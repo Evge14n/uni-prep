@@ -18,12 +18,12 @@ git з `.gitignore`, заготовка всередині, перевірка d
 mkdir -p ~/univer/labs/ЛР5
 cd ~/univer/labs/ЛР5
 ls /mnt/c/Users                              # дізнатись своє імʼя Windows
-cp /mnt/c/Users/ІМ'Я/Downloads/lab5.py .     # крапка = сюди
+cp /mnt/c/Users/IMYA/Downloads/lab5.py .      # IMYA - твоє імʼя Windows (без апострофа!), крапка = сюди
 git init
 printf '.venv/\n__pycache__/\n*.png\n' > .gitignore
 univer                                        # увімкнути venv (перейде в ~/univer)
 cd -                                          # назад у ЛР5
-python -m doctest lab5.py                     # заготовка: doctest падають - функції ще порожні, це нормально
+python lab5.py                                # заготовка: doctest падають - функції ще порожні, це нормально
 git add .
 git commit -m "Заготовка"
 git log --oneline
@@ -81,7 +81,7 @@ source ~/univer/.venv/bin/activate
 
 bad=0
 for f in "$lab"/*.py; do
-    if ! python -m doctest "$f" > /dev/null 2>&1; then
+    if ! python -m pytest --doctest-modules -q -p no:cacheprovider "$f" < /dev/null > /dev/null 2>&1; then
         echo "doctest не проходить: $f"
         bad=1
     fi
@@ -110,8 +110,9 @@ echo "Готово: $HOME/univer/zdacha/$name/${name}.zip"
 `python -m zipfile -c` робить zip без встановлення програми `zip`, але кладе в архів лише ОСТАННЮ теку
 шляху. Тому скрипт заходить (`cd`) туди, де лежить `Прізвище_Імʼя_Група_2026`, і пакує саме її - так назва
 теки в архіві збережеться (перша версія цього розвʼязку губила її, знайшла перевірка).
-Увага: лабу з `input()` на верхньому рівні `python -m doctest` не перевірить (чекатиме вводу) -
-для неї дописати ввід, як у дні 8.
+Doctest тут через pytest (`python -m pytest --doctest-modules`), а не `python -m doctest` - день 8, «пастка».
+Увага: лабу з `input()` на верхньому рівні pytest не перевірить (не дає читати клавіатуру) - вона піде в
+«doctest не проходить»; таку перевір руками з вводом, як у дні 8.
 
 </details>
 
@@ -138,7 +139,7 @@ echo "Готово: $HOME/univer/zdacha/$name/${name}.zip"
 14. Як знайти всі рядки з `turtle.` у всіх `.py` теки `ЛР4` з номерами рядків?
 15. Лаба питає два числа через `input()`. Як запустити її з 3 і 4 без клавіатури?
 16. Як зрозуміти, що venv увімкнено, і що буде, якщо ні?
-17. `python -m doctest lab4.py` нічого не вивів. Це добре чи погано? Як побачити подробиці?
+17. `python lab4.py` (у кінці файлу `doctest.testmod()`) нічого не вивів про doctest. Це добре чи погано? Як побачити подробиці?
 18. (руками) Перевір свою лабу так, як вимагає викладач: doctest, PEP 8 до 78 символів, типи.
 19. Ти зіпсував `lab4.py`, останній коміт був робочий. Як подивитись, що змінилось, і повернути?
 20. Що не так у скрипті нижче?
@@ -154,7 +155,7 @@ if [-d $folder]; then echo "є"; fi
 1. `cd ../../praktyka` (ЛР4 → labs → univer, далі praktyka) або `cd ~/univer/praktyka`. День 1.
 2. Створяться дві теки: `Лаба` і `4`. Правильно `mkdir "Лаба 4"` або без пробілу `mkdir Лаба4`. День 2.
 3. `ls *.png` (подивитись, що саме видалиться), потім `rm *.png`. Кошика нема. День 2.
-4. Його вміст мовчки замінить вміст `lab4.py`. `cp -i` спитає перед перезаписом; або git. День 2.
+4. `lab4_old.py` мовчки перезапишеться копією `lab4.py` (старий вміст пропаде). `cp -i` спитає перед перезаписом; або git. День 2.
 5. Ctrl+O, Enter, Ctrl+X. День 3.
 6. Файл з кінцями рядків Windows (CRLF). VS Code: внизу праворуч CRLF → LF і зберегти; або `sed -i 's/\r$//' файл`. День 3.
 7. Звичайний файл; власник rwx (7), група r-x (5), інші нічого (0): 750. День 4.
@@ -163,15 +164,17 @@ if [-d $folder]; then echo "є"; fi
    Ставити у venv: `univer` (або `source ~/univer/.venv/bin/activate`), потім `pip install numpy`. Дні 5, 8.
 10. `sudo apt update` (оновити список пакетів), потім знову install. День 5.
 11. Ctrl+Z лише призупинив її, вона в памʼяті (`jobs` покаже Stopped). `fg`, потім Ctrl+C. День 6.
-12. В іншому вікні: `ps aux | grep lab4` → друга колонка PID → `kill PID` (не допомогло - `kill -9 PID`). День 6.
+12. В іншому вікні: `pgrep -af lab4` → перше число - PID → `kill PID` (не допомогло - `kill -9 PID`).
+    Можна і `ps aux | grep lab4` (PID - друга колонка; рядок з самим grep пропусти). День 6.
 13. `>` перезаписує файл, `>>` дописує в кінець. День 7.
 14. `grep -n "turtle\." ЛР4/*.py` (або `grep -rn "turtle\." ЛР4`). Крапка в grep означає «будь-який символ», тому `\.`
     точніше; `grep -n "turtle." ...` теж знайде, але й зайве. День 7.
 15. `printf "3\n4\n" | python lab.py`. День 7, 8.
 16. На початку рядка `(.venv)`, `which python` показує `.venv`. Без venv: `ModuleNotFoundError` для matplotlib
     або `externally-managed-environment` при pip. День 8.
-17. Добре: doctest мовчить, коли все пройшло. Подробиці: `python -m doctest -v lab4.py` (внизу `Test passed.`). День 8.
-18. `perevir lab4.py` або окремо: `python -m doctest -v lab4.py`, `flake8 --max-line-length=78 lab4.py`, `mypy lab4.py`. День 8.
+17. Добре: `testmod()` мовчить, коли все пройшло. Подробиці: `python lab4.py -v` (внизу `Test passed.`).
+    Не `python -m doctest` - з `testmod()` у файлі він покаже чужу помилку `DebugRunner`. День 8.
+18. `perevir lab4.py` або окремо: `python -m pytest --doctest-modules -q lab4.py`, `flake8 --max-line-length=78 lab4.py`, `mypy lab4.py`. День 8.
 19. `git diff lab4.py` - що змінилось; `git restore lab4.py` - повернути як в останньому коміті. День 9.
 20. `folder = $1` - пробіли навколо `=` (bash шукатиме команду `folder`), треба `folder="$1"`;
     `[-d $folder]` - потрібні пробіли всередині дужок і лапки: `if [ -d "$folder" ]; then`. День 10.

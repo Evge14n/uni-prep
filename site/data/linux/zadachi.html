@@ -11,12 +11,12 @@ git з <code>.gitignore</code>, заготовка всередині, пере�
 <pre><code>mkdir -p ~/univer/labs/ЛР5
 cd ~/univer/labs/ЛР5
 ls /mnt/c/Users                              # дізнатись своє імʼя Windows
-cp /mnt/c/Users/ІМ'Я/Downloads/lab5.py .     # крапка = сюди
+cp /mnt/c/Users/IMYA/Downloads/lab5.py .      # IMYA - твоє імʼя Windows (без апострофа!), крапка = сюди
 git init
 printf '.venv/\n__pycache__/\n*.png\n' &gt; .gitignore
 univer                                        # увімкнути venv (перейде в ~/univer)
 cd -                                          # назад у ЛР5
-python -m doctest lab5.py                     # заготовка: doctest падають - функції ще порожні, це нормально
+python lab5.py                                # заготовка: doctest падають - функції ще порожні, це нормально
 git add .
 git commit -m &quot;Заготовка&quot;
 git log --oneline
@@ -62,7 +62,7 @@ source ~/univer/.venv/bin/activate
 
 bad=0
 for f in &quot;$lab&quot;/*.py; do
-    if ! python -m doctest &quot;$f&quot; &gt; /dev/null 2&gt;&amp;1; then
+    if ! python -m pytest --doctest-modules -q -p no:cacheprovider &quot;$f&quot; &lt; /dev/null &gt; /dev/null 2&gt;&amp;1; then
         echo &quot;doctest не проходить: $f&quot;
         bad=1
     fi
@@ -90,8 +90,9 @@ echo &quot;Готово: $HOME/univer/zdacha/$name/${name}.zip&quot;
 <code>python -m zipfile -c</code> робить zip без встановлення програми <code>zip</code>, але кладе в архів лише ОСТАННЮ теку
 шляху. Тому скрипт заходить (<code>cd</code>) туди, де лежить <code>Прізвище_Імʼя_Група_2026</code>, і пакує саме її - так назва
 теки в архіві збережеться (перша версія цього розвʼязку губила її, знайшла перевірка).
-Увага: лабу з <code>input()</code> на верхньому рівні <code>python -m doctest</code> не перевірить (чекатиме вводу) -
-для неї дописати ввід, як у дні 8.</p>
+Doctest тут через pytest (<code>python -m pytest --doctest-modules</code>), а не <code>python -m doctest</code> - день 8, «пастка».
+Увага: лабу з <code>input()</code> на верхньому рівні pytest не перевірить (не дає читати клавіатуру) - вона піде в
+«doctest не проходить»; таку перевір руками з вводом, як у дні 8.</p>
 </details>
 <h2 id="іспит-самоперевірка-20-питань">Іспит-самоперевірка: 20 питань</h2>
 <p>Після 10 днів. Відповідай письмово, потім звір. Мета - 18 з 20 (90 %). Що не вийшло - повтори день,
@@ -114,7 +115,7 @@ echo &quot;Готово: $HOME/univer/zdacha/$name/${name}.zip&quot;
 <li>Як знайти всі рядки з <code>turtle.</code> у всіх <code>.py</code> теки <code>ЛР4</code> з номерами рядків?</li>
 <li>Лаба питає два числа через <code>input()</code>. Як запустити її з 3 і 4 без клавіатури?</li>
 <li>Як зрозуміти, що venv увімкнено, і що буде, якщо ні?</li>
-<li><code>python -m doctest lab4.py</code> нічого не вивів. Це добре чи погано? Як побачити подробиці?</li>
+<li><code>python lab4.py</code> (у кінці файлу <code>doctest.testmod()</code>) нічого не вивів про doctest. Це добре чи погано? Як побачити подробиці?</li>
 <li>(руками) Перевір свою лабу так, як вимагає викладач: doctest, PEP 8 до 78 символів, типи.</li>
 <li>Ти зіпсував <code>lab4.py</code>, останній коміт був робочий. Як подивитись, що змінилось, і повернути?</li>
 <li>Що не так у скрипті нижче?</li>
@@ -129,7 +130,7 @@ if [-d $folder]; then echo &quot;є&quot;; fi
 <li><code>cd ../../praktyka</code> (ЛР4 → labs → univer, далі praktyka) або <code>cd ~/univer/praktyka</code>. День 1.</li>
 <li>Створяться дві теки: <code>Лаба</code> і <code>4</code>. Правильно <code>mkdir "Лаба 4"</code> або без пробілу <code>mkdir Лаба4</code>. День 2.</li>
 <li><code>ls *.png</code> (подивитись, що саме видалиться), потім <code>rm *.png</code>. Кошика нема. День 2.</li>
-<li>Його вміст мовчки замінить вміст <code>lab4.py</code>. <code>cp -i</code> спитає перед перезаписом; або git. День 2.</li>
+<li><code>lab4_old.py</code> мовчки перезапишеться копією <code>lab4.py</code> (старий вміст пропаде). <code>cp -i</code> спитає перед перезаписом; або git. День 2.</li>
 <li>Ctrl+O, Enter, Ctrl+X. День 3.</li>
 <li>Файл з кінцями рядків Windows (CRLF). VS Code: внизу праворуч CRLF → LF і зберегти; або <code>sed -i 's/\r$//' файл</code>. День 3.</li>
 <li>Звичайний файл; власник rwx (7), група r-x (5), інші нічого (0): 750. День 4.</li>
@@ -138,15 +139,17 @@ if [-d $folder]; then echo &quot;є&quot;; fi
    Ставити у venv: <code>univer</code> (або <code>source ~/univer/.venv/bin/activate</code>), потім <code>pip install numpy</code>. Дні 5, 8.</li>
 <li><code>sudo apt update</code> (оновити список пакетів), потім знову install. День 5.</li>
 <li>Ctrl+Z лише призупинив її, вона в памʼяті (<code>jobs</code> покаже Stopped). <code>fg</code>, потім Ctrl+C. День 6.</li>
-<li>В іншому вікні: <code>ps aux | grep lab4</code> → друга колонка PID → <code>kill PID</code> (не допомогло - <code>kill -9 PID</code>). День 6.</li>
+<li>В іншому вікні: <code>pgrep -af lab4</code> → перше число - PID → <code>kill PID</code> (не допомогло - <code>kill -9 PID</code>).
+    Можна і <code>ps aux | grep lab4</code> (PID - друга колонка; рядок з самим grep пропусти). День 6.</li>
 <li><code>&gt;</code> перезаписує файл, <code>&gt;&gt;</code> дописує в кінець. День 7.</li>
 <li><code>grep -n "turtle\." ЛР4/*.py</code> (або <code>grep -rn "turtle\." ЛР4</code>). Крапка в grep означає «будь-який символ», тому <code>\.</code>
     точніше; <code>grep -n "turtle." ...</code> теж знайде, але й зайве. День 7.</li>
 <li><code>printf "3\n4\n" | python lab.py</code>. День 7, 8.</li>
 <li>На початку рядка <code>(.venv)</code>, <code>which python</code> показує <code>.venv</code>. Без venv: <code>ModuleNotFoundError</code> для matplotlib
     або <code>externally-managed-environment</code> при pip. День 8.</li>
-<li>Добре: doctest мовчить, коли все пройшло. Подробиці: <code>python -m doctest -v lab4.py</code> (внизу <code>Test passed.</code>). День 8.</li>
-<li><code>perevir lab4.py</code> або окремо: <code>python -m doctest -v lab4.py</code>, <code>flake8 --max-line-length=78 lab4.py</code>, <code>mypy lab4.py</code>. День 8.</li>
+<li>Добре: <code>testmod()</code> мовчить, коли все пройшло. Подробиці: <code>python lab4.py -v</code> (внизу <code>Test passed.</code>).
+    Не <code>python -m doctest</code> - з <code>testmod()</code> у файлі він покаже чужу помилку <code>DebugRunner</code>. День 8.</li>
+<li><code>perevir lab4.py</code> або окремо: <code>python -m pytest --doctest-modules -q lab4.py</code>, <code>flake8 --max-line-length=78 lab4.py</code>, <code>mypy lab4.py</code>. День 8.</li>
 <li><code>git diff lab4.py</code> - що змінилось; <code>git restore lab4.py</code> - повернути як в останньому коміті. День 9.</li>
 <li><code>folder = $1</code> - пробіли навколо <code>=</code> (bash шукатиме команду <code>folder</code>), треба <code>folder="$1"</code>;
     <code>[-d $folder]</code> - потрібні пробіли всередині дужок і лапки: <code>if [ -d "$folder" ]; then</code>. День 10.</li>

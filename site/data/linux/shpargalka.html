@@ -2,7 +2,7 @@
 <p><strong>Де я і що тут</strong></p>
 <pre><code>pwd                 де я
 ls -la              що тут (детально, з прихованими)
-cd тека | cd .. | cd ~ | cd -
+cd тека             зайти;  cd ..  вище;  cd ~  додому
 /mnt/c, /mnt/d      диски Windows
 explorer.exe .      відкрити теку в Провіднику
 </code></pre>
@@ -10,33 +10,37 @@ explorer.exe .      відкрити теку в Провіднику
 <p><strong>Файли і теки</strong></p>
 <pre><code>mkdir -p a/b        створити теку
 touch f.py          порожній файл
-cp f.py g.py        копія;   cp -r тека нова
+cp f.py g.py        копія (cp -r тека нова - теку)
 mv f.py g.py        перейменувати / перемістити
 rm f.py             видалити НАЗАВЖДИ (кошика нема)
 rmdir тека          видалити порожню теку
 </code></pre>
 <p>Перед <code>rm *.щось</code> - спершу <code>ls *.щось</code>. Назви з пробілом - у лапки.</p>
 <p><strong>Подивитись і редагувати</strong></p>
-<pre><code>cat f | less f | head -n 20 f | tail -n 20 f | wc -l f
+<pre><code>cat f               весь файл
+less f              гортати, q - вийти
+tail -n 20 f        кінець (head - початок)
 nano f.py           Ctrl+O Enter - зберегти, Ctrl+X - вийти
 code .              VS Code у цій теці
 </code></pre>
 <p><strong>Права і sudo</strong></p>
 <pre><code>ls -l               -rwxr-xr-x : власник / група / інші
-chmod +x s.sh       дозволити запуск;  ./s.sh
-chmod 755 | 644     r=4 w=2 x=1
+chmod +x s.sh       дозволити запуск, потім ./s.sh
+chmod 755 s.sh      r=4 w=2 x=1
 sudo команда        від root (пароль Ubuntu)
 </code></pre>
 <p>Свої файли - без sudo.</p>
 <p><strong>Пакети</strong></p>
-<pre><code>sudo apt update &amp;&amp; sudo apt upgrade
-sudo apt install назва  |  apt search слово
+<pre><code>sudo apt update
+sudo apt upgrade
+sudo apt install назва
 </code></pre>
 <p>Python-бібліотеки - лише у venv (pip).</p>
 <p><strong>Процеси</strong></p>
-<pre><code>Ctrl+C зупинити   Ctrl+Z призупинити → fg
-ps aux | grep python    kill PID    kill -9 PID
-top (q)   free -h   df -h
+<pre><code>Ctrl+C              зупинити;  Ctrl+Z - призупинити, fg - назад
+pgrep -af python    PID усіх python
+kill PID            зупинити (kill -9 PID - силою)
+top                 хто їсть процесор, q - вийти
 wsl --shutdown      (у PowerShell) перезапустити Ubuntu
 </code></pre>
 <p><strong>Пайпи і пошук</strong></p>
@@ -47,14 +51,20 @@ printf &quot;5\n&quot; | python lab.py      ввід без клавіатури
 </code></pre>
 <p><strong>Python і лаби</strong></p>
 <pre><code>univer              ~/univer + venv увімкнено, видно (.venv)
-python lab.py
-python -m doctest -v lab.py      внизу Test passed.
-perevir lab.py      doctest + flake8 + mypy
+python lab.py       doctest (testmod у файлі) + програма
+python lab.py -v    doctest з подробицями
+perevir lab.py      doctest (pytest) + flake8 78 + mypy
 deactivate
 </code></pre>
+<p>Не <code>python -m doctest</code>, якщо в файлі є <code>doctest.testmod()</code> - чужий «DebugRunner Failed».</p>
 <p><strong>git</strong></p>
-<pre><code>git init | git status | git add . | git commit -m &quot;що&quot;
-git log --oneline | git diff | git restore f.py
+<pre><code>git init
+git status
+git add .
+git commit -m &quot;що зробив&quot;
+git log --oneline
+git diff
+git restore f.py
 </code></pre>
 <p><strong>bash-скрипт</strong></p>
 <pre><code>#!/bin/bash

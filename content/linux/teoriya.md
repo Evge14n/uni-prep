@@ -2,7 +2,7 @@
 
 Щоб писати і запускати лаби з Python в Ubuntu (WSL) на ноутбуці. День = одна тема: 5 хв прочитати,
 10 хв зробити руками в терміналі, 5 питань самоперевірки. Усі вправи «Руками» прогнано скриптом
-у справжній Ubuntu 24.04 (78 перевірок, 17.11.2026).
+у справжній Ubuntu 24.04 (87 перевірок, 17.11.2026).
 
 ## Тема 0. Встановлення: Ubuntu, VS Code, усе для лаб
 
@@ -16,7 +16,8 @@ WSL - це справжня Ubuntu всередині Windows. Не віртуа
 Win + R → `winver` → Enter. Дивись рядок «Збірка ОС» (OS Build).
 
 - Windows 11 - усе працює, включно з вікнами turtle.
-- Windows 10, збірка 19044 або більша (19045 теж) - усе працює, включно з вікнами turtle.
+- Windows 10, збірка 19044 або більша (19045 теж) - усе працює, включно з вікнами turtle
+  (потрібен свіжий WSL: `wsl --update`, крок 2).
   → Перевірено на твоєму ПК 17.11.2026: Windows 10 збірка 19045, WSL 3.0.5, вікно Tk у WSL відкривається.
 - Windows 10, збірка від 19041 до 19043 - Ubuntu встановиться, але вікна (turtle) з Linux не відкриються.
   Тоді або онови Windows (Параметри → Оновлення), або turtle-лабу запускай звичайним Python у Windows (крок 6).
@@ -44,6 +45,15 @@ Win + R → `winver` → Enter. Дивись рядок «Збірка ОС» (O
 Якщо `wsl --install` пише, що WSL уже є, - просто відкрий «Ubuntu» з меню Пуск.
 Якщо Ubuntu нема в меню: `wsl --install -d Ubuntu` в адмінському PowerShell.
 
+Одразу після встановлення (у звичайному PowerShell):
+```
+wsl --update
+wsl --version
+```
+`wsl --update` ставить найновіший WSL з Microsoft Store - саме він уміє відкривати вікна (turtle) на Windows 10.
+`wsl --version` має показати кілька рядків (WSL version, WSLg version). Якщо пише, що такої команди нема, -
+WSL старий, повтори `wsl --update`.
+
 ### Крок 3. Встановити VS Code з розширеннями (5 хв)
 
 1. Скачай VS Code з https://code.visualstudio.com і встав **у Windows** (не в Ubuntu).
@@ -52,6 +62,9 @@ Win + R → `winver` → Enter. Дивись рядок «Збірка ОС» (O
    - **WSL** (від Microsoft, id `ms-vscode-remote.remote-wsl`);
    - **Python** (від Microsoft, id `ms-python.python`).
 3. Закрий і заново відкрий вікно Ubuntu (щоб воно побачило `code`).
+4. Після першого `code .` з Ubuntu (крок 5) зайди в Extensions: біля Python буде кнопка
+   **«Install in WSL: Ubuntu»** - натисни. Розширення з Windows саме в Ubuntu не працює, без цього не буде
+   вибору інтерпретатора і підказок.
 
 ### Крок 4. Усе для лаб одним скриптом (5-20 хв)
 
@@ -59,12 +72,12 @@ Win + R → `winver` → Enter. Дивись рядок «Збірка ОС» (O
 
 ```
 cd ~
-wget https://evge14n.github.io/uni-prep/files/ustanovka.sh
+wget -O ustanovka.sh https://evge14n.github.io/uni-prep/files/ustanovka.sh
 less ustanovka.sh
 bash ustanovka.sh
 ```
 
-- `wget` скачує файл, `less` показує, що в ньому (гортати стрілками, вийти - `q`).
+- `wget` скачує файл (`-O ustanovka.sh` - зберегти саме під цим імʼям, навіть якщо скачуєш удруге), `less` показує, що в ньому (гортати стрілками, вийти - `q`).
   Завжди дивись, що за скрипт, перш ніж запускати.
 - `bash ustanovka.sh` попросить пароль Ubuntu (символи не видно). Перший раз оновлення йде довго.
   **Не закривай вікно, поки не з'явиться «Готово»** - якщо закрити посередині, Ubuntu обірве
@@ -118,15 +131,17 @@ python -c "import turtle; turtle.forward(100); turtle.left(90); turtle.forward(5
   Крапка в кінці обов'язкова. Адреса в Провіднику буде `\\wsl.localhost\Ubuntu\home\evgen\...`.
 - Забрати файл з Windows у Linux (напр. заготовку з «Завантажень»):
   ```
-  cp /mnt/c/Users/ТВОЄ_ІМ'Я_WINDOWS/Downloads/lab4.py ~/univer/labs/ЛР4/
+  cp /mnt/c/Users/IMYA/Downloads/lab4.py ~/univer/labs/ЛР4/
   ```
-  (ім'я Windows-користувача подивись: `ls /mnt/c/Users`).
+  Замість `IMYA` - імʼя Windows-користувача (подивись: `ls /mnt/c/Users`). Апостроф у команду не пиши:
+  bash сприйме його як лапку і чекатиме продовження (рядок `>`; вийти - Ctrl+C).
 
 Якщо лаби вже лежать у теці Windows і хочеш працювати прямо там - можна. Тоді один раз:
 ```
-bash ustanovka.sh "C:\Users\ТВОЄ_ІМ'Я\Documents\Програмування"
+NO_APT=1 bash ustanovka.sh "C:\Users\IMYA\Documents\Програмування"
 ```
-і в `~/univer/prog` буде посилання на цю теку. Працює, просто повільніше на великих теках.
+(`NO_APT=1` - не оновлювати Ubuntu вдруге), і в `~/univer/prog` буде посилання на цю теку.
+Працює, просто повільніше на великих теках.
 
 **Turtle (ЛР4), якщо вікно не з'явилося** (стара збірка Windows 10, крок 1): той самий файл
 запускай звичайним Python у Windows - відкрий його у VS Code **без WSL** (File → Open Folder на
@@ -139,7 +154,8 @@ Windows-теці) або в IDLE і натисни Run. Код однакови�
 | `E: dpkg was interrupted, you must manually run 'sudo dpkg --configure -a'` | `sudo dpkg --configure -a`, потім знову `bash ustanovka.sh` |
 | `Could not get lock /var/lib/dpkg/lock-frontend` | Ubuntu сама ставить оновлення у фоні. Зачекай 5 хв і повтори |
 | `code: command not found` | VS Code встановлено без «Add to PATH» або не перевідкрив Ubuntu. Перевстанови з галочкою |
-| `sudo: ... incorrect password` | пароль Ubuntu (крок 2), не Windows. Забув - у PowerShell: `wsl -u root passwd evgen` |
+| `WslRegisterDistribution failed with error: 0x80370102` або «Virtual Machine Platform» | на ноутбуці вимкнена віртуалізація. Увімкни в BIOS/UEFI (Intel VT-x або AMD-V/SVM, зазвичай вкладка Advanced або CPU Configuration), потім знову `wsl --install` |
+| `sudo: ... incorrect password` | пароль Ubuntu (крок 2), не Windows. Забув - у PowerShell: `wsl -u root passwd ІМЯ_В_UBUNTU` (те імʼя, що в рядку перед @) |
 | `bash: $'\r': command not found` | скрипт збережено з кінцями рядків Windows (CRLF). Виправити: `sed -i 's/\r$//' файл.sh` |
 | `error: externally-managed-environment` при `pip install` | ти не у venv. Спершу `univer` (або `source ~/univer/.venv/bin/activate`) |
 | Ubuntu «зникла» посеред довгої команди | WSL вимикається, коли закрито всі вікна Ubuntu. Тримай вікно відкритим до кінця |
@@ -200,8 +216,9 @@ evgen@NOUT:~$
   Два Tab підряд - покаже варіанти. Особливо рятує з кириличними назвами.
 - **Стрілка ↑** - попередня команда. Ctrl+R - пошук по історії.
 
-**Скопіювати і вставити** у вікні Ubuntu: виділив мишкою - скопійовано; права кнопка миші - вставити.
-(Ctrl+C у терміналі - це не «копіювати», а «зупинити програму», див. день 6.)
+**Скопіювати і вставити** у вікні Ubuntu: виділи мишкою і натисни Enter (або Ctrl+Shift+C) - скопійовано;
+вставити - права кнопка миші або Ctrl+Shift+V. (Ctrl+C без виділення - це не «копіювати», а «зупинити
+програму», день 6. У новому Windows Terminal Ctrl+C з виділеним текстом копіює.)
 
 ### Руками (10 хв)
 
@@ -291,8 +308,8 @@ explorer.exe .
    rm *.png
    ```
 2. Не використовуй `rm -rf`, поки не розумієш кожну букву. `-r` - теки з усім вмістом,
-   `-f` - не питати і не скаржитись. Помилка з пробілом `rm -rf ~ /тека` (пробіл після `~`) стирає
-   всю домашню теку.
+   `-f` - не питати і не скаржитись. Один зайвий пробіл після тильди (між `~` і `/тека`) - і замість
+   однієї теки стирається вся домашня тека. (Це приклад словами, такого не вводь.)
 3. Ніколи не запускай `rm` з `sudo`, якщо не розумієш навіщо.
 4. Важливе - в git (день 9), тоді навіть видалене можна повернути.
 5. `cp` і `mv` **мовчки перезаписують** файл з тим самим ім'ям. Додавай `-i`: `cp -i`, `mv -i` - спитає.
@@ -320,6 +337,10 @@ rmdir den2/a/b          # тепер вийшло
 mkdir "моя тека"
 ls
 rmdir "моя тека"
+cd den2/a
+echo rm *.py            # echo лише ДРУКУЄ, на що розгорнеться шаблон: rm one.py
+echo rm * .py           # з пробілом: rm note.txt one.py .py - тобто ВСЕ. Тому пробіл тут небезпечний
+cd ~/univer/praktyka
 ```
 
 Зроби теку для 4-ї лаби (знадобиться в дні 8):
@@ -333,7 +354,8 @@ mkdir -p ~/univer/labs/ЛР4
 - `mkdir ЛР 4` створює **дві** теки: `ЛР` і `4`.
 - `cp тека нова` без `-r` → «-r not specified; omitting directory».
 - `mv lab.py lab.py.bak` і забув - потім шукаєш, «де файл». Для копії бери `cp`.
-- Шаблон без перевірки: `rm * .py` (пробіл!) видаляє **все** в теці, а потім ще шукає файл `.py`.
+- Шаблон з випадковим пробілом між `*` і `.py` видаляє **все** в теці. Перевірка без ризику - поставити
+  `echo` перед командою: побачиш, які файли вона зачепила б.
 
 ### Самоперевірка
 
@@ -341,7 +363,7 @@ mkdir -p ~/univer/labs/ЛР4
 2. Як перейменувати `lab.py` на `lab4.py`?
 3. Чому `rmdir` безпечніший за `rm -r`?
 4. Що станеться після `cp new.py old.py`, якщо `old.py` вже є?
-5. Що робить `rm * .py` (з пробілом) і як цього уникнути?
+5. Що зробила б команда rm з шаблоном `* .py` (з пробілом між зірочкою і .py) і як це перевірити без ризику?
 
 <details markdown="1"><summary>Відповіді</summary>
 
@@ -349,8 +371,8 @@ mkdir -p ~/univer/labs/ЛР4
 2. `mv lab.py lab4.py`.
 3. `rmdir` видаляє лише порожню теку, тому файли не загубиш. `rm -r` видаляє все всередині.
 4. `old.py` мовчки перезапишеться вмістом `new.py`. З `cp -i` спитало б.
-5. Пробіл робить з шаблону два аргументи: `*` (усі файли в теці) і `.py`. Видалить усі файли. Уникнути:
-   спершу `ls` з тим самим шаблоном, і писати `*.py` разом.
+5. Пробіл робить з шаблону два аргументи: `*` (усі файли в теці) і `.py`. Видалила б усі файли. Перевірити:
+   `echo` або `ls` з тим самим шаблоном перед `rm`, і писати `*.py` разом.
 
 </details>
 
@@ -375,7 +397,7 @@ mkdir -p ~/univer/labs/ЛР4
 
 | Клавіші | Що |
 |---|---|
-| Ctrl+O, Enter | зберегти (Write Out) |
+| Ctrl+O, Enter | зберегти (Write Out); Ctrl+S теж зберігає |
 | Ctrl+X | вийти (якщо не зберіг - спитає: Y/N) |
 | Ctrl+W | пошук |
 | Ctrl+K / Ctrl+U | вирізати рядок / вставити |
@@ -422,9 +444,9 @@ file hello.py
 
 ### Типові помилки
 
-- Натиснув Ctrl+Z у nano (як «скасувати» у Windows) - nano «зник». Він не закрився, а призупинився
-  (день 6). Набери `fg` - повернешся.
-- Ctrl+S у nano може «заморозити» термінал. Розморозити - Ctrl+Q.
+- Натиснув Ctrl+Z у nano (як «скасувати» у Windows) - нічого не скасувалось, а внизу напис
+  `[ To suspend, type ^T^Z ]`. Скасувати в nano - Alt+U. (У звичайному терміналі Ctrl+Z призупиняє програму - день 6.)
+- Ctrl+S поза nano (просто в терміналі) може «заморозити» вікно - нічого не друкується. Розморозити - Ctrl+Q.
 - `cat` на величезний файл засипає екран - для довгих бери `less`.
 - Відкрив `code .` у `/mnt/c/...` - VS Code працює, але повільніше. Лаби - у `~/univer/labs`.
 - Редагував файл у Блокноті Windows через `\\wsl.localhost\...` і він став CRLF. Краще VS Code.
@@ -520,7 +542,8 @@ ls -ld /mnt/c            # drwxrwxrwx - диск Windows
 - `sudo` перед усім підряд «щоб не було помилок». Потім `Permission denied` уже на власних файлах.
   Виправити: `sudo chown -R evgen:evgen ~/univer` (повернути собі власність).
 - `chmod 777` «щоб працювало». Це дозволяє всім усе. Для скрипта досить `chmod +x` (або 755).
-- Забув пароль Ubuntu. У PowerShell Windows: `wsl -u root passwd evgen` - задаси новий.
+- Забув пароль Ubuntu. У PowerShell Windows: `wsl -u root passwd evgen` (замість `evgen` - твоє імʼя в Ubuntu,
+  воно в рядку перед @) - задаси новий.
 - Запускаєш `run.sh` без `./` → «command not found». Поточна тека не шукається автоматично.
 
 ### Самоперевірка
@@ -583,7 +606,8 @@ sudo apt install cowsay         # кумедна програма для тре�
 sudo apt remove cowsay
 /usr/games/cowsay "ще є?"       # No such file or directory - видалено
 dpkg -l python3-tk | tail -1    # ii = встановлено (його поставив ustanovka.sh)
-pip install requests            # думає до хвилини, потім error: externally-managed-environment - так і треба
+deactivate 2>/dev/null         # вимкнути venv, якщо був увімкнений (рядок без (.venv))
+pip install requests            # error: externally-managed-environment - так і треба (буває, думає кілька секунд)
 python3 -m venv --help | head -3
 ```
 
@@ -633,11 +657,12 @@ python3 -m venv --help | head -3
 | `bg` | продовжити призупинене у фоні |
 | `команда &` | одразу запустити у фоні |
 | `ps` | процеси цього терміналу |
-| `ps aux \| grep python` | усі процеси python |
+| `pgrep -af python` | усі процеси python: PID і команда |
+| `ps aux \| grep python` | те саме по-старому (останній рядок - сам grep, його не чіпай) |
 | `top` (вийти `q`) або `htop` | живий список: хто їсть процесор і память |
 | `kill PID` | попросити процес завершитись |
 | `kill -9 PID` | вбити без питань (якщо `kill` не допоміг) |
-| `pkill -f назва` | вбити за назвою |
+| `pkill назва` | вбити за назвою програми. Обережно: `pkill python` вбʼє ВСІ python, і ті, що працюють для VS Code |
 | `free -h`, `df -h` | скільки памʼяті, скільки місця на диску |
 
 **Повністю вимкнути Ubuntu** (все зависло): у PowerShell Windows `wsl --shutdown`.
@@ -656,8 +681,8 @@ jobs                     # [1]+ Stopped
 fg                       # знову рахує; Ctrl+C
 python3 forever.py > /dev/null &     # у фоні, вивід викидаємо
 jobs
-ps aux | grep forever
-kill %1                  # %1 - номер у jobs (або kill PID з ps)
+pgrep -af forever        # PID і команда
+kill %1                  # %1 - номер у jobs (або kill PID з pgrep)
 jobs                     # Terminated
 top                      # подивись, q - вийти
 free -h
@@ -671,7 +696,7 @@ df -h ~
 - `kill -9` одразу. Спершу звичайний `kill`: програма встигне закрити файли.
 - Програма чекає `input()`, а тобі здається, що вона зависла. Курсор блимає на порожньому рядку -
   вона чекає вводу. Введи значення або Ctrl+D.
-- Ctrl+C у вікні терміналу - не «копіювати». Копіювати - виділити мишкою.
+- Ctrl+C у вікні терміналу без виділеного тексту - не «копіювати», а «зупинити». Як копіювати - день 1.
 
 ### Самоперевірка
 
@@ -685,8 +710,8 @@ df -h ~
 
 1. Ctrl+C зупиняє програму (Python кидає KeyboardInterrupt). Ctrl+Z лише призупиняє: програма жива,
    її можна повернути `fg`.
-2. Ctrl+C. Якщо не реагує - в іншому вікні `ps aux | grep python` і `kill PID` (у крайньому разі `kill -9 PID`).
-3. `ps aux | grep python` (друга колонка - PID).
+2. Ctrl+C. Якщо не реагує - в іншому вікні `pgrep -af python` і `kill PID` (у крайньому разі `kill -9 PID`).
+3. `pgrep -af python` (перше число в рядку - PID). Або `ps aux | grep python` (друга колонка; рядок з самим grep пропусти).
 4. Запускає команду у фоні, термінал одразу вільний.
 5. Коли зависла вся Ubuntu (не відповідає жодне вікно) або після зміни налаштувань WSL. Виконується в PowerShell Windows.
 
@@ -807,29 +832,36 @@ grep -rl "turtle" ~/univer/labs
 | `pip list` | що стоїть |
 | `which python` | який Python зараз (у venv - `.../.venv/bin/python`) |
 
-**Запуск і перевірка лаби:**
+**Як перевіряти doctest у лабах.** У заготовках викладача в кінці файлу стоїть `doctest.testmod()`.
 
-| Команда | Що |
+| Команда | Коли |
 |---|---|
-| `python lab4.py` | запустити |
-| `python -m doctest lab4.py` | doctest: тиша = усе пройшло |
-| `python -m doctest -v lab4.py` | doctest з подробицями, внизу `Test passed.` або `***Test Failed***` |
-| `flake8 --max-line-length=78 lab4.py` | PEP 8 (викладач просив рядки до 78) |
-| `mypy lab4.py` | перевірка типів (знаходить `str` замість `int`) |
-| `black -l 78 lab4.py` | сам переформатує файл (зроби копію або git перед цим) |
-| `perevir lab4.py` | наша команда: doctest + flake8 + mypy разом |
+| `python lab4.py` | як задумав викладач: `testmod()` у файлі проганяє doctest. Тиша = все пройшло, `***Test Failed***` = ні. Далі програма працює як звичайно (питає `input()`, малює) |
+| `python lab4.py -v` | те саме з подробицями (`-v` бачить `testmod()`), унизу `Test passed.` |
+| `python -m pytest --doctest-modules -q lab4.py` | надійна перевірка: `1 passed` або `FAILED` і код помилки (зручно в скриптах) |
+| `perevir lab4.py` | наша команда: doctest (через pytest) + flake8 + mypy |
+
+**Пастка: не запускай `python -m doctest lab4.py` для таких файлів.** Коли в файлі є `doctest.testmod()`
+не під `if __name__ == "__main__":`, команда `-m doctest` змушує його перевіряти ще й сам модуль doctest, і ти
+побачиш чужу помилку `1 of 21 in __main__.DebugRunner ***Test Failed***`, хоча твій код правильний.
+`python -m doctest` годиться лише для файлів, де `testmod()` нема або він під `if __name__ == "__main__":`.
+
+Стиль: `flake8 --max-line-length=78 lab4.py` (викладач просив рядки до 78), `mypy lab4.py` (типи, знаходить
+`str` замість `int`), `black -l 78 lab4.py` (сам переформатує файл, перед цим зроби коміт або копію).
 
 Вимоги викладача (з файлу «Вимоги викладача»): лаба зарахована, коли проходять **усі doctest**;
 функція повертає через `return`, а не друкує; код - у наданій функції, назви і doctest не міняти;
 перед здачею flake8, pycodestyle, mypy, ruff або black.
 
-**Якщо в лабі є `input()` на верхньому рівні файлу** (як у твоїй ЛР3), то `python -m doctest`
-зупиниться і чекатиме вводу. Тоді: `printf "5\n" | python lab.py` - doctest.testmod() усередині
-спрацює, а ввід піде з printf.
+**Якщо в лабі є `input()` на верхньому рівні файлу** (як у твоїй ЛР3), то pytest скаже «reading from stdin»
+(а `perevir` підкаже, що робити). Тоді: `printf "5\n" | python lab.py` - `testmod()` усередині спрацює, а ввід
+піде з printf.
 
-**turtle (ЛР4) у WSL:** на Windows 11 і Windows 10 збірки 19044+ вікно відкривається як звичайне
-вікно Windows. Наприкінці програми потрібен `turtle.done()`, інакше вікно одразу закриється (так і в методичці ЛР4).
-Якщо вікна нема (стара збірка Windows) - див. «00 - Почни тут», крок 6.
+**turtle (ЛР4) у WSL:** на Windows 11 і Windows 10 збірки 19044+ (з WSL з Microsoft Store) вікно відкривається
+як звичайне вікно Windows. Наприкінці потрібен `turtle.done()`, інакше вікно одразу закриється (так і в методичці ЛР4).
+Головне правило для turtle-лаби: **малювання і `turtle.done()` - лише під `if __name__ == "__main__":`**.
+Інакше перевірка doctest (pytest, `perevir`) відкриє вікно і чекатиме, поки ти його закриєш.
+Якщо вікна нема зовсім (стара Windows) - див. «00 - Почни тут», крок 6.
 
 ### Руками (10 хв)
 
@@ -862,11 +894,11 @@ doctest.testmod()
 Далі:
 ```
 python kvadrat.py                # тиша - усі doctest пройшли
-python -m doctest -v kvadrat.py  # подробиці, внизу Test passed.
-perevir kvadrat.py
+python kvadrat.py -v             # подробиці, внизу Test passed.
+perevir kvadrat.py               # doctest: усе пройшло (1 passed ...), flake8, mypy
 ```
 Тепер зіпсуй: заміни `side * side` на `side * 2`, збережи, і ще раз `python kvadrat.py` - побачиш
-`Failed example` з `Expected: 9` і `Got: 6`. Поверни як було.
+`Failed example` з `Expected: 9` і `Got: 6`. І `perevir kvadrat.py` - напише «Є ПОМИЛКИ». Поверни як було.
 
 Turtle-перевірка (вікно на 2 секунди):
 ```
@@ -878,28 +910,32 @@ python -c "import turtle, time; turtle.circle(50); time.sleep(2)"
 - Забув `univer` (venv вимкнено) → `ModuleNotFoundError: No module named 'matplotlib'` або
   `externally-managed-environment` при pip. Подивись, чи є `(.venv)` на початку рядка.
 - `python` vs `python3`: поза venv у Ubuntu є лише `python3`. У venv працюють обидва.
+- `python -m doctest` на файлі з `doctest.testmod()` - чужий «Test Failed» з `DebugRunner` (див. вище).
+- `python lab.py` при помилках doctest **все одно** завершується «успішно» (код 0) - у скриптах бери pytest.
 - Venv не переносять копіюванням між комп'ютерами. На новому - створюють заново (`ustanovka.sh`).
 - Venv не кладуть у git (день 9, `.gitignore`).
 - doctest «падає» через пробіл у кінці рядка або `6.25` проти `6.250`. Doctest порівнює текст
   буквально - дивись `Expected` і `Got`.
-- Doctest викладача теж бувають з помилками (у ЛР1 завдання 3 два приклади хибні - розбір у
-  `Лабораторні\ЛР1 - завдання 3 (розбір).md`). Не підганяй код - скажи викладачу.
+- Doctest викладача теж бувають з помилками (у ЛР1 завдання 3 два приклади хибні - розбір ЛР1 завдання 3
+  лежить у теці `Лабораторні`). Не підганяй код - скажи викладачу.
 
 ### Самоперевірка
 
 1. Як зрозуміти, що venv увімкнено?
-2. Що означає тиша після `python -m doctest lab.py`?
-3. Як перевірити стиль лаби так, як просить викладач?
+2. `python lab.py` нічого не вивів про doctest і перейшов до програми. Це добре чи погано?
+3. Як перевірити лабу так, як просить викладач (doctest, стиль, типи)?
 4. Лаба питає `input()` одне число. Як прогнати її з числом 7 без клавіатури?
-5. Чому не можна просто скопіювати теку `.venv` на ноутбук?
+5. Чому `python -m doctest lab.py` показує «1 of 21 in __main__.DebugRunner Failed», хоча код правильний?
 
 <details markdown="1"><summary>Відповіді</summary>
 
 1. Рядок-запрошення починається з `(.venv)`; `which python` показує шлях з `.venv`.
-2. Усі doctest пройшли (doctest мовчить, коли все добре). Подробиці - з `-v`.
-3. `flake8 --max-line-length=78 lab.py` і `mypy lab.py` (або все разом - `perevir lab.py`).
+2. Добре: `doctest.testmod()` мовчить, коли все пройшло. Подробиці - `python lab.py -v`.
+3. `perevir lab.py` (doctest через pytest + flake8 до 78 + mypy) або окремо:
+   `python -m pytest --doctest-modules -q lab.py`, `flake8 --max-line-length=78 lab.py`, `mypy lab.py`.
 4. `printf "7\n" | python lab.py`.
-5. Venv привʼязаний до шляхів і версії Python того комп'ютера, де створений. На іншому його створюють заново.
+5. У файлі `doctest.testmod()` стоїть на верхньому рівні, а `-m doctest` робить головним модулем сам doctest, тож
+   `testmod()` перевіряє його власні приклади. Перевіряй `python lab.py` або pytest.
 
 </details>
 
@@ -970,7 +1006,16 @@ python3 -m doctest lab.py              # тиша - знову все добре
 git log --oneline
 ```
 
-Для ЛР4: `cd ~/univer/labs/ЛР4 && git init`, і після кожного готового завдання `git add . && git commit -m "..."`.
+Для ЛР4 (один раз):
+```
+cd ~/univer/labs/ЛР4
+git init
+printf '.venv/\n__pycache__/\n*.png\n' > .gitignore
+```
+і після кожного готового завдання `git add .` і `git commit -m "Завдання 1"`.
+
+Кириличні назви файлів `git status` може показувати як `\320\233\320\240...`. Лікується один раз:
+`git config --global core.quotepath false` (скрипт установки це вже зробив).
 
 ### Типові помилки
 
@@ -1068,7 +1113,7 @@ fi
 ok=0
 bad=0
 for f in "$folder"/*.py; do
-    if python -m doctest "$f" > /dev/null 2>&1 && flake8 --max-line-length=78 "$f" > /dev/null; then
+    if python -m pytest --doctest-modules -q -p no:cacheprovider "$f" < /dev/null > /dev/null 2>&1 && flake8 --max-line-length=78 "$f" > /dev/null; then
         echo "ГОТОВО  $f"
         ok=$((ok + 1))
     else
@@ -1096,8 +1141,8 @@ echo $?                            # 1 - скрипт повідомив про 
 - `[` без пробілів: `if [-f "$1"]` - помилка. Потрібно `if [ -f "$1" ]`.
 - Скрипт, збережений з CRLF (Блокнот Windows) → `$'\r': command not found`. День 3.
 - Забув `chmod +x` → `Permission denied`. Або запускай `bash zdaty.sh`.
-- Скрипт для лаби з `input()` на верхньому рівні «зависне» на doctest - для такої лаби подавай ввід
-  (`printf "5\n" | python лаба.py`), як у дні 8.
+- Лаба з `input()` на верхньому рівні вийде «ПРАВИТИ» (pytest не дає їй читати клавіатуру) - таку перевір
+  руками: `printf "5\n" | python лаба.py`, як у дні 8.
 
 ### Самоперевірка
 

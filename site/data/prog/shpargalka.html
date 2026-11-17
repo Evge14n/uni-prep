@@ -1,0 +1,39 @@
+<h1 id="програмування-шпаргалка">Програмування - шпаргалка</h1>
+<pre><code>7/2=3.5  7//2=3  -7//2=-4  7%2=1  -7%2=1
+n%10 остання цифра   n//10%10 передостання
+input() -&gt; str!  &quot;2&quot;+&quot;3&quot;=&quot;23&quot;  int(input())
+True=1 False=0   &quot;так&quot;*(x&gt;0)
+a if умова else b   (вираз, не оператор)
+not &gt; and &gt; or      0 &lt; x &lt; 10
+range(1,10,2): 1 3 5 7 9  (stop не входить)
+while: змінна з умови міняється всередині
+break - вихід; for...else - якщо без break
+НСД: while b: a, b = b, a % b
+НСК = a*b // НСД;  дільники до d*d &lt;= n
+Фібоначчі: p, c = c, p + c  (одночасно!)
+ряд eˣ: a = a * x / n;  S = S + a
+ε: while abs(cur - prev) &gt;= eps
+бісекція: f(a)*f(c) &lt; 0 -&gt; b = c
+  кроків ≈ log₂((b - a) / ε)
+Горнер: v = v * x + coef
+lst[-1] останній  lst[1:3]  lst[::-1]
+append -&gt; None!   b = a НЕ копія: a.copy()
+[[0]*m for _ in range(n)]  не [[0]*m]*n
+(5,) кортеж   (5) число
+sorted(.., key=lambda r: (-r[1], r[0]))
+sum(1 for x in lst if x % 2 == 0)
+f&quot;{x:.2f}&quot; f&quot;{s:&lt;10}&quot; f&quot;{n:&gt;5}&quot; f&quot;{x:.3g}&quot;
+print(a, b, sep=&quot;, &quot;, end=&quot;&quot;)
+</code></pre>
+<p><strong>Функція:</strong> без <code>return</code> повертає <code>None</code>. Один <code>return</code>, частини через <code>\n</code>. Назву і doctest
+із заготовки не міняти.</p>
+<p><strong>doctest:</strong> порівнює вивід <strong>як текст</strong>: рядок у лапках, зайвий пробіл - падіння.
+<code>python -m doctest -v file.py</code>.</p>
+<p><strong>PEP 8:</strong> 4 пробіли; рядок до 79; 2 порожні рядки між функціями; пробіли навколо <code>=</code> і після
+коми; <code>snake_case</code>, <code>UPPER_CASE</code> для констант; не <code>list</code>, <code>sum</code>, <code>str</code>, <code>id</code> як імена;
+назви змістовні (<code>last_digit</code>, а не <code>a</code>).</p>
+<p><strong>Лінтери:</strong> pycodestyle (PEP 8), flake8 (+ невикористане), ruff (швидше), mypy (типи),
+black (переформатовує).</p>
+<p><strong>Помилки:</strong> <code>TypeError</code> "2"+3; <code>ValueError</code> int("abc"); <code>ZeroDivisionError</code>;
+<code>IndexError</code> lst[10]; <code>KeyError</code> d["нема"]; <code>NameError</code> нема змінної.</p>
+<p><strong>Залік:</strong> формат і бали невідомі - спитати викладача.</p>

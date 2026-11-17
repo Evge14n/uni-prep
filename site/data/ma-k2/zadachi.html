@@ -1,0 +1,458 @@
+<h1 id="типові-задачі-колоквіум-2-і-кр-2">Типові задачі (колоквіум 2 і КР 2)</h1>
+<blockquote>
+<p>Задачі у стилі файлу «Розвʼязування типових завдань розділу Диференціальне числення функцій»
+і зразка КР 2. Числа здебільшого свої, щоб було на чому тренуватись. Кожну відповідь
+перевірено в sympy. Спершу розвʼяжи сам, потім відкривай розвʼязання.</p>
+</blockquote>
+<h2 id="1-похідна-за-означенням">1. Похідна за означенням</h2>
+<p><strong>Задача 1.</strong> Знайдіть похідну f(x) = 1/x у точці x₀ = 2 за означенням.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Приріст функції:</p>
+<pre><code>       1        1     2 - (2 + Δx)
+Δy = ────── - ─── = ────────────
+     2 + Δx    2    2(2 + Δx)
+          -Δx
+     = ──────────
+       2(2 + Δx)
+</code></pre>
+<p><strong>Крок 2.</strong> Ділимо на Δx: <span class="fr"><span>Δy</span><span>Δx</span></span> = <span class="fr"><span>-1</span><span>2(2 + Δx)</span></span> (Δx скоротилось - так буде завжди).</p>
+<p><strong>Крок 3.</strong> Границя при Δx → 0: <span class="fr"><span>-1</span><span>2·2</span></span> = -1/4.</p>
+<p><strong>Відповідь:</strong> f'(2) = -1/4. Перевірка за таблицею: (1/x)' = -1/x², при x = 2 це -1/4.</p>
+</details>
+<h2 id="2-правила-диференціювання">2. Правила диференціювання</h2>
+<p><strong>Задача 2.</strong> y = <span class="fr"><span>2x + 1</span><span>x² + 1</span></span>. Знайдіть y'.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Частка: u = 2x + 1, u' = 2; v = x² + 1, v' = 2x.</p>
+<p><strong>Крок 2.</strong> За правилом (u/v)' = (u'v - uv')/v²:</p>
+<pre><code>     2(x² + 1) - (2x + 1)·2x
+y' = ───────────────────────
+           (x² + 1)²
+</code></pre>
+<p><strong>Крок 3.</strong> Розкриваємо чисельник: 2x² + 2 - 4x² - 2x = -2x² - 2x + 2.</p>
+<p><strong>Відповідь:</strong> y' = <span class="fr"><span>2(1 - x - x²)</span><span>(x² + 1)²</span></span>.</p>
+</details>
+<h2 id="3-складена-функція">3. Складена функція</h2>
+<p><strong>Задача 3.</strong> a) y = √(9 - x²); b) y = ln<span class="fr"><span>x - 1</span><span>x + 1</span></span>. Знайдіть y'.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>a) Крок 1.</strong> Пишемо як степінь: y = (9 - x²)^(1/2). Зовнішня - степінь 1/2, внутрішня 9 - x².</p>
+<p><strong>Крок 2.</strong> y' = (1/2)(9 - x²)^(-1/2)·(9 - x²)' = <span class="fr"><span>1</span><span>2√(9 - x²)</span></span>·(-2x) = -<span class="fr"><span>x</span><span>√(9 - x²)</span></span>.</p>
+<p><strong>b) Крок 3.</strong> Спершу спрощуємо логарифм (так легше): y = ln(x - 1) - ln(x + 1).</p>
+<p><strong>Крок 4.</strong> y' = <span class="fr"><span>1</span><span>x - 1</span></span> - <span class="fr"><span>1</span><span>x + 1</span></span> = <span class="fr"><span>(x + 1) - (x - 1)</span><span>(x - 1)(x + 1)</span></span> = <span class="fr"><span>2</span><span>x² - 1</span></span>.</p>
+<p>У методичці цю саму функцію рахують «в лоб» через похідну частки - відповідь та сама, але довше.</p>
+<p><strong>Відповідь:</strong> a) -x/√(9 - x²); b) 2/(x² - 1).</p>
+</details>
+<p><strong>Задача 4.</strong> y = arcsin 3x + arctg x². Знайдіть y'.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> (arcsin u)' = <span class="fr"><span>u'</span><span>√(1 - u²)</span></span>, u = 3x, u' = 3: <span class="fr"><span>3</span><span>√(1 - 9x²)</span></span>.</p>
+<p><strong>Крок 2.</strong> (arctg u)' = <span class="fr"><span>u'</span><span>1 + u²</span></span>, u = x², u' = 2x, u² = x⁴: <span class="fr"><span>2x</span><span>1 + x⁴</span></span>.</p>
+<p><strong>Відповідь:</strong> y' = <span class="fr"><span>3</span><span>√(1 - 9x²)</span></span> + <span class="fr"><span>2x</span><span>1 + x⁴</span></span>.</p>
+<p>Пастка: (3x)² = 9x², а не 3x².</p>
+</details>
+<h2 id="4-логарифмічна-похідна">4. Логарифмічна похідна</h2>
+<p><strong>Задача 5.</strong> y = (x² + 1)^(sin x). Знайдіть y'.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Змінна і в основі, і в показнику - логарифмуємо: ln y = sin x · ln(x² + 1).</p>
+<p><strong>Крок 2.</strong> Диференціюємо обидві частини. Зліва (ln y)' = y'/y (y - функція від x). Справа -
+похідна добутку:</p>
+<pre><code>y'
+── = cos x·ln(x² + 1)
+y          2x·sin x
+        + ─────────
+           x² + 1
+</code></pre>
+<p><strong>Крок 3.</strong> Множимо на y:</p>
+<pre><code>y' = (x² + 1)^(sin x) ·
+     ⎛                   2x·sin x⎞
+   · ⎜cos x·ln(x² + 1) + ────────⎟
+     ⎝                    x² + 1 ⎠
+</code></pre>
+</details>
+<h2 id="5-параметрична-і-неявна-функція">5. Параметрична і неявна функція</h2>
+<p><strong>Задача 6.</strong> x = t² + 1, y = t³ - t. Знайдіть y'ₓ і y''ₓₓ, обчисліть їх при t = 1.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> x'ₜ = 2t, y'ₜ = 3t² - 1.</p>
+<p><strong>Крок 2.</strong> y'ₓ = <span class="fr"><span>y'ₜ</span><span>x'ₜ</span></span> = <span class="fr"><span>3t² - 1</span><span>2t</span></span>.</p>
+<p><strong>Крок 3.</strong> Для другої похідної спершу (y'ₓ)'ₜ - похідна по t від того, що вийшло:</p>
+<pre><code>          6t·2t - (3t² - 1)·2
+(y'ₓ)'ₜ = ───────────────────
+                 4t²
+          6t² + 2   3t² + 1
+        = ─────── = ───────
+            4t²       2t²
+</code></pre>
+<p><strong>Крок 4.</strong> Ділимо на x'ₜ = 2t: y''ₓₓ = <span class="fr"><span>3t² + 1</span><span>2t²·2t</span></span> = <span class="fr"><span>3t² + 1</span><span>4t³</span></span>.</p>
+<p><strong>Крок 5.</strong> t = 1: y'ₓ = (3 - 1)/2 = 1; y''ₓₓ = (3 + 1)/4 = 1.</p>
+<p>Пастка: y''ₓₓ ≠ y''ₜ/x''ₜ = 6t/2 = 3t (при t = 1 дало б 3 - неправильно).</p>
+</details>
+<p><strong>Задача 7.</strong> Функція задана неявно: e^y + xy = e. Знайдіть y' і його значення в точці (0; 1).</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Перевіряємо точку: e¹ + 0·1 = e. Лежить на кривій.</p>
+<p><strong>Крок 2.</strong> Диференціюємо по x, памʼятаючи, що y = y(x):
+(e^y)' = e^y·y', (xy)' = 1·y + x·y', (e)' = 0.</p>
+<pre><code>e^y·y' + y + x·y' = 0
+</code></pre>
+<p><strong>Крок 3.</strong> Виносимо y': y'(e^y + x) = -y ⇒ y' = <span class="fr"><span>-y</span><span>e^y + x</span></span>.</p>
+<p><strong>Крок 4.</strong> У точці (0; 1): y' = <span class="fr"><span>-1</span><span>e + 0</span></span> = -1/e ≈ -0,368.</p>
+</details>
+<h2 id="6-дотична-і-нормаль">6. Дотична і нормаль</h2>
+<p><strong>Задача 8.</strong> Запишіть рівняння дотичної і нормалі до y = x³ - 2x у точці x₀ = 1.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> y₀ = 1 - 2 = -1. Точка (1; -1).</p>
+<p><strong>Крок 2.</strong> y' = 3x² - 2, y'(1) = 1.</p>
+<p><strong>Крок 3.</strong> Дотична: y = y'(x₀)(x - x₀) + y₀ = 1·(x - 1) - 1 = x - 2.</p>
+<p><strong>Крок 4.</strong> Нормаль: кутовий коефіцієнт -1/y'(x₀) = -1. y = -(x - 1) - 1 = -x.</p>
+<p><strong>Відповідь:</strong> дотична y = x - 2, нормаль y = -x.</p>
+</details>
+<p><strong>Задача 9.</strong> Під яким кутом до осі OX нахилена дотична до y = x³/3 у точці x = 1?</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> y' = x², y'(1) = 1.</p>
+<p><strong>Крок 2.</strong> tg α = 1, α = 45° (π/4).</p>
+</details>
+<h2 id="7-диференціал-і-наближені-обчислення">7. Диференціал і наближені обчислення</h2>
+<p><strong>Задача 10.</strong> a) Знайдіть dy для y = arctg x². b) Для y = x³ при x = 2, Δx = 0,01 порівняйте Δy і dy.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>a)</strong> dy = y'dx = <span class="fr"><span>2x</span><span>1 + x⁴</span></span>dx.</p>
+<p><strong>b) Крок 1.</strong> dy = 3x²·Δx = 3·4·0,01 = 0,12.</p>
+<p><strong>Крок 2.</strong> Δy = 2,01³ - 2³ = 8,120601 - 8 = 0,120601.</p>
+<p><strong>Крок 3.</strong> Різниця Δy - dy = 0,000601 - вона набагато менша за Δx = 0,01, як і каже теорія
+(нескінченно мала вищого порядку). Точно: 6Δx² + Δx³ = 0,0006 + 0,000001.</p>
+</details>
+<p><strong>Задача 11.</strong> Обчисліть наближено: a) arcsin 0,51; b) sin 31°.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p>Формула: f(x₀ + Δx) ≈ f(x₀) + f'(x₀)·Δx.</p>
+<p><strong>a) Крок 1.</strong> f = arcsin x, x₀ = 0,5 (бо arcsin 0,5 = π/6 точно), Δx = 0,01.</p>
+<p><strong>Крок 2.</strong> f'(x) = <span class="fr"><span>1</span><span>√(1 - x²)</span></span>, f'(0,5) = <span class="fr"><span>1</span><span>√0,75</span></span> ≈ 1,1547.</p>
+<p><strong>Крок 3.</strong> arcsin 0,51 ≈ π/6 + 1,1547·0,01 = 0,52360 + 0,01155 = 0,53515.</p>
+<p>Точне значення 0,53518 - збіг до 4 знаків.</p>
+<blockquote>
+<p>У методичці цей самий приклад закінчується числом «0,513» - це арифметична описка:
+π/6 ≈ 0,5236, і 0,5236 + 0,0115 = 0,5351.</p>
+</blockquote>
+<p><strong>b) Крок 4.</strong> Градуси переводимо в радіани! x₀ = 30° = π/6, Δx = 1° = π/180 ≈ 0,017453.</p>
+<p><strong>Крок 5.</strong> (sin x)' = cos x, cos 30° = √3/2 ≈ 0,86603.</p>
+<p><strong>Крок 6.</strong> sin 31° ≈ 0,5 + 0,86603·0,017453 = 0,5 + 0,01511 = 0,51511 (точно 0,51504).</p>
+<p>Пастка: підставити Δx = 1 (градус), а не π/180 - вийде 1,366, більше за 1, чого для синуса не буває.</p>
+</details>
+<h2 id="8-похідні-вищих-порядків-лейбніц">8. Похідні вищих порядків, Лейбніц</h2>
+<p><strong>Задача 12.</strong> Знайдіть y⁽ⁿ⁾ для y = <span class="fr"><span>1</span><span>2x + 3</span></span>.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> y = (2x + 3)⁻¹.</p>
+<p><strong>Крок 2.</strong> Рахуємо кілька похідних і стежимо за закономірністю (кожного разу вилазить множник 2):</p>
+<pre><code>y'   = (-1)·2·(2x + 3)⁻²
+y''  = (-1)(-2)·2²·(2x + 3)⁻³
+y''' = (-1)(-2)(-3)·2³·(2x + 3)⁻⁴
+</code></pre>
+<p><strong>Крок 3.</strong> Добуток (-1)(-2)...(-n) = (-1)ⁿ·n!. Тому</p>
+<pre><code>        (-1)ⁿ·n!·2ⁿ
+y⁽ⁿ⁾ = ────────────
+       (2x + 3)ⁿ⁺¹
+</code></pre>
+<p>Перевірка при n = 1: -2/(2x + 3)². Збіг.</p>
+</details>
+<p><strong>Задача 13.</strong> За формулою Лейбніца знайдіть y⁽⁵⁾ для y = x²·e^(3x).</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> u = e^(3x): u⁽ⁿ⁾ = 3ⁿe^(3x). v = x²: v' = 2x, v'' = 2, v''' = 0. Тому в сумі лише k = 0, 1, 2.</p>
+<p><strong>Крок 2.</strong> C₅⁰ = 1, C₅¹ = 5, C₅² = 5·4/2 = 10.</p>
+<p><strong>Крок 3.</strong></p>
+<pre><code>y⁽⁵⁾ = u⁽⁵⁾v + 5u⁽⁴⁾v' + 10u'''v''
+ = 243e³ˣ·x² + 5·81e³ˣ·2x
+   + 10·27e³ˣ·2
+</code></pre>
+<p><strong>Відповідь:</strong> y⁽⁵⁾ = e^(3x)(243x² + 810x + 540).</p>
+</details>
+<p><strong>Задача 14.</strong> Знайдіть d²y для y = x·ln x: a) x - незалежна змінна; b) x - функція іншої змінної.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> y' = ln x + x·(1/x) = ln x + 1, y'' = 1/x.</p>
+<p><strong>Крок 2.</strong> a) d²y = y''dx² = <span class="fr"><span>dx²</span><span>x</span></span>.</p>
+<p><strong>Крок 3.</strong> b) d²y = y''dx² + y'd²x = <span class="fr"><span>dx²</span><span>x</span></span> + (ln x + 1)d²x. Зайвий доданок і є
+«неінваріантність» другого диференціала.</p>
+</details>
+<h2 id="9-теореми-ролля-і-лагранжа">9. Теореми Ролля і Лагранжа</h2>
+<p><strong>Задача 15.</strong> a) Перевірте теорему Ролля для f(x) = x² - 6x + 5 на [1; 5] і знайдіть c.
+b) Знайдіть c з теореми Лагранжа для f(x) = ln x на [1; e].</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>a) Крок 1.</strong> Многочлен неперервний і диференційовний скрізь. f(1) = 1 - 6 + 5 = 0,
+f(5) = 25 - 30 + 5 = 0. Умови Ролля виконані.</p>
+<p><strong>Крок 2.</strong> f'(c) = 2c - 6 = 0 ⇒ c = 3 ∈ (1; 5).</p>
+<p><strong>b) Крок 3.</strong> ln x неперервна на [1; e] і має похідну 1/x на (1; e).</p>
+<p><strong>Крок 4.</strong> <span class="fr"><span>f(e) - f(1)</span><span>e - 1</span></span> = <span class="fr"><span>1 - 0</span><span>e - 1</span></span> = <span class="fr"><span>1</span><span>e - 1</span></span>.</p>
+<p><strong>Крок 5.</strong> f'(c) = 1/c = 1/(e - 1) ⇒ c = e - 1 ≈ 1,718 ∈ (1; e).</p>
+</details>
+<h2 id="10-правило-лопіталя">10. Правило Лопіталя</h2>
+<p><strong>Задача 16.</strong> lim x→0 <span class="fr"><span>eˣ - e⁻ˣ - 2x</span><span>x - sin x</span></span>.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Підставляємо 0: (1 - 1 - 0)/(0 - 0) = 0/0. Лопіталь можна.</p>
+<p><strong>Крок 2.</strong> Похідні окремо: <span class="fr"><span>eˣ + e⁻ˣ - 2</span><span>1 - cos x</span></span> → (1 + 1 - 2)/(1 - 1) = 0/0. Ще раз.</p>
+<p><strong>Крок 3.</strong> <span class="fr"><span>eˣ - e⁻ˣ</span><span>sin x</span></span> → 0/0. Ще раз.</p>
+<p><strong>Крок 4.</strong> <span class="fr"><span>eˣ + e⁻ˣ</span><span>cos x</span></span> → (1 + 1)/1 = 2.</p>
+<p><strong>Відповідь:</strong> 2.</p>
+</details>
+<p><strong>Задача 17.</strong> a) lim x→+∞ x³/eˣ; b) lim x→+0 x²·ln x.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>a) Крок 1.</strong> ∞/∞. Тричі Лопіталь: <span class="fr"><span>3x²</span><span>eˣ</span></span> → <span class="fr"><span>6x</span><span>eˣ</span></span> → <span class="fr"><span>6</span><span>eˣ</span></span> → 0. Експонента «сильніша»
+за будь-який степінь (у методичці так само xⁿ/e²ˣ → 0).</p>
+<p><strong>b) Крок 2.</strong> 0·∞ (x² → 0, ln x → -∞). Переписуємо як дріб: x²·ln x = <span class="fr"><span>ln x</span><span>x⁻²</span></span> - тепер ∞/∞.</p>
+<p><strong>Крок 3.</strong> <span class="fr"><span>(ln x)'</span><span>(x⁻²)'</span></span> = <span class="fr"><span>1/x</span><span>-2x⁻³</span></span> = -<span class="fr"><span>x²</span><span>2</span></span> → 0.</p>
+<p><strong>Відповідь:</strong> a) 0; b) 0.</p>
+</details>
+<p><strong>Задача 18.</strong> a) lim x→0 (cos x)^(1/x²); b) lim x→0 (<span class="fr"><span>1</span><span>x</span></span> - <span class="fr"><span>1</span><span>eˣ - 1</span></span>).</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>a) Крок 1.</strong> Вид 1^∞. Пишемо u^v = e^(v·ln u): (cos x)^(1/x²) = e^(ln cos x / x²).</p>
+<p><strong>Крок 2.</strong> Границя показника: <span class="fr"><span>ln cos x</span><span>x²</span></span>, 0/0. Лопіталь:
+<span class="fr"><span>-sin x / cos x</span><span>2x</span></span> = -<span class="fr"><span>1</span><span>2</span></span>·<span class="fr"><span>sin x</span><span>x</span></span>·<span class="fr"><span>1</span><span>cos x</span></span> → -1/2.</p>
+<p><strong>Крок 3.</strong> Відповідь a) e^(-1/2) = 1/√e ≈ 0,6065.</p>
+<p><strong>b) Крок 4.</strong> Вид ∞ - ∞. Спільний знаменник: <span class="fr"><span>eˣ - 1 - x</span><span>x(eˣ - 1)</span></span>, 0/0.</p>
+<p><strong>Крок 5.</strong> Лопіталь: <span class="fr"><span>eˣ - 1</span><span>eˣ - 1 + x·eˣ</span></span> - знову 0/0. Ще раз: <span class="fr"><span>eˣ</span><span>2eˣ + x·eˣ</span></span> → 1/2.</p>
+<p><strong>Відповідь:</strong> a) e^(-1/2); b) 1/2.</p>
+</details>
+<h2 id="11-формула-тейлора-і-маклорена">11. Формула Тейлора і Маклорена</h2>
+<p><strong>Задача 19.</strong> Розкладіть f(x) = x³ - 2x² + 3x + 5 за степенями (x - 2).</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Значення і похідні в x₀ = 2:</p>
+<pre><code>f(2)   = 8 - 8 + 6 + 5 = 11
+f'     = 3x² - 4x + 3,  f'(2) = 7
+f''    = 6x - 4,        f''(2) = 8
+f'''   = 6,             f''''  = 0
+</code></pre>
+<p><strong>Крок 2.</strong> Ділимо на факторіали: 11, 7/1! = 7, 8/2! = 4, 6/3! = 1.</p>
+<p><strong>Відповідь:</strong> f(x) = 11 + 7(x - 2) + 4(x - 2)² + (x - 2)³. Залишку нема: многочлен 3-го степеня.
+Перевірка: розкрий дужки - вийде початковий многочлен.</p>
+</details>
+<p><strong>Задача 20.</strong> a) За Маклореном знайдіть lim x→0 <span class="fr"><span>cos x - 1 + x²/2</span><span>x⁴</span></span>.
+b) Обчисліть ln 1,1 трьома доданками формули Маклорена і оцініть похибку.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>a) Крок 1.</strong> cos x = 1 - x²/2 + x⁴/24 + o(x⁴).</p>
+<p><strong>Крок 2.</strong> Чисельник: 1 - x²/2 + x⁴/24 - 1 + x²/2 = x⁴/24 + o(x⁴).</p>
+<p><strong>Крок 3.</strong> Ділимо на x⁴: 1/24 + o(x⁴)/x⁴ → 1/24.</p>
+<p><strong>b) Крок 4.</strong> ln(1 + x) ≈ x - x²/2 + x³/3, x = 0,1:
+0,1 - 0,005 + 0,000333 = 0,095333.</p>
+<p><strong>Крок 5.</strong> Точне ln 1,1 = 0,095310. Похибка ≈ 0,000023, і вона менша за перший відкинутий
+доданок x⁴/4 = 0,000025 (у ряді зі змінними знаками так і має бути).</p>
+</details>
+<h2 id="12-монотонність-екстремум-найбільше-і-найменше">12. Монотонність, екстремум, найбільше і найменше</h2>
+<p><strong>Задача 21.</strong> Знайдіть проміжки монотонності і екстремуми f(x) = x⁴ - 2x².</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> f' = 4x³ - 4x = 4x(x - 1)(x + 1) = 0 ⇒ x = -1, 0, 1.</p>
+<p><strong>Крок 2.</strong> Знаки f' (пробні точки -2; -0,5; 0,5; 2):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>x</th>
+<th>(-∞; -1)</th>
+<th>-1</th>
+<th>(-1; 0)</th>
+<th>0</th>
+<th>(0; 1)</th>
+<th>1</th>
+<th>(1; +∞)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>f'</td>
+<td>-</td>
+<td>0</td>
+<td>+</td>
+<td>0</td>
+<td>-</td>
+<td>0</td>
+<td>+</td>
+</tr>
+<tr>
+<td>f</td>
+<td>↘</td>
+<td>min</td>
+<td>↗</td>
+<td>max</td>
+<td>↘</td>
+<td>min</td>
+<td>↗</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Крок 3.</strong> f(-1) = 1 - 2 = -1, f(0) = 0, f(1) = -1.</p>
+<p><strong>Перевірка другою умовою:</strong> f'' = 12x² - 4: f''(±1) = 8 &gt; 0 (мінімуми), f''(0) = -4 &lt; 0 (максимум).</p>
+<p><strong>Відповідь:</strong> спадає на (-∞; -1) і (0; 1), зростає на (-1; 0) і (1; +∞);
+min f(±1) = -1, max f(0) = 0.</p>
+</details>
+<p><strong>Задача 22.</strong> Найбільше і найменше значення f(x) = x³ - 3x² - 9x + 7 на [-2; 4].</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> f' = 3x² - 6x - 9 = 3(x - 3)(x + 1) = 0 ⇒ x = -1, x = 3. Обидві всередині [-2; 4].</p>
+<p><strong>Крок 2.</strong> Значення в критичних точках і на кінцях:</p>
+<pre><code>f(-2) = -8 - 12 + 18 + 7 = 5
+f(-1) = -1 - 3 + 9 + 7  = 12
+f(3)  = 27 - 27 - 27 + 7 = -20
+f(4)  = 64 - 48 - 36 + 7 = -13
+</code></pre>
+<p><strong>Відповідь:</strong> найбільше 12 (у x = -1), найменше -20 (у x = 3).</p>
+</details>
+<h2 id="13-опуклість-перегин-асимптоти">13. Опуклість, перегин, асимптоти</h2>
+<p><strong>Задача 23.</strong> Проміжки опуклості і точки перегину y = x·e⁻ˣ.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> y' = e⁻ˣ - x·e⁻ˣ = (1 - x)e⁻ˣ.</p>
+<p><strong>Крок 2.</strong> y'' = -e⁻ˣ - (1 - x)e⁻ˣ = (x - 2)e⁻ˣ.</p>
+<p><strong>Крок 3.</strong> e⁻ˣ &gt; 0 завжди, тому знак y'' = знак (x - 2). y'' = 0 при x = 2.</p>
+<p><strong>Крок 4.</strong> x &lt; 2: y'' &lt; 0, опуклий доверху ∩; x &gt; 2: y'' &gt; 0, опуклий донизу ∪.</p>
+<p><strong>Крок 5.</strong> Знак змінився - перегин. y(2) = 2e⁻² ≈ 0,271.</p>
+<p><strong>Відповідь:</strong> ∩ на (-∞; 2), ∪ на (2; +∞), точка перегину (2; 2/e²).</p>
+</details>
+<p><strong>Задача 24.</strong> Асимптоти графіка y = <span class="fr"><span>x² - 3</span><span>x + 2</span></span>.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Вертикальна: знаменник 0 при x = -2, чисельник там 4 - 3 = 1 ≠ 0.
+x → -2 + 0: 1/(+мале) → +∞; x → -2 - 0: → -∞. Отже, x = -2 - вертикальна асимптота.</p>
+<p><strong>Крок 2.</strong> k = lim <span class="fr"><span>f(x)</span><span>x</span></span> = lim <span class="fr"><span>x² - 3</span><span>x² + 2x</span></span> = 1.</p>
+<p><strong>Крок 3.</strong> b = lim (f(x) - x) = lim <span class="fr"><span>x² - 3 - x² - 2x</span><span>x + 2</span></span> = lim <span class="fr"><span>-2x - 3</span><span>x + 2</span></span> = -2.</p>
+<p><strong>Крок 4.</strong> Для x → -∞ ті самі k = 1, b = -2.</p>
+<p><strong>Відповідь:</strong> x = -2 і y = x - 2.</p>
+</details>
+<h2 id="14-повне-дослідження-функції-завдання-6-зі-зразка-кр-2-3-бал">14. Повне дослідження функції (завдання 6 зі зразка КР 2, 3 бали)</h2>
+<p><strong>Задача 25.</strong> Дослідіть функцію y = <span class="fr"><span>x²</span><span>x - 1</span></span> і побудуйте графік.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1. Область.</strong> x ≠ 1: D = (-∞; 1) ∪ (1; +∞).</p>
+<p><strong>Крок 2. Перетин з осями.</strong> x = 0 ⇒ y = 0. Точка (0; 0) - єдина.</p>
+<p><strong>Крок 3. Парність.</strong> Область не симетрична відносно 0 - ні парна, ні непарна. Не періодична.</p>
+<p><strong>Крок 4. Розрив.</strong> У x = 1: x → 1 + 0: 1/(+0) → +∞; x → 1 - 0: → -∞. Розрив другого роду,
+x = 1 - вертикальна асимптота.</p>
+<p><strong>Крок 5. Похила.</strong> k = lim <span class="fr"><span>x²</span><span>x(x - 1)</span></span> = 1; b = lim (<span class="fr"><span>x²</span><span>x - 1</span></span> - x) = lim <span class="fr"><span>x</span><span>x - 1</span></span> = 1.
+Асимптота y = x + 1 (при x → ±∞).</p>
+<p><strong>Крок 6. Монотонність.</strong></p>
+<pre><code>     2x(x - 1) - x²    x(x - 2)
+y' = ────────────── = ────────
+        (x - 1)²       (x - 1)²
+</code></pre>
+<p>y' = 0 при x = 0 і x = 2; не існує при x = 1 (не в області).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>x</th>
+<th>(-∞; 0)</th>
+<th>0</th>
+<th>(0; 1)</th>
+<th>(1; 2)</th>
+<th>2</th>
+<th>(2; +∞)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>y'</td>
+<td>+</td>
+<td>0</td>
+<td>-</td>
+<td>-</td>
+<td>0</td>
+<td>+</td>
+</tr>
+<tr>
+<td>y</td>
+<td>↗</td>
+<td>max 0</td>
+<td>↘</td>
+<td>↘</td>
+<td>min 4</td>
+<td>↗</td>
+</tr>
+</tbody>
+</table></div>
+<p>y(2) = 4/1 = 4.</p>
+<p><strong>Крок 7. Опуклість.</strong> y'' = <span class="fr"><span>2</span><span>(x - 1)³</span></span>. Нуля нема. x &lt; 1: y'' &lt; 0, ∩; x &gt; 1: y'' &gt; 0, ∪.
+Опуклість міняється лише в x = 1, але там функція не визначена - <strong>точок перегину нема</strong>.</p>
+<p><strong>Крок 8. Графік.</strong> Ліва гілка: йде з -∞ під асимптотою y = x + 1, вершина (0; 0), падає до
+-∞ біля x = 1. Права гілка: з +∞ біля x = 1, дно (2; 4), далі вгору над асимптотою y = x + 1.</p>
+</details>
+<p><strong>Задача 26.</strong> Дослідіть функцію y = <span class="fr"><span>x</span><span>x² + 1</span></span>.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Область - уся пряма (x² + 1 &gt; 0). Розривів і вертикальних асимптот нема.</p>
+<p><strong>Крок 2.</strong> (0; 0) - перетин з осями. y(-x) = -y(x) - функція <strong>непарна</strong>, графік симетричний
+відносно початку координат.</p>
+<p><strong>Крок 3.</strong> Горизонтальна асимптота: lim <span class="fr"><span>x</span><span>x² + 1</span></span> = 0 при x → ±∞, тобто y = 0 (k = 0).</p>
+<p><strong>Крок 4.</strong> y' = <span class="fr"><span>(x² + 1) - x·2x</span><span>(x² + 1)²</span></span> = <span class="fr"><span>1 - x²</span><span>(x² + 1)²</span></span>. Нулі x = ±1.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>x</th>
+<th>(-∞; -1)</th>
+<th>-1</th>
+<th>(-1; 1)</th>
+<th>1</th>
+<th>(1; +∞)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>y'</td>
+<td>-</td>
+<td>0</td>
+<td>+</td>
+<td>0</td>
+<td>-</td>
+</tr>
+<tr>
+<td>y</td>
+<td>↘</td>
+<td>min -1/2</td>
+<td>↗</td>
+<td>max 1/2</td>
+<td>↘</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Крок 5.</strong> y'' = <span class="fr"><span>2x(x² - 3)</span><span>(x² + 1)³</span></span>. Нулі x = 0, x = ±√3 ≈ ±1,732.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>x</th>
+<th>(-∞; -√3)</th>
+<th>(-√3; 0)</th>
+<th>(0; √3)</th>
+<th>(√3; +∞)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>y''</td>
+<td>-</td>
+<td>+</td>
+<td>-</td>
+<td>+</td>
+</tr>
+<tr>
+<td>графік</td>
+<td>∩</td>
+<td>∪</td>
+<td>∩</td>
+<td>∪</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Крок 6.</strong> Знак міняється в кожній з трьох точок - три перегини:
+(-√3; -√3/4), (0; 0), (√3; √3/4). √3/4 ≈ 0,433.</p>
+<p><strong>Крок 7. Графік.</strong> Іде з 0 (знизу від асимптоти y = 0) вниз до мінімуму (-1; -1/2), через (0; 0)
+вгору до максимуму (1; 1/2), потім спадає до 0 при x → +∞.</p>
+</details>

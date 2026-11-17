@@ -1,0 +1,6 @@
+tools/e2e-shots/
+__pycache__/
+CONTENT-SPEC.md
+UNIMOL1-КООРДИНАЦІЯ.md
+*.pyc
+tools/unimol1_mol_tasks.json

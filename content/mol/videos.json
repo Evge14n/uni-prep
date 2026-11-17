@@ -1,0 +1,305 @@
+{
+ "checked": "17.11.2026",
+ "topics": [
+  {
+   "topic": "К1: рівняння стану",
+   "videos": [
+    {
+     "id": "SCHftoCN0N4",
+     "title": "Практичне №4 - МКТ, перше начало термодинаміки, теплоємність",
+     "author": "Roman Zakharchenko",
+     "duration": "1:23:46",
+     "lang": "uk",
+     "start": 204,
+     "main": true,
+     "why": "з 3:24 рівняння Менделєєва-Клапейрона, з 21:39 розбір задач з балонами газу"
+    },
+    {
+     "id": "VIle0yf4Daw",
+     "title": "Про цикл Карно та цикли теплових машин",
+     "author": "Roman Zakharchenko",
+     "duration": "1:11:28",
+     "lang": "uk",
+     "start": 3616,
+     "why": "з 60:16 коротко: тиск і основне рівняння МКТ, ступені вільності"
+    }
+   ]
+  },
+  {
+   "topic": "К1: температура",
+   "videos": [
+    {
+     "id": "ldlKICQyOBQ",
+     "title": "Zeroth law of thermodynamics - Temperature, Temperature scales",
+     "author": "Singularity Stuffs",
+     "duration": "10:22",
+     "lang": "en",
+     "start": 22,
+     "main": true,
+     "why": "з 0:22 температура, з 1:52 нульове начало і теплова рівновага, з 3:51 термометри (зокрема газовий), з 8:43 шкали температур"
+    }
+   ]
+  },
+  {
+   "topic": "К1: перше начало",
+   "videos": [
+    {
+     "id": "SCHftoCN0N4",
+     "title": "Практичне №4 - МКТ, перше начало термодинаміки, теплоємність",
+     "author": "Roman Zakharchenko",
+     "duration": "1:23:46",
+     "lang": "uk",
+     "start": 349,
+     "main": true,
+     "why": "з 5:49 перше начало термодинаміки, з 11:23 теплоємності, далі задачі"
+    },
+    {
+     "id": "VIle0yf4Daw",
+     "title": "Про цикл Карно та цикли теплових машин",
+     "author": "Roman Zakharchenko",
+     "duration": "1:11:28",
+     "lang": "uk",
+     "start": 3682,
+     "why": "з 61:22 ступені вільності молекули, внутрішня енергія і перше начало (коротко)"
+    }
+   ]
+  },
+  {
+   "topic": "К1: теплоємність",
+   "videos": [
+    {
+     "id": "SjGLml9kgos",
+     "title": "Робота та теплоємність ідеального газу в ізопроцесах",
+     "author": "Roman Zakharchenko",
+     "duration": "29:04",
+     "lang": "uk",
+     "start": 198,
+     "main": true,
+     "why": "з 3:18 теплоємність ідеального газу в різних ізопроцесах через перше начало"
+    },
+    {
+     "id": "VIle0yf4Daw",
+     "title": "Про цикл Карно та цикли теплових машин",
+     "author": "Roman Zakharchenko",
+     "duration": "1:11:28",
+     "lang": "uk",
+     "start": 3795,
+     "why": "з 63:15 теплоємність при V = const і з 66:09 при P = const"
+    },
+    {
+     "id": "SCHftoCN0N4",
+     "title": "Практичне №4 - МКТ, перше начало термодинаміки, теплоємність",
+     "author": "Roman Zakharchenko",
+     "duration": "1:23:46",
+     "lang": "uk",
+     "start": 683,
+     "why": "з 11:23 C_P/C_V і молярна теплоємність, з 15:03 розрахунок теплоємності"
+    }
+   ]
+  },
+  {
+   "topic": "К1: адіабата і політропа",
+   "videos": [
+    {
+     "id": "VIle0yf4Daw",
+     "title": "Про цикл Карно та цикли теплових машин",
+     "author": "Roman Zakharchenko",
+     "duration": "1:11:28",
+     "lang": "uk",
+     "start": 4134,
+     "main": true,
+     "why": "з 68:54 рівняння адіабати (Пуассона), з 70:41 політропічні процеси"
+    },
+    {
+     "id": "SjGLml9kgos",
+     "title": "Робота та теплоємність ідеального газу в ізопроцесах",
+     "author": "Roman Zakharchenko",
+     "duration": "29:04",
+     "lang": "uk",
+     "start": 309,
+     "why": "з 5:09 адіабатний процес (теплоємність нуль), з 12:35 показник адіабати"
+    }
+   ]
+  },
+  {
+   "topic": "К1: цикли, друге начало",
+   "videos": [
+    {
+     "id": "VIle0yf4Daw",
+     "title": "Про цикл Карно та цикли теплових машин",
+     "author": "Roman Zakharchenko",
+     "duration": "1:11:28",
+     "lang": "uk",
+     "start": 0,
+     "main": true,
+     "why": "з 0:00 цикли Карно, Отто, Дизеля, з 38:39 ККД і отримане тепло, з 51:40 ККД довільного циклу"
+    }
+   ]
+  },
+  {
+   "topic": "К1: ентропія",
+   "videos": [
+    {
+     "id": "rwq1Zi7bP2w",
+     "title": "Boltzmann entropy",
+     "author": "UNSW Physics",
+     "duration": "8:23",
+     "lang": "en",
+     "start": 0,
+     "main": true,
+     "why": "з 0:00 мікростани і макростани, формула Больцмана S = k·ln W на прикладі"
+    }
+   ]
+  },
+  {
+   "topic": "К1: Максвелл",
+   "videos": [
+    {
+     "id": "O8RRkBqkxPk",
+     "title": "Основи МКТ. Розв'язання задач",
+     "author": "Roman Zakharchenko",
+     "duration": "21:31",
+     "lang": "uk",
+     "start": 26,
+     "main": true,
+     "why": "з 0:26 задачі на розподіл Максвелла: частка молекул у проміжку швидкостей, далі ще задачі"
+    },
+    {
+     "id": "NZZQLYcgZZs",
+     "title": "Physics 32 Kinetic Theory of a Gas (7 of 10) The Maxwell Boltzmann Distribution",
+     "author": "Michel van Biezen",
+     "duration": "10:46",
+     "lang": "en",
+     "start": 0,
+     "why": "з 0:00 розподіл молекул за швидкостями (Максвелла-Больцмана): формула і графік"
+    },
+    {
+     "id": "xQ9D4Jz95-A",
+     "title": "The Maxwell-Boltzmann distribution | AP Chemistry | Khan Academy",
+     "author": "Khan Academy",
+     "duration": "9:29",
+     "lang": "en",
+     "start": 0,
+     "why": "з 0:00 як крива розподілу Максвелла змінюється з температурою і масою молекул"
+    }
+   ]
+  },
+  {
+   "topic": "К1: Больцман, броунівський рух",
+   "videos": [
+    {
+     "id": "gwUQH_9C0eM",
+     "title": "Розподіл частинок в потенціальному силовому полі. Урок-лекція в 10 класі ЛФМЛ 28.11.2024 р.",
+     "author": "Ігор Теличин",
+     "duration": "40:48",
+     "lang": "uk",
+     "start": 0,
+     "main": true,
+     "why": "з 0:00 розподіл частинок у полі сили тяжіння (Больцман), з 23:35 барометрична формула, з 35:39 довжина вільного пробігу"
+    }
+   ]
+  },
+  {
+   "topic": "К1: перенесення",
+   "videos": [
+    {
+     "id": "ZFS2XtAC_xw",
+     "title": "Явища переносу",
+     "author": "Roman Zakharchenko",
+     "duration": "1:10:19",
+     "lang": "uk",
+     "start": 1750,
+     "main": true,
+     "why": "з 29:10 середня довжина вільного пробігу, з 42:52 виведення коефіцієнтів дифузії, теплопровідності і вʼязкості"
+    },
+    {
+     "id": "gwUQH_9C0eM",
+     "title": "Розподіл частинок в потенціальному силовому полі. Урок-лекція в 10 класі ЛФМЛ 28.11.2024 р.",
+     "author": "Ігор Теличин",
+     "duration": "40:48",
+     "lang": "uk",
+     "start": 2139,
+     "why": "з 35:39 середня довжина вільного пробігу молекул"
+    }
+   ]
+  },
+  {
+   "topic": "К2: Ван-дер-Ваальс",
+   "videos": [
+    {
+     "id": "isXeIgWKjNk",
+     "title": "van der Waals Critical Point",
+     "author": "Physical Chemistry",
+     "duration": "11:08",
+     "lang": "en",
+     "start": 0,
+     "main": true,
+     "why": "з 0:00 критична точка газу Ван-дер-Ваальса і як через a і b знайти Pк, Vк, Tк"
+    },
+    {
+     "id": "8zJrjEV9n8o",
+     "title": "Non-Ideal Gases and the Van der Waals Equation",
+     "author": "Professor Dave Explains",
+     "duration": "8:09",
+     "lang": "en",
+     "start": 0,
+     "why": "з 0:00 чому реальні гази неідеальні і що означають поправки a і b"
+    },
+    {
+     "id": "4xGO_bDCJss",
+     "title": "Реальні гази Рівняння Ван-дер-Ваальса. Фізика 10 клас",
+     "author": "Підготовка до ЗНО",
+     "duration": "9:29",
+     "lang": "uk",
+     "start": 0,
+     "why": "з 0:00 реальні гази і рівняння Ван-дер-Ваальса (шкільний рівень, 10 клас)"
+    }
+   ]
+  },
+  {
+   "topic": "К2: рідини",
+   "videos": [
+    {
+     "id": "8UD5Yv9Yr1w",
+     "title": "Фізика 10. Урок-презентація «Поверхневий натяг рідини. Змочування. Капілярні явища»",
+     "author": "Фізика Онлайн",
+     "duration": "1:11:42",
+     "lang": "uk",
+     "start": 30,
+     "main": true,
+     "why": "з 0:30 поверхневий шар і поверхнева енергія, з 12:24 змочування, з 14:37 капілярні явища і тиск Лапласа, з 25:44 задачі (шкільний рівень)"
+    }
+   ]
+  },
+  {
+   "topic": "К2: розчини",
+   "videos": [
+    {
+     "id": "b7izjAyYELI",
+     "title": "Osmotic Pressure & Raoult's Law Problems",
+     "author": "laffeychem",
+     "duration": "20:11",
+     "lang": "en",
+     "start": 30,
+     "main": true,
+     "why": "з 0:30 закон Рауля і приклад, з 12:00 осмотичний тиск і задача"
+    }
+   ]
+  },
+  {
+   "topic": "К2: тверді тіла і фази",
+   "videos": [
+    {
+     "id": "QrHlwgmMTq4",
+     "title": "Phase Diagrams of Water & CO2 Explained -  Chemistry - Melting, Boiling & Critical Point",
+     "author": "The Organic Chemistry Tutor",
+     "duration": "10:27",
+     "lang": "en",
+     "start": 141,
+     "main": true,
+     "why": "з 2:21 фазові діаграми CO₂ і води, з 3:10 потрійна точка, з 7:24 чому у води лінія плавлення нахилена в інший бік (лід тане під тиском)"
+    }
+   ]
+  }
+ ]
+}

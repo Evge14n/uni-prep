@@ -1,0 +1,666 @@
+<h1 id="програмування-python-задачі-з-розвʼязанням">Програмування (Python) - задачі з розвʼязанням</h1>
+<blockquote>
+<p>Задачі - з файлу підготовки UNI2 (теми 1-10) і нові на ті самі прийоми. Код кожної
+задачі разом з doctest перевіряє генератор сайту <code>tools/gen_prog.py</code>: він виконує кожен
+блок коду з цієї сторінки і проганяє всі doctest. Останній запуск - 0 падінь.</p>
+<p>Як розвʼязувати, щоб зарахували: назву функції і doctest не міняти, результат
+<strong>повертати</strong> (<code>return</code>), назви змінних англійські і змістовні, PEP 8, кожен рядок уміти
+пояснити. Спершу прочитай doctest - це і є умова.</p>
+</blockquote>
+<h2 id="тема-1-арифметика-без-циклів">Тема 1. Арифметика без циклів</h2>
+<h3 id="задача-1-секунди-в-години-хвилини-секунди">Задача 1. Секунди в години, хвилини, секунди</h3>
+<p>Функція отримує кількість секунд і повертає рядок <code>'1 год 2 хв 5 с'</code>.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> У годині 3600 с. Цілі години - <code>total_seconds // 3600</code>.</p>
+<p><strong>Крок 2.</strong> Те, що лишилось після годин, - <code>total_seconds % 3600</code>. З цього цілі хвилини - <code>// 60</code>.</p>
+<p><strong>Крок 3.</strong> Секунди - остача від ділення на 60.</p>
+<pre><code class="language-python">def split_seconds(total_seconds: int) -&gt; str:
+    &quot;&quot;&quot;Переводить секунди в години, хвилини і секунди.
+
+    &gt;&gt;&gt; split_seconds(3725)
+    '1 год 2 хв 5 с'
+    &gt;&gt;&gt; split_seconds(59)
+    '0 год 0 хв 59 с'
+    &gt;&gt;&gt; split_seconds(86400)
+    '24 год 0 хв 0 с'
+    &quot;&quot;&quot;
+    hours = total_seconds // 3600
+    minutes = total_seconds % 3600 // 60
+    seconds = total_seconds % 60
+    return f&quot;{hours} год {minutes} хв {seconds} с&quot;
+</code></pre>
+<p>Перевірка вручну: 3725 = 3600 + 120 + 5, тобто 1 год, 2 хв, 5 с.</p>
+</details>
+<h3 id="задача-2-сума-цифр-тризначного-числа-без-циклу">Задача 2. Сума цифр тризначного числа без циклу</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Число може бути відʼємним, тому спершу <code>abs</code>.</p>
+<p><strong>Крок 2.</strong> Перша цифра - <code>// 100</code>, друга - <code>// 10 % 10</code>, остання - <code>% 10</code>.</p>
+<pre><code class="language-python">def three_digit_sum(number: int) -&gt; int:
+    &quot;&quot;&quot;Сума цифр тризначного числа без циклу.
+
+    &gt;&gt;&gt; three_digit_sum(472)
+    13
+    &gt;&gt;&gt; three_digit_sum(-905)
+    14
+    &quot;&quot;&quot;
+    number = abs(number)
+    first_digit = number // 100
+    second_digit = number // 10 % 10
+    last_digit = number % 10
+    return first_digit + second_digit + last_digit
+</code></pre>
+<p>Без <code>abs</code>: -905 // 100 = -10 (округлення вниз), і сума вийде неправильна.</p>
+</details>
+<h3 id="задача-3-парне-чи-непарне-без-if">Задача 3. Парне чи непарне без <code>if</code></h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><code>True</code> = 1, <code>False</code> = 0. Рядок, помножений на <code>True</code>, лишається, на <code>False</code> - стає порожнім.
+Рівно одна з двох умов істинна, тому сума дає одне слово.</p>
+<pre><code class="language-python">def parity_text(number: int) -&gt; str:
+    &quot;&quot;&quot;Парне чи непарне - множенням рядка на умову.
+
+    &gt;&gt;&gt; parity_text(10)
+    'парне'
+    &gt;&gt;&gt; parity_text(7)
+    'непарне'
+    &gt;&gt;&gt; parity_text(-3)
+    'непарне'
+    &quot;&quot;&quot;
+    return &quot;парне&quot; * (number % 2 == 0) + &quot;непарне&quot; * (number % 2 == 1)
+</code></pre>
+<p>Для -3: <code>-3 % 2</code> дорівнює 1 (знак як у дільника), тому працює і для відʼємних.</p>
+</details>
+<h3 id="задача-4-розміняти-суму-монетами-5-2-і-1-без-циклів-і-спискі">Задача 4. Розміняти суму монетами 5, 2 і 1 без циклів і списків</h3>
+<p>Найменша кількість монет. Повернути рядок <code>'5 грн: 3, 2 грн: 1, 1 грн: 1'</code> для 18.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Спершу беремо скільки влізе найбільших: <code>amount // 5</code>.</p>
+<p><strong>Крок 2.</strong> Залишок <code>amount % 5</code> розмінюємо двійками, те, що лишилось, - одиницями.</p>
+<pre><code class="language-python">def coins_change(amount: int) -&gt; str:
+    &quot;&quot;&quot;Розмін суми монетами 5, 2 і 1 грн.
+
+    &gt;&gt;&gt; coins_change(18)
+    '5 грн: 3, 2 грн: 1, 1 грн: 1'
+    &gt;&gt;&gt; coins_change(4)
+    '5 грн: 0, 2 грн: 2, 1 грн: 0'
+    &quot;&quot;&quot;
+    used_5 = amount // 5
+    rest = amount % 5
+    used_2 = rest // 2
+    used_1 = rest % 2
+    return f&quot;5 грн: {used_5}, 2 грн: {used_2}, 1 грн: {used_1}&quot;
+</code></pre>
+<p>Перевірка: 18 = 3·5 + 1·2 + 1·1.</p>
+</details>
+<h2 id="тема-2-функції-return-f-рядки">Тема 2. Функції, return, f-рядки</h2>
+<h3 id="задача-5-один-return-з-кількома-рядками">Задача 5. Один return з кількома рядками</h3>
+<p>Повернути радіус, довжину кола і площу круга, кожне з 3 знаками після коми, в окремому рядку.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p>Вимога викладача: один <code>return</code>, один рядок, частини склеєні через <code>\n</code>. Довгий вираз
+беремо в дужки, щоб перенести на кілька рядків (PEP 8, до 79 символів).</p>
+<pre><code class="language-python">import math
+
+
+def circle_info(radius: float) -&gt; str:
+    &quot;&quot;&quot;Один return, частини склеєні через переведення рядка.
+
+    &gt;&gt;&gt; print(circle_info(2))
+    Радіус: 2.000
+    Довжина кола: 12.566
+    Площа круга: 12.566
+    &quot;&quot;&quot;
+    length = 2 * math.pi * radius
+    area = math.pi * radius ** 2
+    return (f&quot;Радіус: {radius:.3f}\n&quot;
+            f&quot;Довжина кола: {length:.3f}\n&quot;
+            f&quot;Площа круга: {area:.3f}&quot;)
+</code></pre>
+<p>У doctest тут <code>print(...)</code>, бо інакше doctest показав би рядок з <code>\n</code> у лапках.</p>
+</details>
+<h3 id="задача-6-чому-doctest-падає-якщо-функція-друкує">Задача 6. Чому doctest падає, якщо функція друкує</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><code>print</code> лише показує число на екрані, а функція повертає <code>None</code>. Doctest чекає значення,
+яке функція <strong>повернула</strong>.</p>
+<pre><code class="language-python">def bad_square(number: int) -&gt; None:
+    &quot;&quot;&quot;Типова помилка: print замість return.
+
+    &gt;&gt;&gt; result = bad_square(3)
+    9
+    &gt;&gt;&gt; print(result)
+    None
+    &quot;&quot;&quot;
+    print(number ** 2)
+
+
+def good_square(number: int) -&gt; int:
+    &quot;&quot;&quot;Правильно: функція повертає значення.
+
+    &gt;&gt;&gt; good_square(3)
+    9
+    &gt;&gt;&gt; good_square(3) + 1
+    10
+    &quot;&quot;&quot;
+    return number ** 2
+</code></pre>
+<p><code>bad_square(3) + 1</code> дав би <code>TypeError</code>: не можна додати <code>None</code> і число.</p>
+</details>
+<h3 id="задача-7-таблиця-з-шириною-колонок">Задача 7. Таблиця з шириною колонок</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><code>:&lt;10</code> - ширина 10, вирівнювання вліво; <code>:&gt;3</code> - ширина 3 вправо; <code>:.2f</code> - 2 знаки.</p>
+<pre><code class="language-python">def price_line(product_name: str, price: float, count: int) -&gt; str:
+    &quot;&quot;&quot;Рядок таблиці: назва, кількість, сума.
+
+    &gt;&gt;&gt; price_line(&quot;зошит&quot;, 12.5, 4)
+    'зошит     |   4 шт | 50.00 грн'
+    &quot;&quot;&quot;
+    total = price * count
+    return f&quot;{product_name:&lt;10}| {count:&gt;3} шт | {total:.2f} грн&quot;
+</code></pre>
+</details>
+<h2 id="тема-3-розгалуження">Тема 3. Розгалуження</h2>
+<h3 id="задача-8-координатна-чверть">Задача 8. Координатна чверть</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Спершу особливий випадок (точка на осі), потім чверті. <code>x &lt; 0 &lt; y</code> - ланцюжок порівнянь.</p>
+<pre><code class="language-python">def quadrant(x: float, y: float) -&gt; int:
+    &quot;&quot;&quot;Номер координатної чверті, 0 - якщо точка на осі.
+
+    &gt;&gt;&gt; quadrant(1, 2), quadrant(-1, 2), quadrant(-1, -2), quadrant(1, -2)
+    (1, 2, 3, 4)
+    &gt;&gt;&gt; quadrant(0, 5)
+    0
+    &quot;&quot;&quot;
+    if x == 0 or y == 0:
+        return 0
+    elif x &gt; 0 and y &gt; 0:
+        return 1
+    elif x &lt; 0 &lt; y:
+        return 2
+    elif x &lt; 0 and y &lt; 0:
+        return 3
+    else:
+        return 4
+</code></pre>
+</details>
+<h3 id="задача-9-вид-трикутника">Задача 9. Вид трикутника</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Трикутник існує, якщо найбільша сторона менша за суму двох інших. Сума двох
+інших = периметр мінус найбільша.</p>
+<p><strong>Крок 2.</strong> Рівносторонній перевіряємо раніше за рівнобедрений, бо рівносторонній - теж
+«дві сторони рівні».</p>
+<pre><code class="language-python">def triangle_type(side_a: float, side_b: float, side_c: float) -&gt; str:
+    &quot;&quot;&quot;Вид трикутника за сторонами.
+
+    &gt;&gt;&gt; triangle_type(3, 4, 5)
+    'різносторонній'
+    &gt;&gt;&gt; triangle_type(2, 2, 3)
+    'рівнобедрений'
+    &gt;&gt;&gt; triangle_type(1, 1, 1)
+    'рівносторонній'
+    &gt;&gt;&gt; triangle_type(1, 2, 3)
+    'не існує'
+    &quot;&quot;&quot;
+    longest = max(side_a, side_b, side_c)
+    if longest &gt;= side_a + side_b + side_c - longest:
+        return &quot;не існує&quot;
+    if side_a == side_b == side_c:
+        return &quot;рівносторонній&quot;
+    if side_a == side_b or side_b == side_c or side_a == side_c:
+        return &quot;рівнобедрений&quot;
+    return &quot;різносторонній&quot;
+</code></pre>
+</details>
+<h3 id="задача-10-високосний-рік-одним-виразом">Задача 10. Високосний рік одним виразом</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Високосний: ділиться на 4, але не на 100, <strong>або</strong> ділиться на 400. <code>and</code> сильніший за <code>or</code>,
+тому дужки не потрібні.</p>
+<pre><code class="language-python">def is_leap(year: int) -&gt; bool:
+    &quot;&quot;&quot;Високосний рік без if.
+
+    &gt;&gt;&gt; is_leap(2024), is_leap(1900), is_leap(2000), is_leap(2026)
+    (True, False, True, False)
+    &quot;&quot;&quot;
+    return year % 4 == 0 and year % 100 != 0 or year % 400 == 0
+</code></pre>
+</details>
+<h3 id="задача-11-найбільше-з-трьох-тернарним-виразом">Задача 11. Найбільше з трьох тернарним виразом</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Тернарний вираз <code>a if умова else b</code> - це вираз, тож його можна вкласти. Без <code>max</code> і без
+оператора <code>if</code>.</p>
+<pre><code class="language-python">def max_of_three(first: int, second: int, third: int) -&gt; int:
+    &quot;&quot;&quot;Найбільше з трьох чисел тернарним виразом.
+
+    &gt;&gt;&gt; max_of_three(3, 9, 4), max_of_three(7, 2, 7), max_of_three(-1, -5, -3)
+    (9, 7, -1)
+    &quot;&quot;&quot;
+    larger = first if first &gt; second else second
+    return larger if larger &gt; third else third
+</code></pre>
+</details>
+<h2 id="тема-4-цикли">Тема 4. Цикли</h2>
+<h3 id="задача-12-кількість-цифр-числа">Задача 12. Кількість цифр числа</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Ділимо на 10, поки число не стане однозначним. Починаємо з 1, тому 0 має одну цифру.</p>
+<pre><code class="language-python">def count_digits(number: int) -&gt; int:
+    &quot;&quot;&quot;Кількість цифр числа (while).
+
+    &gt;&gt;&gt; count_digits(12345)
+    5
+    &gt;&gt;&gt; count_digits(0)
+    1
+    &gt;&gt;&gt; count_digits(-70)
+    2
+    &quot;&quot;&quot;
+    number = abs(number)
+    digits_count = 1
+    while number &gt;= 10:
+        number //= 10
+        digits_count += 1
+    return digits_count
+</code></pre>
+</details>
+<h3 id="задача-13-сума-квадратів-непарних-до-limit">Задача 13. Сума квадратів непарних до limit</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><code>range(1, limit + 1, 2)</code> дає 1, 3, 5, ... Плюс один - бо stop не входить.</p>
+<pre><code class="language-python">def sum_odd_squares(limit: int) -&gt; int:
+    &quot;&quot;&quot;Сума квадратів непарних від 1 до limit.
+
+    &gt;&gt;&gt; sum_odd_squares(5)
+    35
+    &gt;&gt;&gt; sum_odd_squares(0)
+    0
+    &quot;&quot;&quot;
+    total = 0
+    for odd_number in range(1, limit + 1, 2):
+        total += odd_number ** 2
+    return total
+</code></pre>
+<p>Перевірка: 1 + 9 + 25 = 35.</p>
+</details>
+<h3 id="задача-14-перший-степінь-трійки-не-менший-за-число-лекція-7">Задача 14. Перший степінь трійки, не менший за число (лекція 7)</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Наперед не знаємо, скільки кроків, тому <code>while</code>. Множимо на 3, поки менше за межу.</p>
+<pre><code class="language-python">def first_power_of_three(limit: int) -&gt; int:
+    &quot;&quot;&quot;Найменше 3 ** k, яке &gt;= limit.
+
+    &gt;&gt;&gt; first_power_of_three(10)
+    27
+    &gt;&gt;&gt; first_power_of_three(81)
+    81
+    &gt;&gt;&gt; first_power_of_three(1)
+    1
+    &quot;&quot;&quot;
+    power = 1
+    while power &lt; limit:
+        power *= 3
+    return power
+</code></pre>
+</details>
+<h2 id="тема-5-цілочисельні-алгоритми">Тема 5. Цілочисельні алгоритми</h2>
+<h3 id="задача-15-нсд-і-нск">Задача 15. НСД і НСК</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Евклід: пара (a, b) замінюється на (b, a % b), поки b не стане 0. Тоді a - НСД.
+48, 18 → 18, 12 → 12, 6 → 6, 0. НСК = добуток / НСД.</p>
+<pre><code class="language-python">def gcd_euclid(first: int, second: int) -&gt; int:
+    &quot;&quot;&quot;НСД за алгоритмом Евкліда.
+
+    &gt;&gt;&gt; gcd_euclid(48, 18)
+    6
+    &gt;&gt;&gt; gcd_euclid(17, 5)
+    1
+    &quot;&quot;&quot;
+    while second != 0:
+        first, second = second, first % second
+    return first
+
+
+def lcm_numbers(first: int, second: int) -&gt; int:
+    &quot;&quot;&quot;НСК через НСД.
+
+    &gt;&gt;&gt; lcm_numbers(10, 15)
+    30
+    &gt;&gt;&gt; lcm_numbers(4, 6)
+    12
+    &quot;&quot;&quot;
+    return first * second // gcd_euclid(first, second)
+</code></pre>
+</details>
+<h3 id="задача-16-кількість-дільників-перебір-до-n">Задача 16. Кількість дільників, перебір до √n</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Кожен дільник d ≤ √n має пару n // d. Якщо d == n // d (повний квадрат), рахуємо один раз.
+Для 36: пари (1, 36), (2, 18), (3, 12), (4, 9), (6, 6) - разом 9.</p>
+<pre><code class="language-python">def divisor_count(number: int) -&gt; int:
+    &quot;&quot;&quot;Кількість дільників, перебір лише до кореня.
+
+    &gt;&gt;&gt; divisor_count(36)
+    9
+    &gt;&gt;&gt; divisor_count(13)
+    2
+    &gt;&gt;&gt; divisor_count(1)
+    1
+    &quot;&quot;&quot;
+    divisors_found = 0
+    divisor = 1
+    while divisor * divisor &lt;= number:
+        if number % divisor == 0:
+            divisors_found += 1
+            if divisor != number // divisor:
+                divisors_found += 1
+        divisor += 1
+    return divisors_found
+</code></pre>
+</details>
+<h3 id="задача-17-чи-просте-число">Задача 17. Чи просте число</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Числа менші за 2 - не прості. Далі шукаємо дільник від 2 до √n; знайшли - одразу <code>False</code>.</p>
+<pre><code class="language-python">def is_prime(number: int) -&gt; bool:
+    &quot;&quot;&quot;Чи просте число.
+
+    &gt;&gt;&gt; [n for n in range(1, 20) if is_prime(n)]
+    [2, 3, 5, 7, 11, 13, 17, 19]
+    &quot;&quot;&quot;
+    if number &lt; 2:
+        return False
+    divisor = 2
+    while divisor * divisor &lt;= number:
+        if number % divisor == 0:
+            return False
+        divisor += 1
+    return True
+</code></pre>
+</details>
+<h3 id="задача-18-число-задом-наперед-і-паліндром-без-рядків">Задача 18. Число задом наперед і паліндром без рядків</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Беремо останню цифру <code>% 10</code> і дописуємо її в кінець результату: <code>result * 10 + digit</code>.</p>
+<pre><code class="language-python">def reversed_number(number: int) -&gt; int:
+    &quot;&quot;&quot;Число задом наперед без рядків.
+
+    &gt;&gt;&gt; reversed_number(1203)
+    3021
+    &gt;&gt;&gt; reversed_number(500)
+    5
+    &quot;&quot;&quot;
+    result = 0
+    while number &gt; 0:
+        result = result * 10 + number % 10
+        number //= 10
+    return result
+
+
+def is_palindrome(number: int) -&gt; bool:
+    &quot;&quot;&quot;Чи читається число однаково з обох боків.
+
+    &gt;&gt;&gt; is_palindrome(12321), is_palindrome(1230)
+    (True, False)
+    &quot;&quot;&quot;
+    return reversed_number(number) == number
+</code></pre>
+</details>
+<h2 id="тема-6-рекурентні-співвідношення">Тема 6. Рекурентні співвідношення</h2>
+<h3 id="задача-19-фібоначчі-двома-змінними">Задача 19. Фібоначчі двома змінними</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2). Тримаємо лише дві останні величини і оновлюємо
+їх <strong>одночасно</strong>.</p>
+<pre><code class="language-python">def fibonacci(index: int) -&gt; int:
+    &quot;&quot;&quot;Число Фібоначчі без списку.
+
+    &gt;&gt;&gt; [fibonacci(n) for n in range(10)]
+    [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+    &quot;&quot;&quot;
+    previous, current = 0, 1
+    for _ in range(index):
+        previous, current = current, previous + current
+    return previous
+</code></pre>
+<p>Якщо написати <code>previous = current</code> і потім <code>current = previous + current</code>, друга дія візьме
+вже нове <code>previous</code>, і вийде 1, 2, 4, 8... - степені двійки.</p>
+</details>
+<h3 id="задача-20-часткова-сума-ряду-для-eˣ">Задача 20. Часткова сума ряду для eˣ</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>S(n) = 1 + x + x²/2! + ... + xⁿ/n!. Член a(n) = a(n-1) · x / n - рахуємо з попереднього,
+без факторіала.</p>
+<pre><code class="language-python">def exp_partial_sum(x: float, last_index: int) -&gt; float:
+    &quot;&quot;&quot;Часткова сума ряду для e ** x.
+
+    &gt;&gt;&gt; round(exp_partial_sum(1, 10), 6)
+    2.718282
+    &gt;&gt;&gt; exp_partial_sum(2, 0)
+    1.0
+    &quot;&quot;&quot;
+    term = 1.0
+    partial_sum = 1.0
+    for index in range(1, last_index + 1):
+        term = term * x / index
+        partial_sum += term
+    return partial_sum
+</code></pre>
+</details>
+<h2 id="тема-7-точність-ε-бісекція-горнер">Тема 7. Точність ε, бісекція, Горнер</h2>
+<h3 id="задача-21-корінь-за-героном-з-точністю-ε">Задача 21. Корінь за Героном з точністю ε</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>x(n) = (x(n-1) + number / x(n-1)) / 2. Рахуємо, поки два сусідні наближення відрізняються
+на ε або більше.</p>
+<pre><code class="language-python">def sqrt_heron(number: float, eps: float) -&gt; float:
+    &quot;&quot;&quot;Корінь квадратний за Героном.
+
+    &gt;&gt;&gt; round(sqrt_heron(2, 1e-12), 10)
+    1.4142135624
+    &gt;&gt;&gt; sqrt_heron(9, 1e-12)
+    3.0
+    &quot;&quot;&quot;
+    previous = number
+    current = (previous + number / previous) / 2
+    while abs(current - previous) &gt;= eps:
+        previous = current
+        current = (previous + number / previous) / 2
+    return current
+</code></pre>
+</details>
+<h3 id="задача-22-бісекція-з-лічильником-кроків">Задача 22. Бісекція з лічильником кроків</h3>
+<p>Повернути кортеж: корінь і кількість поділів навпіл.</p>
+<details>
+<summary>Розвʼязання</summary>
+<p><strong>Крок 1.</strong> Середина <code>middle</code>. Якщо знаки f(left) і f(middle) різні - корінь зліва.</p>
+<p><strong>Крок 2.</strong> Кожен крок ділить довжину навпіл. Для [0, 2] і ε = 10⁻⁶: 2 / 2ᵏ &lt; 10⁻⁶, тобто
+2ᵏ &gt; 2·10⁶. 2²⁰ = 1048576 замало, 2²¹ = 2097152 досить - 21 крок.</p>
+<pre><code class="language-python">def bisection_steps(function, left: float, right: float,
+                    eps: float) -&gt; tuple[float, int]:
+    &quot;&quot;&quot;Бісекція: корінь і кількість кроків.
+
+    &gt;&gt;&gt; root, steps = bisection_steps(lambda x: x * x - 2, 0, 2, 1e-6)
+    &gt;&gt;&gt; round(root, 5), steps
+    (1.41421, 21)
+    &quot;&quot;&quot;
+    steps = 0
+    while right - left &gt;= eps:
+        middle = (left + right) / 2
+        if function(left) * function(middle) &lt; 0:
+            right = middle
+        else:
+            left = middle
+        steps += 1
+    return (left + right) / 2, steps
+</code></pre>
+</details>
+<h3 id="задача-23-значення-многочлена-схемою-горнера-лр6">Задача 23. Значення многочлена схемою Горнера (ЛР6)</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Коефіцієнти від старшого: [1, 0, -2, -5] означає x³ - 2x - 5. <code>value = value * x + coefficient</code>.
+Для x = 2: 1 → 1·2 + 0 = 2 → 2·2 - 2 = 2 → 2·2 - 5 = -1.</p>
+<pre><code class="language-python">def horner(coefficients: list[float], x: float) -&gt; float:
+    &quot;&quot;&quot;Значення многочлена схемою Горнера.
+
+    &gt;&gt;&gt; horner([1, 0, -2, -5], 2)
+    -1
+    &gt;&gt;&gt; horner([1, 0, -2, -5], 3)
+    16
+    &quot;&quot;&quot;
+    value = coefficients[0]
+    for coefficient in coefficients[1:]:
+        value = value * x + coefficient
+    return value
+</code></pre>
+</details>
+<h2 id="тема-8-списки">Тема 8. Списки</h2>
+<h3 id="задача-24-рядок-чисел-у-список">Задача 24. Рядок чисел у список</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><code>split()</code> без аргументу ділить за будь-якими пробілами (і подвійними теж).</p>
+<pre><code class="language-python">def read_numbers(text: str) -&gt; list[float]:
+    &quot;&quot;&quot;Рядок «1 2.5 3» у список дійсних чисел.
+
+    &gt;&gt;&gt; read_numbers(&quot;1 2.5  3&quot;)
+    [1.0, 2.5, 3.0]
+    &gt;&gt;&gt; read_numbers(&quot;&quot;)
+    []
+    &quot;&quot;&quot;
+    return [float(item) for item in text.split()]
+</code></pre>
+</details>
+<h3 id="задача-25-найбільший-елемент-і-його-індекс-без-max">Задача 25. Найбільший елемент і його індекс без <code>max</code></h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><code>enumerate</code> дає пари (індекс, значення). Строго <code>&gt;</code>, тому при рівних лишається перший.</p>
+<pre><code class="language-python">def max_with_index(values: list[float]) -&gt; tuple[float, int]:
+    &quot;&quot;&quot;Найбільший елемент і його індекс.
+
+    &gt;&gt;&gt; max_with_index([3, 9, 2, 9])
+    (9, 1)
+    &quot;&quot;&quot;
+    best_value = values[0]
+    best_index = 0
+    for index, value in enumerate(values):
+        if value &gt; best_value:
+            best_value = value
+            best_index = index
+    return best_value, best_index
+</code></pre>
+</details>
+<h3 id="задача-26-транспонування-матриці">Задача 26. Транспонування матриці</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Рядок нової матриці номер <code>column</code> - це стовпчик <code>column</code> старої.</p>
+<pre><code class="language-python">def transpose(matrix: list[list[int]]) -&gt; list[list[int]]:
+    &quot;&quot;&quot;Транспонування матриці.
+
+    &gt;&gt;&gt; transpose([[1, 2, 3], [4, 5, 6]])
+    [[1, 4], [2, 5], [3, 6]]
+    &quot;&quot;&quot;
+    rows_count = len(matrix)
+    columns_count = len(matrix[0])
+    return [[matrix[row][column] for row in range(rows_count)]
+            for column in range(columns_count)]
+</code></pre>
+</details>
+<h3 id="задача-27-пастки-псевдонім-і-матриця-через-множення">Задача 27. Пастки: псевдонім і матриця через множення</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><code>alias = original</code> - те саме імʼя для того самого списку. <code>[[0] * 2] * 2</code> - два посилання на
+<strong>один</strong> рядок.</p>
+<pre><code class="language-python">def list_traps() -&gt; tuple[list[int], list[int], list[list[int]]]:
+    &quot;&quot;&quot;Що змінюється, коли список не скопійовано.
+
+    &gt;&gt;&gt; list_traps()
+    ([1, 2, 99], [1, 2], [[7, 0], [7, 0]])
+    &quot;&quot;&quot;
+    original = [1, 2]
+    alias = original
+    real_copy = original.copy()
+    alias.append(99)
+    bad_matrix = [[0] * 2] * 2
+    bad_matrix[0][0] = 7
+    return original, real_copy, bad_matrix
+</code></pre>
+<p>Правильно матрицю: <code>[[0] * 2 for _ in range(2)]</code>.</p>
+</details>
+<h2 id="тема-9-кортежі-генератор-вирази-сортування">Тема 9. Кортежі, генератор-вирази, сортування</h2>
+<h3 id="задача-28-кілька-результатів-одним-return">Задача 28. Кілька результатів одним return</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><code>return a, b, c</code> повертає кортеж, а при виклику його розпаковують у три змінні.</p>
+<pre><code class="language-python">def min_max_mean(values: list[float]) -&gt; tuple[float, float, float]:
+    &quot;&quot;&quot;Найменше, найбільше, середнє.
+
+    &gt;&gt;&gt; smallest, largest, mean = min_max_mean([4, 1, 7])
+    &gt;&gt;&gt; smallest, largest, mean
+    (1, 7, 4.0)
+    &quot;&quot;&quot;
+    return min(values), max(values), sum(values) / len(values)
+</code></pre>
+</details>
+<h3 id="задача-29-підрахунок-генератор-виразом-і-сортування-за-двома">Задача 29. Підрахунок генератор-виразом і сортування за двома ключами</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><code>sum(1 for ...)</code> додає одиничку за кожен підхожий елемент. У <code>sorted</code> ключ <code>(-бал, імʼя)</code>:
+мінус робить спадання за балом, при рівних бал іде імʼя за алфавітом.</p>
+<pre><code class="language-python">def count_even(values: list[int]) -&gt; int:
+    &quot;&quot;&quot;Скільки парних.
+
+    &gt;&gt;&gt; count_even([12, 0, 7, 15, 21, 8, 13, 0, 2])
+    5
+    &quot;&quot;&quot;
+    return sum(1 for value in values if value % 2 == 0)
+
+
+def rank_students(records: list[tuple[str, int]]) -&gt; list[tuple[str, int]]:
+    &quot;&quot;&quot;Бал за спаданням, при рівних - за імʼям.
+
+    &gt;&gt;&gt; rank_students([(&quot;Олег&quot;, 80), (&quot;Анна&quot;, 95), (&quot;Борис&quot;, 80)])
+    [('Анна', 95), ('Борис', 80), ('Олег', 80)]
+    &quot;&quot;&quot;
+    return sorted(records, key=lambda record: (-record[1], record[0]))
+</code></pre>
+</details>
+<h2 id="тема-11-словники-і-винятки-нема-конспекту-звір-з-лекцією">Тема 11. Словники і винятки [нема конспекту - звір з лекцією]</h2>
+<h3 id="задача-30-скільки-разів-трапляється-кожне-слово">Задача 30. Скільки разів трапляється кожне слово</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p><code>counts.get(word, 0)</code> дає 0 для нового слова, тому не буде <code>KeyError</code>.</p>
+<pre><code class="language-python">def word_counts(text: str) -&gt; dict[str, int]:
+    &quot;&quot;&quot;Частота слів у рядку.
+
+    &gt;&gt;&gt; word_counts(&quot;так ні так так&quot;)
+    {'так': 3, 'ні': 1}
+    &quot;&quot;&quot;
+    counts: dict[str, int] = {}
+    for word in text.split():
+        counts[word] = counts.get(word, 0) + 1
+    return counts
+</code></pre>
+</details>
+<h3 id="задача-31-безпечне-ділення-через-try-except">Задача 31. Безпечне ділення через try / except</h3>
+<details>
+<summary>Розвʼязання</summary>
+<p>Ділення на нуль кидає <code>ZeroDivisionError</code>. Перехоплюємо лише його, а не всі помилки.</p>
+<pre><code class="language-python">def safe_divide(dividend: float, divisor: float) -&gt; str:
+    &quot;&quot;&quot;Частка або повідомлення про ділення на нуль.
+
+    &gt;&gt;&gt; safe_divide(7, 2)
+    '3.5'
+    &gt;&gt;&gt; safe_divide(1, 0)
+    'ділення на нуль'
+    &quot;&quot;&quot;
+    try:
+        return str(dividend / divisor)
+    except ZeroDivisionError:
+        return &quot;ділення на нуль&quot;
+</code></pre>
+</details>

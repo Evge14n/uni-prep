@@ -50,17 +50,28 @@ fi
 mkdir -p ~/univer/labs ~/univer/praktyka
 
 echo "== 5/5 Команди univer і perevir у ~/.bashrc"
-if ! grep -q "# >>> univer >>>" ~/.bashrc; then
-    cat >> ~/.bashrc <<'BASHRC'
+# старий блок (якщо був) прибираємо і пишемо свіжий - так повторний запуск оновлює perevir
+sed -i '/# >>> univer >>>/,/# <<< univer <<</d' ~/.bashrc
+cat >> ~/.bashrc <<'BASHRC'
 # >>> univer >>>
 # univer  - перейти в ~/univer і увімкнути venv
 alias univer='cd ~/univer && source ~/univer/.venv/bin/activate'
 # perevir файл.py - doctest + flake8 + mypy, як вимагає викладач
+# doctest - через pytest: він не плутається з doctest.testmod() у самому файлі
 perevir() {
     if [ -z "$1" ]; then echo "Напиши: perevir назва_файлу.py"; return 1; fi
-    local py=~/univer/.venv/bin/python
+    local py=~/univer/.venv/bin/python out
+    out=$(mktemp)
     echo "--- doctest"
-    "$py" -m doctest "$1" && echo "doctest: усе пройшло"
+    if "$py" -m pytest --doctest-modules -q -p no:cacheprovider "$1" < /dev/null > "$out" 2>&1; then
+        echo "doctest: усе пройшло ($(tail -n 1 "$out"))"
+    elif grep -q "reading from stdin" "$out"; then
+        echo "doctest: файл питає input() одразу при запуску - перевір так: printf \"5\\n\" | python $1"
+    else
+        cat "$out"
+        echo "doctest: Є ПОМИЛКИ (дивись Expected / Got вище)"
+    fi
+    rm -f "$out"
     echo "--- flake8 (рядок до 78 символів)"
     "$py" -m flake8 --max-line-length=78 "$1" && echo "flake8: зауважень нема"
     echo "--- mypy"
@@ -68,10 +79,10 @@ perevir() {
 }
 # <<< univer <<<
 BASHRC
-    echo "   додано (відкрий нове вікно Ubuntu або виконай: source ~/.bashrc)"
-else
-    echo "   уже було"
-fi
+echo "   готово (відкрий нове вікно Ubuntu або виконай: source ~/.bashrc)"
+
+# кириличні назви файлів у git status показувати буквами, а не \320\233...
+git config --global core.quotepath false
 
 if [ -z "$(git config --global user.name)" ]; then
     echo

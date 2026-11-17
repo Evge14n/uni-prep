@@ -1,0 +1,52 @@
+# Шпаргалка: Python + безпека
+
+```
+ПРАВИЛО 0: усе ззовні - вороже,
+поки не перевірив (ввід, файл, URL,
+cookie, JSON, назва файлу)
+
+ВВІД      int() у try/except + межі
+          ніколи eval(ввід), exec(ввід)
+          текст -> дані: json.loads,
+          ast.literal_eval
+ІНʼЄКЦІЇ  SQL: "... WHERE name = ?",
+          (name,)
+          НЕ f-рядок, НЕ +
+          shell: subprocess.run([...]),
+          без shell=True
+ДОСТУП    перевірка на початку функції
+          чий обʼєкт? (IDOR)
+          fail closed: помилка = відмова
+ЛІМІТИ    len(ввід) ДО роботи
+          розмір файлу, к-сть спроб
+ФАЙЛИ     p = (BASE / name).resolve()
+          p.is_relative_to(BASE)
+СЕКРЕТИ   не в коді: os.environ, .env
+          .env у .gitignore,
+          читати: python-dotenv
+          витік у git -> замінити ключ
+          токени: secrets, НЕ random
+ПОМИЛКИ   користувачу коротко + код
+          traceback - лише в лог
+          DEBUG = False на сервері
+PIP       venv + requirements.txt
+          pip-audit (з дефісом!)
+          назву - з сайту проєкту,
+          на pypi.org звір автора
+URL       лише https, timeout
+          SSRF: список дозволених хостів
+          хост: urlparse(url).hostname
+XSS       html.escape(все від людей)
+          посилання - лише https
+ПАРОЛІ    Argon2id (argon2-cffi)
+          НЕ sha256, НЕ відкрито
+ТОКЕНИ    порівнювати лише так:
+          hmac.compare_digest(
+            a.encode(), b.encode())
+БАЗА      параметри; колонка - зі списку
+          права БД - мінімальні
+```
+
+OWASP Top 10:2025: A01 доступ (IDOR, path traversal, SSRF, CSRF) · A02 налаштування · A03 ланцюг постачання (pip) ·
+A04 криптографія · A05 інʼєкції (SQL, команди, XSS, eval) · A06 небезпечний дизайн · A07 автентифікація ·
+A08 цілісність · A09 логи й тривоги · A10 обробка помилок (fail open, витік у помилці).

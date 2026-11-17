@@ -1,0 +1,746 @@
+<h1 id="задачі-напиши-безпечну-функцію">Задачі: напиши безпечну функцію</h1>
+<p>10 задач, по одній на тему. У кожній - заготовка з doctest: функція поки що <code>pass</code>, тому перевірка червона.
+Допиши функцію так, щоб усі приклади пройшли. Кнопка «doctest -v» під кодом перевіряє прямо тут,
+на ПК - <code>python3 файл.py</code> (у кінці файлу вже стоїть запуск doctest).</p>
+<div class="pybox" id="pybox"></div>
+
+<p>Як працювати: 1) прочитай умову і приклади (приклади - це і є вимоги); 2) натисни «Змінити», напиши код;
+3) «doctest -v»; 4) розвʼязок відкривай лише після двох своїх спроб.</p>
+<h2 id="задача-1-безпечне-читання-числа-тема-1">Задача 1. Безпечне читання числа (тема 1)</h2>
+<p>Функція <code>read_int(text, low, high)</code> повертає ціле число з рядка, якщо воно в межах <code>low..high</code> (межі включно).
+Якщо рядок не число або число поза межами - <code>None</code>. Функція ніколи не падає. <code>eval</code> не можна.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 1. Безпечне читання числа.&quot;&quot;&quot;
+import doctest
+
+
+def read_int(text, low, high):
+    &quot;&quot;&quot;Ціле з рядка в межах low..high або None.
+
+    &gt;&gt;&gt; read_int(&quot;42&quot;, 0, 100)
+    42
+    &gt;&gt;&gt; read_int(&quot; 7 &quot;, 0, 10)
+    7
+    &gt;&gt;&gt; read_int(&quot;100&quot;, 0, 100)
+    100
+    &gt;&gt;&gt; read_int(&quot;101&quot;, 0, 100) is None
+    True
+    &gt;&gt;&gt; read_int(&quot;abc&quot;, 0, 100) is None
+    True
+    &gt;&gt;&gt; read_int(&quot;&quot;, 0, 100) is None
+    True
+    &gt;&gt;&gt; read_int(&quot;2+2&quot;, 0, 100) is None
+    True
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 1. Безпечне читання числа. Розвʼязок.&quot;&quot;&quot;
+import doctest
+
+
+def read_int(text, low, high):
+    &quot;&quot;&quot;Ціле з рядка в межах low..high або None.
+
+    &gt;&gt;&gt; read_int(&quot;42&quot;, 0, 100)
+    42
+    &gt;&gt;&gt; read_int(&quot; 7 &quot;, 0, 10)
+    7
+    &gt;&gt;&gt; read_int(&quot;100&quot;, 0, 100)
+    100
+    &gt;&gt;&gt; read_int(&quot;101&quot;, 0, 100) is None
+    True
+    &gt;&gt;&gt; read_int(&quot;abc&quot;, 0, 100) is None
+    True
+    &gt;&gt;&gt; read_int(&quot;&quot;, 0, 100) is None
+    True
+    &gt;&gt;&gt; read_int(&quot;2+2&quot;, 0, 100) is None
+    True
+    &quot;&quot;&quot;
+    try:
+        value = int(text)
+    except ValueError:
+        return None
+    if low &lt;= value &lt;= high:
+        return value
+    return None
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<p>Чому так: <code>int("2+2")</code> кидає <code>ValueError</code> - рядок не рахується як вираз (на відміну від <code>eval</code>). Межі перевіряємо
+після перетворення, бо до нього це ще рядок.</p>
+</details>
+<h2 id="задача-2-пошук-без-sql-інʼєкції-тема-2">Задача 2. Пошук без SQL-інʼєкції (тема 2)</h2>
+<p>Функція <code>find_secret(con, name)</code> повертає секрет користувача з таблиці <code>users</code> або <code>None</code>, якщо такого нема.
+Запит - лише з параметром <code>?</code>. Базу для прикладів робить готова функція <code>make_db()</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 2. Пошук без SQL-інʼєкції.&quot;&quot;&quot;
+import doctest
+import sqlite3
+
+
+def make_db():
+    con = sqlite3.connect(&quot;:memory:&quot;)
+    con.execute(&quot;CREATE TABLE users (name TEXT, secret TEXT)&quot;)
+    con.executemany(&quot;INSERT INTO users VALUES (?, ?)&quot;,
+                    [(&quot;anna&quot;, &quot;s-111&quot;), (&quot;bob&quot;, &quot;s-222&quot;)])
+    return con
+
+
+def find_secret(con, name):
+    &quot;&quot;&quot;Секрет користувача name або None.
+
+    &gt;&gt;&gt; con = make_db()
+    &gt;&gt;&gt; find_secret(con, &quot;anna&quot;)
+    's-111'
+    &gt;&gt;&gt; find_secret(con, &quot;bob&quot;)
+    's-222'
+    &gt;&gt;&gt; find_secret(con, &quot;ira&quot;) is None
+    True
+    &gt;&gt;&gt; find_secret(con, &quot;nobody' OR '1'='1&quot;) is None
+    True
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 2. Пошук без SQL-інʼєкції. Розвʼязок.&quot;&quot;&quot;
+import doctest
+import sqlite3
+
+
+def make_db():
+    con = sqlite3.connect(&quot;:memory:&quot;)
+    con.execute(&quot;CREATE TABLE users (name TEXT, secret TEXT)&quot;)
+    con.executemany(&quot;INSERT INTO users VALUES (?, ?)&quot;,
+                    [(&quot;anna&quot;, &quot;s-111&quot;), (&quot;bob&quot;, &quot;s-222&quot;)])
+    return con
+
+
+def find_secret(con, name):
+    &quot;&quot;&quot;Секрет користувача name або None.
+
+    &gt;&gt;&gt; con = make_db()
+    &gt;&gt;&gt; find_secret(con, &quot;anna&quot;)
+    's-111'
+    &gt;&gt;&gt; find_secret(con, &quot;bob&quot;)
+    's-222'
+    &gt;&gt;&gt; find_secret(con, &quot;ira&quot;) is None
+    True
+    &gt;&gt;&gt; find_secret(con, &quot;nobody' OR '1'='1&quot;) is None
+    True
+    &quot;&quot;&quot;
+    row = con.execute(&quot;SELECT secret FROM users WHERE name = ?&quot;,
+                      (name,)).fetchone()
+    if row is None:
+        return None
+    return row[0]
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<p>Чому так: <code>fetchone()</code> дає один рядок-кортеж <code>('s-111',)</code> або <code>None</code>. Останній приклад - перевірка, що
+інʼєкція не спрацювала: з f-рядком там повернувся б секрет <code>anna</code>.</p>
+</details>
+<h2 id="задача-3-файл-лише-зі-своєї-теки-тема-5">Задача 3. Файл лише зі своєї теки (тема 5)</h2>
+<p>Функція <code>safe_join(base, name)</code> повертає повний шлях (<code>Path</code>) до файлу <code>name</code> усередині теки <code>base</code>.
+Якщо після зведення шлях виходить за <code>base</code> - <code>ValueError("вихід за межі теки")</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 3. Файл лише зі своєї теки.&quot;&quot;&quot;
+import doctest
+from pathlib import Path
+
+
+def safe_join(base, name):
+    &quot;&quot;&quot;Шлях до name всередині base, або ValueError.
+
+    &gt;&gt;&gt; safe_join(&quot;/srv/files&quot;, &quot;a/b.txt&quot;).name
+    'b.txt'
+    &gt;&gt;&gt; safe_join(&quot;/srv/files&quot;, &quot;x/../c.txt&quot;).name
+    'c.txt'
+    &gt;&gt;&gt; safe_join(&quot;/srv/files&quot;, &quot;../secret.txt&quot;)
+    Traceback (most recent call last):
+        ...
+    ValueError: вихід за межі теки
+    &gt;&gt;&gt; safe_join(&quot;/srv/files&quot;, &quot;/etc/passwd&quot;)
+    Traceback (most recent call last):
+        ...
+    ValueError: вихід за межі теки
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 3. Файл лише зі своєї теки. Розвʼязок.&quot;&quot;&quot;
+import doctest
+from pathlib import Path
+
+
+def safe_join(base, name):
+    &quot;&quot;&quot;Шлях до name всередині base, або ValueError.
+
+    &gt;&gt;&gt; safe_join(&quot;/srv/files&quot;, &quot;a/b.txt&quot;).name
+    'b.txt'
+    &gt;&gt;&gt; safe_join(&quot;/srv/files&quot;, &quot;x/../c.txt&quot;).name
+    'c.txt'
+    &gt;&gt;&gt; safe_join(&quot;/srv/files&quot;, &quot;../secret.txt&quot;)
+    Traceback (most recent call last):
+        ...
+    ValueError: вихід за межі теки
+    &gt;&gt;&gt; safe_join(&quot;/srv/files&quot;, &quot;/etc/passwd&quot;)
+    Traceback (most recent call last):
+        ...
+    ValueError: вихід за межі теки
+    &quot;&quot;&quot;
+    root = Path(base).resolve()
+    path = (root / name).resolve()
+    if not path.is_relative_to(root):
+        raise ValueError(&quot;вихід за межі теки&quot;)
+    return path
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<p>Чому так: <code>resolve()</code> прибирає <code>..</code> і робить шлях повним, а <code>is_relative_to</code> перевіряє, що він починається з теки.
+Перевірка «чи є в рядку <code>..</code>» не ловить <code>/etc/passwd</code>.</p>
+</details>
+<h2 id="задача-4-лише-свої-нотатки-тема-3">Задача 4. Лише свої нотатки (тема 3)</h2>
+<p><code>get_note(notes, user, note_id)</code> повертає текст нотатки, якщо вона існує і її власник - <code>user</code>.
+Інакше - <code>PermissionError("нема доступу")</code> (однаково і для чужої, і для неіснуючої).</p>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 4. Лише свої нотатки.&quot;&quot;&quot;
+import doctest
+
+NOTES = {
+    1: {&quot;owner&quot;: &quot;anna&quot;, &quot;text&quot;: &quot;покупки&quot;},
+    2: {&quot;owner&quot;: &quot;bob&quot;, &quot;text&quot;: &quot;пароль від Wi-Fi&quot;},
+}
+
+
+def get_note(notes, user, note_id):
+    &quot;&quot;&quot;Текст своєї нотатки або PermissionError.
+
+    &gt;&gt;&gt; get_note(NOTES, &quot;anna&quot;, 1)
+    'покупки'
+    &gt;&gt;&gt; get_note(NOTES, &quot;bob&quot;, 2)
+    'пароль від Wi-Fi'
+    &gt;&gt;&gt; get_note(NOTES, &quot;anna&quot;, 2)
+    Traceback (most recent call last):
+        ...
+    PermissionError: нема доступу
+    &gt;&gt;&gt; get_note(NOTES, &quot;anna&quot;, 99)
+    Traceback (most recent call last):
+        ...
+    PermissionError: нема доступу
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 4. Лише свої нотатки. Розвʼязок.&quot;&quot;&quot;
+import doctest
+
+NOTES = {
+    1: {&quot;owner&quot;: &quot;anna&quot;, &quot;text&quot;: &quot;покупки&quot;},
+    2: {&quot;owner&quot;: &quot;bob&quot;, &quot;text&quot;: &quot;пароль від Wi-Fi&quot;},
+}
+
+
+def get_note(notes, user, note_id):
+    &quot;&quot;&quot;Текст своєї нотатки або PermissionError.
+
+    &gt;&gt;&gt; get_note(NOTES, &quot;anna&quot;, 1)
+    'покупки'
+    &gt;&gt;&gt; get_note(NOTES, &quot;bob&quot;, 2)
+    'пароль від Wi-Fi'
+    &gt;&gt;&gt; get_note(NOTES, &quot;anna&quot;, 2)
+    Traceback (most recent call last):
+        ...
+    PermissionError: нема доступу
+    &gt;&gt;&gt; get_note(NOTES, &quot;anna&quot;, 99)
+    Traceback (most recent call last):
+        ...
+    PermissionError: нема доступу
+    &quot;&quot;&quot;
+    note = notes.get(note_id)
+    if note is None or note[&quot;owner&quot;] != user:
+        raise PermissionError(&quot;нема доступу&quot;)
+    return note[&quot;text&quot;]
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<p>Чому так: <code>notes.get(...)</code> не падає на неіснуючому номері. Одна й та сама відповідь для «чужої» і «нема» не
+підказує, які номери існують.</p>
+</details>
+<h2 id="задача-5-оцінки-з-ліміту-тема-4">Задача 5. Оцінки з ліміту (тема 4)</h2>
+<p><code>parse_scores(text)</code> розбирає рядок оцінок через кому: <code>"90,75,82"</code> → <code>[90, 75, 82]</code>. Правила:
+довше 200 символів - <code>ValueError("задовгий ввід")</code>; більше 20 чисел - <code>ValueError("забагато оцінок")</code>;
+кожна оцінка 0..100, інакше <code>ValueError("погана оцінка")</code>. Довжину перевір ДО <code>split</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 5. Оцінки з ліміту.&quot;&quot;&quot;
+import doctest
+
+MAX_LEN = 200
+MAX_ITEMS = 20
+
+
+def parse_scores(text):
+    &quot;&quot;&quot;Список оцінок з рядка через кому, з лімітами.
+
+    &gt;&gt;&gt; parse_scores(&quot;90,75,82&quot;)
+    [90, 75, 82]
+    &gt;&gt;&gt; parse_scores(&quot;100&quot;)
+    [100]
+    &gt;&gt;&gt; parse_scores(&quot;9&quot; * 300)
+    Traceback (most recent call last):
+        ...
+    ValueError: задовгий ввід
+    &gt;&gt;&gt; parse_scores(&quot;,&quot;.join([&quot;5&quot;] * 21))
+    Traceback (most recent call last):
+        ...
+    ValueError: забагато оцінок
+    &gt;&gt;&gt; parse_scores(&quot;90,abc&quot;)
+    Traceback (most recent call last):
+        ...
+    ValueError: погана оцінка
+    &gt;&gt;&gt; parse_scores(&quot;90,101&quot;)
+    Traceback (most recent call last):
+        ...
+    ValueError: погана оцінка
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 5. Оцінки з ліміту. Розвʼязок.&quot;&quot;&quot;
+import doctest
+
+MAX_LEN = 200
+MAX_ITEMS = 20
+
+
+def parse_scores(text):
+    &quot;&quot;&quot;Список оцінок з рядка через кому, з лімітами.
+
+    &gt;&gt;&gt; parse_scores(&quot;90,75,82&quot;)
+    [90, 75, 82]
+    &gt;&gt;&gt; parse_scores(&quot;100&quot;)
+    [100]
+    &gt;&gt;&gt; parse_scores(&quot;9&quot; * 300)
+    Traceback (most recent call last):
+        ...
+    ValueError: задовгий ввід
+    &gt;&gt;&gt; parse_scores(&quot;,&quot;.join([&quot;5&quot;] * 21))
+    Traceback (most recent call last):
+        ...
+    ValueError: забагато оцінок
+    &gt;&gt;&gt; parse_scores(&quot;90,abc&quot;)
+    Traceback (most recent call last):
+        ...
+    ValueError: погана оцінка
+    &gt;&gt;&gt; parse_scores(&quot;90,101&quot;)
+    Traceback (most recent call last):
+        ...
+    ValueError: погана оцінка
+    &quot;&quot;&quot;
+    if len(text) &gt; MAX_LEN:
+        raise ValueError(&quot;задовгий ввід&quot;)
+    parts = text.split(&quot;,&quot;)
+    if len(parts) &gt; MAX_ITEMS:
+        raise ValueError(&quot;забагато оцінок&quot;)
+    scores = []
+    for part in parts:
+        try:
+            score = int(part)
+        except ValueError:
+            raise ValueError(&quot;погана оцінка&quot;) from None
+        if not 0 &lt;= score &lt;= 100:
+            raise ValueError(&quot;погана оцінка&quot;)
+        scores.append(score)
+    return scores
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<p>Чому так: <code>int("abc")</code> сам кидає <code>ValueError</code>, але з іншим текстом - ловимо і кидаємо свій, зрозумілий.
+<code>from None</code> ховає першу помилку з виводу.</p>
+</details>
+<h2 id="задача-6-завантаження-лише-з-дозволених-сайтів-тема-8">Задача 6. Завантаження лише з дозволених сайтів (тема 8)</h2>
+<p><code>is_allowed_url(url, allowed)</code> - <code>True</code>, лише якщо схема <code>https</code> і хост рівно один з множини <code>allowed</code>.
+Розбирати адресу через <code>urlparse</code>, а не <code>startswith</code> чи <code>in</code> (дивись приклади з <code>@</code> і <code>.evil.net</code>).
+Функція ніколи не падає.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 6. Завантаження лише з дозволених сайтів.&quot;&quot;&quot;
+import doctest
+from urllib.parse import urlparse
+
+ALLOWED = {&quot;example.com&quot;, &quot;img.example.com&quot;}
+
+
+def is_allowed_url(url, allowed):
+    &quot;&quot;&quot;True лише для https і хоста зі списку allowed.
+
+    &gt;&gt;&gt; is_allowed_url(&quot;https://example.com/cat.png&quot;, ALLOWED)
+    True
+    &gt;&gt;&gt; is_allowed_url(&quot;https://img.example.com/a.jpg&quot;, ALLOWED)
+    True
+    &gt;&gt;&gt; is_allowed_url(&quot;http://example.com/cat.png&quot;, ALLOWED)
+    False
+    &gt;&gt;&gt; is_allowed_url(&quot;https://example.com.evil.net/x&quot;, ALLOWED)
+    False
+    &gt;&gt;&gt; is_allowed_url(&quot;https://example.com@evil.net/x&quot;, ALLOWED)
+    False
+    &gt;&gt;&gt; is_allowed_url(&quot;https://127.0.0.1/admin&quot;, ALLOWED)
+    False
+    &gt;&gt;&gt; is_allowed_url(&quot;not a url&quot;, ALLOWED)
+    False
+    &gt;&gt;&gt; is_allowed_url(&quot;https://[abc/x&quot;, ALLOWED)
+    False
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 6. Завантаження лише з дозволених сайтів. Розвʼязок.&quot;&quot;&quot;
+import doctest
+from urllib.parse import urlparse
+
+ALLOWED = {&quot;example.com&quot;, &quot;img.example.com&quot;}
+
+
+def is_allowed_url(url, allowed):
+    &quot;&quot;&quot;True лише для https і хоста зі списку allowed.
+
+    &gt;&gt;&gt; is_allowed_url(&quot;https://example.com/cat.png&quot;, ALLOWED)
+    True
+    &gt;&gt;&gt; is_allowed_url(&quot;https://img.example.com/a.jpg&quot;, ALLOWED)
+    True
+    &gt;&gt;&gt; is_allowed_url(&quot;http://example.com/cat.png&quot;, ALLOWED)
+    False
+    &gt;&gt;&gt; is_allowed_url(&quot;https://example.com.evil.net/x&quot;, ALLOWED)
+    False
+    &gt;&gt;&gt; is_allowed_url(&quot;https://example.com@evil.net/x&quot;, ALLOWED)
+    False
+    &gt;&gt;&gt; is_allowed_url(&quot;https://127.0.0.1/admin&quot;, ALLOWED)
+    False
+    &gt;&gt;&gt; is_allowed_url(&quot;not a url&quot;, ALLOWED)
+    False
+    &gt;&gt;&gt; is_allowed_url(&quot;https://[abc/x&quot;, ALLOWED)
+    False
+    &quot;&quot;&quot;
+    try:
+        parts = urlparse(url)
+    except ValueError:
+        return False
+    return parts.scheme == &quot;https&quot; and parts.hostname in allowed
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<p>Чому так: у <code>https://example.com@evil.net/x</code> частина до <code>@</code> - це «імʼя користувача», а справжній хост - <code>evil.net</code>.
+<code>url.startswith("https://example.com")</code> тут сказав би «так». <code>urlparse(...).hostname</code> бере саме хост.
+А на зламаній адресі (<code>https://[abc/x</code>) <code>urlparse</code> сам кидає <code>ValueError</code> - ловимо і відмовляємо (fail closed).</p>
+</details>
+<h2 id="задача-7-коментар-без-xss-тема-9">Задача 7. Коментар без XSS (тема 9)</h2>
+<p><code>render_comment(author, text)</code> повертає HTML <code>&lt;p&gt;&lt;b&gt;автор&lt;/b&gt;: текст&lt;/p&gt;</code>, де і автор, і текст екрановані
+<code>html.escape</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 7. Коментар без XSS.&quot;&quot;&quot;
+import doctest
+import html
+
+
+def render_comment(author, text):
+    &quot;&quot;&quot;HTML коментаря з екрануванням.
+
+    &gt;&gt;&gt; render_comment(&quot;anna&quot;, &quot;привіт&quot;)
+    '&lt;p&gt;&lt;b&gt;anna&lt;/b&gt;: привіт&lt;/p&gt;'
+    &gt;&gt;&gt; render_comment(&quot;&lt;i&gt;bob&lt;/i&gt;&quot;, &quot;&lt;script&gt;alert(1)&lt;/script&gt;&quot;)
+    '&lt;p&gt;&lt;b&gt;&amp;lt;i&amp;gt;bob&amp;lt;/i&amp;gt;&lt;/b&gt;: &amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&lt;/p&gt;'
+    &gt;&gt;&gt; render_comment(&quot;ira&quot;, 'a &quot;b&quot; &amp; c')
+    '&lt;p&gt;&lt;b&gt;ira&lt;/b&gt;: a &amp;quot;b&amp;quot; &amp;amp; c&lt;/p&gt;'
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 7. Коментар без XSS. Розвʼязок.&quot;&quot;&quot;
+import doctest
+import html
+
+
+def render_comment(author, text):
+    &quot;&quot;&quot;HTML коментаря з екрануванням.
+
+    &gt;&gt;&gt; render_comment(&quot;anna&quot;, &quot;привіт&quot;)
+    '&lt;p&gt;&lt;b&gt;anna&lt;/b&gt;: привіт&lt;/p&gt;'
+    &gt;&gt;&gt; render_comment(&quot;&lt;i&gt;bob&lt;/i&gt;&quot;, &quot;&lt;script&gt;alert(1)&lt;/script&gt;&quot;)
+    '&lt;p&gt;&lt;b&gt;&amp;lt;i&amp;gt;bob&amp;lt;/i&amp;gt;&lt;/b&gt;: &amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&lt;/p&gt;'
+    &gt;&gt;&gt; render_comment(&quot;ira&quot;, 'a &quot;b&quot; &amp; c')
+    '&lt;p&gt;&lt;b&gt;ira&lt;/b&gt;: a &amp;quot;b&amp;quot; &amp;amp; c&lt;/p&gt;'
+    &quot;&quot;&quot;
+    return f&quot;&lt;p&gt;&lt;b&gt;{html.escape(author)}&lt;/b&gt;: {html.escape(text)}&lt;/p&gt;&quot;
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<p>Чому так: екранувати треба ВСЕ, що прийшло від користувача, і імʼя теж. <code>html.escape</code> міняє <code>&lt;</code> <code>&gt;</code> <code>&amp;</code> <code>"</code> <code>'</code>.</p>
+</details>
+<h2 id="задача-8-одноразовий-код-теми-5-і-9">Задача 8. Одноразовий код (теми 5 і 9)</h2>
+<p><code>new_code()</code> повертає 6-значний код з цифр (може починатися з 0) через <code>secrets</code>, не <code>random</code>.
+<code>check_code(given, expected)</code> порівнює через <code>hmac.compare_digest</code> і не падає на будь-якому вводі (навіть кирилиці).</p>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 8. Одноразовий код.&quot;&quot;&quot;
+import doctest
+import hmac
+import secrets
+
+
+def new_code():
+    &quot;&quot;&quot;6 випадкових цифр рядком.
+
+    &gt;&gt;&gt; c = new_code()
+    &gt;&gt;&gt; len(c), c.isdigit()
+    (6, True)
+    &gt;&gt;&gt; len({new_code() for _ in range(50)}) &gt; 40
+    True
+    &quot;&quot;&quot;
+    pass
+
+
+def check_code(given, expected):
+    &quot;&quot;&quot;Чи збігається код, порівняння за сталий час.
+
+    &gt;&gt;&gt; check_code(&quot;012345&quot;, &quot;012345&quot;)
+    True
+    &gt;&gt;&gt; check_code(&quot;012346&quot;, &quot;012345&quot;)
+    False
+    &gt;&gt;&gt; check_code(&quot;&quot;, &quot;012345&quot;)
+    False
+    &gt;&gt;&gt; check_code(&quot;абвгде&quot;, &quot;012345&quot;)
+    False
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 8. Одноразовий код. Розвʼязок.&quot;&quot;&quot;
+import doctest
+import hmac
+import secrets
+
+
+def new_code():
+    &quot;&quot;&quot;6 випадкових цифр рядком.
+
+    &gt;&gt;&gt; c = new_code()
+    &gt;&gt;&gt; len(c), c.isdigit()
+    (6, True)
+    &gt;&gt;&gt; len({new_code() for _ in range(50)}) &gt; 40
+    True
+    &quot;&quot;&quot;
+    return f&quot;{secrets.randbelow(10**6):06d}&quot;
+
+
+def check_code(given, expected):
+    &quot;&quot;&quot;Чи збігається код, порівняння за сталий час.
+
+    &gt;&gt;&gt; check_code(&quot;012345&quot;, &quot;012345&quot;)
+    True
+    &gt;&gt;&gt; check_code(&quot;012346&quot;, &quot;012345&quot;)
+    False
+    &gt;&gt;&gt; check_code(&quot;&quot;, &quot;012345&quot;)
+    False
+    &gt;&gt;&gt; check_code(&quot;абвгде&quot;, &quot;012345&quot;)
+    False
+    &quot;&quot;&quot;
+    return hmac.compare_digest(given.encode(), expected.encode())
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<p>Чому так: <code>secrets.randbelow(10**6)</code> дає 0..999999, а <code>:06d</code> доповнює нулями зліва (<code>42</code> → <code>000042</code>).
+Другий приклад <code>new_code</code> - що коди справді різні: 50 кодів з мільйона майже ніколи не повторюються
+(ймовірність хоча б одного збігу ≈ 0,1 %, а щоб різних було лише 40, треба 10 збігів - практично неможливо).
+<code>.encode()</code> - бо рядки з кирилицею <code>compare_digest</code> не бере (кидає <code>TypeError</code>), а байти - будь-які.
+І головне про такі коди: варіантів лише мільйон, тому справжній захист - ліміт спроб (тема 4), строк дії
+(кілька хвилин) і «використав - код згорів».</p>
+</details>
+<h2 id="задача-9-помилка-без-витоку-тема-6">Задача 9. Помилка без витоку (тема 6)</h2>
+<p><code>safe_call(func, log)</code> викликає <code>func()</code>. Якщо все добре - повертає <code>("ok", результат)</code>.
+Якщо виняток - дописує в список <code>log</code> назву типу помилки і повертає <code>("error", "Сталася помилка")</code>.
+Деталей помилки користувач не бачить.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 9. Помилка без витоку.&quot;&quot;&quot;
+import doctest
+
+
+def safe_call(func, log):
+    &quot;&quot;&quot;Виклик func з короткою відповіддю на помилку.
+
+    &gt;&gt;&gt; log = []
+    &gt;&gt;&gt; safe_call(lambda: 2 + 2, log)
+    ('ok', 4)
+    &gt;&gt;&gt; safe_call(lambda: 1 / 0, log)
+    ('error', 'Сталася помилка')
+    &gt;&gt;&gt; safe_call(lambda: int(&quot;x&quot;), log)
+    ('error', 'Сталася помилка')
+    &gt;&gt;&gt; log
+    ['ZeroDivisionError', 'ValueError']
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 9. Помилка без витоку. Розвʼязок.&quot;&quot;&quot;
+import doctest
+
+
+def safe_call(func, log):
+    &quot;&quot;&quot;Виклик func з короткою відповіддю на помилку.
+
+    &gt;&gt;&gt; log = []
+    &gt;&gt;&gt; safe_call(lambda: 2 + 2, log)
+    ('ok', 4)
+    &gt;&gt;&gt; safe_call(lambda: 1 / 0, log)
+    ('error', 'Сталася помилка')
+    &gt;&gt;&gt; safe_call(lambda: int(&quot;x&quot;), log)
+    ('error', 'Сталася помилка')
+    &gt;&gt;&gt; log
+    ['ZeroDivisionError', 'ValueError']
+    &quot;&quot;&quot;
+    try:
+        return (&quot;ok&quot;, func())
+    except Exception as e:
+        log.append(type(e).__name__)
+        return (&quot;error&quot;, &quot;Сталася помилка&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<p>Чому так: <code>except Exception</code> ловить звичайні помилки, але не <code>KeyboardInterrupt</code> (Ctrl+C) - так і треба.
+У справжній програмі в лог іде весь <code>traceback.format_exc()</code>, тут лише назва, щоб приклад був коротким.</p>
+</details>
+<h2 id="задача-10-сортування-зі-списку-дозволених-тема-10">Задача 10. Сортування зі списку дозволених (тема 10)</h2>
+<p><code>top_names(con, column)</code> повертає імена з таблиці <code>marks</code>, відсортовані за колонкою <code>column</code> за спаданням.
+Назву колонки параметром <code>?</code> не передаси, тому - лише <code>"name"</code> або <code>"mark"</code>, інакше <code>ValueError("не можна")</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 10. Сортування зі списку дозволених.&quot;&quot;&quot;
+import doctest
+import sqlite3
+
+ALLOWED = {&quot;name&quot;, &quot;mark&quot;}
+
+
+def make_db():
+    con = sqlite3.connect(&quot;:memory:&quot;)
+    con.execute(&quot;CREATE TABLE marks (name TEXT, mark INTEGER)&quot;)
+    con.executemany(&quot;INSERT INTO marks VALUES (?, ?)&quot;,
+                    [(&quot;anna&quot;, 90), (&quot;bob&quot;, 75), (&quot;ira&quot;, 82)])
+    return con
+
+
+def top_names(con, column):
+    &quot;&quot;&quot;Імена за спаданням column; column лише зі списку ALLOWED.
+
+    &gt;&gt;&gt; con = make_db()
+    &gt;&gt;&gt; top_names(con, &quot;mark&quot;)
+    ['anna', 'ira', 'bob']
+    &gt;&gt;&gt; top_names(con, &quot;name&quot;)
+    ['ira', 'bob', 'anna']
+    &gt;&gt;&gt; top_names(con, &quot;mark; DROP TABLE marks&quot;)
+    Traceback (most recent call last):
+        ...
+    ValueError: не можна
+    &gt;&gt;&gt; top_names(con, &quot;mark&quot;)
+    ['anna', 'ira', 'bob']
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Задача 10. Сортування зі списку дозволених. Розвʼязок.&quot;&quot;&quot;
+import doctest
+import sqlite3
+
+ALLOWED = {&quot;name&quot;, &quot;mark&quot;}
+
+
+def make_db():
+    con = sqlite3.connect(&quot;:memory:&quot;)
+    con.execute(&quot;CREATE TABLE marks (name TEXT, mark INTEGER)&quot;)
+    con.executemany(&quot;INSERT INTO marks VALUES (?, ?)&quot;,
+                    [(&quot;anna&quot;, 90), (&quot;bob&quot;, 75), (&quot;ira&quot;, 82)])
+    return con
+
+
+def top_names(con, column):
+    &quot;&quot;&quot;Імена за спаданням column; column лише зі списку ALLOWED.
+
+    &gt;&gt;&gt; con = make_db()
+    &gt;&gt;&gt; top_names(con, &quot;mark&quot;)
+    ['anna', 'ira', 'bob']
+    &gt;&gt;&gt; top_names(con, &quot;name&quot;)
+    ['ira', 'bob', 'anna']
+    &gt;&gt;&gt; top_names(con, &quot;mark; DROP TABLE marks&quot;)
+    Traceback (most recent call last):
+        ...
+    ValueError: не можна
+    &gt;&gt;&gt; top_names(con, &quot;mark&quot;)
+    ['anna', 'ira', 'bob']
+    &quot;&quot;&quot;
+    if column not in ALLOWED:
+        raise ValueError(&quot;не можна&quot;)
+    rows = con.execute(f&quot;SELECT name FROM marks ORDER BY {column} DESC&quot;)
+    return [row[0] for row in rows]
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<p>Чому так: f-рядок тут безпечний лише тому, що <code>column</code> уже перевірено - це точно <code>"name"</code> або <code>"mark"</code>.
+Останній приклад показує, що таблиця після спроби на місці. (SQLite і так не виконав би два запити через <code>;</code>,
+але в <code>ORDER BY</code> можна вставити підзапит - тому перевірка списком обовʼязкова.)</p>
+</details>

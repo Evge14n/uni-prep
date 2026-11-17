@@ -154,7 +154,7 @@ const IC = {
 const icon = (n, cls = "") => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ""}</svg>`;
 
 // колір предмета
-const SUBJ = { "an-k1": "an", an: "an", "ma-k2": "ma", ma: "ma", mech: "mech", mol: "mol", prog: "prog", zfp: "zfp", hist: "hist", eng: "eng", linux: "prog" };
+const SUBJ = { "an-k1": "an", an: "an", "ma-k2": "ma", ma: "ma", mech: "mech", mol: "mol", prog: "prog", zfp: "zfp", hist: "hist", eng: "eng", linux: "prog", "prog-sec": "prog" };
 const sk = (id) => SUBJ[id] || "an";
 function kindBadge(u) {
   if (u.kind === "colloquium") return '<span class="badge k">Колоквіум</span>';
@@ -462,7 +462,7 @@ async function subjects() {
     <div class="units stagger">${kol}</div>
     <details class="later"><summary>Після колоквіумів: 4 іспити</summary><div class="units">${ex}</div></details>
     <details class="later"><summary>Заліки</summary><div class="units">${zl}</div></details>
-    ${skl ? `<details class="later"><summary>Навички: Linux для лаб</summary><div class="units">${skl}</div></details>` : ""}
+    ${skl ? `<details class="later"><summary>Навички: Linux, Python + безпека</summary><div class="units">${skl}</div></details>` : ""}
     <p><a class="chiplink" href="kalendar.ics" download>${icon("cal")}Календар .ics (лише відомі дати колоквіумів і іспитів)</a></p>
     <p class="footer">Власні конспекти, задачі й тести. Числові відповіді тестів перевірені скриптом. Дати, яких нема в джерелах, позначені «спитати в групі».</p>`;
   stagger(); animateRings();
@@ -504,7 +504,7 @@ async function unitPage(id, page) {
   try {
     const html = await getText(`data/${u.id}/${page}.html`);
     app.innerHTML = head + `<article class="doc">${html}</article>`;
-    if (u.id === "prog" && window.PyRun) { // UNIPROG1: «Запустити» під кодом, Python офлайн
+    if ((u.id === "prog" || u.id === "prog-sec") && window.PyRun) { // UNIPROG1: «Запустити» під кодом, Python офлайн
       PyRun.enhance(app.querySelector("article.doc"));
       PyRun.box(app.querySelector("#pybox"));
     }

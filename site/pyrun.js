@@ -4,7 +4,8 @@
   "use strict";
   const PYVER = "0.29.5";
   const PYCACHE = "pyodide-" + PYVER;
-  const PYFILES = ["py/pyodide.js", "py/pyodide.asm.js", "py/pyodide.asm.wasm", "py/python_stdlib.zip", "py/pyodide-lock.json"];
+  const PYFILES = ["py/pyodide.js", "py/pyodide.asm.js", "py/pyodide.asm.wasm", "py/python_stdlib.zip", "py/pyodide-lock.json",
+    "py/sqlite3-1.0.0-cp313-cp313-pyemscripten_2025_0_wasm32.whl"]; // sqlite3 - для prog-sec (UPROGSEC1)
   const LIMIT_MS = 10000;
   let worker = null, isReady = false, seq = 0;
   const pending = new Map();
@@ -94,7 +95,8 @@
       if (kind === "skip") {
         const note = document.createElement("span");
         note.className = "pynote";
-        note.textContent = "Цей код відкриває вікно (turtle/matplotlib) - запускай у терміналі.";
+        const why = original.split("\n").slice(0, 3).join("\n").match(/^# не запускати:\s*(.+)$/m);
+        note.textContent = why ? why[1].trim() : "Цей код відкриває вікно (turtle/matplotlib) - запускай у терміналі.";
         bar.append(copy, note);
         pre.after(bar);
         return;

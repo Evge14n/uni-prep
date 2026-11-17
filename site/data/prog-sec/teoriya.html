@@ -1,0 +1,505 @@
+<h1 id="програмування-безпека-теорія">Програмування + безпека: теорія</h1>
+<p>Принцип: кожну тему Python вчу одразу з її стороною безпеки. Більшість дірок береться не з «хакерства»,
+а з того, як написаний звичайний код: склеїв рядок, не перевірив ввід, показав помилку.</p>
+<div class="pybox" id="pybox"></div>
+
+<p>Як читати кожну тему: <strong>що треба з Python</strong> → <strong>де діра</strong> (код «погано», його можна запустити) →
+<strong>як правильно</strong> (код «добре») → <strong>типова помилка</strong> → де це в списку OWASP Top 10:2025 (головний список
+ризиків вебзастосунків, https://top10.owasp.org/2025/).</p>
+<blockquote>
+<p>Усі приклади - на своїх іграшкових даних у браузері. «Перевіряти» чужі сайти чи сервери без письмового
+дозволу власника не можна: це може бути злочином (зокрема ст. 361 Кримінального кодексу України -
+несанкціоноване втручання в роботу інформаційних систем). Учимось писати код, який не ламається.</p>
+</blockquote>
+<p>Код під кожним прикладом можна запустити кнопкою «Запустити» і змінити кнопкою «Змінити». Вивід під кодом
+перевірено запуском (Python 3.13 на ПК і Python 3.13 у браузері; приклад з argon2 - лише на ПК).</p>
+<h2 id="тема-1-ввід-користувача">Тема 1. Ввід користувача</h2>
+<p><strong>Що треба з Python:</strong> <code>input()</code> завжди повертає рядок. <code>int("17")</code> дає 17, а <code>int("abc")</code> кидає <code>ValueError</code>.
+<code>try/except</code> ловить помилку. <code>eval(рядок)</code> виконує рядок як код Python.</p>
+<p><strong>Де діра 1: програма падає на будь-якому «неправильному» вводі.</strong> Для сервера це означає, що один
+запит зупиняє обробку.</p>
+<pre><code class="language-python">text = &quot;abc&quot;          # уяви, що це прийшло з input()
+age = int(text)
+print(&quot;Через рік тобі&quot;, age + 1)
+</code></pre>
+<pre><code class="language-text">Traceback (most recent call last):
+  File &quot;&lt;код&gt;&quot;, line 2
+    age = int(text)
+ValueError: invalid literal for int() with base 10: 'abc'
+</code></pre>
+<p><strong>Як правильно:</strong> перевірити і тип, і межі. Не впевнений - повертаєш «нема значення», а не падаєш.</p>
+<pre><code class="language-python">def read_age(text):
+    try:
+        age = int(text)
+    except ValueError:
+        return None          # не число
+    if not 0 &lt;= age &lt;= 130:
+        return None          # число, але неможливе
+    return age
+
+
+for t in [&quot;17&quot;, &quot;abc&quot;, &quot;&quot;, &quot;-5&quot;, &quot;999&quot;, &quot; 18 &quot;]:
+    print(repr(t), &quot;-&gt;&quot;, read_age(t))
+</code></pre>
+<pre><code class="language-text">'17' -&gt; 17
+'abc' -&gt; None
+'' -&gt; None
+'-5' -&gt; None
+'999' -&gt; None
+' 18 ' -&gt; 18
+</code></pre>
+<p>Зверни увагу: <code>int(" 18 ")</code> пробіли по краях прощає, а от <code>int("1 8")</code> - ні. Ще <code>int()</code> приймає
+<code>"+18"</code> і <code>"1_8"</code> (це 18) - тому межі після перетворення перевіряти обовʼязково.</p>
+<p><strong>Де діра 2: <code>eval</code> виконує ввід як код.</strong> Хотів калькулятор, а користувач ввів не число, а імʼя змінної:</p>
+<pre><code class="language-python">secret = &quot;пароль-123&quot;
+user_text = &quot;secret&quot;     # користувач ввів не число
+print(eval(user_text))
+</code></pre>
+<pre><code class="language-text">пароль-123
+</code></pre>
+<p>Програма віддала те, що мала тримати в собі. Так само через <code>eval</code> можна викликати будь-яку функцію,
+навіть видалення файлів. <strong>Правило: ніколи <code>eval(ввід)</code> і <code>exec(ввід)</code>.</strong></p>
+<p><strong>Як правильно:</strong> якщо треба число - <code>int()</code> / <code>float()</code>. Якщо треба список чи словник з тексту -
+спершу <code>json.loads</code>. Якщо саме синтаксис Python - <code>ast.literal_eval</code> (приймає лише літерали: числа, рядки,
+списки, словники), але з лімітом довжини і ловити кілька помилок: на <code>"1+"</code> він кидає <code>SyntaxError</code>, а не
+<code>ValueError</code>, а на дуже глибоких дужках може закінчитись памʼять.</p>
+<pre><code class="language-python">import ast
+
+print(ast.literal_eval(&quot;[1, 2, 3]&quot;))
+try:
+    ast.literal_eval(&quot;secret&quot;)
+except (ValueError, SyntaxError) as e:
+    print(&quot;відмова:&quot;, type(e).__name__)
+</code></pre>
+<pre><code class="language-text">[1, 2, 3]
+відмова: ValueError
+</code></pre>
+<p><strong>Типова помилка:</strong> перевіряти ввід лише в браузері (JavaScript-форма). Запит можна надіслати й без форми,
+тому перевірка завжди на сервері, у Python.</p>
+<p>OWASP: A05 Injection (eval - це інʼєкція коду, CWE-95).</p>
+<h2 id="тема-2-рядки-й-інʼєкції">Тема 2. Рядки й інʼєкції</h2>
+<p><strong>Що треба з Python:</strong> f-рядок <code>f"... {x} ..."</code> просто вставляє текст. Python не знає, що цей рядок потім
+стане командою для бази даних чи терміналу.</p>
+<p><strong>Де діра:</strong> ввід ліпиться в команду, і користувач міняє сенс команди. Приклад - SQL-запит до бази
+(SQLite є в Python, <code>import sqlite3</code>). Створюємо свою іграшкову базу в памʼяті:</p>
+<pre><code class="language-python">import sqlite3
+
+con = sqlite3.connect(&quot;:memory:&quot;)
+con.execute(&quot;CREATE TABLE users (name TEXT, secret TEXT)&quot;)
+con.executemany(&quot;INSERT INTO users VALUES (?, ?)&quot;,
+                [(&quot;anna&quot;, &quot;s-111&quot;), (&quot;bob&quot;, &quot;s-222&quot;)])
+
+name = &quot;nobody' OR '1'='1&quot;      # ввід користувача
+sql = f&quot;SELECT name, secret FROM users WHERE name = '{name}'&quot;
+print(sql)
+print(con.execute(sql).fetchall())
+</code></pre>
+<pre><code class="language-text">SELECT name, secret FROM users WHERE name = 'nobody' OR '1'='1'
+[('anna', 's-111'), ('bob', 's-222')]
+</code></pre>
+<p>Лапка у вводі закрила рядок, і <code>OR '1'='1'</code> (завжди правда) стало частиною запиту. Запит віддав
+секрети всіх. Це <strong>SQL-інʼєкція</strong>.</p>
+<p><strong>Як правильно: дані окремо від команди.</strong> У запиті ставиш <code>?</code>, а значення передаєш другим аргументом.
+База отримує їх як дані і ніколи не виконує як код.</p>
+<pre><code class="language-python">import sqlite3
+
+con = sqlite3.connect(&quot;:memory:&quot;)
+con.execute(&quot;CREATE TABLE users (name TEXT, secret TEXT)&quot;)
+con.executemany(&quot;INSERT INTO users VALUES (?, ?)&quot;,
+                [(&quot;anna&quot;, &quot;s-111&quot;), (&quot;bob&quot;, &quot;s-222&quot;)])
+
+name = &quot;nobody' OR '1'='1&quot;
+rows = con.execute(&quot;SELECT name, secret FROM users WHERE name = ?&quot;,
+                   (name,)).fetchall()
+print(rows)
+print(con.execute(&quot;SELECT secret FROM users WHERE name = ?&quot;,
+                  (&quot;anna&quot;,)).fetchall())
+</code></pre>
+<pre><code class="language-text">[]
+[('s-111',)]
+</code></pre>
+<p>Користувача з іменем <code>nobody' OR '1'='1</code> нема - і запит чесно повертає порожній список.
+Зверни увагу на кому в <code>(name,)</code>: це кортеж з одного елемента.</p>
+<p><strong>Command-інʼєкція - те саме з командою терміналу.</strong> Склеїв команду рядком і віддав у shell:</p>
+<pre><code class="language-python">host = &quot;example.com; echo ЗЛАМАНО&quot;     # ввід користувача
+cmd = &quot;ping -c 1 &quot; + host
+print(cmd)
+</code></pre>
+<pre><code class="language-text">ping -c 1 example.com; echo ЗЛАМАНО
+</code></pre>
+<p>Shell бачить <code>;</code> і виконує ДВІ команди. Правильно: <code>subprocess.run(["ping", "-c", "1", host])</code> - список
+аргументів без <code>shell=True</code>, тоді <code>host</code> лишається одним аргументом, а не командою. Але аргумент усе ще
+може бути опцією: <code>host = "--help"</code> ping прочитає як ключ (це argument injection). Тому ще й перевірити,
+що <code>host</code> схожий на імʼя хоста: лише літери, цифри, крапки, дефіс, і НЕ починається з дефісу.</p>
+<p><strong>Типова помилка:</strong> «екранувати лапки самому» (<code>name.replace("'", "")</code>). Завжди знайдеться обхід;
+параметри (<code>?</code>) - єдиний надійний спосіб.</p>
+<p>OWASP: A05 Injection (SQL - CWE-89, команди ОС - CWE-78).</p>
+<h2 id="тема-3-функції-й-доступ">Тема 3. Функції й доступ</h2>
+<p><strong>Що треба з Python:</strong> функція отримує аргументи і може кинути виняток <code>raise PermissionError(...)</code>.
+Перевірки - на самому початку функції.</p>
+<p><strong>Три правила:</strong>
+1. <strong>Перевіряй вхід на початку функції</strong> (тип, межі, хто питає).
+2. <strong>Fail closed:</strong> не впевнений - забороняй. Помилка під час перевірки = відмова, не дозвіл.
+3. <strong>Найменші права:</strong> функція робить лише своє (функція «показати нотатку» не вміє видаляти).</p>
+<p><strong>Де діра: IDOR</strong> (Insecure Direct Object Reference). Нотатки лежать за номером, і функція віддає будь-яку
+нотатку за номером, не дивлячись, чия вона:</p>
+<pre><code class="language-python">notes = {
+    1: {&quot;owner&quot;: &quot;anna&quot;, &quot;text&quot;: &quot;мій список покупок&quot;},
+    2: {&quot;owner&quot;: &quot;bob&quot;, &quot;text&quot;: &quot;пароль від Wi-Fi&quot;},
+}
+
+
+def get_note_bad(user, note_id):
+    return notes[note_id][&quot;text&quot;]
+
+
+print(get_note_bad(&quot;anna&quot;, 1))
+print(get_note_bad(&quot;anna&quot;, 2))     # anna поміняла номер у запиті
+</code></pre>
+<pre><code class="language-text">мій список покупок
+пароль від Wi-Fi
+</code></pre>
+<p><strong>Як правильно:</strong> перевірити власника. Якщо нотатки нема або вона чужа - однакова відмова
+(щоб не підказувати, які номери існують).</p>
+<pre><code class="language-python">notes = {
+    1: {&quot;owner&quot;: &quot;anna&quot;, &quot;text&quot;: &quot;мій список покупок&quot;},
+    2: {&quot;owner&quot;: &quot;bob&quot;, &quot;text&quot;: &quot;пароль від Wi-Fi&quot;},
+}
+
+
+def get_note(user, note_id):
+    note = notes.get(note_id)
+    if note is None or note[&quot;owner&quot;] != user:
+        raise PermissionError(&quot;нема доступу&quot;)
+    return note[&quot;text&quot;]
+
+
+print(get_note(&quot;anna&quot;, 1))
+for nid in (2, 99):
+    try:
+        get_note(&quot;anna&quot;, nid)
+    except PermissionError as e:
+        print(nid, &quot;-&gt;&quot;, e)
+</code></pre>
+<pre><code class="language-text">мій список покупок
+2 -&gt; нема доступу
+99 -&gt; нема доступу
+</code></pre>
+<p><strong>Fail open - як НЕ треба:</strong></p>
+<pre><code class="language-python">def is_admin_bad(user, admins):
+    try:
+        return user in admins
+    except Exception:
+        return True          # перевірка зламалась - пускаємо (погано!)
+
+
+def is_admin(user, admins):
+    try:
+        return user in admins
+    except Exception:
+        return False         # зламалась - не пускаємо
+
+
+print(is_admin_bad(&quot;anna&quot;, None), is_admin(&quot;anna&quot;, None))
+</code></pre>
+<pre><code class="language-text">True False
+</code></pre>
+<p><code>"anna" in None</code> кидає <code>TypeError</code>. Погана функція з цього зробила «так, адмін».</p>
+<p>Дрібниця на потім: <code>PermissionError</code> - це різновид <code>OSError</code> (помилок файлів), тож <code>except OSError</code> поруч його
+проковтне. У великій програмі для відмови в доступі роблять свій клас: <code>class AccessDenied(Exception): ...</code>.</p>
+<p>OWASP: A01 Broken Access Control (IDOR - CWE-639), A10 Mishandling of Exceptional Conditions (fail open - CWE-636).</p>
+<h2 id="тема-4-списки-цикли-ліміти">Тема 4. Списки, цикли, ліміти</h2>
+<p><strong>Що треба з Python:</strong> <code>len()</code>, <code>split()</code>, цикл <code>for</code>. Памʼять і час компʼютера скінченні.</p>
+<p><strong>Де діра:</strong> цикл чи список по вводу без обмеження. Хтось надішле рядок на 100 МБ або мільйон чисел -
+програма зʼїсть памʼять і процесор, і сервіс перестане відповідати всім. Це відмова в обслуговуванні (DoS).</p>
+<p><strong>Як правильно:</strong> межа на вході, ДО будь-якої роботи.</p>
+<pre><code class="language-python">MAX_TEXT = 1000
+MAX_ITEMS = 100
+
+
+def parse_numbers(text):
+    if len(text) &gt; MAX_TEXT:
+        raise ValueError(&quot;задовгий ввід&quot;)
+    parts = text.split(&quot;,&quot;)
+    if len(parts) &gt; MAX_ITEMS:
+        raise ValueError(&quot;забагато чисел&quot;)
+    return [int(p) for p in parts]
+
+
+print(parse_numbers(&quot;1,2,3&quot;))
+for t in [&quot;1,&quot; * 199 + &quot;1&quot;, &quot;9&quot; * 5000]:
+    try:
+        parse_numbers(t)
+    except ValueError as e:
+        print(len(t), &quot;символів -&gt;&quot;, e)
+</code></pre>
+<pre><code class="language-text">[1, 2, 3]
+399 символів -&gt; забагато чисел
+5000 символів -&gt; задовгий ввід
+</code></pre>
+<p>Інші місця, де потрібна межа: розмір файлу, який завантажують; кількість спроб входу (інакше перебір
+паролів); глибина рекурсії; регулярні вирази з вкладеними <code>(a+)+</code> на довгому вводі (можуть працювати
+дуже довго, це називають ReDoS).</p>
+<p><strong>Типова помилка:</strong> перевірити довжину ПІСЛЯ того, як усе вже прочитав і розібрав. Межа має стояти
+до роботи.</p>
+<p>OWASP: окремої категорії в Top 10:2025 для цього нема (CWE-400 «неконтрольоване споживання ресурсів» і CWE-770
+«ресурси без ліміту» не значаться в жодній з 10). Але це класична відмова в обслуговуванні - ліміт ставлять завжди.</p>
+<h2 id="тема-5-файли-й-секрети">Тема 5. Файли й секрети</h2>
+<p><strong>Що треба з Python:</strong> <code>open(шлях)</code>, модуль <code>pathlib</code>: <code>Path("a") / "b"</code>, <code>.resolve()</code> (зводить <code>..</code> і
+дає повний шлях), <code>.is_relative_to(тека)</code> (Python 3.9+).</p>
+<p><strong>Де діра: path traversal.</strong> Сайт віддає файли з теки за іменем від користувача: <code>open("files/" + name)</code>.
+Користувач передає <code>../</code> і виходить з теки, наприклад <code>../../etc/passwd</code> на Linux.</p>
+<p><strong>Як правильно:</strong> звести шлях і перевірити, що він досі всередині дозволеної теки.</p>
+<pre><code class="language-python">from pathlib import Path
+
+BASE = Path(&quot;/srv/files&quot;).resolve()
+
+
+def is_safe(name):
+    p = (BASE / name).resolve()
+    return p.is_relative_to(BASE)
+
+
+for name in [&quot;notes.txt&quot;, &quot;sub/../notes.txt&quot;, &quot;../secret.txt&quot;,
+             &quot;../../etc/passwd&quot;, &quot;/etc/passwd&quot;]:
+    print(name, &quot;-&gt;&quot;, is_safe(name))
+</code></pre>
+<pre><code class="language-text">notes.txt -&gt; True
+sub/../notes.txt -&gt; True
+../secret.txt -&gt; False
+../../etc/passwd -&gt; False
+/etc/passwd -&gt; False
+</code></pre>
+<p>Зверни увагу на останній: <code>Path("/srv/files") / "/etc/passwd"</code> дає просто <code>/etc/passwd</code> - абсолютний
+шлях «перебиває» теку. Тому перевіряти треба результат, а не шукати <code>..</code> у рядку.
+Ще надійніше - не брати імʼя файлу від користувача взагалі, а зберігати файли під своїми номерами.</p>
+<p><strong>Секрети (паролі, ключі API, токени):</strong>
+- ніколи не писати в код: код потрапляє в git, на GitHub, до всіх, хто його бачить;
+- тримати в змінних оточення або у файлі <code>.env</code>, а <code>.env</code> дописати в <code>.gitignore</code>;
+- <code>.env</code> Python сам НЕ читає: потрібен пакет <code>python-dotenv</code> (<code>from dotenv import load_dotenv</code>, потім
+  <code>load_dotenv()</code>), тоді значення зʼявляться в <code>os.environ</code>;
+- читати так:</p>
+<pre><code class="language-python">import os
+
+key = os.environ.get(&quot;UNIPREP_DEMO_KEY&quot;)
+if key is None:
+    print(&quot;ключ не задано - працюю без нього&quot;)
+</code></pre>
+<pre><code class="language-text">ключ не задано - працюю без нього
+</code></pre>
+<ul>
+<li>випадкові паролі й токени - лише модуль <code>secrets</code>, не <code>random</code> (<code>random</code> передбачуваний, він для ігор і симуляцій):</li>
+</ul>
+<pre><code class="language-python">import secrets
+
+token = secrets.token_urlsafe(32)    # 32 випадкові байти
+print(len(token))
+</code></pre>
+<pre><code class="language-text">43
+</code></pre>
+<p>Якщо секрет уже потрапив у git - видалити файл замало (він лишається в історії). Ключ треба
+<strong>замінити на новий</strong> (відкликати старий).</p>
+<p>OWASP: A01 Broken Access Control (path traversal - CWE-22), A07 Authentication Failures (пароль у коді - CWE-798),
+A04 Cryptographic Failures (слабкий випадковий генератор - CWE-338).</p>
+<h2 id="тема-6-помилки">Тема 6. Помилки</h2>
+<p><strong>Що треба з Python:</strong> <code>try/except</code>, модуль <code>traceback</code>, <code>logging</code>.</p>
+<p><strong>Де діра:</strong> показати користувачу весь стектрейс. Там шляхи до файлів, версії бібліотек, шматки SQL -
+готова карта для того, хто шукає діру.</p>
+<p><strong>Як правильно:</strong> користувачу - коротко і з номером, повний текст - у свій журнал (лог).</p>
+<pre><code class="language-python">import traceback
+
+LOG = []                       # журнал; у справжній програмі - logging у файл
+
+
+def handle(request_id, func):
+    try:
+        return func()
+    except Exception:
+        LOG.append(traceback.format_exc())
+        return f&quot;Сталася помилка (код {request_id}). Спробуй пізніше.&quot;
+
+
+print(handle(7, lambda: 1 / 0))
+print(len(LOG), &quot;запис у журналі, останній рядок:&quot;,
+      LOG[0].strip().splitlines()[-1])
+</code></pre>
+<pre><code class="language-text">Сталася помилка (код 7). Спробуй пізніше.
+1 запис у журналі, останній рядок: ZeroDivisionError: division by zero
+</code></pre>
+<p>Інші правила:
+- не ловити все підряд <code>except:</code> і мовчки йти далі - помилка зникає, а дані лишаються напівзмінені;
+- у вебі вимкнути режим налагодження на сервері (<code>DEBUG = False</code> у Django, <code>debug=False</code> у Flask);
+- у журнал не писати паролі й токени.</p>
+<p>OWASP: A10 Mishandling of Exceptional Conditions (CWE-209 - витік деталей у помилці), A02 Security Misconfiguration (debug на сервері).</p>
+<h2 id="тема-7-залежності-pip">Тема 7. Залежності (pip)</h2>
+<p><strong>Що треба з Python:</strong> <code>pip install пакет</code>, віртуальне оточення <code>python3 -m venv .venv</code>, файл <code>requirements.txt</code>.</p>
+<p><strong>Де діра:</strong>
+- у старій версії бібліотеки є відома діра - вразливість з номером CVE, а ти її не оновив;
+- підробка: пакет з назвою, схожою на справжню (<code>reqeusts</code> замість <code>requests</code>) - це називають typosquatting;
+- атака на ланцюг постачання: зламали самого автора пакета, і шкідлива версія приходить «оновленням».</p>
+<p><strong>Як правильно:</strong>
+- ставити лише потрібне; назву брати з документації чи репозиторію проєкту, а на pypi.org звірити автора,
+  посилання на репозиторій, дату і кількість завантажень (підробка теж лежить на pypi.org);
+- пакет, який порадив ШІ, перевірити так само: ШІ іноді вигадує назви, а зловмисники реєструють
+  пакети з такими вигаданими назвами;
+- фіксувати версії в <code>requirements.txt</code> (<code>requests==2.32.4</code>), кожен проєкт - у своєму venv;
+- перевіряти на відомі дірки програмою <strong>pip-audit</strong> (від PyPA, тих, хто робить pip):</p>
+<pre><code class="language-bash">pip install pip-audit
+pip-audit                      # перевірити те, що встановлено у venv
+pip-audit -r requirements.txt  # перевірити файл залежностей
+</code></pre>
+<p>Перевірено 17.11.2026 (pip-audit 2.10.0): для <code>requests==2.19.0</code> він видав PYSEC-2018-28 (виправлено в 2.20.0),
+PYSEC-2023-74 (виправлено в 2.31.0) і ще кілька. Пастка: команди <code>pip audit</code> (з пробілом) у pip нема - pip 25.1.1
+на ПК відповів <code>ERROR: unknown command "audit"</code>. Правильно - з дефісом, окрема програма.</p>
+<p>OWASP: A03 Software Supply Chain Failures (нова назва в 2025, раніше «вразливі й застарілі компоненти»).</p>
+<h2 id="тема-8-веб-запити-й-ssrf">Тема 8. Веб-запити й SSRF</h2>
+<p><strong>Що треба з Python:</strong> <code>urllib.parse.urlparse(url)</code> розбирає адресу на схему, хост, порт; модуль <code>ipaddress</code>
+каже, чи адреса приватна.</p>
+<p><strong>Правила для запитів:</strong>
+- лише <code>https://</code> (TLS шифрує і перевіряє, що сервер справжній); не вимикати перевірку сертифіката
+  (<code>verify=False</code> у бібліотеці requests);
+- секрети не в URL (URL пишеться в логи і історію браузера) - у заголовку;
+- завжди ставити <code>timeout</code> (інакше один повільний сервер підвішує твою програму).</p>
+<p><strong>Де діра: SSRF</strong> (Server-Side Request Forgery). Сервер вміє «завантажити картинку за посиланням». Користувач
+дає не картинку, а внутрішню адресу: <code>http://127.0.0.1:...</code> (сам сервер), <code>http://169.254.169.254/</code> (службові
+дані хмари, там бувають ключі доступу), <code>http://192.168.0.1/</code> (роутер у мережі).</p>
+<p><strong>Як правильно:</strong> дозволяти лише потрібне (краще список дозволених доменів); не ходити на приватні адреси.</p>
+<pre><code class="language-python">import ipaddress
+from urllib.parse import urlparse
+
+
+def is_safe_url(url):
+    try:
+        u = urlparse(url)
+    except ValueError:
+        return False             # urlparse теж падає на смітті
+    if u.scheme != &quot;https&quot; or not u.hostname:
+        return False
+    try:
+        ip = ipaddress.ip_address(u.hostname)
+    except ValueError:
+        return True              # не IP у звичайному записі - текстом не перевірити
+    return ip.is_global
+
+
+for url in [&quot;https://example.com/cat.png&quot;, &quot;http://example.com/&quot;,
+            &quot;https://127.0.0.1/admin&quot;, &quot;https://169.254.169.254/&quot;,
+            &quot;https://192.168.0.1/&quot;, &quot;file:///etc/passwd&quot;]:
+    print(url, &quot;-&gt;&quot;, is_safe_url(url))
+</code></pre>
+<pre><code class="language-text">https://example.com/cat.png -&gt; True
+http://example.com/ -&gt; False
+https://127.0.0.1/admin -&gt; False
+https://169.254.169.254/ -&gt; False
+https://192.168.0.1/ -&gt; False
+file:///etc/passwd -&gt; False
+</code></pre>
+<p><strong>Пастка:</strong> ця перевірка дивиться лише на текст адреси. Вона пропустить <code>https://localhost/</code>, <code>https://127.1/</code>
+і <code>https://2130706433/</code> - а система все одно перетворить їх на <code>127.0.0.1</code>. Імʼя домену теж може вести на
+<code>127.0.0.1</code>, а сервер може відповісти перенаправленням на внутрішню адресу. Тому в справжньому сервісі перевіряють IP <strong>після</strong> того,
+як імʼя перетворили на адресу, вимикають автоматичні перенаправлення або пускають такі запити через
+окремий проксі. Найнадійніше - список дозволених доменів.</p>
+<p>OWASP: A01 Broken Access Control (у 2025 SSRF входить сюди, CWE-918), A04 Cryptographic Failures (без TLS).</p>
+<h2 id="тема-9-веб-застосунок-owasp">Тема 9. Веб-застосунок (OWASP)</h2>
+<p><strong>Автентифікація</strong> - хто ти (логін). <strong>Авторизація</strong> - що тобі можна (див. тему 3, IDOR).</p>
+<p><strong>XSS</strong> (cross-site scripting): ввід користувача потрапляє на сторінку як HTML і виконується як JavaScript
+у браузері ІНШИХ людей. Збережений XSS - коли текст зберігся (коментар) і показується всім.</p>
+<pre><code class="language-python">import html
+
+comment = &quot;&lt;script&gt;alert(1)&lt;/script&gt;&quot;     # «коментар» користувача
+print(&quot;&lt;p&gt;&quot; + comment + &quot;&lt;/p&gt;&quot;)             # погано
+print(&quot;&lt;p&gt;&quot; + html.escape(comment) + &quot;&lt;/p&gt;&quot;)  # добре
+</code></pre>
+<pre><code class="language-text">&lt;p&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&lt;/p&gt;
+</code></pre>
+<p>Після <code>html.escape</code> браузер показує текст як текст. Це працює для тексту в HTML і для атрибута в лапках,
+але не для посилань: <code>href="javascript:..."</code> екранування не рятує - у посиланнях від користувача пускай лише
+схему <code>https</code>. Шаблонізатори (Jinja2 у Flask, шаблони Django) екранують
+самі - не вимикай це (<code>|safe</code>, <code>Markup</code>) для вводу користувача.</p>
+<p><strong>CSRF:</strong> чужий сайт змушує твій браузер надіслати запит на сайт, де ти залогінений (браузер сам додає твої
+cookie). Захист: CSRF-токен у формах (у Django і Flask-WTF є готовий), cookie з <code>SameSite=Lax</code>, зміни лише через POST.</p>
+<p><strong>Паролі:</strong> ніколи не зберігати відкрито і не «шифрувати». Зберігати <strong>хеш повільною функцією з сіллю</strong>.
+OWASP Password Storage Cheat Sheet: перший вибір Argon2id (мінімум 19 МіБ памʼяті, 2 ітерації, 1 потік),
+якщо його нема - scrypt, bcrypt - лише для старих систем (і він бере лише перші 72 байти пароля). Звичайний SHA-256 для паролів -
+<strong>ні</strong>: він швидкий, відеокарта перебирає мільярди за секунду.</p>
+<pre><code class="language-python"># не запускати: у браузері нема argon2-cffi - запускай у терміналі на ПК
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+
+ph = PasswordHasher()   # типово 64 МіБ, 3 ітерації, 4 потоки - вище за мінімум OWASP
+stored = ph.hash(&quot;мій-пароль&quot;)      # це й зберігаємо в базі
+print(stored[:9])                   # $argon2id
+print(ph.verify(stored, &quot;мій-пароль&quot;))
+try:
+    ph.verify(stored, &quot;не-той&quot;)
+except VerifyMismatchError:
+    print(&quot;неправильний пароль&quot;)
+</code></pre>
+<pre><code class="language-text">$argon2id
+True
+неправильний пароль
+</code></pre>
+<p><strong>Порівняння секретів</strong> (токен, код з листа) - <code>hmac.compare_digest(a, b)</code>, а не <code>a == b</code>: звичайне <code>==</code> зупиняється
+на першій різниці, і за часом відповіді можна вгадувати символи по одному. Рядки <code>compare_digest</code> бере лише
+латинські (ASCII): на <code>"абв"</code> він кидає <code>TypeError</code>, тому для вводу користувача порівнюй байти - <code>.encode()</code>.</p>
+<pre><code class="language-python">import hmac
+
+print(hmac.compare_digest(b&quot;abc123&quot;, b&quot;abc123&quot;), hmac.compare_digest(&quot;абв&quot;.encode(), b&quot;abc123&quot;))
+</code></pre>
+<pre><code class="language-text">True False
+</code></pre>
+<p>OWASP: A05 Injection (XSS - CWE-79), A01 (CSRF - CWE-352), A07 Authentication Failures, A04 Cryptographic Failures (слабкий хеш пароля - CWE-916).</p>
+<h2 id="тема-10-база-даних">Тема 10. База даних</h2>
+<p><strong>Головне:</strong> лише параметризовані запити (<code>?</code> у SQLite, <code>%s</code> у psycopg для PostgreSQL), ніколи f-рядок чи <code>+</code>.
+Увага: <code>%s</code> у psycopg - це мітка, значення йде ДРУГИМ аргументом <code>execute(sql, (name,))</code>. А оператор Python
+<code>"... %s" % name</code> - це знову склеювання рядка, тобто діра.</p>
+<p><strong>Пастка: параметром можна передати лише ЗНАЧЕННЯ.</strong> Назву колонки чи таблиці (<code>ORDER BY колонка</code>) параметром не
+передаси. Тоді - лише вибір зі списку дозволених:</p>
+<pre><code class="language-python">import sqlite3
+
+con = sqlite3.connect(&quot;:memory:&quot;)
+con.execute(&quot;CREATE TABLE marks (name TEXT, mark INTEGER)&quot;)
+con.executemany(&quot;INSERT INTO marks VALUES (?, ?)&quot;,
+                [(&quot;anna&quot;, 90), (&quot;bob&quot;, 75), (&quot;ira&quot;, 82)])
+
+ALLOWED = {&quot;name&quot;, &quot;mark&quot;}
+
+
+def top(order_by):
+    if order_by not in ALLOWED:
+        raise ValueError(&quot;так сортувати не можна&quot;)
+    return con.execute(f&quot;SELECT name FROM marks ORDER BY {order_by}&quot;).fetchall()
+
+
+print(top(&quot;mark&quot;))
+try:
+    top(&quot;mark; DROP TABLE marks&quot;)
+except ValueError as e:
+    print(e)
+</code></pre>
+<pre><code class="language-text">[('bob',), ('ira',), ('anna',)]
+так сортувати не можна
+</code></pre>
+<p>Тут f-рядок безпечний лише тому, що <code>order_by</code> - точно одне зі слів списку. (SQLite і так не виконає два
+запити через <code>;</code>, але в <code>ORDER BY</code> можна вставити підзапит, тому перевірка списком - обовʼязкова.)</p>
+<p><strong>Найменші права:</strong> програма заходить у базу користувачем, який може лише те, що їй треба (читати і писати
+свої таблиці), а не адміном бази. Тоді інʼєкція не зможе видалити таблиці чи дістатись до інших баз - хоча
+дані своїх таблиць усе одно під загрозою. Права зменшують шкоду, а не замінюють параметри.</p>
+<p><strong>Ще:</strong> резервні копії бази (і перевірка, що з них можна відновитись), паролі - хешем (тема 9),
+особисті дані - лише ті, що справді потрібні.</p>
+<p>OWASP: A05 Injection (CWE-89), A02 Security Misconfiguration (зайві права).</p>
+<h2 id="тренажер-на-пк">Тренажер (на ПК)</h2>
+<p>Є окремий тренажер з локальною моделлю на ПК (дає задачу з вимогою безпеки і перевіряє рішення, працює
+без інтернету). На сайті його нема - він живе лише на компʼютері.</p>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>OWASP Top 10:2025 - https://top10.owasp.org/2025/ (категорії A01-A10; номери CWE звірено зі списками «Mapped CWEs» сторінок категорій 17.11.2026).</li>
+<li>OWASP Password Storage Cheat Sheet - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html (Argon2id 19 МіБ / 2 / 1).</li>
+<li>Документація Python: <code>sqlite3</code> (розділ про placeholders - «How to use placeholders to bind values in SQL queries»),
+  <code>secrets</code>, <code>hmac.compare_digest</code>, <code>html.escape</code>, <code>ast.literal_eval</code>, <code>pathlib.PurePath.is_relative_to</code>.</li>
+<li>pip-audit (PyPA) - https://github.com/pypa/pip-audit (запуск 17.11.2026, версія 2.10.0).</li>
+<li>CWE (каталог типів дірок) - https://cwe.mitre.org/ (номери біля кожної теми).</li>
+<li>Кримінальний кодекс України, ст. 361 «Несанкціоноване втручання в роботу інформаційних (автоматизованих), електронних
+  комунікаційних, інформаційно-комунікаційних систем, електронних комунікаційних мереж» - https://zakon.rada.gov.ua/laws/show/2341-14</li>
+</ul>

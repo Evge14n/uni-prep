@@ -1,0 +1,835 @@
+<h1 id="урок-6-анімація-turtle-події-і-рекурентні-співвідношення">Урок 6. Анімація turtle, події і рекурентні співвідношення</h1>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/dovidnyk">Довідник функцій</a></p>
+<blockquote>
+<p>Лекція 6 (с. 1-15; решта лекції, с. 15-26, - системи рекурентних, пошук з <code>while</code>, точність ε, бісекція - майже дослівно повторена в Лекції 7, тому вона в уроці 7), потрібно для: ЛР4 (завд. 2: годинник - <code>tracer</code>/<code>update</code>/<code>ontimer</code>, миша і клавіші; завд. 3: анімація кульок), ЛР5 (завд. 1: члени й суми рекурентно, без <code>**</code> і факторіала), ЛР6 (завд. 2: визначник Dₙ рекурентно; завд. 3: схема Горнера). Час: 30 хв. Перед цим уроком: урок 5.</p>
+</blockquote>
+<h2 id="1-ідея">1. Ідея</h2>
+<p>У Лекції 6 дві різні половини. Перша - як оживити черепашку (анімація, клавіші, миша). Друга - рекурентні
+співвідношення: як цикл рахує послідовність, де кожен член залежить від попередніх. Насправді це одна ідея:
+<strong>стан на наступному кроці рахуємо зі стану на попередньому.</strong> У м'ячика стан - висота і швидкість,
+у послідовності - останній член (або кілька останніх).</p>
+<h3 id="11-анімація-цикл-кадрів-лекція-6-с-1-2">1.1. Анімація = цикл кадрів (Лекція 6, с. 1-2)</h3>
+<p>Мультик - це швидка зміна картинок. Програма робить те саме: у циклі 1) змінює числа стану, 2) переносить
+черепашку в нове місце, 3) показує кадр, 4) трохи чекає. Щоб кожен рух не малювався окремо (повільно,
+з миготінням), лекція вимикає автоматичне оновлення <code>screen.tracer(0)</code> і сама показує кадр
+<code>screen.update()</code>. Паузу між кадрами дає <code>time.sleep(0.01)</code> - 0.01 с.</p>
+<pre><code class="language-python"># не запускати: turtle
+import time
+import turtle
+
+screen = turtle.Screen()
+screen.tracer(0)                  # не малювати кожен рух окремо
+ball = turtle.Turtle(shape=&quot;circle&quot;)
+ball.penup()                      # м'ячик не лишає сліду
+ball.goto(-250, 150)
+dx, dy = 4, 0                     # швидкість: 4 вправо, 0 по вертикалі
+gravity = -0.4                    # щокадру швидкість вниз зростає на 0.4
+for frame in range(1200):         # 1200 кадрів
+    dy += gravity                 # 1) змінили швидкість
+    x = ball.xcor() + dx          # 2) нова позиція = стара + швидкість
+    y = ball.ycor() + dy
+    if x &gt; 285 or x &lt; -285:       # стіна: горизонтальна швидкість міняє знак
+        dx = -dx
+    if y &lt; -235:                  # підлога: відскок і втрата енергії
+        y = -235
+        dy = -dy * 0.9
+    ball.goto(x, y)               # 3) перенесли м'ячик
+    screen.update()               # 4) показали кадр
+    time.sleep(0.01)              # 5) пауза ~ 100 кадрів за секунду
+screen.bye()
+</code></pre>
+<p>Уся «фізика» тут - звичайні числа, їх можна порахувати без вікна. Ось той самий крок для м'ячика,
+що падає з висоти 10 на підлогу 0 (гравітація -2, при відскоку швидкість гаситься вдвічі):</p>
+<pre><code class="language-python">height = 10.0
+speed = 0.0
+for frame in range(6):
+    speed += -2.0
+    height += speed
+    if height &lt; 0:
+        height = 0.0
+        speed = -speed * 0.5
+    print(frame, height, speed)
+</code></pre>
+<pre><code class="language-text">0 8.0 -2.0
+1 4.0 -4.0
+2 0.0 3.0
+3 1.0 1.0
+4 0.0 -1.0
+5 0.0 1.5
+</code></pre>
+<p>Кадр 2: швидкість стала -6, висота 4 - 6 = -2 - м'ячик «провалився» під підлогу. Умова ставить його на 0
+і перевертає швидкість: -(-6) · 0.5 = 3.0 - тепер вгору. Кадр 3: 3 - 2 = 1, висота 0 + 1 = 1. Так і
+виглядає відскок. Зверни увагу на порядок: <strong>спершу швидкість, потім позиція, потім перевірка підлоги.</strong></p>
+<h3 id="12-події-миша-клавіші-таймер-лекція-6-с-3-5">1.2. Події: миша, клавіші, таймер (Лекція 6, с. 3-5)</h3>
+<p>До цього програма йшла за сценарієм. Тепер вона чекає дій користувача. Ти кажеш turtle: «коли станеться
+X - виклич мою функцію f». Такі функції називають обробниками подій (с. 3).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>виклик</th>
+<th>коли turtle викличе функцію</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>screen.onclick(fun)</code></td>
+<td>клацання мишею; <code>fun(x, y)</code> отримує координати клацання</td>
+</tr>
+<tr>
+<td><code>screen.onkey(fun, "Up")</code></td>
+<td>відпускання клавіші (<code>"Up"</code>, <code>"space"</code>, <code>"q"</code> ...); <code>fun()</code> без аргументів</td>
+</tr>
+<tr>
+<td><code>screen.ontimer(fun, 30)</code></td>
+<td>один раз, через 30 мілісекунд</td>
+</tr>
+<tr>
+<td><code>screen.listen()</code></td>
+<td>обов'язково: вікно починає «слухати» клавіатуру, інакше клавіші не працюють</td>
+</tr>
+<tr>
+<td><code>screen.mainloop()</code></td>
+<td>запускає очікування подій; програма «засинає» і лише відповідає на них</td>
+</tr>
+</tbody>
+</table></div>
+<p>Головне правило: <strong>функцію передають без дужок.</strong> <code>screen.onkey(toggle_pen, "space")</code> - «ось тобі функція,
+виклич її потім». А <code>screen.onkey(toggle_pen(), "space")</code> викличе її ОДРАЗУ, ще до натискання, і передасть
+turtle її результат <code>None</code>. Коли функції треба аргумент, лекція обгортає виклик у <code>lambda</code> (с. 4):
+<code>screen.onkey(lambda: move(90), "Up")</code> - «функція без аргументів, яка, коли її викличуть, зробить <code>move(90)</code>».</p>
+<pre><code class="language-python"># не запускати: turtle
+import turtle
+
+screen = turtle.Screen()
+t = turtle.Turtle()
+STEP = 20
+
+def move(angle):
+    t.setheading(angle)           # подивитись у потрібний бік
+    t.forward(STEP)
+    if abs(t.xcor()) &gt; 280 or abs(t.ycor()) &gt; 280:
+        t.backward(STEP)          # вийшли б за межу - крок назад
+
+def toggle_pen():
+    if t.isdown():                # перо опущене?
+        t.penup()
+    else:
+        t.pendown()
+
+screen.listen()
+screen.onkey(lambda: move(90), &quot;Up&quot;)
+screen.onkey(lambda: move(270), &quot;Down&quot;)
+screen.onkey(toggle_pen, &quot;space&quot;)   # без дужок!
+screen.onkey(screen.bye, &quot;q&quot;)       # q закриває вікно
+screen.mainloop()
+</code></pre>
+<p>У ЛР4 (с. 8) цикл анімації зроблено не <code>for</code> + <code>sleep</code>, а таймером: функція кадру в кінці сама себе
+записує на наступний виклик - <code>screen.ontimer(main_loop, 30)</code>. Перевага: програма між кадрами не «спить»
+і встигає обробляти клавіші й мишу. А стан, який змінюють обробники (тема, режим), у ЛР4 тримають у
+глобальних змінних з <code>global</code> (ЛР4, с. 9) - лекція замість цього кладе лічильник у словник
+<code>counter = {"clicks": 0}</code> (с. 3), бо вміст словника функція може змінювати без <code>global</code>.</p>
+<h3 id="13-кілька-черепашок-рекурсія-поради-лекція-6-с-5-8">1.3. Кілька черепашок, рекурсія, поради (Лекція 6, с. 5-8)</h3>
+<p><strong>Кілька черепашок</strong> (с. 5-6): кожна <code>turtle.Turtle()</code> - окремий об'єкт зі своїм станом. Їх тримають у
+списку <code>racers</code> і рухають у <code>for racer in racers:</code>. Лідер: <code>max(racers, key=lambda r: r.xcor())</code> - «найбільша
+за значенням <code>xcor()</code>».</p>
+<p><strong>Рекурсія</strong> (с. 6-7, у лекції це бонус): функція викликає сама себе. Щоб вона зупинилась, потрібен
+<strong>базовий випадок</strong> - <code>if depth == 0: return</code>. Дерево: гілка = стовбур + дві менші гілки, кожна з яких теж
+дерево. Сніжинка Коха: відрізок = чотири менші відрізки зі «шпилем» посередині.</p>
+<pre><code class="language-python"># не запускати: turtle
+def koch(t, length, depth):
+    if depth == 0:                 # базовий випадок: просто відрізок
+        t.forward(length)
+    else:
+        for angle in (60, -120, 60, 0):
+            koch(t, length / 3, depth - 1)   # той самий малюнок, утричі менший
+            t.left(angle)
+</code></pre>
+<p>У ЛР6, завд. 1 рекурсія <strong>заборонена</strong> умовою - там лише цикли.</p>
+<p><strong>Поради з лекції</strong> (с. 7-8): <code>turtle.Terminator</code> - з'являється, коли закрив вікно, а програма ще малює
+(у Jupyter лікується рядком <code>turtle.TurtleScreen._RUNNING = True</code>); швидко - <code>t.speed(0)</code>,
+<code>screen.tracer(0)</code> + <code>screen.update()</code>, <code>t.hideturtle()</code>; фігура «не замикається» - перевір, що сума
+поворотів 360°; <code>t.undo()</code> - скасувати останню дію; <code>t.clone()</code> - копія черепашки з тим самим станом;
+<code>t.setundobuffer(None)</code> - вимкнути пам'ять для <code>undo</code> на дуже довгих малюнках. Стиль <code>turtle.forward(100)</code>
+(без об'єкта, як у ЛР4, с. 1) - для швидких проб; <code>t = turtle.Turtle()</code> - коли черепашок кілька або є події.</p>
+<h3 id="14-рекурентне-співвідношення-першого-порядку-лекція-6-с-8-12">1.4. Рекурентне співвідношення першого порядку (Лекція 6, с. 8-12)</h3>
+<p>Послідовність задана рекурентно, якщо відомий перший член a₀, а кожен наступний рахується з попереднього:</p>
+<pre><code>a₀ = u
+aₙ = f(n, p, aₙ₋₁),   n ≥ 1
+</code></pre>
+<p>Факторіал: a₀ = 1, aₙ = n · aₙ₋₁. Тобто 1, 1, 2, 6, 24, 120 (с. 9). Комп'ютеру так рахувати зручніше,
+ніж за явною формулою: одна змінна і цикл. Шаблон лекції (с. 9):</p>
+<pre><code>a = u
+for n in range(1, N + 1):
+    a = f(n, p, a)
+</code></pre>
+<p>Після циклу в <code>a</code> лежить aₙ. Ліва <code>a</code> - новий член, права <code>a</code> - попередній. Одна змінна, бо старий член
+після обчислення нового вже не потрібен.</p>
+<p><strong>Як знайти рекурентну формулу.</strong> Для aₙ = xⁿ / n! лекція ділить сусідні члени (с. 10):</p>
+<pre><code> aₙ       xⁿ      (n-1)!      x
+───── = ───── · ──────── = ───     ⇒   aₙ = aₙ₋₁ · x / n,   a₀ = x⁰ / 0! = 1
+aₙ₋₁      n!      xⁿ⁻¹        n
+</code></pre>
+<p>Жодного <code>**</code> і жодного факторіала - лише одне множення й одне ділення на крок. Саме цього вимагає ЛР5,
+завд. 1 (с. 5: «не можна ... піднесення до степеня і функцію, яка рахує факторіал»), бо <code>x ** 200</code> і
+<code>factorial(200)</code> окремо - величезні числа, а їх частка - нормальна.</p>
+<p><strong>Нумерація не з нуля</strong> (с. 11): якщо перший відомий член aₘ, то цикл починається з <code>m + 1</code>:
+<code>for n in range(m + 1, N + 1)</code>. Гармонічна сума Sₙ = 1 + 1/2 + ... + 1/n: S₁ = 1, Sₙ = Sₙ₋₁ + 1/n,
+тому <code>S = 1</code> і <code>range(2, N + 1)</code>. Ще приклад з с. 12: Sₙ = 2·Sₙ₋₁ + n², S₁ = 1.</p>
+<h3 id="15-співвідношення-старших-порядків-лекція-6-с-12-15">1.5. Співвідношення старших порядків (Лекція 6, с. 12-15)</h3>
+<p>Тепер новий член залежить від кількох попередніх. Фібоначчі - другий порядок (с. 13):
+F₀ = F₁ = 1, Fₙ = Fₙ₋₁ + Fₙ₋₂. Однієї змінної вже мало: треба пам'ятати два останні члени.
+Скільки порядок - стільки додаткових змінних (с. 14). Після обчислення нового члена змінні <strong>зсуваються</strong>
+на одну позицію:</p>
+<pre><code>до кроку:     F2 = Fₙ₋₂    F1 = Fₙ₋₁
+обчислили:    F  = F1 + F2
+зсув:         F2 = F1      (найстаріше - першим!)
+              F1 = F
+</code></pre>
+<p>Правило з лекції (с. 14): <strong>спочатку зсунути найстаріші значення, потім молодші.</strong> Якщо спершу зробити
+<code>F1 = F</code>, старе F1 загубиться, і <code>F2 = F1</code> запише туди нове значення - обидві змінні стануть однаковими.</p>
+<pre><code class="language-python">older = 1
+previous = 1
+for n in range(2, 7):
+    current = previous + older
+    older = previous
+    previous = current
+    print(n, current)
+</code></pre>
+<pre><code class="language-text">2 2
+3 3
+4 5
+5 8
+6 13
+</code></pre>
+<p>Лекція (с. 15) для N = 35 отримує <code>F =  14930352</code> - та сама програма, просто довше крутить цикл.</p>
+<h2 id="2-розібраний-приклад">2. Розібраний приклад</h2>
+<p><strong>Умова</strong> (Лекція 6, с. 14-15). Визначник Dₙ порядку n: на головній діагоналі 5, над нею 3, під нею 2,
+решта нулі. Розклад за першим рядком дає Dₙ = 5·Dₙ₋₁ - 6·Dₙ₋₂ (6 = 3 · 2), D₁ = 5, D₂ = 5·5 - 3·2 = 19.
+Напиши функцію, яка ПОВЕРТАЄ Dₙ.</p>
+<p>У лекції програма стартує з D₂ = 5 і D₁ = 19 (імена <code>D2</code>, <code>D1</code> там означають «два кроки тому» і
+«крок тому»), а цикл з <code>n = 3</code>. Пастка: при N = 1 цикл не виконується, і програма друкує 19, хоча D₁ = 5.
+Виправлення без жодного <code>if</code> - підставити «нульовий» визначник D₀ = 1. Тоді D₂ = 5·5 - 6·1 = 19, як і має
+бути, і цикл можна починати з n = 2. Той самий прийом D₀ = 1 є в ЛР6 (с. 4).</p>
+<pre><code class="language-python">def tridiagonal_det(order: int) -&gt; int:
+    &quot;&quot;&quot;Повертає визначник Dₙ: 5 на діагоналі, 3 над нею, 2 під нею.
+
+    &gt;&gt;&gt; tridiagonal_det(1)
+    5
+    &gt;&gt;&gt; tridiagonal_det(2)
+    19
+    &gt;&gt;&gt; tridiagonal_det(5)
+    665
+    &quot;&quot;&quot;
+    older = 1
+    previous = 5
+    for n in range(2, order + 1):
+        current = 5 * previous - 6 * older
+        older = previous
+        previous = current
+    return previous
+
+
+for order in range(1, 6):
+    print(order, tridiagonal_det(order))
+</code></pre>
+<p>Вивід:</p>
+<pre><code class="language-text">1 5
+2 19
+3 65
+4 211
+5 665
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>рядок</th>
+<th>що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>older = 1</code></td>
+<td>Dₙ₋₂; перед першим кроком це D₀ = 1</td>
+</tr>
+<tr>
+<td><code>previous = 5</code></td>
+<td>Dₙ₋₁; перед першим кроком це D₁ = 5</td>
+</tr>
+<tr>
+<td><code>for n in range(2, order + 1):</code></td>
+<td>рахуємо D₂, D₃, ..., D_order. Для order = 1 цикл порожній</td>
+</tr>
+<tr>
+<td><code>current = 5 * previous - 6 * older</code></td>
+<td>сама рекурентна формула: новий член з двох попередніх</td>
+</tr>
+<tr>
+<td><code>older = previous</code></td>
+<td>зсув: найстаріше - першим (інакше загубимо Dₙ₋₁)</td>
+</tr>
+<tr>
+<td><code>previous = current</code></td>
+<td>новий член стає «попереднім» для наступного кроку</td>
+</tr>
+<tr>
+<td><code>return previous</code></td>
+<td>після циклу в <code>previous</code> лежить D_order (для order = 1 - стартове 5)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Трасувальна таблиця для <code>tridiagonal_det(5)</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>ітерація</th>
+<th>n</th>
+<th>older (Dₙ₋₂)</th>
+<th>previous (Dₙ₋₁)</th>
+<th>current = 5·previous - 6·older</th>
+<th>older після</th>
+<th>previous після</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>5</td>
+<td>25 - 6 = 19</td>
+<td>5</td>
+<td>19</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+<td>19</td>
+<td>95 - 30 = 65</td>
+<td>19</td>
+<td>65</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>19</td>
+<td>65</td>
+<td>325 - 114 = 211</td>
+<td>65</td>
+<td>211</td>
+</tr>
+<tr>
+<td>4</td>
+<td>5</td>
+<td>65</td>
+<td>211</td>
+<td>1055 - 390 = 665</td>
+<td>211</td>
+<td>665</td>
+</tr>
+</tbody>
+</table></div>
+<p>Перевірка іншим способом (у лекції нема): для цього визначника є явна формула Dₙ = 3ⁿ⁺¹ - 2ⁿ⁺¹.
+n = 5: 3⁶ - 2⁶ = 729 - 64 = 665. Збігається.</p>
+<p><strong>Закрий приклад і напиши його сам з пам'яті.</strong> Потім зміни на визначник з 4 на діагоналі, 1 над і 1 під:
+Dₙ = 4·Dₙ₋₁ - 1·Dₙ₋₂, D₀ = 1, D₁ = 4. Має вийти D₃ = 56.</p>
+<h2 id="3-передбач-вивід">3. Передбач вивід</h2>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<pre><code class="language-python">value = 1
+for n in range(1, 6):
+    value = n * value
+    print(n, value)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">1 1
+2 2
+3 6
+4 24
+5 120
+</code></pre>
+<p>Це шаблон з с. 9 для факторіала: a₀ = 1, aₙ = n · aₙ₋₁. Кожен рядок - aₙ = n!. Порівняй з таблицею
+лекції на с. 9: a₅ = 5 · 24 = 120.</p>
+</details>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий. (Фібоначчі, але зсув записано в іншому порядку.)</p>
+<pre><code class="language-python">F2 = 1
+F1 = 1
+for n in range(2, 7):
+    F = F1 + F2
+    F1 = F
+    F2 = F1
+    print(n, F, end=&quot; | &quot;)
+print()
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">2 2 | 3 4 | 4 8 | 5 16 | 6 32 |
+</code></pre>
+<p>Замість 2, 3, 5, 8, 13 - степені двійки. На першому кроці F = 2, потім <code>F1 = 2</code>, і <code>F2 = F1</code> теж 2 (вже
+нове значення!). Старе F1 = 1 загубилось. Далі щоразу F = F1 + F2 = 2·F1 - подвоєння. Саме тому правило
+лекції: спершу <code>F2 = F1</code>, потім <code>F1 = F</code> (с. 14).</p>
+</details>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<pre><code class="language-python">total = 1
+for n in range(2, 5):
+    total += 1 / n
+print(round(total, 4))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">2.0833
+</code></pre>
+<p>Гармонічна сума S₄ = 1 + 1/2 + 1/3 + 1/4 = 2.08333... Стартове <code>total = 1</code> - це вже S₁, тому цикл з 2
+(нумерація з m = 1, отже <code>range(m + 1, N + 1)</code>, с. 11). Якби цикл ішов з 1, одиниця додалася б двічі: 3.0833.</p>
+</details>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий. (Це про те, як <code>onkey</code> отримує функцію.)</p>
+<pre><code class="language-python">def greet():
+    print(&quot;привіт&quot;)
+    return &quot;готово&quot;
+
+
+handler = greet
+print(&quot;ще нічого&quot;)
+result = greet()
+print(result)
+handler()
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">ще нічого
+привіт
+готово
+привіт
+</code></pre>
+<p><code>handler = greet</code> (без дужок) нічого не викликає - лише дає функції друге ім'я. Тому першим друкується
+«ще нічого». <code>greet()</code> з дужками викликає: друкує «привіт» і повертає «готово». <code>handler()</code> - та сама
+функція, ще одне «привіт». <code>screen.onkey(greet, "space")</code> робить як <code>handler = greet</code>: запам'ятовує
+функцію і викличе її пізніше, коли натиснуть пробіл.</p>
+</details>
+<h2 id="4-знайди-помилку">4. Знайди помилку</h2>
+<pre><code class="language-python"># БАГ
+def fibonacci(number: int) -&gt; int:
+    &quot;&quot;&quot;Повертає Fₙ, де F₀ = F₁ = 1, Fₙ = Fₙ₋₁ + Fₙ₋₂ (Лекція 6, с. 13).
+
+    &gt;&gt;&gt; fibonacci(6)
+    13
+    &quot;&quot;&quot;
+    older = 1
+    previous = 1
+    for n in range(2, number + 1):
+        current = previous + older
+        previous = current
+        older = previous
+    return previous
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>Порядок зсуву. <code>previous = current</code> виконується першим, і старе Fₙ₋₁ губиться; <code>older = previous</code> записує
+вже нове значення. Функція повертає 32 замість 13 (ти це бачив у «Передбач вивід»). Найстаріше - першим.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def fibonacci(number: int) -&gt; int:
+    &quot;&quot;&quot;Повертає Fₙ, де F₀ = F₁ = 1, Fₙ = Fₙ₋₁ + Fₙ₋₂ (Лекція 6, с. 13).
+
+    &gt;&gt;&gt; fibonacci(6)
+    13
+    &gt;&gt;&gt; fibonacci(1)
+    1
+    &quot;&quot;&quot;
+    older = 1
+    previous = 1
+    for n in range(2, number + 1):
+        current = previous + older
+        older = previous
+        previous = current
+    return previous
+</code></pre>
+</details>
+<pre><code class="language-python"># БАГ
+def next_frame(height: float, speed: float) -&gt; tuple[float, float]:
+    &quot;&quot;&quot;Один кадр м'ячика над підлогою 0: гравітація -2 за кадр.
+
+    Якщо м'ячик опинився нижче підлоги, ставимо його на 0 і відбиваємо
+    вгору, швидкість після відскоку - 0.9 від тієї, що була.
+
+    &gt;&gt;&gt; next_frame(10.0, 0.0)
+    (8.0, -2.0)
+    &gt;&gt;&gt; next_frame(1.0, -3.0)
+    (0.0, 4.5)
+    &quot;&quot;&quot;
+    speed += -2.0
+    height += speed
+    if height &lt; 0:
+        height = 0.0
+        speed = speed * 0.9
+    return (height, speed)
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>Забули мінус при відскоку. Перед ударом швидкість від'ємна (вниз): -5. <code>speed * 0.9</code> = -4.5 - знову вниз,
+і в наступному кадрі м'ячик знову «провалиться». Відскок - це зміна напрямку: <code>-speed * 0.9</code> = 4.5, вгору.
+У лекції саме так: <code>dy = -dy * 0.9</code> (с. 2). Перший тест проходить, бо там підлоги не торкнулись.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def next_frame(height: float, speed: float) -&gt; tuple[float, float]:
+    &quot;&quot;&quot;Один кадр м'ячика над підлогою 0: гравітація -2 за кадр.
+
+    Якщо м'ячик опинився нижче підлоги, ставимо його на 0 і відбиваємо
+    вгору, швидкість після відскоку - 0.9 від тієї, що була.
+
+    &gt;&gt;&gt; next_frame(10.0, 0.0)
+    (8.0, -2.0)
+    &gt;&gt;&gt; next_frame(1.0, -3.0)
+    (0.0, 4.5)
+    &quot;&quot;&quot;
+    speed += -2.0
+    height += speed
+    if height &lt; 0:
+        height = 0.0
+        speed = -speed * 0.9
+    return (height, speed)
+</code></pre>
+</details>
+<pre><code class="language-python"># БАГ
+def power_over_factorial(x: float, number: int) -&gt; float:
+    &quot;&quot;&quot;Повертає aₙ = xⁿ / n! через aₙ = aₙ₋₁ · x / n, a₀ = 1 (с. 10).
+
+    &gt;&gt;&gt; power_over_factorial(2.0, 3)
+    1.3333333333333333
+    &quot;&quot;&quot;
+    term = 1.0
+    for n in range(number):
+        term = term * x / n
+    return term
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>range(number)</code> починається з 0, і на першому ж кроці <code>x / 0</code> - <code>ZeroDivisionError</code>. Формула aₙ = aₙ₋₁ · x / n
+працює для n ≥ 1 (a₀ ми вже задали стартовим значенням). Отже <code>range(1, number + 1)</code>: від 1 і так, щоб
+<code>number</code> увійшов. Перевірка: 2³ / 3! = 8 / 6 = 1.333...</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def power_over_factorial(x: float, number: int) -&gt; float:
+    &quot;&quot;&quot;Повертає aₙ = xⁿ / n! через aₙ = aₙ₋₁ · x / n, a₀ = 1 (с. 10).
+
+    &gt;&gt;&gt; power_over_factorial(2.0, 3)
+    1.3333333333333333
+    &gt;&gt;&gt; power_over_factorial(5.0, 0)
+    1.0
+    &quot;&quot;&quot;
+    term = 1.0
+    for n in range(1, number + 1):
+        term = term * x / n
+    return term
+</code></pre>
+</details>
+<h2 id="5-склади-з-рядків">5. Склади з рядків</h2>
+<p><strong>Задача 1.</strong> Функція рахує Sₙ = 2·Sₙ₋₁ + n², S₁ = 1 (Лекція 6, с. 12). Один рядок зайвий (пастка).</p>
+<pre><code class="language-parsons">    return total
+        total = 2 * total + n ** 2
+    for n in range(1, count + 1):
+def doubled_squares_sum(count: int) -&gt; int:
+    for n in range(2, count + 1):
+    total = 1
+</code></pre>
+<details>
+<summary>Розв'язок</summary>
+<pre><code class="language-python">def doubled_squares_sum(count: int) -&gt; int:
+    total = 1
+    for n in range(2, count + 1):
+        total = 2 * total + n ** 2
+    return total
+
+
+print(doubled_squares_sum(1), doubled_squares_sum(3), doubled_squares_sum(4))
+</code></pre>
+<pre><code class="language-text">1 21 58
+</code></pre>
+<p>Зайвий - цикл з <code>range(1, ...)</code>: S₁ = 1 вже задано, тож перший крок - n = 2. З <code>range(1, ...)</code> для count = 1
+вийшло б 2·1 + 1 = 3 замість 1. Трасування для 4: S₂ = 2·1 + 4 = 6, S₃ = 2·6 + 9 = 21, S₄ = 2·21 + 16 = 58.
+Перевірка за означенням (с. 12, Sₙ = Σ 2ⁿ⁻ⁱ·i²): S₃ = 4·1 + 2·4 + 1·9 = 21.</p>
+</details>
+<p><strong>Задача 2.</strong> Склади анімацію: м'ячик їде зліва направо без миготіння. Один рядок зайвий (пастка).
+Запускай у себе, відкриється вікно.</p>
+<pre><code class="language-parsons">    ball.goto(x, 0)
+screen.tracer(0)
+x = -200
+    x = -200
+import turtle
+    time.sleep(0.01)
+ball = turtle.Turtle(shape=&quot;circle&quot;)
+    screen.update()
+for frame in range(200):
+import time
+    x += 2
+screen = turtle.Screen()
+ball.penup()
+turtle.done()
+</code></pre>
+<details>
+<summary>Розв'язок</summary>
+<pre><code class="language-python"># не запускати: turtle
+import time
+import turtle
+
+screen = turtle.Screen()
+screen.tracer(0)
+ball = turtle.Turtle(shape=&quot;circle&quot;)
+ball.penup()
+x = -200
+for frame in range(200):
+    x += 2
+    ball.goto(x, 0)
+    screen.update()
+    time.sleep(0.01)
+turtle.done()
+</code></pre>
+<p>Зайвий - <code>x = -200</code> з відступом: всередині циклу він щокадру повертав би м'ячик на старт, і той стояв би
+на місці (та сама пастка, що з накопичувачем в уроці 4). Порядок у тілі - як у лекції: змінили стан
+(<code>x += 2</code>), перенесли (<code>goto</code>), показали кадр (<code>update</code>), почекали (<code>sleep</code>).</p>
+</details>
+<h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
+<p>Заготовка: <code>zadachi/urok06.py</code>. Розв'язок: <code>_rozvyazky/urok06.py</code> (відкривай лише після 2 спроб).</p>
+<pre><code>python3 -m doctest zadachi/urok06.py -v
+</code></pre>
+<p><strong>Задача 1. <code>ball_heights(start_height, frames)</code></strong> - кроки анімації без вікна. М'ячик падає з висоти
+<code>start_height</code> без швидкості. Кожен кадр: швидкість -= 1, висота += швидкість; якщо висота ≤ 0 - висота 0, а
+швидкість <code>-speed * 3 // 4</code> (відскок угору з утратою чверті швидкості). Повертає список висот після кожного
+кадру. Це система двох рекурентних: vₙ = vₙ₋₁ - 1, hₙ = hₙ₋₁ + vₙ.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Три змінні до циклу: <code>height = start_height</code>, <code>speed = 0</code>, <code>heights = []</code>.</li>
+<li><code>for frame in range(frames):</code> - рівно <code>frames</code> кадрів (для 0 - порожній список).</li>
+<li>У тілі - порядок, як у лекції: спершу швидкість, потім висота, потім перевірка підлоги, потім <code>append</code>.</li>
+<li>Перевір себе на <code>ball_heights(10, 4)</code> на папері: швидкості -1, -2, -3, -4; висоти 9, 7, 4, 0.</li>
+</ol>
+<p>Увага: так рухають м'ячик у Лекції 6. А в ЛР4, завд. 3 саму модель зіткнень кроком часу рахувати НЕ можна
+(ЛР4, с. 19: моменти зіткнень - з рівнянь руху). Кадрами там можна лише показувати анімацію.</p>
+</details>
+<p><strong>Задача 2. <code>stair_ways(stairs)</code></strong> - скількома способами можна піднятися на <code>stairs</code> сходинок, якщо за крок
+стаєш на 1, 2 або 3 сходинки вище. Порядок кроків важить: 1 + 2 і 2 + 1 - різні способи.
+Для 3 сходинок способів 4: 1+1+1, 1+2, 2+1, 3.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Останній крок - 1, 2 або 3 сходинки. Тож Wₙ = Wₙ₋₁ + Wₙ₋₂ + Wₙ₋₃ - співвідношення <strong>третього</strong> порядку.</li>
+<li>Шаблон лекції для третього порядку (с. 13): три змінні для трьох останніх членів + змінна для нового.</li>
+<li>Щоб не писати окремо W₁, W₂, W₃, візьми «до-старт» (як D₀ = 1 у розібраному прикладі): W₀ = 1
+   (стояти на місці - один спосіб), W₋₁ = W₋₂ = 0. Тоді W₁ = 1 + 0 + 0 = 1, W₂ = 1 + 1 + 0 = 2, W₃ = 2 + 1 + 1 = 4.</li>
+<li>Цикл <code>for n in range(1, stairs + 1):</code>, зсув - найстаріше першим.</li>
+</ol>
+</details>
+<h3 id="заготовка-тут-же-можна-писати-і-запускати-doctest">Заготовка (тут же можна писати і запускати doctest)</h3>
+<p>Скачати файл: <a href="data/prog/zadachi/urok06.py">urok06.py</a> - поклади в теку <code>zadachi/</code> і запускай <code>python3 -m doctest zadachi/urok06.py -v</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 6. Задачі з doctest (заготовка).
+
+Як запускати (з теки Курс):
+    python3 -m doctest zadachi/urok06.py -v
+
+Спершу всі приклади червоні: замість коду стоїть pass, і функція
+повертає None. Заміни pass на свій код, щоб усі стали зелені.
+turtle тут не потрібен: рахуємо лише числа (кадри анімації,
+рекурентні послідовності з Лекції 6).
+Розвʼязок - у _rozvyazky/urok06.py (відкривай лише після 2 спроб).
+&quot;&quot;&quot;
+import doctest
+
+
+def ball_heights(start_height: int, frames: int) -&gt; list[int]:
+    &quot;&quot;&quot;Повертає висоти мʼячика після кожного з frames кадрів анімації.
+
+    Мʼячик стартує з висоти start_height без швидкості. Кожен кадр:
+    1) speed -= 1 (гравітація); 2) height += speed;
+    3) якщо height &lt;= 0: height = 0 і speed = -speed * 3 // 4
+       (відскок угору, мʼячик втрачає чверть швидкості).
+    Усі числа цілі: висота в пікселях, швидкість у пікселях за кадр.
+
+    :param start_height: початкова висота (0 або більше)
+    :param frames: кількість кадрів (0 або більше)
+    :return: список з frames висот, по одній після кожного кадру
+
+    &gt;&gt;&gt; ball_heights(10, 4)
+    [9, 7, 4, 0]
+    &gt;&gt;&gt; ball_heights(20, 12)
+    [19, 17, 14, 10, 5, 0, 3, 5, 6, 6, 5, 3]
+    &gt;&gt;&gt; ball_heights(0, 3)
+    [0, 0, 0]
+    &gt;&gt;&gt; ball_heights(5, 0)
+    []
+    &quot;&quot;&quot;
+    pass
+
+
+def stair_ways(stairs: int) -&gt; int:
+    &quot;&quot;&quot;Повертає, скількома способами можна піднятися на stairs сходинок.
+
+    За один крок можна піднятися на 1, 2 або 3 сходинки. Порядок
+    кроків важить: 1 + 2 і 2 + 1 - різні способи.
+    Рекурентне співвідношення третього порядку:
+    W₁ = 1, W₂ = 2, W₃ = 4, Wₙ = Wₙ₋₁ + Wₙ₋₂ + Wₙ₋₃ для n &gt;= 4.
+
+    :param stairs: кількість сходинок (1 або більше)
+    :return: кількість способів
+
+    &gt;&gt;&gt; stair_ways(1)
+    1
+    &gt;&gt;&gt; stair_ways(2)
+    2
+    &gt;&gt;&gt; stair_ways(3)
+    4
+    &gt;&gt;&gt; stair_ways(4)
+    7
+    &gt;&gt;&gt; stair_ways(5)
+    13
+    &gt;&gt;&gt; stair_ways(10)
+    274
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 6. Задачі з doctest (розвʼязок).
+
+Відкривай лише після 2 спроб розвʼязати самому.
+Перевірка (з теки Курс):
+    python3 -m doctest _rozvyazky/urok06.py -v
+&quot;&quot;&quot;
+import doctest
+
+
+def ball_heights(start_height: int, frames: int) -&gt; list[int]:
+    &quot;&quot;&quot;Повертає висоти мʼячика після кожного з frames кадрів анімації.
+
+    Мʼячик стартує з висоти start_height без швидкості. Кожен кадр:
+    1) speed -= 1 (гравітація); 2) height += speed;
+    3) якщо height &lt;= 0: height = 0 і speed = -speed * 3 // 4
+       (відскок угору, мʼячик втрачає чверть швидкості).
+    Усі числа цілі: висота в пікселях, швидкість у пікселях за кадр.
+
+    :param start_height: початкова висота (0 або більше)
+    :param frames: кількість кадрів (0 або більше)
+    :return: список з frames висот, по одній після кожного кадру
+
+    &gt;&gt;&gt; ball_heights(10, 4)
+    [9, 7, 4, 0]
+    &gt;&gt;&gt; ball_heights(20, 12)
+    [19, 17, 14, 10, 5, 0, 3, 5, 6, 6, 5, 3]
+    &gt;&gt;&gt; ball_heights(0, 3)
+    [0, 0, 0]
+    &gt;&gt;&gt; ball_heights(5, 0)
+    []
+    &quot;&quot;&quot;
+    # Стан мʼячика - дві змінні, як dy і y у Лекції 6, с. 2.
+    height = start_height
+    speed = 0
+    heights = []
+    # Номер кадру в тілі не потрібен - лише кількість повторень.
+    for _ in range(frames):
+        # Порядок як у лекції: спершу швидкість, потім позиція.
+        speed -= 1
+        height += speed
+        if height &lt;= 0:
+            height = 0
+            # Перед ударом speed &lt; 0 (вниз). Мінус робить її додатною
+            # (вгору), * 3 // 4 - лишається три чверті, ціла частина.
+            speed = -speed * 3 // 4
+        heights.append(height)
+    return heights
+
+
+def stair_ways(stairs: int) -&gt; int:
+    &quot;&quot;&quot;Повертає, скількома способами можна піднятися на stairs сходинок.
+
+    За один крок можна піднятися на 1, 2 або 3 сходинки. Порядок
+    кроків важить: 1 + 2 і 2 + 1 - різні способи.
+    Рекурентне співвідношення третього порядку:
+    W₁ = 1, W₂ = 2, W₃ = 4, Wₙ = Wₙ₋₁ + Wₙ₋₂ + Wₙ₋₃ для n &gt;= 4.
+
+    :param stairs: кількість сходинок (1 або більше)
+    :return: кількість способів
+
+    &gt;&gt;&gt; stair_ways(1)
+    1
+    &gt;&gt;&gt; stair_ways(2)
+    2
+    &gt;&gt;&gt; stair_ways(3)
+    4
+    &gt;&gt;&gt; stair_ways(4)
+    7
+    &gt;&gt;&gt; stair_ways(5)
+    13
+    &gt;&gt;&gt; stair_ways(10)
+    274
+    &quot;&quot;&quot;
+    # «До-старт»: W₋₂ = 0, W₋₁ = 0, W₀ = 1 (стояти на місці - 1 спосіб).
+    # Тоді формула сама дає W₁ = 1, W₂ = 2, W₃ = 4, без окремих if.
+    oldest = 0      # Wₙ₋₃
+    older = 0       # Wₙ₋₂
+    previous = 1    # Wₙ₋₁
+    for _ in range(1, stairs + 1):
+        current = previous + older + oldest
+        # Зсув від найстарішого (Лекція 6, с. 14), інакше значення
+        # затруться раніше, ніж їх скопіюють.
+        oldest = older
+        older = previous
+        previous = current
+    return previous
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+</details>
+<h2 id="7-поясни-чому">7. Поясни чому</h2>
+<p><strong>1. Чому при зсуві змінних (с. 14) спершу пишуть <code>a3 = a2</code>, потім <code>a2 = a1</code>, і лише потім <code>a1 = a</code>?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p>Присвоєння затирає старе значення. <code>a3 = a2</code> безпечно: старе a3 (найстаріший член) вже не знадобиться.
+Після цього a2 вже скопійоване в a3, тож можна затерти a2 значенням a1. І лише тоді a1 - новим членом.
+Якщо почати з <code>a1 = a</code>, старе a1 зникне раніше, ніж його скопіюють в a2, і дві змінні стануть однаковими.</p>
+</details>
+<p><strong>2. Навіщо в анімації <code>screen.tracer(0)</code> і <code>screen.update()</code>, якщо черепашка й так усе малює?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p>Без <code>tracer(0)</code> turtle перемальовує вікно після кожної дрібної команди: стерти, перенести, намалювати.
+Око бачить ці проміжні стани - миготіння, і це повільно. <code>tracer(0)</code> каже «малюй у пам'яті», а
+<code>update()</code> - «покажи готовий кадр одним махом». Так кадр з'являється цілим (ЛР4 називає це подвійною
+буферизацією, с. 8).</p>
+</details>
+<p><strong>3. Чому в <code>screen.onkey(toggle_pen, "space")</code> після <code>toggle_pen</code> нема дужок, а в <code>screen.onkey(lambda: move(90), "Up")</code> з'являється <code>lambda</code>?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p><code>onkey</code> хоче отримати саму функцію, щоб викликати її пізніше, при натисканні. Ім'я без дужок - це і є
+функція; з дужками - це її негайний виклик і результат (<code>None</code>). <code>move</code> потребує аргументу (кута), а
+<code>onkey</code> викликає без аргументів. <code>lambda: move(90)</code> - маленька функція без аргументів, яка «пам'ятає»,
+що треба зробити <code>move(90)</code>. Вона не виконується одразу, лише коли її викличуть.</p>
+</details>
+<p><strong>4. Чому для aₙ = xⁿ / n! лекція рахує через aₙ₋₁ · x / n, а не прямо <code>x ** n / factorial(n)</code>?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p>Прямо - на кожен член окремо n множень для степеня і n для факторіала, а рекурентно - одне множення й
+одне ділення. До того ж xⁿ і n! окремо бувають величезні (200! має 375 цифр, <code>x ** 200</code> для великих x
+переповнює float), хоча їх частка - звичайне число. Рекурентно ми ніколи не тримаємо ці гіганти. Саме тому
+ЛР5, завд. 1 забороняє <code>**</code> і факторіал, а в завд. 2 вимагає рахувати доданок через попередній.</p>
+</details>
+<h2 id="8-що-запамятати">8. Що запам'ятати</h2>
+<ul>
+<li>Анімація: у циклі 1) змінити стан (швидкість, потім позиція), 2) <code>goto</code>, 3) <code>screen.update()</code>, 4) <code>time.sleep</code>; на початку <code>screen.tracer(0)</code>.</li>
+<li>Події: <code>onclick(f)</code> - f(x, y); <code>onkey(f, "Up")</code>; <code>ontimer(f, мс)</code>; <code>listen()</code> для клавіш; в кінці <code>mainloop()</code>. Функцію - <strong>без дужок</strong>, з аргументом - через <code>lambda</code>.</li>
+<li>Рекурсія: функція кличе себе, обов'язковий базовий випадок (<code>if depth == 0</code>).</li>
+<li>Рекурентне 1-го порядку: <code>a = u</code>, <code>for n in range(1, N + 1): a = f(n, a)</code>; перший відомий член aₘ - <code>range(m + 1, N + 1)</code>.</li>
+<li>Формулу шукають через частку aₙ / aₙ₋₁ (добутки) або різницю Sₙ - Sₙ₋₁ (суми).</li>
+<li>Порядок k - k змінних + нова; зсув <strong>від найстарішого</strong>. «До-старт» (D₀ = 1, W₀ = 1) прибирає окремі <code>if</code>.</li>
+</ul>
+<p><strong>Де в лабах:</strong>
+- ЛР4, завд. 2 (годинник) - <code>screen.tracer(0)</code>, <code>screen.update()</code>, цикл через <code>screen.ontimer(main_loop, 30)</code>, <code>screen.onclick(f, btn=1)</code> / <code>btn=3</code>, <code>screen.listen()</code> + <code>screen.onkey(...)</code> (ЛР4, с. 8-10).
+- ЛР4, завд. 3 - анімація кульок кадрами (як м'ячик), але моменти зіткнень - з рівнянь, не кроком dt.
+- ЛР5, завд. 1 - кожен вираз a)-d) рекурентно, без <code>**</code> і <code>factorial</code> (як <code>power_over_factorial</code>); у d) ще й система aₖ, bₖ (урок 7).
+- ЛР5, завд. 2-3 - доданок через попередній і зупинка за точністю - урок 7.
+- ЛР6, завд. 2 - Dₙ = (2k - mₙ·ω²)·Dₙ₋₁ - k²·Dₙ₋₂, D₀ = 1 - рівно схема розібраного прикладу.
+- ЛР6, завд. 3 - схема Горнера: bₖ = aₖ + bₖ₊₁·x (ЛР6, с. 5) - рекурентне першого порядку (Горнер є і в Лекції 4, с. 10).
+- ЛР6, завд. 1 - без рекурсії. І пастка: doctest-и <code>is_happy(55, 3)</code> і <code>is_happy(136, 3)</code> у викладача хибні - див. <code>Лабораторні\ЛР6\ЛР6 - розбір.md</code>.</p>
+<hr>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/urok-07">Наступний урок →</a></p>

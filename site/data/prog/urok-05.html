@@ -1,0 +1,894 @@
+<h1 id="урок-5-кортежі-списки-словники-графіки-matplotlib-черепашка-">Урок 5. Кортежі, списки, словники; графіки matplotlib; черепашка turtle</h1>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/dovidnyk">Довідник функцій</a></p>
+<blockquote>
+<p>Лекція 5 (с. 1-34) і кінець Лекції 4 (с. 15-18, списки), потрібно для: ЛР3 (завд. 1-4: функції повертають списки, вивід через zip, графіки plot/bar/hist), ЛР4 (завд. 1.1-1.11: усі малюнки turtle, точки як список кортежів; завд. 2-3: стан об'єктів у словниках), ЛР6 (завд. 3: графіки). Час: 30 хв. Перед цим уроком: урок 4.</p>
+</blockquote>
+<h2 id="1-ідея">1. Ідея</h2>
+<p>Лекція 4 (с. 15) малює ланцюжок будь-якого обчислення: <strong>згенерували дані → зберегли → обробили →
+показали</strong>. Цикли з уроку 4 генерують. Цей урок - про «зберегли» (список, кортеж, словник) і
+«показали» (графік matplotlib, малюнок turtle).</p>
+<h3 id="11-список-змінювана-послідовність-лекція-4-с-15-18">1.1. Список - змінювана послідовність (Лекція 4, с. 15-18)</h3>
+<p>Список - це ряд значень у квадратних дужках. У кожного є номер (індекс), і <strong>відлік з нуля</strong>.
+Від'ємний індекс рахує з кінця: <code>-1</code> - останній. Список можна міняти: замінити елемент,
+дописати новий у кінець через <code>.append()</code>. <code>len()</code> - кількість елементів. Зріз <code>[start:stop:step]</code> -
+шматок списку, <code>stop</code> не входить (як у <code>range</code>).</p>
+<pre><code>        10   20   30   40   50
+індекс:  0    1    2    3    4
+        -5   -4   -3   -2   -1
+</code></pre>
+<pre><code class="language-python">numbers = [10, 20, 30, 40, 50]
+print(numbers[0], numbers[4], numbers[-1])
+numbers[1] = 25
+numbers.append(60)
+print(numbers, len(numbers))
+print(numbers[1:4], numbers[::2])
+</code></pre>
+<pre><code class="language-text">10 50 50
+[10, 25, 30, 40, 50, 60] 6
+[25, 30, 40] [10, 30, 50]
+</code></pre>
+<p><code>numbers[1:4]</code> - індекси 1, 2, 3 (4 не входить). <code>numbers[::2]</code> - від початку до кінця з кроком 2:
+індекси 0, 2, 4. Головний прийом лекції - <strong>накопичувати результати в циклі</strong> (с. 16):
+<code>values = []</code> до циклу, <code>values.append(...)</code> у тілі. Це той самий накопичувач з уроку 4, тільки
+збирає не суму, а всі значення.</p>
+<h3 id="12-кортеж-незмінна-послідовність-лекція-5-с-1-лекція-4-с-18">1.2. Кортеж - незмінна послідовність (Лекція 5, с. 1; Лекція 4, с. 18)</h3>
+<p>Кортеж пишуть у круглих дужках: <code>point = (3, 5)</code>, <code>rgb = (120, 80, 200)</code>. Індекси, зрізи, <code>len</code>, <code>for</code> -
+усе як у списку. Але <strong>змінити елемент не можна</strong>:</p>
+<pre><code class="language-python">point = (3, 5)
+print(point[0], len(point))
+point[0] = 10
+</code></pre>
+<pre><code class="language-text">3 2
+Traceback (most recent call last):
+  ...
+TypeError: 'tuple' object does not support item assignment
+</code></pre>
+<p>Навіщо таке обмеження? Щоб «зафіксувати» набір значень (с. 1): розмір рисунка <code>figsize=(10, 5)</code>,
+координати точки, колір. Правило лекції: <strong>список - коли дані формуються або змінюються; кортеж -
+коли набір параметрів має лишатися незмінним.</strong></p>
+<p>На с. 18 Лекції 4 є <code>t += (5,)</code>. Це НЕ зміна кортежу: Python склеює старий кортеж з <code>(5,)</code> і
+створює <strong>новий</strong>, а ім'я <code>t</code> тепер вказує на нього. Кома в <code>(5,)</code> обов'язкова: <code>(5)</code> - це просто число 5 у дужках.</p>
+<pre><code class="language-python">t = (0, 1, 2, &quot;python&quot;)
+t += (5,)
+print(t)
+print(type((5)), type((5,)))
+</code></pre>
+<pre><code class="language-text">(0, 1, 2, 'python', 5)
+&lt;class 'int'&gt; &lt;class 'tuple'&gt;
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>список <code>[1, 2, 3]</code></th>
+<th>кортеж <code>(1, 2, 3)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>порядок, індекси, зрізи</td>
+<td>так</td>
+<td>так</td>
+</tr>
+<tr>
+<td>змінити елемент, <code>.append()</code></td>
+<td>так</td>
+<td>ні</td>
+</tr>
+<tr>
+<td>для чого</td>
+<td>дані, що змінюються</td>
+<td>фіксовані набори значень</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="13-for-по-списку-enumerate-zip-лекція-5-с-2-3">1.3. for по списку, enumerate, zip (Лекція 5, с. 2-3)</h3>
+<p><code>for value in values:</code> - перебирає самі елементи. Коли потрібен ще й номер - <code>enumerate</code>, він дає пари
+«індекс, елемент» (з 0, або з <code>start=1</code>). Коли треба йти по двох списках паралельно - <code>zip</code>, він дає
+пари «елемент першого, елемент другого». Пару одразу розпаковують у дві змінні: <code>for x, y in ...</code>.</p>
+<pre><code class="language-python">months = [&quot;Січ&quot;, &quot;Лют&quot;, &quot;Бер&quot;]
+for number, month in enumerate(months, start=1):
+    print(number, month)
+x_values = [1, 2, 3]
+y_values = [10, 20, 30]
+for x, y in zip(x_values, y_values):
+    print(x, y)
+</code></pre>
+<pre><code class="language-text">1 Січ
+2 Лют
+3 Бер
+1 10
+2 20
+3 30
+</code></pre>
+<p>Так само розпаковують список кортежів: <code>for x, y in [(1, 2), (4, 5), (0, 9)]:</code> (с. 3). Саме так у
+ЛР4 зберігають вершини фігури: <code>points = [(-100, 0), (0, 100), ...]</code> (ЛР4, с. 5-6).</p>
+<h3 id="14-словник-ключ-значення-лекція-5-с-4-6">1.4. Словник - «ключ: значення» (Лекція 5, с. 4-6)</h3>
+<p>У списку значення шукають за номером, у словнику - <strong>за ключем</strong> (назвою). Ключі унікальні й незмінні
+(рядки, числа, кортежі), значення - будь-які.</p>
+<pre><code class="language-python">student = {&quot;name&quot;: &quot;Олексій&quot;, &quot;age&quot;: 20}
+print(student[&quot;name&quot;], student.get(&quot;gpa&quot;), student.get(&quot;gpa&quot;, 0.0))
+student[&quot;age&quot;] = 21
+student[&quot;city&quot;] = &quot;Київ&quot;
+print(student)
+city = student.pop(&quot;city&quot;)
+del student[&quot;age&quot;]
+print(city, student)
+print(&quot;name&quot; in student, &quot;age&quot; in student)
+for key, value in {&quot;name&quot;: &quot;Марія&quot;, &quot;role&quot;: &quot;Developer&quot;}.items():
+    print(f&quot;{key}: {value}&quot;)
+</code></pre>
+<pre><code class="language-text">Олексій None 0.0
+{'name': 'Олексій', 'age': 21, 'city': 'Київ'}
+Київ {'name': 'Олексій'}
+True False
+name: Марія
+role: Developer
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>запис</th>
+<th>що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>d["key"]</code></td>
+<td>значення за ключем; ключа нема - помилка <code>KeyError</code></td>
+</tr>
+<tr>
+<td><code>d.get("key")</code>, <code>d.get("key", 0)</code></td>
+<td>те саме, але без помилки: нема ключа - <code>None</code> або вказане значення</td>
+</tr>
+<tr>
+<td><code>d["key"] = value</code></td>
+<td>змінити існуюче або додати нове</td>
+</tr>
+<tr>
+<td><code>del d["key"]</code>, <code>d.pop("key")</code></td>
+<td>видалити; <code>pop</code> ще й повертає видалене значення</td>
+</tr>
+<tr>
+<td><code>d.keys()</code>, <code>d.values()</code>, <code>d.items()</code></td>
+<td>ключі / значення / пари (ключ, значення) для циклу</td>
+</tr>
+<tr>
+<td><code>"key" in d</code></td>
+<td>чи є такий ключ</td>
+</tr>
+</tbody>
+</table></div>
+<p>У ЛР4 (с. 7) словник зберігає стан об'єкта анімації: <code>{"x": 100, "y": 150, "speed": 2}</code>, а
+<code>entity["x"] += entity["speed"]</code> - один крок руху.</p>
+<p><strong>Анотації типів</strong> (Лекція 4, с. 18): <code>list[int]</code> - список цілих, <code>tuple[int, float, str]</code> - кортеж рівно
+з трьох значень цих типів, <code>tuple[int, ...]</code> - кортеж цілих будь-якої довжини, <code>list[int | str]</code> - список,
+де кожен елемент ціле або рядок. У ЛР3 <code>-&gt; tuple[list[int], list[int]]</code> означає: функція повертає кортеж
+з двох списків цілих, наприклад <code>([1, 2, 3], [1, 4, 9])</code>.</p>
+<h3 id="15-matplotlib-графік-з-двох-списків-лекція-5-с-6-17">1.5. matplotlib - графік з двох списків (Лекція 5, с. 6-17)</h3>
+<p>Графік - це лише два списки однакової довжини: x-и і y-и. Точка номер i - це <code>(x_values[i], y_values[i])</code>.
+У matplotlib два об'єкти (с. 6-7): <strong>Figure</strong> - весь рисунок (полотно), <strong>Axes</strong> - область з осями, де
+сам графік. Лекція створює їх явно: <code>fig, ax = plt.subplots(...)</code>, і далі кличе методи <code>ax</code>. А в
+ЛР3 (с. 5-6) - «короткий» стиль: функції <code>plt.</code> прямо, вони малюють на поточних осях.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>що зробити</th>
+<th>стиль лекції (<code>ax</code>)</th>
+<th>стиль ЛР3 (<code>plt</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>лінія через точки</td>
+<td><code>ax.plot(x, y)</code></td>
+<td><code>plt.plot(x, y)</code></td>
+</tr>
+<tr>
+<td>заголовок</td>
+<td><code>ax.set_title("...")</code></td>
+<td><code>plt.title("...")</code></td>
+</tr>
+<tr>
+<td>підписи осей</td>
+<td><code>ax.set_xlabel("x")</code>, <code>ax.set_ylabel("y")</code></td>
+<td><code>plt.xlabel("x")</code>, <code>plt.ylabel("y")</code></td>
+</tr>
+<tr>
+<td>сітка</td>
+<td><code>ax.grid(True)</code></td>
+<td><code>plt.grid(True)</code></td>
+</tr>
+<tr>
+<td>стовпчики / гістограма</td>
+<td><code>ax.bar(...)</code>, <code>ax.hist(...)</code></td>
+<td><code>plt.bar(...)</code>, <code>plt.hist(...)</code></td>
+</tr>
+<tr>
+<td>зберегти у файл</td>
+<td><code>fig.savefig("graph.png", dpi=300)</code></td>
+<td><code>plt.savefig("chart.png", dpi=300)</code></td>
+</tr>
+<tr>
+<td>показати вікно</td>
+<td><code>plt.show()</code></td>
+<td><code>plt.show()</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Повний приклад лекції (с. 16), кожен рядок з поясненням. Вікно відкриває <code>plt.show()</code>, тому тут лише код:</p>
+<pre><code class="language-python"># не запускати: matplotlib
+import math
+import matplotlib.pyplot as plt          # модуль pyplot під коротким ім'ям plt
+
+x_values = []                             # 1) згенерувати: 101 точка від -π до π
+for i in range(101):
+    x_values.append(-math.pi + 2 * math.pi * i / 100)
+y_values = []                             # 2) обчислити y для кожного x
+for x in x_values:
+    y_values.append(math.sin(x))
+fig, ax = plt.subplots(figsize=(9, 5))    # полотно 9 x 5 дюймів і одні осі
+ax.plot(x_values, y_values)               # 3) лінія через усі 101 точку
+ax.set_title(&quot;Функція y = sin(x)&quot;)        # заголовок над графіком
+ax.set_xlabel(&quot;x&quot;)                        # підпис горизонтальної осі
+ax.set_ylabel(&quot;y&quot;)                        # підпис вертикальної осі
+ax.grid(True)                             # сітка
+plt.show()                                # 4) показати вікно
+</code></pre>
+<p>Чому <code>-math.pi + 2 * math.pi * i / 100</code>: при i = 0 це -π, при i = 100 це -π + 2π = π, а кроки рівні
+(2π / 100). 101 точка - щоб увійшли обидва кінці.</p>
+<p>Інші види графіків з лекції - той самий шаблон, змінюється один рядок:
+<code>ax.scatter(x, y)</code> - окремі точки без ліній, для експериментальних даних (с. 10-11);
+<code>ax.bar(months, sales)</code> - стовпчики для категорій (с. 11-12);
+<code>ax.hist(dice_sums, bins=range(2, 14))</code> - гістограма: розбиває значення на інтервали й рахує,
+скільки потрапило в кожен (с. 12-13). Кілька ліній на одних осях: кожному <code>ax.plot(..., label="y = x²")</code>
+дати підпис і в кінці <code>ax.legend()</code> (с. 8-9). Два графіки поруч: <code>fig, axes = plt.subplots(1, 2)</code>,
+далі <code>axes[0].plot(...)</code>, <code>axes[1].plot(...)</code> і <code>plt.tight_layout()</code>, щоб підписи не налазили (с. 14).
+Вигляд лінії: <code>linewidth=2</code>, <code>linestyle="--"</code>, <code>marker="o"</code> (с. 14-15). Межі осей: <code>ax.set_xlim(-5, 5)</code> (с. 15).</p>
+<p>Типові помилки з лекції (с. 17-18): різна кількість x і y (<code>[1, 2, 3, 4]</code> і <code>[1, 4, 9]</code> - графік не
+побудується); індекс 5 у списку з 5 елементів (останній - 4); <code>while</code> без зміни змінної умови.</p>
+<h3 id="16-turtle-черепашка-зі-станом-лекція-5-с-18-34">1.6. turtle - черепашка зі станом (Лекція 5, с. 18-34)</h3>
+<p>Ідея з 1960-х (мова Logo, с. 18): робот-черепашка повзає по підлозі з маркером. У кожен момент у неї є
+<strong>стан</strong>: позиція <code>(x, y)</code>, напрямок «носа» (кут у градусах), перо (опущене - лишає слід, підняте - ні),
+колір і товщина пера. Кожна команда змінює стан. Програма = послідовність змін стану (с. 18-19).</p>
+<p>Координати (с. 21): <code>(0, 0)</code> - центр вікна, x праворуч, y <strong>вгору</strong> (як у математиці). Кут 0° - праворуч
+(схід), 90° - вгору, 180° - ліворуч, 270° - вниз. <code>left</code> повертає проти годинникової стрілки, <code>right</code> - за.</p>
+<p>Що рахують «розповідні» команди (с. 22-23). Черепашка з (0, 0) пройшла 100 праворуч, повернула ліворуч на 90°
+і пройшла 50 вгору. Лекція друкує: позиція <code>(100.00,50.00)</code>, кут <code>90.0</code>, відстань до початку <code>111.8</code>, кут на
+початок <code>206.6</code>. Звідки числа: відстань - теорема Піфагора, √(100² + 50²) = √12500 ≈ 111.8. Кут на початок:
+з точки (100, 50) треба дивитися вліво-вниз, а це 180° + arctg(50 / 100) ≈ 180° + 26.6° = 206.6°. Після
+<code>setheading(206.6)</code> і <code>forward(111.8)</code> вона опиняється в <code>(0.00,-0.00)</code>: мінус перед нулем - це
+залишок округлення дробових чисел, насправді там щось на кшталт -0.000000000000002.</p>
+<p>Головні команди (детально - у довіднику курсу і в <code>_У_ЗОШИТ\Програмування - turtle шпаргалка.md</code>):
+рух <code>forward/backward/left/right/goto/setheading</code>; перо <code>penup/pendown/pensize/pencolor</code>; заливка
+<code>fillcolor</code> + <code>begin_fill()</code> ... <code>end_fill()</code>; фігури <code>circle(r)</code>, <code>circle(r, 180)</code> (півколо),
+<code>circle(r, steps=5)</code> (п'ятикутник), <code>dot(d, color)</code>; текст <code>write</code>; швидкість <code>speed(0)</code>; <code>hideturtle()</code>.</p>
+<p><strong>Головна математика turtle</strong> (с. 26): щоб обійти фігуру й повернутися в той самий напрямок, черепашка
+мусить сумарно повернутися на 360°. Тому в правильному n-кутнику кожен поворот = 360° / n:
+трикутник 120°, квадрат 90°, п'ятикутник 72°, шестикутник 60°.</p>
+<pre><code class="language-python"># не запускати: turtle
+import turtle
+
+def polygon(t, n, side):
+    &quot;&quot;&quot;Малює правильний n-кутник зі стороною side (Лекція 5, с. 26).&quot;&quot;&quot;
+    angle = 360 / n            # сума поворотів 360°, поворотів n
+    for _ in range(n):         # _ - лічильник, значення якого не потрібне
+        t.forward(side)        # сторона
+        t.left(angle)          # поворот на вершині
+
+screen = turtle.Screen()       # вікно
+t = turtle.Turtle()            # черепашка-об'єкт
+t.speed(0)                     # без анімації - найшвидше
+colors = [&quot;red&quot;, &quot;orange&quot;, &quot;gold&quot;, &quot;green&quot;, &quot;dodgerblue&quot;, &quot;purple&quot;]
+for n in range(3, 9):          # 3-кутник ... 8-кутник
+    t.color(colors[n - 3])     # n = 3 -&gt; colors[0], ... n = 8 -&gt; colors[5]
+    polygon(t, n, 360 / n)     # однаковий периметр 360
+screen.exitonclick()           # вікно чекає клацання, потім закривається
+</code></pre>
+<p>Прийоми з лекції, які потрібні в ЛР4:
+- <code>colors[i % len(colors)]</code> - ходити по списку кольорів по колу (с. 25): остача від ділення на <code>len</code>
+  завжди від 0 до <code>len - 1</code>, тож індекс ніколи не вилетить за межі.
+- «квітка»: малюємо фігуру і після неї повертаємо на 360° / кількість (36 кіл × 10°, с. 27-28).
+- спіраль: довжина кроку залежить від лічильника, <code>t.forward(i * 1.5)</code> (с. 28-29); товщина «сходинками»
+  <code>1 + i // 40</code> (с. 29).
+- <code>while t.distance(0, 0) &lt; 250:</code> - малюй, доки не відійшла далеко (с. 29-30); <code>while True</code> + <code>break</code> (с. 30).
+- вкладені цикли: 36 квадратів × 4 сторони = 144 кроки (с. 30-31); шахова дошка <code>(row + col) % 2 == 0</code> (с. 32).
+- <code>screen.tracer(0)</code> на початку і <code>screen.update()</code> в кінці - малюнок з'являється миттєво (с. 32).</p>
+<p>Допоміжні функції лекції <code>new_screen</code>, <code>new_turtle</code>, <code>jump</code> (с. 19-20): <code>jump</code> = <code>penup</code>, <code>goto</code>,
+<code>setheading</code>, <code>pendown</code> - перейти без лінії. Рядок <code>turtle.TurtleScreen._RUNNING = True</code> у <code>new_screen</code> -
+захист від помилки <code>turtle.Terminator</code>, яка буває в Jupyter, коли закрив вікно хрестиком і запускаєш знову (с. 19).</p>
+<h2 id="2-розібраний-приклад">2. Розібраний приклад</h2>
+<p><strong>Умова.</strong> Тіло вільно падає (g = 9.8 м/с²). Склади таблицю: моменти часу 0, 0.5, 1.0, 1.5, 2.0 с і
+пройдений шлях h = g·t²/2, округлений до сотих. Збережи час і шлях у два списки, надрукуй пари,
+потім побудуй графік. (Це ланцюжок лекції: згенерували → зберегли → показали.)</p>
+<pre><code class="language-python">GRAVITY = 9.8
+times = []
+heights = []
+for step in range(5):
+    seconds = step * 0.5
+    times.append(seconds)
+    heights.append(round(GRAVITY * seconds ** 2 / 2, 2))
+for seconds, height in zip(times, heights):
+    print(f&quot;t = {seconds} с, h = {height} м&quot;)
+print(&quot;точок:&quot;, len(times), &quot;останнє h:&quot;, heights[-1])
+</code></pre>
+<p>Вивід:</p>
+<pre><code class="language-text">t = 0.0 с, h = 0.0 м
+t = 0.5 с, h = 1.23 м
+t = 1.0 с, h = 4.9 м
+t = 1.5 с, h = 11.03 м
+t = 2.0 с, h = 19.6 м
+точок: 5 останнє h: 19.6
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>рядок</th>
+<th>що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GRAVITY = 9.8</code></td>
+<td>стала великими літерами - домовленість PEP 8: «не змінюю»</td>
+</tr>
+<tr>
+<td><code>times = []</code>, <code>heights = []</code></td>
+<td>два порожні списки-накопичувачі, ДО циклу</td>
+</tr>
+<tr>
+<td><code>for step in range(5):</code></td>
+<td>step = 0, 1, 2, 3, 4 - номер точки. <code>range</code> дає лише цілі, тому крок 0.5 робимо множенням</td>
+</tr>
+<tr>
+<td><code>seconds = step * 0.5</code></td>
+<td>номер точки → час: 0.0, 0.5, ... 2.0</td>
+</tr>
+<tr>
+<td><code>times.append(seconds)</code></td>
+<td>дописати час у кінець списку</td>
+</tr>
+<tr>
+<td><code>heights.append(round(...))</code></td>
+<td>порахувати h = g·t²/2, округлити до 2 знаків, дописати</td>
+</tr>
+<tr>
+<td><code>for seconds, height in zip(times, heights):</code></td>
+<td>іти по двох списках разом: (0.0, 0.0), (0.5, 1.23), ...</td>
+</tr>
+<tr>
+<td><code>print(f"t = {seconds} с, h = {height} м")</code></td>
+<td>f-рядок підставляє значення у фігурні дужки</td>
+</tr>
+<tr>
+<td><code>len(times)</code>, <code>heights[-1]</code></td>
+<td>кількість точок і останній елемент</td>
+</tr>
+</tbody>
+</table></div>
+<p>Трасувальна таблиця першого циклу:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>ітерація</th>
+<th>step</th>
+<th>seconds</th>
+<th>g·t²/2</th>
+<th>times після</th>
+<th>heights після</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>[0.0]</td>
+<td>[0.0]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>0.5</td>
+<td>9.8 · 0.25 / 2 = 1.225 → 1.23</td>
+<td>[0.0, 0.5]</td>
+<td>[0.0, 1.23]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2</td>
+<td>1.0</td>
+<td>9.8 · 1 / 2 = 4.9</td>
+<td>[0.0, 0.5, 1.0]</td>
+<td>[0.0, 1.23, 4.9]</td>
+</tr>
+<tr>
+<td>4</td>
+<td>3</td>
+<td>1.5</td>
+<td>9.8 · 2.25 / 2 = 11.025 → 11.03</td>
+<td>[..., 1.5]</td>
+<td>[..., 11.03]</td>
+</tr>
+<tr>
+<td>5</td>
+<td>4</td>
+<td>2.0</td>
+<td>9.8 · 4 / 2 = 19.6</td>
+<td>[..., 2.0]</td>
+<td>[..., 19.6]</td>
+</tr>
+</tbody>
+</table></div>
+<p>Обидва списки ростуть разом, тому в кінці їхні довжини однакові (5 і 5) - а це саме те, що потрібно
+для графіка. Тепер допиши в кінець того самого файлу:</p>
+<pre><code class="language-python"># не запускати: matplotlib
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(8, 5))
+ax.plot(times, heights, marker=&quot;o&quot;, label=&quot;h = g·t²/2&quot;)
+ax.set_title(&quot;Вільне падіння&quot;)
+ax.set_xlabel(&quot;t, с&quot;)
+ax.set_ylabel(&quot;h, м&quot;)
+ax.grid(True)
+ax.legend()
+plt.show()
+</code></pre>
+<p><code>marker="o"</code> ставить кружечок у кожній з 5 точок, лінія їх з'єднує. Без <code>ax.legend()</code> підпис з
+<code>label=</code> не з'явиться. (<code>import</code> за PEP 8 пишуть угорі файлу - тут він знизу лише для наочності.)</p>
+<p><strong>Закрий приклад і напиши його сам з пам'яті.</strong> Потім зміни: тіло кинули вгору зі швидкістю 10 м/с,
+h = 10·t - g·t²/2, точки кожні 0.25 с до 2 с (скільки тоді точок і яке <code>range</code>?).</p>
+<h2 id="3-передбач-вивід">3. Передбач вивід</h2>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<pre><code class="language-python">values = [2, 4, 6, 8]
+values[0] = values[-1] - values[1]
+print(values, values[1:3], len(values[::3]))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">[4, 4, 6, 8] [4, 6] 2
+</code></pre>
+<p><code>values[-1]</code> = 8 (останній), <code>values[1]</code> = 4 (другий, бо відлік з 0). 8 - 4 = 4 записали на місце 0.
+<code>values[1:3]</code> - індекси 1 і 2 → <code>[4, 6]</code>. <code>values[::3]</code> - індекси 0 і 3 → <code>[4, 8]</code>, довжина 2.</p>
+</details>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<pre><code class="language-python">names = [&quot;Аня&quot;, &quot;Богдан&quot;, &quot;Віра&quot;]
+scores = [90, 75, 82]
+for index, name in enumerate(names):
+    print(index, name, scores[index])
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">0 Аня 90
+1 Богдан 75
+2 Віра 82
+</code></pre>
+<p>Без <code>start=1</code> <code>enumerate</code> рахує з 0 - так само, як індекси. Тому <code>scores[index]</code> бере правильний бал.
+Якби написали <code>enumerate(names, start=1)</code>, то <code>scores[3]</code> для Віри дав би <code>IndexError</code>.</p>
+</details>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<pre><code class="language-python">x_values = [1, 2, 3, 4]
+y_values = [1, 4, 9]
+pairs = 0
+for x, y in zip(x_values, y_values):
+    pairs += 1
+print(pairs, len(x_values), len(y_values))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">3 4 3
+</code></pre>
+<p>Пастка: <code>zip</code> мовчки зупиняється на коротшому списку (у лекціях цього нема - стандартний Python).
+Четверта точка просто губиться, помилки нема. А <code>ax.plot(x_values, y_values)</code> з тими самими списками
+впаде з помилкою про різну довжину - саме цю ситуацію лекція називає типовою помилкою (с. 17).
+Висновок: якщо списки формуються в циклі, додавай у них разом, в одному тілі.</p>
+</details>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<pre><code class="language-python">person = {&quot;name&quot;: &quot;Марія&quot;, &quot;role&quot;: &quot;Developer&quot;}
+print(person.get(&quot;age&quot;, 18), len(person))
+person[&quot;age&quot;] = 19
+print(person[&quot;age&quot;], len(person))
+print(person[&quot;city&quot;])
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">18 2
+19 3
+Traceback (most recent call last):
+  ...
+KeyError: 'city'
+</code></pre>
+<p><code>get("age", 18)</code> не знайшов ключа і повернув запасне 18, але словник НЕ змінив (довжина 2).
+<code>person["age"] = 19</code> вже додав ключ (довжина 3). <code>person["city"]</code> - ключа нема, квадратні дужки дають
+<code>KeyError</code> (Лекція 5, с. 4). Для «можливо, нема» - <code>get</code>, для «точно є» - <code>[]</code>.</p>
+</details>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий. (Це напрямок черепашки, яка малює п'ятикутник.)</p>
+<pre><code class="language-python">heading = 0
+for side in range(5):
+    heading = (heading + 72) % 360
+    print(heading, end=&quot; &quot;)
+print()
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">72 144 216 288 0
+</code></pre>
+<p>Після кожної сторони п'ятикутника поворот на 360 / 5 = 72°. Після п'ятого повороту 360°, а <code>% 360</code>
+робить з цього 0 - черепашка знову дивиться праворуч, як на старті. Саме тому фігура «замикається» (с. 26).
+Якщо поворот не ділить 360 на ціле число сторін, фігура не замкнеться.</p>
+</details>
+<h2 id="4-знайди-помилку">4. Знайди помилку</h2>
+<pre><code class="language-python"># БАГ
+def squares(values: list[int]) -&gt; list[int]:
+    &quot;&quot;&quot;Повертає список квадратів чисел.
+
+    &gt;&gt;&gt; squares([1, 2, 3])
+    [1, 4, 9]
+    &quot;&quot;&quot;
+    result = []
+    for value in values:
+        result.append(value ** 2)
+        return result
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>return</code> стоїть усередині циклу (8 пробілів), тому функція повертає результат вже після першого числа:
+<code>[1]</code>. <code>return</code> одразу завершує функцію - цикл далі не йде. Відступ <code>return</code> має бути як у <code>for</code>.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def squares(values: list[int]) -&gt; list[int]:
+    &quot;&quot;&quot;Повертає список квадратів чисел.
+
+    &gt;&gt;&gt; squares([1, 2, 3])
+    [1, 4, 9]
+    &gt;&gt;&gt; squares([])
+    []
+    &quot;&quot;&quot;
+    result = []
+    for value in values:
+        result.append(value ** 2)
+    return result
+</code></pre>
+</details>
+<pre><code class="language-python"># БАГ
+def move_point(point: tuple[int, int], shift: int) -&gt; tuple[int, int]:
+    &quot;&quot;&quot;Повертає точку, зсунуту праворуч на shift.
+
+    &gt;&gt;&gt; move_point((3, 5), 10)
+    (13, 5)
+    &quot;&quot;&quot;
+    point[0] = point[0] + shift
+    return point
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>Кортеж змінювати не можна: <code>point[0] = ...</code> дає <code>TypeError: 'tuple' object does not support item
+assignment</code> (Лекція 5, с. 1). Треба не міняти старий кортеж, а <strong>створити новий</strong> з потрібних значень.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def move_point(point: tuple[int, int], shift: int) -&gt; tuple[int, int]:
+    &quot;&quot;&quot;Повертає точку, зсунуту праворуч на shift.
+
+    &gt;&gt;&gt; move_point((3, 5), 10)
+    (13, 5)
+    &quot;&quot;&quot;
+    return (point[0] + shift, point[1])
+</code></pre>
+</details>
+<pre><code class="language-python"># БАГ
+def turn_angle(sides: int) -&gt; float:
+    &quot;&quot;&quot;Повертає кут повороту черепашки для правильного n-кутника.
+
+    &gt;&gt;&gt; turn_angle(4)
+    90.0
+    &gt;&gt;&gt; turn_angle(7)
+    51.42857142857143
+    &quot;&quot;&quot;
+    return 360 // sides
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>//</code> - цілочисельне ділення: 360 // 7 = 51, а не 51.43. Сім поворотів по 51° = 357°, і семикутник не
+замкнеться - між кінцем і початком лишиться щілина. Навіть <code>turn_angle(4)</code> падає: 360 // 4 дає ціле <code>90</code>,
+а тест чекає <code>90.0</code>. Лекція пише саме <code>360 / n</code> (с. 26).</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def turn_angle(sides: int) -&gt; float:
+    &quot;&quot;&quot;Повертає кут повороту черепашки для правильного n-кутника.
+
+    &gt;&gt;&gt; turn_angle(4)
+    90.0
+    &gt;&gt;&gt; turn_angle(7)
+    51.42857142857143
+    &quot;&quot;&quot;
+    return 360 / sides
+</code></pre>
+</details>
+<h2 id="5-склади-з-рядків">5. Склади з рядків</h2>
+<p><strong>Задача 1.</strong> Склади програму, яка будує списки точок графіка y = x² - 1 для x від -2 до 2 і друкує пари.
+Один рядок зайвий (пастка).</p>
+<pre><code class="language-parsons">for x, y in zip(x_values, y_values):
+    y_values.append(x ** 2 - 1)
+x_values = []
+    print(x, y)
+for x in range(-2, 3):
+    y_values = []
+y_values = []
+    x_values.append(x)
+</code></pre>
+<details>
+<summary>Розв'язок</summary>
+<pre><code class="language-python">x_values = []
+y_values = []
+for x in range(-2, 3):
+    x_values.append(x)
+    y_values.append(x ** 2 - 1)
+for x, y in zip(x_values, y_values):
+    print(x, y)
+</code></pre>
+<pre><code class="language-text">-2 3
+-1 0
+0 -1
+1 0
+2 3
+</code></pre>
+<p>Зайвий - <code>y_values = []</code> з відступом (усередині циклу): він обнуляв би список на кожному кроці, і в кінці
+лишилося б одне значення. <code>range(-2, 3)</code> - бо 3 не входить, а 2 має увійти.</p>
+</details>
+<p><strong>Задача 2.</strong> Склади програму turtle, яка малює квадрат зі стороною 100, залитий золотим. Один рядок
+зайвий (пастка). Запускай у себе, відкриється вікно.</p>
+<pre><code class="language-parsons">t.end_fill()
+    t.left(90)
+t.fillcolor(&quot;gold&quot;)
+import turtle
+for _ in range(4):
+    t.left(60)
+t = turtle.Turtle()
+turtle.done()
+t.begin_fill()
+    t.forward(100)
+</code></pre>
+<details>
+<summary>Розв'язок</summary>
+<pre><code class="language-python"># не запускати: turtle
+import turtle
+t = turtle.Turtle()
+t.fillcolor(&quot;gold&quot;)
+t.begin_fill()
+for _ in range(4):
+    t.forward(100)
+    t.left(90)
+t.end_fill()
+turtle.done()
+</code></pre>
+<p>Зайвий - <code>t.left(60)</code>: у квадраті поворот 360 / 4 = 90°. <code>fillcolor</code> можна поставити і після
+<code>begin_fill</code>, але точно до <code>end_fill</code> - саме <code>end_fill</code> зафарбовує контур. <code>turtle.done()</code> - останнім,
+інакше вікно закриється одразу (ЛР4, с. 1).</p>
+</details>
+<h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
+<p>Заготовка: <code>zadachi/urok05.py</code>. Розв'язок: <code>_rozvyazky/urok05.py</code> (відкривай лише після 2 спроб).</p>
+<pre><code>python3 -m doctest zadachi/urok05.py -v
+</code></pre>
+<p><strong>Задача 1. <code>count_grades(grades)</code></strong> - повертає словник «оцінка: скільки разів трапилась».
+Ключі - у порядку першої появи. <code>count_grades([5, 4, 5, 3, 5])</code> → <code>{5: 3, 4: 1, 3: 1}</code>.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Порожній словник <code>counts = {}</code> до циклу.</li>
+<li><code>for grade in grades:</code> - для кожної оцінки збільшити лічильник.</li>
+<li><code>counts[grade] += 1</code> впаде з <code>KeyError</code> для нової оцінки (її ще нема в словнику). Візьми <code>get</code> із
+   запасним 0: «було стільки (або 0) плюс один».</li>
+<li><code>return counts</code>. Порожній список → порожній словник <code>{}</code>.</li>
+</ol>
+</details>
+<p><strong>Задача 2. <code>final_position(commands)</code></strong> - черепашка «на папері», без вікна. Команди - список кортежів:
+<code>("F", 100)</code> - вперед на 100, <code>("L", 90)</code> - ліворуч на 90°, <code>("R", 90)</code> - праворуч. Старт у (0, 0),
+дивиться праворуч. Функція повертає кінцеву позицію <code>(x, y)</code>, округлену до сотих.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Стан черепашки - три змінні: <code>x = 0.0</code>, <code>y = 0.0</code>, <code>heading = 0.0</code>.</li>
+<li><code>for action, value in commands:</code> - розпаковуємо кортеж.</li>
+<li><code>"L"</code> - <code>heading += value</code>; <code>"R"</code> - <code>heading -= value</code>.</li>
+<li><code>"F"</code> - зсув на <code>value</code> уздовж напрямку: x += value · cos(heading), y += value · sin(heading).
+   Кут у градусах, а <code>math.cos</code> хоче радіани - <code>math.radians(heading)</code> (ЛР4, с. 4).</li>
+<li>В кінці <code>round(x, 2)</code>, <code>round(y, 2)</code>. Пастка: після квадрата x вийде щось на кшталт -0.000000000000002,
+   а <code>round</code> з цього дасть <code>-0.0</code> (як <code>(0.00,-0.00)</code> у лекції, с. 23). Додай <code>+ 0.0</code>: <code>-0.0 + 0.0</code> дає <code>0.0</code>.</li>
+</ol>
+</details>
+<h3 id="заготовка-тут-же-можна-писати-і-запускати-doctest">Заготовка (тут же можна писати і запускати doctest)</h3>
+<p>Скачати файл: <a href="data/prog/zadachi/urok05.py">urok05.py</a> - поклади в теку <code>zadachi/</code> і запускай <code>python3 -m doctest zadachi/urok05.py -v</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 5. Задачі з doctest (заготовка).
+
+Як запускати (з теки Курс):
+    python3 -m doctest zadachi/urok05.py -v
+
+Спершу всі приклади червоні: замість коду стоїть pass, і функція
+повертає None. Заміни pass на свій код, щоб усі стали зелені.
+Тут уже можна списки, кортежі, словники (Лекція 4, с. 15-18; Лекція 5).
+Розвʼязок - у _rozvyazky/urok05.py (відкривай лише після 2 спроб).
+&quot;&quot;&quot;
+import doctest
+
+
+def count_grades(grades: list[int]) -&gt; dict[int, int]:
+    &quot;&quot;&quot;Повертає словник «оцінка: скільки разів вона трапилась».
+
+    Ключі йдуть у порядку першої появи оцінки в списку.
+
+    :param grades: список оцінок (може бути порожнім)
+    :return: словник {оцінка: кількість}
+
+    &gt;&gt;&gt; count_grades([5, 4, 5, 3, 5])
+    {5: 3, 4: 1, 3: 1}
+    &gt;&gt;&gt; count_grades([2])
+    {2: 1}
+    &gt;&gt;&gt; count_grades([4, 4, 4, 4])
+    {4: 4}
+    &gt;&gt;&gt; count_grades([])
+    {}
+    &quot;&quot;&quot;
+    pass
+
+
+def final_position(commands: list[tuple[str, float]]) -&gt; tuple[float, float]:
+    &quot;&quot;&quot;Повертає, де опиниться черепашка після команд (без вікна turtle).
+
+    Старт у (0, 0), черепашка дивиться праворуч (кут 0°).
+    Команди: (&quot;F&quot;, d) - вперед на d, (&quot;L&quot;, a) - ліворуч на a градусів,
+    (&quot;R&quot;, a) - праворуч на a градусів.
+    Знадобляться math.radians, math.cos, math.sin (import math -
+    на початку файлу).
+
+    :param commands: список кортежів (команда, число)
+    :return: кортеж (x, y), кожне число округлене до сотих
+
+    &gt;&gt;&gt; final_position([(&quot;F&quot;, 100), (&quot;L&quot;, 90), (&quot;F&quot;, 50)])
+    (100.0, 50.0)
+    &gt;&gt;&gt; final_position([(&quot;L&quot;, 60), (&quot;F&quot;, 10)])
+    (5.0, 8.66)
+    &gt;&gt;&gt; final_position([(&quot;R&quot;, 90), (&quot;F&quot;, 20)])
+    (0.0, -20.0)
+    &gt;&gt;&gt; final_position([(&quot;F&quot;, 30), (&quot;L&quot;, 90)] * 4)
+    (0.0, 0.0)
+    &gt;&gt;&gt; final_position([])
+    (0.0, 0.0)
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 5. Задачі з doctest (розвʼязок).
+
+Відкривай лише після 2 спроб розвʼязати самому.
+Перевірка (з теки Курс):
+    python3 -m doctest _rozvyazky/urok05.py -v
+&quot;&quot;&quot;
+import doctest
+import math
+
+
+def count_grades(grades: list[int]) -&gt; dict[int, int]:
+    &quot;&quot;&quot;Повертає словник «оцінка: скільки разів вона трапилась».
+
+    Ключі йдуть у порядку першої появи оцінки в списку.
+
+    :param grades: список оцінок (може бути порожнім)
+    :return: словник {оцінка: кількість}
+
+    &gt;&gt;&gt; count_grades([5, 4, 5, 3, 5])
+    {5: 3, 4: 1, 3: 1}
+    &gt;&gt;&gt; count_grades([2])
+    {2: 1}
+    &gt;&gt;&gt; count_grades([4, 4, 4, 4])
+    {4: 4}
+    &gt;&gt;&gt; count_grades([])
+    {}
+    &quot;&quot;&quot;
+    counts = {}
+    for grade in grades:
+        # counts[grade] += 1 впало б з KeyError для нової оцінки.
+        # get(grade, 0): «скільки вже було, а якщо ще не було - 0».
+        counts[grade] = counts.get(grade, 0) + 1
+    # Словник памʼятає порядок додавання ключів, тому 5 перша, 4 друга.
+    return counts
+
+
+def final_position(commands: list[tuple[str, float]]) -&gt; tuple[float, float]:
+    &quot;&quot;&quot;Повертає, де опиниться черепашка після команд (без вікна turtle).
+
+    Старт у (0, 0), черепашка дивиться праворуч (кут 0°).
+    Команди: (&quot;F&quot;, d) - вперед на d, (&quot;L&quot;, a) - ліворуч на a градусів,
+    (&quot;R&quot;, a) - праворуч на a градусів.
+    Знадобляться math.radians, math.cos, math.sin (import math -
+    на початку файлу).
+
+    :param commands: список кортежів (команда, число)
+    :return: кортеж (x, y), кожне число округлене до сотих
+
+    &gt;&gt;&gt; final_position([(&quot;F&quot;, 100), (&quot;L&quot;, 90), (&quot;F&quot;, 50)])
+    (100.0, 50.0)
+    &gt;&gt;&gt; final_position([(&quot;L&quot;, 60), (&quot;F&quot;, 10)])
+    (5.0, 8.66)
+    &gt;&gt;&gt; final_position([(&quot;R&quot;, 90), (&quot;F&quot;, 20)])
+    (0.0, -20.0)
+    &gt;&gt;&gt; final_position([(&quot;F&quot;, 30), (&quot;L&quot;, 90)] * 4)
+    (0.0, 0.0)
+    &gt;&gt;&gt; final_position([])
+    (0.0, 0.0)
+    &quot;&quot;&quot;
+    # Стан черепашки: позиція і напрямок (як у Лекції 5, с. 18).
+    x = 0.0
+    y = 0.0
+    heading = 0.0
+    for action, value in commands:
+        if action == &quot;F&quot;:
+            # math.cos і math.sin працюють з радіанами, а кут - у градусах.
+            angle = math.radians(heading)
+            x += value * math.cos(angle)
+            y += value * math.sin(angle)
+        elif action == &quot;L&quot;:
+            heading += value
+        elif action == &quot;R&quot;:
+            heading -= value
+    # cos(90°) у компʼютері не рівно 0, а 6e-17. Після квадрата x може
+    # стати -0.000000000000002, і round дасть -0.0. Додавання 0.0
+    # перетворює -0.0 на 0.0 (у лекції, с. 23, видно (0.00,-0.00)).
+    return (round(x, 2) + 0.0, round(y, 2) + 0.0)
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+</details>
+<h2 id="7-поясни-чому">7. Поясни чому</h2>
+<p><strong>1. Чому <code>figsize=(8, 5)</code> - кортеж, а <code>x_values</code> - список?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p>Розмір рисунка - фіксований набір параметрів: ширина і висота задаються один раз і не міняються.
+Кортеж це гарантує і показує читачу «тут нічого не зміниться». <code>x_values</code> формується поступово в
+циклі через <code>append</code> - йому потрібна змінюваність, тому список. Це принцип лекції (Лекція 5, с. 1).</p>
+</details>
+<p><strong>2. Чому <code>colors[i % len(colors)]</code> ніколи не дає <code>IndexError</code>, навіть коли i = 1000?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p>Остача від ділення на n завжди від 0 до n - 1. Для 4 кольорів: 1000 % 4 = 0, 1001 % 4 = 1 ... -
+індекси 0, 1, 2, 3 по колу. А допустимі індекси списку довжини 4 - саме 0..3. <code>len(colors)</code> замість
+числа 4 робить код правильним для будь-якої кількості кольорів (ЛР4, с. 4).</p>
+</details>
+<p><strong>3. Чому в правильному n-кутнику черепашка повертає на 360° / n, а не на внутрішній кут?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p>Команда <code>left(a)</code> повертає ВІД поточного напрямку руху, тобто задає, на скільки відхилитися від прямої.
+Це зовнішній кут, він дорівнює 180° мінус внутрішній. Обійшовши фігуру, черепашка дивиться туди ж, звідки
+почала, - отже повернулася рівно на 360°, і ці 360° розділені порівну на n вершин. Для трикутника
+внутрішній кут 60°, а поворот 120°.</p>
+</details>
+<p><strong>4. Чому <code>student["gpa"]</code> і <code>student.get("gpa")</code> поводяться по-різному, і коли що брати?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p>Квадратні дужки означають «я впевнений, що ключ є» - якщо нема, це помилка в програмі, і Python кричить
+<code>KeyError</code>. <code>get</code> означає «ключа може не бути - тоді дай запасне значення» (<code>None</code> або друге аргументом).
+Для лічильників нових ключів - <code>get(key, 0)</code>, для обов'язкових полів - <code>[]</code>, щоб помилку було видно одразу.</p>
+</details>
+<h2 id="8-що-запамятати">8. Що запам'ятати</h2>
+<ul>
+<li>Список <code>[...]</code> змінюваний: індекси з 0, <code>-1</code> - останній, <code>append</code>, <code>len</code>, зріз <code>[start:stop:step]</code> (stop не входить).</li>
+<li>Кортеж <code>(...)</code> незмінний: <code>t[0] = ...</code> - <code>TypeError</code>; кортеж з одного елемента - <code>(5,)</code>.</li>
+<li><code>enumerate(список, start=1)</code> - пари (номер, елемент); <code>zip(a, b)</code> - пари з двох списків, зупиняється на коротшому.</li>
+<li>Словник <code>{ключ: значення}</code>: <code>d[k]</code> (нема - <code>KeyError</code>), <code>d.get(k, запасне)</code>, <code>d[k] = v</code>, <code>pop</code>, <code>del</code>, <code>items()</code>, <code>in</code>.</li>
+<li>Графік = два списки однакової довжини; <code>fig, ax = plt.subplots()</code>, <code>ax.plot</code>, підписи, <code>plt.show()</code>.
+  У стилі <code>plt</code>: <code>plt.title</code>, <code>plt.xlabel</code>; у стилі <code>ax</code>: <code>ax.set_title</code>, <code>ax.set_xlabel</code>.</li>
+<li>turtle: стан = позиція + напрямок + перо; поворот у правильному n-кутнику 360° / n; кольори по колу <code>colors[i % len(colors)]</code>.</li>
+</ul>
+<p><strong>Де в лабах:</strong>
+- ЛР3, завд. 1-3 - функції повертають <code>tuple[list[int], list[int]]</code> (два списки, накопичені через <code>append</code>); вивід у заготовці через <code>zip(numbers, squares)</code>.
+- ЛР3, завд. 1-4 - графіки: <code>plt.plot</code>, <code>plt.bar</code>, <code>plt.hist</code>, підписи, <code>plt.subplots</code>, <code>plt.savefig</code> (ЛР3, с. 5-6).
+- ЛР4, завд. 1.1-1.10 - polygon-логіка 360 / n і зірки 360·k / n, <code>colors[i % len(colors)]</code>, <code>circle(r, steps=6)</code>; розбір по кожному - <code>Лабораторні\ЛР4\ЛР4 - розбір по завданнях.md</code>.
+- ЛР4, завд. 1.11 - <code>draw_polygon(t, points, color)</code>: список кортежів <code>[(x, y), ...]</code> і <code>for x, y in points:</code>.
+- ЛР4, завд. 2-3 - стан об'єктів у словниках <code>{"x": ..., "speed": ...}</code>; графіки matplotlib у завд. 3.
+- ЛР6, завд. 3 - графіки matplotlib.</p>
+<hr>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/urok-06">Наступний урок →</a></p>

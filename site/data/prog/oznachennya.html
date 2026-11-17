@@ -1,0 +1,114 @@
+<h1 id="програмування-python-поняття">Програмування (Python) - поняття</h1>
+<blockquote>
+<p>Означення - своїми словами за лекціями 1, 2, 7-9 і файлом UNI2. Позначка
+«[нема конспекту - звір з лекцією]» - теми, яких у лекціях 1-9 нема.</p>
+</blockquote>
+<h2 id="тема-1-програма-змінні-типи">Тема 1. Програма, змінні, типи</h2>
+<ul>
+<li><strong>Алгоритм</strong> - точна послідовність кроків, яка з вхідних даних дає результат.</li>
+<li><strong>Інтерпретатор</strong> - програма, яка читає код Python і виконує його рядок за рядком.</li>
+<li><strong>Змінна</strong> - імʼя, яке показує на обʼєкт у памʼяті. Присвоєння <code>x = 12</code> не копіює число
+  в «коробку», а привʼязує імʼя до обʼєкта.</li>
+<li><strong>Літерал</strong> - значення, записане прямо в коді: <code>12</code>, <code>3.14</code>, <code>"hello"</code>, <code>True</code>, <code>2 + 3j</code>.</li>
+<li><strong>Тип</strong> - що це за дані і які операції з ними можна робити: <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>,
+  <code>complex</code>. Дізнатися: <code>type(x)</code>.</li>
+<li><strong>Анотація типу</strong> - підказка <code>x: int = 8</code> або <code>def f(n: int) -&gt; str</code>. Python її не
+  перевіряє, перевіряє <code>mypy</code>.</li>
+<li><strong>Приведення типу</strong> - <code>int("12")</code>, <code>float("2.5")</code>, <code>str(7)</code>. Потрібне після <code>input()</code>, бо
+  <code>input()</code> завжди повертає рядок.</li>
+<li><strong>Конкатенація</strong> - склеювання рядків: <code>"23" + "17"</code> дає <code>"2317"</code>.</li>
+<li><strong>Цілочисельне ділення</strong> <code>//</code> - ціла частина частки, округлення вниз: <code>-7 // 2 = -4</code>.</li>
+<li><strong>Остача</strong> <code>%</code> - те, що лишається: <code>17 % 5 = 2</code>. Знак як у дільника.</li>
+<li><strong>Збирач сміття</strong> (garbage collector) - видаляє з памʼяті обʼєкти, на які не показує жодне імʼя.</li>
+</ul>
+<h2 id="тема-2-функції-doctest-pep-8">Тема 2. Функції, doctest, PEP 8</h2>
+<ul>
+<li><strong>Функція</strong> - іменований блок коду, який отримує параметри і повертає результат.</li>
+<li><strong>Параметр</strong> - імʼя в <code>def f(param)</code>; <strong>аргумент</strong> - значення, яке передали при виклику <code>f(5)</code>.</li>
+<li><strong>return</strong> - повертає значення з функції. Без <code>return</code> функція повертає <code>None</code>.</li>
+<li><strong>Процедура</strong> - стара назва функції без <code>return</code>.</li>
+<li><strong>None</strong> - спеціальне значення «нічого».</li>
+<li><strong>docstring</strong> - рядок у потрійних лапках одразу під <code>def</code>, опис функції.</li>
+<li><strong>doctest</strong> - тест усередині docstring: рядок <code>&gt;&gt;&gt; виклик</code> і під ним точний очікуваний
+  результат. Модуль <code>doctest</code> виконує виклик і порівнює вивід як текст.</li>
+<li><strong>Test Driven Development</strong> - спершу тести, потім код, який їх проходить.</li>
+<li><strong>Edge case</strong> (граничний випадок) - нуль, відʼємне число, порожній список, одне число.</li>
+<li><strong>DRY</strong> (Don't Repeat Yourself) - не повторювати той самий код, а винести його у функцію.</li>
+<li><strong>Декомпозиція</strong> - розбиття задачі на прості блоки (функції).</li>
+<li><strong>Локальна змінна</strong> - створена всередині функції і видна лише там.</li>
+<li><strong>Структурне програмування</strong> - програма з трьох конструкцій: послідовність, галуження,
+  повторення; без <code>goto</code>.</li>
+<li><strong>Самодокументований код</strong> - назви функцій і змінних самі пояснюють, що відбувається.</li>
+<li><strong>f-рядок</strong> - <code>f"... {вираз:формат} ..."</code>, вставляє значення в текст. <code>.2f</code> - 2 знаки після
+  коми, <code>.3g</code> - 3 значущі цифри, <code>&lt;10</code> / <code>&gt;10</code> - ширина 10 вліво / вправо.</li>
+<li><strong>PEP 8</strong> - офіційний стандарт оформлення коду Python (PEP = Python Enhancement Proposal).</li>
+<li><strong>snake_case</strong> - слова малими літерами через <code>_</code>: <code>last_digit</code>. Для змінних і функцій.</li>
+<li><strong>UPPER_CASE</strong> - для констант: <code>MAX_SIZE</code>.</li>
+<li><strong>Лінтер</strong> - програма, що шукає стильові й логічні помилки, не запускаючи код:
+  <code>pycodestyle</code>, <code>flake8</code>, <code>ruff</code>, <code>mypy</code> (типи); <code>black</code> - форматувальник.</li>
+<li><strong>Модуль</strong> - файл з функціями (<code>math</code>); <strong>бібліотека</strong> - набір модулів; <strong>пакет</strong> - те, що
+  ставлять через <code>pip install</code>.</li>
+</ul>
+<h2 id="тема-3-розгалуження-конспекту-лекції-нема">Тема 3. Розгалуження [конспекту лекції нема]</h2>
+<ul>
+<li><strong>Логічний вираз</strong> - вираз, що дає <code>True</code> або <code>False</code>: <code>x &gt; 0</code>, <code>a == b</code>.</li>
+<li><strong>Логічні оператори</strong> - <code>not</code>, <code>and</code>, <code>or</code> (у такому порядку пріоритету).</li>
+<li><strong>Тернарний вираз</strong> - <code>a if умова else b</code>; це вираз, а не оператор <code>if</code>.</li>
+<li><strong>Множення на умову</strong> - <code>"текст" * (умова)</code>: <code>True</code> = 1, <code>False</code> = 0.</li>
+</ul>
+<h2 id="тема-4-цикли-конспекту-лекції-нема">Тема 4. Цикли [конспекту лекції нема]</h2>
+<ul>
+<li><strong>Цикл</strong> - повторення блоку коду.</li>
+<li><strong>for</strong> - цикл по елементах (<code>range</code>, список, рядок).</li>
+<li><strong>range(start, stop, step)</strong> - числа від start до stop <strong>не включно</strong> з кроком step.</li>
+<li><strong>while</strong> - цикл, поки умова істинна.</li>
+<li><strong>Ітерація</strong> - один прохід тіла циклу.</li>
+<li><strong>break</strong> - негайний вихід з циклу; <strong>else</strong> після циклу виконується, якщо <code>break</code> не було.</li>
+<li><strong>Нескінченний цикл</strong> - умова <code>while</code> ніколи не стає хибною.</li>
+</ul>
+<h2 id="тема-5-цілочисельні-алгоритми-конспекту-лекції-нема">Тема 5. Цілочисельні алгоритми [конспекту лекції нема]</h2>
+<ul>
+<li><strong>НСД</strong> - найбільший спільний дільник; <strong>алгоритм Евкліда</strong>: <code>a, b = b, a % b</code>, поки <code>b != 0</code>.</li>
+<li><strong>НСК</strong> - найменше спільне кратне: <code>a * b // НСД(a, b)</code>.</li>
+<li><strong>Просте число</strong> - більше за 1 і ділиться лише на 1 і на себе.</li>
+<li><strong>Перебір до √n</strong> - дільники шукають, поки <code>d * d &lt;= n</code>, бо кожен дільник більший за √n
+  має пару, меншу за √n.</li>
+</ul>
+<h2 id="тема-6-7-рекурентні-співвідношення-точність-корені">Тема 6-7. Рекурентні співвідношення, точність, корені</h2>
+<ul>
+<li><strong>Рекурентне співвідношення</strong> - формула, де новий член рахується з попередніх.</li>
+<li><strong>Порядок</strong> співвідношення - зі скількох попередніх членів рахується новий.</li>
+<li><strong>Одночасне присвоєння</strong> - <code>a, b = b, a + b</code>: спершу рахується вся права частина, потім
+  присвоєння.</li>
+<li><strong>Часткова сума ряду</strong> - S(n) = a(0) + ... + a(n), рахують S = S + a.</li>
+<li><strong>Точність ε</strong> - зупиняємось, коли два сусідні наближення відрізняються менше ніж на ε.</li>
+<li><strong>Бісекція</strong> - пошук кореня діленням відрізка навпіл.</li>
+<li><strong>Метод хорд</strong> - корінь як перетин хорди з віссю x, один кінець відрізка нерухомий.</li>
+<li><strong>Схема Горнера</strong> - значення многочлена <code>b = b * x + a[i]</code>, без степенів.</li>
+</ul>
+<h2 id="тема-8-9-списки-кортежі">Тема 8-9. Списки, кортежі</h2>
+<ul>
+<li><strong>Список</strong> - змінювана впорядкована послідовність <code>[1, 2, 3]</code>.</li>
+<li><strong>Індекс</strong> - номер елемента з нуля; <code>-1</code> - останній.</li>
+<li><strong>Зріз</strong> - частина списку <code>values[start:stop:step]</code>, stop не входить.</li>
+<li><strong>Метод</strong> - функція обʼєкта, через крапку: <code>values.append(5)</code>.</li>
+<li><strong>Псевдонім</strong> (alias) - друге імʼя того самого обʼєкта: <code>b = a</code>.</li>
+<li><strong>Копія</strong> - новий список з тими самими елементами: <code>a.copy()</code>, <code>a[:]</code>.</li>
+<li><strong>Спискоутворення</strong> (list comprehension) - <code>[вираз for x in ... if умова]</code>.</li>
+<li><strong>Кортеж</strong> - незмінна послідовність <code>(1, 2)</code>; з одного елемента <code>(5,)</code>.</li>
+<li><strong>Розпакування</strong> - <code>x, y = (3, 4)</code>.</li>
+<li><strong>Генератор-вираз</strong> - <code>(вираз for x in ...)</code>, дає значення по одному, не тримає список.</li>
+<li><strong>lambda</strong> - коротка безіменна функція: <code>lambda r: r[1]</code>.</li>
+<li><strong>Стек</strong> - список, де додають і забирають з кінця: <code>append</code>, <code>pop</code>.</li>
+<li><strong>Двійковий пошук</strong> - пошук у <strong>відсортованому</strong> списку діленням навпіл.</li>
+</ul>
+<h2 id="тема-11-рядки-словники-винятки-файли-нема-конспекту-звір-з-л">Тема 11. Рядки, словники, винятки, файли [нема конспекту - звір з лекцією]</h2>
+<ul>
+<li><strong>Рядок</strong> (<code>str</code>) - незмінна послідовність символів; методи <code>upper</code>, <code>split</code>, <code>join</code>, <code>strip</code>.</li>
+<li><strong>Словник</strong> (<code>dict</code>) - пари ключ: значення <code>{"Ann": 18}</code>; ключі не повторюються.</li>
+<li><strong>Множина</strong> (<code>set</code>) - набір без повторів <code>{1, 2}</code>.</li>
+<li><strong>Виняток</strong> - помилка під час виконання (<code>ZeroDivisionError</code>, <code>ValueError</code>, <code>TypeError</code>,
+  <code>IndexError</code>, <code>KeyError</code>, <code>NameError</code>).</li>
+<li><strong>try / except</strong> - спробувати виконати блок і перехопити виняток.</li>
+<li><strong>with open(...)</strong> - відкрити файл так, що він сам закриється після блоку.</li>
+</ul>

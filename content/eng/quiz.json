@@ -1,0 +1,1258 @@
+{
+ "questions": [
+  {
+   "id": "eng-001",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Переклади українською: «armchair»",
+   "answer": "крісло",
+   "accept": [
+    "крісло"
+   ],
+   "explain": "armchair - крісло. Приклад: I like reading in the armchair by the window. - Я люблю читати в кріслі біля вікна.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-002",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Переклади українською: «blanket»",
+   "answer": "ковдра",
+   "accept": [
+    "ковдра",
+    "плед"
+   ],
+   "explain": "blanket - ковдра. Приклад: It is cold, so I need a warm blanket. - Холодно, тому мені потрібна тепла ковдра.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-003",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Переклади українською: «chest of drawers»",
+   "answer": "комод",
+   "accept": [
+    "комод"
+   ],
+   "explain": "chest of drawers - комод. Приклад: I keep my clothes in a chest of drawers. - Я тримаю одяг у комоді.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-004",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Переклади українською: «cosy»",
+   "answer": "затишний",
+   "accept": [
+    "затишний"
+   ],
+   "explain": "cosy - затишний. Приклад: My room is small but cosy. - Моя кімната маленька, але затишна.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-005",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Переклади українською: «fridge»",
+   "answer": "холодильник",
+   "accept": [
+    "холодильник"
+   ],
+   "explain": "fridge - холодильник. Приклад: Put the milk in the fridge. - Постав молоко в холодильник.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-006",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Переклади українською: «improve»",
+   "answer": "покращувати",
+   "accept": [
+    "покращувати",
+    "покращуватися",
+    "покращити",
+    "поліпшувати",
+    "вдосконалювати"
+   ],
+   "explain": "improve - покращувати, покращуватися. Приклад: I want to improve my English. - Я хочу покращити свою англійську.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-007",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Переклади українською: «mirror»",
+   "answer": "дзеркало",
+   "accept": [
+    "дзеркало"
+   ],
+   "explain": "mirror - дзеркало. Приклад: Practise your speech in front of a mirror. - Тренуй виступ перед дзеркалом.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-008",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Переклади українською: «pillow»",
+   "answer": "подушка",
+   "accept": [
+    "подушка"
+   ],
+   "explain": "pillow - подушка (для сну). Приклад: I can't sleep without my pillow. - Я не можу спати без своєї подушки.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-009",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Переклади українською: «tap»",
+   "answer": "кран",
+   "accept": [
+    "кран"
+   ],
+   "explain": "tap - кран. Приклад: Turn off the tap, please. - Закрий кран, будь ласка.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-010",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Переклади українською: «upstairs»",
+   "answer": "нагорі",
+   "accept": [
+    "нагорі",
+    "нагору",
+    "на верхньому поверсі"
+   ],
+   "explain": "upstairs - нагорі, нагору. Приклад: The library is upstairs, on the third floor. - Бібліотека нагорі, на третьому поверсі.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-011",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Переклади українською: «apologise»",
+   "answer": "вибачатися",
+   "accept": [
+    "вибачатися",
+    "перепрошувати",
+    "вибачитися"
+   ],
+   "explain": "apologise - вибачатися. Приклад: I apologised to the teacher for being late. - Я вибачився перед викладачкою за запізнення.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-012",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Переклади українською: «canteen»",
+   "answer": "їдальня",
+   "accept": [
+    "їдальня"
+   ],
+   "explain": "canteen - їдальня. Приклад: We have lunch in the university canteen. - Ми обідаємо в університетській їдальні.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-013",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Переклади українською: «earn a wage»",
+   "answer": "заробляти",
+   "accept": [
+    "заробляти",
+    "заробляти гроші",
+    "заробляти зарплату",
+    "отримувати зарплату"
+   ],
+   "explain": "earn a wage - заробляти (гроші, зарплату). Приклад: Many students work in the evening to earn a wage. - Багато студентів працюють увечері, щоб заробляти гроші.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-014",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Переклади українською: «fail an exam»",
+   "answer": "провалити іспит",
+   "accept": [
+    "провалити іспит",
+    "не скласти іспит",
+    "завалити іспит"
+   ],
+   "explain": "fail an exam - не скласти іспит, провалити іспит. Приклад: He failed the exam because he didn't study. - Він не склав іспит, бо не вчився.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-015",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Переклади українською: «make friends»",
+   "answer": "заводити друзів",
+   "accept": [
+    "заводити друзів",
+    "подружитися",
+    "знайомитися"
+   ],
+   "explain": "make friends - заводити друзів, подружитися. Приклад: It is easy to make friends at university. - В університеті легко знайти друзів.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-016",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Переклади українською: «miss the bus»",
+   "answer": "запізнитися на автобус",
+   "accept": [
+    "запізнитися на автобус",
+    "не встигнути на автобус",
+    "пропустити автобус"
+   ],
+   "explain": "miss the bus - запізнитися на автобус. Приклад: I missed the bus and came late. - Я запізнився на автобус і прийшов пізно.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-017",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Переклади українською: «set off»",
+   "answer": "вирушати",
+   "accept": [
+    "вирушати",
+    "вирушити",
+    "вирушати в дорогу"
+   ],
+   "explain": "set off - вирушати (в дорогу). Приклад: We set off for the Carpathians early in the morning. - Ми вирушили в Карпати рано-вранці.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-018",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Переклади українською: «suggest»",
+   "answer": "пропонувати",
+   "accept": [
+    "пропонувати",
+    "запропонувати",
+    "радити"
+   ],
+   "explain": "suggest - пропонувати. Приклад: I suggest going to the library after classes. - Пропоную піти в бібліотеку після пар.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-019",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Переклади українською: «admission fee»",
+   "answer": "плата за вхід",
+   "accept": [
+    "плата за вхід",
+    "вхідна плата",
+    "вартість входу"
+   ],
+   "explain": "admission fee - плата за вхід. Приклад: The admission fee for students is 50 hryvnias. - Плата за вхід для студентів - 50 гривень.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-020",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Переклади українською: «book ahead»",
+   "answer": "бронювати заздалегідь",
+   "accept": [
+    "бронювати заздалегідь",
+    "забронювати заздалегідь",
+    "бронювати наперед"
+   ],
+   "explain": "book ahead - бронювати заздалегідь. Приклад: You should book ahead, the hostel is very popular. - Краще забронювати заздалегідь, хостел дуже популярний.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-021",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Переклади українською: «deal with»",
+   "answer": "мати справу з",
+   "accept": [
+    "мати справу з",
+    "впоратися з",
+    "розбиратися з",
+    "займатися"
+   ],
+   "explain": "deal with - мати справу з, впоратися з. Приклад: I don't know how to deal with this problem. - Я не знаю, як впоратися з цією проблемою.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-022",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Переклади українською: «get on with»",
+   "answer": "ладнати з",
+   "accept": [
+    "ладнати з",
+    "ладнати",
+    "мати добрі стосунки"
+   ],
+   "explain": "get on with - ладнати з. Приклад: I get on well with my groupmates. - Я добре ладнаю з одногрупниками.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-023",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Переклади українською: «give up»",
+   "answer": "кинути",
+   "accept": [
+    "кинути",
+    "здатися",
+    "відмовитися",
+    "покинути"
+   ],
+   "explain": "give up - кинути (звичку), здатися. Приклад: My father gave up smoking last year. - Мій тато кинув курити торік.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-024",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Переклади українською: «look forward to»",
+   "answer": "з нетерпінням чекати",
+   "accept": [
+    "з нетерпінням чекати",
+    "чекати з нетерпінням"
+   ],
+   "explain": "look forward to - з нетерпінням чекати. Приклад: I'm looking forward to the winter holidays. - Я з нетерпінням чекаю зимових канікул.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-025",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Переклади українською: «opening hours»",
+   "answer": "години роботи",
+   "accept": [
+    "години роботи",
+    "графік роботи",
+    "розклад роботи"
+   ],
+   "explain": "opening hours - години роботи. Приклад: What are the library's opening hours? - Які години роботи бібліотеки?",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-026",
+   "topic": "Слова UNI",
+   "type": "short",
+   "q": "Переклади українською: «dormitory»",
+   "answer": "гуртожиток",
+   "accept": [
+    "гуртожиток"
+   ],
+   "explain": "dormitory - гуртожиток. Приклад: A room in the dormitory costs about 400 euros per month. - Кімната в гуртожитку коштує близько 400 євро на місяць.",
+   "src": "Презентація про університети TUM і LMU"
+  },
+  {
+   "id": "eng-027",
+   "topic": "Слова UNI",
+   "type": "short",
+   "q": "Переклади українською: «tuition fee»",
+   "answer": "плата за навчання",
+   "accept": [
+    "плата за навчання",
+    "оплата навчання"
+   ],
+   "explain": "tuition fee - плата за навчання. Приклад: There are no tuition fees at LMU. - В LMU немає плати за навчання.",
+   "src": "Презентація про університети TUM і LMU"
+  },
+  {
+   "id": "eng-028",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Як англійською: «дзеркало»?",
+   "answer": "mirror",
+   "accept": [
+    "mirror",
+    "a mirror"
+   ],
+   "explain": "mirror - дзеркало. Приклад: Practise your speech in front of a mirror. - Тренуй виступ перед дзеркалом.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-029",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Як англійською: «холодильник»?",
+   "answer": "fridge",
+   "accept": [
+    "fridge",
+    "refrigerator",
+    "a fridge"
+   ],
+   "explain": "fridge - холодильник. Приклад: Put the milk in the fridge. - Постав молоко в холодильник.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-030",
+   "topic": "Слова U1",
+   "type": "short",
+   "q": "Як англійською: «кран (з водою)»?",
+   "answer": "tap",
+   "accept": [
+    "tap",
+    "a tap",
+    "faucet"
+   ],
+   "explain": "tap - кран. Приклад: Turn off the tap, please. - Закрий кран, будь ласка.",
+   "src": "Word list Unit 1 (16.10)"
+  },
+  {
+   "id": "eng-031",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Як англійською: «вибачатися»?",
+   "answer": "apologise",
+   "accept": [
+    "apologise",
+    "apologize",
+    "to apologise",
+    "to apologize"
+   ],
+   "explain": "apologise - вибачатися. Приклад: I apologised to the teacher for being late. - Я вибачився перед викладачкою за запізнення.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-032",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Як англійською: «їдальня (в університеті, на заводі)»?",
+   "answer": "canteen",
+   "accept": [
+    "canteen",
+    "a canteen",
+    "the canteen"
+   ],
+   "explain": "canteen - їдальня. Приклад: We have lunch in the university canteen. - Ми обідаємо в університетській їдальні.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-033",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Як англійською: «скласти іспит (успішно)»?",
+   "answer": "pass an exam",
+   "accept": [
+    "pass an exam",
+    "pass the exam",
+    "pass exam",
+    "to pass an exam"
+   ],
+   "explain": "pass an exam - скласти іспит (успішно). Приклад: I hope to pass all my exams in January. - Сподіваюся скласти всі іспити в січні.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-034",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Як англійською: «провалити іспит»?",
+   "answer": "fail an exam",
+   "accept": [
+    "fail an exam",
+    "fail the exam",
+    "fail exam",
+    "to fail an exam"
+   ],
+   "explain": "fail an exam - не скласти іспит, провалити іспит. Приклад: He failed the exam because he didn't study. - Він не склав іспит, бо не вчився.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-035",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Як англійською: «вирушати в дорогу (2 слова, U2)»?",
+   "answer": "set off",
+   "accept": [
+    "set off",
+    "to set off"
+   ],
+   "explain": "set off - вирушати (в дорогу). Приклад: We set off for the Carpathians early in the morning. - Ми вирушили в Карпати рано-вранці.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-036",
+   "topic": "Слова U2",
+   "type": "short",
+   "q": "Як англійською: «запрошувати»?",
+   "answer": "invite",
+   "accept": [
+    "invite",
+    "to invite"
+   ],
+   "explain": "invite - запрошувати. Приклад: I want to invite my friends to my birthday party. - Я хочу запросити друзів на день народження.",
+   "src": "Unit 2 (16.10)"
+  },
+  {
+   "id": "eng-037",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Як англійською: «шолом»?",
+   "answer": "helmet",
+   "accept": [
+    "helmet",
+    "a helmet"
+   ],
+   "explain": "helmet - шолом. Приклад: Always wear a helmet when you ride a bike. - Завжди вдягай шолом, коли їдеш на велосипеді.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-038",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Як англійською: «намет»?",
+   "answer": "tent",
+   "accept": [
+    "tent",
+    "a tent"
+   ],
+   "explain": "tent - намет. Приклад: We slept in a tent in the mountains. - Ми спали в наметі в горах.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-039",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Як англійською: «рюкзак»?",
+   "answer": "backpack",
+   "accept": [
+    "backpack",
+    "a backpack",
+    "rucksack"
+   ],
+   "explain": "backpack - рюкзак. Приклад: I carry my laptop in a backpack. - Я ношу ноутбук у рюкзаку.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-040",
+   "topic": "Слова UNI",
+   "type": "short",
+   "q": "Як англійською: «гуртожиток»?",
+   "answer": "dormitory",
+   "accept": [
+    "dormitory",
+    "dorm",
+    "a dormitory",
+    "the dormitory"
+   ],
+   "explain": "dormitory - гуртожиток. Приклад: A room in the dormitory costs about 400 euros per month. - Кімната в гуртожитку коштує близько 400 євро на місяць.",
+   "src": "Презентація про університети TUM і LMU"
+  },
+  {
+   "id": "eng-041",
+   "topic": "Слова UNI",
+   "type": "short",
+   "q": "Як англійською: «стипендія (грант на навчання)»?",
+   "answer": "scholarship",
+   "accept": [
+    "scholarship",
+    "a scholarship"
+   ],
+   "explain": "scholarship - стипендія. Приклад: TUM has scholarships for international students. - У TUM є стипендії для іноземних студентів.",
+   "src": "Презентація про університети TUM і LMU"
+  },
+  {
+   "id": "eng-042",
+   "topic": "Слова UNI",
+   "type": "short",
+   "q": "Як англійською: «плата за навчання»?",
+   "answer": "tuition fee",
+   "accept": [
+    "tuition fee",
+    "tuition fees",
+    "tuition"
+   ],
+   "explain": "tuition fee - плата за навчання. Приклад: There are no tuition fees at LMU. - В LMU немає плати за навчання.",
+   "src": "Презентація про університети TUM і LMU"
+  },
+  {
+   "id": "eng-043",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Як англійською: «з нетерпінням чекати (чогось)»?",
+   "answer": "look forward to",
+   "accept": [
+    "look forward to",
+    "to look forward to",
+    "look forward"
+   ],
+   "explain": "look forward to - з нетерпінням чекати. Приклад: I'm looking forward to the winter holidays. - Я з нетерпінням чекаю зимових канікул.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-044",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Як англійською: «ладнати з (кимось)»?",
+   "answer": "get on with",
+   "accept": [
+    "get on with",
+    "get along with",
+    "get on"
+   ],
+   "explain": "get on with - ладнати з. Приклад: I get on well with my groupmates. - Я добре ладнаю з одногрупниками.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-045",
+   "topic": "Слова U3",
+   "type": "short",
+   "q": "Як англійською: «кинути (звичку), здатися»?",
+   "answer": "give up",
+   "accept": [
+    "give up",
+    "to give up"
+   ],
+   "explain": "give up - кинути (звичку), здатися. Приклад: My father gave up smoking last year. - Мій тато кинув курити торік.",
+   "src": "Unit 3 (23.10)"
+  },
+  {
+   "id": "eng-046",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "go (йти, їхати): друга форма (V2, Past Simple)?",
+   "answer": "went",
+   "accept": [
+    "went"
+   ],
+   "explain": "go - went - gone (йти, їхати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-047",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "take (брати): третя форма (V3, Past Participle)?",
+   "answer": "taken",
+   "accept": [
+    "taken"
+   ],
+   "explain": "take - took - taken (брати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-048",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "write (писати): друга форма (V2, Past Simple)?",
+   "answer": "wrote",
+   "accept": [
+    "wrote"
+   ],
+   "explain": "write - wrote - written (писати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-049",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "write (писати): третя форма (V3, Past Participle)?",
+   "answer": "written",
+   "accept": [
+    "written"
+   ],
+   "explain": "write - wrote - written (писати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-050",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "begin (починати): третя форма (V3, Past Participle)?",
+   "answer": "begun",
+   "accept": [
+    "begun"
+   ],
+   "explain": "begin - began - begun (починати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-051",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "bring (приносити): друга форма (V2, Past Simple)?",
+   "answer": "brought",
+   "accept": [
+    "brought"
+   ],
+   "explain": "bring - brought - brought (приносити).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-052",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "buy (купувати): третя форма (V3, Past Participle)?",
+   "answer": "bought",
+   "accept": [
+    "bought"
+   ],
+   "explain": "buy - bought - bought (купувати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-053",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "teach (навчати): друга форма (V2, Past Simple)?",
+   "answer": "taught",
+   "accept": [
+    "taught"
+   ],
+   "explain": "teach - taught - taught (навчати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-054",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "think (думати): друга форма (V2, Past Simple)?",
+   "answer": "thought",
+   "accept": [
+    "thought"
+   ],
+   "explain": "think - thought - thought (думати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-055",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "speak (розмовляти): третя форма (V3, Past Participle)?",
+   "answer": "spoken",
+   "accept": [
+    "spoken"
+   ],
+   "explain": "speak - spoke - spoken (розмовляти).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-056",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "choose (обирати): друга форма (V2, Past Simple)?",
+   "answer": "chose",
+   "accept": [
+    "chose"
+   ],
+   "explain": "choose - chose - chosen (обирати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-057",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "lose (губити, програвати): друга форма (V2, Past Simple)?",
+   "answer": "lost",
+   "accept": [
+    "lost"
+   ],
+   "explain": "lose - lost - lost (губити, програвати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-058",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "spend (витрачати, проводити (час)): третя форма (V3, Past Participle)?",
+   "answer": "spent",
+   "accept": [
+    "spent"
+   ],
+   "explain": "spend - spent - spent (витрачати, проводити (час)).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-059",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "ring (дзвонити, дзвеніти): третя форма (V3, Past Participle)?",
+   "answer": "rung",
+   "accept": [
+    "rung"
+   ],
+   "explain": "ring - rang - rung (дзвонити, дзвеніти).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-060",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "know (знати): третя форма (V3, Past Participle)?",
+   "answer": "known",
+   "accept": [
+    "known"
+   ],
+   "explain": "know - knew - known (знати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-061",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "leave (залишати, їхати звідкись): друга форма (V2, Past Simple)?",
+   "answer": "left",
+   "accept": [
+    "left"
+   ],
+   "explain": "leave - left - left (залишати, їхати звідкись).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-062",
+   "topic": "Неправильні дієслова",
+   "type": "short",
+   "q": "forget (забувати): третя форма (V3, Past Participle)?",
+   "answer": "forgotten",
+   "accept": [
+    "forgotten"
+   ],
+   "explain": "forget - forgot - forgotten (забувати).",
+   "src": "ДЗ 16.10: неправильні дієслова (стандартний список)"
+  },
+  {
+   "id": "eng-063",
+   "topic": "Present Simple чи Continuous",
+   "type": "single",
+   "q": "Water ___ at 100 °C.",
+   "options": [
+    "boils",
+    "is boiling",
+    "boil",
+    "boiling"
+   ],
+   "answer": 0,
+   "explain": "Закон природи, істина - Present Simple. water = it, тому -s: boils.",
+   "src": "пара 25.09, Present Simple і Continuous"
+  },
+  {
+   "id": "eng-064",
+   "topic": "Present Simple чи Continuous",
+   "type": "single",
+   "q": "Listen! Somebody ___ in the corridor.",
+   "options": [
+    "sings",
+    "sing",
+    "singed",
+    "is singing"
+   ],
+   "answer": 3,
+   "explain": "Listen! = просто зараз - Present Continuous: is + singing.",
+   "src": "пара 25.09, Present Simple і Continuous"
+  },
+  {
+   "id": "eng-065",
+   "topic": "Present Simple чи Continuous",
+   "type": "single",
+   "q": "I ___ the answer to this question.",
+   "options": [
+    "knows",
+    "is knowing",
+    "know",
+    "am knowing"
+   ],
+   "answer": 2,
+   "explain": "know - дієслово стану, у Continuous не буває. I + know без -s.",
+   "src": "пара 25.09, Present Simple і Continuous"
+  },
+  {
+   "id": "eng-066",
+   "topic": "Present Simple чи Continuous",
+   "type": "single",
+   "q": "This semester we ___ mechanics and molecular physics.",
+   "options": [
+    "studies",
+    "are studying",
+    "study",
+    "is studying"
+   ],
+   "answer": 1,
+   "explain": "This semester = тимчасово, на цей період - Present Continuous. we → are.",
+   "src": "пара 25.09, Present Simple і Continuous"
+  },
+  {
+   "id": "eng-067",
+   "topic": "Present Simple чи Continuous",
+   "type": "single",
+   "q": "Our English class ___ at 13:30 on Wednesdays.",
+   "options": [
+    "starts",
+    "is starting",
+    "start",
+    "starting"
+   ],
+   "answer": 0,
+   "explain": "Розклад - Present Simple (на парі 25.09: timetables and schedules - Present Simple). class = it → starts.",
+   "src": "пара 25.09, Present Simple і Continuous"
+  },
+  {
+   "id": "eng-068",
+   "topic": "Present Simple чи Continuous",
+   "type": "single",
+   "q": "___ she usually ___ to the university by tram?",
+   "options": [
+    "Is ... going",
+    "Do ... go",
+    "Does ... goes",
+    "Does ... go"
+   ],
+   "answer": 3,
+   "explain": "usually = звичка - Present Simple. she → does, а після does дієслово без -s: go.",
+   "src": "пара 25.09, Present Simple і Continuous"
+  },
+  {
+   "id": "eng-069",
+   "topic": "Present Simple чи Continuous",
+   "type": "single",
+   "q": "I ___ my group leader tomorrow at 5 pm, we have already agreed.",
+   "options": [
+    "meets",
+    "will meeting",
+    "am meeting",
+    "meet"
+   ],
+   "answer": 2,
+   "explain": "Домовлена зустріч у майбутньому - Present Continuous (так казали на парі 25.09).",
+   "src": "пара 25.09, Present Simple і Continuous"
+  },
+  {
+   "id": "eng-070",
+   "topic": "Present Simple чи Continuous",
+   "type": "single",
+   "q": "He ___ coffee. He prefers tea.",
+   "options": [
+    "not likes",
+    "doesn't like",
+    "isn't liking",
+    "don't like"
+   ],
+   "answer": 1,
+   "explain": "like - дієслово стану, Continuous не буває. he → doesn't + like (без -s).",
+   "src": "пара 25.09, Present Simple і Continuous"
+  },
+  {
+   "id": "eng-071",
+   "topic": "Present Simple чи Continuous",
+   "type": "single",
+   "q": "Why ___ you ___ the milk? Is it bad?",
+   "options": [
+    "are ... smelling",
+    "do ... smell",
+    "does ... smell",
+    "is ... smelling"
+   ],
+   "answer": 0,
+   "explain": "smell тут = нюхати, це дія просто зараз - Continuous. you → are. Приклад з пари 25.09.",
+   "src": "пара 25.09, Present Simple і Continuous"
+  },
+  {
+   "id": "eng-072",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "I enjoy ___ physics problems.",
+   "options": [
+    "solving",
+    "to solve",
+    "solve"
+   ],
+   "answer": 0,
+   "explain": "enjoy - зі списку 1 роздатки (+ -ing): enjoy solving.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-073",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "We decided ___ a taxi.",
+   "options": [
+    "taking",
+    "take",
+    "to take"
+   ],
+   "answer": 2,
+   "explain": "decide - зі списку 2 (+ to infinitive): decided to take.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-074",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "I'm looking forward to ___ you.",
+   "options": [
+    "to see",
+    "seeing",
+    "see"
+   ],
+   "answer": 1,
+   "explain": "look forward to - зі списку 1. Тут to - прийменник, після нього -ing: to seeing.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-075",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "He suggested ___ to the library.",
+   "options": [
+    "going",
+    "to go",
+    "go"
+   ],
+   "answer": 0,
+   "explain": "suggest - зі списку 1 (+ -ing): suggested going. Помилка українців - suggested to go.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-076",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "I can't afford ___ a new phone.",
+   "options": [
+    "buying",
+    "buy",
+    "to buy"
+   ],
+   "answer": 2,
+   "explain": "afford - зі списку 2. Приклад з роздатки: I can't afford to buy a bike.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-077",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "She refused ___ the question.",
+   "options": [
+    "answer",
+    "to answer",
+    "answering"
+   ],
+   "answer": 1,
+   "explain": "refuse - зі списку 2 (+ to): refused to answer.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-078",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "Do you mind ___ the window?",
+   "options": [
+    "opening",
+    "to open",
+    "open"
+   ],
+   "answer": 0,
+   "explain": "mind - зі списку 1 (+ -ing): mind opening.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-079",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "I would like ___ in Germany.",
+   "options": [
+    "studying",
+    "study",
+    "to study"
+   ],
+   "answer": 2,
+   "explain": "would like - зі списку 2 (+ to): would like to study. Не плутай з like, де можна обидва.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-080",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "They managed ___ the experiment on time.",
+   "options": [
+    "finish",
+    "to finish",
+    "finishing"
+   ],
+   "answer": 1,
+   "explain": "manage - зі списку 2 (+ to): managed to finish.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-081",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "Do you fancy ___ to the cinema tonight?",
+   "options": [
+    "going",
+    "to go",
+    "go"
+   ],
+   "answer": 0,
+   "explain": "fancy - зі списку 1 (+ -ing): fancy going.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-082",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "We expect ___ the lab work by Friday.",
+   "options": [
+    "finishing",
+    "finish",
+    "to finish"
+   ],
+   "answer": 2,
+   "explain": "expect - зі списку 2. Приклад з роздатки: We expected to win the game.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-083",
+   "topic": "Verbs + to чи -ing",
+   "type": "single",
+   "q": "Which sentence is WRONG?",
+   "options": [
+    "I want going home.",
+    "It started raining.",
+    "It started to rain.",
+    "I love playing tennis."
+   ],
+   "answer": 0,
+   "explain": "want - лише + to: I want to go home. start і love - зі списку 3, з ними можна і to, і -ing.",
+   "src": "роздатка 06.11 Verbs followed by to or -ing"
+  },
+  {
+   "id": "eng-084",
+   "topic": "V2 і V3 неправильних дієслів",
+   "type": "single",
+   "q": "Did you ___ to the lab yesterday?",
+   "options": [
+    "went",
+    "gone",
+    "goes",
+    "go"
+   ],
+   "answer": 3,
+   "explain": "Після did - перша форма (V1). Минуле вже показує did, тому не went.",
+   "src": "ДЗ 16.10: неправильні дієслова"
+  },
+  {
+   "id": "eng-085",
+   "topic": "V2 і V3 неправильних дієслів",
+   "type": "single",
+   "q": "I have already ___ my lab report.",
+   "options": [
+    "write",
+    "writed",
+    "written",
+    "wrote"
+   ],
+   "answer": 2,
+   "explain": "have + третя форма (V3): write - wrote - written.",
+   "src": "ДЗ 16.10: неправильні дієслова"
+  },
+  {
+   "id": "eng-086",
+   "topic": "V2 і V3 неправильних дієслів",
+   "type": "single",
+   "q": "They ___ the exam last week.",
+   "options": [
+    "taked",
+    "took",
+    "taken",
+    "take"
+   ],
+   "answer": 1,
+   "explain": "last week - Past Simple, друга форма (V2): take - took - taken.",
+   "src": "ДЗ 16.10: неправильні дієслова"
+  },
+  {
+   "id": "eng-087",
+   "topic": "V2 і V3 неправильних дієслів",
+   "type": "single",
+   "q": "I ___ my student card yesterday and still can't find it.",
+   "options": [
+    "lost",
+    "losed",
+    "lose",
+    "have lost"
+   ],
+   "answer": 0,
+   "explain": "yesterday - Past Simple, V2: lose - lost - lost. Present Perfect з yesterday не вживають.",
+   "src": "ДЗ 16.10: неправильні дієслова"
+  },
+  {
+   "id": "eng-088",
+   "topic": "V2 і V3 неправильних дієслів",
+   "type": "single",
+   "q": "LMU ___ in 1472.",
+   "options": [
+    "founded",
+    "was found",
+    "is founded",
+    "was founded"
+   ],
+   "answer": 3,
+   "explain": "Пасив у минулому: was + V3. found (засновувати) - founded - founded; found без -ed - це минуле від find (знаходити).",
+   "src": "текст презентації TUM і LMU"
+  },
+  {
+   "id": "eng-089",
+   "topic": "Слова юнітів у реченні",
+   "type": "single",
+   "q": "Я склав іспит (успішно) = I ___ the exam.",
+   "options": [
+    "failed",
+    "gave",
+    "passed",
+    "took"
+   ],
+   "answer": 2,
+   "explain": "pass an exam - скласти успішно. take an exam - лише складати (йти на іспит), fail - провалити. Слова U2.",
+   "src": "U2"
+  },
+  {
+   "id": "eng-090",
+   "topic": "Слова юнітів у реченні",
+   "type": "single",
+   "q": "My alarm clock ___ at 6:30, but I didn't get up.",
+   "options": [
+    "gave up",
+    "went off",
+    "went on",
+    "set off"
+   ],
+   "answer": 1,
+   "explain": "go off - задзвонити (про будильник). went on - тривав, set off - вирушив, gave up - кинув. Слова U3.",
+   "src": "U3"
+  },
+  {
+   "id": "eng-091",
+   "topic": "Слова юнітів у реченні",
+   "type": "single",
+   "q": "I missed two classes, so now I have to ___ them.",
+   "options": [
+    "make up for",
+    "take up",
+    "turn into",
+    "join in"
+   ],
+   "answer": 0,
+   "explain": "make up for - надолужити, компенсувати. take up - почати займатися хобі. Слова U3.",
+   "src": "U3"
+  },
+  {
+   "id": "eng-092",
+   "topic": "Слова юнітів у реченні",
+   "type": "single",
+   "q": "Water ___ of hydrogen and oxygen.",
+   "options": [
+    "contains",
+    "includes",
+    "belongs",
+    "consists"
+   ],
+   "answer": 3,
+   "explain": "consist of - складатися з. contains of так не кажуть. Слова U1.",
+   "src": "U1"
+  }
+ ]
+}

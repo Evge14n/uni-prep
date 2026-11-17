@@ -161,6 +161,8 @@ def main():
 
     shell = ["./", "index.html", "app.js", "style.css", "manifest.webmanifest",
              "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/favicon.svg"]
+    # шрифти (self-hosted, tools/make_fonts.py) - теж у кеш, щоб офлайн був той самий вигляд
+    shell += sorted("fonts/" + f.name for f in (SITE / "fonts").glob("*.woff2"))
     for s in shell + files:
         p = SITE / (s if s != "./" else "index.html")
         if not p.exists():

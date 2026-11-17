@@ -1,5 +1,5 @@
 {
-"version": "9b89bc7b8db2",
+"version": "5e6245331596",
 "files": [
 "./",
 "index.html",
@@ -10,6 +10,13 @@
 "icons/icon-512.png",
 "icons/maskable-512.png",
 "icons/favicon.svg",
+"fonts/dvmono-400.woff2",
+"fonts/fira-400.woff2",
+"fonts/fira-400i.woff2",
+"fonts/fira-600.woff2",
+"fonts/fira-700.woff2",
+"fonts/literata-600.woff2",
+"fonts/unimath-400.woff2",
 "data/an-k1/teoriya.html",
 "data/an-k1/oznachennya.html",
 "data/an-k1/zadachi.html",

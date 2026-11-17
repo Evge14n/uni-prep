@@ -4,22 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#14161c" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10141c" media="(prefers-color-scheme: dark)">
 <meta name="description" content="Підготовка до колоквіумів і сесії 1 курсу фізфаку: теорія, задачі з розвʼязанням, тести, відео. Працює офлайн.">
 <title>Підготовка до сесії</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preload" href="fonts/fira-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/fira-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/literata-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="#/">Сесія 1 курс</a>
+  <a class="brand" href="#/"><span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></svg></span>Зошит · сесія</a>
+  <nav class="dnav" aria-label="Розділи сайту"></nav>
   <span id="net" class="net" role="status" aria-live="polite"></span>
-  <button id="theme" class="icon-btn" type="button" aria-label="Тема: авто">◐</button>
+  <button id="theme" class="icon-btn" type="button" aria-label="Тема: авто"></button>
 </header>
 <main id="app" tabindex="-1"><p class="muted">Завантаження…</p></main>
+<nav class="bnav" aria-label="Головна навігація"></nav>
 <noscript><p class="pad">Для сайту потрібен JavaScript.</p></noscript>
 <script src="app.js" defer></script>
 </body>

@@ -1,0 +1,1043 @@
+<h1 id="урок-2-основні-команди-ввід-і-вивід-форматування-рядків-pep-">Урок 2. Основні команди: ввід і вивід, форматування рядків, PEP 8, функції</h1>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/dovidnyk">Довідник функцій</a></p>
+<blockquote>
+<p>Лекція 2 (с. 1-17) і Лекція 2 (код з пари, с. 1-20), потрібно для: ЛР1 (завд. 1-3: функція повертає f-рядок з <code>:.3f</code> і <code>:02d</code>, введення через <code>int(input())</code>), ЛР2 (завд. 1-3: анотації типів, перевірка <code>flake8</code>, <code>mypy</code>). Час: 30 хв. Перед цим уроком: урок 1.</p>
+</blockquote>
+<h2 id="1-ідея">1. Ідея</h2>
+<p>Урок 1 дав «цеглинки»: змінні й <code>print</code>. Тепер з них складаємо справжню програму, яка
+<strong>питає</strong> дані (<code>input</code>), <strong>рахує</strong> і <strong>показує</strong> результат гарно відформатованим (<code>%</code>, f-рядки).
+А щоб ту саму обчислювальну частину можна було перевірити й використати ще раз, її ховають у
+<strong>функцію</strong>, яка <strong>повертає</strong> результат (<code>return</code>). Плюс правила оформлення PEP 8, бо викладач
+перевіряє не лише «чи працює», а й «чи правильно написано».</p>
+<p>Головна думка уроку: <strong>друкувати і повертати - різні речі.</strong> <code>print</code> показує текст людині і віддає
+<code>None</code>. <code>return</code> віддає значення програмі, щоб з ним працювати далі. doctest у лабах перевіряє саме
+те, що функція <strong>повертає</strong>.</p>
+<h3 id="карта-лекції">Карта лекції</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Тема (Лекція 2)</th>
+<th>с.</th>
+<th>Головне</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Тотожна інструкція <code>pass</code></td>
+<td>1</td>
+<td>Нічого не робить. Заглушка там, де синтаксис вимагає інструкцію.</td>
+</tr>
+<tr>
+<td>Присвоєння <code>x = e</code></td>
+<td>1</td>
+<td>Рахує <code>e</code>, дає результату імʼя <code>x</code>; старе значення <code>x</code> стає недосяжним.</td>
+</tr>
+<tr>
+<td>Ввід <code>x = input(S)</code></td>
+<td>2</td>
+<td>Показує підказку <code>S</code>, чекає Enter, <strong>повертає рядок</strong>.</td>
+</tr>
+<tr>
+<td>Вивід <code>print(S1, ..., SN)</code>, <code>sep</code>, <code>end</code></td>
+<td>2</td>
+<td>Значення через пробіл (<code>sep</code>), у кінці перехід на новий рядок (<code>end</code>).</td>
+</tr>
+<tr>
+<td>Оператор <code>%</code> для рядків</td>
+<td>3-4</td>
+<td><code>"%d і %s" % (5, "текст")</code>; кількість <code>%...</code> = кількість значень.</td>
+</tr>
+<tr>
+<td>f-рядки, <code>ljust</code>/<code>rjust</code>/<code>center</code>, <code>.format</code>, <code>zfill</code></td>
+<td>4-5</td>
+<td><code>f"{value:.2f}"</code>, <code>{x:.3g}</code>, <code>{n:_}</code>, <code>{text:&lt;10}</code>, <code>{text:&gt;10}</code>, <code>{text:^10}</code>.</td>
+</tr>
+<tr>
+<td>Лінійна програма</td>
+<td>5</td>
+<td>Лише ввід, вивід, присвоєння і <code>pass</code>.</td>
+</tr>
+<tr>
+<td>Стиль коду, PEP 8</td>
+<td>5-12</td>
+<td>4 пробіли, рядок ≤ 79, 2 порожні рядки між функціями, пробіли навколо операторів, <code>snake_case</code>, <code>UPPER_SNAKE_CASE</code>, <code>PascalCase</code>.</td>
+</tr>
+<tr>
+<td>Лінтери і форматери</td>
+<td>12-14</td>
+<td><code>pycodestyle</code>, <code>flake8</code>, <code>pylint</code>, <code>mypy</code> (типи) - знаходять; <code>black</code>, <code>autopep8</code>, <code>isort</code> - виправляють.</td>
+</tr>
+<tr>
+<td>Сума цифр до і після PEP 8</td>
+<td>14-15</td>
+<td>Імʼя <code>sum</code> «затіняє» вбудовану функцію; правильно <code>digit_sum</code>.</td>
+</tr>
+<tr>
+<td>Функція: <code>def</code>, параметри, <code>return</code>, <code>None</code></td>
+<td>15-16</td>
+<td>Без <code>return</code> функція повертає <code>None</code>.</td>
+</tr>
+<tr>
+<td>Функції і структурне програмування</td>
+<td>16-17</td>
+<td>Декомпозиція, локальні змінні, одна точка входу і виходу.</td>
+</tr>
+<tr>
+<td>Код з пари</td>
+<td>1, 16-18</td>
+<td><code>x: int</code> не забороняє рядок; <code>"23" + "17"</code>; <code>"23" + 17</code> - TypeError; <code>math.cos(math.pi/3)</code>; вивід <code>pycodestyle</code> і <code>mypy</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="pass-і-присвоєння"><code>pass</code> і присвоєння</h3>
+<pre><code class="language-python">def future_feature():
+    pass
+
+
+print(future_feature())
+</code></pre>
+<pre><code class="language-text">None
+</code></pre>
+<p><code>pass</code> - «тут поки нічого». Функцію без <code>return</code> можна викликати, і вона поверне <code>None</code> («нічого»).
+Саме тому в заготовках задач стоїть <code>pass</code>: doctest чекає число чи рядок, отримує <code>None</code> і червоніє.</p>
+<p>Присвоєння (с. 1): у <code>x = e</code> спершу рахується <code>e</code>, потім старе значення <code>x</code> стає недосяжним.
+<code>x = 12</code> і <code>y = (x**5 + x**4 + x**3 + x**2 + x + 1)</code> дає <code>y = 271453</code> (так і в коді з пари, с. 1).</p>
+<h3 id="ввід-input-завжди-повертає-рядок">Ввід: <code>input</code> завжди повертає рядок</h3>
+<pre><code class="language-python"># ввід: Андрій
+name = input(&quot;Як тебе звати? &quot;)
+print(&quot;Привіт,&quot;, name)
+</code></pre>
+<pre><code class="language-text">Як тебе звати? Андрій
+Привіт, Андрій
+</code></pre>
+<p>Програма друкує підказку, зупиняється, чекає, поки людина набере текст і натисне Enter, і <strong>повертає
+набраний текст як рядок</strong> (<code>str</code>). Навіть якщо набрали <code>25</code>, це рядок з двох символів <code>"25"</code>. Для
+чисел потрібне перетворення: <code>int(input(...))</code> для цілих, <code>float(input(...))</code> для дійсних
+(Лекція 3, с. 3; ЛР1, с. 2).</p>
+<h3 id="вивід-print-sep-і-end">Вивід: <code>print</code>, <code>sep</code> і <code>end</code></h3>
+<pre><code class="language-python">print(1, 2, 3)
+print(1, 2, 3, sep=&quot;_&quot;)
+print(1); print(2)
+print(1, end=&quot;!&quot;); print(2, end=&quot;!&quot;)
+print()
+print(1, 2, 3, sep=&quot;\n&quot;, end=&quot;!&quot;)
+</code></pre>
+<pre><code class="language-text">1 2 3
+1_2_3
+1
+2
+1!2!
+1
+2
+3!
+</code></pre>
+<p><code>sep</code> - що ставити <strong>між</strong> значеннями (типово пробіл), <code>end</code> - що ставити <strong>в кінці</strong> (типово
+<code>"\n"</code>, тобто перехід на новий рядок). У рядку 4 <code>end="!"</code> прибрав перехід, тому <code>1!2!</code> в одному
+рядку. Порожній <code>print()</code> друкує лише <code>end</code>, тобто закінчує цей рядок. <code>"\n"</code> - один символ «новий
+рядок», тому <code>sep="\n"</code> ставить кожне число на свій рядок (код з пари, с. 1).</p>
+<h3 id="форматування-оператором">Форматування оператором <code>%</code></h3>
+<pre><code class="language-python">print(&quot;First = %d, second = %d&quot; % (1, 2))
+print(&quot;%s було %d років, коли він пішов у %d клас&quot; % (&quot;Миколі&quot;, 7, 1))
+print(&quot;Високосний рік має %d днів&quot; % 366)
+print(&quot;Знижка %d%%&quot; % 15)
+print(&quot;%.2f і %e&quot; % (3.14159, 0.000123))
+</code></pre>
+<pre><code class="language-text">First = 1, second = 2
+Миколі було 7 років, коли він пішов у 1 клас
+Високосний рік має 366 днів
+Знижка 15%
+3.14 і 1.230000e-04
+</code></pre>
+<p>Зліва - шаблон, справа після <code>%</code> - значення в дужках. Кожен <code>%d</code> (ціле), <code>%s</code> (рядок), <code>%f</code> (дійсне),
+<code>%e</code> (експоненційна форма) забирає <strong>одне</strong> значення по черзі. <code>%%</code> - сам знак відсотка. Одне значення
+можна без дужок (с. 3). Правило: скільки <code>%...</code> у шаблоні, стільки значень справа, інакше <code>TypeError</code>.
+Цей стиль старий, але в чужому коді (і в Лекції 3) трапляється часто.</p>
+<h3 id="f-рядки-сучасний-спосіб">f-рядки - сучасний спосіб</h3>
+<pre><code class="language-python">pi = 3.14159265
+val = 0.0012345
+print(f&quot;2 знаки після коми: {pi:.2f}&quot;)
+print(f&quot;3 значущі цифри:    {val:.3g}&quot;)
+print(f&quot;Роздільник тисяч:   {1000000:_}&quot;)
+name = &quot;Марко&quot;
+score = 95
+print(f&quot;{name:&lt;10} | {score:&gt;5}&quot;)
+print(f&quot;[{name:^9}]&quot;)
+print(f&quot;{7:02d}:{5:02d}&quot;)
+</code></pre>
+<pre><code class="language-text">2 знаки після коми: 3.14
+3 значущі цифри:    0.00123
+Роздільник тисяч:   1_000_000
+Марко      |    95
+[  Марко  ]
+07:05
+</code></pre>
+<p>Буква <code>f</code> перед лапками вмикає підстановку: у <code>{}</code> можна писати змінну або будь-який вираз. Після
+двокрапки - <strong>як</strong> показати:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Запис</th>
+<th>Що означає</th>
+<th>Приклад → результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:.2f</code></td>
+<td>2 знаки після коми</td>
+<td><code>3.14159</code> → <code>3.14</code></td>
+</tr>
+<tr>
+<td><code>:.3g</code></td>
+<td>3 значущі цифри</td>
+<td><code>0.0012345</code> → <code>0.00123</code></td>
+</tr>
+<tr>
+<td><code>:_</code></td>
+<td>підкреслення між тисячами</td>
+<td><code>1000000</code> → <code>1_000_000</code></td>
+</tr>
+<tr>
+<td><code>:&lt;10</code>, <code>:&gt;5</code>, <code>:^9</code></td>
+<td>ширина поля, вирівнювання вліво, вправо, по центру</td>
+<td><code>"Марко"</code> → <code>Марко</code></td>
+</tr>
+<tr>
+<td><code>:02d</code></td>
+<td>ціле, ширина 2, доповнити нулями (ЛР1, с. 4)</td>
+<td><code>7</code> → <code>07</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Форматування міняє лише <strong>показ</strong>, саме число лишається тим самим (ЛР1, с. 3-4). Ширина - це
+<strong>мінімум</strong>: довший текст не обрізається.</p>
+<p>Ті самі вирівнювання - методами рядків (с. 4):</p>
+<pre><code class="language-python">text = &quot;Python&quot;
+print(text.ljust(10, &quot;-&quot;))
+print(text.rjust(10, &quot;*&quot;))
+print(text.center(10, &quot;.&quot;))
+print(&quot;7&quot;.zfill(3))
+print(&quot;{} + {} = {}&quot;.format(2, 3, 5))
+</code></pre>
+<pre><code class="language-text">Python----
+****Python
+..Python..
+007
+2 + 3 = 5
+</code></pre>
+<h3 id="лінійна-програма-с-5">Лінійна програма (с. 5)</h3>
+<p>Програма лише з вводу, виводу, присвоєння і <code>pass</code>. Без розгалужень і циклів, кожна інструкція - один
+раз, згори вниз. Саме такі програми просять у ЛР1.</p>
+<h3 id="pep-8-і-перевірка-стилю">PEP 8 і перевірка стилю</h3>
+<p>PEP 8 - офіційні рекомендації, як оформлювати код Python (Лекція 2, с. 6-12). Код з порушеннями
+все одно запуститься, але викладач перевіряє стиль, і читати такий код у 10 разів частіше, ніж писати
+(с. 6). Найважливіше:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Правило</th>
+<th>Як правильно</th>
+<th>Як не треба</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Відступ</td>
+<td>4 пробіли, без табуляції (змішування дає <code>TabError</code>)</td>
+<td>2 пробіли або Tab</td>
+</tr>
+<tr>
+<td>Довжина рядка</td>
+<td>до 79 знаків (докстрінг і коментар до 72)</td>
+<td>рядок на весь екран</td>
+</tr>
+<tr>
+<td>Перенос</td>
+<td>усередині дужок: <code>total = (first + second +</code></td>
+<td>зворотна риска <code>\</code> у кінці</td>
+</tr>
+<tr>
+<td>Порожні рядки</td>
+<td>2 між функціями, 1 між методами класу</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Пробіли</td>
+<td><code>x = 1</code>, <code>y = x + 3</code>, <code>f(a, b)</code>, <code>data[1]</code></td>
+<td><code>x=1</code>, <code>f (a,b)</code>, <code>( a + b )</code></td>
+</tr>
+<tr>
+<td>Змінні, функції</td>
+<td><code>snake_case</code>: <code>student_name</code>, <code>calculate_area()</code></td>
+<td><code>studentName</code>, <code>a</code>, <code>d1</code></td>
+</tr>
+<tr>
+<td>Константи</td>
+<td><code>UPPER_SNAKE_CASE</code>: <code>MAX_SPEED</code>, <code>EARTH_RADIUS_KM = 6371</code></td>
+<td><code>maxspeed</code></td>
+</tr>
+<tr>
+<td>Класи</td>
+<td><code>PascalCase</code>: <code>BankAccount</code></td>
+<td><code>bank_account</code></td>
+</tr>
+<tr>
+<td>Не брати</td>
+<td><code>l</code>, <code>O</code>, <code>I</code> (схожі на 1 і 0); імена <code>sum</code>, <code>list</code>, <code>str</code>, <code>type</code>, <code>id</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Імпорти</td>
+<td>кожен на окремому рядку, на початку файлу: стандартні, сторонні, свої</td>
+<td><code>import math, os</code></td>
+</tr>
+<tr>
+<td>Коментарі</td>
+<td>повне речення; не дублювати код; функції - докстрінг <code>"""..."""</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Порівняння</td>
+<td><code>if value is None:</code>, <code>if is_valid:</code> (про <code>if</code> - урок 3)</td>
+<td><code>== None</code>, <code>== True</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Інструменти (с. 12-14): <strong>лінтери</strong> знаходять проблеми, не запускаючи код (<code>pycodestyle</code> - лише PEP 8;
+<code>flake8</code> - PEP 8 + невикористані імена; <code>pylint</code> - глибше, ставить оцінку з 10; <code>mypy</code> - перевіряє
+типи). <strong>Форматери</strong> самі переписують код (<code>black</code> - «безкомпромісний», ширина 88; <code>autopep8</code>;
+<code>isort</code> - сортує імпорти). Запуск: <code>pip install flake8 black</code>, потім <code>flake8 my_program.py</code>.</p>
+<p>Приклад з лекції (с. 14-15), сума цифр двозначного числа. Спершу «до PEP 8» (працює, але читати важко):</p>
+<pre><code class="language-python"># не запускати: приклад поганого стилю, flake8 знайде 7 зауважень
+x=int(input(&quot;Введіть двозначне число &quot;))
+f=x//10
+s=x%10
+sum=f+s
+print(&quot;Сума цифр числа %d = %d&quot;%(x,sum))
+</code></pre>
+<p><code>pycodestyle</code> на парі (код з пари, с. 17) видав для такого коду, зокрема:
+<code>E225 missing whitespace around operator</code> (нема пробілів навколо <code>=</code>), <code>E228</code> (навколо <code>%</code>), <code>E231</code>
+(після коми). І ще гірше: <code>sum</code> - імʼя вбудованої функції <code>sum()</code>, після <code>sum=f+s</code> вона «затінена» і
+далі в програмі не працює. Після PEP 8:</p>
+<pre><code class="language-python"># ввід: 25
+x = int(input(&quot;Введіть двозначне число &quot;))
+first_digit = x // 10   # перша (десяткова) цифра числа
+second_digit = x % 10   # друга (одинична) цифра числа
+digit_sum = first_digit + second_digit
+print(&quot;Сума цифр числа %d = %d&quot; % (x, digit_sum))
+</code></pre>
+<pre><code class="language-text">Введіть двозначне число 25
+Сума цифр числа 25 = 7
+</code></pre>
+<p><code>//</code> - ціла частина від ділення (25 // 10 = 2), <code>%</code> для чисел - остача (25 % 10 = 5). Детально ці
+операції - в уроці 3 (Лекція 3, с. 1-3).</p>
+<h3 id="анотації-типів-підказка-а-не-заборона">Анотації типів: підказка, а не заборона</h3>
+<pre><code class="language-python">x: int = 10
+x = &quot;hello&quot;
+print(x, type(x))
+</code></pre>
+<pre><code class="language-text">hello &lt;class 'str'&gt;
+</code></pre>
+<p><code>x: int</code> каже людині й інструменту <code>mypy</code> «тут має бути ціле». Сам Python це <strong>ігнорує</strong> (с. 13),
+тому рядок <code>x = "hello"</code> спрацював. На парі <code>mypy</code> для такого коду написав (код з пари, с. 17):
+<code>error: Incompatible types in assignment (expression has type "str", variable has type "int")</code>.</p>
+<h3 id="функції-с-15-17">Функції (с. 15-17)</h3>
+<pre><code class="language-python">def calculate_area(width: float, height: float) -&gt; float:
+    &quot;&quot;&quot;Обчислює площу прямокутника.&quot;&quot;&quot;
+    return width * height
+
+
+# Виклик функції та збереження результату
+rect_area = calculate_area(5.0, 3.0)
+print(f&quot;Площа: {rect_area}&quot;)
+</code></pre>
+<pre><code class="language-text">Площа: 15.0
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Частина</th>
+<th>Що це</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>def</code></td>
+<td>«оголошую функцію» (define). Тіло ще <strong>не виконується</strong>, лише запамʼятовується.</td>
+</tr>
+<tr>
+<td><code>calculate_area</code></td>
+<td>імʼя, <code>snake_case</code>.</td>
+</tr>
+<tr>
+<td><code>(width: float, height: float)</code></td>
+<td><strong>параметри</strong> - імена для даних, які передадуть при виклику; <code>: float</code> - анотація.</td>
+</tr>
+<tr>
+<td><code>-&gt; float</code></td>
+<td>анотація: функція повертає <code>float</code>.</td>
+</tr>
+<tr>
+<td><code>:</code> і відступ 4 пробіли</td>
+<td>межі тіла функції.</td>
+</tr>
+<tr>
+<td><code>"""..."""</code></td>
+<td>докстрінг: що робить функція. У лабах тут живуть doctest.</td>
+</tr>
+<tr>
+<td><code>return width * height</code></td>
+<td>обчислити і <strong>віддати</strong> результат у місце виклику; функція на цьому закінчується.</td>
+</tr>
+<tr>
+<td><code>calculate_area(5.0, 3.0)</code></td>
+<td><strong>виклик</strong>: <code>width = 5.0</code>, <code>height = 3.0</code> (це <strong>аргументи</strong>, ЛР1, с. 4), виконується тіло, вираз виклику набуває значення 15.0.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Без <code>return</code> (або з порожнім <code>return</code>) функція повертає <code>None</code> (с. 16).</p>
+<p>Python не перевіряє анотації, тому функція працює з будь-якими значеннями, для яких є <code>+</code> (код з пари,
+с. 18):</p>
+<pre><code class="language-python">def add(number1: int, number2: int):
+    result = number1 + number2
+    return result
+
+
+print(add(7, 8))
+print(add(-7, 5))
+print(add(&quot;I like&quot;, &quot; Python&quot;))
+</code></pre>
+<pre><code class="language-text">15
+-2
+I like Python
+</code></pre>
+<p>Для рядків <code>+</code> склеює (конкатенація). Зате <code>"23" + 17</code> (рядок + число) - <code>TypeError: can only
+concatenate str (not "int") to str</code> (код з пари, с. 1).</p>
+<p><strong>Змінні всередині функції - локальні</strong> (с. 17): їх видно лише всередині.</p>
+<pre><code class="language-python">def process():
+    inner_value = 10  # локальна змінна
+    return inner_value * 2
+
+
+print(process())
+print(inner_value)
+</code></pre>
+<pre><code class="language-text">20
+Traceback (most recent call last):
+  ...
+NameError: name 'inner_value' is not defined
+</code></pre>
+<p>Навіщо функції (с. 15-17): <strong>DRY</strong> - не повторювати код; <strong>декомпозиція</strong> - велику задачу ділять на
+малі функції (<code>load_data</code>, <code>process_data</code>, <code>save_reports</code>); <strong>ізоляція</strong> - локальні змінні не
+плутаються з іншими; <strong>одна точка входу і виходу</strong> - виклик заходить у перший рядок, <code>return</code> віддає
+результат назад. Це структурне програмування: послідовність, розгалуження, повторення.</p>
+<p>На парі ще показали (код з пари, с. 16): <code>import math</code>, <code>help(math)</code> - довідка про модуль, і
+<code>math.cos(math.pi/3)</code> дає <code>0.5000000000000001</code>, а не 0.5 (похибка дійсних чисел, урок 3).</p>
+<h2 id="2-розібраний-приклад">2. Розібраний приклад</h2>
+<p><strong>Умова.</strong> Користувач вводить відстань у км і час у годинах. Функція повертає рядок із середньою
+швидкістю, округленою до 1 знака. Структура - як у ЛР1, с. 11: функція з doctest, ввід, виклик,
+вивід, перевірка.</p>
+<pre><code class="language-python"># ввід: 120 | 1.5
+import doctest
+
+
+def average_speed(distance_km: float, hours: float) -&gt; str:
+    &quot;&quot;&quot;Повертає рядок із середньою швидкістю, км/год.
+
+    &gt;&gt;&gt; average_speed(120.0, 1.5)
+    'Середня швидкість: 80.0 км/год'
+    &gt;&gt;&gt; average_speed(0.0, 2.0)
+    'Середня швидкість: 0.0 км/год'
+    &quot;&quot;&quot;
+    speed = distance_km / hours
+    return f&quot;Середня швидкість: {speed:.1f} км/год&quot;
+
+
+distance = float(input(&quot;Відстань, км: &quot;))
+time_hours = float(input(&quot;Час, год: &quot;))
+message = average_speed(distance, time_hours)
+print(message)
+doctest.testmod()
+</code></pre>
+<pre><code class="language-text">Відстань, км: 120
+Час, год: 1.5
+Середня швидкість: 80.0 км/год
+</code></pre>
+<p><strong>Кожен рядок:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Рядок</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>import doctest</code></td>
+<td>Підключає модуль для перевірки прикладів з докстрінгів. Імпорти - на початку (PEP 8).</td>
+</tr>
+<tr>
+<td><code>def average_speed(distance_km: float, hours: float) -&gt; str:</code></td>
+<td>Оголошує функцію з двома параметрами; обіцяє повернути рядок. Тіло поки не виконується.</td>
+</tr>
+<tr>
+<td><code>"""Повертає рядок ... &gt;&gt;&gt; ..."""</code></td>
+<td>Докстрінг з двома doctest: виклик після <code>&gt;&gt;&gt;</code> і очікуваний результат. Рядок у лапках, бо функція повертає <code>str</code>.</td>
+</tr>
+<tr>
+<td><code>speed = distance_km / hours</code></td>
+<td>Локальна змінна: 120.0 / 1.5 = 80.0.</td>
+</tr>
+<tr>
+<td><code>return f"Середня швидкість: {speed:.1f} км/год"</code></td>
+<td>Збирає рядок, <code>:.1f</code> - 1 знак після коми, і віддає його в місце виклику.</td>
+</tr>
+<tr>
+<td>(2 порожні рядки)</td>
+<td>PEP 8: дві порожні лінії після функції.</td>
+</tr>
+<tr>
+<td><code>distance = float(input("Відстань, км: "))</code></td>
+<td>Друкує підказку, чекає, отримує рядок <code>"120"</code>, <code>float</code> робить з нього 120.0.</td>
+</tr>
+<tr>
+<td><code>time_hours = float(input("Час, год: "))</code></td>
+<td>Так само: <code>"1.5"</code> → 1.5.</td>
+</tr>
+<tr>
+<td><code>message = average_speed(distance, time_hours)</code></td>
+<td>Виклик: параметри отримують 120.0 і 1.5, виконується тіло, <code>return</code> повертає рядок, він отримує імʼя <code>message</code>.</td>
+</tr>
+<tr>
+<td><code>print(message)</code></td>
+<td>Лише тут щось зʼявляється на екрані. Функція сама нічого не друкувала.</td>
+</tr>
+<tr>
+<td><code>doctest.testmod()</code></td>
+<td>Проганяє обидва приклади з докстрінгу. Якщо все добре - мовчить.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Трасувальна таблиця</strong> (виконання від першого рядка, що щось робить):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Крок</th>
+<th>Де</th>
+<th>distance</th>
+<th>time_hours</th>
+<th>distance_km</th>
+<th>hours</th>
+<th>speed</th>
+<th>message</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>distance = ...</code> (ввели <code>120</code>)</td>
+<td>120.0</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>time_hours = ...</code> (ввели <code>1.5</code>)</td>
+<td>120.0</td>
+<td>1.5</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>3</td>
+<td>вхід у функцію</td>
+<td>120.0</td>
+<td>1.5</td>
+<td>120.0</td>
+<td>1.5</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>speed = ...</code></td>
+<td>120.0</td>
+<td>1.5</td>
+<td>120.0</td>
+<td>1.5</td>
+<td>80.0</td>
+<td>-</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>return</code> → вихід із функції</td>
+<td>120.0</td>
+<td>1.5</td>
+<td>(зникли)</td>
+<td>(зникли)</td>
+<td>(зникла)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>message = ...</code></td>
+<td>120.0</td>
+<td>1.5</td>
+<td></td>
+<td></td>
+<td></td>
+<td><code>'Середня швидкість: 80.0 км/год'</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>print(message)</code></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>на екрані без лапок</td>
+</tr>
+</tbody>
+</table></div>
+<p>Після кроку 5 локальні <code>distance_km</code>, <code>hours</code>, <code>speed</code> зникають: вони жили лише всередині функції.</p>
+<p><strong>Закрий приклад і напиши його сам з памʼяті.</strong> Інший сюжет: функція <code>fuel_per_100km(liters,
+distance_km)</code> повертає <code>f"Витрата: ... л/100 км"</code> (формула: літри / км · 100). Для 13 л на 200 км має
+вийти <code>Витрата: 6.5 л/100 км</code>. Не забудь doctest на граничний випадок: 0 л - <code>Витрата: 0.0 л/100 км</code>.</p>
+<h2 id="3-передбач-вивід">3. Передбач вивід</h2>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<p><strong>Фрагмент 1.</strong> <code>sep</code> і <code>end</code>.</p>
+<pre><code class="language-python">print(&quot;a&quot;, &quot;b&quot;, sep=&quot;&quot;)
+print(&quot;x&quot;, &quot;y&quot;, sep=&quot;, &quot;, end=&quot; | &quot;)
+print(&quot;кінець&quot;)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">ab
+x, y | кінець
+</code></pre>
+<p><code>sep=""</code> - між значеннями нічого. У другому <code>print</code> між <code>x</code> і <code>y</code> стоїть <code>", "</code>, а в кінці <code>" | "</code>
+замість переходу на новий рядок. Тому третій <code>print</code> дописує <code>кінець</code> у той самий рядок.</p>
+</details>
+<p><strong>Фрагмент 2.</strong> <code>%d</code> і дробове число.</p>
+<pre><code class="language-python">print(&quot;%s має %d балів&quot; % (&quot;Оля&quot;, 95.7))
+print(&quot;%.1f%%&quot; % 95.75)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">Оля має 95 балів
+95.8%
+</code></pre>
+<p><code>%d</code> - <strong>ціле</strong>, тому від 95.7 лишається 95: дробову частину відкинуто, а не округлено. <code>%.1f</code> -
+дійсне з 1 знаком (95.75 → 95.8), <code>%%</code> - сам знак <code>%</code>.</p>
+</details>
+<p><strong>Фрагмент 3.</strong> Формати у f-рядку.</p>
+<pre><code class="language-python">print(f&quot;{2 / 3:.3f}|{5:03d}|{'ok':&gt;4}|{1234567:_}|&quot;)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">0.667|005|  ok|1_234_567|
+</code></pre>
+<p><code>2 / 3</code> = 0.666..., <code>:.3f</code> округлює до 0.667. <code>5:03d</code> - ширина 3 з нулями: <code>005</code>. <code>'ok':&gt;4</code> - ширина
+4, вправо: два пробіли і <code>ok</code>. <code>:_</code> ставить <code>_</code> між тисячами. Усередині <code>{}</code> можна писати вирази
+(<code>2 / 3</code>) і літерали (<code>'ok'</code> в одинарних лапках, бо зовнішні - подвійні).</p>
+</details>
+<p><strong>Фрагмент 4 (головна пастка).</strong> <code>print</code> замість <code>return</code>.</p>
+<pre><code class="language-python">def double(number):
+    print(number * 2)
+
+
+result = double(5)
+print(result)
+print(double(1) == 2)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">10
+None
+2
+False
+</code></pre>
+<p><code>double(5)</code> <strong>друкує</strong> 10, але нічого не повертає, тобто повертає <code>None</code>. Тому <code>result</code> = <code>None</code>.
+В останньому рядку <code>double(1)</code> друкує <code>2</code> і повертає <code>None</code>; <code>None == 2</code> - хибно, <code>False</code>. На екрані
+«2» видно, а в програмі його нема. Це і є різниця «друкує» і «повертає».</p>
+</details>
+<p><strong>Фрагмент 5.</strong> <code>input</code> і <code>+</code>.</p>
+<pre><code class="language-python"># ввід: 12 | 18
+first = input(&quot;Перше число: &quot;)
+second = input(&quot;Друге число: &quot;)
+print(first + second)
+print(int(first) + int(second))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">Перше число: 12
+Друге число: 18
+1218
+30
+</code></pre>
+<p><code>input</code> повертає рядки <code>"12"</code> і <code>"18"</code>. Для рядків <code>+</code> - склеювання: <code>"1218"</code>. Лише після <code>int</code>
+вони стають числами, і <code>+</code> додає: 30. Як у коді з пари: <code>"23" + "17"</code> дає <code>'2317'</code>, а <code>23 + 17</code> - 40.</p>
+</details>
+<h2 id="4-знайди-помилку">4. Знайди помилку</h2>
+<p><strong>Помилка 1.</strong> Функція має повертати привітання.</p>
+<pre><code class="language-python"># БАГ
+def greet(name: str) -&gt; str:
+    &quot;&quot;&quot;Повертає привітання.
+
+    &gt;&gt;&gt; greet(&quot;Оля&quot;)
+    'Привіт, Оля!'
+    &quot;&quot;&quot;
+    print(f&quot;Привіт, {name}!&quot;)
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>doctest падає: чекав <code>'Привіт, Оля!'</code> (у лапках, бо це <strong>значення-рядок</strong>), а отримав <code>Привіт, Оля!</code>
+без лапок - це <strong>надрукований текст</strong>. Функція друкує, а повертає <code>None</code>.</p>
+<p>Пастка: з числами doctest таку помилку <strong>не ловить</strong>. Якщо <code>double</code> друкує 4, то doctest
+<code>&gt;&gt;&gt; double(2)</code> / <code>4</code> бачить на екрані <code>4</code> і задоволений. Помилка вилізе пізніше, коли результат
+спробують використати (<code>double(2) + 1</code> - <code>TypeError</code>). Тому в лабах (ЛР1, с. 5, с. 12) - завжди
+<code>return</code>, а друк - поза функцією.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def greet(name: str) -&gt; str:
+    &quot;&quot;&quot;Повертає привітання.
+
+    &gt;&gt;&gt; greet(&quot;Оля&quot;)
+    'Привіт, Оля!'
+    &quot;&quot;&quot;
+    return f&quot;Привіт, {name}!&quot;
+</code></pre>
+</details>
+<p><strong>Помилка 2.</strong> Рахуємо вік.</p>
+<pre><code class="language-python"># БАГ
+# ввід: 2007
+birth_year = input(&quot;Рік народження: &quot;)
+age = 2026 - birth_year
+print(&quot;Вам&quot;, age, &quot;років&quot;)
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>TypeError: unsupported operand type(s) for -: 'int' and 'str'</code>. <code>input</code> повернув рядок <code>"2007"</code>,
+а від числа рядок не відняти. Те саме на парі знайшов <code>mypy</code> (порівняння <code>str</code> з <code>int</code>). Виправлення:</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+# ввід: 2007
+birth_year = int(input(&quot;Рік народження: &quot;))
+age = 2026 - birth_year
+print(&quot;Вам&quot;, age, &quot;років&quot;)
+</code></pre>
+<pre><code class="language-text">Рік народження: 2007
+Вам 19 років
+</code></pre>
+</details>
+<p><strong>Помилка 3.</strong> Шаблон на три значення.</p>
+<pre><code class="language-python"># БАГ
+hours = 3
+minutes = 7
+seconds = 5
+print(&quot;Час: %d год %d хв %d с&quot; % (hours, minutes))
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>TypeError: not enough arguments for format string</code>. У шаблоні три <code>%d</code>, а значень два. Правило з
+Лекції 2, с. 3: кількість спеціальних символів зліва = кількості значень справа.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+hours = 3
+minutes = 7
+seconds = 5
+print(&quot;Час: %d год %d хв %d с&quot; % (hours, minutes, seconds))
+print(f&quot;Час: {hours:02d}:{minutes:02d}:{seconds:02d}&quot;)
+</code></pre>
+<pre><code class="language-text">Час: 3 год 7 хв 5 с
+Час: 03:07:05
+</code></pre>
+<p>Другий рядок - той самий результат f-рядком у форматі ЛР1, с. 4.</p>
+</details>
+<h2 id="5-склади-з-рядків">5. Склади з рядків</h2>
+<p><strong>Задача 1.</strong> Функція рахує площу кімнати, програма друкує її з 1 знаком. Відступи вже правильні.
+<strong>Один рядок зайвий</strong> - знайди.</p>
+<pre><code class="language-parsons">area = rectangle_area(4.2, 3.5)
+    return width * height
+print(f&quot;Площа кімнати: {area:.1f} м²&quot;)
+def rectangle_area(width: float, height: float) -&gt; float:
+    print(width * height)
+    &quot;&quot;&quot;Повертає площу прямокутника в м².&quot;&quot;&quot;
+</code></pre>
+<details>
+<summary>Розвʼязок</summary>
+<pre><code class="language-python">def rectangle_area(width: float, height: float) -&gt; float:
+    &quot;&quot;&quot;Повертає площу прямокутника в м².&quot;&quot;&quot;
+    return width * height
+
+
+area = rectangle_area(4.2, 3.5)
+print(f&quot;Площа кімнати: {area:.1f} м²&quot;)
+</code></pre>
+<pre><code class="language-text">Площа кімнати: 14.7 м²
+</code></pre>
+<p>Зайвий - <code>print(width * height)</code>: функція з ним друкувала б і повертала <code>None</code>, а тоді <code>area</code> = <code>None</code>
+і <code>{area:.1f}</code> впав би з <code>TypeError</code>. Докстрінг - одразу під <code>def</code>. Виклик - після оголошення: доки
+Python не виконав <code>def</code>, імені <code>rectangle_area</code> ще нема. До речі, 4.2 · 3.5 у памʼяті -
+<code>14.700000000000001</code>, а <code>:.1f</code> показує <code>14.7</code>.</p>
+</details>
+<p><strong>Задача 2.</strong> Сума цифр двозначного числа в стилі PEP 8 (Лекція 2, с. 15). Один рядок зайвий.</p>
+<pre><code class="language-parsons">second_digit = number % 10
+print(&quot;Сума цифр числа %d = %d&quot; % (number, digit_sum))
+number = int(input(&quot;Введіть двозначне число &quot;))
+sum = first_digit + second_digit
+digit_sum = first_digit + second_digit
+first_digit = number // 10
+</code></pre>
+<details>
+<summary>Розвʼязок</summary>
+<pre><code class="language-python"># ввід: 47
+number = int(input(&quot;Введіть двозначне число &quot;))
+first_digit = number // 10
+second_digit = number % 10
+digit_sum = first_digit + second_digit
+print(&quot;Сума цифр числа %d = %d&quot; % (number, digit_sum))
+</code></pre>
+<pre><code class="language-text">Введіть двозначне число 47
+Сума цифр числа 47 = 11
+</code></pre>
+<p>Зайвий - <code>sum = ...</code>: працював би, але затінив би вбудовану <code>sum()</code> (Лекція 2, с. 15), та й <code>print</code>
+використовує <code>digit_sum</code>. Рядки з <code>first_digit</code> і <code>second_digit</code> можна поміняти місцями, але обидва -
+після вводу і до суми.</p>
+</details>
+<h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
+<p>Заготовка - <code>zadachi/urok02.py</code>, розвʼязок - <code>_rozvyazky/urok02.py</code> (відкривай лише після 2 спроб).
+Обмеження як у ЛР1: без <code>if</code>, без циклів, без списків. Функція <strong>повертає</strong> рядок.</p>
+<pre><code class="language-text">python3 -m doctest zadachi/urok02.py -v
+</code></pre>
+<p><strong>Задача 1. <code>temperature_report(celsius)</code>.</strong> Повертає <code>'36.6 °C = 97.9 °F'</code>; для температури нижче
+нуля дописує <code>' (мороз)'</code>. Формула F = C · 9 / 5 + 32. <code>if</code> не можна.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Порахуй <code>fahrenheit</code> за формулою.</li>
+<li>Умова «мороз» - логічний вираз <code>celsius &lt; 0</code>, він дає <code>True</code> або <code>False</code>.</li>
+<li><code>True</code> у множенні = 1, <code>False</code> = 0 (ЛР1, с. 7). Тому <code>" (мороз)" * (celsius &lt; 0)</code> дає або текст,
+   або порожній рядок. Дужки навколо умови обовʼязкові: <code>*</code> виконується раніше за <code>&lt;</code>.</li>
+<li>Збери один f-рядок з <code>:.1f</code> для обох чисел і допиши в кінець «мороз».</li>
+<li>Граничний випадок: <code>0.0</code> - не мороз, тому <code>&lt;</code>, а не <code>&lt;=</code>.</li>
+</ol>
+</details>
+<p><strong>Задача 2. <code>receipt(item, price, quantity)</code>.</strong> Чек з двох рядків, склеєних через <code>\n</code>:
+<code>'Milk    | 2 x 28.50\nTotal: 57.00 UAH'</code>.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Порахуй <code>total = price * quantity</code>.</li>
+<li>Перший рядок: <code>{item:&lt;8}</code> (ширина 8, вліво), потім <code>|</code>, кількість, <code>x</code>, ціна з <code>:.2f</code>.</li>
+<li>Другий рядок: <code>Total:</code> і сума з <code>:.2f</code>, потім <code>UAH</code>.</li>
+<li>Між ними - <code>\n</code> прямо всередині f-рядка. Один <code>return</code> з одним рядком (вимога викладача).</li>
+<li>Подивись на doctest з <code>"Chocolate"</code>: 9 літер не влазять у ширину 8, і нічого не обрізається.</li>
+<li>Останній doctest з <code>print(...)</code> показує, як <code>\n</code> виглядає на екрані: два окремі рядки.</li>
+</ol>
+</details>
+<h3 id="заготовка-тут-же-можна-писати-і-запускати-doctest">Заготовка (тут же можна писати і запускати doctest)</h3>
+<p>Скачати файл: <a href="data/prog/zadachi/urok02.py">urok02.py</a> - поклади в теку <code>zadachi/</code> і запускай <code>python3 -m doctest zadachi/urok02.py -v</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 2. Задачі з doctest (заготовка).
+
+Як запускати (з теки Курс):
+    python3 -m doctest zadachi/urok02.py -v
+
+Спершу всі приклади червоні: замість коду стоїть pass, і функція
+повертає None. Заміни pass на свій код, щоб усі стали зелені.
+Обмеження як у ЛР1: без if/elif/else, без циклів, без списків.
+Функція ПОВЕРТАЄ рядок через return, а не друкує його.
+Розвʼязок - у _rozvyazky/urok02.py (відкривай лише після 2 спроб).
+&quot;&quot;&quot;
+import doctest
+
+
+def temperature_report(celsius: float) -&gt; str:
+    &quot;&quot;&quot;Повертає рядок «C °C = F °F», а для морозу дописує « (мороз)».
+
+    Формула: F = C * 9 / 5 + 32. Обидва числа - з одним знаком
+    після коми. Мороз - коли температура нижче нуля (0.0 - ще ні).
+    Без if: використай прийом «рядок * умова».
+
+    :param celsius: температура в градусах Цельсія
+    :return: рядок-звіт
+
+    &gt;&gt;&gt; temperature_report(0.0)
+    '0.0 °C = 32.0 °F'
+    &gt;&gt;&gt; temperature_report(36.6)
+    '36.6 °C = 97.9 °F'
+    &gt;&gt;&gt; temperature_report(100.0)
+    '100.0 °C = 212.0 °F'
+    &gt;&gt;&gt; temperature_report(-40.0)
+    '-40.0 °C = -40.0 °F (мороз)'
+    &gt;&gt;&gt; temperature_report(-0.5)
+    '-0.5 °C = 31.1 °F (мороз)'
+    &quot;&quot;&quot;
+    pass
+
+
+def receipt(item: str, price: float, quantity: int) -&gt; str:
+    &quot;&quot;&quot;Повертає чек з двох рядків, склеєних через символ нового рядка.
+
+    Перший рядок: назва товару (займає щонайменше 8 знаків,
+    вирівняна вліво), риска, кількість і ціна за штуку.
+    Другий рядок: загальна сума. Ціни - з двома знаками після коми.
+    Один return з одним f-рядком.
+
+    :param item: назва товару
+    :param price: ціна за штуку, грн
+    :param quantity: кількість штук (0 або більше)
+    :return: текст чека
+
+    &gt;&gt;&gt; receipt(&quot;Milk&quot;, 28.5, 2)
+    'Milk    | 2 x 28.50\\nTotal: 57.00 UAH'
+    &gt;&gt;&gt; receipt(&quot;Tea&quot;, 45.0, 0)
+    'Tea     | 0 x 45.00\\nTotal: 0.00 UAH'
+    &gt;&gt;&gt; receipt(&quot;Chocolate&quot;, 52.25, 3)
+    'Chocolate| 3 x 52.25\\nTotal: 156.75 UAH'
+    &gt;&gt;&gt; print(receipt(&quot;Bread&quot;, 19.9, 1))
+    Bread   | 1 x 19.90
+    Total: 19.90 UAH
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 2. Розвʼязки задач з doctest.
+
+Відкривай лише після 2 спроб написати самому.
+Перевірка: python3 -m doctest _rozvyazky/urok02.py -v
+&quot;&quot;&quot;
+import doctest
+
+
+def temperature_report(celsius: float) -&gt; str:
+    &quot;&quot;&quot;Повертає рядок «C °C = F °F», а для морозу дописує « (мороз)».
+
+    Формула: F = C * 9 / 5 + 32. Обидва числа - з одним знаком
+    після коми. Мороз - коли температура нижче нуля (0.0 - ще ні).
+    Без if: використай прийом «рядок * умова».
+
+    :param celsius: температура в градусах Цельсія
+    :return: рядок-звіт
+
+    &gt;&gt;&gt; temperature_report(0.0)
+    '0.0 °C = 32.0 °F'
+    &gt;&gt;&gt; temperature_report(36.6)
+    '36.6 °C = 97.9 °F'
+    &gt;&gt;&gt; temperature_report(100.0)
+    '100.0 °C = 212.0 °F'
+    &gt;&gt;&gt; temperature_report(-40.0)
+    '-40.0 °C = -40.0 °F (мороз)'
+    &gt;&gt;&gt; temperature_report(-0.5)
+    '-0.5 °C = 31.1 °F (мороз)'
+    &quot;&quot;&quot;
+    fahrenheit = celsius * 9 / 5 + 32
+    # celsius &lt; 0 - це логічний вираз: True або False.
+    # У множенні True поводиться як 1, False як 0, тому
+    # &quot; (мороз)&quot; * True = &quot; (мороз)&quot;, а &quot; (мороз)&quot; * False = &quot;&quot;.
+    # Строго «&lt; 0», а не «&lt;= 0»: 0.0 °C ще не мороз (див. doctest).
+    frost_note = &quot; (мороз)&quot; * (celsius &lt; 0)
+    # :.1f - один знак після коми. 97.88 показується як 97.9,
+    # але саме число fahrenheit не змінюється (це лише показ).
+    return f&quot;{celsius:.1f} °C = {fahrenheit:.1f} °F{frost_note}&quot;
+
+
+def receipt(item: str, price: float, quantity: int) -&gt; str:
+    &quot;&quot;&quot;Повертає чек з двох рядків, склеєних через символ нового рядка.
+
+    Перший рядок: назва товару (займає щонайменше 8 знаків,
+    вирівняна вліво), риска, кількість і ціна за штуку.
+    Другий рядок: загальна сума. Ціни - з двома знаками після коми.
+    Один return з одним f-рядком.
+
+    :param item: назва товару
+    :param price: ціна за штуку, грн
+    :param quantity: кількість штук (0 або більше)
+    :return: текст чека
+
+    &gt;&gt;&gt; receipt(&quot;Milk&quot;, 28.5, 2)
+    'Milk    | 2 x 28.50\\nTotal: 57.00 UAH'
+    &gt;&gt;&gt; receipt(&quot;Tea&quot;, 45.0, 0)
+    'Tea     | 0 x 45.00\\nTotal: 0.00 UAH'
+    &gt;&gt;&gt; receipt(&quot;Chocolate&quot;, 52.25, 3)
+    'Chocolate| 3 x 52.25\\nTotal: 156.75 UAH'
+    &gt;&gt;&gt; print(receipt(&quot;Bread&quot;, 19.9, 1))
+    Bread   | 1 x 19.90
+    Total: 19.90 UAH
+    &quot;&quot;&quot;
+    total = price * quantity
+    # {item:&lt;8} - ширина щонайменше 8, вирівнювання вліво. Ширина -
+    # це МІНІМУМ: &quot;Chocolate&quot; має 9 літер, його не обрізає, тому
+    # риска стоїть одразу після назви (див. третій doctest).
+    # \n всередині рядка - це один символ «перейти на новий рядок».
+    # doctest без print показує його як \n, а print - як перенос.
+    return (f&quot;{item:&lt;8}| {quantity} x {price:.2f}\n&quot;
+            f&quot;Total: {total:.2f} UAH&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+</details>
+<h2 id="7-поясни-чому">7. Поясни чому</h2>
+<p><strong>1. Чому у лабах функція має повертати результат через <code>return</code>, а не друкувати його?</strong></p>
+<details>
+<summary>Еталон</summary>
+<p><code>print</code> показує текст людині, а функція при цьому повертає <code>None</code>: з результатом далі нічого не
+зробиш (не додаси, не передаси в іншу функцію, не перевіриш). doctest порівнює саме повернене
+значення. Крім того, ЛР1, с. 11-12 вимагає розділяти обчислення (функція) і ввід-вивід (поза
+функцією): так функцію можна тестувати й використовувати з будь-яким джерелом даних.</p>
+</details>
+<p><strong>2. Чому <code>input()</code> + <code>input()</code> склеює числа, а не додає?</strong></p>
+<details>
+<summary>Еталон</summary>
+<p><code>input</code> завжди повертає <strong>рядок</strong> (<code>str</code>), навіть якщо набрали цифри. Що робить <code>+</code>, залежить від
+типу: для чисел - додавання, для рядків - склеювання. <code>"12" + "18"</code> = <code>"1218"</code>. Тому одразу пишуть
+<code>int(input(...))</code> або <code>float(input(...))</code>.</p>
+</details>
+<p><strong>3. Чому код, що порушує PEP 8, працює, а викладач однаково вимагає <code>flake8</code>?</strong></p>
+<details>
+<summary>Еталон</summary>
+<p>PEP 8 - не синтаксис, а домовленість (Лекція 2, с. 7): інтерпретатору байдуже, чи є пробіли навколо
+<code>=</code>. Але код читають у 10 разів частіше, ніж пишуть, і в команді всі мають писати однаково. Частина
+правил ловить справжні проблеми: імʼя <code>sum</code> ламає вбудовану функцію, <code>flake8</code> бачить невикористані
+змінні, <code>mypy</code> - рядок там, де чекали число. І ще: проходження <code>flake8</code> не означає правильний
+алгоритм, а зелений doctest не означає гарний стиль (ЛР1, с. 9) - перевіряють обидва.</p>
+</details>
+<h2 id="8-що-запамʼятати">8. Що запамʼятати</h2>
+<ul>
+<li><code>input()</code> повертає рядок завжди; числа - <code>int(input())</code> / <code>float(input())</code>.</li>
+<li><code>print(..., sep=" ", end="\n")</code>: <code>sep</code> між значеннями, <code>end</code> у кінці; <code>print</code> повертає <code>None</code>.</li>
+<li><code>%</code>: кількість <code>%d</code>/<code>%s</code>/<code>%f</code> = кількість значень; <code>%%</code> - знак відсотка; <code>%d</code> відкидає дріб.</li>
+<li>f-рядок: <code>{x:.2f}</code> знаки після коми, <code>{n:02d}</code> нулі зліва, <code>{s:&lt;10}</code> / <code>{s:&gt;10}</code> / <code>{s:^10}</code>
+  ширина і вирівнювання (ширина - мінімум). Форматування змінює показ, не число.</li>
+<li><code>def імʼя(параметр: тип) -&gt; тип:</code>, докстрінг, <code>return</code>. Без <code>return</code> - <code>None</code>. Змінні в функції
+  локальні.</li>
+<li><strong>Друкує ≠ повертає.</strong> У лабах функція повертає, друк - поза нею.</li>
+<li>Анотації типів Python не перевіряє, це робить <code>mypy</code>.</li>
+<li>PEP 8: 4 пробіли, ≤ 79 знаків, 2 порожні рядки між функціями, <code>snake_case</code>, <code>UPPER_SNAKE_CASE</code>,
+  не <code>sum</code>/<code>list</code>/<code>str</code>. Перевірка: <code>flake8</code>, <code>pycodestyle</code>, <code>ruff</code>; виправлення: <code>black</code>.</li>
+</ul>
+<p><strong>Де в лабах:</strong></p>
+<ul>
+<li>ЛР1, завд. 1: частку виводять з трьома знаками (<code>12.700</code>, <code>44.000</code>) - це <code>:.3f</code> (ЛР1, с. 4, с. 14).</li>
+<li>ЛР1, завд. 2: формат <code>HH:MM:SS</code> - <code>{hours:02d}:{minutes:02d}:{seconds:02d}</code> (ЛР1, с. 4, с. 16).</li>
+<li>ЛР1, завд. 1-3: функція повертає <code>str</code> одним <code>return</code>, частини через <code>\n</code> (ЛР1, с. 6); введення -
+  <code>int(input(...))</code> поза функцією; структура програми - ЛР1, с. 11.</li>
+<li>ЛР1, с. 9-10 і ЛР2, с. 9-10: <code>pycodestyle</code>, <code>flake8</code>, <code>ruff</code>, <code>black</code>, <code>mypy</code>; у ЛР2 (завд. 1-3)
+  прямо написано прогнати всі.</li>
+<li>ЛР2, завд. 2: виняток із правила! <code>age_chat(age: int) -&gt; None</code> за doctest <strong>друкує</strong> (у прикладах
+  нема лапок), а <code>year_word</code> - <strong>повертає</strong> рядок (ЛР2, с. 14, с. 17). Читай doctest першим.</li>
+<li>ЛР2, завд. 3: <code>body_moving(...) -&gt; str</code> повертає рядок з числами, округленими до 2 знаків, - це
+  <code>:.2f</code>.</li>
+</ul>
+<hr>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/urok-03">Наступний урок →</a></p>

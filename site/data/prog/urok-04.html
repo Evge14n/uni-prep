@@ -1,0 +1,809 @@
+<h1 id="урок-4-цикли-while-for-range-break-continue-else">Урок 4. Цикли: while, for, range, break, continue, else</h1>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/dovidnyk">Довідник функцій</a></p>
+<blockquote>
+<p>Лекція 4 (с. 1-14; кінець лекції, с. 15-18 про списки, - в уроці 5), потрібно для: ЛР3 (завд. 1-4: цифри числа, прості числа, НСД), ЛР4 (завд. 1: кожен візерунок - цикл for), ЛР5 (завд. 1-3: суми й добутки в циклі), ЛР6 (завд. 1: цифри, дільники, цикли без списків). Час: 30 хв. Перед цим уроком: урок 3.</p>
+</blockquote>
+<h2 id="1-ідея">1. Ідея</h2>
+<p>Лекція 4 починається з жарту (с. 1): 15 рядків <code>print(5)</code> підряд. Набирати так 1000 рядків ніхто не буде.
+Цикл - це «повтори цей шматок коду кілька разів». Лекція називає його третьою базовою конструкцією
+програмування, поруч з лінійною програмою і розгалуженням <code>if</code> (с. 2).</p>
+<p>У Python два цикли (с. 2-3):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>цикл</th>
+<th>як читати</th>
+<th>коли брати</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>while умова:</code></td>
+<td>«поки умова True - роби тіло»</td>
+<td>не знаєш наперед, скільки буде кроків (цифри числа, «поки не знайду»)</td>
+</tr>
+<tr>
+<td><code>for x in колекція:</code></td>
+<td>«для кожного x з колекції - роби тіло»</td>
+<td>знаєш, що перебирати (числа від 1 до N, елементи списку)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>while крок за кроком</strong> (правило з с. 3): 1) Python рахує умову; 2) якщо <code>True</code> - виконує тіло і
+повертається до пункту 1; 3) якщо <code>False</code> - цикл закінчено, ідемо далі.</p>
+<pre><code class="language-python">countdown = 3
+while countdown &gt; 0:
+    print(&quot;залишилось&quot;, countdown)
+    countdown -= 1
+print(&quot;старт!&quot;)
+</code></pre>
+<p>Вивід:</p>
+<pre><code class="language-text">залишилось 3
+залишилось 2
+залишилось 1
+старт!
+</code></pre>
+<p>Умова перевіряється 4 рази: при 3, 2, 1 вона <code>True</code>, при 0 - <code>False</code>, і цикл закінчується.
+Рядок <code>countdown -= 1</code> - це <code>countdown = countdown - 1</code>. Якщо його забути, <code>countdown</code> назавжди 3,
+умова назавжди <code>True</code>, програма «зависає». Лекція називає це зациклюванням (с. 3, і ще раз Лекція 5, с. 18).
+Правило: <strong>тіло while мусить змінювати те, від чого залежить умова.</strong></p>
+<p><strong>range - «лінійка» чисел для for</strong> (с. 8-9). <code>range(b, c, d)</code> - це арифметична прогресія:
+починаємо з <code>b</code>, крок <code>d</code>, <strong>зупиняємось ДО <code>c</code></strong> (саме <code>c</code> не входить).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>виклик</th>
+<th>числа</th>
+<th>чому</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>range(5)</code></td>
+<td>0 1 2 3 4</td>
+<td>старт 0 і крок 1 можна не писати</td>
+</tr>
+<tr>
+<td><code>range(2, 6)</code></td>
+<td>2 3 4 5</td>
+<td>6 не входить</td>
+</tr>
+<tr>
+<td><code>range(1, 10, 2)</code></td>
+<td>1 3 5 7 9</td>
+<td>крок 2</td>
+</tr>
+<tr>
+<td><code>range(1, N + 1)</code></td>
+<td>1 ... N</td>
+<td>щоб N увійшло, пишемо <code>N + 1</code></td>
+</tr>
+<tr>
+<td><code>range(10, 0, -3)</code></td>
+<td>10 7 4 1</td>
+<td>від'ємний крок - спадаємо (с. 11-12, подвійний факторіал)</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">print(list(range(1, 10, 2)))
+for number in range(3):
+    print(&quot;крок&quot;, number)
+</code></pre>
+<pre><code class="language-text">[1, 3, 5, 7, 9]
+крок 0
+крок 1
+крок 2
+</code></pre>
+<p><code>list(...)</code> тут лише щоб побачити числа (так робить лекція на с. 7). Сам <code>range</code> чисел не зберігає,
+а видає їх по одному «на льоту», тому навіть <code>range(10**9)</code> не з'їдає пам'ять (с. 9).</p>
+<p><strong>Накопичувач, лічильник, прапорець</strong> - три змінні, які живуть майже в кожному циклі:</p>
+<ul>
+<li><em>накопичувач суми</em>: <code>suma = 0</code> ДО циклу, <code>suma += i</code> у тілі (с. 7). Чому 0: додати 0 - нічого не змінити.</li>
+<li><em>накопичувач добутку</em>: <code>p = 1</code> ДО циклу, <code>p = p * k</code> у тілі (подвійний факторіал, с. 11-12). Чому 1:
+  помножити на 1 - нічого не змінити. Почнеш з 0 - весь добуток буде 0.</li>
+<li><em>лічильник</em>: <code>i = 2</code>, потім <code>i = i + 1</code> (перевірка на простоту, с. 4).</li>
+<li><em>прапорець</em>: <code>prime = True</code> («поки що вважаємо простим»), а в циклі <code>prime = False</code>, коли знайшли дільник (с. 4).</li>
+</ul>
+<p>Скорочені присвоєння: <code>suma += 3</code> це <code>suma = suma + 3</code>; так само <code>-=</code>, <code>*=</code>, <code>//=</code>, <code>%=</code>
+(лекція показує <code>suma %= 3</code> = <code>suma = suma % 3</code>, с. 2).</p>
+<p><strong>break і continue</strong> (с. 12-13). <code>break</code> - вийти з циклу зовсім, прямо зараз. <code>continue</code> - кинути
+решту тіла і перейти до наступного кроку. Приклад з лекції (с. 12): у тілі <code>print(i)</code>, потім
+<code>continue</code>, потім <code>print("hello")</code> - <code>hello</code> не надрукується ніколи, бо до нього не доходить.</p>
+<p><strong>else у циклі</strong> (с. 13-14) - найзаплутаніша річ лекції. Блок <code>else</code> після <code>for</code> або <code>while</code>
+виконується, <strong>якщо цикл закінчився сам, без break</strong>. Це НЕ «якщо цикл не виконався жодного разу».
+Типове використання - пошук: знайшли - <code>break</code>; не знайшли - цикл дійшов до кінця, і спрацьовує <code>else</code>.</p>
+<p><strong>Ледачий and</strong> (с. 2 і с. 4). <code>A and B</code>: якщо <code>A</code> хибне, Python вже знає відповідь (<code>False</code>) і <code>B</code>
+<strong>навіть не обчислює</strong>. Лекція показує це на діленні на нуль:</p>
+<pre><code class="language-python">number = 0
+print(number != 0 and 10 / number &gt; 1)
+print(10 / number &gt; 1 and number != 0)
+</code></pre>
+<pre><code class="language-text">False
+Traceback (most recent call last):
+  ...
+ZeroDivisionError: division by zero
+</code></pre>
+<p>Перший рядок: <code>number != 0</code> дає <code>False</code>, ділення не робиться, друкується <code>False</code>. Другий рядок: ділення
+стоїть першим, і програма падає. Порядок у <code>and</code> важливий! З <code>or</code> те саме навпаки: якщо ліва частина
+<code>True</code>, права не рахується (у Лекції 4 показано лише <code>and</code>). Тому в лекції оптимізація
+<code>while (i &lt;= N - 1) and prime:</code> (с. 4): щойно <code>prime</code> став <code>False</code>, цикл зупиняється.</p>
+<p>Ще дві дрібниці з лекції. 1) Тернарний вираз у циклі: <code>max_value = a if a &gt; max_value else max_value</code> -
+«онови максимум» (с. 11-12). 2) Рядки на кшталт <code>"НСД(%d, %d) = %d" % (N, M, U)</code> (с. 6) - старий спосіб
+форматування: <code>%d</code> - ціле, <code>%f</code> - дробове, значення беруться з кортежу праворуч. f-рядок з уроку 2 робить
+те саме. І зверни увагу: на с. 11 лекція назвала змінну <code>max</code>, а на с. 12 перейменувала в <code>max_value</code>.
+Правильно: імена <code>max</code>, <code>sum</code>, <code>min</code> ховають вбудовані функції, після цього <code>max(3, 7)</code> вже не працює.</p>
+<h2 id="2-розібраний-приклад">2. Розібраний приклад</h2>
+<p><strong>Умова.</strong> Напиши функцію <code>max_digit(number)</code>, яка ПОВЕРТАЄ найбільшу цифру натурального числа.
+Наприклад, для 4096 - це 9. (Це поєднання двох прийомів лекції: розклад числа на цифри через <code>% 10</code>
+і <code>// 10</code>, с. 5, і оновлення максимуму, с. 11.)</p>
+<pre><code class="language-python">def max_digit(number: int) -&gt; int:
+    &quot;&quot;&quot;Повертає найбільшу цифру натурального числа.
+
+    &gt;&gt;&gt; max_digit(4096)
+    9
+    &gt;&gt;&gt; max_digit(7)
+    7
+    &quot;&quot;&quot;
+    largest = 0
+    while number &gt; 0:
+        digit = number % 10
+        largest = digit if digit &gt; largest else largest
+        number //= 10
+    return largest
+
+
+print(max_digit(4096))
+print(max_digit(7))
+print(max_digit(30500))
+</code></pre>
+<p>Вивід:</p>
+<pre><code class="language-text">9
+7
+5
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>рядок</th>
+<th>що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>def max_digit(number: int) -&gt; int:</code></td>
+<td>функція отримує ціле число, обіцяє повернути ціле</td>
+</tr>
+<tr>
+<td><code>largest = 0</code></td>
+<td>накопичувач максимуму. Чому 0: будь-яка цифра ≥ 0, тож перша ж цифра його «переб'є» або дорівняє</td>
+</tr>
+<tr>
+<td><code>while number &gt; 0:</code></td>
+<td>поки в числі лишилися цифри. Скільки їх - не знаємо, тому <code>while</code>, а не <code>for</code></td>
+</tr>
+<tr>
+<td><code>digit = number % 10</code></td>
+<td>остання цифра: остача від ділення на 10 (4096 % 10 = 6)</td>
+</tr>
+<tr>
+<td><code>largest = digit if digit &gt; largest else largest</code></td>
+<td>якщо нова цифра більша - запам'ятати її, інакше лишити старий максимум</td>
+</tr>
+<tr>
+<td><code>number //= 10</code></td>
+<td>відкинути останню цифру (4096 // 10 = 409). Без цього рядка - вічний цикл</td>
+</tr>
+<tr>
+<td><code>return largest</code></td>
+<td>ПОВЕРНУТИ результат. Не <code>print</code>: число піде туди, звідки функцію викликали</td>
+</tr>
+<tr>
+<td><code>print(max_digit(4096))</code></td>
+<td>друкує вже програма, не функція</td>
+</tr>
+</tbody>
+</table></div>
+<p>Трасувальна таблиця для <code>max_digit(4096)</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>ітерація</th>
+<th>number на початку</th>
+<th>умова <code>number &gt; 0</code></th>
+<th>digit</th>
+<th>largest після</th>
+<th>number після <code>//= 10</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>4096</td>
+<td>True</td>
+<td>6</td>
+<td>6</td>
+<td>409</td>
+</tr>
+<tr>
+<td>2</td>
+<td>409</td>
+<td>True</td>
+<td>9</td>
+<td>9</td>
+<td>40</td>
+</tr>
+<tr>
+<td>3</td>
+<td>40</td>
+<td>True</td>
+<td>0</td>
+<td>9</td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>True</td>
+<td>4</td>
+<td>9</td>
+<td>0</td>
+</tr>
+<tr>
+<td>-</td>
+<td>0</td>
+<td>False</td>
+<td>-</td>
+<td>-</td>
+<td>цикл закінчено, <code>return 9</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Цифри йдуть <strong>справа наліво</strong> (6, 9, 0, 4) - для максимуму порядок не важить. Умова перевіряється
+5 разів, а тіло виконується 4 рази (стільки, скільки цифр). Для 30500: цифри 0, 0, 5, 0, 3 - максимум 5.</p>
+<p>Що буде для <code>number = 0</code>? Умова одразу <code>False</code>, тіло не виконується жодного разу, повертається 0.
+І це правильно: у числа 0 найбільша цифра 0.</p>
+<p><strong>Закрий приклад і напиши його сам з пам'яті.</strong> Потім зміни на <code>min_digit</code> (найменша цифра).
+Підказка-пастка: з чого тепер починати накопичувач? Не з 0 (тоді мінімум завжди 0), а з 9 - більшої
+цифри не буває.</p>
+<h2 id="3-передбач-вивід">3. Передбач вивід</h2>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<pre><code class="language-python">for number in range(10, 0, -3):
+    print(number, end=&quot; &quot;)
+print()
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">10 7 4 1
+</code></pre>
+<p>Старт 10, крок -3: 10, 7, 4, 1. Наступне було б -2, але воно вже «за» межею 0 (при від'ємному кроці
+зупинка, коли число стає ≤ 0). <code>end=" "</code> - друкувати пробіл замість переходу на новий рядок;
+останній <code>print()</code> просто закінчує рядок.</p>
+</details>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<pre><code class="language-python">count = 10
+while count &gt; 0:
+    count -= 3
+    print(count)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">7
+4
+1
+-2
+</code></pre>
+<p>Пастка: <code>print</code> стоїть ПІСЛЯ зменшення. Трасування: 10 &gt; 0 - так, count = 7, друк 7; 7 &gt; 0, count = 4,
+друк 4; 4 &gt; 0, count = 1, друк 1; 1 &gt; 0 - так! count = -2, друк -2; -2 &gt; 0 - ні, кінець.
+Умова перевіряється лише на початку кроку, тому -2 встигає надрукуватися.</p>
+</details>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<pre><code class="language-python">total = 0
+for number in range(1, 8):
+    if number % 3 == 0:
+        continue
+    total += number
+print(total)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">19
+</code></pre>
+<p><code>range(1, 8)</code> дає 1..7. Для 3 і 6 спрацьовує <code>continue</code> - рядок <code>total += number</code> пропускається.
+Отже 1 + 2 + 4 + 5 + 7 = 19.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>number</th>
+<th><code>number % 3 == 0</code></th>
+<th>що сталося</th>
+<th>total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>False</td>
+<td>додали</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>False</td>
+<td>додали</td>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>True</td>
+<td>continue</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>False</td>
+<td>додали</td>
+<td>7</td>
+</tr>
+<tr>
+<td>5</td>
+<td>False</td>
+<td>додали</td>
+<td>12</td>
+</tr>
+<tr>
+<td>6</td>
+<td>True</td>
+<td>continue</td>
+<td>12</td>
+</tr>
+<tr>
+<td>7</td>
+<td>False</td>
+<td>додали</td>
+<td>19</td>
+</tr>
+</tbody>
+</table></div>
+</details>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<pre><code class="language-python">for number in [3, 5, 7]:
+    if number % 2 == 0:
+        print(&quot;знайшов парне:&quot;, number)
+        break
+else:
+    print(&quot;парних нема&quot;)
+
+for number in [3, 4, 7]:
+    if number % 2 == 0:
+        print(&quot;знайшов парне:&quot;, number)
+        break
+else:
+    print(&quot;парних нема&quot;)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">парних нема
+знайшов парне: 4
+</code></pre>
+<p>Перший цикл пройшов усі три числа без <code>break</code> - закінчився «природно», тому <code>else</code> спрацював (с. 14).
+Другий цикл на числі 4 зробив <code>break</code> - вихід «аварійний», <code>else</code> пропускається, і 7 навіть не перевіряється.
+Тобто <code>else</code> циклу = «не було break». Саме так у лекції пошук числа в послідовності (с. 14).</p>
+</details>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий. (Код з лекції, с. 12.)</p>
+<pre><code class="language-python">flag = True
+for i in range(10):
+    print(i)
+    for j in range(5):
+        print(&quot;----&quot;, j)
+        flag = False
+        break
+    if not flag:
+        break
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">0
+---- 0
+</code></pre>
+<p><code>break</code> виходить лише з <strong>найближчого</strong> циклу, у якому стоїть. Внутрішній <code>break</code> перериває
+<code>for j</code>, але зовнішній <code>for i</code> жив би далі. Тому лекція ставить прапорець <code>flag = False</code> і в
+зовнішньому циклі перевіряє <code>if not flag: break</code> - так виходять з двох циклів одразу.
+Без цих двох рядків вивід був би 0, ---- 0, 1, ---- 0, 2, ---- 0 ... (20 рядків).</p>
+</details>
+<h2 id="4-знайди-помилку">4. Знайди помилку</h2>
+<p>Кожна функція нижче має помилку, яку doctest ловить. Знайди її, перш ніж відкривати відповідь.</p>
+<pre><code class="language-python"># БАГ
+def sum_up_to(limit: int) -&gt; int:
+    &quot;&quot;&quot;Повертає суму 1 + 2 + ... + limit.
+
+    &gt;&gt;&gt; sum_up_to(4)
+    10
+    &quot;&quot;&quot;
+    for number in range(1, limit + 1):
+        total = 0
+        total += number
+    return total
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>total = 0</code> стоїть ВСЕРЕДИНІ циклу, тож на кожному кроці накопичувач обнуляється. Після
+останнього кроку там лише останнє число: <code>sum_up_to(4)</code> повертає 4, а не 10. Ще гірше:
+<code>sum_up_to(0)</code> впаде з <code>UnboundLocalError</code>, бо цикл не виконався ні разу і <code>total</code> взагалі не створено.
+Правило: накопичувач створюють ДО циклу, а в циклі лише додають.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def sum_up_to(limit: int) -&gt; int:
+    &quot;&quot;&quot;Повертає суму 1 + 2 + ... + limit.
+
+    &gt;&gt;&gt; sum_up_to(4)
+    10
+    &gt;&gt;&gt; sum_up_to(0)
+    0
+    &quot;&quot;&quot;
+    total = 0
+    for number in range(1, limit + 1):
+        total += number
+    return total
+</code></pre>
+</details>
+<pre><code class="language-python"># БАГ
+def sum_odd_up_to(limit: int) -&gt; int:
+    &quot;&quot;&quot;Повертає суму непарних чисел від 1 до limit включно.
+
+    &gt;&gt;&gt; sum_odd_up_to(7)
+    16
+    &quot;&quot;&quot;
+    total = 0
+    for number in range(1, limit, 2):
+        total += number
+    return total
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>Межа <code>range</code>: <code>range(1, 7, 2)</code> дає 1, 3, 5 - число 7 НЕ входить, бо <code>stop</code> завжди «до, не включно».
+Повертається 9, а треба 1 + 3 + 5 + 7 = 16. «Включно до limit» - це <code>range(1, limit + 1, 2)</code>
+(так лекція робить у сумі парних: <code>range(2, N + 1, 2)</code>, с. 9).</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def sum_odd_up_to(limit: int) -&gt; int:
+    &quot;&quot;&quot;Повертає суму непарних чисел від 1 до limit включно.
+
+    &gt;&gt;&gt; sum_odd_up_to(7)
+    16
+    &gt;&gt;&gt; sum_odd_up_to(8)
+    16
+    &quot;&quot;&quot;
+    total = 0
+    for number in range(1, limit + 1, 2):
+        total += number
+    return total
+</code></pre>
+</details>
+<pre><code class="language-python"># БАГ
+def count_digits(number: int) -&gt; int:
+    &quot;&quot;&quot;Повертає кількість цифр натурального числа.
+
+    &gt;&gt;&gt; count_digits(507) + 1
+    4
+    &quot;&quot;&quot;
+    count = 0
+    while number &gt; 0:
+        count += 1
+        number //= 10
+    print(count)
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>print</code> замість <code>return</code>. Функція друкує 3, але повертає <code>None</code>, і <code>None + 1</code> дає <code>TypeError</code>.
+Підступне: якби doctest був просто <code>&gt;&gt;&gt; count_digits(507)</code> / <code>3</code>, він би ПРОЙШОВ - doctest бачить
+надруковане «3» і задоволений. Тому викладач і вимагає <code>return</code>: функцію, що друкує, не можна
+використати далі (додати, порівняти, передати в іншу функцію). Цикл тут правильний.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def count_digits(number: int) -&gt; int:
+    &quot;&quot;&quot;Повертає кількість цифр натурального числа.
+
+    &gt;&gt;&gt; count_digits(507) + 1
+    4
+    &gt;&gt;&gt; count_digits(9)
+    1
+    &quot;&quot;&quot;
+    count = 0
+    while number &gt; 0:
+        count += 1
+        number //= 10
+    return count
+</code></pre>
+</details>
+<h2 id="5-склади-з-рядків">5. Склади з рядків</h2>
+<p><strong>Задача 1.</strong> Функція <code>count_multiples(limit)</code> повертає, скільки чисел від 1 до <code>limit</code> включно діляться
+на 3 або на 5. Розстав рядки в правильному порядку і з правильними відступами. Один рядок зайвий (пастка).</p>
+<pre><code class="language-parsons">    return count
+def count_multiples(limit: int) -&gt; int:
+        if number % 3 == 0 or number % 5 == 0:
+    count = 0
+            count += 1
+    for number in range(1, limit + 1):
+    count = 1
+</code></pre>
+<details>
+<summary>Розв'язок</summary>
+<pre><code class="language-python">def count_multiples(limit: int) -&gt; int:
+    count = 0
+    for number in range(1, limit + 1):
+        if number % 3 == 0 or number % 5 == 0:
+            count += 1
+    return count
+
+
+print(count_multiples(10))
+print(count_multiples(15))
+</code></pre>
+<pre><code class="language-text">5
+7
+</code></pre>
+<p>Зайвий рядок - <code>count = 1</code>: лічильник знайденого починають з 0 (ще нічого не знайшли).
+Для 10 підходять 3, 5, 6, 9, 10 - п'ять чисел. Для 15 додаються 12 і 15 - сім.
+<code>return</code> стоїть на рівні <code>for</code> (4 пробіли), а не всередині циклу, інакше функція завершиться на першому кроці.</p>
+</details>
+<p><strong>Задача 2.</strong> Програма читає числа, доки не введуть 0. Від'ємні пропускає. Друкує суму додатних.
+Це прийом <code>while True</code> + <code>break</code> + <code>continue</code> з лекції (с. 12-13). Тут зайвих рядків нема.</p>
+<pre><code class="language-parsons">    if value &lt; 0:
+print(&quot;сума додатних:&quot;, total)
+        break
+while True:
+    total += value
+total = 0
+        continue
+    value = int(input(&quot;число: &quot;))
+    if value == 0:
+</code></pre>
+<details>
+<summary>Розв'язок</summary>
+<pre><code class="language-python"># ввід: 4 | -2 | 5 | 0
+total = 0
+while True:
+    value = int(input(&quot;число: &quot;))
+    if value == 0:
+        break
+    if value &lt; 0:
+        continue
+    total += value
+print(&quot;сума додатних:&quot;, total)
+</code></pre>
+<pre><code class="language-text">число: 4
+число: -2
+число: 5
+число: 0
+сума додатних: 9
+</code></pre>
+<p><code>while True</code> сам ніколи не закінчиться - вихід лише через <code>break</code>. Перевірку на 0 ставимо одразу після
+<code>input</code>, інакше 0 встигне додатися (не страшно для суми, але для максимуму чи добутку це вже помилка).
+-2 «перескакує» <code>total += value</code> через <code>continue</code>. Лекція пояснює, навіщо так: умову виходу треба
+перевіряти ПІСЛЯ читання числа, а не на початку циклу (с. 13).</p>
+</details>
+<h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
+<p>Заготовка: <code>zadachi/urok04.py</code>. Розв'язок: <code>_rozvyazky/urok04.py</code> (відкривай лише після 2 спроб).</p>
+<pre><code>python3 -m doctest zadachi/urok04.py -v
+</code></pre>
+<p>Спершу всі тести червоні (у функціях лише <code>pass</code>). Дописуєш тіло - стають зелені.</p>
+<p><strong>Задача 1. <code>alternating_sum(count)</code></strong> - знакозмінна сума <code>1 - 2 + 3 - 4 + ... ± count</code>.
+Наприклад, <code>alternating_sum(5)</code> = 1 - 2 + 3 - 4 + 5 = 3. Обмеження: без <code>**</code> і без <code>if</code>.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Накопичувач <code>total = 0</code> і змінна знаку <code>sign = 1</code> - ДО циклу.</li>
+<li><code>for number in range(1, count + 1):</code> - щоб <code>count</code> увійшло.</li>
+<li>У тілі: додати <code>sign * number</code>, потім перевернути знак: <code>sign = -sign</code>.</li>
+<li>Після циклу <code>return total</code>.</li>
+</ol>
+<p>Знак через <code>sign = -sign</code> замість <code>(-1) ** n</code> - саме те, що треба в ЛР5, завд. 1 (там заборонено
+піднесення до степеня).</p>
+</details>
+<p><strong>Задача 2. <code>collatz_steps(number)</code></strong> - гра «3n + 1» (у лекціях нема, це відома задача). Беремо число.
+Якщо воно парне - ділимо навпіл, якщо непарне - множимо на 3 і додаємо 1. Повторюємо, доки не отримаємо 1.
+Функція повертає, скільки кроків для цього треба. Для 6: 6 → 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1, тобто 8 кроків.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Скільки буде кроків - невідомо, тому <code>while number != 1:</code>.</li>
+<li>Лічильник <code>steps = 0</code> до циклу, <code>steps += 1</code> у кінці тіла.</li>
+<li>У тілі <code>if number % 2 == 0:</code> ... <code>else:</code> ... - нове значення <code>number</code>.</li>
+<li>Ділення - лише <code>//</code>, інакше вийде дробове число 3.0, і тести не пройдуть.</li>
+<li>Для <code>number = 1</code> цикл не виконується ні разу - повертається 0. Це граничний випадок у тестах.</li>
+</ol>
+</details>
+<h3 id="заготовка-тут-же-можна-писати-і-запускати-doctest">Заготовка (тут же можна писати і запускати doctest)</h3>
+<p>Скачати файл: <a href="data/prog/zadachi/urok04.py">urok04.py</a> - поклади в теку <code>zadachi/</code> і запускай <code>python3 -m doctest zadachi/urok04.py -v</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 4. Задачі з doctest (заготовка).
+
+Як запускати (з теки Курс):
+    python3 -m doctest zadachi/urok04.py -v
+
+Спершу всі приклади червоні: замість коду стоїть pass, і функція
+повертає None. Заміни pass на свій код, щоб усі стали зелені.
+Тут уже можна цикли for і while, if, break, continue (Лекція 4).
+Розвʼязок - у _rozvyazky/urok04.py (відкривай лише після 2 спроб).
+&quot;&quot;&quot;
+import doctest
+
+
+def alternating_sum(count: int) -&gt; int:
+    &quot;&quot;&quot;Повертає знакозмінну суму 1 - 2 + 3 - 4 + ... ± count.
+
+    Знак чергується: непарні числа додаються, парні віднімаються.
+    Обмеження: без ** і без if (знак тримай в окремій змінній).
+
+    :param count: останнє число суми (0 або більше)
+    :return: значення суми; для count = 0 сума порожня, тобто 0
+
+    &gt;&gt;&gt; alternating_sum(1)
+    1
+    &gt;&gt;&gt; alternating_sum(2)
+    -1
+    &gt;&gt;&gt; alternating_sum(5)
+    3
+    &gt;&gt;&gt; alternating_sum(10)
+    -5
+    &gt;&gt;&gt; alternating_sum(0)
+    0
+    &quot;&quot;&quot;
+    pass
+
+
+def collatz_steps(number: int) -&gt; int:
+    &quot;&quot;&quot;Повертає кількість кроків гри «3n + 1», щоб дійти до 1.
+
+    Крок: парне число ділимо навпіл, непарне множимо на 3 і додаємо 1.
+    Для 6: 6 -&gt; 3 -&gt; 10 -&gt; 5 -&gt; 16 -&gt; 8 -&gt; 4 -&gt; 2 -&gt; 1, тобто 8 кроків.
+
+    :param number: натуральне число (1 або більше)
+    :return: кількість кроків до 1; для number = 1 це 0
+
+    &gt;&gt;&gt; collatz_steps(1)
+    0
+    &gt;&gt;&gt; collatz_steps(2)
+    1
+    &gt;&gt;&gt; collatz_steps(6)
+    8
+    &gt;&gt;&gt; collatz_steps(7)
+    16
+    &gt;&gt;&gt; collatz_steps(27)
+    111
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 4. Задачі з doctest (розвʼязок).
+
+Відкривай лише після 2 спроб розвʼязати самому.
+Перевірка (з теки Курс):
+    python3 -m doctest _rozvyazky/urok04.py -v
+&quot;&quot;&quot;
+import doctest
+
+
+def alternating_sum(count: int) -&gt; int:
+    &quot;&quot;&quot;Повертає знакозмінну суму 1 - 2 + 3 - 4 + ... ± count.
+
+    Знак чергується: непарні числа додаються, парні віднімаються.
+    Обмеження: без ** і без if (знак тримай в окремій змінній).
+
+    :param count: останнє число суми (0 або більше)
+    :return: значення суми; для count = 0 сума порожня, тобто 0
+
+    &gt;&gt;&gt; alternating_sum(1)
+    1
+    &gt;&gt;&gt; alternating_sum(2)
+    -1
+    &gt;&gt;&gt; alternating_sum(5)
+    3
+    &gt;&gt;&gt; alternating_sum(10)
+    -5
+    &gt;&gt;&gt; alternating_sum(0)
+    0
+    &quot;&quot;&quot;
+    # Накопичувач суми - з 0 (додати 0 нічого не змінює), ДО циклу.
+    total = 0
+    # Перший доданок (1) іде з плюсом.
+    sign = 1
+    # count + 1, бо range не включає верхню межу, а count має увійти.
+    for number in range(1, count + 1):
+        total += sign * number
+        # Перевертаємо знак для наступного числа: 1 -&gt; -1 -&gt; 1 -&gt; ...
+        sign = -sign
+    # count = 0: range(1, 1) порожній, цикл не виконався, total = 0.
+    return total
+
+
+def collatz_steps(number: int) -&gt; int:
+    &quot;&quot;&quot;Повертає кількість кроків гри «3n + 1», щоб дійти до 1.
+
+    Крок: парне число ділимо навпіл, непарне множимо на 3 і додаємо 1.
+    Для 6: 6 -&gt; 3 -&gt; 10 -&gt; 5 -&gt; 16 -&gt; 8 -&gt; 4 -&gt; 2 -&gt; 1, тобто 8 кроків.
+
+    :param number: натуральне число (1 або більше)
+    :return: кількість кроків до 1; для number = 1 це 0
+
+    &gt;&gt;&gt; collatz_steps(1)
+    0
+    &gt;&gt;&gt; collatz_steps(2)
+    1
+    &gt;&gt;&gt; collatz_steps(6)
+    8
+    &gt;&gt;&gt; collatz_steps(7)
+    16
+    &gt;&gt;&gt; collatz_steps(27)
+    111
+    &quot;&quot;&quot;
+    steps = 0
+    # Скільки буде кроків - невідомо наперед, тому while, а не for.
+    while number != 1:
+        if number % 2 == 0:
+            # //, а не /: інакше вийде 3.0 (float) замість 3.
+            number //= 2
+        else:
+            number = 3 * number + 1
+        steps += 1
+    return steps
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+</details>
+<h2 id="7-поясни-чому">7. Поясни чому</h2>
+<p><strong>1. Чому в сумі цифр (с. 5) лекція бере <code>while</code>, а в сумі парних чисел до N (с. 9) - <code>for</code>?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p>Для суми парних наперед відомо, що перебирати: числа 2, 4, ..., N - це готова колекція <code>range(2, N + 1, 2)</code>.
+Для цифр невідомо, скільки їх (у 7 одна цифра, у 4096 чотири). Ми знаємо лише умову зупинки: «число стало 0».
+Коли відома колекція - <code>for</code>, коли відома лише умова - <code>while</code>.</p>
+</details>
+<p><strong>2. Чому <code>else</code> після циклу пошуку - це не «якщо цикл не виконався», і що він надрукує для порожньої послідовності?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p><code>else</code> циклу означає «цикл закінчився без <code>break</code>» (с. 14). Для порожньої послідовності тіло не
+виконається жодного разу, <code>break</code> не буде - отже <code>else</code> спрацює і надрукує «не знайдено». І це
+правильно: у порожній послідовності шуканого числа справді нема. Плутанина - від аналогії з <code>if-else</code>,
+лекція прямо попереджає про неї.</p>
+</details>
+<p><strong>3. Чому в <code>while (i &lt;= N - 1) and prime:</code> (с. 4) цикл зупиняється одразу, щойно знайдено дільник, і що зміниться, якщо поміняти частини <code>and</code> місцями?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p>Коли <code>prime</code> стає <code>False</code>, весь <code>and</code> стає <code>False</code>, і цикл закінчується - зайві ділення не робляться.
+Якщо поміняти місцями (<code>prime and i &lt;= N - 1</code>), результат той самий, бо обидві частини безпечні.
+Порядок стає критичним, коли права частина може «впасти»: <code>a != 0 and 1 / a &gt; 0</code> працює, а
+<code>1 / a &gt; 0 and a != 0</code> при a = 0 дає <code>ZeroDivisionError</code> (с. 2). Ледачий <code>and</code> рахує праву частину,
+лише коли ліва <code>True</code>, тому «запобіжник» ставлять зліва.</p>
+</details>
+<p><strong>4. Чому накопичувач суми починають з 0, а добутку - з 1?</strong></p>
+<details>
+<summary>Відповідь-еталон</summary>
+<p>Стартове значення не має «зіпсувати» результат. 0 + будь-що = те саме, тому для суми 0. 1 · будь-що = те
+саме, тому для добутку 1. Якби добуток почався з 0, то 0 · 3 · 5 · ... = 0 завжди. Порожня сума (жодного
+кроку) природно дорівнює 0, порожній добуток - 1 (тому 0! = 1).</p>
+</details>
+<h2 id="8-що-запамятати">8. Що запам'ятати</h2>
+<ul>
+<li><code>while умова:</code> - поки умова True; тіло мусить змінювати умову, інакше зациклення.</li>
+<li><code>for x in колекція:</code> - для кожного елемента; <code>range(b, c, d)</code> - від b з кроком d, <strong>c не входить</strong>; «до N включно» = <code>range(1, N + 1)</code>.</li>
+<li>Накопичувач створюють ДО циклу: сума з 0, добуток з 1, лічильник з 0, прапорець з True/False.</li>
+<li>Цифри числа: <code>digit = number % 10</code>, <code>number //= 10</code>, <code>while number &gt; 0</code>.</li>
+<li><code>break</code> - вийти з найближчого циклу; <code>continue</code> - на наступний крок; <code>else</code> циклу - «не було break».</li>
+<li><code>A and B</code>: якщо A хибне, B не рахується - «запобіжник» ставлять зліва.</li>
+<li>Функція рахує і робить <code>return</code>; друкує програма, яка її викликала.</li>
+</ul>
+<p><strong>Де в лабах:</strong>
+- ЛР3, завд. 1 - паліндром числа без рядків: цифри через <code>% 10</code> і <code>// 10</code>, нове число <code>result * 10 + digit</code> (ЛР3, с. 2).
+- ЛР3, завд. 2 - <code>is_prime</code> (перебір дільників у циклі, <code>return False</code>, щойно знайшли) і <code>digit_sum</code> (той самий цикл, що в розібраному прикладі, лише сума замість максимуму).
+- ЛР3, завд. 3 - НСД за Евклідом: <code>while</code>, доки остача не 0 (Лекція 4, с. 6).
+- ЛР4, завд. 1 - кожен візерунок: <code>for i in range(36): ...</code>, групи через <code>i // 20</code>.
+- ЛР5, завд. 1 - суми й добутки в циклі, знак через <code>sign = -sign</code> (задача 1 цього уроку).
+- ЛР6, завд. 1 - щасливі числа: цифри числа в <code>while</code>, без списків; перебір дільників до √n.
+  Пастка: два doctest-и викладача там хибні (<code>is_happy(55, 3)</code> і <code>is_happy(136, 3)</code> чекають <code>True</code>,
+  а за означенням це <code>False</code>) - розрахунок у <code>Лабораторні\ЛР6\ЛР6 - розбір.md</code>. Не підганяй код під них.</p>
+<hr>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/urok-05">Наступний урок →</a></p>

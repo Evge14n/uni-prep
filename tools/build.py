@@ -18,10 +18,12 @@ DATA = SITE / "data"
 
 # сторінки розділу: файл -> назва вкладки (порядок = порядок вкладок)
 PAGES = [
+    ("uroky", "Уроки"),  # UNIPROG1: курс програмування з нуля (лише prog)
     ("teoriya", "Теорія"),
     ("oznachennya", "Означення і теореми"),
     ("zadachi", "Задачі"),
     ("shpargalka", "Шпаргалка"),
+    ("dovidnyk", "Довідник"),  # UNIPROG1: довідник функцій (лише prog)
     ("slovnyk", "Словник"),
 ]
 
@@ -108,6 +110,15 @@ def main():
             (out / f"{key}.html").write_text(html, encoding="utf-8")
             files.append(f"data/{uid}/{key}.html")
             pages.append({"key": key, "title": title})
+        # сторінки поза вкладками (UNIPROG1: уроки prog) - content/<id>/pages/*.md -> data/<id>/<імʼя>.html
+        for src in sorted((udir / "pages").glob("*.md")) if (udir / "pages").exists() else []:
+            text = src.read_text(encoding="utf-8")
+            check_text(text, f"{uid}/pages/{src.name}", errors)
+            (out / f"{src.stem}.html").write_text(md_to_html(text), encoding="utf-8")
+            files.append(f"data/{uid}/{src.stem}.html")
+        # файли для скачування (заготовки задач prog) - теж у офлайн-кеш
+        for f in sorted((out / "zadachi").glob("*.py")) if (out / "zadachi").exists() else []:
+            files.append(f"data/{uid}/zadachi/{f.name}")
         nq = 0
         quiz = udir / "quiz.json"
         if quiz.exists():
@@ -170,7 +181,7 @@ def main():
     (DATA / "units.json").write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
     files.append("data/units.json")
 
-    shell = ["./", "index.html", "app.js", "style.css", "manifest.webmanifest",
+    shell = ["./", "index.html", "app.js", "pyrun.js", "py-worker.js", "style.css", "manifest.webmanifest",
              "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/favicon.svg"]
     # шрифти (self-hosted, tools/make_fonts.py) - теж у кеш, щоб офлайн був той самий вигляд
     shell += sorted("fonts/" + f.name for f in (SITE / "fonts").glob("*.woff2"))
@@ -178,7 +189,7 @@ def main():
         p = SITE / (s if s != "./" else "index.html")
         if not p.exists():
             errors.append(f"нема файлу {s}")
-    for s in ["index.html", "app.js", "style.css"]:
+    for s in ["index.html", "app.js", "pyrun.js", "py-worker.js", "style.css"]:
         t = (SITE / s).read_text(encoding="utf-8")
         for ch, name in (("—", "довге тире"), ("–", "середнє тире")):
             if ch in t:

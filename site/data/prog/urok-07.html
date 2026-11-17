@@ -1,0 +1,926 @@
+<h1 id="урок-7-системи-рекурентних-співвідношень">Урок 7. Системи рекурентних співвідношень</h1>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/dovidnyk">Довідник функцій</a></p>
+<blockquote>
+<p>Лекція 7 (с. 1-11), потрібно для: ЛР5 (завд. 1, пункт d) - дві звʼязані послідовності aₖ і bₖ;
+завд. 2 - ряд для sin з точністю ε; завд. 3 - число π з точністю), ЛР6 (завд. 2 - визначник
+Dₙ рекурентно і пошук першого n з умовою; завд. 3 - бісекція і хорди). Час: 25 хв.
+Перед цим уроком: урок 06.</p>
+</blockquote>
+<h2 id="1-ідея">1. Ідея</h2>
+<p><strong>Рекурентне співвідношення</strong> ти вже знаєш: новий член рахуємо з попереднього
+(aₙ = 3·aₙ₋₁). <strong>Система</strong> рекурентних співвідношень - це коли на кожному кроці
+ми рахуємо <strong>кілька</strong> величин одразу, і вони залежать одна від одної. Лекція каже:
+«послідовності є векторними - на кожному кроці ми одночасно обчислюємо кілька
+взаємопов'язаних величин» (Лекція 7, с. 1).</p>
+<p>Аналогія. Ти ведеш облік на складі: щодня рахуєш, скільки товару (aₙ) і скільки грошей
+у касі (Sₙ). Гроші завтра залежать від того, скільки товару продали сьогодні. Одна
+величина «тягне» іншу. Рахувати їх треба разом, у тому самому циклі.</p>
+<h3 id="11-сума-ряду-xⁿn-перша-система-лекція-7-с-1-2">1.1. Сума ряду xⁿ/n! - перша система (Лекція 7, с. 1-2)</h3>
+<p>Треба Sₙ = 1 + x/1! + x²/2! + ... + xⁿ/n!. Можна щоразу рахувати xⁿ і n! заново - але
+це купа зайвих множень, а для великих n ще й переповнення (саме про це ЛР5). Хитрість:
+позначимо доданок aₙ = xⁿ/n!. Тоді наступний доданок - це попередній, помножений на x/n:</p>
+<pre><code>        xⁿ        xⁿ⁻¹       x
+aₙ = ──────  =  ─────── · ───  = aₙ₋₁ · x / n
+        n!       (n-1)!     n
+
+a₀ = 1,  S₀ = 1
+aₙ = aₙ₋₁ · x / n          (спершу новий доданок)
+Sₙ = Sₙ₋₁ + aₙ             (потім додаємо його до суми)
+</code></pre>
+<p>Дві послідовності, aₙ і Sₙ, рахуємо в одному циклі. У лекції змінні звуться <code>a</code> і <code>S</code>
+(як у математиці), а в лабах викладач хоче змістовні імена - тому в мене <code>term</code> (доданок)
+і <code>total</code> (сума):</p>
+<pre><code class="language-python">x = 2
+count = 4
+term = 1       # a₀ = 1
+total = 1      # S₀ = 1
+for number in range(1, count + 1):
+    term = x / number * term     # aₙ = aₙ₋₁ · x / n
+    total = total + term         # Sₙ = Sₙ₋₁ + aₙ
+    print(number, term, total)
+</code></pre>
+<pre><code class="language-text">1 2.0 3.0
+2 2.0 5.0
+3 1.3333333333333333 6.333333333333333
+4 0.6666666666666666 7.0
+</code></pre>
+<p>Трасувальна таблиця (те саме, але повільно, на папері):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>n</th>
+<th>як рахуємо aₙ</th>
+<th>aₙ</th>
+<th>як рахуємо Sₙ</th>
+<th>Sₙ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>старт</td>
+<td>1</td>
+<td>старт</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1 · 2 / 1</td>
+<td>2</td>
+<td>1 + 2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2 · 2 / 2</td>
+<td>2</td>
+<td>3 + 2</td>
+<td>5</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2 · 2 / 3</td>
+<td>1.333</td>
+<td>5 + 1.333</td>
+<td>6.333</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1.333 · 2 / 4</td>
+<td>0.667</td>
+<td>6.333 + 0.667</td>
+<td>7.0</td>
+</tr>
+</tbody>
+</table></div>
+<p>Порядок рядків у тілі важливий: спершу новий доданок, <strong>потім</strong> сума. Якщо переставити,
+до суми додасться старий доданок.</p>
+<h3 id="12-одне-значення-кільком-змінним-s-x-1-лекція-7-с-2">1.2. Одне значення кільком змінним: <code>S = x = 1</code> (Лекція 7, с. 2)</h3>
+<p>Сума Sₙ = Σ aᵏ·bⁿ⁻ᵏ (k від 0 до n). Розкривши суму, лекція отримує систему:
+xₙ = a·xₙ₋₁ (це aⁿ), Sₙ = b·Sₙ₋₁ + xₙ, обидві з початком 1. Код лекції починається з
+<code>S = x = 1</code> - це <strong>одночасне присвоєння одного значення кільком змінним</strong>. Обидві
+змінні отримують 1. Перевіримо на a = 2, b = 3, N = 2 (вручну: 3² + 2·3 + 2² = 9 + 6 + 4 = 19):</p>
+<pre><code class="language-python">base_a = 2
+base_b = 3
+total = power = 1
+for number in range(1, 3):
+    power = base_a * power           # xₙ = a · xₙ₋₁
+    total = base_b * total + power   # Sₙ = b · Sₙ₋₁ + xₙ
+    print(number, power, total)
+</code></pre>
+<pre><code class="language-text">1 2 5
+2 4 19
+</code></pre>
+<h3 id="13-третій-порядок-і-зсув-змінних-лекція-7-с-2-3">1.3. Третій порядок і «зсув» змінних (Лекція 7, с. 2-3)</h3>
+<p>Послідовність a₁ = a₂ = a₃ = 1, aₖ = aₖ₋₁ + aₖ₋₃ (k ≥ 4) - третього порядку: новий член
+залежить від трьох попередніх. Тримаємо три змінні: <code>a1</code> (останній), <code>a2</code> (передостанній),
+<code>a3</code> (ще раніший). Після обчислення нового <code>a</code> всі «зсуваються на одну позицію»:</p>
+<pre><code>до кроку:    a3   a2   a1         нове a = a1 + a3
+               \    \    \
+після:        a3 = a2,  a2 = a1,  a1 = a
+</code></pre>
+<p>Порядок зсуву - <strong>від найстарішого</strong>: спершу <code>a3 = a2</code>, потім <code>a2 = a1</code>, потім <code>a1 = a</code>.
+Якщо почати з <code>a1 = a</code>, старе значення <code>a1</code> пропаде раніше, ніж ми перекладемо його в <code>a2</code>.</p>
+<p>Ще одна думка з того прикладу: перші три члени особливі (вони задані, а не пораховані),
+тому лекція пише <strong>два цикли підряд</strong>: перший обробляє «межові» (початкові) випадки,
+другий - загальний рекурентний випадок. Межа першого - <code>range(1, min(4, N + 1))</code>, щоб
+не зайти далі, ніж просили, коли N &lt; 3.</p>
+<p>Найскладніший приклад лекції (с. 4-5) - добуток Pₙ = Π aₖ/3ᵏ, де aₖ теж третього порядку.
+Там аж три допоміжні послідовності: <code>a</code> (третього порядку), <code>z</code> = 3ᵏ (z = z · 3) і
+<code>t</code> = 2ᵏ⁻¹ (t = t · 2). Ідея та сама: кожну з них рахуємо в тому самому циклі її власною
+маленькою формулою. Лекція називає це «декомпозицією задачі на систему простіших
+рекурентних співвідношень».</p>
+<h3 id="14-перехресні-співвідношення-головна-пастка-лекція-7-с-3-4">1.4. Перехресні співвідношення - головна пастка (Лекція 7, с. 3-4)</h3>
+<p>a₀ = b₀ = 1; aₖ = aₖ₋₁ · bₖ₋₁; bₖ = aₖ₋₁ + bₖ₋₁. Нове a залежить від <strong>старого</strong> b, нове b - від
+<strong>старого</strong> a. Якщо написати <code>a = a * b</code>, а потім <code>b = a + b</code>, то в другому рядку <code>a</code> - вже
+нове. Лекція наголошує: потрібні допоміжні змінні <code>a_k</code>, <code>b_k</code>, і це «загальний принцип
+для будь-яких перехресних співвідношень». Розберемо це на прикладі в розділі 2.</p>
+<h3 id="15-знайти-перший-член-що-задовольняє-умову-while-лекція-7-с-">1.5. Знайти перший член, що задовольняє умову: <code>while</code> (Лекція 7, с. 5-7)</h3>
+<p>Досі цикл <code>for</code> рахував член за номером. Але буває інше питання: «знайди <strong>перший</strong> член,
+для якого виконується умова». Скільки кроків - невідомо, тому <code>for</code> замінюємо на <code>while</code>.</p>
+<p>Правило лекції: <strong>умова <code>while</code> - це заперечення умови зупинки.</strong> Треба найменше 3ᵏ ≥ N.
+Зупинитись треба, коли aₖ ≥ N. Заперечення: aₖ &lt; N. Отже, <code>while power &lt; limit:</code>.</p>
+<pre><code class="language-python">limit = 100
+power = 1
+while power &lt; limit:      # поки ще НЕ досягли умови 3ᵏ &gt;= 100
+    power = power * 3
+print(power)
+</code></pre>
+<pre><code class="language-text">243
+</code></pre>
+<p>Перевірка: 1, 3, 9, 27, 81 - усі менші за 100, цикл крутиться далі; 243 ≥ 100 - стоп.</p>
+<p>Варіант «найбільший член, що <strong>не перевищує</strong> a» (с. 6-7): xₙ = xₙ₋₁ + 2xₙ₋₂ + xₙ₋₃,
+члени 1, 0, 1, 2, 4, 9, 19, 41, 88. Цикл іде, поки член ≤ a, і зупиняється на <strong>першому, що
+вже більший</strong>. Тому відповідь - <strong>попередній</strong> член, а не поточний. Ось код лекції без змін
+(запустимо з a = 30, як у лекції):</p>
+<pre><code class="language-python"># ввід: 30
+a = int(input(&quot;a = &quot;))
+x3 = 1
+x2 = 0
+x1 = 1
+n = 2    # Номер поточного члену послідовності
+while x1 &lt;= a:    # Поки поточний член послідовності
+    n += 1
+    x = x1 + 2 * x2 + x3
+    x3 = x2
+    x2 = x1
+    x1 = x
+print(&quot;x(%d) = %d &lt;= %d = a&quot; % (n - 1, x2, a))
+</code></pre>
+<pre><code class="language-text">a = 30
+x(6) = 19 &lt;= 30 = a
+</code></pre>
+<p>Після виходу з циклу <code>x1 = 41</code> (перший, що більший за 30), а <code>x2 = 19</code> - той, що перед ним.
+Лекція: «доводиться зберігати не лише поточний, а й попередній стан». (Тут імена <code>a</code>, <code>x1</code>
+лишились лекційні; у лабі краще <code>limit</code>, <code>current</code>, <code>previous</code>.)</p>
+<h3 id="16-границя-з-точністю-ε-лекція-7-с-7-9">1.6. Границя з точністю ε (Лекція 7, с. 7-9)</h3>
+<p>Послідовність yₙ прямує до границі y. Комп'ютер не дійде до нескінченності, тому лекція
+домовляється: «наближене з точністю ε значення» - це перший член y_N, для якого
+|y_N - y_N-1| &lt; ε. Отже, рахуємо, <strong>поки</strong> |yₙ - yₙ₋₁| ≥ ε (знову заперечення умови
+зупинки). Потрібні дві змінні: <code>current</code> (поточний член) і <code>previous</code> (попередній).</p>
+<p>Золотий переріз Φ ≈ 1.618: Φₙ = 1 + 1/Φₙ₋₁, Φ₁ = 1. Код лекції (с. 8):</p>
+<pre><code class="language-python">eps = 0.0000000001    # точність
+prev = 0        # попередній член послідовності
+current = 1     # поточний член послідовності
+while abs(current - prev) &gt;= eps:
+    prev = current
+    current = 1 + 1 / current
+print(&quot;Ф =&quot;, current)    # Виводимо значення золотого перетину
+# Перевірка результату згідно з властивостями
+print(&quot;Ф - 1 =&quot;, current - 1)
+print(&quot;1 / Ф =&quot;, 1 / current)
+</code></pre>
+<pre><code class="language-text">Ф = 1.618033988738303
+Ф - 1 = 0.6180339887383031
+1 / Ф = 0.6180339887543225
+</code></pre>
+<p>Вивід збігся з лекцією до останньої цифри. Перевірка Φ - 1 = 1/Φ виконується до 10 знаків
+після коми - саме з такою точністю ε ми рахували.</p>
+<p>Для eˣ (с. 9) Sₙ - Sₙ₋₁ = aₙ, тому умова «поки |aₙ| ≥ ε». Тут лекція звертає увагу: у <code>while</code>
+<strong>нема вбудованого лічильника</strong>, як у <code>for</code>. А номер n потрібен у формулі aₙ = aₙ₋₁·x/n.
+Тому лічильник заводимо самі: <code>n = 0</code> до циклу і <code>n += 1</code> першим рядком тіла.</p>
+<h3 id="17-бісекція-і-хорди-лекція-7-с-10-11">1.7. Бісекція і хорди (Лекція 7, с. 10-11)</h3>
+<p>Рівняння f(x) = 0, на кінцях відрізка [a, b] f має різні знаки (тоді корінь усередині -
+теорема Больцано-Коші). <strong>Бісекція</strong>: ділимо відрізок навпіл, лишаємо ту половину, де знаки на
+кінцях різні; повторюємо, поки довжина ≥ ε. Відповідь - середина останнього відрізка.
+Перевага - збігається завжди; недолік - повільно (кожен крок лише вдвічі зменшує відрізок).</p>
+<p>Код лекції для tan x = 2x на [0.5, 1.5] (с. 11), лише <code>l</code>, <code>r</code> перейменовано на <code>left</code>,
+<code>right</code> (буква <code>l</code> схожа на одиницю, PEP 8 її не радить):</p>
+<pre><code class="language-python">import math
+eps = 0.0000000000001
+left = 0.5    # tan(left) - 2 * left &lt; 0
+right = 1.5   # tan(right) - 2 * right &gt; 0
+while right - left &gt;= eps:
+    middle = (left + right) / 2.0
+    value = math.tan(middle) - 2.0 * middle
+    if value == 0.0:
+        break             # влучили точно в корінь - далі нема куди
+    elif value &lt; 0.0:
+        left = middle     # [left, right] = [middle, right]
+    else:
+        right = middle    # [left, right] = [left, middle]
+root = (left + right) / 2.0
+print(root)
+</code></pre>
+<pre><code class="language-text">1.165561185207224
+</code></pre>
+<p><strong>Метод хорд</strong> - через дві точки графіка проводимо пряму (хорду) і беремо точку її
+перетину з віссю x як наступне наближення. Кінець b нерухомий, і виходить знову
+рекурентне співвідношення:</p>
+<pre><code>u₀ = a
+                          b - uₙ₋₁
+uₙ = uₙ₋₁ - f(uₙ₋₁) · ─────────────────
+                      f(b) - f(uₙ₋₁)
+рахуємо, поки |uₙ - uₙ₋₁| ≥ ε
+</code></pre>
+<p>У лекції коду для хорд нема, лише формула. Ось приклад на x² - 2 = 0, [1, 2] (мій код,
+ЛР6 завд. 3 просить те саме, але для полінома і з історією наближень):</p>
+<pre><code class="language-python">def func(x):
+    return x * x - 2
+
+right_end = 2.0       # нерухомий кінець b
+previous = 1.0        # u₀ = a
+current = previous - func(previous) * (right_end - previous) / (
+    func(right_end) - func(previous))
+steps = 1
+while abs(current - previous) &gt;= 1e-9:
+    previous = current
+    current = previous - func(previous) * (right_end - previous) / (
+        func(right_end) - func(previous))
+    steps += 1
+print(round(current, 9), steps)
+</code></pre>
+<pre><code class="language-text">1.414213562 13
+</code></pre>
+<p>Бісекції для такої точності треба було б близько 30 кроків, хордам вистачило 13: вони
+враховують не лише знак f, а й саме значення.</p>
+<h2 id="2-розібраний-приклад">2. Розібраний приклад</h2>
+<p><strong>Задача.</strong> Дві кімнати: гаряча (hot) і холодна (cold). Кожну годину гаряча віддає холодній
+чверть різниці температур: hotₖ = hotₖ₋₁ - (hotₖ₋₁ - coldₖ₋₁)/4, coldₖ = coldₖ₋₁ + (hotₖ₋₁ - coldₖ₋₁)/4.
+Ввести дві температури, друкувати стан після кожного кроку, і знайти, після якого кроку
+різниця стане меншою за 1 градус. Для перевірки друкуємо ще й hot + cold: тепло нікуди
+не зникає, тож сума мусить бути сталою.</p>
+<p>Це <strong>перехресна</strong> система (як у лекції, с. 3-4): обидві нові температури рахуються зі
+<strong>старих</strong> обох. І це пошук <strong>першого</strong> кроку з умовою, тому <code>while</code>.</p>
+<pre><code class="language-python"># ввід: 80 | 20
+hot = float(input(&quot;Гаряча кімната, °C: &quot;))
+cold = float(input(&quot;Холодна кімната, °C: &quot;))
+step = 0
+while hot - cold &gt;= 1:
+    step += 1
+    new_hot = hot - (hot - cold) / 4
+    new_cold = cold + (hot - cold) / 4
+    hot = new_hot
+    cold = new_cold
+    print(step, hot, cold, hot + cold)
+print(&quot;Різниця менша за 1 градус після кроку&quot;, step)
+</code></pre>
+<pre><code class="language-text">Гаряча кімната, °C: 80
+Холодна кімната, °C: 20
+1 65.0 35.0 100.0
+2 57.5 42.5 100.0
+3 53.75 46.25 100.0
+4 51.875 48.125 100.0
+5 50.9375 49.0625 100.0
+6 50.46875 49.53125 100.0
+Різниця менша за 1 градус після кроку 6
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>рядок</th>
+<th>що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hot = float(input(...))</code></td>
+<td>читає рядок з клавіатури і робить з нього дійсне число (<code>input</code> завжди дає рядок)</td>
+</tr>
+<tr>
+<td><code>step = 0</code></td>
+<td>лічильник кроків: у <code>while</code> свого лічильника нема (лекція, с. 9)</td>
+</tr>
+<tr>
+<td><code>while hot - cold &gt;= 1:</code></td>
+<td>умова = заперечення умови зупинки. Зупинка: «різниця &lt; 1», тому крутимось, поки різниця ≥ 1</td>
+</tr>
+<tr>
+<td><code>step += 1</code></td>
+<td>номер кроку, який зараз рахуємо</td>
+</tr>
+<tr>
+<td><code>new_hot = ...</code></td>
+<td>нова гаряча <strong>зі старих</strong> hot і cold</td>
+</tr>
+<tr>
+<td><code>new_cold = ...</code></td>
+<td>нова холодна - теж <strong>зі старих</strong>: <code>hot</code> ще не змінений, бо нове лежить у <code>new_hot</code></td>
+</tr>
+<tr>
+<td><code>hot = new_hot</code>, <code>cold = new_cold</code></td>
+<td>лише тепер, коли обидва нові пораховані, записуємо їх</td>
+</tr>
+<tr>
+<td><code>print(step, hot, cold, hot + cold)</code></td>
+<td>стан після кроку; сума 100.0 - перевірка, що формула правильна</td>
+</tr>
+<tr>
+<td>останній <code>print</code></td>
+<td>після циклу <code>step</code> - номер першого кроку, де умова зупинки виконалась</td>
+</tr>
+</tbody>
+</table></div>
+<p>Трасувальна таблиця:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>step</th>
+<th>hot до</th>
+<th>cold до</th>
+<th>(hot - cold) / 4</th>
+<th>new_hot</th>
+<th>new_cold</th>
+<th>hot - cold після</th>
+<th>цикл далі?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>80</td>
+<td>20</td>
+<td>15</td>
+<td>65</td>
+<td>35</td>
+<td>30</td>
+<td>так</td>
+</tr>
+<tr>
+<td>2</td>
+<td>65</td>
+<td>35</td>
+<td>7.5</td>
+<td>57.5</td>
+<td>42.5</td>
+<td>15</td>
+<td>так</td>
+</tr>
+<tr>
+<td>3</td>
+<td>57.5</td>
+<td>42.5</td>
+<td>3.75</td>
+<td>53.75</td>
+<td>46.25</td>
+<td>7.5</td>
+<td>так</td>
+</tr>
+<tr>
+<td>4</td>
+<td>53.75</td>
+<td>46.25</td>
+<td>1.875</td>
+<td>51.875</td>
+<td>48.125</td>
+<td>3.75</td>
+<td>так</td>
+</tr>
+<tr>
+<td>5</td>
+<td>51.875</td>
+<td>48.125</td>
+<td>0.9375</td>
+<td>50.9375</td>
+<td>49.0625</td>
+<td>1.875</td>
+<td>так</td>
+</tr>
+<tr>
+<td>6</td>
+<td>50.9375</td>
+<td>49.0625</td>
+<td>0.46875</td>
+<td>50.46875</td>
+<td>49.53125</td>
+<td>0.9375</td>
+<td>ні, 0.9375 &lt; 1</td>
+</tr>
+</tbody>
+</table></div>
+<p>А що було б без <code>new_hot</code>? Крок 1: <code>hot = 80 - 60/4 = 65</code>, а далі <code>cold = 20 + (65 - 20)/4 = 31.25</code>.
+Сума 65 + 31.25 = 96.25 - «зникло» 3.75 градуса тепла. Фізика підказує, що код неправильний.
+Ще один спосіб без двох нових змінних: спершу порахувати потік <code>flow = (hot - cold) / 4</code>
+(зі старих значень!), а потім <code>hot = hot - flow</code>, <code>cold = cold + flow</code>. Це теж правильно.</p>
+<p><strong>Закрий приклад і напиши його сам з пам'яті.</strong> Перевір на 80 і 20: має вийти 6 кроків і
+сума 100.0 у кожному рядку.</p>
+<h2 id="3-передбач-вивід">3. Передбач вивід</h2>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<p><strong>Фрагмент 1</strong></p>
+<pre><code class="language-python">total = power = 1
+power = power * 3
+print(total, power)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">1 3
+</code></pre>
+<p><code>total = power = 1</code> дає обом змінним одне значення 1. Далі <code>power = power * 3</code> створює
+нове число 3 і прив'язує до нього лише ім'я <code>power</code>. <code>total</code> ніхто не чіпав - там 1.
+(Зі списками буде інакше, див. урок 08 - але числа змінити «на місці» не можна.)</p>
+</details>
+<p><strong>Фрагмент 2</strong></p>
+<pre><code class="language-python">limit = 27
+power = 1
+while power &lt; limit:
+    power = power * 3
+print(power)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">27
+</code></pre>
+<p>Ряд: 1, 3, 9, 27. Коли <code>power = 27</code>, умова <code>27 &lt; 27</code> хибна - цикл зупиняється, 27 і
+виводиться. Це правильно: шукали найменше 3ᵏ ≥ 27, а 27 ≥ 27. Якби <code>limit = 28</code>, вивід був
+би 81. Пастка - думати, що <code>while</code> «проскочить» 27: ні, перевірка йде перед кожним кроком.</p>
+</details>
+<p><strong>Фрагмент 3</strong> (перехресна система з лекції, с. 3, але записана без допоміжних змінних)</p>
+<pre><code class="language-python">a = 1
+b = 1
+for step in range(3):
+    a = a * b
+    b = a + b
+    print(a, b)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">1 2
+2 4
+8 12
+</code></pre>
+<p>Крок 1: a = 1·1 = 1, b = <strong>1</strong> + 1 = 2 (тут нове a випадково таке саме, як старе). Крок 2:
+a = 1·2 = 2, b = <strong>2</strong> + 2 = 4 - а мало бути старе a + b = 1 + 2 = 3. Крок 3: a = 2·4 = 8,
+b = 8 + 4 = 12. Правильна система дає (1, 2), (2, 3), (6, 5). Перший рядок збігся - і саме
+тому таку помилку важко помітити: вона «вилазить» не одразу.</p>
+</details>
+<p><strong>Фрагмент 4</strong></p>
+<pre><code class="language-python">eps = 0.01
+previous = 0
+current = 1
+steps = 0
+while abs(current - previous) &gt;= eps:
+    previous = current
+    current = 1 + 1 / current
+    steps += 1
+print(steps, round(current, 3))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">6 1.615
+</code></pre>
+<p>Члени: 1 → 2 → 1.5 → 1.667 → 1.6 → 1.625 → 1.615. Різниці: 1, 0.5, 0.167, 0.067, 0.025,
+0.0096. Шоста різниця вже менша за 0.01 - стоп після 6 кроків. Відповідь 1.615 відрізняється
+від Φ = 1.618 приблизно на 0.003: ε обмежує різницю <strong>сусідніх членів</strong>, а не відстань до
+границі (лекція, с. 7, теж каже, що це означення «не є строгим»).</p>
+</details>
+<p><strong>Фрагмент 5</strong> (хотіли 1 + 1/2 + 1/4 + 1/8)</p>
+<pre><code class="language-python">count = 3
+total = 1
+term = 1
+for number in range(1, count):
+    term = term / 2
+    total = total + term
+print(total)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">1.75
+</code></pre>
+<p><code>range(1, count)</code> = <code>range(1, 3)</code> = 1, 2 - лише <strong>два</strong> кроки, бо кінець не входить. Додалися
+1/2 і 1/4, а 1/8 загубилась: 1 + 0.5 + 0.25 = 1.75. У лекції всюди <code>range(1, N + 1)</code> - саме
+щоб останній номер N увійшов. Правильна відповідь 1.875.</p>
+</details>
+<h2 id="4-знайди-помилку">4. Знайди помилку</h2>
+<p><strong>Помилка 1.</strong> Функція має повернути температури після <code>steps</code> кроків обміну.</p>
+<pre><code class="language-python"># БАГ
+def exchange(hot: float, cold: float, steps: int) -&gt; str:
+    &quot;&quot;&quot;Температури двох кімнат після steps кроків обміну теплом.
+
+    &gt;&gt;&gt; exchange(80.0, 20.0, 1)
+    '65.0 35.0'
+    &gt;&gt;&gt; exchange(80.0, 20.0, 2)
+    '57.5 42.5'
+    &quot;&quot;&quot;
+    for _ in range(steps):
+        hot = hot - (hot - cold) / 4
+        cold = cold + (hot - cold) / 4
+    return f&quot;{hot} {cold}&quot;
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>Перехресна система без допоміжних змінних. У другому рядку тіла <code>hot</code> уже <strong>новий</strong> (65),
+тому <code>cold = 20 + (65 - 20)/4 = 31.25</code>, а не 35. doctest отримує <code>'65.0 31.25'</code>.
+Чому так: Python виконує рядки по черзі, і після першого присвоєння старого <code>hot</code> вже ніде
+нема. Лікування - як у лекції (с. 4): спершу порахувати обидва нові значення, потім записати.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def exchange(hot: float, cold: float, steps: int) -&gt; str:
+    &quot;&quot;&quot;Температури двох кімнат після steps кроків обміну теплом.
+
+    &gt;&gt;&gt; exchange(80.0, 20.0, 1)
+    '65.0 35.0'
+    &gt;&gt;&gt; exchange(80.0, 20.0, 2)
+    '57.5 42.5'
+    &quot;&quot;&quot;
+    for _ in range(steps):
+        new_hot = hot - (hot - cold) / 4
+        new_cold = cold + (hot - cold) / 4
+        hot = new_hot
+        cold = new_cold
+    return f&quot;{hot} {cold}&quot;
+</code></pre>
+</details>
+<p><strong>Помилка 2.</strong> Знайти найменший степінь двійки, <strong>більший</strong> за <code>limit</code>.</p>
+<pre><code class="language-python"># БАГ
+def first_power_above(limit: int) -&gt; int:
+    &quot;&quot;&quot;Найменший степінь двійки, більший за limit.
+
+    &gt;&gt;&gt; first_power_above(10)
+    16
+    &gt;&gt;&gt; first_power_above(16)
+    32
+    &quot;&quot;&quot;
+    power = 1
+    while power &gt; limit:
+        power = power * 2
+    return power
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>В умову <code>while</code> записали саму умову зупинки («більший за limit»), а треба її заперечення.
+Для <code>limit = 10</code>: <code>1 &gt; 10</code> хибне - цикл не зробив жодного кроку, функція повертає 1.
+Заперечення «power &gt; limit» - це «power &lt;= limit»: поки степінь ще не перевищив межу,
+множимо далі.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def first_power_above(limit: int) -&gt; int:
+    &quot;&quot;&quot;Найменший степінь двійки, більший за limit.
+
+    &gt;&gt;&gt; first_power_above(10)
+    16
+    &gt;&gt;&gt; first_power_above(16)
+    32
+    &quot;&quot;&quot;
+    power = 1
+    while power &lt;= limit:
+        power = power * 2
+    return power
+</code></pre>
+<p>Друга перевірка ловить ще й межу: для 16 треба 32, бо 16 не <strong>більше</strong> за 16. Якби
+написали <code>while power &lt; limit</code>, вийшло б 16 - помилка на одиницю в умові.</p>
+</details>
+<p><strong>Помилка 3.</strong> eˣ через ряд Тейлора з точністю eps (як у лекції, с. 9).</p>
+<pre><code class="language-python"># БАГ
+def exp_series(x: float, eps: float) -&gt; float:
+    &quot;&quot;&quot;e у степені x через ряд Тейлора з точністю eps.
+
+    &gt;&gt;&gt; round(exp_series(1.0, 1e-10), 6)
+    2.718282
+    &quot;&quot;&quot;
+    term = 1
+    total = 1
+    number = 0
+    while abs(term) &gt;= eps:
+        term = x / number * term
+        total = total + term
+        number += 1
+    return total
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>Лічильник <code>number</code> збільшують <strong>після</strong> формули. На першому кроці <code>number = 0</code>, і
+<code>x / number</code> дає <code>ZeroDivisionError: division by zero</code>. У лекції <code>n += 1</code> стоїть <strong>першим</strong>
+рядком тіла: спершу «перейшли до наступного номера», потім рахуємо член з цим номером.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def exp_series(x: float, eps: float) -&gt; float:
+    &quot;&quot;&quot;e у степені x через ряд Тейлора з точністю eps.
+
+    &gt;&gt;&gt; round(exp_series(1.0, 1e-10), 6)
+    2.718282
+    &quot;&quot;&quot;
+    term = 1
+    total = 1
+    number = 0
+    while abs(term) &gt;= eps:
+        number += 1
+        term = x / number * term
+        total = total + term
+    return total
+</code></pre>
+</details>
+<h2 id="5-склади-з-рядків">5. Склади з рядків</h2>
+<p><strong>Задача 1.</strong> Бісекцією знайти √2 як корінь x² - 2 = 0 на [1, 2] з точністю 10⁻⁶ і вивести
+з 5 знаками. Розстав рядки в правильному порядку і з правильними відступами. <strong>Один рядок
+зайвий</strong> (пастка) - знайди його.</p>
+<pre><code class="language-parsons">print(round((left + right) / 2, 5))
+        left = middle
+right = 2.0
+while right - left &gt;= 1e-6:
+    middle = (left + right) / 2
+while right - left &lt; 1e-6:
+    else:
+left = 1.0
+    if middle * middle - 2 &lt; 0:
+        right = middle
+</code></pre>
+<details>
+<summary>Розвʼязок</summary>
+<pre><code class="language-python">left = 1.0
+right = 2.0
+while right - left &gt;= 1e-6:
+    middle = (left + right) / 2
+    if middle * middle - 2 &lt; 0:
+        left = middle
+    else:
+        right = middle
+print(round((left + right) / 2, 5))
+</code></pre>
+<pre><code class="language-text">1.41421
+</code></pre>
+<p>Зайвий рядок - <code>while right - left &lt; 1e-6:</code>. Це умова <strong>зупинки</strong>, а не продовження: з нею
+цикл не зробив би жодного кроку (на старті довжина 1, а 1 &lt; 10⁻⁶ хибне). Чому <code>left = middle</code>,
+коли f(middle) &lt; 0: f(left) теж &lt; 0, отже знаки різні між middle і right - корінь там.</p>
+</details>
+<p><strong>Задача 2.</strong> Знайти найменше n, для якого 1 + 1/2 + 1/3 + ... + 1/n &gt; 3. Зайвих рядків нема.</p>
+<pre><code class="language-parsons">print(number)
+    total = total + 1 / number
+number = 0
+while total &lt;= 3:
+total = 0
+    number += 1
+</code></pre>
+<details>
+<summary>Розвʼязок</summary>
+<pre><code class="language-python">total = 0
+number = 0
+while total &lt;= 3:
+    number += 1
+    total = total + 1 / number
+print(number)
+</code></pre>
+<pre><code class="language-text">11
+</code></pre>
+<p>Умова зупинки «сума &gt; 3», тому в <code>while</code> її заперечення «сума &lt;= 3». <code>number += 1</code> - перед
+діленням (інакше ділення на нуль, як у помилці 3). Для n = 10 сума 2.929, для n = 11 - 3.020.</p>
+</details>
+<h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
+<p>Заготовка - <code>zadachi/urok07.py</code>, розвʼязок - <code>_rozvyazky/urok07.py</code> (відкривай лише після
+2 спроб). У терміналі, з теки <code>Курс</code>:</p>
+<pre><code>python3 -m doctest zadachi/urok07.py -v
+</code></pre>
+<p>Спершу всі тести червоні. Ти дописуєш тіло функції замість <code>pass</code> - тести стають зеленими.</p>
+<p><strong>Задача 1. <code>sqrt2_fraction(steps)</code> - дроби для √2.</strong> Система p₀ = q₀ = 1,
+pₖ = pₖ₋₁ + 2·qₖ₋₁, qₖ = pₖ₋₁ + qₖ₋₁. Повернути рядок <code>'p/q'</code> після <code>steps</code> кроків:
+<code>'1/1'</code>, <code>'3/2'</code>, <code>'7/5'</code>, <code>'17/12'</code>, ... (17/12 = 1.41667 - уже близько до √2 = 1.41421).</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Дві змінні <code>numerator = 1</code>, <code>denominator = 1</code>.</li>
+<li>Цикл <code>for _ in range(steps)</code>: перехресна система, тому спершу <code>new_numerator</code> і
+   <code>new_denominator</code> зі <strong>старих</strong>, потім присвоїти.</li>
+<li><code>return f"{numerator}/{denominator}"</code>.</li>
+<li>Перевір себе вручну: з (3, 2) має вийти (3 + 4, 3 + 2) = (7, 5).</li>
+</ol>
+</details>
+<p><strong>Задача 2. <code>heron_sqrt(number, eps)</code> - корінь методом Герона з точністю.</strong> x₀ = number,
+xₙ = (xₙ₋₁ + number/xₙ₋₁)/2, рахувати, поки |xₙ - xₙ₋₁| ≥ eps. Повернути рядок
+<code>'sqrt(2) = 1.414214, steps = 5'</code> (6 знаків після коми; steps - скільки разів порахували
+нове xₙ). Прийом той самий, що в ЛР5 завд. 2 і 3: рахувати до точності через <code>previous</code>
+і <code>current</code>.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li><code>previous = number</code>, одразу перше нове <code>current = (previous + number / previous) / 2</code>,
+   <code>steps = 1</code> (як у лекції для Φ: поки нема двох членів, нема й різниці).</li>
+<li><code>while abs(current - previous) &gt;= eps:</code> - заперечення умови зупинки.</li>
+<li>У тілі: <code>previous = current</code>, нове <code>current</code> за формулою, <code>steps += 1</code>.</li>
+<li><code>return f"sqrt({number}) = {current:.6f}, steps = {steps}"</code>.</li>
+<li>Граничний випадок: <code>number = 1</code> - вже перше нове значення дорівнює 1, різниця 0,
+   <code>steps = 1</code>.</li>
+</ol>
+</details>
+<h3 id="заготовка-тут-же-можна-писати-і-запускати-doctest">Заготовка (тут же можна писати і запускати doctest)</h3>
+<p>Скачати файл: <a href="data/prog/zadachi/urok07.py">urok07.py</a> - поклади в теку <code>zadachi/</code> і запускай <code>python3 -m doctest zadachi/urok07.py -v</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 7. Задачі з doctest (заготовка).
+
+Як запускати (з теки Курс):
+    python3 -m doctest zadachi/urok07.py -v
+
+Спершу всі приклади червоні: замість коду стоїть pass, і функція
+повертає None. Заміни pass на свій код, щоб усі стали зелені.
+Можна: цикли for і while, if, змінні (усе це є в лекціях 4-7).
+Списки ще не потрібні - вистачить кількох змінних.
+Розвʼязок - у _rozvyazky/urok07.py (відкривай лише після 2 спроб).
+&quot;&quot;&quot;
+import doctest
+
+
+def sqrt2_fraction(steps: int) -&gt; str:
+    &quot;&quot;&quot;Наближення кореня з 2 дробом p/q за системою рекурентних.
+
+    Система (перехресна - нове p і нове q рахуються зі старих):
+        p₀ = 1, q₀ = 1,
+        pₖ = pₖ₋₁ + 2 * qₖ₋₁,
+        qₖ = pₖ₋₁ + qₖ₋₁,   k &gt;= 1.
+    Дріб p/q з кожним кроком ближчий до √2 = 1.41421...
+
+    :param steps: скільки кроків зробити (steps &gt;= 0)
+    :return: рядок 'p/q' після steps кроків
+
+    &gt;&gt;&gt; sqrt2_fraction(0)
+    '1/1'
+    &gt;&gt;&gt; sqrt2_fraction(1)
+    '3/2'
+    &gt;&gt;&gt; sqrt2_fraction(2)
+    '7/5'
+    &gt;&gt;&gt; sqrt2_fraction(4)
+    '41/29'
+    &gt;&gt;&gt; sqrt2_fraction(6)
+    '239/169'
+    &quot;&quot;&quot;
+    pass
+
+
+def heron_sqrt(number: float, eps: float) -&gt; str:
+    &quot;&quot;&quot;Корінь з number методом Герона з точністю eps.
+
+    Послідовність: x₀ = number, xₙ = (xₙ₋₁ + number / xₙ₋₁) / 2.
+    Рахуємо, поки |xₙ - xₙ₋₁| &gt;= eps. steps - скільки разів
+    порахували нове xₙ. Значення - з 6 знаками після коми.
+
+    :param number: додатне число, з якого беремо корінь
+    :param eps: точність (eps &gt; 0)
+    :return: рядок 'sqrt(number) = значення, steps = кроки'
+
+    &gt;&gt;&gt; heron_sqrt(2, 1e-6)
+    'sqrt(2) = 1.414214, steps = 5'
+    &gt;&gt;&gt; heron_sqrt(9, 1e-6)
+    'sqrt(9) = 3.000000, steps = 6'
+    &gt;&gt;&gt; heron_sqrt(1, 1e-6)
+    'sqrt(1) = 1.000000, steps = 1'
+    &gt;&gt;&gt; heron_sqrt(0.25, 1e-6)
+    'sqrt(0.25) = 0.500000, steps = 5'
+    &gt;&gt;&gt; heron_sqrt(10000, 1e-6)
+    'sqrt(10000) = 100.000000, steps = 11'
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 7. Задачі з doctest (розвʼязок).
+
+Відкривай лише після 2 спроб розвʼязати самому.
+Перевірка (з теки Курс):
+    python3 -m doctest _rozvyazky/urok07.py -v
+&quot;&quot;&quot;
+import doctest
+
+
+def sqrt2_fraction(steps: int) -&gt; str:
+    &quot;&quot;&quot;Наближення кореня з 2 дробом p/q за системою рекурентних.
+
+    Система (перехресна - нове p і нове q рахуються зі старих):
+        p₀ = 1, q₀ = 1,
+        pₖ = pₖ₋₁ + 2 * qₖ₋₁,
+        qₖ = pₖ₋₁ + qₖ₋₁,   k &gt;= 1.
+    Дріб p/q з кожним кроком ближчий до √2 = 1.41421...
+
+    :param steps: скільки кроків зробити (steps &gt;= 0)
+    :return: рядок 'p/q' після steps кроків
+
+    &gt;&gt;&gt; sqrt2_fraction(0)
+    '1/1'
+    &gt;&gt;&gt; sqrt2_fraction(1)
+    '3/2'
+    &gt;&gt;&gt; sqrt2_fraction(2)
+    '7/5'
+    &gt;&gt;&gt; sqrt2_fraction(4)
+    '41/29'
+    &gt;&gt;&gt; sqrt2_fraction(6)
+    '239/169'
+    &quot;&quot;&quot;
+    numerator = 1      # p₀
+    denominator = 1    # q₀
+    # Лічильник циклу не потрібен у формулах, тому імʼя _ (як у лекції 8).
+    for _ in range(steps):
+        # Обидва нові значення - зі СТАРИХ numerator і denominator.
+        # Якби одразу написати numerator = ..., то в наступному рядку
+        # denominator порахувався б уже з нового numerator.
+        new_numerator = numerator + 2 * denominator
+        new_denominator = numerator + denominator
+        numerator = new_numerator
+        denominator = new_denominator
+    # steps = 0: цикл не виконався жодного разу, лишилось 1/1.
+    return f&quot;{numerator}/{denominator}&quot;
+
+
+def heron_sqrt(number: float, eps: float) -&gt; str:
+    &quot;&quot;&quot;Корінь з number методом Герона з точністю eps.
+
+    Послідовність: x₀ = number, xₙ = (xₙ₋₁ + number / xₙ₋₁) / 2.
+    Рахуємо, поки |xₙ - xₙ₋₁| &gt;= eps. steps - скільки разів
+    порахували нове xₙ. Значення - з 6 знаками після коми.
+
+    :param number: додатне число, з якого беремо корінь
+    :param eps: точність (eps &gt; 0)
+    :return: рядок 'sqrt(number) = значення, steps = кроки'
+
+    &gt;&gt;&gt; heron_sqrt(2, 1e-6)
+    'sqrt(2) = 1.414214, steps = 5'
+    &gt;&gt;&gt; heron_sqrt(9, 1e-6)
+    'sqrt(9) = 3.000000, steps = 6'
+    &gt;&gt;&gt; heron_sqrt(1, 1e-6)
+    'sqrt(1) = 1.000000, steps = 1'
+    &gt;&gt;&gt; heron_sqrt(0.25, 1e-6)
+    'sqrt(0.25) = 0.500000, steps = 5'
+    &gt;&gt;&gt; heron_sqrt(10000, 1e-6)
+    'sqrt(10000) = 100.000000, steps = 11'
+    &quot;&quot;&quot;
+    previous = number                                  # x₀
+    current = (previous + number / previous) / 2       # x₁
+    steps = 1
+    # Умова зупинки: |xₙ - xₙ₋₁| &lt; eps. У while - її заперечення.
+    while abs(current - previous) &gt;= eps:
+        previous = current
+        current = (previous + number / previous) / 2
+        steps += 1   # while сам не рахує кроки (лекція 7, с. 9)
+    return f&quot;sqrt({number}) = {current:.6f}, steps = {steps}&quot;
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+</details>
+<h2 id="7-поясни-чому">7. Поясни чому</h2>
+<p><strong>Питання 1.</strong> Чому в перехресній системі (aₖ залежить від bₖ₋₁, bₖ від aₖ₋₁) не можна
+просто написати <code>a = a * b</code>, а потім <code>b = a + b</code>?</p>
+<details>
+<summary>Еталон</summary>
+<p>Бо Python виконує рядки по черзі, а присвоєння <strong>затирає</strong> старе значення. Після <code>a = a * b</code>
+у змінній <code>a</code> лежить вже aₖ, а формула для bₖ хоче aₖ₋₁. Старого значення більше ніде нема.
+Тому спершу треба порахувати <strong>всі</strong> нові значення в допоміжні змінні (<code>a_k</code>, <code>b_k</code>) зі
+старих, і лише потім присвоїти. В уроці 09 буде коротший запис <code>a, b = a * b, a + b</code> - там
+права частина рахується повністю до присвоєння.</p>
+</details>
+<p><strong>Питання 2.</strong> Чому умова в <code>while</code> - це <strong>заперечення</strong> умови зупинки, а не сама умова?</p>
+<details>
+<summary>Еталон</summary>
+<p>Бо <code>while</code> означає «<strong>поки</strong> умова істинна - роби ще крок». Ми ж формулюємо задачу як
+«рахуй, <strong>доки не</strong> стане aₖ ≥ N». «Доки не стане A» = «поки не-A». Заперечення
+aₖ ≥ N - це aₖ &lt; N; заперечення |yₙ - yₙ₋₁| &lt; ε - це |yₙ - yₙ₋₁| ≥ ε. Якщо в <code>while</code>
+написати саму умову зупинки, цикл або не почнеться, або зупиниться не там.</p>
+</details>
+<p><strong>Питання 3.</strong> У прикладі «найбільший член, що не перевищує a» програма друкує <code>x2</code>, а
+не <code>x1</code>. Чому?</p>
+<details>
+<summary>Еталон</summary>
+<p>Цикл <code>while x1 &lt;= a</code> зупиняється лише тоді, коли <code>x1</code> <strong>вже</strong> більший за <code>a</code> (41 &gt; 30).
+Тобто після циклу в <code>x1</code> - перший «поганий» член. Шуканий - той, що перед ним, а він
+якраз лежить у <code>x2</code> після зсуву. Ми не можемо «знати наперед», що наступний член
+перевищить межу, - дізнаємось, лише коли порахуємо його. Тому й тримаємо попередній.</p>
+</details>
+<p><strong>Питання 4.</strong> Чому член ряду aₙ = xⁿ/n! рахують як <code>term = x / number * term</code>, а не
+<code>x ** n / factorial(n)</code>?</p>
+<details>
+<summary>Еталон</summary>
+<p>Дві причини. Швидкість: з попереднього члена - одне множення і одне ділення, а
+заново - n множень для xⁿ і ще n для n!. Діапазон: xⁿ і n! окремо дуже швидко стають
+величезними (171! вже більше за найбільший float, ЛР5, с. 2), хоча їхнє відношення
+помірне. Множник x/n тримає член «нормального» розміру на кожному кроці. Саме це ЛР5
+завд. 1 просить порівняти з «наївною» реалізацією.</p>
+</details>
+<h2 id="8-що-запамятати">8. Що запам'ятати</h2>
+<ul>
+<li>Система рекурентних = кілька величин, які рахуються <strong>разом в одному циклі</strong>, кожна своєю
+  маленькою формулою (доданок, сума, степінь...).</li>
+<li>Член ряду рахуй з попереднього: aₙ = aₙ₋₁ · (множник). Спершу новий член, потім сума.</li>
+<li>Перехресні співвідношення: спершу всі нові значення з <strong>старих</strong> (допоміжні змінні), потім
+  присвоєння. Інакше другий рядок бере вже нове.</li>
+<li>Третій порядок - три змінні і зсув <strong>від найстарішої</strong>: <code>a3 = a2</code>, <code>a2 = a1</code>, <code>a1 = new</code>.</li>
+<li>«Знайти перший член з умовою» - <code>while</code>, і в ньому <strong>заперечення</strong> умови зупинки.</li>
+<li>«Останній, що ще задовольняє умову» - зберігай попередній член.</li>
+<li>Точність ε: рахуй, поки |поточний - попередній| ≥ ε. У <code>while</code> лічильник - сам (<code>n += 1</code>).</li>
+<li>Бісекція: середина, лишаємо половину з різними знаками, поки довжина ≥ ε.
+  Хорди: uₙ = uₙ₋₁ - f(uₙ₋₁)·(b - uₙ₋₁)/(f(b) - f(uₙ₋₁)).</li>
+</ul>
+<p><strong>Де в лабах:</strong>
+- ЛР5 завд. 1 (пункти a-c) - член ряду і суму/добуток з попереднього, без степенів і
+  факторіалів; пункт d) - дві звʼязані послідовності aₖ, bₖ (перехресна система).
+- ЛР5 завд. 2 - ряд для sin з точністю ε (<code>while</code>, член з попереднього); завд. 3 - π з
+  точністю (Грегорі, Валліс).
+- ЛР6 завд. 2 - визначник Dₙ рекурентно (другий порядок: Dₙ з Dₙ₋₁ і Dₙ₋₂) і перший n,
+  де |Dₙ| &lt; a або |Dₙ| &gt; a (<code>while</code> з запереченням); завд. 3 - бісекція і хорди.</p>
+<hr>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/urok-08">Наступний урок →</a></p>

@@ -208,3 +208,7 @@ h3 { font-size: 1.05rem; margin: 20px 0 8px; }
 .vhint { margin: 8px 0; }
 
 [hidden] { display: none !important; }
+.later > summary::before { content: "▸"; display: inline-block; width: 1.2em; }
+.later[open] > summary::before { content: "▾"; }
+.later > summary { list-style: none; }
+.later > summary::-webkit-details-marker { display: none; }

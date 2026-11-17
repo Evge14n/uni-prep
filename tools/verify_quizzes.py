@@ -28,6 +28,11 @@ NS.update({"e": sp.E, "E": sp.E, "pi": sp.pi, "oo": sp.oo, "ln": sp.log})
 for s in "x y z t u v w a b c n k m h r s".split():
     NS[s] = sp.Symbol(s, real=True)
 
+import re  # noqa: E402
+
+# «(2 знаки після коми)», «(Числом, 4 знаки ...)», «3 знаки» - але не «зі знаком»
+PREC = re.compile(r"(\d)\s*знак(?:и|ами|ів)?\b")
+
 BAD = ["$$", "\\frac", "\\sqrt", "begin{", "\\(", "\\[", "—", "–"]
 
 
@@ -108,6 +113,14 @@ def main():
                     continue
                 if t == "number":
                     tol = q.get("tol", 0.01)
+                    # UNIFIX1 п.2: відповідь, округлена так, як просить питання («3 знаки після коми»), мусить пройти
+                    # допуск сайту (k2-055 просило 3 знаки, а приймало лише 4 - UNIFINAL1F).
+                    pm = PREC.search(q["q"])
+                    if pm:
+                        nd = int(pm.group(1))
+                        r = round(q["answer"], nd)
+                        if not (abs(r - q["answer"]) <= tol * abs(q["answer"]) + q.get("atol", 1e-9)):
+                            errs.append(f"{where}: просить {nd} знаки, а {r} не проходить допуск tol={tol}")
                     if not (abs(float(sp.N(got)) - q["answer"]) <= tol * abs(q["answer"]) + q.get("atol", 1e-9)):
                         errs.append(f"{where}: verify={sp.N(got, 8)} ≠ answer={q['answer']}")
                     else:

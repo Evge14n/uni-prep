@@ -22,18 +22,28 @@ if (!STORE.d) STORE.d = {};
 function dayKey(d = new Date()) {
   return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
 }
+// UNIFIX1: «памʼятаю надовго» = остання відповідь правильна і дана через ≥ 20 год (≈ добу) після попередньої;
+// правильно того ж дня - лише «знаю сьогодні» (коротка памʼять обманює). Та сама межа, що в боті.
+const LONG_MS = 20 * 3600 * 1000;
 function record(unit, q, ok, mode) {
   const id = unit + "/" + q.id;
   const r = STORE.q[id] || { r: 0, w: 0, t: q.topic };
+  const now = Date.now();
   if (ok) r.r++; else r.w++;
   r.last = ok ? 1 : 0;
   r.t = q.topic;
+  if (!r.f) r.f = now;                       // коли вперше відповів
+  if (!ok) r.lt = 0;
+  else if (r.ts && now - r.ts >= LONG_MS) r.lt = 1;
+  r.ts = now;                                // остання відповідь
+  if (q.type === "gen") r.g = 1;             // картка «поясни / виведи / задача» - не тестове питання
   STORE.q[id] = r;
   // день: скільки відповідей, скільки з карток, скільки по кожній темі (для «Сьогодні» і серії днів)
   const k = dayKey();
   const d = STORE.d[k] || (STORE.d[k] = { n: 0, r: 0, t: {} });
   d.n++;
   if (mode === "recall") d.r++;
+  if (mode === "week" || mode === "month") d.w = (d.w || 0) + 1;
   const tk = unit + "|" + q.topic;
   d.t[tk] = (d.t[tk] || 0) + 1;
   const keys = Object.keys(STORE.d).sort();
@@ -44,12 +54,28 @@ function unitStats(unit) {
   let r = 0, w = 0, seen = 0, wrongNow = 0, rightNow = 0;
   const topics = {};
   for (const [id, v] of Object.entries(STORE.q)) {
-    if (!id.startsWith(unit + "/")) continue;
+    if (!id.startsWith(unit + "/") || v.g) continue;
     seen++; r += v.r; w += v.w; if (v.last === 0) wrongNow++; if (v.last === 1) rightNow++;
     const t = topics[v.t] || (topics[v.t] = { r: 0, w: 0 });
     t.r += v.r; t.w += v.w;
   }
   return { r, w, seen, wrongNow, rightNow, topics };
+}
+// «знаю сьогодні» / «памʼятаю надовго» по розділу (тестові питання + картки «поясни/виведи»)
+function memStats(unit) {
+  let today = 0, long = 0, seen = 0;
+  for (const [id, v] of Object.entries(STORE.q)) {
+    if (!id.startsWith(unit + "/")) continue;
+    seen++;
+    if (v.last === 1 && v.lt) long++;
+    else if (v.last === 1) today++;
+  }
+  return { today, long, seen };
+}
+function memLine(unit) {
+  const m = memStats(unit);
+  if (!m.seen) return "";
+  return `<span class="mem"><b class="num">${m.long}</b> памʼятаю надовго · <b class="num">${m.today}</b> знаю сьогодні</span>`;
 }
 function streak() {
   const d = new Date();
@@ -241,7 +267,7 @@ function drawNav() {
   $(".dnav").innerHTML = items;
 }
 function markNav(h0) {
-  const cur = !h0 ? "#/" : (h0 === "u" || h0 === "q" || h0 === "subjects" || h0 === "glossary" || h0 === "about") ? "#/subjects" : "#/" + h0;
+  const cur = !h0 || h0 === "w" ? "#/" : (h0 === "u" || h0 === "q" || h0 === "subjects" || h0 === "glossary" || h0 === "about") ? "#/subjects" : "#/" + h0;
   document.querySelectorAll("[data-nav]").forEach((a) => {
     if (a.dataset.nav === cur) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
@@ -305,7 +331,8 @@ async function planData() {
     const c = cells(tr);
     const a = tr.querySelector('a[href^="#/u/"]');
     const m = a ? a.getAttribute("href").match(/#\/u\/([^/]+)/) : null;
-    return { n: parseInt(c[0].textContent, 10), coll: c[2].textContent.trim(), topic: c[3].textContent.trim(), unit: m ? m[1] : "" };
+    // UNIFIX1 п.10: черга без колонки «День тижня»: № | Колоквіум | Тема | Задачі | Де
+    return { n: parseInt(c[0].textContent, 10), coll: c[1].textContent.trim(), topic: c[2].textContent.trim(), unit: m ? m[1] : "" };
   }) : [];
   PLAN = { days, queue };
   return PLAN;
@@ -329,6 +356,7 @@ function unitCard(u) {
         <h3>${esc(u.title)}</h3>
         <div class="row"><span>Дата: ${esc(u.date)}</span><span>${esc(u.points)}</span></div>
         <div class="row"><span>${u.nq} питань у тестах</span>${u.nv ? `<span>${u.nv} відео</span>` : ""}</div>
+        ${memLine(u.id) ? `<div class="row">${memLine(u.id)}</div>` : ""}
       </div>
       ${ring(p, 56, 6, `<b>${Math.round(p * 100)}%</b>`)}
     </a>`;
@@ -360,8 +388,16 @@ async function home() {
       <span class="go">${icon("right")}</span></a>`;
   const hasB = /блок Б/.test(day.what);
   if (wd === "нд") {
-    const weak = coll.slice().sort((a, b) => mastery(a) - mastery(b))[0] || aUnit;
-    tiles.push(tile({ s: sk(weak.id), href: `#/u/${weak.id}/shpargalka`, ic: "sheet", k: `${day.min || 10} хв · неділя`, t: "Перечитати шпаргалку: " + esc(weak.title), main: true }));
+    // UNIFIX1: неділя - тест тижня з усього вивченого (раз на 4 тижні - «через місяць»); поки вивченого мало - шпаргалка
+    const ck = cumulKind();
+    const wDone = (rec.w || 0) > 0;
+    if (ck) {
+      tiles.push(tile({ s: "an", href: `#/w/${ck}`, ic: "redo", k: `${ck === "month" ? "Раз на 4 тижні" : "Неділя"} · ≈ 10 хв · теми впереміш`, t: ck === "month" ? "Тест «через місяць»" : "Тест тижня: усе вивчене", main: !wDone, done: wDone, id: "goW" }));
+      tiles.push(tile({ s: sk(aUnit.id), href: `#/q/${aUnit.id}/recall`, ic: "cards", k: "Блок А · 5 хв", t: aDone ? "Картки на сьогодні є" : "Пригадай сам: картки", done: aDone, id: "goA" }));
+    } else {
+      const weak = coll.slice().sort((a, b) => mastery(a) - mastery(b))[0] || aUnit;
+      tiles.push(tile({ s: sk(weak.id), href: `#/u/${weak.id}/shpargalka`, ic: "sheet", k: `${day.min || 10} хв · неділя`, t: "Перечитати шпаргалку: " + esc(weak.title), main: true }));
+    }
   } else {
     tiles.push(tile({ s: sk(aUnit.id), href: `#/q/${aUnit.id}/recall`, ic: "cards", k: "Блок А · 10-15 хв · повторення", t: aDone ? "Картки на сьогодні є" : "Пригадай сам: картки", done: aDone, main: !hasB && wd !== "сб" && !aDone, id: "goA" }));
     if (hasB) {
@@ -456,7 +492,7 @@ async function unitPage(id, page) {
   const p = mastery(u);
   const head = `<a class="back" href="#/subjects">${icon("left")}Усі предмети</a>
     <div class="uhead"><div>${kindBadge(u)}<h1>${esc(u.title)}</h1>
-    <p class="muted">Дата: ${esc(u.date)}. ${esc(u.points)}. ${esc(u.format || "")}</p></div>
+    <p class="muted">Дата: ${esc(u.date)}. ${esc(u.points)}. ${esc(u.format || "")}</p>${memLine(u.id) ? `<p class="muted">${memLine(u.id)}</p>` : ""}</div>
     ${ring(p, 64, 7, `<b>${Math.round(p * 100)}%</b>`)}</div>
     ${unitTabs(u, page)}`;
   if (page === "test") { await testStart(u, head); return animateRings(); }
@@ -513,7 +549,7 @@ async function testStart(u, head) {
     <div class="modes stagger">
       ${mt(`#/q/${u.id}/real`, "clock", "Як на справжньому", t.timer ? `${t.count} пит., ${t.timer} хв, без підказок` : "без підказок до кінця", "", true)}
       ${mt(`#/q/${u.id}/train`, "pen", "Тренування з поясненнями", "одразу видно, чому так")}
-      ${mt(`#/q/${u.id}/recall`, "cards", "Пригадай сам (картки)", "переверни і свайпни: знав чи ні")}
+      ${mt(`#/q/${u.id}/recall`, "cards", "Пригадай сам (картки)", u.ng ? `${RECALL_N} карток: спершу ті, що пора перевірити через добу; є «поясни» і «виведи»` : `${RECALL_N} карток: спершу ті, що пора перевірити через добу`)}
       ${mt(`#/q/${u.id}/wrong`, "redo", `Лише помилки (${wrongIds.length})`, wrongIds.length ? "перерозвʼязати те, що не вийшло" : "поки помилок нема", wrongIds.length ? "" : ' aria-disabled="true"')}
     </div>
     <details class="card picker"><summary>${icon("target")}Тренувати лише вибрані теми</summary>
@@ -531,7 +567,7 @@ async function testStart(u, head) {
   });
 }
 
-async function loadPool(u) {
+async function loadPool(u, withGen = false) {
   const ids = [u.id, ...(u.include || [])];
   const out = [];
   const seen = new Set();
@@ -544,13 +580,99 @@ async function loadPool(u) {
       seen.add(k);
       out.push(Object.assign({ _unit: id }, q));
     }
+    // UNIFIX1: у «Пригадай сам» - ще й картки «поясни, чому / виведи / задача без підказки» (data/<розділ>/gen.json)
+    const un = UNITS.find((x) => x.id === id);
+    if (withGen && un && un.ng) {
+      try {
+        const g = await getJSON(`data/${id}/gen.json`);
+        for (const q of g.cards) out.push(Object.assign({ _unit: id }, q));
+      } catch (e) { /* без карток на генерацію */ }
+    }
   }
   return out;
+}
+
+// ---------- довга памʼять (UNIFIX1): порядок карток, перемежування, тест тижня і «через місяць» ----------
+function recKey(q) { return q._unit + "/" + q.id; }
+// сусідні картки - з різних тем (interleaving); групи в порядку появи, всередині порядок зберігається
+function interleave(list) {
+  const groups = new Map();
+  for (const q of list) {
+    const k = q._unit + "|" + q.topic;
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(q);
+  }
+  const out = [];
+  let last = null;
+  while (out.length < list.length) {
+    const ks = [...groups.keys()].filter((k) => groups.get(k).length).sort((a, b) => groups.get(b).length - groups.get(a).length);
+    const k = ks.find((x) => x !== last) || ks[0];
+    out.push(groups.get(k).shift());
+    last = k;
+  }
+  return out;
+}
+// «Пригадай сам»: спершу те, що пора перевірити через добу (ще не «надовго»), потім помилки, потім нові
+// («Закінчити речення» першими, «поясни/виведи» після питань своєї теми), «надовго» - в кінці
+function recallOrder(pool) {
+  const now = Date.now();
+  const topicPos = new Map();
+  pool.forEach((q) => { const k = q._unit + "|" + q.topic; if (!topicPos.has(k)) topicPos.set(k, topicPos.size); });
+  const pr = (q) => {
+    const r = STORE.q[recKey(q)];
+    if (!r) return 2;
+    if (r.lt && r.last === 1) return 3;
+    if (r.last === 0) return 1;
+    return now - (r.ts || 0) >= LONG_MS ? 0 : 4; // правильно сьогодні - лише в самому кінці
+  };
+  const items = shuffle(pool.slice()).map((q) => ({ q, p: pr(q), s: /^Закінчіть речення/.test(q.q) ? 0 : 1, t: topicPos.get(q._unit + "|" + q.topic), g: q.type === "gen" ? 1 : 0 }));
+  items.sort((a, b) => a.p - b.p || (a.p === 2 ? (a.s - b.s || a.t - b.t || a.g - b.g) : 0));
+  const head = items.slice(0, RECALL_N).map((x) => x.q);
+  return interleave(head);
+}
+const RECALL_N = 20;
+const MONTH_MS = 28 * 86400000;
+// пул для тесту тижня / місяця: усе вивчене в усіх розділах; тиждень - що відповідав ≥ 20 год тому;
+// місяць - що вперше вчив ≥ 4 тижні тому
+function cumulKeys(kind) {
+  const now = Date.now();
+  return Object.entries(STORE.q).filter(([, v]) => v.f && (kind === "month" ? now - v.f >= MONTH_MS : now - (v.ts || 0) >= LONG_MS)).map(([k]) => k);
+}
+function cumulKind() {
+  const lm = STORE.m || 0;
+  if (Date.now() - lm >= MONTH_MS && cumulKeys("month").length >= 5) return "month";
+  return cumulKeys("week").length >= 5 ? "week" : null;
+}
+async function cumulTest(kind) {
+  if (kind !== "week" && kind !== "month") return notFound();
+  setTitle(kind === "month" ? "Тест «через місяць»" : "Тест тижня");
+  delete app.dataset.s;
+  clearInterval(timerId);
+  const keys = new Set(cumulKeys(kind));
+  const units = [...new Set([...keys].map((k) => k.split("/")[0]))];
+  let pool = [];
+  for (const id of units) {
+    const u = UNITS.find((x) => x.id === id);
+    if (u) pool = pool.concat((await loadPool({ id, include: [] }, true)).filter((q) => keys.has(recKey(q))));
+  }
+  if (pool.length < 5) {
+    app.innerHTML = `<a class="back" href="#/">${icon("left")}На головну</a><div class="card"><p>Поки замало вивченого для тесту (треба хоча б 5 карток, на які ти відповідав учора або раніше).</p></div>`;
+    return;
+  }
+  // спершу те, що ще не доведено «надовго», далі решта; 12 (тиждень) або 15 (місяць) карток, теми впереміш
+  pool = shuffle(pool).sort((a, b) => (STORE.q[recKey(a)].lt ? 1 : 0) - (STORE.q[recKey(b)].lt ? 1 : 0));
+  const qs = interleave(pool.slice(0, kind === "month" ? 15 : 12));
+  const u = { id: "all", title: kind === "month" ? "Тест «через місяць»" : "Тест тижня", include: [] };
+  const S = { u, mode: kind, real: false, qs, i: 0, ans: new Array(qs.length).fill(null), done: false, end: 0, enter: true, known: 0, back: "#/", cumul: kind };
+  S.vids = await loadVideos(units);
+  S_CUR = S;
+  renderRecall(S);
 }
 
 // ---------- тест: збереження посеред проходу (назад/перезавантаження не губить відповіді) ----------
 const RUN = "uniprep:run";
 function saveRun(S) {
+  if (S.cumul) return; // тест тижня/місяця не відновлюємо - його пул залежить від дати
   try {
     sessionStorage.setItem(RUN, JSON.stringify({ id: S.u.id, mode: S.mode, keys: S.qs.map((q) => q._unit + "/" + q.id),
       orders: S.qs.map((q) => q._order || null), ans: S.ans, i: S.i, end: S.end, known: S.known || 0 }));
@@ -571,7 +693,7 @@ async function quiz(id, mode, fresh) {
   if (!u) return notFound();
   setTitle("Тест: " + u.title);
   app.dataset.s = sk(u.id);
-  let pool = await loadPool(u);
+  let pool = await loadPool(u, mode === "recall");
   const t = u.test || {};
   clearInterval(timerId);
   S_CUR = null;
@@ -595,7 +717,8 @@ async function quiz(id, mode, fresh) {
       app.innerHTML = `<a class="back" href="#/u/${id}/test">${icon("left")}Назад</a><div class="card"><p>Тут поки нема питань${mode === "wrong" ? ". Помилок немає - так тримати." : "."}</p></div>`;
       return;
     }
-    shuffle(pool);
+    if (mode === "recall") pool = recallOrder(pool); // UNIFIX1: довга памʼять + перемежування, 20 карток
+    else shuffle(pool);
     const real = mode === "real";
     if (real && t.count) pool = pool.slice(0, t.count);
     const qs = pool.map((q) => {
@@ -619,24 +742,37 @@ async function quiz(id, mode, fresh) {
 }
 let S_CUR = null;
 
-// головне відео теми (з таймкодом) - показуємо лише після неправильної відповіді
+// головне відео теми (з таймкодом) - показуємо лише після неправильної відповіді.
+// UNIFIX1 п.7: «частини» теми (parts) - питання про мінор, гіперболу тощо відкривають інше відео або іншу хвилину.
 async function loadVideos(ids) {
   const m = {};
   for (const id of ids) {
     const un = UNITS.find((x) => x.id === id);
-    if (un && !un.nv) continue; // у розділі нема відео - не просимо файл (інакше 404 у консолі)
+    if (!un || !un.nv) continue; // у розділі нема відео - не просимо файл (інакше 404 у консолі)
     let d;
     try { d = await getJSON(`data/${id}/videos.json`); } catch (e) { continue; }
     for (const t of d.topics) {
       const v = t.videos.find((x) => x.main) || t.videos[0];
-      if (v) m[id + "|" + t.topic] = v;
+      if (v) m[id + "|" + t.topic] = { main: v, videos: t.videos, parts: t.parts || [] };
     }
   }
   return m;
 }
+function pickVideo(e, q) {
+  if (!e) return null;
+  for (const p of e.parts) {
+    let ok = false;
+    try { ok = new RegExp(p.re, "i").test(q.q || ""); } catch (er) { ok = false; }
+    if (!ok) continue;
+    if (!p.id) return null; // до цього питання в лекціях-відео нема фрагмента - лише теорія
+    const v = e.videos.find((x) => x.id === p.id);
+    return v ? Object.assign({}, v, { start: p.start || 0 }) : null;
+  }
+  return e.main;
+}
 function mmss(sec) { sec = Number(sec) || 0; return Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0"); }
 function videoHint(S, q) {
-  const v = S.vids && S.vids[q._unit + "|" + q.topic];
+  const v = pickVideo(S.vids && S.vids[q._unit + "|" + q.topic], q);
   if (!v) return "";
   if (!navigator.onLine) return `<p class="offline-note">Є відео з розвʼязанням цієї теми - відкриється, коли буде інтернет.</p>`;
   const url = `https://www.youtube.com/watch?v=${encodeURIComponent(v.id)}${v.start ? "&t=" + v.start + "s" : ""}`;
@@ -659,15 +795,18 @@ function renderRecall(S) {
   if (S.i >= S.qs.length) return recallResult(S);
   const q = S.qs[S.i];
   const exp = `${rich(q.explain || "")}${q.explainPre ? `<pre>${esc(q.explainPre)}</pre>` : ""}${q.src ? `<div class="src">Джерело: ${esc(q.src)}</div>` : ""}`;
-  app.innerHTML = `${progressBar(S)}<div class="qhead"><a href="#/u/${S.u.id}/test" id="exit">${icon("x")}Вийти</a><span class="num">${S.i + 1} / ${S.qs.length}</span><span>картки</span></div>
+  const tip = q.type === "gen"
+    ? (q.kind === "task" ? "Розвʼяжи в зошиті без підказки, потім переверни." : "Поясни своїми словами - вголос або в зошит, потім переверни.")
+    : "Скажи або запиши відповідь сам, потім переверни картку.";
+  app.innerHTML = `${progressBar(S)}<div class="qhead"><a href="${S.back || `#/u/${S.u.id}/test`}" id="exit">${icon("x")}Вийти</a><span class="num">${S.i + 1} / ${S.qs.length}</span><span>${S.cumul ? esc(S.u.title) : "картки"}</span></div>
     <div class="flash${S.enter && motion() ? " enter" : ""}" id="flash">
       <div class="drag" id="drag">
         <span class="stamp yes" aria-hidden="true">знав</span><span class="stamp no" aria-hidden="true">не знав</span>
         <div class="flip" id="flip">
           <div class="face front"><div class="topic">${esc(q.topic)}</div><p class="qtext">${rich(q.q)}</p>${q.pre ? `<pre>${esc(q.pre)}</pre>` : ""}
-            <div class="tip">${icon("redo")}Скажи або запиши відповідь сам, потім переверни картку.</div></div>
+            <div class="tip">${icon("redo")}${tip}</div></div>
           <div class="face bk" aria-hidden="true"><div class="topic">${esc(q.topic)}</div>
-            <div class="verdict">Відповідь: ${rich(answerText(q))}</div><div class="exp">${exp}</div></div>
+            <div class="verdict">Відповідь: ${rich(answerText(q))}</div>${q.apre ? `<pre>${esc(q.apre)}</pre>` : ""}<div class="exp">${exp}</div></div>
         </div>
       </div>
     </div>
@@ -695,7 +834,7 @@ function renderRecall(S) {
   flip.addEventListener("click", () => { if (!open) doOpen(); });
   const stamps = { yes: flash.querySelector(".stamp.yes"), no: flash.querySelector(".stamp.no") };
   const next = (ok) => {
-    record(q._unit, q, ok, "recall");
+    record(q._unit, q, ok, S.cumul || "recall");
     if (ok) S.known++;
     S.i++;
     saveRun(S);
@@ -766,10 +905,31 @@ function recallResult(S) {
   clearRun();
   const n = S.qs.length;
   const p = n ? S.known / n : 0;
+  if (S.cumul) {
+    // UNIFIX1: тест тижня / «через місяць» - результат і окремо «памʼятаю надовго»
+    const k = dayKey();
+    if (S.cumul === "month") STORE.m = Date.now();
+    const log = STORE.c || (STORE.c = []);
+    log.push({ d: k, k: S.cumul, ok: S.known, n });
+    while (log.length > 20) log.shift();
+    save(STORE);
+    const coll = UNITS.filter((u) => u.kind === "colloquium");
+    app.innerHTML = `<a class="back" href="#/">${icon("left")}На головну</a><h1>${esc(S.u.title)}: результат</h1>
+      <div class="card result">${ring(p, 150, 12, `<b class="score"><span id="cnt">${S.known}</span><small>знав з ${n}</small></b>`, "big")}
+      <div class="pts">${Math.round(p * 100)} % памʼятаєш через добу і більше</div>${streakLine()}
+      <p class="muted">Те, що не згадав, - у «Лише помилки» свого розділу. Так і тренується довга памʼять.</p>
+      ${coll.map((u) => memLine(u.id) ? `<p>${esc(u.title)}: ${memLine(u.id)}</p>` : "").join("")}</div>`;
+    countUp($("#cnt"), S.known);
+    animateRings();
+    if (n) setTimeout(celebrate, 200);
+    focusMain();
+    return;
+  }
   app.innerHTML = `<a class="back" href="#/u/${S.u.id}/test">${icon("left")}До тестів</a><h1>Картки: результат</h1>
     <div class="card result">${ring(p, 150, 12, `<b class="score"><span id="cnt">${S.known}</span><small>знав з ${n}</small></b>`, "big")}
     <div class="pts">${Math.round(p * 100)} % згадав сам</div>${streakLine()}
-    <div class="btn-row" style="width:100%"><a class="btn primary" href="#/q/${S.u.id}/recall" id="again">${icon("redo")}Ще раз</a><a class="btn" href="#/q/${S.u.id}/wrong">Лише помилки</a></div></div>`;
+    ${memLine(S.u.id) ? `<p>${memLine(S.u.id)}</p>` : ""}
+    <div class="btn-row" style="width:100%"><a class="btn primary" href="#/q/${S.u.id}/recall" id="again">${icon("redo")}Ще ${RECALL_N}</a><a class="btn" href="#/q/${S.u.id}/wrong">Лише помилки</a></div></div>`;
   $("#again").addEventListener("click", (e) => { e.preventDefault(); quiz(S.u.id, "recall", true); });
   countUp($("#cnt"), S.known);
   animateRings();
@@ -827,6 +987,7 @@ function fmtNum(x) {
   return String(Number(x.toPrecision(6))).replace(".", ",");
 }
 function answerText(q) {
+  if (q.type === "gen") return q.a || "";
   if (q.type === "single") return q.options[q.answer];
   if (q.type === "multi") return q.answer.map((i) => q.options[i]).join("; ");
   if (q.type === "number") return q.answerText ? String(q.answerText).replace(".", ",") : fmtNum(q.answer);
@@ -976,13 +1137,14 @@ async function statsPage() {
     if (!list.length) return "";
     const p = (s.r) / (s.r + s.w);
     return `<div class="card" data-s="${sk(u.id)}"><div class="uhead"><div><h3 style="margin:2px 0 4px">${esc(u.title)}</h3>
-      <p class="muted">Відповідей ${s.r + s.w}, правильно ${Math.round(100 * p)} %, зараз у помилках ${s.wrongNow}</p></div>${ring(p, 52, 6, `<b>${Math.round(p * 100)}%</b>`)}</div>
+      <p class="muted">Відповідей ${s.r + s.w}, правильно ${Math.round(100 * p)} %, зараз у помилках ${s.wrongNow}</p>${memLine(u.id) ? `<p class="muted">${memLine(u.id)}</p>` : ""}</div>${ring(p, 52, 6, `<b>${Math.round(p * 100)}%</b>`)}</div>
       <ul class="topics">${list.map((x) => `<li><span>${esc(x.t)}</span><span class="chip">${Math.round(x.p * 100)} % з ${x.n}</span></li>`).join("")}</ul>
       <a class="btn subject" href="#/q/${u.id}/wrong">${icon("redo")}Перерозвʼязати помилки</a></div>`;
   }).join("");
   const st = streak();
   app.innerHTML = `<a class="back" href="#/">${icon("left")}На головну</a><h1>Мої слабкі теми</h1>
-    <p class="muted">Статистика зберігається лише на цьому пристрої.</p>
+    <p class="muted">Статистика зберігається лише на цьому пристрої. «Памʼятаю надовго» - остання відповідь правильна і дана через добу або більше після попередньої; «знаю сьогодні» - правильно, але ще не перевірено через добу.</p>
+    ${(STORE.c || []).length ? `<div class="card"><h3 style="margin-top:2px">Тести тижня і місяця</h3><ul class="topics">${STORE.c.slice(-6).reverse().map((c) => `<li><span>${esc(c.d.split("-").reverse().slice(0, 2).join("."))} ${c.k === "month" ? "через місяць" : "тиждень"}</span><span class="chip">${c.ok} з ${c.n}</span></li>`).join("")}</ul></div>` : ""}
     ${st ? `<p>${streakLine()}</p>` : ""}
     <div class="stagger">${rows || "<div class='card'><p>Ще нема відповідей. Пройди будь-який тест.</p></div>"}</div>
     <button class="btn" type="button" id="reset">Скинути статистику</button>`;
@@ -1011,6 +1173,7 @@ async function route() {
     else if (h[0] === "glossary") await staticPage("glossary", "Словник EN-UA");
     else if (h[0] === "about") await staticPage("about", "Як користуватись");
     else if (h[0] === "stats") await statsPage();
+    else if (h[0] === "w") await cumulTest(h[1]);
     else notFound();
   } catch (e) {
     app.innerHTML = `<p>Помилка завантаження (${esc(e.message)}). Якщо ти офлайн, а сайт ще не відкривався з інтернетом, - відкрий раз онлайн.</p>`;

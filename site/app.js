@@ -479,6 +479,7 @@ async function staticPage(key, title) {
 
 const TAB_IC = { teoriya: "book", oznachennya: "sheet", zadachi: "pen", shpargalka: "sheet", slovnyk: "dict", video: "video", test: "target" };
 function unitTabs(u, cur) {
+  if (cur && cur.startsWith("urok-")) cur = "uroky"; // уроки prog - сторінки всередині вкладки «Уроки»
   return `<nav class="tabs" aria-label="Розділи">${u.pages.map((p) =>
     `<a href="#/u/${u.id}/${p.key}"${p.key === cur ? ' aria-current="page"' : ""}>${esc(p.title)}</a>`).join("")}</nav>`;
 }
@@ -500,6 +501,10 @@ async function unitPage(id, page) {
   try {
     const html = await getText(`data/${u.id}/${page}.html`);
     app.innerHTML = head + `<article class="doc">${html}</article>`;
+    if (u.id === "prog" && window.PyRun) { // UNIPROG1: «Запустити» під кодом, Python офлайн
+      PyRun.enhance(app.querySelector("article.doc"));
+      PyRun.box(app.querySelector("#pybox"));
+    }
   } catch (e) {
     app.innerHTML = head + `<p>Не вдалося відкрити (${esc(e.message)}).</p>`;
   }

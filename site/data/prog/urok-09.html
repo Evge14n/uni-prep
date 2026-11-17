@@ -1,0 +1,1223 @@
+<h1 id="урок-9-кортежі-та-генератори">Урок 9. Кортежі та генератори</h1>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/dovidnyk">Довідник функцій</a></p>
+<blockquote>
+<p>Лекція 9 (с. 1-25), потрібно для: ЛР5 (завд. 3 - π за формулою Грегорі), ЛР6 (завд. 3 -
+функція повертає корінь, кількість ітерацій і історію одразу, тобто кортеж), ЛР7 (завд. 2 -
+точки як кортежі (x, y, z), <code>itertools.combinations</code> дає кортежі, сортування за відстанню;
+завд. 3 - «вивести у вигляді списку кортежів індекси»). Час: 30 хв.
+Перед цим уроком: урок 08.</p>
+</blockquote>
+<h2 id="1-ідея">1. Ідея</h2>
+<p>Кортеж (<code>tuple</code>) - це «список, який не можна змінити»: <code>(3, 5)</code>, <code>(120, 80, 200)</code>. Генератор -
+«рецепт» послідовності, який видає елементи по одному, лише коли їх просять, і нічого не
+зберігає наперед. Обидва ти вже бачив: <code>enumerate</code> видає пари <code>(індекс, елемент)</code> - це
+кортежі; <code>sum(x * x for x in values)</code> - генератор-вираз. Цей урок пояснює, що там
+відбувається насправді, і чому <code>a, b = b, a</code> працює без третьої змінної.</p>
+<h3 id="11-кортеж-і-навіщо-він-лекція-9-с-1-2">1.1. Кортеж і навіщо він (Лекція 9, с. 1-2)</h3>
+<p>Кортеж - впорядкована <strong>незмінювана</strong> колекція: <code>(0, 1, 2)</code>, <code>('first', 'second', 100)</code>.
+Навіщо, якщо є списки? Три причини з підручника і одна від лектора:</p>
+<ol>
+<li><strong>Захист від змін.</strong> Константи (розмір вікна, назви днів) ніхто «випадково» не змінить:
+   спроба одразу дасть помилку, а не тихий баг десь далі.</li>
+<li><strong>Менший розмір</strong> - кортежу не треба запасу пам'яті для росту.</li>
+<li><strong>Ключ словника і елемент множини.</strong> Ключем може бути лише хешований об'єкт, а хеш
+   змінюваного об'єкта надійно не порахуєш.</li>
+<li><strong>Зміст: список чи запис?</strong> Список - однорідна колекція змінної довжини (оцінки групи,
+   температури за місяць), позиція нічого особливого не значить. Кортеж - <strong>запис</strong>
+   фіксованої структури: <code>(x, y)</code>, <code>(R, G, B)</code>, <code>(прізвище, ім'я, рік)</code>, і кожна позиція
+   має свій зміст.</li>
+</ol>
+<pre><code class="language-python">&gt;&gt;&gt; import sys
+&gt;&gt;&gt; sys.getsizeof((1, 2, 3)) &lt; sys.getsizeof([1, 2, 3])
+True
+&gt;&gt;&gt; cities = {(49.84, 24.03): &quot;Львів&quot;, (50.45, 30.52): &quot;Київ&quot;}
+&gt;&gt;&gt; cities[(49.84, 24.03)]
+'Львів'
+&gt;&gt;&gt; {[1, 2]: &quot;a&quot;}
+Traceback (most recent call last):
+TypeError: unhashable type: 'list'
+&gt;&gt;&gt; {([1], 2): &quot;a&quot;}
+Traceback (most recent call last):
+TypeError: unhashable type: 'list'
+</code></pre>
+<p>Останній рядок - примітка лекції: кортеж хешований, лише коли <strong>всі</strong> його елементи
+хешовані. Кортеж зі списком усередині ключем бути не може.</p>
+<h3 id="12-як-створити-кортеж-лекція-9-с-2-3">1.2. Як створити кортеж (Лекція 9, с. 2-3)</h3>
+<pre><code class="language-python">&gt;&gt;&gt; empty_tuple = ()
+&gt;&gt;&gt; one_element = (333,)              # кома обов'язкова!
+&gt;&gt;&gt; type((333)), type((333,))
+(&lt;class 'int'&gt;, &lt;class 'tuple'&gt;)
+&gt;&gt;&gt; point = 1, 2, 3                   # дужки не обов'язкові
+&gt;&gt;&gt; point
+(1, 2, 3)
+&gt;&gt;&gt; tuple(range(5)), tuple([1, 2]), tuple(&quot;abc&quot;)
+((0, 1, 2, 3, 4), (1, 2), ('a', 'b', 'c'))
+&gt;&gt;&gt; tuple(number * 2 for number in range(5))
+(0, 2, 4, 6, 8)
+</code></pre>
+<p>Головне: <strong>кортеж створює кома, а не дужки.</strong> <code>(333)</code> - це просто число 333 у дужках, які
+змінюють пріоритет операцій, як у <code>(2 + 3) * 4</code>. Дужки потрібні для порожнього кортежу і для
+читабельності. «Кортежного спискоутворення» нема: <code>(x * 2 for x in range(5))</code> - це
+<strong>генератор-вираз</strong> (1.9), а кортеж з нього - <code>tuple(...)</code>.</p>
+<h3 id="13-що-можна-з-кортежем-лекція-9-с-3-4">1.3. Що можна з кортежем (Лекція 9, с. 3-4)</h3>
+<p>Усе, що <strong>не змінює</strong>: індекси, зрізи, <code>len</code>, <code>min</code>, <code>max</code>, <code>sum</code>, <code>in</code>, <code>+</code>, <code>*</code>, і лише два методи -
+<code>count</code> та <code>index</code>.</p>
+<pre><code class="language-python">&gt;&gt;&gt; marks = (1, 2, 3, 4, 5)
+&gt;&gt;&gt; marks[4], marks[1:4], marks[::-1]
+(5, (2, 3, 4), (5, 4, 3, 2, 1))
+&gt;&gt;&gt; len(marks), min(marks), max(marks), sum(marks)
+(5, 1, 5, 15)
+&gt;&gt;&gt; 3 in marks
+True
+&gt;&gt;&gt; (1, 2) + (3,), (0,) * 4
+((1, 2, 3), (0, 0, 0, 0))
+&gt;&gt;&gt; (1, 2, 2, 3).count(2), (1, 2, 2, 3).index(3)
+(2, 3)
+&gt;&gt;&gt; marks[4] = 333
+Traceback (most recent call last):
+TypeError: 'tuple' object does not support item assignment
+&gt;&gt;&gt; marks = marks + (555, 666)    # &quot;змінити&quot; = створити НОВИЙ кортеж
+&gt;&gt;&gt; marks
+(1, 2, 3, 4, 5, 555, 666)
+</code></pre>
+<p>Після <code>marks = marks + (555, 666)</code> ім'я <code>marks</code> вказує на інший об'єкт; старий кортеж не
+змінився (його приберуть, коли на нього не лишиться посилань) - так само, як з числами і
+рядками.</p>
+<p><strong>Порівняння - лексикографічне</strong>, як слова в словнику: спершу перші елементи, при рівності -
+другі і далі. Тому сортування списку кортежів сортує «за першим полем, потім за другим»:</p>
+<pre><code class="language-python">&gt;&gt;&gt; (1, 5) &lt; (2, 0), (1, 5) &lt; (1, 7)
+(True, True)
+&gt;&gt;&gt; sorted([(2, 'b'), (1, 'z'), (2, 'a')])
+[(1, 'z'), (2, 'a'), (2, 'b')]
+</code></pre>
+<p><strong>Незмінюваність - «неглибока»</strong> (с. 4). Кортеж не дає змінити <strong>набір посилань</strong>. Але якщо
+посилання веде на список, сам список змінювати можна:</p>
+<pre><code class="language-python">&gt;&gt;&gt; record = ([1, 2], 3)
+&gt;&gt;&gt; record[0].append(99)        # кортеж той самий: те саме посилання на той самий список
+&gt;&gt;&gt; record
+([1, 2, 99], 3)
+&gt;&gt;&gt; record[0] += [4]
+Traceback (most recent call last):
+TypeError: 'tuple' object does not support item assignment
+&gt;&gt;&gt; record
+([1, 2, 99, 4], 3)
+</code></pre>
+<p>Задачка зі співбесід (лекція, с. 4): помилка є, <strong>а список усе одно змінився</strong>. Бо
+<code>record[0] += [4]</code> - це два кроки: (1) список змінюється на місці (як <code>extend</code>) - успішно;
+(2) результат намагаються записати назад у <code>record[0]</code> - заборонено, помилка. Але крок 1
+вже відбувся.</p>
+<h3 id="14-пакування-і-розпакування-лекція-9-с-5-7">1.4. Пакування і розпакування (Лекція 9, с. 5-7)</h3>
+<p><strong>Пакування</strong> - зібрати кілька значень у кортеж: <code>record = (name, group, year)</code>.
+<strong>Розпакування</strong> - розкласти кортеж по змінних: <code>name, group, year = record</code>. Кількість змінних
+мусить збігатися з кількістю елементів:</p>
+<pre><code class="language-python">&gt;&gt;&gt; tpl = (1, 2, 3)
+&gt;&gt;&gt; x_coord, y_coord, z_coord = tpl
+&gt;&gt;&gt; print(x_coord, y_coord, z_coord)
+1 2 3
+&gt;&gt;&gt; first, second = (1, 2, 3)
+Traceback (most recent call last):
+ValueError: too many values to unpack (expected 2)
+&gt;&gt;&gt; first, second, third = (1, 2)
+Traceback (most recent call last):
+ValueError: not enough values to unpack (expected 3, got 2)
+&gt;&gt;&gt; first, second, third = &quot;abc&quot;         # розпакувати можна будь-яку колекцію
+&gt;&gt;&gt; first, second, third
+('a', 'b', 'c')
+&gt;&gt;&gt; hours, minutes, seconds = [12, 30, 45]
+</code></pre>
+<p><strong>Одночасне присвоєння</strong> <code>x, y = u, v</code> - це пакування і розпакування разом: спершу
+<code>t = (u, v)</code>, потім <code>x, y = t</code>. Найважливіше правило лекції (с. 6): <strong>спершу повністю
+обчислюється права частина, і лише потім відбувається присвоєння.</strong> Тому обмін
+працює без третьої «склянки»:</p>
+<pre><code class="language-python"># ввід: 3 | 8
+first = int(input(&quot;first = &quot;))
+second = int(input(&quot;second = &quot;))
+first, second = second, first
+print(&quot;first =&quot;, first, &quot;second =&quot;, second)
+places = [5, 2, 9]
+places[0], places[2] = places[2], places[0]
+print(places)
+</code></pre>
+<pre><code class="language-text">first = 3
+second = 8
+first = 8 second = 3
+[9, 2, 5]
+</code></pre>
+<p>Покроково: (1) праворуч утворюється кортеж <code>(8, 3)</code> зі <strong>старих</strong> значень; (2) він
+розпаковується: 8 у <code>first</code>, 3 у <code>second</code>. Старе значення <code>first</code> не губиться, бо воно вже
+лежить у кортежі. Класичний спосіб - через <code>tmp = first; first = second; second = tmp</code>.</p>
+<p><strong>Розширене розпакування із зірочкою</strong> (с. 6) - «збери решту в список»:</p>
+<pre><code class="language-python">&gt;&gt;&gt; first, *rest = [10, 20, 30, 40]
+&gt;&gt;&gt; first, rest
+(10, [20, 30, 40])
+&gt;&gt;&gt; head, *middle, tail = range(6)
+&gt;&gt;&gt; head, middle, tail
+(0, [1, 2, 3, 4], 5)
+&gt;&gt;&gt; *init, last = &quot;hello&quot;
+&gt;&gt;&gt; init, last
+(['h', 'e', 'l', 'l'], 'o')
+</code></pre>
+<p>Зірочка - лише одна, і «зібране» - <strong>завжди список</strong> (навіть якщо джерело - кортеж чи рядок).</p>
+<p><strong>Ще з лекції (с. 7):</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; name, _, year = (&quot;Тарас&quot;, &quot;Шевченко&quot;, 1814)   # _ - &quot;це поле мені не потрібне&quot;
+&gt;&gt;&gt; (x_coord, y_coord), z_coord = (1, 2), 3       # вкладене розпакування
+&gt;&gt;&gt; for key, value in {&quot;x&quot;: 1, &quot;y&quot;: 2}.items():   # розпакування в циклі
+...     print(key, value)
+x 1
+y 2
+&gt;&gt;&gt; quotient, remainder = divmod(17, 5)           # функція &quot;повертає два значення&quot;
+&gt;&gt;&gt; quotient, remainder
+(3, 2)
+&gt;&gt;&gt; def min_max(values):
+...     return min(values), max(values)           # насправді повертає ОДИН кортеж
+&gt;&gt;&gt; low, high = min_max([4, 8, 1, 9])
+&gt;&gt;&gt; low, high
+(1, 9)
+&gt;&gt;&gt; args = (2, 10)
+&gt;&gt;&gt; pow(*args)                                    # те саме, що pow(2, 10)
+1024
+</code></pre>
+<p>«Функція повертає кілька значень» - насправді вона повертає <strong>один кортеж</strong>, а ми одразу
+його розпаковуємо. Саме так у ЛР6 завд. 3 функція методу може повернути корінь, кількість
+ітерацій і історію: <code>return root, steps, history</code>.</p>
+<h3 id="15-рекурентні-співвідношення-стають-коротшими-лекція-9-с-7-9">1.5. Рекурентні співвідношення стають коротшими (Лекція 9, с. 7-9)</h3>
+<p>Пам'ятаєш з уроку 07 пастку перехресних співвідношень і зсув трьох змінних? Одночасне
+присвоєння розв'язує обидві: права частина рахується зі <strong>старих</strong> значень. Числа
+Фібоначчі з лекції (F₀ = F₁ = 1, як у коді лекції):</p>
+<pre><code class="language-python"># ввід: 5
+N = int(input('введіть N: '))
+F2 = 1                          # F2 - нульове число Фібоначчі
+F1 = 1                          # F1 - перше число Фібоначчі
+for n in range(2, N + 1):
+    F2, F1 = F1, F1 + F2        # третя змінна стає непотрібною
+print('Результат', F1)
+</code></pre>
+<pre><code class="language-text">введіть N: 5
+Результат 8
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>крок n</th>
+<th>було (F2, F1)</th>
+<th>праворуч (F1, F1 + F2)</th>
+<th>стало (F2, F1)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>початок</td>
+<td>-</td>
+<td>-</td>
+<td>(1, 1)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>(1, 1)</td>
+<td>(1, 2)</td>
+<td>(1, 2)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>(1, 2)</td>
+<td>(2, 3)</td>
+<td>(2, 3)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>(2, 3)</td>
+<td>(3, 5)</td>
+<td>(3, 5)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>(3, 5)</td>
+<td>(5, 8)</td>
+<td>(5, 8)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Якщо написати двома рядками <code>F2 = F1</code>, <code>F1 = F1 + F2</code>, то в другому рядку <code>F2</code> уже дорівнює
+<code>F1</code>, і F1 просто <strong>подвоюється</strong>. Версія з поширеною нумерацією F₀ = 0, F₁ = 1:</p>
+<pre><code class="language-python">def fib(number):
+    previous, current = 0, 1
+    for _ in range(number):
+        previous, current = current, previous + current
+    return previous
+
+
+print([fib(number) for number in range(10)])
+</code></pre>
+<pre><code class="language-text">[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+</code></pre>
+<p><strong>Алгоритм Евкліда</strong> (с. 8-9) для НСД: <code>V, U = U % V, V</code>, поки V &gt; 0. Код лекції:</p>
+<pre><code class="language-python"># ввід: 48 | 18
+N = int(input(&quot;Введіть перше число &quot;))
+M = int(input(&quot;Введіть друге число &quot;))
+U = N
+V = M
+if U &lt; V:
+    U, V = V, U
+while V &gt; 0:
+    V, U = U % V, V
+print(&quot;НСД(%d, %d) = %d&quot; % (N, M, U))
+</code></pre>
+<pre><code class="language-text">Введіть перше число 48
+Введіть друге число 18
+НСД(48, 18) = 6
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>ітерація</th>
+<th>U</th>
+<th>V</th>
+<th>(U % V, V) - нові (V, U)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>48</td>
+<td>18</td>
+<td>(12, 18)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>18</td>
+<td>12</td>
+<td>(6, 12)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>12</td>
+<td>6</td>
+<td>(0, 6)</td>
+</tr>
+<tr>
+<td>кінець</td>
+<td>6</td>
+<td>0</td>
+<td>НСД = 6</td>
+</tr>
+</tbody>
+</table></div>
+<p>Лекція помічає: блок <code>if U &lt; V</code> не обов'язковий - якщо U &lt; V, то <code>U % V == U</code>, і перша ж
+ітерація сама переставить числа. У реальній програмі - <code>math.gcd(N, M)</code>, а НСК - це
+<code>N * M // math.gcd(N, M)</code>.</p>
+<h3 id="16-іменовані-кортежі-анотації-match-лекція-9-с-9-10">1.6. Іменовані кортежі, анотації, match (Лекція 9, с. 9-10)</h3>
+<p>Звичайний кортеж має «магічні індекси»: що таке <code>student[2]</code>? Іменований кортеж дає полям
+імена:</p>
+<pre><code class="language-python">from collections import namedtuple
+from typing import NamedTuple
+
+Point = namedtuple(&quot;Point&quot;, [&quot;x&quot;, &quot;y&quot;])
+point = Point(3, 4)
+print(point.x, point.y, point[0], point)
+
+
+class Student(NamedTuple):
+    name: str
+    group: str
+    mark: float
+
+
+student = Student(&quot;Оксана&quot;, &quot;КН-21&quot;, 95.0)
+print(student.name, student.mark)
+</code></pre>
+<pre><code class="language-text">3 4 3 Point(x=3, y=4)
+Оксана 95.0
+</code></pre>
+<p><code>student.mark = 100</code> дасть помилку - іменований кортеж теж незмінюваний. Анотації типів для
+колекцій (Python 3.9+): <code>list[float]</code>, <code>tuple[int, int, int]</code> (рівно три цілих),
+<code>tuple[str, ...]</code> (будь-яка довжина). Python їх не перевіряє, зате перевіряє mypy. Ми їх
+пишемо в задачах уроків.</p>
+<p>Оператор <code>match</code> (Python 3.10+) розбирає кортеж «за зразком»:</p>
+<pre><code class="language-python">def describe(point):
+    match point:
+        case (0, 0):
+            return &quot;початок координат&quot;
+        case (x, 0):
+            return f&quot;на осі X, x = {x}&quot;
+        case (0, y):
+            return f&quot;на осі Y, y = {y}&quot;
+        case (x, y):
+            return f&quot;точка ({x}, {y})&quot;
+        case _:
+            return &quot;це не точка&quot;
+
+
+print(describe((3, 0)))
+print(describe((2, 5)))
+print(describe(&quot;abc&quot;))
+</code></pre>
+<pre><code class="language-text">на осі X, x = 3
+точка (2, 5)
+це не точка
+</code></pre>
+<h3 id="17-сортування-списку-кортежів-через-key-лекція-9-с-10-11">1.7. Сортування списку кортежів через key (Лекція 9, с. 10-11)</h3>
+<p><code>key</code> - функція, яка для кожного елемента дає «ключ» для порівняння. <code>lambda s: s[1]</code> -
+коротка безіменна функція «взяти поле 1» (те саме, що <code>def</code> з одним <code>return</code>):</p>
+<pre><code class="language-python">&gt;&gt;&gt; students = [(&quot;Оксана&quot;, 95), (&quot;Тарас&quot;, 82), (&quot;Соломія&quot;, 100), (&quot;Андрій&quot;, 82)]
+&gt;&gt;&gt; sorted(students, key=lambda record: record[1])
+[('Тарас', 82), ('Андрій', 82), ('Оксана', 95), ('Соломія', 100)]
+&gt;&gt;&gt; sorted(students, key=lambda record: (-record[1], record[0]))
+[('Соломія', 100), ('Оксана', 95), ('Андрій', 82), ('Тарас', 82)]
+</code></pre>
+<p>Другий ключ - кортеж <code>(-оцінка, ім'я)</code>: мінус перевертає порядок оцінок (більша оцінка -
+менший ключ - раніше), а при рівних оцінках кортежі порівнюються далі - за іменем. У
+першому сортуванні Тарас лишився перед Андрієм: сортування стабільне, при однаковому ключі
+порядок не міняється.</p>
+<h3 id="18-генератор-вираз-лекція-9-с-11-13">1.8. Генератор-вираз (Лекція 9, с. 11-13)</h3>
+<p><code>(вираз for змінна in колекція if умова)</code> - як спискоутворення, але в <strong>круглих</strong> дужках.
+Різниця принципова: список будується <strong>одразу</strong> весь і лежить у пам'яті; генератор не
+будує нічого, а видає наступний елемент <strong>на запит</strong>.</p>
+<pre><code>                        [ ... ] список             ( ... ) генератор
+пам'ять                 усі елементи               лише поточний стан
+обчислення              одразу (&quot;жадібно&quot;)         на запит (&quot;ліниво&quot;)
+індекс, len, 2-й обхід  так                        ні
+скільки разів обійти    скільки завгодно           один раз
+коли брати              треба доступ і кілька      один прохід, великі або
+                        проходів                   безкінечні дані
+</code></pre>
+<p>Аналогія лекції: книжка займає місце завжди, а автомат, що друкує наступну сторінку на
+прохання, пам'ятає лише, де зупинився.</p>
+<pre><code class="language-python">import sys
+
+squares_list = [number * number for number in range(1_000_000)]
+squares_gen = (number * number for number in range(1_000_000))
+print(sys.getsizeof(squares_list) &gt; 1_000_000)
+print(sys.getsizeof(squares_gen) &lt; 1_000)
+odd = (number for number in range(1, 10, 2))
+print(next(odd), next(odd))
+print(list(odd))
+print(list(odd))
+</code></pre>
+<pre><code class="language-text">True
+True
+1 3
+[5, 7, 9]
+[]
+</code></pre>
+<p><strong>Генератор одноразовий.</strong> <code>next</code> бере наступний елемент; <code>list(odd)</code> забрав решту (5, 7,
+9), і другий <code>list(odd)</code> - порожній: генератор «вичерпано». Ще один <code>next(odd)</code> дав би
+<code>StopIteration</code>. Цикл <code>for</code> сам ловить <code>StopIteration</code> і тихо завершується.</p>
+<p><strong>З <code>sum</code>, <code>max</code>, <code>any</code>, <code>all</code>, <code>join</code></strong> (с. 13) - найчастіше використання. Якщо генератор -
+єдиний аргумент, другі дужки не пишуть:</p>
+<pre><code class="language-python">&gt;&gt;&gt; sum(number * number for number in range(10))
+285
+&gt;&gt;&gt; max(len(word) for word in [&quot;кіт&quot;, &quot;слон&quot;, &quot;миша&quot;])
+4
+&gt;&gt;&gt; any(number &lt; 0 for number in [3, 5, -1, 8])     # є хоч один від'ємний?
+True
+&gt;&gt;&gt; all(number &gt; 0 for number in [3, 5, -1, 8])     # усі додатні?
+False
+&gt;&gt;&gt; &quot;, &quot;.join(str(number) for number in range(5))
+'0, 1, 2, 3, 4'
+&gt;&gt;&gt; sum(1 for number in [12, 0, 7, 15, 21] if number % 3 == 0)   # кількість за умовою
+4
+</code></pre>
+<p><code>any</code> і <code>all</code> зупиняються, щойно відповідь відома (тут - на -1). Останній рядок - прийом
+лекції «порахувати одиничками» (с. 21): додаємо 1 за кожен елемент, що пройшов фільтр.</p>
+<h3 id="19-безкінечні-послідовності-і-yield-лекція-9-с-14">1.9. Безкінечні послідовності і yield (Лекція 9, с. 14)</h3>
+<p>Генератор нічого не рахує наперед, тому може описувати навіть <strong>нескінченну</strong> послідовність,
+а ми беремо з неї скільки треба (<code>itertools.count(0)</code> - 0, 1, 2, ... без кінця; <code>islice</code> -
+«перші n»). Якщо логіка складніша за один вираз, пишуть <strong>функцію-генератор</strong> з <code>yield</code>:
+<code>yield</code> «віддає» значення і <strong>призупиняє</strong> функцію до наступного запиту.</p>
+<pre><code class="language-python">from itertools import count, islice
+
+evens = (number for number in count(0) if number % 2 == 0)
+print(list(islice(evens, 5)))
+
+
+def fib_gen():
+    previous, current = 0, 1
+    while True:
+        yield previous
+        previous, current = current, previous + current
+
+
+print(list(islice(fib_gen(), 10)))
+</code></pre>
+<pre><code class="language-text">[0, 2, 4, 6, 8]
+[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+</code></pre>
+<p><code>while True</code> тут не зависає: після кожного <code>yield</code> функція стоїть і чекає, а <code>islice</code> попросить
+рівно 10 значень.</p>
+<h3 id="110-число-π-за-грегорі-лекція-9-с-14-15">1.10. Число π за Грегорі (Лекція 9, с. 14-15)</h3>
+<p>π/4 = 1 - 1/3 + 1/5 - 1/7 + ... Код лекції (лише змінну <code>a</code> названо <code>fraction</code>):</p>
+<pre><code class="language-python">N = 99999                                    # найбільший знаменник
+generator = (1.0 / k for k in range(1, N + 1, 2))
+pi_4 = 0.0                                   # змінна для pi/4
+sign = 1.0                                   # чергування знака
+for fraction in generator:
+    pi_4 += sign * fraction
+    sign = -sign
+print(4.0 * pi_4)
+</code></pre>
+<pre><code class="language-text">3.1415726535897814
+</code></pre>
+<p>Правильні лише 4 знаки після коми, хоча доданків 50 000: для знакозмінного ряду похибка
+порядку першого відкинутого доданка, тобто ~1/N. Щоб отримати ще один знак, треба вдесятеро
+більше доданків. Знак можна зашити у формулу <code>(-1) ** k</code> і записати все одним виразом, а ряд
+Нілаканти π = 3 + 4/(2·3·4) - 4/(4·5·6) + ... збігається набагато швидше:</p>
+<pre><code class="language-python">import math
+
+
+def gregory(terms):
+    return 4 * sum((-1) ** k / (2 * k + 1) for k in range(terms))
+
+
+def nilakantha(terms):
+    return 3 + sum(
+        (-1) ** (k + 1) * 4 / ((2 * k) * (2 * k + 1) * (2 * k + 2))
+        for k in range(1, terms + 1)
+    )
+
+
+for terms in (10, 100, 1000):
+    print(terms, f&quot;{abs(gregory(terms) - math.pi):.1e}&quot;,
+          f&quot;{abs(nilakantha(terms) - math.pi):.1e}&quot;)
+</code></pre>
+<pre><code class="language-text">10 1.0e-01 1.9e-04
+100 1.0e-02 2.4e-07
+1000 1.0e-03 2.5e-10
+</code></pre>
+<p>Похибка Грегорі ~1/n, Нілаканти ~1/n³: доданків у 10 разів більше - у Грегорі на 1 знак
+точніше, у Нілаканти на 3. Висновок лекції: «асимптотика важливіша за мікрооптимізації».
+(Грегорі - це ЛР5 завд. 3.)</p>
+<h3 id="111-списки-на-практиці-лекція-9-с-15-19">1.11. Списки на практиці (Лекція 9, с. 15-19)</h3>
+<p>Лекція збирає все разом у кількох класичних задачах. Коротко, з виводом:</p>
+<pre><code class="language-python">from bisect import bisect_left
+from collections import deque
+from itertools import accumulate
+
+
+def is_balanced(text):
+    opening, closing = &quot;([{&quot;, &quot;)]}&quot;
+    stack = []
+    for symbol in text:
+        if symbol in opening:
+            stack.append(symbol)
+        elif symbol in closing:
+            if not stack or opening.index(stack.pop()) != closing.index(symbol):
+                return False
+    return not stack
+
+
+print(is_balanced(&quot;{[()]}&quot;), is_balanced(&quot;([)]&quot;), is_balanced(&quot;((&quot;))
+queue = deque([1, 2, 3])
+queue.append(4)
+print(queue.popleft(), queue)
+data = [1, 3, 5, 7, 9, 11]
+position = bisect_left(data, 7)
+print(position, data[position] == 7)
+prefix = [0] + list(accumulate([3, 1, 4, 1, 5, 9, 2, 6]))
+print(prefix, prefix[6] - prefix[2])
+</code></pre>
+<pre><code class="language-text">True False False
+1 deque([2, 3, 4])
+3 True
+[0, 3, 4, 8, 9, 14, 23, 25, 31] 19
+</code></pre>
+<ul>
+<li><strong>Стек</strong> (останнім прийшов - першим вийшов): <code>append</code> кладе на вершину, <code>pop()</code> знімає -
+  обидва O(1). Дужка закрилась - на вершині має лежати її пара.</li>
+<li><strong>Черга</strong> (першим прийшов - першим вийшов): у списку <code>pop(0)</code> коштує O(n), тому
+  <code>collections.deque</code> з <code>popleft()</code> за O(1).</li>
+<li><strong>Двійковий пошук</strong> у відсортованому списку: дивимось на середину, відкидаємо половину -
+  ~log₂ n кроків. Готовий - <code>bisect_left</code>.</li>
+<li><strong>Решето Ератосфена</strong> (с. 17) - «викреслити кратні» через присвоєння зрізу з кроком:
+  <code>is_prime[p * p::p] = [False] * len(range(p * p, n + 1, p))</code>. Зріз за позиціями - як і в
+  ЛР7 завд. 1, але там решето інше («щасливі числа»).</li>
+<li><strong>Префіксні суми</strong>: один прохід - і сума <code>a[i:j]</code> за одну дію: <code>prefix[j] - prefix[i]</code>
+  (тут <code>sum(a[2:6]) = 4 + 1 + 5 + 9 = 19</code>).</li>
+</ul>
+<p>Машинне навчання (с. 18) - те саме: скалярний добуток <code>sum(a * b for a, b in zip(u, v))</code>,
+середньоквадратична похибка <code>sum((a - b) ** 2 for a, b in zip(y_true, y_pred)) / len(y_true)</code>.
+Тут водночас працюють <code>zip</code>, розпакування пар, генератор і <code>sum</code> - «так виглядає
+ідіоматичний Python».</p>
+<p><strong>Мініпроєкт - журнал групи</strong> (с. 18-19): список кортежів-записів <code>(ім'я, оцінка)</code> - список,
+бо студентів скільки завгодно, кортеж, бо запис фіксованої структури.</p>
+<pre><code class="language-python">journal = [
+    (&quot;Оксана&quot;, 95),
+    (&quot;Тарас&quot;, 82),
+    (&quot;Соломія&quot;, 100),
+    (&quot;Андрій&quot;, 82),
+    (&quot;Марта&quot;, 74),
+]
+marks = [mark for _, mark in journal]
+average = sum(marks) / len(marks)
+best = max(journal, key=lambda record: record[1])
+above = [name for name, mark in journal if mark &gt; average]
+ranking = sorted(journal, key=lambda record: (-record[1], record[0]))
+print(f&quot;Середній бал: {average:.1f}&quot;)
+print(&quot;Найкращий результат:&quot;, best)
+print(&quot;Вище середнього:&quot;, above)
+for place, (name, mark) in enumerate(ranking, start=1):
+    print(f&quot;{place}. {name:&lt;10} {mark:&gt;3}&quot;)
+</code></pre>
+<pre><code class="language-text">Середній бал: 86.6
+Найкращий результат: ('Соломія', 100)
+Вище середнього: ['Оксана', 'Соломія']
+1. Соломія    100
+2. Оксана      95
+3. Андрій      82
+4. Тарас       82
+5. Марта       74
+</code></pre>
+<p><code>for place, (name, mark) in enumerate(...)</code> - вкладене розпакування: <code>enumerate</code> дає пару
+<code>(місце, запис)</code>, а запис - ще одна пара. Питання лекції: що, якщо журнал зробити кортежем
+кортежів? <code>append</code> перестане працювати - для даних, що змінюються, кортеж не годиться, а для
+«заморожених» результатів сесії - ідеально.</p>
+<h3 id="112-типові-помилки-таблиця-лекції-с-19-20">1.12. Типові помилки (таблиця лекції, с. 19-20)</h3>
+<pre><code>помилка                         що стається                    як правильно
+values = values.sort()          values стає None               values.sort() або sorted(values)
+copy = values                   одне й те саме, не копія       values.copy(), values[:]
+[[0] * 3] * 3                   рядки - один список            [[0] * 3 for _ in range(3)]
+single = (5)                    просто число 5                 single = (5,)
+range(len(values) + 1)          IndexError в кінці             range(len(values))
+remove під час for              пропуск елементів              новий список або обхід копії
+def f(x, acc=[])                список &quot;пам'ятає&quot; виклики      acc=None, всередині acc = []
+змінна max, sum, list           вбудована функція зникла       max_elem, total, items
+row = map(float, ...) без list  одноразовий ітератор           list(map(float, ...))
+values.append(1, 2)             TypeError: один аргумент       extend([1, 2]) або append((1, 2))
+x in big_list у циклі           O(n²)                          set(big_list)
+повторний обхід генератора      другий прохід порожній         зберегти в список
+зміна кортежу                   TypeError                      новий кортеж або список
+</code></pre>
+<h2 id="2-розібраний-приклад">2. Розібраний приклад</h2>
+<p><strong>Задача.</strong> Числа Трибоначчі: T₀ = T₁ = 0, T₂ = 1, Tₙ = Tₙ₋₁ + Tₙ₋₂ + Tₙ₋₃. Написати функцію
+<code>tribonacci(number)</code>, яка повертає Tₙ, і вивести перші 10. Третій порядок, як у лекції 7 -
+але замість трьох рядків зсуву скористаємось одночасним присвоєнням.</p>
+<pre><code class="language-python">def tribonacci(number: int) -&gt; int:
+    &quot;&quot;&quot;Число Трибоначчі з номером number.
+
+    &gt;&gt;&gt; tribonacci(0), tribonacci(2), tribonacci(6)
+    (0, 1, 7)
+    &quot;&quot;&quot;
+    oldest, middle, newest = 0, 0, 1          # T₀, T₁, T₂
+    for _ in range(number):
+        oldest, middle, newest = middle, newest, oldest + middle + newest
+    return oldest
+
+
+print([tribonacci(number) for number in range(10)])
+</code></pre>
+<pre><code class="language-text">[0, 0, 1, 1, 2, 4, 7, 13, 24, 44]
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>рядок</th>
+<th>що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>def tribonacci(number: int) -&gt; int:</code></td>
+<td>функція з анотаціями: приймає ціле, повертає ціле</td>
+</tr>
+<tr>
+<td>docstring з <code>&gt;&gt;&gt;</code></td>
+<td>doctest: три виклики через кому дають <strong>кортеж</strong> <code>(0, 1, 7)</code></td>
+</tr>
+<tr>
+<td><code>oldest, middle, newest = 0, 0, 1</code></td>
+<td>пакування <code>(0, 0, 1)</code> і розпакування в три змінні: вікно з трьох сусідніх членів T₀, T₁, T₂</td>
+</tr>
+<tr>
+<td><code>for _ in range(number):</code></td>
+<td>зсунути вікно на одну позицію <code>number</code> разів; номер кроку не потрібен - тому <code>_</code></td>
+</tr>
+<tr>
+<td><code>oldest, middle, newest = middle, newest, ...</code></td>
+<td>праворуч кортеж зі <strong>старих</strong>: (старий middle, старий newest, сума всіх трьох старих); потім розпаковка. Те, що в уроці 07 було <code>a3 = a2</code>, <code>a2 = a1</code>, <code>a1 = a</code></td>
+</tr>
+<tr>
+<td><code>return oldest</code></td>
+<td>після k зсувів у <code>oldest</code> лежить Tₖ</td>
+</tr>
+<tr>
+<td><code>print([... for number in range(10)])</code></td>
+<td>спискоутворення: виклик для 0..9</td>
+</tr>
+</tbody>
+</table></div>
+<p>Трасувальна таблиця для <code>tribonacci(6)</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>крок</th>
+<th>було (oldest, middle, newest)</th>
+<th>праворуч (middle, newest, сума)</th>
+<th>стало</th>
+<th>oldest =</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>старт</td>
+<td>-</td>
+<td>-</td>
+<td>(0, 0, 1)</td>
+<td>T₀ = 0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>(0, 0, 1)</td>
+<td>(0, 1, 0 + 0 + 1)</td>
+<td>(0, 1, 1)</td>
+<td>T₁ = 0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>(0, 1, 1)</td>
+<td>(1, 1, 0 + 1 + 1)</td>
+<td>(1, 1, 2)</td>
+<td>T₂ = 1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>(1, 1, 2)</td>
+<td>(1, 2, 1 + 1 + 2)</td>
+<td>(1, 2, 4)</td>
+<td>T₃ = 1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>(1, 2, 4)</td>
+<td>(2, 4, 1 + 2 + 4)</td>
+<td>(2, 4, 7)</td>
+<td>T₄ = 2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>(2, 4, 7)</td>
+<td>(4, 7, 2 + 4 + 7)</td>
+<td>(4, 7, 13)</td>
+<td>T₅ = 4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>(4, 7, 13)</td>
+<td>(7, 13, 4 + 7 + 13)</td>
+<td>(7, 13, 24)</td>
+<td>T₆ = 7</td>
+</tr>
+</tbody>
+</table></div>
+<p>Чому не <code>oldest = middle</code>, <code>middle = newest</code>, <code>newest = oldest + middle + newest</code> трьома
+рядками? На кроці 1 вийшло б: oldest = 0, middle = 1, newest = 0 + 1 + 1 = 2 - а має бути 1.
+Третій рядок бере вже <strong>нові</strong> oldest і middle.</p>
+<p><strong>Закрий приклад і напиши його сам з пам'яті.</strong> Перевір: <code>tribonacci(9)</code> має дати 44.</p>
+<h2 id="3-передбач-вивід">3. Передбач вивід</h2>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<p><strong>Фрагмент 1</strong> (контрольне запитання 12 лекції)</p>
+<pre><code class="language-python">single = (5)
+pair = (5,)
+print(type(single), type(pair))
+print(pair * 3, len((1, 2, 3) * 2), (1, 2, 3) * 2)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">&lt;class 'int'&gt; &lt;class 'tuple'&gt;
+(5, 5, 5) 6 (1, 2, 3, 1, 2, 3)
+</code></pre>
+<p><code>(5)</code> - число в дужках, кортеж робить <strong>кома</strong>: <code>(5,)</code>. <code>*</code> для кортежу - повторення, як для
+списку: <code>(1, 2, 3) * 2</code> - новий кортеж із 6 елементів, двічі <code>1, 2, 3</code>.</p>
+</details>
+<p><strong>Фрагмент 2</strong> (контрольне запитання 8)</p>
+<pre><code class="language-python">first, *middle, last = [1, 2, 3, 4, 5]
+print(first, middle, last)
+head, *tail = &quot;abc&quot;
+print(head, tail)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">1 [2, 3, 4] 5
+a ['b', 'c']
+</code></pre>
+<p><code>first</code> бере перший, <code>last</code> - останній, а <code>*middle</code> - <strong>усе, що лишилось</strong>, і це <strong>завжди
+список</strong>. Навіть з рядка <code>"abc"</code> зірочка зібрала список літер <code>['b', 'c']</code>, а не рядок.</p>
+</details>
+<p><strong>Фрагмент 3</strong></p>
+<pre><code class="language-python">squares = (number * number for number in range(4))
+print(sum(squares))
+print(sum(squares))
+print(list(squares))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">14
+0
+[]
+</code></pre>
+<p>0 + 1 + 4 + 9 = 14. Перший <code>sum</code> забрав <strong>усі</strong> елементи генератора. Генератор одноразовий:
+другий <code>sum</code> не отримав жодного - сума порожньої послідовності 0; <code>list</code> - порожній. Зі
+списком у квадратних дужках обидва <code>sum</code> дали б 14.</p>
+</details>
+<p><strong>Фрагмент 4</strong></p>
+<pre><code class="language-python">print((1, 5) &lt; (2, 0), (1, 5) &lt; (1, 7), (3,) &lt; (2, 9))
+print(sorted([(2, 'b'), (1, 'z'), (2, 'a')]))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">True True False
+[(1, 'z'), (2, 'a'), (2, 'b')]
+</code></pre>
+<p>Кортежі порівнюються <strong>по черзі</strong>: спершу перші елементи. 1 &lt; 2 - відповідь <code>True</code>, далі не
+дивимось (хоч 5 &gt; 0). (1, 5) і (1, 7): перші рівні, тоді 5 &lt; 7. (3,) і (2, 9): 3 &gt; 2 - <code>False</code>,
+довжина не важить. Тому <code>sorted</code> упорядковує за першим полем, а при рівному - за другим.</p>
+</details>
+<p><strong>Фрагмент 5</strong> (контрольне запитання 7 і половина 6)</p>
+<pre><code class="language-python">record = ([1, 2], 3)
+record[0].append(99)
+print(record)
+left, right = 1, 2
+left, right = right, left + right
+print(left, right)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">([1, 2, 99], 3)
+2 3
+</code></pre>
+<p>Кортеж не змінився - він і далі тримає те саме посилання на той самий список. Змінився
+<strong>список</strong>, а його змінювати можна. У другій частині права частина <code>(2, 1 + 2)</code> = <code>(2, 3)</code>
+рахується <strong>повністю</strong> зі старих 1 і 2, і лише потім розпаковується.</p>
+</details>
+<h2 id="4-знайди-помилку">4. Знайди помилку</h2>
+<p><strong>Помилка 1.</strong> Фібоначчі з F₀ = 0, F₁ = 1.</p>
+<pre><code class="language-python"># БАГ
+def fibonacci(number: int) -&gt; int:
+    &quot;&quot;&quot;Число Фібоначчі з номером number (F₀ = 0, F₁ = 1).
+
+    &gt;&gt;&gt; [fibonacci(number) for number in range(8)]
+    [0, 1, 1, 2, 3, 5, 8, 13]
+    &quot;&quot;&quot;
+    previous = 0
+    current = 1
+    for _ in range(number):
+        previous = current
+        current = previous + current
+    return previous
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>Два окремі присвоєння. Після <code>previous = current</code> старе <code>previous</code> загублене, і
+<code>current = previous + current</code> - це <code>current + current</code>, подвоєння. Виходить
+<code>[0, 1, 2, 4, 8, 16, 32, 64]</code> - степені двійки, а не Фібоначчі. Лікування - одночасне
+присвоєння, де права частина рахується зі старих значень:</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def fibonacci(number: int) -&gt; int:
+    &quot;&quot;&quot;Число Фібоначчі з номером number (F₀ = 0, F₁ = 1).
+
+    &gt;&gt;&gt; [fibonacci(number) for number in range(8)]
+    [0, 1, 1, 2, 3, 5, 8, 13]
+    &quot;&quot;&quot;
+    previous, current = 0, 1
+    for _ in range(number):
+        previous, current = current, previous + current
+    return previous
+</code></pre>
+</details>
+<p><strong>Помилка 2.</strong> Хотіли кортеж з однієї допустимої оцінки.</p>
+<pre><code class="language-python"># БАГ
+allowed_marks = (5)
+for mark in allowed_marks:
+    print(&quot;можна:&quot;, mark)
+</code></pre>
+<pre><code class="language-text">TypeError: 'int' object is not iterable
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>(5)</code> - не кортеж, а число 5 у дужках. По числу не можна пройти циклом - звідси
+<code>TypeError: 'int' object is not iterable</code> («не можна перебирати»). Кортеж робить кома:</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+allowed_marks = (5,)
+for mark in allowed_marks:
+    print(&quot;можна:&quot;, mark)
+</code></pre>
+<pre><code class="language-text">можна: 5
+</code></pre>
+</details>
+<p><strong>Помилка 3.</strong> Середнє квадратів.</p>
+<pre><code class="language-python"># БАГ
+def mean_square(values: list[float]) -&gt; float:
+    &quot;&quot;&quot;Середнє арифметичне квадратів значень.
+
+    &gt;&gt;&gt; mean_square([1.0, 2.0, 3.0])
+    4.666666666666667
+    &quot;&quot;&quot;
+    squares = (value * value for value in values)
+    total = sum(squares)
+    count = len(list(squares))
+    return total / count
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>squares</code> - генератор, а він <strong>одноразовий</strong>. <code>sum</code> забрав усі елементи, тому <code>list(squares)</code> -
+порожній, <code>count = 0</code>, і <code>total / count</code> дає <code>ZeroDivisionError: division by zero</code>. Лікування:
+кількість брати з <code>values</code> (або зробити <code>squares</code> списком у квадратних дужках, якщо його
+справді треба обходити двічі):</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def mean_square(values: list[float]) -&gt; float:
+    &quot;&quot;&quot;Середнє арифметичне квадратів значень.
+
+    &gt;&gt;&gt; mean_square([1.0, 2.0, 3.0])
+    4.666666666666667
+    &quot;&quot;&quot;
+    return sum(value * value for value in values) / len(values)
+</code></pre>
+</details>
+<h2 id="5-склади-з-рядків">5. Склади з рядків</h2>
+<p><strong>Задача 1.</strong> НСД 48 і 18 алгоритмом Евкліда з одночасним присвоєнням. <strong>Один рядок зайвий</strong>
+(пастка).</p>
+<pre><code class="language-parsons">print(first)
+    first = second
+first = 48
+while second &gt; 0:
+second = 18
+    first, second = second, first % second
+</code></pre>
+<details>
+<summary>Розвʼязок</summary>
+<pre><code class="language-python">first = 48
+second = 18
+while second &gt; 0:
+    first, second = second, first % second
+print(first)
+</code></pre>
+<pre><code class="language-text">6
+</code></pre>
+<p>Зайвий - <code>first = second</code>. Окреме присвоєння затерло б старе <code>first</code>, а <code>first % second</code>
+потрібне саме зі старим. В одночасному присвоєнні <code>(second, first % second)</code> рахується до
+будь-якого запису. Порівняй з лекцією: там <code>V, U = U % V, V</code> - той самий крок, змінні в
+іншому порядку.</p>
+</details>
+<p><strong>Задача 2.</strong> Функція-генератор степенів двійки, що не перевищують <code>limit</code>. Зайвих рядків
+нема (порожні рядки між функцією і кодом додай сам).</p>
+<pre><code class="language-parsons">print(sum(powers_of_two(20)))
+        power *= 2
+def powers_of_two(limit):
+        yield power
+    while power &lt;= limit:
+print(list(powers_of_two(20)))
+    power = 1
+</code></pre>
+<details>
+<summary>Розвʼязок</summary>
+<pre><code class="language-python">def powers_of_two(limit):
+    power = 1
+    while power &lt;= limit:
+        yield power
+        power *= 2
+
+
+print(list(powers_of_two(20)))
+print(sum(powers_of_two(20)))
+</code></pre>
+<pre><code class="language-text">[1, 2, 4, 8, 16]
+31
+</code></pre>
+<p><code>yield power</code> віддає число і ставить функцію на паузу; наступний запит продовжує з
+<code>power *= 2</code>. Кожен виклик <code>powers_of_two(20)</code> створює <strong>новий</strong> генератор, тому <code>sum</code> у
+другому рядку отримав усі числа: 1 + 2 + 4 + 8 + 16 = 31.</p>
+</details>
+<h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
+<p>Заготовка - <code>zadachi/urok09.py</code>, розвʼязок - <code>_rozvyazky/urok09.py</code> (відкривай лише після
+2 спроб). У терміналі, з теки <code>Курс</code>:</p>
+<pre><code>python3 -m doctest zadachi/urok09.py -v
+</code></pre>
+<p>Спершу всі тести червоні. Ти дописуєш тіло функції замість <code>pass</code> - тести стають зеленими.</p>
+<p><strong>Задача 1. <code>split_number(number)</code> - три відповіді одним кортежем.</strong> Для цілого
+<code>number &gt;= 0</code> повернути кортеж <code>(кількість цифр, сума цифр, число задом наперед)</code>:
+<code>split_number(4096)</code> → <code>(4, 19, 6904)</code>. Для 0 - <code>(1, 0, 0)</code>. Прийом «цифри через остачу»
+потрібен і в ЛР6 завд. 1 (там без кортежів - лише змінні).</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>0 - окремий випадок: <code>return 1, 0, 0</code> (у 0 одна цифра, а цикл <code>while rest &gt; 0</code> не
+   зробив би жодного кроку).</li>
+<li>Три змінні-накопичувачі: <code>digit_count</code>, <code>digit_sum</code>, <code>reversed_number</code> = 0.</li>
+<li><code>while rest &gt; 0:</code> і в тілі одним рядком <code>rest, digit = divmod(rest, 10)</code> - частка й остача
+   одразу (лекція 9, с. 7).</li>
+<li>Далі: <code>digit_count += 1</code>, <code>digit_sum += digit</code>, <code>reversed_number = reversed_number * 10 + digit</code>.</li>
+<li><code>return digit_count, digit_sum, reversed_number</code> - кома робить кортеж.</li>
+</ol>
+</details>
+<p><strong>Задача 2. <code>podium(results)</code> - п'єдестал забігу.</strong> На вході список кортежів
+<code>(ім'я, час у секундах)</code>. Менший час - краще місце; при однаковому часі - за алфавітом.
+Повернути список рядків для перших трьох місць: <code>['1. Олена 11.9', '2. Андрій 12.4', ...]</code>.
+Учасників може бути менше за 3. Вихідний список <strong>не змінювати</strong> (є doctest). Прийом
+«сортувати записи за полем» потрібен у ЛР7 завд. 2 (точки за відстанню).</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li><code>sorted</code>, а не <code>.sort()</code>: другий змінив би список, який тобі передали.</li>
+<li>Ключ-кортеж: <code>key=lambda record: (record[1], record[0])</code> - спершу час, потім ім'я.</li>
+<li>Перші три - зріз <code>[:3]</code> (якщо учасників менше, зріз сам дасть менше, без помилки).</li>
+<li><code>for place, (name, seconds) in enumerate(..., start=1):</code> і <code>append</code> рядка
+   <code>f"{place}. {name} {seconds}"</code>.</li>
+</ol>
+</details>
+<h3 id="заготовка-тут-же-можна-писати-і-запускати-doctest">Заготовка (тут же можна писати і запускати doctest)</h3>
+<p>Скачати файл: <a href="data/prog/zadachi/urok09.py">urok09.py</a> - поклади в теку <code>zadachi/</code> і запускай <code>python3 -m doctest zadachi/urok09.py -v</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 9. Задачі з doctest (заготовка).
+
+Як запускати (з теки Курс):
+    python3 -m doctest zadachi/urok09.py -v
+
+Спершу всі приклади червоні: замість коду стоїть pass, і функція
+повертає None. Заміни pass на свій код, щоб усі стали зелені.
+Можна все з лекцій 8-9: списки, кортежі, розпакування, divmod,
+sorted з key і lambda, enumerate, генератор-вирази.
+Розвʼязок - у _rozvyazky/urok09.py (відкривай лише після 2 спроб).
+&quot;&quot;&quot;
+import doctest
+
+
+def split_number(number: int) -&gt; tuple[int, int, int]:
+    &quot;&quot;&quot;Кількість цифр, сума цифр і число задом наперед - одним кортежем.
+
+    Для 0 вважаємо, що в нього одна цифра 0.
+
+    :param number: ціле число, number &gt;= 0
+    :return: кортеж (кількість цифр, сума цифр, число навпаки)
+
+    &gt;&gt;&gt; split_number(4096)
+    (4, 19, 6904)
+    &gt;&gt;&gt; split_number(7)
+    (1, 7, 7)
+    &gt;&gt;&gt; split_number(0)
+    (1, 0, 0)
+    &gt;&gt;&gt; split_number(120)
+    (3, 3, 21)
+    &gt;&gt;&gt; count, total, backwards = split_number(305)
+    &gt;&gt;&gt; count, total, backwards
+    (3, 8, 503)
+    &quot;&quot;&quot;
+    pass
+
+
+def podium(results: list[tuple[str, float]]) -&gt; list[str]:
+    &quot;&quot;&quot;Перші три місця забігу.
+
+    Кожен запис - кортеж (імʼя, час у секундах). Менший час - краще
+    місце; при однаковому часі вище той, чиє імʼя раніше за
+    алфавітом. Учасників може бути менше за три. Вихідний список
+    results не змінюється.
+
+    :param results: список кортежів (імʼя, час)
+    :return: рядки 'місце. імʼя час' для не більше ніж трьох місць
+
+    &gt;&gt;&gt; race = [(&quot;Тарас&quot;, 12.4), (&quot;Олена&quot;, 11.9), (&quot;Андрій&quot;, 12.4),
+    ...         (&quot;Марта&quot;, 13.0)]
+    &gt;&gt;&gt; podium(race)
+    ['1. Олена 11.9', '2. Андрій 12.4', '3. Тарас 12.4']
+    &gt;&gt;&gt; race[0]
+    ('Тарас', 12.4)
+    &gt;&gt;&gt; podium([(&quot;Соломія&quot;, 10.0)])
+    ['1. Соломія 10.0']
+    &gt;&gt;&gt; podium([(&quot;Марта&quot;, 9.5), (&quot;Андрій&quot;, 9.8)])
+    ['1. Марта 9.5', '2. Андрій 9.8']
+    &gt;&gt;&gt; podium([])
+    []
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 9. Задачі з doctest (розвʼязок).
+
+Відкривай лише після 2 спроб розвʼязати самому.
+Перевірка (з теки Курс):
+    python3 -m doctest _rozvyazky/urok09.py -v
+&quot;&quot;&quot;
+import doctest
+
+
+def split_number(number: int) -&gt; tuple[int, int, int]:
+    &quot;&quot;&quot;Кількість цифр, сума цифр і число задом наперед - одним кортежем.
+
+    Для 0 вважаємо, що в нього одна цифра 0.
+
+    :param number: ціле число, number &gt;= 0
+    :return: кортеж (кількість цифр, сума цифр, число навпаки)
+
+    &gt;&gt;&gt; split_number(4096)
+    (4, 19, 6904)
+    &gt;&gt;&gt; split_number(7)
+    (1, 7, 7)
+    &gt;&gt;&gt; split_number(0)
+    (1, 0, 0)
+    &gt;&gt;&gt; split_number(120)
+    (3, 3, 21)
+    &gt;&gt;&gt; count, total, backwards = split_number(305)
+    &gt;&gt;&gt; count, total, backwards
+    (3, 8, 503)
+    &quot;&quot;&quot;
+    # Цикл while rest &gt; 0 для нуля не зробив би жодного кроку
+    # і дав би (0, 0, 0), а в нуля одна цифра.
+    if number == 0:
+        return 1, 0, 0
+    digit_count = 0
+    digit_sum = 0
+    reversed_number = 0
+    rest = number
+    while rest &gt; 0:
+        # divmod повертає кортеж (частка, остача) - одразу
+        # розпаковуємо: rest втрачає останню цифру, digit - вона сама.
+        rest, digit = divmod(rest, 10)
+        digit_count += 1
+        digit_sum += digit
+        # Дописуємо цифру справа: 69 -&gt; 690 + 4 = 694.
+        reversed_number = reversed_number * 10 + digit
+    # Кома робить кортеж: це те саме, що
+    # return (digit_count, digit_sum, reversed_number).
+    return digit_count, digit_sum, reversed_number
+
+
+def podium(results: list[tuple[str, float]]) -&gt; list[str]:
+    &quot;&quot;&quot;Перші три місця забігу.
+
+    Кожен запис - кортеж (імʼя, час у секундах). Менший час - краще
+    місце; при однаковому часі вище той, чиє імʼя раніше за
+    алфавітом. Учасників може бути менше за три. Вихідний список
+    results не змінюється.
+
+    :param results: список кортежів (імʼя, час)
+    :return: рядки 'місце. імʼя час' для не більше ніж трьох місць
+
+    &gt;&gt;&gt; race = [(&quot;Тарас&quot;, 12.4), (&quot;Олена&quot;, 11.9), (&quot;Андрій&quot;, 12.4),
+    ...         (&quot;Марта&quot;, 13.0)]
+    &gt;&gt;&gt; podium(race)
+    ['1. Олена 11.9', '2. Андрій 12.4', '3. Тарас 12.4']
+    &gt;&gt;&gt; race[0]
+    ('Тарас', 12.4)
+    &gt;&gt;&gt; podium([(&quot;Соломія&quot;, 10.0)])
+    ['1. Соломія 10.0']
+    &gt;&gt;&gt; podium([(&quot;Марта&quot;, 9.5), (&quot;Андрій&quot;, 9.8)])
+    ['1. Марта 9.5', '2. Андрій 9.8']
+    &gt;&gt;&gt; podium([])
+    []
+    &quot;&quot;&quot;
+    # sorted повертає НОВИЙ список; results.sort() змінив би список
+    # того, хто викликав функцію (doctest race[0] це ловить).
+    # Ключ-кортеж (час, імʼя): кортежі порівнюються по черзі, тож
+    # спершу за часом, а при рівному часі - за імʼям.
+    ranking = sorted(results, key=lambda record: (record[1], record[0]))
+    lines = []
+    # [:3] - не більше трьох; якщо учасників менше, зріз не падає.
+    # (name, seconds) - вкладене розпакування запису з enumerate.
+    for place, (name, seconds) in enumerate(ranking[:3], start=1):
+        lines.append(f&quot;{place}. {name} {seconds}&quot;)
+    return lines
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+</details>
+<h2 id="7-поясни-чому">7. Поясни чому</h2>
+<p><strong>Питання 1</strong> (контрольне 6). Чому <code>t = (1, 2, 3); t[0] = 10</code> - помилка, а
+<code>t = ([1], 2); t[0].append(5)</code> - ні?</p>
+<details>
+<summary>Еталон</summary>
+<p>Кортеж забороняє змінювати <strong>свій набір посилань</strong>: <code>t[0] = 10</code> - спроба переставити
+посилання в комірці 0, це заборонено. А <code>t[0].append(5)</code> нічого в кортежі не переставляє:
+ми беремо список, на який вказує комірка 0, і змінюємо <strong>сам список</strong>. Кортеж і далі вказує
+на той самий об'єкт. Незмінюваність кортежу «неглибока».</p>
+</details>
+<p><strong>Питання 2</strong> (контрольне 7). Чому <code>a, b = b, a</code> не потребує третьої змінної?</p>
+<details>
+<summary>Еталон</summary>
+<p>Бо <strong>спершу</strong> повністю обчислюється права частина: з поточних значень складається кортеж
+<code>(b, a)</code>. Старі значення вже «сфотографовані» в ньому. Лише <strong>потім</strong> кортеж розпаковується
+в <code>a</code> і <code>b</code>. Третя змінна в класичному обміні робить те саме вручну - тримає старе значення,
+поки ми його затираємо; тут цю роль грає тимчасовий кортеж.</p>
+</details>
+<p><strong>Питання 3</strong> (контрольне 9). Чим генератор-вираз відрізняється від спискоутворення?
+Коли генератор кращий?</p>
+<details>
+<summary>Еталон</summary>
+<p>Спискоутворення <code>[...]</code> одразу будує всі елементи і тримає їх у пам'яті; його можна
+індексувати, брати <code>len</code> і обходити скільки завгодно. Генератор <code>(...)</code> нічого не будує
+наперед, а видає наступний елемент на запит; пам'ять - лише на поточний стан, але обійти
+можна <strong>один</strong> раз, без індексів і <code>len</code>. Генератор кращий, коли треба один прохід по
+великих даних: <code>sum(x * x for x in range(10**7))</code> не створює список з 10 мільйонів чисел.
+Ще - для безкінечних послідовностей (<code>count</code>, <code>yield</code>) і з <code>any</code>/<code>all</code>, які зупиняються рано.</p>
+</details>
+<p><strong>Питання 4</strong> (контрольне 11). Чому кортеж може бути ключем словника, а список - ні?</p>
+<details>
+<summary>Еталон</summary>
+<p>Словник шукає ключ за <strong>хешем</strong> - числом, порахованим із вмісту ключа. Якби ключ змінився
+після того, як його поклали в словник, хеш став би іншим, і словник шукав би «не в тій
+шухляді» - запис загубився б. Тому ключ мусить бути незмінним. Кортеж незмінний -
+придатний (якщо всі його елементи теж незмінні), список змінюваний - <code>TypeError:
+unhashable type: 'list'</code>.</p>
+</details>
+<p><strong>Повторення списків - решта контрольних запитань лекції 9 (с. 20-21).</strong> Спершу відповідай
+сам, потім відкривай. (Питання 2 - у розділі 3 уроку 08.)</p>
+<details>
+<summary>1. Чим відрізняються l.append([1, 2]) та l.extend([1, 2])?</summary>
+<p><code>append</code> додає <strong>один</strong> елемент - сам список <code>[1, 2]</code> (довжина +1, останній елемент -
+список). <code>extend</code> додає <strong>кожен</strong> елемент окремо: 1 і 2 (довжина +2). Обидва змінюють список
+на місці і повертають <code>None</code>.</p>
+</details>
+<details>
+<summary>3. Що повертають l[10:20] та l[10] для списку з п'яти елементів?</summary>
+<p><code>l[10:20]</code> - порожній список <code>[]</code>: зріз обрізає межі і не падає. <code>l[10]</code> - помилка
+<code>IndexError: list index out of range</code>: конкретного елемента 10 нема.</p>
+</details>
+<details>
+<summary>4. Зріз, що повертає елементи з непарними індексами у зворотному порядку?</summary>
+<p>Найнадійніше в два кроки: <code>l[1::2][::-1]</code> - спершу непарні індекси (1, 3, 5, ...), потім
+навпаки. Для <code>[0, 1, 2, 3, 4, 5, 6]</code> це <code>[5, 3, 1]</code>. Один зріз <code>l[-1::-2]</code> працює, лише
+коли довжина парна (тоді останній індекс непарний); для довжини 7 він дав би <code>[6, 4, 2, 0]</code> -
+парні індекси.</p>
+</details>
+<details>
+<summary>5. У чому різниця між sorted(l) та l.sort()?</summary>
+<p><code>sorted(l)</code> повертає <strong>новий</strong> відсортований список, <code>l</code> не змінюється; працює з будь-якою
+колекцією (кортеж, рядок). <code>l.sort()</code> сортує <strong>сам</strong> список на місці і повертає <code>None</code>; є
+лише в списків. Тому <code>l = l.sort()</code> - помилка: <code>l</code> стане <code>None</code>.</p>
+</details>
+<details>
+<summary>10. Яка складність l.append(x), l.insert(0, x), x in l, l[i]?</summary>
+<p><code>append</code> - O(1) (амортизовано: інколи список перевиділяє пам'ять, але в середньому дешево);
+<code>insert(0, x)</code> - O(n), бо треба зсунути всі елементи; <code>x in l</code> - O(n), лінійний пошук;
+<code>l[i]</code> - O(1), пряма адресація комірки.</p>
+</details>
+<h2 id="8-що-запамятати">8. Що запам'ятати</h2>
+<ul>
+<li>Кортеж - незмінюваний список і «запис» фіксованої структури. Кортеж робить <strong>кома</strong>:
+  <code>(5,)</code>, а <code>(5)</code> - число.</li>
+<li>Кортеж: індекси, зрізи, <code>len</code>, <code>min</code>, <code>max</code>, <code>sum</code>, <code>in</code>, <code>+</code>, <code>*</code>, <code>count</code>, <code>index</code>. Змінити -
+  лише створивши новий. Незмінюваність неглибока: список усередині змінювати можна.</li>
+<li>Кортежі порівнюються по черзі елементів - тому <code>key=lambda r: (r[1], r[0])</code> сортує за двома
+  полями; мінус перед числовим полем перевертає порядок.</li>
+<li><code>x, y = u, v</code>: спершу вся права частина (зі <strong>старих</strong> значень), потім присвоєння. Звідси
+  обмін <code>a, b = b, a</code>, Фібоначчі <code>prev, cur = cur, prev + cur</code>, Евклід <code>V, U = U % V, V</code>.</li>
+<li><code>first, *rest = ...</code> - зірочка збирає решту в <strong>список</strong>. <code>_</code> - «не потрібне».</li>
+<li><code>return a, b, c</code> повертає один кортеж; <code>x, y, z = f(...)</code> його розпаковує.</li>
+<li>Генератор-вираз <code>(... for ...)</code> - лінивий і <strong>одноразовий</strong>; найкраще - прямо в <code>sum</code>,
+  <code>max</code>, <code>any</code>, <code>all</code>, <code>join</code>. Кількість за умовою: <code>sum(1 for x in data if cond)</code>.</li>
+<li><code>yield</code> робить функцію генератором: віддає значення і стає на паузу до наступного запиту.</li>
+</ul>
+<p><strong>Де в лабах:</strong>
+- ЛР5 завд. 3 - π за формулою Грегорі (знакозмінний ряд, <code>sign = -sign</code>, повільна збіжність).
+- ЛР6 завд. 3 - функції методів повертають корінь, кількість ітерацій і історію:
+  <code>return root, steps, history</code>, а виклик - <code>root, steps, history = bisection_method(...)</code>.
+- ЛР7 завд. 2 - точка <code>(x, y, z)</code> як кортеж; <code>itertools.combinations</code> видає трійки й
+  четвірки точок кортежами (розпаковуй <code>for first, second, third in ...</code>); сортування точок за
+  відстанню - <code>sorted(points, key=...)</code>.
+- ЛР7 завд. 3 - сідлові й «особливі» елементи вивести як список кортежів індексів
+  <code>[(1, 1)]</code>.</p>
+<hr>
+<p><a href="#/u/prog/uroky">← Усі уроки</a></p>

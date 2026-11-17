@@ -1,0 +1,1229 @@
+<h1 id="урок-8-списки-в-python">Урок 8. Списки в Python</h1>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/dovidnyk">Довідник функцій</a></p>
+<blockquote>
+<p>Лекція 8 (с. 1-32), потрібно для: ЛР6 (завд. 3 - поліном як список коефіцієнтів, історія
+наближень списком), ЛР7 (завд. 1 - решето на списку і <code>del lst[s-1::s]</code>; завд. 2 - список
+точок і сортування; завд. 3 - матриці, введення рядка через пробіл). Час: 30 хв.
+Перед цим уроком: урок 07.</p>
+</blockquote>
+<h2 id="1-ідея">1. Ідея</h2>
+<p>Досі в нас були змінні з <strong>одним</strong> значенням: <code>x = 5</code>. А якщо вимірів температури 30?
+Заводити <code>t1</code>, <code>t2</code>, ..., <code>t30</code> - безглуздо, і цикл по них не пройдеш. Потрібна одна змінна,
+яка тримає <strong>багато</strong> значень <strong>по порядку</strong>, дає будь-яке за номером і вміє рости й
+зменшуватись. У Python це <strong>список</strong> (<code>list</code>). Лекція називає його «швейцарським ножем»
+(с. 1) і одразу попереджає про дві речі: список <strong>змінюваний</strong> (джерело найпідступніших
+помилок: «змінили один список - і раптом змінився інший»), і в нього є незмінюваний
+брат - кортеж (урок 09).</p>
+<h3 id="11-що-таке-список-лекція-8-с-2">1.1. Що таке список (Лекція 8, с. 2)</h3>
+<p>Список - впорядкована колекція об'єктів будь-яких типів, у квадратних дужках через кому:
+<code>[0, 1, 2, 3]</code>, <code>['first', 'second', 100, 1.234]</code>. Властивості з таблиці лекції:</p>
+<pre><code>впорядкований   [1, 2] == [2, 1]  -&gt;  False   (порядок важить)
+індексований    values[0]                     (елемент за номером)
+змінюваний      values[0] = 10                (міняємо &quot;на місці&quot;)
+різнотипний     [1, 'a', 3.5, None]
+з повторами     [7, 7, 7]
+вкладений       [[1, 2], [3, 4]]              (список списків)
+динамічний      values.append(1)              (росте під час роботи)
+</code></pre>
+<h3 id="12-що-всередині-список-це-масив-посилань-лекція-8-с-3">1.2. Що всередині: список - це масив посилань (Лекція 8, с. 3)</h3>
+<p>Це найважливіша картинка уроку. Змінна - не «коробка зі списком», а <strong>ім'я, прив'язане до
+об'єкта</strong>. Сам список - ряд комірок, і в кожній комірці лежить не число, а <strong>посилання</strong> на
+об'єкт:</p>
+<pre><code>ім'я values ──►  об'єкт list
+                 ┌─────┬─────┬─────┐
+                 │ [0] │ [1] │ [2] │
+                 └──┼──┴──┼──┴──┼──┘
+                    ▼     ▼     ▼
+                 int 10  str 'a'  float 3.5
+</code></pre>
+<p>Звідси наслідки, до яких ми весь урок повертатимемось:
+1. <code>values[i]</code> - «перейти до i-ї комірки», миттєво, хоч список з мільйона елементів (O(1)).
+2. Типи можуть бути різні: комірка тримає лише посилання.
+3. <strong>Два імені можуть вказувати на один список.</strong> Присвоєння <code>other = values</code> не копіює
+   список, а лише прив'язує до нього ще одне ім'я.
+4. Список списків - масив посилань на інші масиви посилань.</p>
+<p>Порожній список в умові - «хиба», тому перевірку «чи порожній» пишуть <code>if not values:</code>.</p>
+<h3 id="13-як-створити-список-лекція-8-с-4">1.3. Як створити список (Лекція 8, с. 4)</h3>
+<pre><code class="language-python">&gt;&gt;&gt; empty_list = []                    # порожній
+&gt;&gt;&gt; mixed = ['1', '2', 3.0, 4]         # різні типи
+&gt;&gt;&gt; list(range(5))                     # з діапазону
+[0, 1, 2, 3, 4]
+&gt;&gt;&gt; list('list')                       # з рядка: кожна літера
+['l', 'i', 's', 't']
+&gt;&gt;&gt; list(range(0, 10, 3))
+[0, 3, 6, 9]
+&gt;&gt;&gt; &quot;Слава Україні Героям слава&quot;.split()
+['Слава', 'Україні', 'Героям', 'слава']
+&gt;&gt;&gt; list(map(int, &quot;3 1 4 1 5 9&quot;.split()))
+[3, 1, 4, 1, 5, 9]
+&gt;&gt;&gt; [0] * 5                            # п'ять нулів
+[0, 0, 0, 0, 0]
+</code></pre>
+<ul>
+<li><code>list(колекція)</code> <strong>завжди створює новий</strong> список, навіть із списку (це один зі способів
+  копіювання, див. 1.9).</li>
+<li><code>рядок.split()</code> ріже рядок по пробілах і дає список <strong>рядків</strong>. <code>map(int, ...)</code> застосовує
+  <code>int</code> до кожного шматка, а <code>list(...)</code> збирає результат у список. Так читають кілька чисел
+  з одного рядка вводу.</li>
+<li>Кома після останнього елемента в багаторядковому літералі дозволена, і лекція вважає це
+  гарним стилем (легше дописувати нові рядки).</li>
+</ul>
+<h3 id="14-спискоутворення-лекція-8-с-5-8">1.4. Спискоутворення (Лекція 8, с. 5-8)</h3>
+<p><code>[вираз for змінна in колекція if умова]</code> - новий список: змінна пробігає колекцію, і
+<strong>якщо</strong> умова істинна, у список додається вираз. Це «стиснений» цикл. Ці два записи
+роблять те саме:</p>
+<pre><code class="language-python">result = []
+for number in range(5, 31):
+    if number % 5 == 0:
+        result.append(number ** 2)
+print(result)
+print([number ** 2 for number in range(5, 31) if number % 5 == 0])
+print([number ** 2 for number in range(5, 31, 5)])   # простіше: одразу крок 5
+</code></pre>
+<pre><code class="language-text">[25, 100, 225, 400, 625, 900]
+[25, 100, 225, 400, 625, 900]
+[25, 100, 225, 400, 625, 900]
+</code></pre>
+<p>Лекція (с. 7) радить питати себе: «чи не можна досягти мети простіше, ніж згенерувати все й
+відфільтрувати?» - третій рядок і є таким простішим варіантом.</p>
+<p><strong>Де стоїть <code>if</code> - вирішує все</strong> (с. 7-8):</p>
+<pre><code class="language-python">&gt;&gt;&gt; [x for x in range(10) if x % 2 == 0]          # if ПІСЛЯ for - фільтр
+[0, 2, 4, 6, 8]
+&gt;&gt;&gt; [x if x % 2 == 0 else -x for x in range(6)]   # if-else ПЕРЕД for - вибір значення
+[0, -1, 2, -3, 4, -5]
+</code></pre>
+<p>Фільтр <strong>відкидає</strong> елементи (довжина менша). <code>a if умова else b</code> перед <code>for</code> <strong>нічого не
+відкидає</strong>, лише обирає, що покласти: довжина результату = довжина колекції.</p>
+<p>Ще можливості з лекції:</p>
+<pre><code class="language-python">&gt;&gt;&gt; [(x, y) for x in range(3) for y in range(x)]          # два for, як вкладені цикли
+[(1, 0), (2, 0), (2, 1)]
+&gt;&gt;&gt; table = [[i * j for j in range(1, 4)] for i in range(1, 4)]
+&gt;&gt;&gt; table                                                 # вкладене: таблиця множення
+[[1, 2, 3], [2, 4, 6], [3, 6, 9]]
+&gt;&gt;&gt; [x for row in table for x in row]                     # &quot;розплющити&quot; матрицю
+[1, 2, 3, 2, 4, 6, 3, 6, 9]
+&gt;&gt;&gt; words = [&quot;слава&quot;, &quot;україні&quot;, &quot;героям&quot;, &quot;слава&quot;]
+&gt;&gt;&gt; [len(word) for word in words]
+[5, 7, 6, 5]
+&gt;&gt;&gt; [word.capitalize() for word in words]
+['Слава', 'Україні', 'Героям', 'Слава']
+</code></pre>
+<p>Коли <strong>не</strong> варто: якщо вираз довший за 1-2 рядки або всередині потрібні побічні ефекти
+(<code>print</code>, зміна зовнішніх змінних) - пиши звичайний цикл. «Код читають частіше, ніж пишуть».</p>
+<h3 id="15-індекси-лекція-8-с-8-9">1.5. Індекси (Лекція 8, с. 8-9)</h3>
+<p>Елементи занумеровані <strong>з 0</strong>. Чому з нуля: індекс - це <strong>зсув від початку</strong> (перший
+елемент лежить на зсуві 0). Останній має номер <code>len - 1</code>.</p>
+<pre><code class="language-python">&gt;&gt;&gt; values = [10, 20, 30, 40]
+&gt;&gt;&gt; values[0], values[3]
+(10, 40)
+&gt;&gt;&gt; values[4]
+Traceback (most recent call last):
+IndexError: list index out of range
+&gt;&gt;&gt; values[0] = 111                 # заміна на місці
+&gt;&gt;&gt; values
+[111, 20, 30, 40]
+&gt;&gt;&gt; values[-1], values[-3]          # від'ємні: з кінця
+(40, 20)
+</code></pre>
+<pre><code>елемент            10   20   30   40
+індекс              0    1    2    3
+від'ємний індекс   -4   -3   -2   -1
+</code></pre>
+<p>Правило: <code>values[-k]</code> - те саме, що <code>values[len(values) - k]</code>. <code>values[-1]</code> - останній, і це
+охайніше, ніж <code>values[len(values) - 1]</code>. Але <code>[][0]</code> і <code>[][-1]</code> - теж <code>IndexError</code>: перед
+<code>values[-1]</code> переконайся, що список не порожній. Вихід за межі - «помилка на одиницю»
+(off-by-one), одна з найчастіших.</p>
+<h3 id="16-зрізи-лекція-8-с-9-13">1.6. Зрізи (Лекція 8, с. 9-13)</h3>
+<p><code>values[start:end:step]</code> - <strong>новий</strong> список з елементів від <code>start</code> <strong>включно</strong> до <code>end</code>
+<strong>не включно</strong>, з кроком <code>step</code>. Та сама логіка, що в <code>range(start, end)</code>.</p>
+<p>Щоб не плутатись, лекція (с. 10) радить уявляти індекси як <strong>розрізи між елементами</strong>:</p>
+<pre><code>  ┌───┬───┬───┬───┬───┬───┐
+  │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
+  └───┴───┴───┴───┴───┴───┘
+  0   1   2   3   4   5   6      &lt;- розрізи зліва направо
+ -6  -5  -4  -3  -2  -1          &lt;- від'ємні
+</code></pre>
+<p><code>values[2:5]</code> - усе між розрізом 2 і розрізом 5, тобто <code>[3, 4, 5]</code>. Довжина зрізу <code>[a:b]</code>
+дорівнює <code>b - a</code>, і <code>values[:k] + values[k:] == values</code> - список ріжеться без втрат.</p>
+<pre><code class="language-python">&gt;&gt;&gt; values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+&gt;&gt;&gt; values[2:7:2]                 # індекси 2, 4, 6
+[3, 5, 7]
+&gt;&gt;&gt; values[:3], values[10:]       # пропущений start = 0, пропущений end = len
+([1, 2, 3], [11, 12, 13])
+&gt;&gt;&gt; values[::4]                   # кожен четвертий
+[1, 5, 9, 13]
+&gt;&gt;&gt; values[5:3], values[20:30]    # порожньо, БЕЗ помилки
+([], [])
+&gt;&gt;&gt; short = [1, 2, 3, 4, 5, 6]
+&gt;&gt;&gt; short[::-1]                   # навпаки
+[6, 5, 4, 3, 2, 1]
+&gt;&gt;&gt; short[-1:1:-1]                # від останнього вліво, до індексу 1 не включно
+[6, 5, 4, 3]
+&gt;&gt;&gt; short[5:1:-2]                 # індекси 5, 3
+[6, 4]
+&gt;&gt;&gt; short[1:5:-1]                 # крок вліво, а start лівіше за end - порожньо
+[]
+</code></pre>
+<p>Важлива різниця: <code>values[20]</code> - <code>IndexError</code>, а <code>values[20:30]</code> мовчки дає <code>[]</code>. Зрізи
+«прощають» вихід за межі. Це зручно (<code>values[:5]</code> - «не більше п'яти перших» для будь-якого
+списку), але ховає помилки.</p>
+<p>При від'ємному кроці правило «start включно, end ні» те саме - змінюється лише напрямок.</p>
+<p>Шпаргалка (с. 12) для <code>digits = [0, 1, ..., 9]</code>:</p>
+<pre><code>digits[:3]    [0, 1, 2]        перші три
+digits[-3:]   [7, 8, 9]        останні три
+digits[:-1]   [0, ..., 8]      усе, крім останнього
+digits[1:-1]  [1, ..., 8]      без першого й останнього
+digits[::2]   [0, 2, 4, 6, 8]  парні індекси
+digits[1::2]  [1, 3, 5, 7, 9]  непарні індекси
+digits[::-1]  [9, 8, ..., 0]   навпаки
+digits[::-2]  [9, 7, 5, 3, 1]  навпаки через один
+digits[:]     копія
+</code></pre>
+<p>Зрізу можна дати ім'я: <code>first_three = slice(0, 3)</code>, потім <code>digits[first_three]</code>.</p>
+<p><strong>Зріз - новий список.</strong> Змінив результат - оригінал цілий:</p>
+<pre><code class="language-python">&gt;&gt;&gt; values = [1, 2, 3, 4, 5]
+&gt;&gt;&gt; part = values[1:4]
+&gt;&gt;&gt; part[0] = 100
+&gt;&gt;&gt; part, values
+([100, 3, 4], [1, 2, 3, 4, 5])
+</code></pre>
+<p><strong>Присвоєння зрізу змінює сам список</strong> (с. 12-13): вставити, видалити, замінити шматок.
+Кількість елементів праворуч може бути іншою - список «розтягнеться» або «стиснеться».</p>
+<pre><code class="language-python">&gt;&gt;&gt; values = [1, 2, 3, 4, 5, 6]
+&gt;&gt;&gt; values[0:0] = [0]            # вставка перед індексом 0
+&gt;&gt;&gt; values
+[0, 1, 2, 3, 4, 5, 6]
+&gt;&gt;&gt; values[3:] = []              # видалення з індексу 3 до кінця
+&gt;&gt;&gt; values
+[0, 1, 2]
+&gt;&gt;&gt; values[1:3] = [20, 30, 40]   # 2 елементи замінили на 3
+&gt;&gt;&gt; values
+[0, 20, 30, 40]
+&gt;&gt;&gt; del values[1:3]              # del видаляє зріз
+&gt;&gt;&gt; values
+[0, 40]
+</code></pre>
+<p>Для зрізу <strong>з кроком</strong> правило жорсткіше: праворуч рівно стільки елементів, скільки позицій:</p>
+<pre><code class="language-python">&gt;&gt;&gt; values = [0, 1, 2, 3, 4, 5]
+&gt;&gt;&gt; values[::2] = ['a', 'b', 'c']
+&gt;&gt;&gt; values
+['a', 1, 'b', 3, 'c', 5]
+&gt;&gt;&gt; values[::2] = ['x', 'y']
+Traceback (most recent call last):
+ValueError: attempt to assign sequence of size 2 to extended slice of size 3
+</code></pre>
+<p>А <code>del</code> зрізу з кроком працює завжди. Це <strong>той самий прийом</strong>, що в ЛР7 завд. 1
+(<code>del lst[s-1::s]</code> - викреслити кожен s-й). Ось на іншому прикладі: з 12 учасників
+лічилки вибуває кожен третій (позиції 2, 5, 8, 11 з нуля):</p>
+<pre><code class="language-python">&gt;&gt;&gt; players = list(range(1, 13))
+&gt;&gt;&gt; del players[2::3]
+&gt;&gt;&gt; players
+[1, 2, 4, 5, 7, 8, 10, 11]
+</code></pre>
+<p>Зверни увагу: зріз іде за <strong>позиціями</strong>, а не значеннями. ЛР7 (с. 1) прямо про це попереджає.</p>
+<h3 id="17-операції-і-аналіз-списку-лекція-8-с-13-15">1.7. Операції і «аналіз» списку (Лекція 8, с. 13-15)</h3>
+<pre><code class="language-python">&gt;&gt;&gt; first = [1, 2, 3]
+&gt;&gt;&gt; first + [10, 20]              # конкатенація - НОВИЙ список
+[1, 2, 3, 10, 20]
+&gt;&gt;&gt; first * 2                     # повторення - теж новий
+[1, 2, 3, 1, 2, 3]
+&gt;&gt;&gt; 2 in first, 222 in first, 222 not in first
+(True, False, True)
+&gt;&gt;&gt; marks = [1, 2, 2, 2, 2, 3]
+&gt;&gt;&gt; len(marks), min(marks), max(marks), sum(marks)
+(6, 1, 3, 12)
+&gt;&gt;&gt; marks.count(2)                # скільки разів трапляється 2
+4
+&gt;&gt;&gt; marks.index(2)                # індекс ПЕРШОЇ двійки
+1
+&gt;&gt;&gt; [1, 2, 3, 2, 1].index(2, 2)   # шукати, починаючи з індексу 2
+3
+&gt;&gt;&gt; marks.index(7)
+Traceback (most recent call last):
+ValueError: 7 is not in list
+&gt;&gt;&gt; max([&quot;кіт&quot;, &quot;слон&quot;, &quot;миша&quot;], key=len)
+'слон'
+&gt;&gt;&gt; min([-7, 3, -2], key=abs)
+-2
+&gt;&gt;&gt; max([], default=0)
+0
+</code></pre>
+<ul>
+<li><code>x in values</code> перевіряє елементи <strong>по одному</strong> (лінійний пошук, O(n)). Для частих перевірок
+  у великих колекціях беруть <code>set</code> або <code>dict</code>.</li>
+<li><code>index</code> для відсутнього елемента - <code>ValueError</code>; спершу перевір <code>x in values</code>.</li>
+<li><code>min</code>/<code>max</code> порожнього списку - <code>ValueError</code>; рятує <code>default=</code>.</li>
+<li><code>key=</code> - функція, за якою порівнювати: <code>key=len</code> - за довжиною, <code>key=abs</code> - за модулем.</li>
+</ul>
+<h3 id="18-методи-що-змінюють-список-лекція-8-с-15-17">1.8. Методи, що змінюють список (Лекція 8, с. 15-17)</h3>
+<pre><code>values.append(x)      додає x у кінець
+values.extend(t)      додає в кінець КОЖЕН елемент t
+values.insert(i, x)   вставляє x на позицію i
+values.pop(i)         вилучає елемент з позиції i і ПОВЕРТАЄ його
+values.pop()          вилучає і повертає останній
+values.remove(x)      видаляє ПЕРШЕ входження x, нічого не повертає
+values.clear()        видаляє все
+values.copy()         повертає копію
+values.reverse()      розвертає на місці
+values.sort()         сортує на місці за неспаданням
+</code></pre>
+<p><strong>append, extend і +=</strong> - найчастіше плутають:</p>
+<pre><code class="language-python">&gt;&gt;&gt; first = [1, 2, 3]
+&gt;&gt;&gt; first.append([4, 5])     # ОДИН новий елемент - сам список [4, 5]
+&gt;&gt;&gt; first
+[1, 2, 3, [4, 5]]
+&gt;&gt;&gt; second = [1, 2, 3]
+&gt;&gt;&gt; second.extend([4, 5])    # КОЖЕН елемент окремо
+&gt;&gt;&gt; second
+[1, 2, 3, 4, 5]
+&gt;&gt;&gt; third = [1, 2, 3]
+&gt;&gt;&gt; third += [4, 5]          # для списку = extend, на місці
+&gt;&gt;&gt; third
+[1, 2, 3, 4, 5]
+</code></pre>
+<p><strong>insert</strong> за межами не падає, а просто ставить на початок або в кінець:</p>
+<pre><code class="language-python">&gt;&gt;&gt; values = [10, 20, 30]
+&gt;&gt;&gt; values.insert(1, 15)
+&gt;&gt;&gt; values.insert(100, 99)
+&gt;&gt;&gt; values
+[10, 15, 20, 30, 99]
+</code></pre>
+<p><strong>pop, remove, del</strong> - три способи видалити (с. 16):</p>
+<pre><code class="language-python">&gt;&gt;&gt; values = [5, 6, 7, 6, 8]
+&gt;&gt;&gt; values.pop(1)            # за індексом, ПОВЕРТАЄ видалене
+6
+&gt;&gt;&gt; values.remove(6)         # за значенням, лише перше, повертає None
+&gt;&gt;&gt; values
+[5, 7, 8]
+&gt;&gt;&gt; del values[0]            # за індексом, це інструкція, а не метод
+&gt;&gt;&gt; values
+[7, 8]
+&gt;&gt;&gt; values.remove(100)
+Traceback (most recent call last):
+ValueError: list.remove(x): x not in list
+&gt;&gt;&gt; [].pop()
+Traceback (most recent call last):
+IndexError: pop from empty list
+</code></pre>
+<p><strong>sort і sorted, reverse і reversed</strong> (с. 17) - «змінює на місці» проти «повертає нове»:</p>
+<pre><code class="language-python">&gt;&gt;&gt; values = [3, 1, 2]
+&gt;&gt;&gt; new_list = sorted(values)     # нова відсортована копія, values не змінився
+&gt;&gt;&gt; new_list, values
+([1, 2, 3], [3, 1, 2])
+&gt;&gt;&gt; print(values.sort())          # сортує САМ values і повертає None
+None
+&gt;&gt;&gt; values
+[1, 2, 3]
+&gt;&gt;&gt; values.sort(reverse=True)
+&gt;&gt;&gt; values
+[3, 2, 1]
+&gt;&gt;&gt; sorted([&quot;банан&quot;, &quot;яблуко&quot;, &quot;вишня&quot;], key=len)
+['банан', 'вишня', 'яблуко']
+</code></pre>
+<p><strong>Класична помилка: <code>values = values.sort()</code></strong> - змінна стає <code>None</code>. Правило мови (с. 17):
+«якщо змінив об'єкт, то нічого не повертай». Тому <code>sort</code>, <code>reverse</code>, <code>append</code>, <code>extend</code>,
+<code>insert</code>, <code>clear</code>, <code>remove</code> повертають <code>None</code>. Аналогічно: <code>values.reverse()</code> - на місці,
+<code>values[::-1]</code> - новий список, <code>reversed(values)</code> - ітератор для обходу без копії.</p>
+<p>Сортування <strong>стабільне</strong>: при однаковому ключі елементи зберігають взаємний порядок
+(«банан» і «вишня» обидва по 5 літер - лишились у вихідному порядку). Цікавинка з лекції:
+рядки порівнюються за кодами Unicode, і українські «є», «і», «ї», «ґ» лежать поза основним
+блоком кирилиці. Тому:</p>
+<pre><code class="language-python">&gt;&gt;&gt; sorted(['яблуко', 'єнот', 'іній'])
+['яблуко', 'єнот', 'іній']
+</code></pre>
+<p>«я» опинилось перед «є». Для справжнього алфавітного порядку потрібні локалі або PyICU.</p>
+<p>Лекція ще показує (с. 18), що всі ці методи можна виразити зрізами: <code>append(x)</code> - це
+<code>values[len(values):len(values)] = [x]</code>, <code>extend(t)</code> - <code>values[len(values):] = t</code>, <code>clear()</code> -
+<code>values[::] = []</code>. У справжньому коді так не пишуть, але видно, яке потужне присвоєння зрізу.</p>
+<p><strong>Скільки коштує</strong> (с. 18-19), n - довжина:</p>
+<pre><code>values[i], values[i] = x, len(values)      O(1)    миттєво
+append(x), pop()                            O(1)    з кінця дешево
+pop(0), insert(0, x), pop(i), insert(i, x)  O(n)    треба зсунути елементи
+x in values, index, count, remove           O(n)    перебір
+min, max, sum                               O(n)    один прохід
+sort(), sorted()                            O(n log n)
+</code></pre>
+<p>Висновок лекції: додавати й видаляти <strong>в кінці</strong> - дешево, <strong>на початку</strong> - дорого.
+Для черги з обох кінців є <code>collections.deque</code> (урок 09).</p>
+<h3 id="19-два-імені-один-список-копії-лекція-8-с-19-23">1.9. Два імені - один список. Копії (Лекція 8, с. 19-23)</h3>
+<pre><code class="language-python">&gt;&gt;&gt; values = [1, 2, 3, 4, 5, 6]
+&gt;&gt;&gt; alias = values
+&gt;&gt;&gt; alias.pop()
+6
+&gt;&gt;&gt; values
+[1, 2, 3, 4, 5]
+</code></pre>
+<p><code>values</code> змінився, хоча ми «нічого з ним не робили». Бо <code>alias = values</code> скопіювало
+<strong>посилання</strong>, а не список. Лекція: «одна пляшка - дві етикетки»:</p>
+<pre><code>після alias = values             після alias = values.copy()
+
+values ──┐                       values ──► [1, 2, 3, 4, 5, 6]
+         ├──► [1, 2, 3, 4, 5, 6]
+alias  ──┘                       alias  ──► [1, 2, 3, 4, 5, 6]   (інший об'єкт)
+</code></pre>
+<p>Перевірити «той самий об'єкт?» - оператор <code>is</code> або <code>id</code> («серійний номер» об'єкта).
+<code>==</code> порівнює <strong>вміст</strong>, <code>is</code> - <strong>тотожність</strong>:</p>
+<pre><code class="language-python">&gt;&gt;&gt; first = [1, 2, 3]
+&gt;&gt;&gt; same = first
+&gt;&gt;&gt; twin = [1, 2, 3]
+&gt;&gt;&gt; first is same, first is twin, first == twin
+(True, False, True)
+&gt;&gt;&gt; id(first) == id(same)
+True
+</code></pre>
+<p><strong>Копія</strong>: <code>values.copy()</code>, <code>values[:]</code>, <code>list(values)</code> - три рівноцінні способи.</p>
+<pre><code class="language-python">&gt;&gt;&gt; values = [1, 2, 3, 4, 5, 6]
+&gt;&gt;&gt; backup = values.copy()
+&gt;&gt;&gt; backup.pop()
+6
+&gt;&gt;&gt; values, backup
+([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5])
+</code></pre>
+<p><strong>Поверхнева і глибока копія</strong> (с. 21). <code>copy()</code> створює новий <strong>зовнішній</strong> список, але його
+комірки вказують на <strong>ті самі</strong> внутрішні списки:</p>
+<pre><code>a ──► [ • , • ]          b = a.copy()    b ──► [ • , • ]
+        │   │                                  │   │
+        ▼   ▼                                  │   │
+      [1,2] [3,4]  ◄───────────────────────────┘───┘   (спільні!)
+</code></pre>
+<pre><code class="language-python">&gt;&gt;&gt; import copy
+&gt;&gt;&gt; outer = [[1, 2], [3, 4]]
+&gt;&gt;&gt; shallow = outer.copy()
+&gt;&gt;&gt; shallow[0][0] = 99
+&gt;&gt;&gt; outer
+[[99, 2], [3, 4]]
+&gt;&gt;&gt; outer = [[1, 2], [3, 4]]
+&gt;&gt;&gt; deep = copy.deepcopy(outer)
+&gt;&gt;&gt; deep[0][0] = 99
+&gt;&gt;&gt; outer, deep
+([[1, 2], [3, 4]], [[99, 2], [3, 4]])
+</code></pre>
+<p>Правило лекції: всередині лише числа, рядки, кортежі чисел - вистачає <code>copy()</code>. Всередині
+списки, які ти змінюватимеш окремо, - <code>copy.deepcopy</code>.</p>
+<p><strong>Пастка <code>[[0] * 3] * 3</code></strong> (с. 22). <code>*</code> повторює <strong>посилання</strong>, а не створює нові списки:</p>
+<pre><code class="language-python">&gt;&gt;&gt; grid = [[0] * 3] * 3
+&gt;&gt;&gt; grid[0][0] = 1
+&gt;&gt;&gt; grid
+[[1, 0, 0], [1, 0, 0], [1, 0, 0]]
+&gt;&gt;&gt; grid = [[0] * 3 for _ in range(3)]
+&gt;&gt;&gt; grid[0][0] = 1
+&gt;&gt;&gt; grid
+[[1, 0, 0], [0, 0, 0], [0, 0, 0]]
+</code></pre>
+<p>У першому випадку три «рядки» - одне й те саме: три стрілки на один список <code>[0, 0, 0]</code>.
+Спискоутворення виконує <code>[0] * 3</code> <strong>тричі</strong> - три різні списки. <code>_</code> - ім'я для змінної, яка нам
+не потрібна. А <code>[0] * 5</code> безпечне: число змінити на місці не можна, <code>values[0] = 1</code> лише
+переставляє стрілку однієї комірки.</p>
+<p><strong>Пастка <code>+=</code> проти <code>= ... +</code></strong> (с. 22):</p>
+<pre><code class="language-python">&gt;&gt;&gt; first = [1, 2]
+&gt;&gt;&gt; alias = first
+&gt;&gt;&gt; first += [3]          # на місці (як extend) - alias бачить зміну
+&gt;&gt;&gt; alias
+[1, 2, 3]
+&gt;&gt;&gt; first = [1, 2]
+&gt;&gt;&gt; alias = first
+&gt;&gt;&gt; first = first + [3]   # НОВИЙ список, ім'я first переїхало на нього
+&gt;&gt;&gt; alias
+[1, 2]
+</code></pre>
+<p><strong>Пастка: змінюваний аргумент за замовчуванням</strong> (с. 22-23). Список <code>bucket=[]</code> створюється
+<strong>один раз</strong>, коли Python читає <code>def</code>, і живе між викликами:</p>
+<pre><code class="language-python">def add_item(item, bucket=[]):      # ПОГАНО
+    bucket.append(item)
+    return bucket
+
+
+print(add_item(1))
+print(add_item(2))
+</code></pre>
+<pre><code class="language-text">[1]
+[1, 2]
+</code></pre>
+<p>Правильно: <code>def add_item(item, bucket=None):</code>, а всередині <code>if bucket is None: bucket = []</code>.</p>
+<p><strong>Списки і функції</strong> (с. 23). Функція отримує посилання на <strong>той самий</strong> список і може змінити
+його в оригіналі:</p>
+<pre><code class="language-python">def double_all(values):
+    for index in range(len(values)):
+        values[index] *= 2
+
+
+data = [1, 2, 3]
+result = double_all(data)
+print(data, result)
+</code></pre>
+<pre><code class="language-text">[2, 4, 6] None
+</code></pre>
+<p>Порада лекції: чітко вирішуй, чи функція <strong>змінює</strong> список (і тоді повертає <code>None</code>, як
+<code>sort</code>), чи <strong>повертає новий</strong> (як <code>sorted</code>). Не змішуй.</p>
+<h3 id="110-введення-і-виведення-лекція-8-с-23-24">1.10. Введення і виведення (Лекція 8, с. 23-24)</h3>
+<p>Готової інструкції «ввести список» нема. Варіант лекції - по одному елементу:</p>
+<pre><code class="language-python"># ввід: 3 | 2.5 | -1 | 4
+size = int(input(&quot;Кількість елементів списку &quot;))
+values = []
+for index in range(size):
+    element = float(input(&quot;Задайте %d-й елемент списку &quot; % index))
+    values.append(element)
+print(values)
+</code></pre>
+<pre><code class="language-text">Кількість елементів списку 3
+Задайте 0-й елемент списку 2.5
+Задайте 1-й елемент списку -1
+Задайте 2-й елемент списку 4
+[2.5, -1.0, 4.0]
+</code></pre>
+<p>Компактніше - усі числа одним рядком через пробіл:</p>
+<pre><code class="language-python"># ввід: 3 1 4 1 5
+values = list(map(int, input(&quot;Числа через пробіл: &quot;).split()))
+print(values)
+print(*values)
+print(*values, sep=&quot;, &quot;)
+print(&quot; &quot;.join(map(str, values)))
+print(f&quot;Список: {values}, довжина {len(values)}&quot;)
+</code></pre>
+<pre><code class="language-text">Числа через пробіл: 3 1 4 1 5
+[3, 1, 4, 1, 5]
+3 1 4 1 5
+3, 1, 4, 1, 5
+3 1 4 1 5
+Список: [3, 1, 4, 1, 5], довжина 5
+</code></pre>
+<p><code>print(*values)</code> - «розпакування»: елементи передаються в <code>print</code> окремо, як <code>print(3, 1, 4,
+1, 5)</code>. <code>str.join</code> склеює лише рядки, тому числа спершу перетворюють: <code>map(str, values)</code>.
+Ще один спосіб з лекції: <code>[float(input()) for _ in range(size)]</code>.</p>
+<h3 id="111-обхід-списку-лекція-8-с-24-28">1.11. Обхід списку (Лекція 8, с. 24-28)</h3>
+<pre><code class="language-python">marks = [95, 82, 100]
+names = [&quot;Оксана&quot;, &quot;Тарас&quot;, &quot;Соломія&quot;]
+for mark in marks:                          # за елементами
+    print(mark, end=&quot; &quot;)
+print()
+for index in range(len(marks)):             # за індексами
+    print(index, marks[index], end=&quot;; &quot;)
+print()
+for number, name in enumerate(names, start=1):   # індекс і елемент разом
+    print(f&quot;{number}. {name}&quot;)
+for name, mark in zip(names, marks):        # два списки паралельно
+    print(name, mark)
+for mark in reversed(marks):                # навпаки, без копії
+    print(mark, end=&quot; &quot;)
+print()
+for current, following in zip(marks, marks[1:]):   # сусідні пари
+    print(following - current, end=&quot; &quot;)
+print()
+</code></pre>
+<pre><code class="language-text">95 82 100 
+0 95; 1 82; 2 100; 
+1. Оксана
+2. Тарас
+3. Соломія
+Оксана 95
+Тарас 82
+Соломія 100
+100 82 95 
+-13 18 
+</code></pre>
+<p>Коли який: за елементами - коли індекс не потрібен (найчастіше); за індексами - коли треба
+<strong>змінювати</strong> елементи (<code>values[i] = ...</code>), порівнювати сусідів (<code>values[i]</code> і <code>values[i + 1]</code>)
+або йти по кількох списках одним індексом; <code>enumerate</code> - коли потрібні і номер, і
+значення. <code>zip</code> зупиняється, коли закінчився <strong>найкоротший</strong> список (тому <code>zip(marks,
+marks[1:])</code> дає на одну пару менше).</p>
+<p>Пошук максимуму вручну (с. 24-26): вважаємо найбільшим перший, проходимо решту, при
+більшому оновлюємо. Якщо треба і індекс - запам'ятовуємо ще <code>max_index</code>. Те саме одним
+рядком: <code>values.index(max(values))</code> (два проходи, зате коротко). Для порожнього списку
+<code>values[0]</code> дасть <code>IndexError</code> - справжня програма має це перевірити.</p>
+<p><strong>Пастка: зміна списку під час обходу</strong> (с. 27). Не видаляй і не додавай елементи в
+список, по якому зараз іде <code>for</code>. Цикл іде за індексом, після видалення елементи
+«з'їжджають», і один пропускається. Правильно: побудувати новий список
+(<code>[x for x in values if x % 2 != 0]</code>) або обходити копію (<code>for x in values[:]:</code>).
+Розберемо це в розділі 3.</p>
+<h3 id="112-матриці-списки-списків-лекція-8-с-28-32">1.12. Матриці - списки списків (Лекція 8, с. 28-32)</h3>
+<p>Матриця - список рядків, кожен рядок - список чисел. Елемент у рядку i, стовпці j (з
+нуля!) - <code>matrix[i][j]</code>. У математиці рядки й стовпці з одиниці, тому елемент a₂₁ - це
+<code>matrix[1][0]</code>.</p>
+<pre><code class="language-python">&gt;&gt;&gt; matrix = [[1, 2, 3], [4, 5, 6]]
+&gt;&gt;&gt; matrix[1][0]
+4
+&gt;&gt;&gt; len(matrix), len(matrix[0])      # рядків, стовпців
+(2, 3)
+&gt;&gt;&gt; [sum(row) for row in matrix]                   # суми рядків
+[6, 15]
+&gt;&gt;&gt; [sum(column) for column in zip(*matrix)]       # суми стовпців
+[5, 7, 9]
+&gt;&gt;&gt; [list(column) for column in zip(*matrix)]      # транспонування
+[[1, 4], [2, 5], [3, 6]]
+&gt;&gt;&gt; square = [[1, 2], [3, 4]]
+&gt;&gt;&gt; sum(square[i][i] for i in range(len(square)))  # слід (головна діагональ)
+5
+&gt;&gt;&gt; [[1 if i == j else 0 for j in range(3)] for i in range(3)]   # одинична
+[[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+</code></pre>
+<p><code>zip(*matrix)</code> - те саме, що <code>zip([1, 2, 3], [4, 5, 6])</code>: бере по елементу з кожного рядка, тобто
+стовпці. (Тут <code>i</code>, <code>j</code> - як у лекції і в математиці; у лабі краще <code>row</code>, <code>col</code>.) Обхід - вкладені цикли: зовнішній по рядках, внутрішній по елементах рядка:</p>
+<pre><code class="language-python">matrix = [[1.5, 2, 3], [4, -5, 6]]
+for row in matrix:
+    for element in row:
+        print(element, end=&quot; &quot;)
+    print()
+for row in matrix:
+    print(&quot; &quot;.join(f&quot;{x:6.2f}&quot; for x in row))
+smallest = matrix[0][0]
+for row in matrix:
+    for element in row:
+        if element &lt; smallest:
+            smallest = element
+print(&quot;Найменший:&quot;, smallest)
+</code></pre>
+<pre><code class="language-text">1.5 2 3 
+4 -5 6 
+  1.50   2.00   3.00
+  4.00  -5.00   6.00
+Найменший: -5
+</code></pre>
+<p>Введення матриці по рядках (с. 29-30): кожен рядок - через пробіл, далі <code>split</code> і <code>map</code>:</p>
+<pre><code class="language-python"># ввід: 2 | 1 2 3 | 4 5 6
+rows = int(input(&quot;Кількість рядків матриці &quot;))
+matrix = []
+for index in range(rows):
+    row = list(map(float, input(&quot;%d: &quot; % index).split()))
+    matrix.append(row)
+print(matrix)
+</code></pre>
+<pre><code class="language-text">Кількість рядків матриці 2
+0: 1 2 3
+1: 4 5 6
+[[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]
+</code></pre>
+<p>Симетричність (с. 31): <code>matrix[i][j] == matrix[j][i]</code> для всіх i, j. Досить перевірити
+половину над діагоналлю (<code>j &gt; i</code>) і зупинитись на першій розбіжності. Найкоротше - <code>all</code>,
+яке теж зупиняється на першому <code>False</code>:</p>
+<pre><code class="language-python">&gt;&gt;&gt; matrix = [[1, 7, 3], [7, 4, 5], [3, 5, 6]]
+&gt;&gt;&gt; size = len(matrix)
+&gt;&gt;&gt; all(matrix[i][j] == matrix[j][i] for i in range(size) for j in range(i + 1, size))
+True
+</code></pre>
+<p>Для серйозних матриць (мільйони елементів, обернена матриця) беруть бібліотеку NumPy, але
+індекси, вкладені цикли й зрізи переносяться туди майже без змін (лекція, с. 32).</p>
+<h2 id="2-розібраний-приклад">2. Розібраний приклад</h2>
+<p><strong>Задача.</strong> Користувач вводить виміри температури одним рядком через пробіл. Знайти
+найбільший ріст між двома сусідніми вимірами і номери цих вимірів (з нуля). Якщо однакових
+найбільших кілька - перший.</p>
+<pre><code class="language-python"># ввід: 12 15 14 20 19 25 24
+readings = list(map(int, input(&quot;Виміри через пробіл: &quot;).split()))
+best_jump = readings[1] - readings[0]
+best_index = 0
+for index in range(1, len(readings) - 1):
+    jump = readings[index + 1] - readings[index]
+    if jump &gt; best_jump:
+        best_jump = jump
+        best_index = index
+print(&quot;Виміри:&quot;, readings)
+print(&quot;Найбільший ріст&quot;, best_jump, &quot;між вимірами&quot;, best_index,
+      &quot;і&quot;, best_index + 1)
+</code></pre>
+<pre><code class="language-text">Виміри через пробіл: 12 15 14 20 19 25 24
+Виміри: [12, 15, 14, 20, 19, 25, 24]
+Найбільший ріст 6 між вимірами 2 і 3
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>рядок</th>
+<th>що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input(...).split()</code></td>
+<td>рядок <code>'12 15 14 ...'</code> ріже по пробілах: <code>['12', '15', '14', ...]</code> - список <strong>рядків</strong></td>
+</tr>
+<tr>
+<td><code>map(int, ...)</code> і <code>list(...)</code></td>
+<td>кожен рядок перетворює на число і збирає в список <code>[12, 15, 14, ...]</code></td>
+</tr>
+<tr>
+<td><code>best_jump = readings[1] - readings[0]</code></td>
+<td>перша пара - «поточний рекорд» (як «вважаємо найбільшим перший» у лекції, с. 24)</td>
+</tr>
+<tr>
+<td><code>best_index = 0</code></td>
+<td>рекорд між вимірами 0 і 1</td>
+</tr>
+<tr>
+<td><code>for index in range(1, len(readings) - 1)</code></td>
+<td>решта пар. Беремо <code>readings[index + 1]</code>, тож <code>index + 1</code> ≤ 6, тобто <code>index</code> ≤ 5, а <code>range</code> не включає кінець: <code>len - 1 = 6</code></td>
+</tr>
+<tr>
+<td><code>jump = ...</code></td>
+<td>ріст від виміру <code>index</code> до <code>index + 1</code> (від'ємний - спад)</td>
+</tr>
+<tr>
+<td><code>if jump &gt; best_jump</code></td>
+<td>строго більше: при рівному рекорд не міняємо, лишається <strong>перший</strong></td>
+</tr>
+<tr>
+<td>два присвоєння в <code>if</code></td>
+<td>новий рекорд і його місце</td>
+</tr>
+<tr>
+<td><code>print(...)</code> у два рядки</td>
+<td>дужки дозволяють перенести рядок (PEP 8: ≤ 79 символів)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Трасувальна таблиця:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>index</th>
+<th>readings[index]</th>
+<th>readings[index + 1]</th>
+<th>jump</th>
+<th>jump &gt; best_jump?</th>
+<th>best_jump</th>
+<th>best_index</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>старт</td>
+<td>12</td>
+<td>15</td>
+<td>3</td>
+<td>-</td>
+<td>3</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>15</td>
+<td>14</td>
+<td>-1</td>
+<td>-1 &gt; 3 ні</td>
+<td>3</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>14</td>
+<td>20</td>
+<td>6</td>
+<td>6 &gt; 3 так</td>
+<td>6</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>20</td>
+<td>19</td>
+<td>-1</td>
+<td>ні</td>
+<td>6</td>
+<td>2</td>
+</tr>
+<tr>
+<td>4</td>
+<td>19</td>
+<td>25</td>
+<td>6</td>
+<td>6 &gt; 6 ні</td>
+<td>6</td>
+<td>2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>25</td>
+<td>24</td>
+<td>-1</td>
+<td>ні</td>
+<td>6</td>
+<td>2</td>
+</tr>
+</tbody>
+</table></div>
+<p>Що буде, якщо написати <code>range(1, len(readings))</code>? На <code>index = 6</code> рядок <code>readings[7]</code> дасть
+<code>IndexError: list index out of range</code> - класична помилка на одиницю. А якщо ввести лише одне
+число - впаде вже <code>readings[1]</code>; справжня програма мала б це перевірити.</p>
+<p>Те саме коротше, з <code>zip</code> сусідніх пар (лекція, с. 27):
+<code>jumps = [after - before for before, after in zip(readings, readings[1:])]</code>, далі
+<code>best_jump = max(jumps)</code>, <code>best_index = jumps.index(best_jump)</code> (<code>index</code> дає <strong>перше</strong>
+входження - саме те, що треба).</p>
+<p><strong>Закрий приклад і напиши його сам з пам'яті.</strong> Перевір на <code>12 15 14 20 19 25 24</code> і на
+<code>5 1</code> (має бути ріст -4 між 0 і 1).</p>
+<h2 id="3-передбач-вивід">3. Передбач вивід</h2>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<p><strong>Фрагмент 1</strong></p>
+<pre><code class="language-python">marks = [5, 4, 3]
+copy_marks = marks
+copy_marks.append(2)
+print(marks)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">[5, 4, 3, 2]
+</code></pre>
+<p><code>copy_marks = marks</code> - не копія, а друга етикетка на той самий список. <code>append</code> змінює
+цей єдиний список, і через ім'я <code>marks</code> ми бачимо зміну. Справжня копія - <code>marks.copy()</code>
+або <code>marks[:]</code>. (Це контрольне запитання 2 з лекції 9, с. 20.)</p>
+</details>
+<p><strong>Фрагмент 2</strong></p>
+<pre><code class="language-python">numbers = [3, 1, 2]
+result = numbers.sort()
+print(result)
+print(numbers)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">None
+[1, 2, 3]
+</code></pre>
+<p><code>sort</code> сортує <strong>сам</strong> список і повертає <code>None</code> («змінив - нічого не повертай»). Тому в
+<code>result</code> - <code>None</code>, а відсортований саме <code>numbers</code>. Хотів нову відсортовану копію -
+<code>sorted(numbers)</code>.</p>
+</details>
+<p><strong>Фрагмент 3</strong></p>
+<pre><code class="language-python">board = [[0] * 3] * 3
+board[0][0] = 1
+print(board)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">[[1, 0, 0], [1, 0, 0], [1, 0, 0]]
+</code></pre>
+<p><code>* 3</code> повторило <strong>посилання</strong> на один і той самий рядок <code>[0, 0, 0]</code>. Змінили «перший рядок» -
+змінився єдиний рядок, на який дивляться всі три комірки. Правильно:
+<code>[[0] * 3 for _ in range(3)]</code>.</p>
+</details>
+<p><strong>Фрагмент 4</strong> (хотіли прибрати всі парні)</p>
+<pre><code class="language-python">values = [1, 2, 2, 3, 4]
+for value in values:
+    if value % 2 == 0:
+        values.remove(value)
+print(values)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">[1, 2, 3]
+</code></pre>
+<p>Цикл іде за номером позиції. Позиція 0: 1 - лишаємо. Позиція 1: 2 - видаляємо, список
+стає <code>[1, 2, 3, 4]</code>, і <strong>друга</strong> двійка з'їхала на позицію 1, яку ми вже пройшли. Позиція 2:
+3 - лишаємо. Позиція 3: 4 - видаляємо, <code>[1, 2, 3]</code>. Позиції 4 вже нема - стоп. Друга двійка
+пропущена. Правильно: <code>values = [value for value in values if value % 2 != 0]</code>.</p>
+</details>
+<p><strong>Фрагмент 5</strong></p>
+<pre><code class="language-python">first = [1, 2, 3]
+second = [1, 2, 3]
+first.append([4, 5])
+second.extend([4, 5])
+print(len(first), len(second))
+print(first[-1], second[-1])
+print(second[10:20], second[::-2])
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">4 5
+[4, 5] 5
+[] [5, 3, 1]
+</code></pre>
+<p><code>append</code> додав <strong>один</strong> елемент - список <code>[4, 5]</code>, тому довжина 4 і останній елемент - сам
+список. <code>extend</code> додав <strong>два</strong> - довжина 5. Зріз <code>[10:20]</code> за межами не падає, а дає <code>[]</code>.
+<code>[::-2]</code> - з кінця через один: індекси 4, 2, 0.</p>
+</details>
+<h2 id="4-знайди-помилку">4. Знайди помилку</h2>
+<p><strong>Помилка 1.</strong> Повернути <strong>новий</strong> відсортований список.</p>
+<pre><code class="language-python"># БАГ
+def sorted_marks(marks: list[int]) -&gt; list[int]:
+    &quot;&quot;&quot;Новий список оцінок за зростанням.
+
+    &gt;&gt;&gt; sorted_marks([5, 3, 4])
+    [3, 4, 5]
+    &quot;&quot;&quot;
+    return marks.sort()
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>marks.sort()</code> сортує сам список і повертає <code>None</code> - його функція й повертає. doctest чекає
+<code>[3, 4, 5]</code>, а бачить порожнечу (<code>None</code> у сесії не друкується). До того ж функція зіпсувала
+список, який їй передали. <code>sorted</code> повертає нове і оригінал не чіпає:</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def sorted_marks(marks: list[int]) -&gt; list[int]:
+    &quot;&quot;&quot;Новий список оцінок за зростанням.
+
+    &gt;&gt;&gt; sorted_marks([5, 3, 4])
+    [3, 4, 5]
+    &quot;&quot;&quot;
+    return sorted(marks)
+</code></pre>
+</details>
+<p><strong>Помилка 2.</strong> Додати бонус до кожної оцінки, <strong>не змінюючи</strong> вихідний список.</p>
+<pre><code class="language-python"># БАГ
+def with_bonus(marks: list[int], bonus: int) -&gt; list[int]:
+    &quot;&quot;&quot;Новий список: кожна оцінка + bonus. Вихідний не змінюється.
+
+    &gt;&gt;&gt; exam = [60, 75, 90]
+    &gt;&gt;&gt; with_bonus(exam, 5)
+    [65, 80, 95]
+    &gt;&gt;&gt; exam
+    [60, 75, 90]
+    &quot;&quot;&quot;
+    result = marks
+    for index in range(len(result)):
+        result[index] += bonus
+    return result
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>result = marks</code> - не копія, а друге ім'я <strong>того самого</strong> списку. Цикл змінює його на місці,
+тож після виклику <code>exam</code> теж <code>[65, 80, 95]</code> - другий doctest падає. Перший проходить, тому
+помилку легко пропустити. Лікування - новий список:</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def with_bonus(marks: list[int], bonus: int) -&gt; list[int]:
+    &quot;&quot;&quot;Новий список: кожна оцінка + bonus. Вихідний не змінюється.
+
+    &gt;&gt;&gt; exam = [60, 75, 90]
+    &gt;&gt;&gt; with_bonus(exam, 5)
+    [65, 80, 95]
+    &gt;&gt;&gt; exam
+    [60, 75, 90]
+    &quot;&quot;&quot;
+    return [mark + bonus for mark in marks]
+</code></pre>
+<p>Або <code>result = marks.copy()</code> і далі той самий цикл.</p>
+</details>
+<p><strong>Помилка 3.</strong> Матриця з нулів, рядки мають бути незалежні.</p>
+<pre><code class="language-python"># БАГ
+def zero_matrix(rows: int, cols: int) -&gt; list[list[int]]:
+    &quot;&quot;&quot;Матриця rows x cols з нулів, рядки незалежні.
+
+    &gt;&gt;&gt; grid = zero_matrix(2, 3)
+    &gt;&gt;&gt; grid[0][1] = 7
+    &gt;&gt;&gt; grid
+    [[0, 7, 0], [0, 0, 0]]
+    &quot;&quot;&quot;
+    return [[0] * cols] * rows
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>[[0] * cols] * rows</code> - <code>rows</code> посилань на <strong>один</strong> рядок. Записали 7 у «перший» - 7 з'явилось
+у всіх: <code>[[0, 7, 0], [0, 7, 0]]</code>. Без doctest-у зі зміною елемента помилку не видно: просто
+<code>zero_matrix(2, 3)</code> надрукується правильно. Лікування - створити кожен рядок окремо:</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def zero_matrix(rows: int, cols: int) -&gt; list[list[int]]:
+    &quot;&quot;&quot;Матриця rows x cols з нулів, рядки незалежні.
+
+    &gt;&gt;&gt; grid = zero_matrix(2, 3)
+    &gt;&gt;&gt; grid[0][1] = 7
+    &gt;&gt;&gt; grid
+    [[0, 7, 0], [0, 0, 0]]
+    &quot;&quot;&quot;
+    return [[0] * cols for _ in range(rows)]
+</code></pre>
+</details>
+<h2 id="5-склади-з-рядків">5. Склади з рядків</h2>
+<p><strong>Задача 1.</strong> Зібрати список квадратів парних чисел зі списку <code>values</code> звичайним циклом.
+<strong>Один рядок зайвий</strong> (пастка).</p>
+<pre><code class="language-parsons">print(squares)
+        squares.append(value ** 2)
+values = [3, 4, 7, 10, 12]
+for value in values:
+        squares = squares.append(value ** 2)
+squares = []
+    if value % 2 == 0:
+</code></pre>
+<details>
+<summary>Розвʼязок</summary>
+<pre><code class="language-python">values = [3, 4, 7, 10, 12]
+squares = []
+for value in values:
+    if value % 2 == 0:
+        squares.append(value ** 2)
+print(squares)
+</code></pre>
+<pre><code class="language-text">[16, 100, 144]
+</code></pre>
+<p>Зайвий - <code>squares = squares.append(value ** 2)</code>: <code>append</code> повертає <code>None</code>, і після першого
+ж парного <code>squares</code> став би <code>None</code>, а наступний <code>append</code> впав би з <code>AttributeError</code>. Одним
+рядком те саме: <code>[value ** 2 for value in values if value % 2 == 0]</code>.</p>
+</details>
+<p><strong>Задача 2.</strong> Знайти індекс найменшої температури і саму температуру через <code>enumerate</code>.
+Зайвих рядків нема.</p>
+<pre><code class="language-parsons">        min_index = index
+temperatures = [3.5, -1.0, 2.0, -4.5, 0.0]
+    if value &lt; temperatures[min_index]:
+print(min_index, temperatures[min_index])
+for index, value in enumerate(temperatures):
+min_index = 0
+</code></pre>
+<details>
+<summary>Розвʼязок</summary>
+<pre><code class="language-python">temperatures = [3.5, -1.0, 2.0, -4.5, 0.0]
+min_index = 0
+for index, value in enumerate(temperatures):
+    if value &lt; temperatures[min_index]:
+        min_index = index
+print(min_index, temperatures[min_index])
+</code></pre>
+<pre><code class="language-text">3 -4.5
+</code></pre>
+<p>Тримаємо лише індекс рекорду - саме значення завжди можна дістати як
+<code>temperatures[min_index]</code>.</p>
+</details>
+<h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
+<p>Заготовка - <code>zadachi/urok08.py</code>, розвʼязок - <code>_rozvyazky/urok08.py</code> (відкривай лише після
+2 спроб). У терміналі, з теки <code>Курс</code>:</p>
+<pre><code>python3 -m doctest zadachi/urok08.py -v
+</code></pre>
+<p>Спершу всі тести червоні. Ти дописуєш тіло функції замість <code>pass</code> - тести стають зеленими.</p>
+<p><strong>Задача 1. <code>remove_spikes(readings, limit)</code> - прибрати викиди датчика.</strong> Повернути <strong>новий</strong>
+список без значень, у яких модуль більший за <code>limit</code>. Вихідний список не змінювати (є
+doctest, який це перевіряє). Є і doctest з двома викидами підряд - він ловить спробу
+<code>remove</code> під час обходу.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Не чіпай <code>readings</code> - збирай новий список.</li>
+<li>Фільтр «лишити, якщо |x| ≤ limit» - спискоутворення з <code>if</code> <strong>після</strong> <code>for</code>.</li>
+<li>Порожній список на вході - порожній на виході (спискоутворення зробить це саме).</li>
+</ol>
+</details>
+<p><strong>Задача 2. <code>transpose(matrix)</code> - транспонувати матрицю.</strong> Рядки стають стовпцями:
+<code>[[1, 2, 3], [4, 5, 6]]</code> → <code>[[1, 4], [2, 5], [3, 6]]</code>. Результат - нова матриця з незалежними
+рядками (doctest змінює результат і перевіряє, що оригінал цілий). Для <code>[]</code> повернути <code>[]</code>.
+Прийом (індекси <code>[i][j]</code>, стовпці, вкладені цикли) знадобиться в ЛР7 завд. 3.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Порожня матриця: <code>if not matrix: return []</code> (інакше <code>matrix[0]</code> впаде).</li>
+<li><code>rows = len(matrix)</code>, <code>cols = len(matrix[0])</code>. У результаті буде <code>cols</code> рядків по <code>rows</code>
+   елементів.</li>
+<li>Для кожного <code>j</code> від 0 до <code>cols - 1</code> зібрати новий рядок <code>[matrix[i][j] for i in ...]</code> і
+   додати його до результату.</li>
+<li>Лекція показує і один рядок: <code>[list(column) for column in zip(*matrix)]</code>. Спробуй обидва
+   способи.</li>
+</ol>
+</details>
+<h3 id="заготовка-тут-же-можна-писати-і-запускати-doctest">Заготовка (тут же можна писати і запускати doctest)</h3>
+<p>Скачати файл: <a href="data/prog/zadachi/urok08.py">urok08.py</a> - поклади в теку <code>zadachi/</code> і запускай <code>python3 -m doctest zadachi/urok08.py -v</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 8. Задачі з doctest (заготовка).
+
+Як запускати (з теки Курс):
+    python3 -m doctest zadachi/urok08.py -v
+
+Спершу всі приклади червоні: замість коду стоїть pass, і функція
+повертає None. Заміни pass на свій код, щоб усі стали зелені.
+Можна все з лекції 8: списки, індекси, зрізи, спискоутворення,
+методи списків, вкладені цикли.
+Розвʼязок - у _rozvyazky/urok08.py (відкривай лише після 2 спроб).
+&quot;&quot;&quot;
+import doctest
+
+
+def remove_spikes(readings: list[float], limit: float) -&gt; list[float]:
+    &quot;&quot;&quot;Новий список вимірів без викидів.
+
+    Викид - значення, модуль якого більший за limit. Значення,
+    рівні limit за модулем, лишаються. Вихідний список readings
+    не змінюється.
+
+    :param readings: виміри датчика
+    :param limit: найбільший допустимий модуль значення
+    :return: новий список без викидів, у тому самому порядку
+
+    &gt;&gt;&gt; remove_spikes([1, 50, 60, 2], 10)
+    [1, 2]
+    &gt;&gt;&gt; remove_spikes([10, -10, 11, -11], 10)
+    [10, -10]
+    &gt;&gt;&gt; remove_spikes([], 5)
+    []
+    &gt;&gt;&gt; data = [3.5, -40.0, 5.0]
+    &gt;&gt;&gt; remove_spikes(data, 10)
+    [3.5, 5.0]
+    &gt;&gt;&gt; data
+    [3.5, -40.0, 5.0]
+    &quot;&quot;&quot;
+    pass
+
+
+def transpose(matrix: list[list[int]]) -&gt; list[list[int]]:
+    &quot;&quot;&quot;Транспонована матриця: рядки стають стовпцями.
+
+    Елемент result[j][i] дорівнює matrix[i][j]. Результат - нова
+    матриця з незалежними рядками, вихідна не змінюється.
+    Для порожньої матриці [] повертає [].
+
+    :param matrix: прямокутна матриця (усі рядки однакової довжини)
+    :return: нова транспонована матриця
+
+    &gt;&gt;&gt; transpose([[1, 2, 3], [4, 5, 6]])
+    [[1, 4], [2, 5], [3, 6]]
+    &gt;&gt;&gt; transpose([[7]])
+    [[7]]
+    &gt;&gt;&gt; transpose([[1, 2, 3]])
+    [[1], [2], [3]]
+    &gt;&gt;&gt; transpose([])
+    []
+    &gt;&gt;&gt; grid = [[1, 2], [3, 4]]
+    &gt;&gt;&gt; flipped = transpose(grid)
+    &gt;&gt;&gt; flipped[0][0] = 99
+    &gt;&gt;&gt; flipped
+    [[99, 3], [2, 4]]
+    &gt;&gt;&gt; grid
+    [[1, 2], [3, 4]]
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 8. Задачі з doctest (розвʼязок).
+
+Відкривай лише після 2 спроб розвʼязати самому.
+Перевірка (з теки Курс):
+    python3 -m doctest _rozvyazky/urok08.py -v
+&quot;&quot;&quot;
+import doctest
+
+
+def remove_spikes(readings: list[float], limit: float) -&gt; list[float]:
+    &quot;&quot;&quot;Новий список вимірів без викидів.
+
+    Викид - значення, модуль якого більший за limit. Значення,
+    рівні limit за модулем, лишаються. Вихідний список readings
+    не змінюється.
+
+    :param readings: виміри датчика
+    :param limit: найбільший допустимий модуль значення
+    :return: новий список без викидів, у тому самому порядку
+
+    &gt;&gt;&gt; remove_spikes([1, 50, 60, 2], 10)
+    [1, 2]
+    &gt;&gt;&gt; remove_spikes([10, -10, 11, -11], 10)
+    [10, -10]
+    &gt;&gt;&gt; remove_spikes([], 5)
+    []
+    &gt;&gt;&gt; data = [3.5, -40.0, 5.0]
+    &gt;&gt;&gt; remove_spikes(data, 10)
+    [3.5, 5.0]
+    &gt;&gt;&gt; data
+    [3.5, -40.0, 5.0]
+    &quot;&quot;&quot;
+    # Спискоутворення з фільтром (if ПІСЛЯ for) будує НОВИЙ список,
+    # тому readings лишається цілим. Спроба readings.remove(...) у
+    # циклі for зіпсувала б оригінал і пропустила б другий викид
+    # з двох підряд (50, 60).
+    return [value for value in readings if abs(value) &lt;= limit]
+
+
+def transpose(matrix: list[list[int]]) -&gt; list[list[int]]:
+    &quot;&quot;&quot;Транспонована матриця: рядки стають стовпцями.
+
+    Елемент result[j][i] дорівнює matrix[i][j]. Результат - нова
+    матриця з незалежними рядками, вихідна не змінюється.
+    Для порожньої матриці [] повертає [].
+
+    :param matrix: прямокутна матриця (усі рядки однакової довжини)
+    :return: нова транспонована матриця
+
+    &gt;&gt;&gt; transpose([[1, 2, 3], [4, 5, 6]])
+    [[1, 4], [2, 5], [3, 6]]
+    &gt;&gt;&gt; transpose([[7]])
+    [[7]]
+    &gt;&gt;&gt; transpose([[1, 2, 3]])
+    [[1], [2], [3]]
+    &gt;&gt;&gt; transpose([])
+    []
+    &gt;&gt;&gt; grid = [[1, 2], [3, 4]]
+    &gt;&gt;&gt; flipped = transpose(grid)
+    &gt;&gt;&gt; flipped[0][0] = 99
+    &gt;&gt;&gt; flipped
+    [[99, 3], [2, 4]]
+    &gt;&gt;&gt; grid
+    [[1, 2], [3, 4]]
+    &quot;&quot;&quot;
+    # Порожній список у логічному контексті - хиба (лекція 8, с. 3).
+    # Без цієї перевірки matrix[0] нижче дав би IndexError.
+    if not matrix:
+        return []
+    rows = len(matrix)
+    cols = len(matrix[0])
+    result = []
+    for col in range(cols):
+        # Стовпець col вихідної матриці стає рядком col результату.
+        # Кожен рядок - новий список, тому рядки незалежні.
+        new_row = [matrix[row][col] for row in range(rows)]
+        result.append(new_row)
+    # Коротший спосіб з лекції 8, с. 32, дає те саме:
+    # [list(column) for column in zip(*matrix)]
+    return result
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+</details>
+<h2 id="7-поясни-чому">7. Поясни чому</h2>
+<p><strong>Питання 1.</strong> Чому після <code>alias = values; alias.append(1)</code> змінюється і <code>values</code>, а після
+<code>copy_x = x; copy_x = copy_x + 1</code> (числа) <code>x</code> не змінюється?</p>
+<details>
+<summary>Еталон</summary>
+<p>Змінна - ім'я, прив'язане до об'єкта. <code>alias = values</code> прив'язує друге ім'я до <strong>того самого</strong>
+списку, а <code>append</code> змінює сам об'єкт, тож зміну видно через обидва імені. З числом
+<code>copy_x + 1</code> створює <strong>новий</strong> об'єкт, і <code>copy_x =</code> лише переносить ім'я <code>copy_x</code> на нього;
+старий об'єкт (і ім'я <code>x</code>) не чіпаємо. Числа взагалі не можна змінити на місці, а список
+можна - звідси різниця.</p>
+</details>
+<p><strong>Питання 2.</strong> Чому <code>values.sort()</code> повертає <code>None</code>, а <code>sorted(values)</code> - список? Чим
+небезпечне <code>values = values.sort()</code>?</p>
+<details>
+<summary>Еталон</summary>
+<p>Домовленість мови (лекція 8, с. 17): метод, який <strong>змінює</strong> об'єкт на місці, нічого не
+повертає. Так одразу видно, що оригінал змінено, і нема спокуси думати, що ти отримав
+копію. <code>sorted</code> нічого не змінює, тому мусить повернути результат - новий список.
+<code>values = values.sort()</code> спершу відсортує список, а потім прив'яже <code>values</code> до <code>None</code> -
+відсортований список загубиться.</p>
+</details>
+<p><strong>Питання 3.</strong> Чому <code>[[0] * 3] * 3</code> дає «зв'язані» рядки, а <code>[0] * 5</code> безпечне?</p>
+<details>
+<summary>Еталон</summary>
+<p><code>*</code> копіює <strong>посилання</strong>. У <code>[0] * 5</code> - п'ять посилань на число 0. Число змінити не можна:
+<code>values[1] = 7</code> просто переводить стрілку однієї комірки на 7, інші лишаються на 0. У
+<code>[[0] * 3] * 3</code> - три посилання на <strong>один</strong> список, а список змінюваний: <code>grid[0][0] = 1</code>
+змінює вміст того самого списку, і це видно через усі три стрілки.</p>
+</details>
+<p><strong>Питання 4.</strong> Чому <code>values[10]</code> для списку з п'яти елементів - помилка, а <code>values[10:20]</code> -
+ні?</p>
+<details>
+<summary>Еталон</summary>
+<p>Індекс просить <strong>конкретний</strong> елемент: його нема - повернути нічого, тому <code>IndexError</code>. Зріз
+просить «усе, що між розрізами 10 і 20», а межі зрізу Python просто обрізає до довжини
+списку - виходить «нічого», тобто <code>[]</code>, і це чесна відповідь. Тому <code>values[:5]</code> працює для
+будь-якого списку. Але так само зріз може мовчки сховати твою помилку в межах.</p>
+</details>
+<h2 id="8-що-запамятати">8. Що запам'ятати</h2>
+<ul>
+<li>Список - впорядкований, змінюваний масив <strong>посилань</strong>. Змінна - ім'я, прив'язане до
+  об'єкта.</li>
+<li><code>b = a</code> - не копія, а друге ім'я. Копія: <code>a.copy()</code>, <code>a[:]</code>, <code>list(a)</code>; для вкладених -
+  <code>copy.deepcopy(a)</code>. <code>==</code> - однаковий вміст, <code>is</code> - той самий об'єкт.</li>
+<li>Індекси з 0 до <code>len - 1</code>, <code>[-1]</code> - останній; за межами - <code>IndexError</code>. Зріз <code>[start:end:step]</code></li>
+<li>кінець не входить, повертає <strong>новий</strong> список, за межами не падає.</li>
+<li>Методи, що змінюють (<code>append</code>, <code>extend</code>, <code>insert</code>, <code>remove</code>, <code>sort</code>, <code>reverse</code>, <code>clear</code>),
+  повертають <code>None</code>. <code>pop</code> змінює <strong>і</strong> повертає. <code>sorted</code>, зрізи, <code>+</code> - дають новий список.</li>
+<li><code>append(x)</code> - один елемент (хоч і список), <code>extend(t)</code> - кожен елемент <code>t</code>; <code>+=</code> - як <code>extend</code>.</li>
+<li><code>[expr for x in data if cond]</code> - фільтр; <code>[a if cond else b for x in data]</code> - вибір значення.</li>
+<li>Матриця - <code>[[0] * m for _ in range(n)]</code>, не <code>[[0] * m] * n</code>. Елемент - <code>matrix[i][j]</code>.</li>
+<li>Не видаляй з того списку, по якому йде <code>for</code>: будуй новий або обходь копію <code>values[:]</code>.</li>
+</ul>
+<p><strong>Де в лабах:</strong>
+- ЛР5 завд. 1: «наївна» <code>calculate_d_naive</code> тримає всі aₖ, bₖ у списках <code>[0.0] * (n + 1)</code>
+  (ЛР5, с. 10); у твоїй оптимізованій версії списки не потрібні - досить змінних (урок 07).
+- ЛР6 завд. 3: поліном - список коефіцієнтів <code>[aₙ, ..., a₀]</code>, функції повертають ще й історію
+  наближень - список, у який робиш <code>append</code> на кожному кроці.
+- ЛР7 завд. 1: решето на списку непарних чисел, вилучення <code>del lst[s-1::s]</code> (зріз з кроком,
+  за позиціями!), вивід по 5 у рядку.
+- ЛР7 завд. 2: список точок, сортування за відстанню (<code>sorted</code> з <code>key</code>, урок 09).
+- ЛР7 завд. 3: матриці - введення рядка через <code>split</code> і <code>map</code>, <code>matrix[i][j]</code>, обхід рядків і
+  стовпців, <code>len(matrix)</code> і <code>len(matrix[0])</code> для перевірки, чи можна перемножити.</p>
+<hr>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/urok-09">Наступний урок →</a></p>

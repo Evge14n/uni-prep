@@ -1,0 +1,1047 @@
+<h1 id="урок-3-числа-бібліотека-math-логічні-вирази-і-розгалуження">Урок 3. Числа, бібліотека math, логічні вирази і розгалуження</h1>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/dovidnyk">Довідник функцій</a></p>
+<blockquote>
+<p>Лекція 3 (с. 1-22), потрібно для: ЛР1 (завд. 1-3: <code>//</code>, <code>%</code>, <code>abs</code>, «рядок * умова»), ЛР2 (завд. 1: логічний вираз без <code>if</code>; завд. 2: <code>if</code>/<code>elif</code>/<code>else</code> і <code>% 10</code>, <code>% 100</code>; завд. 3: <code>math.sin</code>, <code>math.cos</code>, <code>math.radians</code>, <code>math.sqrt</code>), ЛР3 (<code>math.floor</code>, <code>math.log10</code>, <code>math.isqrt</code>, функції-предикати). Час: 30 хв. Перед цим уроком: урок 2.</p>
+</blockquote>
+<h2 id="1-ідея">1. Ідея</h2>
+<p>Досі програма йшла згори вниз і <strong>завжди робила одне й те саме</strong>. Але справжні задачі вимагають
+рішень: «якщо дискримінант додатний - два корені, якщо нуль - один, інакше - нема». Для цього
+потрібні дві речі:</p>
+<ol>
+<li><strong>Числа і точна арифметика</strong>: ціле ділення <code>//</code>, остача <code>%</code>, степінь <code>**</code>, функції з <code>math</code>.
+   Тут найбільше пасток: <code>-7 // 2</code> дає <code>-4</code>, а <code>0.1 + 0.2</code> - не <code>0.3</code>.</li>
+<li><strong>Логічні вирази</strong> (<code>True</code>/<code>False</code>) і <strong>розгалуження</strong> (<code>if</code>/<code>elif</code>/<code>else</code>, тернарний вираз).
+   Умова - це теж вираз, просто його значення не число, а <code>True</code> або <code>False</code>.</li>
+</ol>
+<p>Аналогія: розгалуження - стрілочник на залізниці. Поїзд (програма) доїжджає до стрілки (умова), і
+стрілочник дивиться на одне питання «так чи ні?». Залежно від відповіді поїзд іде однією колією, а
+друга для нього в цей раз не існує.</p>
+<h3 id="карта-лекції">Карта лекції</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Тема (Лекція 3)</th>
+<th>с.</th>
+<th>Головне</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>«Рядок * умова» замість <code>if</code></td>
+<td>1</td>
+<td><code>"Hello!" * flag + "Hi!" * (1 - flag)</code>, де <code>flag = int(n &gt; 1)</code>.</td>
+</tr>
+<tr>
+<td>Цілі числа <code>int</code>: <code>+ - * / // % -x **</code></td>
+<td>1-2</td>
+<td><code>/</code> завжди дає <code>float</code>; <code>//</code> - ціла частина (вниз); <code>%</code> - остача.</td>
+</tr>
+<tr>
+<td><code>abs</code>, <code>int</code>, <code>float</code>, <code>divmod</code></td>
+<td>2</td>
+<td><code>int(9.6)</code> = 9 (відкидає дріб); <code>divmod(x, y)</code> = <code>(x // y, x % y)</code>.</td>
+</tr>
+<tr>
+<td>Пріоритет, унарний мінус</td>
+<td>2-3</td>
+<td><code>**</code> → <code>* / // %</code> → <code>+ -</code>; <code>-3 ** 2</code> = -9, <code>3 ** -2</code> = 0.111...; дужки змінюють порядок.</td>
+</tr>
+<tr>
+<td>Сума цифр двозначного числа</td>
+<td>3</td>
+<td><code>x // 10</code> - перша цифра, <code>x % 10</code> - друга.</td>
+</tr>
+<tr>
+<td>Дійсні числа <code>float</code>, <code>type</code></td>
+<td>3</td>
+<td><code>3.0</code> - <code>float</code>, <code>3</code> - <code>int</code>.</td>
+</tr>
+<tr>
+<td>Експоненційний запис</td>
+<td>4</td>
+<td><code>1.1234e-56</code> = 1.1234 · 10⁻⁵⁶; нормалізована мантиса в [1, 10).</td>
+</tr>
+<tr>
+<td>Похибка дійсних чисел</td>
+<td>4-5</td>
+<td>Десять разів <code>0.1</code> = <code>0.9999999999999999</code>. Не баг Python, а IEEE 754.</td>
+</tr>
+<tr>
+<td>Змішані типи</td>
+<td>5</td>
+<td><code>4.5 + 4</code> = 8.5: результат - «ширший» тип.</td>
+</tr>
+<tr>
+<td>Многочлен</td>
+<td>5</td>
+<td><code>y = x ** 6 - 4 * x ** 4 + 3 * x - 7</code>.</td>
+</tr>
+<tr>
+<td>Бібліотека <code>math</code></td>
+<td>5-6</td>
+<td><code>import math</code>; <code>math.pi</code>, <code>math.sqrt</code>, <code>math.sin</code>... (довідник A).</td>
+</tr>
+<tr>
+<td>Кути прямокутного трикутника</td>
+<td>6-7</td>
+<td><code>math.atan2</code>, <code>math.degrees</code>.</td>
+</tr>
+<tr>
+<td>Комплексні числа, <code>cmath</code></td>
+<td>7-8</td>
+<td><code>2 + 3j</code>, <code>complex(2, 3)</code>, <code>.real</code>, <code>.imag</code>, <code>.conjugate()</code>, <code>abs</code>; <code>cmath.exp(1j * cmath.pi)</code>.</td>
+</tr>
+<tr>
+<td>Висловлювання, <code>and</code>, <code>or</code>, <code>not</code></td>
+<td>10-11</td>
+<td>Таблиці істинності; <code>and</code> і <code>or</code> «ліниві».</td>
+</tr>
+<tr>
+<td>Відношення <code>== != &lt; &lt;= &gt; &gt;=</code>, ланцюжки</td>
+<td>12-13</td>
+<td><code>0 &lt; x &lt; 10</code> = <code>(0 &lt; x) and (x &lt; 10)</code>.</td>
+</tr>
+<tr>
+<td>Пріоритет усіх операцій</td>
+<td>13-14</td>
+<td>арифметика → порівняння → <code>not</code> → <code>and</code> → <code>or</code>.</td>
+</tr>
+<tr>
+<td>Умови, приклади</td>
+<td>14-15</td>
+<td>Існування трикутника; точка в області (<code>and</code> = перетин, <code>or</code> = обʼєднання).</td>
+</tr>
+<tr>
+<td>Тип <code>bool</code>, «правдивість»</td>
+<td>15-16</td>
+<td>0, <code>""</code>, <code>[]</code>, <code>None</code> - хибні; решта - істинні.</td>
+</tr>
+<tr>
+<td><code>if</code>/<code>else</code>, <code>if</code> без <code>else</code></td>
+<td>16-18</td>
+<td>Модуль числа двома способами.</td>
+</tr>
+<tr>
+<td>Найбільше з трьох</td>
+<td>18-19</td>
+<td>Не називай змінну <code>max</code>.</td>
+</tr>
+<tr>
+<td>Каскад <code>elif</code></td>
+<td>19-20</td>
+<td>= вкладені <code>if</code>/<code>else</code>; перевіряються по черзі.</td>
+</tr>
+<tr>
+<td>Тернарний вираз</td>
+<td>20-22</td>
+<td><code>x if x &gt;= 0 else -x</code> - це <strong>вираз</strong>, він має значення.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="цілі-числа-і-на-пальцях">Цілі числа: <code>//</code> і <code>%</code> на пальцях</h3>
+<pre><code class="language-python">print(7 + 3, 7 - 3, 7 * 3, 7 / 3)
+print(17 // 5, 17 % 5, divmod(17, 5))
+print(20 / 5, 20 // 5, 20 % 5)
+print(2 ** 4, 11 // 2, abs(-52), int(9.6))
+</code></pre>
+<pre><code class="language-text">10 4 21 2.3333333333333335
+3 2 (3, 2)
+4.0 4 0
+16 5 52 9
+</code></pre>
+<p>17 цукерок розкладаємо в пакети по 5: повних пакетів <code>17 // 5 = 3</code>, лишилось <code>17 % 5 = 2</code>, бо
+17 = 3 · 5 + 2. Завжди <code>a == (a // b) * b + a % b</code> (ЛР1, с. 3). <code>20 / 5</code> дає <code>4.0</code>, а не <code>4</code>: ділення
+<code>/</code> <strong>завжди</strong> повертає <code>float</code> (ЛР1, с. 2). <code>int(9.6)</code> = 9: дробова частина <strong>відкидається</strong>, а не
+округлюється.</p>
+<p>Цифри числа без рядків (Лекція 3, с. 3; ЛР1, с. 3): <code>n % 10</code> - остання цифра, <code>n // 10</code> - число без
+останньої цифри, <code>n % 100</code> - дві останні. Для 25: <code>25 // 10 = 2</code>, <code>25 % 10 = 5</code>, сума 7.</p>
+<p><strong>Відʼємні числа</strong> (у лекції нема, стандартний Python): <code>//</code> округлює <strong>вниз</strong>, тобто до меншого числа:
+<code>-7 // 2 = -4</code> (бо -3.5 вниз - це -4), а <code>-7 % 2 = 1</code> (бо -7 = -4 · 2 + 1). Знак остачі - як у дільника.</p>
+<h3 id="пріоритет">Пріоритет</h3>
+<pre><code class="language-text">**                     найвищий (і справа наліво: 2 ** 3 ** 2 = 2 ** 9)
+*   /   //   %
++   -
+==  !=  &gt;  &lt;  &gt;=  &lt;=
+not
+and
+or                     найнижчий
+</code></pre>
+<p>Унарний мінус: <code>-3 ** 2</code> = <code>-(3 ** 2)</code> = -9, а <code>3 ** -2</code> = <code>3 ** (-2)</code> = 1/9 (с. 2). Сумніваєшся -
+став дужки (<code>(2 + 2) * 2</code> = 8).</p>
+<h3 id="дійсні-числа-і-похибка">Дійсні числа і похибка</h3>
+<pre><code class="language-python">print(3.6e-8, 1.1234e-56, 3.0 * 2.0, 9.0 ** 0.5)
+print(type(3), type(3.0))
+res1 = 0.5 + 0.5
+res2 = 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1
+print(res1, res2)
+print(4.5 + 4, 9 ** -1)
+</code></pre>
+<pre><code class="language-text">3.6e-08 1.1234e-56 6.0 3.0
+&lt;class 'int'&gt; &lt;class 'float'&gt;
+1.0 0.9999999999999999
+8.5 0.1111111111111111
+</code></pre>
+<p><code>e-8</code> - «помножити на 10 у степені -8». Дійсні числа зберігаються у <strong>двійковому</strong> вигляді, а 0.1 у
+двійковій системі - нескінченний дріб (як 1/3 у десятковій: 0.333...). Компʼютер обрізає, і
+крихітні похибки накопичуються (с. 4-5). Висновок: дійсні числа <strong>не порівнюють через <code>==</code></strong>,
+а перевіряють, що різниця дуже мала: <code>abs(a - b) &lt; 1e-9</code>.</p>
+<p>Многочлен з лекції (с. 5) для x = 2: 2⁶ - 4 · 2⁴ + 3 · 2 - 7 = 64 - 64 + 6 - 7 = -1.</p>
+<pre><code class="language-python"># ввід: 2
+x = float(input('x=? '))
+y = x ** 6 - 4 * x ** 4 + 3 * x - 7
+print('y=', y)
+</code></pre>
+<pre><code class="language-text">x=? 2
+y= -1.0
+</code></pre>
+<h3 id="бібліотека-math">Бібліотека <code>math</code></h3>
+<p>Підключається один раз на початку файлу: <code>import math</code>. Далі - через крапку: <code>math.sqrt(16)</code>.
+Повна таблиця з сторінками - у довіднику (група «модуль math»); основне:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що</th>
+<th>Значення</th>
+<th>Приклад</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>math.pi</code>, <code>math.e</code></td>
+<td>π = 3.14159..., e = 2.71828...</td>
+<td></td>
+</tr>
+<tr>
+<td><code>math.sqrt(x)</code></td>
+<td>√x</td>
+<td><code>math.sqrt(16)</code> = 4.0</td>
+</tr>
+<tr>
+<td><code>math.exp(x)</code>, <code>math.log(x)</code>, <code>math.log(x, a)</code>, <code>math.log10</code>, <code>math.log2</code>, <code>math.log1p</code></td>
+<td>eˣ, ln x, logₐ x, lg x, log₂ x, ln(1 + x)</td>
+<td><code>math.log10(1000)</code> = 3.0</td>
+</tr>
+<tr>
+<td><code>math.sin</code>, <code>cos</code>, <code>tan</code>, <code>asin</code>, <code>acos</code>, <code>atan</code>, <code>atan2(y, x)</code></td>
+<td>тригонометрія, <strong>у радіанах</strong></td>
+<td><code>math.cos(math.pi / 3)</code> = 0.5000000000000001</td>
+</tr>
+<tr>
+<td><code>math.sinh</code>, <code>cosh</code>, <code>tanh</code></td>
+<td>гіперболічні sh, ch, th</td>
+<td></td>
+</tr>
+<tr>
+<td><code>math.degrees</code>, <code>math.radians</code></td>
+<td>радіани ↔ градуси</td>
+<td><code>math.radians(180)</code> = π</td>
+</tr>
+<tr>
+<td><code>math.hypot(x, y)</code></td>
+<td>√(x² + y²)</td>
+<td><code>math.hypot(3, 4)</code> = 5.0</td>
+</tr>
+<tr>
+<td><code>math.factorial(n)</code></td>
+<td>n!</td>
+<td><code>math.factorial(5)</code> = 120</td>
+</tr>
+<tr>
+<td><code>math.trunc</code>, <code>math.ceil</code>, <code>math.floor</code></td>
+<td>відкинути дріб, вгору, вниз</td>
+<td>для -2.5: -2, -2, -3</td>
+</tr>
+</tbody>
+</table></div>
+<p>Приклад з лекції (с. 6-7): гострі кути прямокутного трикутника за катетами. У лекції катети звуться
+<code>a</code> і <code>b</code>; тут змістовні імена, як вимагає викладач.</p>
+<pre><code class="language-python"># ввід: 1 | 1
+import math  # імпорт математичної бібліотеки
+
+leg_a = float(input(&quot;Введіть перший катет &quot;))
+leg_b = float(input(&quot;Введіть другий катет &quot;))
+beta = math.atan2(leg_a, leg_b)       # один з кутів у радіанах
+beta_degree = math.degrees(beta)      # перетворення у градуси
+print(&quot;Перший кут = &quot;, beta_degree)
+print(&quot;Другий кут = &quot;, 90.0 - beta_degree)
+</code></pre>
+<pre><code class="language-text">Введіть перший катет 1
+Введіть другий катет 1
+Перший кут =  45.0
+Другий кут =  45.0
+</code></pre>
+<p>Зверни увагу на <strong>два</strong> пробіли після <code>=</code>: один з кінця рядка <code>"Перший кут = "</code>, другий - <code>sep</code>
+між значеннями <code>print</code>. У PDF лекції видно один, бо PDF стискає пробіли. doctest таке не пробачає.</p>
+<h3 id="комплексні-числа-с-7-8">Комплексні числа (с. 7-8)</h3>
+<pre><code class="language-python">import cmath
+
+c = 2 + 3j
+print(c, complex(2, 3), c.real, c.imag, c.conjugate())
+print(abs(3 + 4j), (2 + 3j) * (1 - 1j))
+print(cmath.sqrt(-4), cmath.exp(1j * cmath.pi))
+</code></pre>
+<pre><code class="language-text">(2+3j) (2+3j) 2.0 3.0 (2-3j)
+5.0 (5+1j)
+2j (-1+1.2246467991473532e-16j)
+</code></pre>
+<p>Уявна одиниця пишеться <code>j</code> (як в електротехніці). <code>abs(3 + 4j)</code> = √(3² + 4²) = 5.0 - модуль.
+<code>math.sqrt(-4)</code> дає помилку, а <code>cmath.sqrt(-4)</code> = <code>2j</code>. Останнє - тотожність Ейлера e^(iπ) = -1:
+уявна частина мала б бути 0, а вийшла 1.2 · 10⁻¹⁶ - та сама похибка дійсних чисел. Вводити
+комплексне з клавіатури: <code>complex(input("z = "))</code> і набрати <code>2+3j</code> без пробілів.</p>
+<h3 id="логіка-true-false-and-or-not">Логіка: <code>True</code>, <code>False</code>, <code>and</code>, <code>or</code>, <code>not</code></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>p</th>
+<th>q</th>
+<th><code>p and q</code></th>
+<th><code>p or q</code></th>
+<th><code>not p</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>True</td>
+<td>True</td>
+<td>True</td>
+<td>True</td>
+<td>False</td>
+</tr>
+<tr>
+<td>True</td>
+<td>False</td>
+<td>False</td>
+<td>True</td>
+<td>False</td>
+</tr>
+<tr>
+<td>False</td>
+<td>True</td>
+<td>False</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr>
+<td>False</td>
+<td>False</td>
+<td>False</td>
+<td>False</td>
+<td>True</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>and</code> - істина, лише коли <strong>обидва</strong> істинні. <code>or</code> - хибність, лише коли <strong>обидва</strong> хибні. <code>not</code> -
+навпаки.</p>
+<p><strong>Ліниві <code>and</code> і <code>or</code></strong> (с. 11): у <code>p and q</code>, якщо <code>p</code> хибне, <code>q</code> навіть <strong>не обчислюється</strong> - відповідь
+уже відома. Тому <code>x != 0 and 10 / x &gt; 1</code> безпечне для <code>x = 0</code>: до ділення не доходить.</p>
+<p>Порівняння (с. 12-13): <code>==</code> (дорівнює, <strong>два</strong> знаки), <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>. Результат -
+<code>True</code> або <code>False</code>. Ланцюжок <code>0 &lt; x &lt; 10</code> означає <code>(0 &lt; x) and (x &lt; 10)</code>, як у математиці.</p>
+<pre><code class="language-python">x = 5
+print(3 &lt; 4, 5 == 6, 5 &gt;= 6, x != 0)
+print(0 &lt; x &lt; 10, 1 &lt;= x &lt;= 3)
+print(True + True, int(False), bool(-5), bool(0), bool(&quot;&quot;), bool(&quot;текст&quot;), bool(None))
+</code></pre>
+<pre><code class="language-text">True False False True
+True False
+2 0 True False False True False
+</code></pre>
+<p><strong>Правдивість</strong> (с. 16): коли Python чекає <code>True</code>/<code>False</code>, будь-яке ненульове число і непорожній
+обʼєкт - істина; <code>0</code>, <code>0.0</code>, <code>""</code>, <code>[]</code>, <code>None</code> - хибність. І навпаки: у арифметиці <code>True</code> = 1,
+<code>False</code> = 0. Звідси прийом з с. 1 і ЛР1, с. 7:</p>
+<pre><code class="language-python">n = 1
+flag = int(n &gt; 1)
+string = &quot;Hello!&quot; * flag + &quot;Hi!&quot; * (1 - flag)
+print(string)
+</code></pre>
+<pre><code class="language-text">Hi!
+</code></pre>
+<p><code>n &gt; 1</code> - хибно, <code>flag = 0</code>; <code>"Hello!" * 0</code> = <code>""</code>, <code>"Hi!" * 1</code> = <code>"Hi!"</code>. Розгалуження без <code>if</code>.</p>
+<p><strong>Умова</strong> - логічний вираз, який залежить від змінних (с. 14). Приклади з лекції: існування трикутника
+<code>(a + b &gt; c) and (a + c &gt; b) and (b + c &gt; a)</code>; точка в першій чверті <code>x &gt;= 0 and y &gt;= 0</code>; складні
+області - це <code>and</code> (перетин множин), <code>or</code> (обʼєднання), <code>not</code> (доповнення) простих умов (с. 15).
+Умову можна просто обчислити і надрукувати (с. 16):</p>
+<pre><code class="language-python"># ввід: -1 | -2
+x = float(input(&quot;x = &quot;))
+y = float(input(&quot;y = &quot;))
+check = x &lt; 0 and y &lt; 0   # Обчислюємо значення умови
+print(&quot;Точка належить до 3-го квадранту це &quot;, check)
+</code></pre>
+<pre><code class="language-text">x = -1
+y = -2
+Точка належить до 3-го квадранту це  True
+</code></pre>
+<h3 id="розгалуження-if-elif-else">Розгалуження <code>if</code> / <code>elif</code> / <code>else</code></h3>
+<pre><code class="language-text">if умова:              # двокрапка обовʼязкова
+    гілка_так          # відступ 4 пробіли = «це всередині if»
+elif інша_умова:       # перевіряється, лише якщо перша хибна
+    гілка_2
+else:                  # якщо жодна умова не спрацювала
+    гілка_інакше
+</code></pre>
+<p>Виконується <strong>рівно одна</strong> гілка: перша, чия умова істинна. <code>else</code> і <code>elif</code> необовʼязкові: <code>if</code> без
+<code>else</code> - «захищена інструкція» (с. 18). Каскад <code>elif</code> - те саме, що вкладені <code>if</code>/<code>else</code> (с. 20), але
+без «трикутника смерті» з відступів.</p>
+<p>Кусково-задана функція з лекції (с. 20): f(x) = -x² + 1 при x &lt; -1; 0 при |x| ≤ 1; x² - 1 при x &gt; 1.</p>
+<pre><code class="language-python"># ввід: -2
+x = float(input(&quot;x = &quot;))
+if x &lt; -1:
+    f = -x ** 2 + 1
+elif abs(x) &lt;= 1:
+    f = 0
+else:
+    f = x ** 2 - 1
+print(&quot;f(&quot;, x, &quot;)= &quot;, f)
+</code></pre>
+<pre><code class="language-text">x = -2
+f( -2.0 )=  -3.0
+</code></pre>
+<p>Для x = -2.0: перша умова <code>-2.0 &lt; -1</code> істинна. Тепер пріоритет: <code>-x ** 2</code> = <code>-(x ** 2)</code>.
+<code>x ** 2</code> = <code>(-2.0) ** 2</code> = 4.0 (мінус сидить усередині значення змінної), потім унарний мінус дає
+-4.0, плюс 1 = -3.0. Решта гілок пропускається.
+У гілці <code>elif abs(x) &lt;= 1</code> уже відомо, що <code>x &gt;= -1</code> (бо перша умова не спрацювала), тому окремо це
+не перевіряють (с. 20).</p>
+<p><strong>Тернарний вираз</strong> (с. 20-22): <code>значення_1 if умова else значення_2</code>. Це <strong>вираз</strong>, а не інструкція:
+він має значення, його можна присвоїти або повернути. Тому його й приймали в ЛР1, де оператор <code>if</code>
+заборонено (вимоги викладача).</p>
+<pre><code class="language-python">x = -2.5
+abs_x = x if x &gt;= 0 else -x
+print(&quot;|&quot;, x, &quot;|= &quot;, abs_x)
+x = -5
+sign = &quot;додатне&quot; if x &gt; 0 else (&quot;від'ємне&quot; if x &lt; 0 else &quot;нульове&quot;)
+print(sign)
+</code></pre>
+<pre><code class="language-text">| -2.5 |=  2.5
+від'ємне
+</code></pre>
+<p>Ще з лекції (с. 18-19): шукаючи найбільше з трьох, лекція називає змінну <code>max</code> і сама попереджає:
+так вбудована функція <code>max()</code> стає недоступною. Бери <code>maximum</code> чи <code>largest</code>.</p>
+<h2 id="2-розібраний-приклад">2. Розібраний приклад</h2>
+<p><strong>Умова.</strong> Розвʼязати квадратне рівняння a·x² + b·x + c = 0 (a ≠ 0) для введених коефіцієнтів:
+два корені, один корінь або повідомлення, що дійсних коренів нема.</p>
+<pre><code class="language-python"># ввід: 1 | -3 | 2
+import math
+
+coef_a = float(input(&quot;a = &quot;))
+coef_b = float(input(&quot;b = &quot;))
+coef_c = float(input(&quot;c = &quot;))
+discriminant = coef_b ** 2 - 4 * coef_a * coef_c
+if discriminant &gt; 0:
+    root_1 = (-coef_b + math.sqrt(discriminant)) / (2 * coef_a)
+    root_2 = (-coef_b - math.sqrt(discriminant)) / (2 * coef_a)
+    print(&quot;Два корені:&quot;, root_1, root_2)
+elif discriminant == 0:
+    root = -coef_b / (2 * coef_a)
+    print(&quot;Один корінь:&quot;, root)
+else:
+    print(&quot;Дійсних коренів нема, D =&quot;, discriminant)
+</code></pre>
+<pre><code class="language-text">a = 1
+b = -3
+c = 2
+Два корені: 2.0 1.0
+</code></pre>
+<p><strong>Кожен рядок:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Рядок</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>import math</code></td>
+<td>Підключає бібліотеку, щоб був <code>math.sqrt</code>.</td>
+</tr>
+<tr>
+<td><code>coef_a = float(input("a = "))</code> (і ще 2)</td>
+<td>Ввід рядка, перетворення в <code>float</code>. Імена не <code>a</code>, <code>b</code>, <code>c</code> - викладач таке бракує.</td>
+</tr>
+<tr>
+<td><code>discriminant = coef_b ** 2 - 4 * coef_a * coef_c</code></td>
+<td>D = b² - 4ac. Пріоритет: <code>**</code>, потім <code>*</code>, потім <code>-</code>. Для 1, -3, 2: 9 - 8 = 1.0.</td>
+</tr>
+<tr>
+<td><code>if discriminant &gt; 0:</code></td>
+<td>Перша перевірка. Двокрапка - далі блок з відступом.</td>
+</tr>
+<tr>
+<td><code>root_1 = (-coef_b + math.sqrt(discriminant)) / (2 * coef_a)</code></td>
+<td>(3 + 1) / 2 = 2.0. Дужки навколо знаменника обовʼязкові: без них було б <code>.../2 * coef_a</code>.</td>
+</tr>
+<tr>
+<td><code>root_2 = ...</code></td>
+<td>(3 - 1) / 2 = 1.0.</td>
+</tr>
+<tr>
+<td><code>print("Два корені:", root_1, root_2)</code></td>
+<td>Друк. Кінець гілки - там, де закінчується відступ.</td>
+</tr>
+<tr>
+<td><code>elif discriminant == 0:</code></td>
+<td>Перевіряється, <strong>лише</strong> якщо <code>D &gt; 0</code> хибне. <code>==</code>, а не <code>=</code>.</td>
+</tr>
+<tr>
+<td><code>root = -coef_b / (2 * coef_a)</code></td>
+<td>Один корінь -b / 2a.</td>
+</tr>
+<tr>
+<td><code>else:</code></td>
+<td>Залишок: D &lt; 0. Умови не пишуть, вона випливає з попередніх.</td>
+</tr>
+<tr>
+<td><code>print("Дійсних коренів нема, D =", discriminant)</code></td>
+<td>Повідомлення. <code>math.sqrt</code> від відʼємного тут не викликається взагалі.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Трасувальна таблиця для трьох вводів:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Ввід (a, b, c)</th>
+<th>discriminant</th>
+<th><code>D &gt; 0</code>?</th>
+<th><code>D == 0</code>?</th>
+<th>Яка гілка</th>
+<th>Вивід</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1, -3, 2</td>
+<td>9 - 8 = 1.0</td>
+<td>True</td>
+<td>(не перевіряється)</td>
+<td><code>if</code></td>
+<td><code>Два корені: 2.0 1.0</code></td>
+</tr>
+<tr>
+<td>1, 2, 1</td>
+<td>4 - 4 = 0.0</td>
+<td>False</td>
+<td>True</td>
+<td><code>elif</code></td>
+<td><code>Один корінь: -1.0</code></td>
+</tr>
+<tr>
+<td>1, 0, 1</td>
+<td>0 - 4 = -4.0</td>
+<td>False</td>
+<td>False</td>
+<td><code>else</code></td>
+<td><code>Дійсних коренів нема, D = -4.0</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Чесне зауваження: <code>discriminant == 0</code> для дійсних чисел ризиковане (похибка!). Тут коефіцієнти
+«круглі», тому D рахується точно. Для довільних чисел краще <code>abs(discriminant) &lt; 1e-12</code>.</p>
+<p><strong>Закрий приклад і напиши його сам з памʼяті.</strong> Потім розшир: у гілці <code>else</code> порахуй комплексні корені
+через <code>cmath.sqrt</code> (Лекція 3, с. 8). Для a = 1, b = 2, c = 5 (D = -16) має вийти
+<code>(-1+2j) (-1-2j)</code>.</p>
+<h2 id="3-передбач-вивід">3. Передбач вивід</h2>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<p><strong>Фрагмент 1.</strong> Пріоритет і унарний мінус.</p>
+<pre><code class="language-python">print(-3 ** 2, (-3) ** 2, 3 ** -2, 2 + 2 * 2)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">-9 9 0.1111111111111111 6
+</code></pre>
+<p><code>**</code> сильніший за унарний мінус ліворуч: <code>-3 ** 2</code> = <code>-(9)</code>. У <code>(-3) ** 2</code> дужки - мінус усередині
+числа. <code>3 ** -2</code> = 1/9, і результат <code>float</code>, бо степінь відʼємний. <code>2 + 2 * 2</code> = 2 + 4 (с. 2-3).</p>
+</details>
+<p><strong>Фрагмент 2 (каверзний).</strong> Ціле ділення відʼємних.</p>
+<pre><code class="language-python">print(17 // 5, 17 % 5, -17 // 5, -17 % 5)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">3 2 -4 3
+</code></pre>
+<p>17 / 5 = 3.4, вниз - 3. -17 / 5 = -3.4, <strong>вниз</strong> - це -4 (не -3!). Остача підлаштовується, щоб
+виконувалось -17 = (-4) · 5 + 3, тобто 3. У ЛР числа зазвичай невідʼємні, але знати треба.</p>
+</details>
+<p><strong>Фрагмент 3.</strong> Дійсні числа.</p>
+<pre><code class="language-python">total = 0.1 + 0.1 + 0.1
+print(total)
+print(total == 0.3)
+print(abs(total - 0.3) &lt; 1e-9)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">0.30000000000000004
+False
+True
+</code></pre>
+<p>0.1 у двійковому вигляді неточне, три похибки складаються. <code>==</code> порівнює всі біти, тому <code>False</code>.
+Правильний спосіб - «різниця менша за дуже мале число» (<code>1e-9</code> = 0.000000001).</p>
+</details>
+<p><strong>Фрагмент 4.</strong> Лінивий <code>and</code> і порядок частин.</p>
+<pre><code class="language-python">speed = 0
+print(speed != 0 and 100 / speed &gt; 5)
+print(100 / speed &gt; 5 and speed != 0)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">False
+ZeroDivisionError: division by zero
+</code></pre>
+<p>Перший рядок: <code>speed != 0</code> хибне, <code>and</code> далі не дивиться, ділення не відбувається - <code>False</code>.
+Другий рядок: першим іде ділення на нуль, Python падає ще до <code>and</code> (с. 11). Захисна умова має стояти
+<strong>ліворуч</strong>.</p>
+</details>
+<p><strong>Фрагмент 5.</strong> Правдивість і тернарний ланцюжок.</p>
+<pre><code class="language-python">print(bool(&quot;&quot;), bool(&quot;0&quot;), bool(0.0), bool(-5))
+x = 0
+print(&quot;додатне&quot; if x &gt; 0 else (&quot;від'ємне&quot; if x &lt; 0 else &quot;нульове&quot;))
+print(&quot;парне&quot; * (x % 2 == 0) + &quot;непарне&quot; * (x % 2 == 1))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">False True False True
+нульове
+парне
+</code></pre>
+<p><code>""</code> порожній - хибний, а <code>"0"</code> - непорожній рядок з одного символу, тому <strong>істинний</strong>. <code>0.0</code> -
+нуль, хибний; <code>-5</code> - ненуль, істинний. Для x = 0 обидві умови тернарного виразу хибні - останнє
+значення. <code>0 % 2 == 0</code> - <code>True</code> = 1, тому <code>"парне"</code> один раз, <code>"непарне"</code> нуль разів.</p>
+</details>
+<h2 id="4-знайди-помилку">4. Знайди помилку</h2>
+<p><strong>Помилка 1.</strong> Перевірка температури.</p>
+<pre><code class="language-python"># БАГ
+temperature = 0
+if temperature = 0:
+    print(&quot;Вода замерзає&quot;)
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>SyntaxError: invalid syntax. Maybe you meant '==' or ':=' instead of '='?</code> Один <code>=</code> - присвоєння
+(інструкція), а в <code>if</code> потрібна умова (вираз). Порівняння - два знаки <code>==</code>. Python 3.13 сам підказує.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+temperature = 0
+if temperature == 0:
+    print(&quot;Вода замерзає&quot;)
+</code></pre>
+<pre><code class="language-text">Вода замерзає
+</code></pre>
+</details>
+<p><strong>Помилка 2.</strong> Оцінка за 100-бальною шкалою.</p>
+<pre><code class="language-python"># БАГ
+def grade(score: int) -&gt; str:
+    &quot;&quot;&quot;Оцінка за 100-бальною шкалою.
+
+    &gt;&gt;&gt; grade(95)
+    'відмінно'
+    &gt;&gt;&gt; grade(75)
+    'добре'
+    &gt;&gt;&gt; grade(60)
+    'задовільно'
+    &gt;&gt;&gt; grade(59)
+    'незадовільно'
+    &quot;&quot;&quot;
+    if score &gt;= 60:
+        return &quot;задовільно&quot;
+    elif score &gt;= 75:
+        return &quot;добре&quot;
+    elif score &gt;= 90:
+        return &quot;відмінно&quot;
+    else:
+        return &quot;незадовільно&quot;
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>Для 95 і 75 повертає <code>'задовільно'</code>. Каскад перевіряє умови <strong>по черзі</strong> і зупиняється на першій
+істинній. 95 &gt;= 60 - істина, далі не дивиться. Гілки <code>&gt;= 75</code> і <code>&gt;= 90</code> недосяжні. Правило: від
+найвужчої умови до найширшої (так само в ЛР2, завд. 2: спершу 11-14, потім остання цифра).</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+def grade(score: int) -&gt; str:
+    &quot;&quot;&quot;Оцінка за 100-бальною шкалою.
+
+    &gt;&gt;&gt; grade(95)
+    'відмінно'
+    &gt;&gt;&gt; grade(75)
+    'добре'
+    &gt;&gt;&gt; grade(60)
+    'задовільно'
+    &gt;&gt;&gt; grade(59)
+    'незадовільно'
+    &quot;&quot;&quot;
+    if score &gt;= 90:
+        return &quot;відмінно&quot;
+    elif score &gt;= 75:
+        return &quot;добре&quot;
+    elif score &gt;= 60:
+        return &quot;задовільно&quot;
+    else:
+        return &quot;незадовільно&quot;
+</code></pre>
+</details>
+<p><strong>Помилка 3.</strong> Висота пандуса під кутом.</p>
+<pre><code class="language-python"># БАГ
+import math
+
+
+def ramp_height(length: float, angle_degrees: float) -&gt; float:
+    &quot;&quot;&quot;Висота пандуса довжини length під кутом angle_degrees.
+
+    &gt;&gt;&gt; round(ramp_height(10.0, 30.0), 2)
+    5.0
+    &quot;&quot;&quot;
+    return length * math.sin(angle_degrees)
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>Повертає -9.88 замість 5.0. <code>math.sin</code> чекає <strong>радіани</strong>, а 30 радіан - це зовсім інший кут
+(30 рад ≈ 1719°). Спершу <code>math.radians</code> (ЛР2, с. 8; ЛР4, с. 7).</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+import math
+
+
+def ramp_height(length: float, angle_degrees: float) -&gt; float:
+    &quot;&quot;&quot;Висота пандуса довжини length під кутом angle_degrees.
+
+    &gt;&gt;&gt; round(ramp_height(10.0, 30.0), 2)
+    5.0
+    &quot;&quot;&quot;
+    return length * math.sin(math.radians(angle_degrees))
+</code></pre>
+<p><code>round(..., 2)</code> у doctest - бо <code>10 * sin(30°)</code> у памʼяті <code>4.999999999999999</code>.</p>
+</details>
+<h2 id="5-склади-з-рядків">5. Склади з рядків</h2>
+<p>Функція повертає стан води за температури (за нормального тиску): <code>"лід"</code> до 0 °C включно, <code>"вода"</code>
+до 100 °C (не включно), <code>"пара"</code> від 100 °C. Відступи вже правильні. <strong>Один рядок зайвий</strong> (пастка).</p>
+<pre><code class="language-parsons">        return &quot;пара&quot;
+    elif temperature &lt; 100:
+def water_state(temperature: float) -&gt; str:
+        return &quot;вода&quot;
+    else:
+    if temperature &lt;= 0:
+    elif temperature &lt;= 100:
+        return &quot;лід&quot;
+</code></pre>
+<details>
+<summary>Розвʼязок</summary>
+<pre><code class="language-python">def water_state(temperature: float) -&gt; str:
+    &quot;&quot;&quot;Стан води за нормального тиску.
+
+    &gt;&gt;&gt; water_state(-5)
+    'лід'
+    &gt;&gt;&gt; water_state(0)
+    'лід'
+    &gt;&gt;&gt; water_state(20)
+    'вода'
+    &gt;&gt;&gt; water_state(100)
+    'пара'
+    &quot;&quot;&quot;
+    if temperature &lt;= 0:
+        return &quot;лід&quot;
+    elif temperature &lt; 100:
+        return &quot;вода&quot;
+    else:
+        return &quot;пара&quot;
+</code></pre>
+<p>Зайвий - <code>elif temperature &lt;= 100:</code>: з ним <code>water_state(100)</code> дало б <code>'вода'</code>, а при 100 °C вода
+кипить. Межі - найчастіше місце помилок (ЛР1, с. 6: «граничний випадок»). <code>else</code> - без умови і
+останнім. Кожен <code>return</code> - під своєю умовою (на 8 пробілів).</p>
+</details>
+<h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
+<p>Заготовка - <code>zadachi/urok03.py</code>, розвʼязок - <code>_rozvyazky/urok03.py</code> (відкривай лише після 2 спроб).
+Можна все з лекцій 1-3: арифметику, <code>math</code>, логічні вирази, <code>if</code>/<code>elif</code>/<code>else</code>, тернарний вираз.
+Не можна: цикли і списки (вони з лекції 4 і далі).</p>
+<pre><code class="language-text">python3 -m doctest zadachi/urok03.py -v
+</code></pre>
+<p><strong>Задача 1. <code>triangle_type(side_a, side_b, side_c)</code>.</strong> Повертає <code>'не трикутник'</code>, <code>'рівносторонній'</code>,
+<code>'прямокутний'</code>, <code>'рівнобедрений'</code> або <code>'різносторонній'</code>. Порядок перевірок - у докстрінгу.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Запиши умову існування з Лекції 3, с. 14-15 у змінну <code>exists</code> (логічний вираз з <code>and</code>).</li>
+<li>Запиши «прямокутність» як <code>or</code> трьох варіантів теореми Піфагора (гіпотенузою може бути будь-яка
+   сторона: подивись на doctest <code>(13, 5, 12)</code>).</li>
+<li>Каскад <code>if not exists</code> → <code>elif</code> рівносторонній → <code>elif</code> прямокутний → <code>elif</code> рівнобедрений →
+   <code>else</code>.</li>
+<li>Чому «не трикутник» першим: <code>(0, 0, 0)</code> - усі сторони рівні, але це не трикутник.</li>
+<li>Граничний випадок <code>(1, 2, 3)</code>: 1 + 2 = 3, нерівність строга - не трикутник.</li>
+</ol>
+</details>
+<p><strong>Задача 2. <code>incline_motion(angle_degrees, friction)</code>.</strong> Брусок на похилій площині: a = g · (sin α -
+μ · cos α). Повертає <code>'Брусок ковзає з a = 4.90 м/с²'</code>, <code>'Брусок стоїть'</code> або <code>'Некоректні дані'</code>.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Спершу відсій погані дані: <code>friction &lt; 0</code> або кут поза межами 0..90 (ланцюжок
+   <code>0 &lt;= angle_degrees &lt;= 90</code> і <code>not</code>). Одразу <code>return</code>.</li>
+<li>Переведи кут у радіани: <code>math.radians</code>.</li>
+<li>Порахуй прискорення за формулою (константа <code>G</code> уже в файлі).</li>
+<li>Якщо <code>acceleration &lt;= 0</code> - стоїть; інакше f-рядок з <code>:.2f</code>.</li>
+<li>Граничний випадок 45° і μ = 1: точно 0, але через похибку виходить приблизно -1e-16. Подумай,
+   чому <code>&lt;= 0</code> тут правильніше за <code>== 0</code>.</li>
+</ol>
+</details>
+<h3 id="заготовка-тут-же-можна-писати-і-запускати-doctest">Заготовка (тут же можна писати і запускати doctest)</h3>
+<p>Скачати файл: <a href="data/prog/zadachi/urok03.py">urok03.py</a> - поклади в теку <code>zadachi/</code> і запускай <code>python3 -m doctest zadachi/urok03.py -v</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 3. Задачі з doctest (заготовка).
+
+Як запускати (з теки Курс):
+    python3 -m doctest zadachi/urok03.py -v
+
+Спершу всі приклади червоні: замість коду стоїть pass, і функція
+повертає None. Заміни pass на свій код, щоб усі стали зелені.
+Можна: арифметику, бібліотеку math, логічні вирази, if/elif/else,
+тернарний вираз (усе це є в лекції 3). Не можна: цикли і списки.
+Розвʼязок - у _rozvyazky/urok03.py (відкривай лише після 2 спроб).
+&quot;&quot;&quot;
+import doctest
+import math  # noqa: F401 (знадобиться у твоєму коді: sin, cos, radians)
+
+G = 9.8  # прискорення вільного падіння, м/с²
+
+
+def triangle_type(side_a: int, side_b: int, side_c: int) -&gt; str:
+    &quot;&quot;&quot;Визначає вид трикутника за трьома цілими сторонами.
+
+    Порядок перевірок:
+    1) якщо трикутник не існує - &quot;не трикутник&quot;
+       (кожна сторона має бути меншою від суми двох інших);
+    2) усі три сторони рівні - &quot;рівносторонній&quot;;
+    3) квадрат однієї сторони дорівнює сумі квадратів двох
+       інших - &quot;прямокутний&quot; (сторони можуть іти в будь-якому
+       порядку);
+    4) якісь дві сторони рівні - &quot;рівнобедрений&quot;;
+    5) інакше - &quot;різносторонній&quot;.
+
+    :param side_a: перша сторона
+    :param side_b: друга сторона
+    :param side_c: третя сторона
+    :return: назва виду трикутника
+
+    &gt;&gt;&gt; triangle_type(3, 4, 5)
+    'прямокутний'
+    &gt;&gt;&gt; triangle_type(13, 5, 12)
+    'прямокутний'
+    &gt;&gt;&gt; triangle_type(2, 2, 2)
+    'рівносторонній'
+    &gt;&gt;&gt; triangle_type(2, 3, 2)
+    'рівнобедрений'
+    &gt;&gt;&gt; triangle_type(4, 5, 6)
+    'різносторонній'
+    &gt;&gt;&gt; triangle_type(1, 2, 3)
+    'не трикутник'
+    &gt;&gt;&gt; triangle_type(0, 0, 0)
+    'не трикутник'
+    &quot;&quot;&quot;
+    pass
+
+
+def incline_motion(angle_degrees: float, friction: float) -&gt; str:
+    &quot;&quot;&quot;Чи зісковзує брусок з похилої площини, і з яким прискоренням.
+
+    Прискорення: a = G * (sin α - μ * cos α), де α - кут нахилу,
+    μ - коефіцієнт тертя. Кут задано в градусах, а math.sin і
+    math.cos чекають радіани.
+    Некоректні дані: тертя від'ємне або кут поза межами 0..90
+    (межі 0 і 90 допустимі) - &quot;Некоректні дані&quot;.
+    Якщо a &lt;= 0 - &quot;Брусок стоїть&quot;, інакше - рядок з a,
+    округленим до двох знаків після коми.
+
+    :param angle_degrees: кут нахилу площини, градуси
+    :param friction: коефіцієнт тертя μ
+    :return: опис руху
+
+    &gt;&gt;&gt; incline_motion(30.0, 0.0)
+    'Брусок ковзає з a = 4.90 м/с²'
+    &gt;&gt;&gt; incline_motion(60.0, 0.2)
+    'Брусок ковзає з a = 7.51 м/с²'
+    &gt;&gt;&gt; incline_motion(90.0, 0.5)
+    'Брусок ковзає з a = 9.80 м/с²'
+    &gt;&gt;&gt; incline_motion(0.0, 0.3)
+    'Брусок стоїть'
+    &gt;&gt;&gt; incline_motion(45.0, 1.0)
+    'Брусок стоїть'
+    &gt;&gt;&gt; incline_motion(30.0, -0.1)
+    'Некоректні дані'
+    &gt;&gt;&gt; incline_motion(95.0, 0.1)
+    'Некоректні дані'
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 3. Розвʼязки задач з doctest.
+
+Відкривай лише після 2 спроб написати самому.
+Перевірка: python3 -m doctest _rozvyazky/urok03.py -v
+&quot;&quot;&quot;
+import doctest
+import math
+
+G = 9.8  # прискорення вільного падіння, м/с²
+
+
+def triangle_type(side_a: int, side_b: int, side_c: int) -&gt; str:
+    &quot;&quot;&quot;Визначає вид трикутника за трьома цілими сторонами.
+
+    Порядок перевірок:
+    1) якщо трикутник не існує - &quot;не трикутник&quot;
+       (кожна сторона має бути меншою від суми двох інших);
+    2) усі три сторони рівні - &quot;рівносторонній&quot;;
+    3) квадрат однієї сторони дорівнює сумі квадратів двох
+       інших - &quot;прямокутний&quot; (сторони можуть іти в будь-якому
+       порядку);
+    4) якісь дві сторони рівні - &quot;рівнобедрений&quot;;
+    5) інакше - &quot;різносторонній&quot;.
+
+    :param side_a: перша сторона
+    :param side_b: друга сторона
+    :param side_c: третя сторона
+    :return: назва виду трикутника
+
+    &gt;&gt;&gt; triangle_type(3, 4, 5)
+    'прямокутний'
+    &gt;&gt;&gt; triangle_type(13, 5, 12)
+    'прямокутний'
+    &gt;&gt;&gt; triangle_type(2, 2, 2)
+    'рівносторонній'
+    &gt;&gt;&gt; triangle_type(2, 3, 2)
+    'рівнобедрений'
+    &gt;&gt;&gt; triangle_type(4, 5, 6)
+    'різносторонній'
+    &gt;&gt;&gt; triangle_type(1, 2, 3)
+    'не трикутник'
+    &gt;&gt;&gt; triangle_type(0, 0, 0)
+    'не трикутник'
+    &quot;&quot;&quot;
+    # Умова існування - з Лекції 3, с. 14-15. Нерівності строгі:
+    # для 1, 2, 3 маємо 1 + 2 = 3, а не &gt; 3, тобто трикутник
+    # «сплющений» в відрізок. Нулі й від'ємні сторони теж не
+    # пройдуть: 0 + 0 &gt; 0 - хибно.
+    exists = (side_a + side_b &gt; side_c
+              and side_a + side_c &gt; side_b
+              and side_b + side_c &gt; side_a)
+    # Теорема Піфагора для всіх трьох варіантів «яка сторона -
+    # гіпотенуза». Сторони цілі, тому == тут працює точно
+    # (з float так порівнювати не можна, див. урок).
+    is_right = (side_a ** 2 + side_b ** 2 == side_c ** 2
+                or side_a ** 2 + side_c ** 2 == side_b ** 2
+                or side_b ** 2 + side_c ** 2 == side_a ** 2)
+    # Каскад: перша істинна умова «перемагає», решта не
+    # перевіряється. Тому «не трикутник» стоїть першим: для
+    # (0, 0, 0) усі сторони рівні, але відповідь - не трикутник.
+    if not exists:
+        return &quot;не трикутник&quot;
+    elif side_a == side_b == side_c:
+        return &quot;рівносторонній&quot;
+    elif is_right:
+        return &quot;прямокутний&quot;
+    elif side_a == side_b or side_b == side_c or side_a == side_c:
+        return &quot;рівнобедрений&quot;
+    else:
+        return &quot;різносторонній&quot;
+
+
+def incline_motion(angle_degrees: float, friction: float) -&gt; str:
+    &quot;&quot;&quot;Чи зісковзує брусок з похилої площини, і з яким прискоренням.
+
+    Прискорення: a = G * (sin α - μ * cos α), де α - кут нахилу,
+    μ - коефіцієнт тертя. Кут задано в градусах, а math.sin і
+    math.cos чекають радіани.
+    Некоректні дані: тертя від'ємне або кут поза межами 0..90
+    (межі 0 і 90 допустимі) - &quot;Некоректні дані&quot;.
+    Якщо a &lt;= 0 - &quot;Брусок стоїть&quot;, інакше - рядок з a,
+    округленим до двох знаків після коми.
+
+    :param angle_degrees: кут нахилу площини, градуси
+    :param friction: коефіцієнт тертя μ
+    :return: опис руху
+
+    &gt;&gt;&gt; incline_motion(30.0, 0.0)
+    'Брусок ковзає з a = 4.90 м/с²'
+    &gt;&gt;&gt; incline_motion(60.0, 0.2)
+    'Брусок ковзає з a = 7.51 м/с²'
+    &gt;&gt;&gt; incline_motion(90.0, 0.5)
+    'Брусок ковзає з a = 9.80 м/с²'
+    &gt;&gt;&gt; incline_motion(0.0, 0.3)
+    'Брусок стоїть'
+    &gt;&gt;&gt; incline_motion(45.0, 1.0)
+    'Брусок стоїть'
+    &gt;&gt;&gt; incline_motion(30.0, -0.1)
+    'Некоректні дані'
+    &gt;&gt;&gt; incline_motion(95.0, 0.1)
+    'Некоректні дані'
+    &quot;&quot;&quot;
+    # Спершу відсіюємо погані дані, щоб далі не рахувати дурниць.
+    # Ланцюжок 0 &lt;= кут &lt;= 90 = (0 &lt;= кут) and (кут &lt;= 90).
+    if friction &lt; 0 or not 0 &lt;= angle_degrees &lt;= 90:
+        return &quot;Некоректні дані&quot;
+    angle = math.radians(angle_degrees)  # градуси -&gt; радіани
+    acceleration = G * (math.sin(angle) - friction * math.cos(angle))
+    # На межі 45°, μ = 1 точна відповідь 0, але через похибку
+    # дійсних чисел виходить приблизно -1e-16. Умова &lt;= 0 ловить
+    # і точний нуль, і такий «майже нуль» з мінусом.
+    if acceleration &lt;= 0:
+        return &quot;Брусок стоїть&quot;
+    return f&quot;Брусок ковзає з a = {acceleration:.2f} м/с²&quot;
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+</details>
+<h2 id="7-поясни-чому">7. Поясни чому</h2>
+<p><strong>1. Чому <code>-7 // 2</code> дає -4, а не -3?</strong></p>
+<details>
+<summary>Еталон</summary>
+<p><code>//</code> округлює частку <strong>вниз</strong>, до меншого цілого, а не «відкидає дріб». -7 / 2 = -3.5, менше ціле -
+це -4. Так зроблено, щоб завжди виконувалось a = (a // b) · b + a % b з остачею того ж знака, що й
+дільник: -7 = (-4) · 2 + 1. «Відкинути дріб» робить інша функція - <code>int(-3.5)</code> = -3 або
+<code>math.trunc</code>.</p>
+</details>
+<p><strong>2. Чому <code>0.1 + 0.2 == 0.3</code> дає <code>False</code>, і як правильно порівнювати дійсні числа?</strong></p>
+<details>
+<summary>Еталон</summary>
+<p>Дійсні числа зберігаються у двійковому вигляді з обмеженою кількістю цифр. 0.1 і 0.2 у двійковій
+системі - нескінченні дроби, їх обрізають, і сума виходить 0.30000000000000004 (Лекція 3, с. 4-5).
+<code>==</code> порівнює точно, до останнього біта. Правильно - перевіряти, що різниця дуже мала:
+<code>abs(a - b) &lt; 1e-9</code>. Цілі числа (<code>int</code>) точні, для них <code>==</code> безпечне.</p>
+</details>
+<p><strong>3. Чому в каскаді <code>elif</code> важливий порядок умов, а в <code>x != 0 and 10 / x &gt; 1</code> - порядок частин?</strong></p>
+<details>
+<summary>Еталон</summary>
+<p>Обидва рази Python іде зліва направо і зупиняється, щойно відповідь відома. У каскаді виконується
+перша істинна гілка, решта навіть не перевіряються, тому широка умова (<code>&gt;= 60</code>) попереду «зʼїдає»
+вужчі (<code>&gt;= 90</code>). У <code>and</code> - якщо ліва частина хибна, права не обчислюється (лінивість, с. 11). Тому
+захисну перевірку (<code>x != 0</code>) ставлять ліворуч: до ділення на нуль справа не дійде.</p>
+</details>
+<h2 id="8-що-запамʼятати">8. Що запамʼятати</h2>
+<ul>
+<li><code>/</code> - завжди <code>float</code>; <code>//</code> - ціла частина <strong>вниз</strong>; <code>%</code> - остача; <code>a == (a // b) * b + a % b</code>.</li>
+<li><code>n % 10</code> - остання цифра, <code>n // 10</code> - без останньої, <code>n % 100</code> - дві останні.</li>
+<li>Пріоритет: <code>**</code> → <code>* / // %</code> → <code>+ -</code> → порівняння → <code>not</code> → <code>and</code> → <code>or</code>. <code>-3 ** 2</code> = -9.</li>
+<li>Дійсні числа неточні: не <code>==</code>, а <code>abs(a - b) &lt; 1e-9</code>.</li>
+<li><code>math</code> працює в <strong>радіанах</strong>: <code>math.radians(градуси)</code> перед <code>sin</code>/<code>cos</code>.</li>
+<li><code>and</code>/<code>or</code> ліниві: захисну умову - ліворуч. Ланцюжок <code>0 &lt;= x &lt;= 90</code> можна.</li>
+<li><code>True</code> = 1, <code>False</code> = 0: <code>"текст" * (умова)</code> - розгалуження без <code>if</code>.</li>
+<li>Каскад <code>if</code>/<code>elif</code>/<code>else</code>: виконується перша істинна гілка; від вузької умови до широкої.</li>
+<li>Тернарний <code>a if умова else b</code> - <strong>вираз</strong> (має значення), <code>if</code> - <strong>інструкція</strong>.</li>
+</ul>
+<p><strong>Де в лабах:</strong></p>
+<ul>
+<li>ЛР1, завд. 1: цифри тризначного числа - <code>number // 100</code>, <code>number // 10 % 10</code>, <code>number % 10</code>; модуль
+  різниці - <code>abs</code>; перевірки «додатне» і «тризначне» без <code>if</code> - через <code>int(100 &lt;= number &lt;= 999)</code> і
+  «рядок * умова» (ЛР1, с. 7).</li>
+<li>ЛР1, завд. 2: дні, години, хвилини - послідовно <code>//</code> і <code>%</code> (ЛР1, с. 3).</li>
+<li>ЛР1, завд. 3: <code>price // 500</code> - скільки купюр влізе, <code>min(...)</code> - скільки взяти.</li>
+<li>ЛР2, завд. 1: функція <strong>повертає логічний вираз</strong> з <code>and</code>, <code>or</code>, <code>not</code> і порівнянь; <code>if</code> заборонено
+  (ЛР2, с. 10-11).</li>
+<li>ЛР2, завд. 2: <code>year_word</code> - каскад <code>if</code>/<code>elif</code>/<code>else</code> з <code>n % 10</code> і <code>n % 100</code>; спершу 11-14.</li>
+<li>ЛР2, завд. 3: <code>math.sin</code>, <code>math.cos</code>, <code>math.radians</code> (кут у градусах), <code>math.sqrt</code> для модуля
+  швидкості; перевірка некоректних <code>H</code>, <code>v0</code>, <code>t</code>.</li>
+<li>ЛР3, с. 3-4: кількість цифр <code>math.floor(math.log10(number)) + 1</code>, межа перебору <code>math.isqrt(number)</code>,
+  предикат <code>is_even</code> повертає <code>number % 2 == 0</code>.</li>
+</ul>
+<hr>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/urok-04">Наступний урок →</a></p>

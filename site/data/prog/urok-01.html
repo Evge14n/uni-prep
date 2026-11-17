@@ -1,0 +1,679 @@
+<h1 id="урок-1-вступ-до-програмування-мовою-python-лінійні-програми">Урок 1. Вступ до програмування мовою Python. Лінійні програми</h1>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/dovidnyk">Довідник функцій</a></p>
+<blockquote>
+<p>Лекція 1 (с. 1-12), потрібно для: ЛР1 (усі три завдання - лінійні програми без <code>if</code> і циклів; константи на кшталт <code>SECONDS_IN_DAY</code> - ЛР1, с. 8, знадобляться в завд. 2). Час: 25 хв. Перед цим уроком: нічого, це перший урок.</p>
+</blockquote>
+<h2 id="1-ідея">1. Ідея</h2>
+<p><strong>Програма - це список наказів компʼютеру, які він виконує згори вниз, по одному, рівно по разу.</strong>
+Такі програми, без розгалужень і циклів, називають <strong>лінійними</strong>. З них починається Лекція 1 і вся ЛР1.</p>
+<p>Уяви рецепт млинців: «1) розбий 2 яйця; 2) додай 300 мл молока; 3) перемішай». Ти не робиш крок 3
+раніше за крок 1, і кожен крок робиш один раз. Компʼютер так само: читає рядок 1, виконує, потім
+рядок 2, і так до кінця файлу. Він не «здогадується», що ти мав на увазі. Робить рівно написане.</p>
+<h3 id="карта-лекції-що-де-і-що-з-цього-запамʼятати">Карта лекції: що де і що з цього запамʼятати</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Тема (Лекція 1)</th>
+<th>с.</th>
+<th>Головне одним реченням</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Інформація, інформатика</td>
+<td>2</td>
+<td>Інформатика - наука про зберігання, передачу й обробку інформації компʼютером.</td>
+</tr>
+<tr>
+<td>Виконавець, інструкція, алгоритм, програма</td>
+<td>2</td>
+<td><strong>Виконавець</strong> вміє певні дії; <strong>інструкція</strong> (оператор) - команда на одну дію; <strong>алгоритм</strong> - набір інструкцій, що за скінченну кількість кроків дає результат; <strong>програма</strong> - алгоритм, записаний так, щоб компʼютер міг виконати.</td>
+</tr>
+<tr>
+<td>Ланцюжок понять</td>
+<td>3</td>
+<td>задача → алгоритм → програма → виконання.</td>
+</tr>
+<tr>
+<td>Мова програмування, вихідний код</td>
+<td>3</td>
+<td>Мова - формальні правила запису; вихідний код - текст програми, який читає і править людина.</td>
+</tr>
+<tr>
+<td>Компілятор і інтерпретатор</td>
+<td>3-4</td>
+<td>Компілятор перекладає всю програму в машинний код <strong>до</strong> запуску; інтерпретатор розбирає й виконує команду за командою. CPython - інтерпретатор, але спершу робить байт-код (<code>.pyc</code>). Ти просто пишеш <code>.py</code> і запускаєш.</td>
+</tr>
+<tr>
+<td>Етапи побудови програми</td>
+<td>4</td>
+<td>алгоритм → текст програми → перевірка синтаксису → (компіляція) → виконання.</td>
+</tr>
+<tr>
+<td>Парадигми</td>
+<td>4-6</td>
+<td><strong>Імперативна</strong>: накази по черзі, результати пишуться в памʼять. <strong>Структурна</strong>: будь-яка програма з трьох «цеглинок» - послідовність, розгалуження, цикл. <strong>Декларативна</strong> («що має бути», а не «як»): функціональна (Haskell), логічна (Prolog), SQL/HTML. Ще: ООП, реактивне, подійно-орієнтоване. Python - <strong>мультипарадигмовий</strong>.</td>
+</tr>
+<tr>
+<td>Перша програма</td>
+<td>6-7</td>
+<td><code>print("Hello, World!")</code>; два способи запуску: інтерактивний (<code>&gt;&gt;&gt;</code>, REPL) і файл <code>.py</code>.</td>
+</tr>
+<tr>
+<td>Синтаксис</td>
+<td>7-8</td>
+<td>Кінець рядка = кінець інструкції; <code>;</code> - кілька інструкцій в одному рядку; довгу інструкцію переносять усередині дужок; вкладений блок - після двокрапки з відступом 4 пробіли.</td>
+</tr>
+<tr>
+<td>Ідентифікатори</td>
+<td>8</td>
+<td>Латинські літери, цифри, <code>_</code>; <strong>не з цифри</strong>; великі й малі літери - різні імена.</td>
+</tr>
+<tr>
+<td>Константи: літерали й іменовані</td>
+<td>8-9</td>
+<td>Літерал - значення, записане прямо в коді (<code>256</code>, <code>0.1</code>, <code>"текст"</code>). Іменована константа - <code>PI = 3.14159</code>; Python не забороняє її змінити, це домовленість.</td>
+</tr>
+<tr>
+<td>Рядкові літерали</td>
+<td>9</td>
+<td><code>'...'</code>, <code>"..."</code>, а багаторядкові - <code>'''...'''</code> або <code>"""..."""</code>.</td>
+</tr>
+<tr>
+<td>Змінні</td>
+<td>9-10</td>
+<td>Змінна - імʼя, що посилається на значення в памʼяті. <code>a = 3; s = a</code> - одне значення 3 і два імені.</td>
+</tr>
+<tr>
+<td>Змінювані / незмінювані</td>
+<td>10</td>
+<td><code>int</code>, <code>float</code>, <code>complex</code> - незмінювані: «змінити» число = створити нове.</td>
+</tr>
+<tr>
+<td>Ключові слова</td>
+<td>10-11</td>
+<td>35 зарезервованих слів (<code>if</code>, <code>for</code>, <code>class</code>, <code>return</code>...). Їх не можна брати за імена.</td>
+</tr>
+<tr>
+<td>Коментарі</td>
+<td>11-12</td>
+<td><code>#</code> до кінця рядка; багаторядковий - рядок у потрійних лапках. Коментар пояснює <strong>чому</strong>, а не <strong>що</strong>.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="перша-програма">Перша програма</h3>
+<pre><code class="language-python">print(&quot;Hello, World!&quot;)
+</code></pre>
+<pre><code class="language-text">Hello, World!
+</code></pre>
+<p><code>print</code> - вбудована функція: що їй дали в дужках, те й виводить на екран. Лапки не друкуються: вони
+лише кажуть Python «це текст, а не імʼя змінної».</p>
+<h3 id="вираз-і-інструкція-різниця-яка-знадобиться-весь-курс">Вираз і інструкція - різниця, яка знадобиться весь курс</h3>
+<p><strong>Вираз</strong> - те, що має значення: <code>2 + 3</code>, <code>x + 3</code>, <code>"Hello"</code>. <strong>Інструкція</strong> - дія: <code>x = 23</code>
+(«запамʼятай»), <code>print(x)</code> («покажи»). В інтерактивному режимі (REPL, Лекція 1, с. 7) Python сам
+показує значення кожного виразу, а присвоєння нічого не показує:</p>
+<pre><code class="language-python">&gt;&gt;&gt; 2 + 3
+5
+&gt;&gt;&gt; total = 2 + 3
+&gt;&gt;&gt; total
+5
+</code></pre>
+<p>Рядок <code>&gt;&gt;&gt; total = 2 + 3</code> нічого не вивів: це інструкція, вона лише дала імʼя <code>total</code> числу 5.
+А от <strong>у файлі програми</strong> рядок <code>2 + 3</code> сам по собі не виведе нічого: Python порахує 5 і викине.
+Щоб побачити результат у файлі, потрібен <code>print</code>. REPL - це «Read-Eval-Print Loop»: прочитай,
+обчисли, <strong>покажи</strong>. Файл показує лише те, що ти попросив через <code>print</code>.</p>
+<h3 id="типи-літералів">Типи літералів</h3>
+<p>Кожне значення має тип. Тип визначає, що з ним можна робити (Лекція 1, с. 9):</p>
+<pre><code class="language-python">&gt;&gt;&gt; type(256)
+&lt;class 'int'&gt;
+&gt;&gt;&gt; type(0.1)
+&lt;class 'float'&gt;
+&gt;&gt;&gt; type(&quot;256&quot;)
+&lt;class 'str'&gt;
+</code></pre>
+<p><code>256</code> - ціле число (<code>int</code>), <code>0.1</code> - дійсне (<code>float</code>), <code>"256"</code> у лапках - <strong>рядок</strong> (<code>str</code>), тобто
+текст із трьох символів <code>2</code>, <code>5</code>, <code>6</code>. З числом можна рахувати, з текстом - ні (детальніше в уроці 2).
+Функцію <code>type</code> детально розберемо в уроці 3 (Лекція 3, с. 3), тут вона лише щоб «підглянути» тип.</p>
+<h3 id="змінна-це-імʼя-а-не-коробка">Змінна - це імʼя, а не коробка</h3>
+<pre><code class="language-python">x = 23
+y = x + 3
+print(x, y)
+</code></pre>
+<pre><code class="language-text">23 26
+</code></pre>
+<p>Рядок <code>y = x + 3</code> виконується так: <strong>спершу</strong> права частина (<code>x + 3</code> = <code>23 + 3</code> = <code>26</code>), <strong>потім</strong>
+імʼя <code>y</code> прикріплюється до числа 26. Знак <code>=</code> - не «дорівнює» з математики, а «обчисли праве і дай
+йому імʼя зліва». Тому в Python нормально писати <code>x = x + 1</code>: праве <code>x + 1</code> рахується зі старим <code>x</code>.</p>
+<p>Лекція (с. 10): після <code>a = 3</code> і <code>s = a</code> маємо не дві змінні, а <strong>одне</strong> число 3 з двома іменами.
+Числа незмінювані: «змінити» <code>a</code> можна лише прикріпивши імʼя <code>a</code> до <strong>іншого</strong> числа. Тоді <code>s</code> і далі
+вказує на 3. Це перевіримо в розділі 3.</p>
+<h3 id="ключові-слова">Ключові слова</h3>
+<pre><code class="language-python">&gt;&gt;&gt; import keyword
+&gt;&gt;&gt; len(keyword.kwlist)
+35
+&gt;&gt;&gt; keyword.iskeyword(&quot;class&quot;)
+True
+&gt;&gt;&gt; keyword.iskeyword(&quot;total&quot;)
+False
+</code></pre>
+<p><code>keyword.kwlist</code> - з лекції (с. 11); <code>len</code> і <code>keyword.iskeyword</code> - у лекціях нема, стандартний Python.
+Редактор підсвічує ключові слова іншим кольором: побачив кольорове слово - не бери його за імʼя.</p>
+<h3 id="коментарі-пояснюй-чому">Коментарі: пояснюй «чому»</h3>
+<pre><code class="language-python">seconds = 7200
+# Ділимо на 3600, бо в годині 60 хв по 60 с.
+hours = seconds / 3600
+print(hours)  # друкує 2.0
+</code></pre>
+<pre><code class="language-text">2.0
+</code></pre>
+<p>Усе після <code>#</code> Python пропускає. Коментар «друкує 2.0» тут для навчання; у справжньому коді він зайвий,
+бо це видно й так. А от «бо в годині 60 хв по 60 с» - корисний: пояснює, звідки 3600 (Лекція 1, с. 12:
+«коментар повинен пояснювати чому, а не що»). Зверни увагу: <code>7200 / 3600</code> дало <code>2.0</code>, а не <code>2</code>.
+Ділення <code>/</code> завжди дає <code>float</code> (це з Лекції 3 і ЛР1, с. 2-3, але знати треба вже зараз).</p>
+<h2 id="2-розібраний-приклад">2. Розібраний приклад</h2>
+<p><strong>Умова.</strong> Світло летить зі швидкістю приблизно 300 000 км/с. Відстань від Сонця до Землі -
+приблизно 150 000 000 км. За скільки секунд і за скільки хвилин сонячне світло долітає до нас?</p>
+<pre><code class="language-python"># Скільки летить світло від Сонця до Землі.
+SPEED_OF_LIGHT = 300000           # км/с, іменована константа
+distance = 150000000              # км, відстань Сонце - Земля
+time_seconds = distance / SPEED_OF_LIGHT
+time_minutes = time_seconds / 60  # у хвилині 60 секунд
+print(&quot;Світло летить&quot;, time_seconds, &quot;секунд&quot;)
+print(&quot;Це&quot;, time_minutes, &quot;хвилин&quot;)
+</code></pre>
+<pre><code class="language-text">Світло летить 500.0 секунд
+Це 8.333333333333334 хвилин
+</code></pre>
+<p><strong>Кожен рядок:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Рядок</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code># Скільки летить ...</code></td>
+<td>Коментар. Python його пропускає. Пише людині, що робить програма.</td>
+</tr>
+<tr>
+<td><code>SPEED_OF_LIGHT = 300000</code></td>
+<td>Іменована константа. Великі літери = «не змінюй мене» (домовленість, Лекція 1, с. 9). <code>300000</code> - літерал типу <code>int</code>.</td>
+</tr>
+<tr>
+<td><code>distance = 150000000</code></td>
+<td>Змінна <code>distance</code> посилається на ціле число 150 000 000.</td>
+</tr>
+<tr>
+<td><code>time_seconds = distance / SPEED_OF_LIGHT</code></td>
+<td>Спершу права частина: 150000000 / 300000 = 500. Ділення <code>/</code> завжди дає <code>float</code>, тому 500.0. Потім імʼя <code>time_seconds</code> прикріплюється до 500.0.</td>
+</tr>
+<tr>
+<td><code>time_minutes = time_seconds / 60</code></td>
+<td>500.0 / 60 = 8.333... Коментар пояснює, звідки 60.</td>
+</tr>
+<tr>
+<td><code>print("Світло летить", time_seconds, "секунд")</code></td>
+<td>Друкує три значення через пробіл: текст, число, текст.</td>
+</tr>
+<tr>
+<td><code>print("Це", time_minutes, "хвилин")</code></td>
+<td>Те саме для хвилин. Останні цифри <code>...334</code> - не помилка програми, а похибка дійсних чисел (Лекція 3, с. 4-5).</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Трасувальна таблиця</strong> (що лежить у змінних після кожного кроку; <code>-</code> = змінної ще нема):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Крок</th>
+<th>SPEED_OF_LIGHT</th>
+<th>distance</th>
+<th>time_seconds</th>
+<th>time_minutes</th>
+<th>На екрані</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>300000</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>300000</td>
+<td>150000000</td>
+<td>-</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>300000</td>
+<td>150000000</td>
+<td>500.0</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>300000</td>
+<td>150000000</td>
+<td>500.0</td>
+<td>8.333333333333334</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>так само</td>
+<td></td>
+<td></td>
+<td></td>
+<td><code>Світло летить 500.0 секунд</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>так само</td>
+<td></td>
+<td></td>
+<td></td>
+<td><code>Це 8.333333333333334 хвилин</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Чому порядок рядків важливий: якщо переставити крок 3 вище кроку 2, Python дійде до <code>distance</code>, якої
+ще не існує, і впаде з <code>NameError</code> (це буде в розділі 4).</p>
+<p><strong>Закрий приклад і напиши його сам з памʼяті.</strong> Зміни сюжет: Місяць від Землі приблизно за
+384 000 км. Порахуй, за скільки секунд і хвилин світло долетить від Місяця. Якщо все правильно,
+побачиш <code>Світло летить 1.28 секунд</code> і <code>Це 0.021333333333333333 хвилин</code>.</p>
+<h2 id="3-передбач-вивід">3. Передбач вивід</h2>
+<p>Що виведе? Спершу напиши відповідь на папері, потім відкрий.</p>
+<p><strong>Фрагмент 1.</strong> Дві інструкції в одному рядку.</p>
+<pre><code class="language-python">print(&quot;Пара о&quot;); print(&quot;8:30&quot;)
+print(&quot;2 + 3&quot;)
+print(2 + 3)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">Пара о
+8:30
+2 + 3
+5
+</code></pre>
+<p>Крапка з комою розділяє дві <strong>окремі</strong> інструкції (Лекція 1, с. 7), тому кожен <code>print</code> друкує свій
+рядок. <code>"2 + 3"</code> у лапках - текст, його друкують як є. <code>2 + 3</code> без лапок - вираз, його спершу
+обчислюють, а потім друкують результат 5.</p>
+</details>
+<p><strong>Фрагмент 2.</strong> Змінили <code>x</code> - чи зміниться <code>y</code>?</p>
+<pre><code class="language-python">x = 23
+y = x + 3
+x = 100
+print(x, y)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">100 26
+</code></pre>
+<p><code>y = x + 3</code> виконався <strong>один раз</strong>, коли <code>x</code> був 23. У <code>y</code> записалось готове число 26, а не формула.
+Пізніше <code>x = 100</code> прикріплює імʼя <code>x</code> до іншого числа, а <code>y</code> про це не знає. Це головна пастка
+лінійних програм: присвоєння - це «знімок» значення в цю мить.</p>
+</details>
+<p><strong>Фрагмент 3.</strong> Два імені на одне число (Лекція 1, с. 10).</p>
+<pre><code class="language-python">price = 3
+old_price = price
+price = price + 2
+print(price, old_price)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">5 3
+</code></pre>
+<p>Після <code>old_price = price</code> обидва імені вказують на одне число 3. Рядок <code>price = price + 2</code> не
+змінює саме число 3 (числа незмінювані), а створює нове число 5 і прикріплює до нього імʼя <code>price</code>.
+Імʼя <code>old_price</code> і далі вказує на 3.</p>
+</details>
+<p><strong>Фрагмент 4 (каверзний).</strong> Довгий вираз у двох рядках. Перший варіант - з дужками, другий - без.</p>
+<pre><code class="language-python">x = 2
+y = (x ** 2 +
+     x + 1)
+z = x ** 2
++ x + 1
+print(y, z)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">7 4
+</code></pre>
+<p><code>y</code>: дужки кажуть Python «інструкція ще не закінчилась» (Лекція 1, с. 7-8), тому <code>y = 4 + 2 + 1 = 7</code>.
+<code>z</code>: без дужок кінець рядка = кінець інструкції, тож <code>z = x ** 2 = 4</code>. Наступний рядок <code>+ x + 1</code> -
+окремий вираз: Python рахує <code>+2 + 1 = 3</code> і викидає (у файлі вираз нічого не показує). Помилки нема,
+але результат неправильний. Такі тихі помилки - найнебезпечніші.</p>
+</details>
+<p><strong>Фрагмент 5.</strong> Що з цього коментар?</p>
+<pre><code class="language-python">'''Ця програма рахує площу.
+Автор: я'''
+side = 4  # сторона квадрата, см
+# print(&quot;це не виконається&quot;)
+print(side * side)  # print(&quot;і це теж&quot;)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">16
+</code></pre>
+<p>Рядок у потрійних лапках, який ніде не використано, Python обчислює і викидає, тому він працює як
+багаторядковий коментар (Лекція 1, с. 11). Усе після <code>#</code> - коментар, навіть якщо там написано
+<code>print(...)</code>. Тому виконується лише <code>print(side * side)</code>, тобто 4 · 4 = 16.</p>
+</details>
+<h2 id="4-знайди-помилку">4. Знайди помилку</h2>
+<p>Кожен фрагмент падає. Знайди причину, а потім відкрий відповідь.</p>
+<p><strong>Помилка 1.</strong> Хотіли запамʼятати, хто на другому місці.</p>
+<pre><code class="language-python"># БАГ
+2nd_place = &quot;Олена&quot;
+print(2nd_place)
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p>Python пише <code>SyntaxError: invalid decimal literal</code>. Ідентифікатор не може починатися з цифри
+(Лекція 1, с. 8): побачивши <code>2</code>, Python думає, що це число, а далі йдуть літери, яких у числі не буває.
+Виправлення - імʼя з літери, змістовне й англійське:</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+second_place = &quot;Олена&quot;
+print(second_place)
+</code></pre>
+<pre><code class="language-text">Олена
+</code></pre>
+</details>
+<p><strong>Помилка 2.</strong> Порахували вартість до того, як задали ціну.</p>
+<pre><code class="language-python"># БАГ
+quantity = 3
+total = price_per_item * quantity
+price_per_item = 25
+print(total)
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>NameError: name 'price_per_item' is not defined</code>. Програма лінійна: на рядку 3 Python ще не бачив
+рядка 4 і не знає імені <code>price_per_item</code>. Він не «заглядає вперед». Виправлення - поставити рядки в
+порядку, у якому потрібні значення:</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+quantity = 3
+price_per_item = 25
+total = price_per_item * quantity
+print(total)
+</code></pre>
+<pre><code class="language-text">75
+</code></pre>
+</details>
+<p><strong>Помилка 3.</strong> Зайвий пробіл на початку рядка.</p>
+<pre><code class="language-python"># БАГ
+group_name = &quot;ФзІ-11&quot;
+ print(group_name)
+</code></pre>
+<details>
+<summary>Що не так</summary>
+<p><code>IndentationError: unexpected indent</code>. У Python відступ - частина синтаксису (Лекція 1, с. 8):
+відступ означає «це вкладений блок» і можливий лише після рядка з двокрапкою. Тут двокрапки нема,
+тому навіть один пробіл - помилка. В інших мовах це було б «неохайно», у Python програма не
+запуститься взагалі.</p>
+<pre><code class="language-python"># ВИПРАВЛЕНО
+group_name = &quot;ФзІ-11&quot;
+print(group_name)
+</code></pre>
+<pre><code class="language-text">ФзІ-11
+</code></pre>
+</details>
+<h2 id="5-склади-з-рядків">5. Склади з рядків</h2>
+<p>Скільки разів серце вдарить за добу, якщо пульс - 70 ударів за хвилину? Розстав рядки в правильному
+порядку. <strong>Один рядок зайвий (пастка)</strong> - знайди його і поясни, чому він зламає програму.</p>
+<pre><code class="language-parsons">print(&quot;За добу серце вдарить&quot;, beats_per_day, &quot;разів&quot;)
+heart_rate = 70  # ударів за хвилину
+beats_per_day = heart_rate * minutes_in_day
+MINUTES_IN_DAY = 24 * 60
+beats_per_day = heart_rate * MINUTES_IN_DAY
+</code></pre>
+<details>
+<summary>Розвʼязок</summary>
+<pre><code class="language-python">MINUTES_IN_DAY = 24 * 60
+heart_rate = 70  # ударів за хвилину
+beats_per_day = heart_rate * MINUTES_IN_DAY
+print(&quot;За добу серце вдарить&quot;, beats_per_day, &quot;разів&quot;)
+</code></pre>
+<pre><code class="language-text">За добу серце вдарить 100800 разів
+</code></pre>
+<p>Зайвий рядок - <code>beats_per_day = heart_rate * minutes_in_day</code>. Великі й малі літери в іменах різні
+(Лекція 1, с. 8): <code>minutes_in_day</code> і <code>MINUTES_IN_DAY</code> - два різні імена, і першого ніхто не створив,
+тому було б <code>NameError</code>. Порядок: константа і пульс можуть стояти в будь-якому порядку між собою,
+але обидва - до обчислення, а <code>print</code> - останнім. 70 · 1440 = 100800.</p>
+</details>
+<h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
+<p>Заготовка - <code>zadachi/urok01.py</code>, розвʼязок - <code>_rozvyazky/urok01.py</code> (відкривай лише після 2 спроб).
+Як у ЛР1: функцію вже оголошено, doctest уже написано, ти лише замінюєш <code>pass</code> одним рядком
+<code>return &lt;вираз&gt;</code>. Що таке <code>def</code> і <code>return</code> докладно - в уроці 2. Зараз досить знати: <code>return вираз</code>
+обчислює вираз і віддає його як результат функції, а doctest перевіряє цей результат.</p>
+<p>Обмеження як у ЛР1: без <code>if</code>, без циклів, без списків.</p>
+<p>Запуск з теки <code>Курс</code>:</p>
+<pre><code class="language-text">python3 -m doctest zadachi/urok01.py -v
+</code></pre>
+<p>Спершу всі приклади червоні (<code>Failed</code>), бо <code>pass</code> нічого не повертає. Дописуєш - стають зелені.
+Наприкінці має бути <code>Test passed</code>.</p>
+<p><strong>Задача 1. <code>kinetic_energy(mass, speed)</code>.</strong> Кінетична енергія E = m · v² / 2. Приклади з doctest:
+маса 2 кг і швидкість 3 м/с дають 9.0 Дж; швидкість -4 м/с дає ту саму енергію, що й 4 м/с.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Запиши формулу через <code>*</code>, <code>/</code> і <code>**</code> (<code>**</code> - піднесення до степеня, Лекція 1, с. 8: <code>x**5</code>).</li>
+<li>Подумай, чи потрібні дужки: <code>**</code> виконується раніше за <code>*</code> і <code>/</code>.</li>
+<li>Перевір у голові граничний випадок: маса 0 - енергія 0.0 (не 0: ділення <code>/</code> дає <code>float</code>).</li>
+<li>Перевір від'ємну швидкість: (-4)² = 16, а не -16. Якщо <code>speed</code> - змінна, мінус уже всередині
+   числа, і <code>speed ** 2</code> дає 16.0.</li>
+</ol>
+</details>
+<p><strong>Задача 2. <code>trip_seconds(hours, minutes, seconds)</code>.</strong> Перевести «2 год 30 хв 15 с» в секунди
+(9015). У файлі вже є константи <code>SECONDS_IN_HOUR</code> і <code>SECONDS_IN_MINUTE</code> - використай їх.</p>
+<details>
+<summary>Підказка-план</summary>
+<ol>
+<li>Години → секунди: множимо на <code>SECONDS_IN_HOUR</code>.</li>
+<li>Хвилини → секунди: множимо на <code>SECONDS_IN_MINUTE</code>.</li>
+<li>Додаємо все й секунди.</li>
+<li>Якщо рядок задовгий (більше 79 знаків), візьми весь вираз у дужки і перенеси (Лекція 1, с. 7-8).</li>
+<li>Це обернена задача до ЛР1, завд. 2 (там секунди розкладають на дні, години, хвилини).</li>
+</ol>
+</details>
+<h3 id="заготовка-тут-же-можна-писати-і-запускати-doctest">Заготовка (тут же можна писати і запускати doctest)</h3>
+<p>Скачати файл: <a href="data/prog/zadachi/urok01.py">urok01.py</a> - поклади в теку <code>zadachi/</code> і запускай <code>python3 -m doctest zadachi/urok01.py -v</code>.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 1. Задачі з doctest (заготовка).
+
+Як запускати (з теки Курс):
+    python3 -m doctest zadachi/urok01.py -v
+
+Спершу всі приклади червоні: замість коду стоїть pass, і функція
+повертає None. Заміни pass на свій код, щоб усі стали зелені.
+Обмеження як у ЛР1: без if/elif/else, без циклів, без списків.
+Розвʼязок - у _rozvyazky/urok01.py (відкривай лише після 2 спроб).
+&quot;&quot;&quot;
+import doctest
+
+SECONDS_IN_MINUTE = 60
+SECONDS_IN_HOUR = 3600
+
+
+def kinetic_energy(mass: float, speed: float) -&gt; float:
+    &quot;&quot;&quot;Повертає кінетичну енергію тіла E = m * v ** 2 / 2 (у джоулях).
+
+    :param mass: маса тіла, кг
+    :param speed: швидкість тіла, м/с (знак не важить: її підносять
+        до квадрата)
+    :return: енергія, Дж
+
+    &gt;&gt;&gt; kinetic_energy(2.0, 3.0)
+    9.0
+    &gt;&gt;&gt; kinetic_energy(1500.0, 20.0)
+    300000.0
+    &gt;&gt;&gt; kinetic_energy(0.0, 10.0)
+    0.0
+    &gt;&gt;&gt; kinetic_energy(1.0, 0.0)
+    0.0
+    &gt;&gt;&gt; kinetic_energy(0.5, -4.0)
+    4.0
+    &quot;&quot;&quot;
+    pass
+
+
+def trip_seconds(hours: int, minutes: int, seconds: int) -&gt; int:
+    &quot;&quot;&quot;Переводить тривалість поїздки «години, хвилини, секунди» в секунди.
+
+    Використай константи SECONDS_IN_HOUR і SECONDS_IN_MINUTE,
+    а не числа 3600 і 60 прямо у формулі.
+
+    :param hours: повні години (0 або більше)
+    :param minutes: хвилини (від 0 до 59)
+    :param seconds: секунди (від 0 до 59)
+    :return: тривалість у секундах
+
+    &gt;&gt;&gt; trip_seconds(0, 0, 0)
+    0
+    &gt;&gt;&gt; trip_seconds(1, 0, 0)
+    3600
+    &gt;&gt;&gt; trip_seconds(0, 1, 1)
+    61
+    &gt;&gt;&gt; trip_seconds(0, 0, 59)
+    59
+    &gt;&gt;&gt; trip_seconds(2, 30, 15)
+    9015
+    &quot;&quot;&quot;
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+<details>
+<summary>Розвʼязок (відкривай лише після 2 своїх спроб)</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Урок 1. Розвʼязки задач з doctest.
+
+Відкривай лише після 2 спроб написати самому.
+Перевірка: python3 -m doctest _rozvyazky/urok01.py -v
+&quot;&quot;&quot;
+import doctest
+
+# Іменовані константи: великі літери кажуть «це значення не змінюємо».
+# Python цього не забороняє (Лекція 1, с. 9), це домовленість PEP 8.
+SECONDS_IN_MINUTE = 60
+SECONDS_IN_HOUR = 3600
+
+
+def kinetic_energy(mass: float, speed: float) -&gt; float:
+    &quot;&quot;&quot;Повертає кінетичну енергію тіла E = m * v ** 2 / 2 (у джоулях).
+
+    :param mass: маса тіла, кг
+    :param speed: швидкість тіла, м/с (знак не важить: її підносять
+        до квадрата)
+    :return: енергія, Дж
+
+    &gt;&gt;&gt; kinetic_energy(2.0, 3.0)
+    9.0
+    &gt;&gt;&gt; kinetic_energy(1500.0, 20.0)
+    300000.0
+    &gt;&gt;&gt; kinetic_energy(0.0, 10.0)
+    0.0
+    &gt;&gt;&gt; kinetic_energy(1.0, 0.0)
+    0.0
+    &gt;&gt;&gt; kinetic_energy(0.5, -4.0)
+    4.0
+    &quot;&quot;&quot;
+    # ** виконується раніше за * і /, тому дужки не потрібні:
+    # спершу speed ** 2, потім множення на масу, потім ділення на 2.
+    # Для speed = -4.0 квадрат дає 16.0, тому енергія додатна.
+    # Ділення / завжди дає float, тому навіть 9 виходить як 9.0.
+    return mass * speed ** 2 / 2
+
+
+def trip_seconds(hours: int, minutes: int, seconds: int) -&gt; int:
+    &quot;&quot;&quot;Переводить тривалість поїздки «години, хвилини, секунди» в секунди.
+
+    Використай константи SECONDS_IN_HOUR і SECONDS_IN_MINUTE,
+    а не числа 3600 і 60 прямо у формулі.
+
+    :param hours: повні години (0 або більше)
+    :param minutes: хвилини (від 0 до 59)
+    :param seconds: секунди (від 0 до 59)
+    :return: тривалість у секундах
+
+    &gt;&gt;&gt; trip_seconds(0, 0, 0)
+    0
+    &gt;&gt;&gt; trip_seconds(1, 0, 0)
+    3600
+    &gt;&gt;&gt; trip_seconds(0, 1, 1)
+    61
+    &gt;&gt;&gt; trip_seconds(0, 0, 59)
+    59
+    &gt;&gt;&gt; trip_seconds(2, 30, 15)
+    9015
+    &quot;&quot;&quot;
+    # Довгий вираз беремо в дужки, щоб перенести на кілька рядків
+    # (Лекція 1, с. 7-8). Тут лише * і +, тому результат - int.
+    # 2 * 3600 + 30 * 60 + 15 = 7200 + 1800 + 15 = 9015.
+    return (hours * SECONDS_IN_HOUR
+            + minutes * SECONDS_IN_MINUTE
+            + seconds)
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod(verbose=True)
+</code></pre>
+</details>
+<h2 id="7-поясни-чому">7. Поясни чому</h2>
+<p><strong>1. Чому після <code>x = 23</code>, <code>y = x + 3</code>, <code>x = 100</code> у <code>y</code> лишається 26?</strong></p>
+<details>
+<summary>Еталон</summary>
+<p>Присвоєння виконується один раз: спершу рахується права частина з тими значеннями, що є <strong>зараз</strong>
+(23 + 3 = 26), і готове число 26 отримує імʼя <code>y</code>. Формула не запамʼятовується. Наступне <code>x = 100</code>
+лише прикріплює імʼя <code>x</code> до нового числа, а <code>y</code> і далі вказує на 26.</p>
+</details>
+<p><strong>2. Чому <code>PI = 3.14159</code> - «константа» лише на словах, і навіщо тоді великі літери?</strong></p>
+<details>
+<summary>Еталон</summary>
+<p>У Python нема окремої конструкції для констант (Лекція 1, с. 9): <code>PI = 3.14159</code> - звичайне
+присвоєння, і нижче можна написати <code>PI = 3</code>, Python не заперечить. Великі літери - домовленість між
+людьми (PEP 8): хто читає код, бачить «це значення ніхто не мусить змінювати». Так помилку видно
+одразу: якщо десь <code>PI = ...</code> удруге - щось не так.</p>
+</details>
+<p><strong>3. Чому рядок <code>2 + 3</code> в інтерактивному режимі показує 5, а у файлі програми - нічого?</strong></p>
+<details>
+<summary>Еталон</summary>
+<p>Інтерактивний режим - це REPL: Read-Eval-<strong>Print</strong> Loop. Він сам друкує значення кожного виразу, щоб
+було зручно експериментувати. Файл програми так не робить: вираз <code>2 + 3</code> обчислюється і результат
+викидається, бо ніхто не сказав, що з ним робити. Щоб побачити - <code>print(2 + 3)</code>, щоб використати
+далі - <code>total = 2 + 3</code>.</p>
+</details>
+<h2 id="8-що-запамʼятати">8. Що запамʼятати</h2>
+<ul>
+<li>Лінійна програма виконується згори вниз, кожна інструкція рівно один раз. Порядок рядків - частина
+  алгоритму.</li>
+<li><code>=</code> - «обчисли праву частину і дай їй імʼя зліва», а не «дорівнює». Значення береться в цю мить.</li>
+<li>Змінна - імʼя, що посилається на значення. <code>int</code>, <code>float</code>, <code>complex</code> - незмінювані.</li>
+<li>Кінець рядка = кінець інструкції; довгий вираз - у дужках; відступ - частина синтаксису (4 пробіли).</li>
+<li>Ідентифікатор: латинські літери, цифри, <code>_</code>, не з цифри, регістр важить, не одне з 35 ключових слів.</li>
+<li>Літерал - значення в коді (<code>256</code>, <code>0.1</code>, <code>"текст"</code>); іменована константа - великими літерами.</li>
+<li>Вираз має значення, інструкція виконує дію. REPL показує значення виразів, файл - лише через <code>print</code>.</li>
+<li>Коментар <code>#</code> пояснює «чому», а не «що».</li>
+</ul>
+<p><strong>Де в лабах:</strong></p>
+<ul>
+<li>ЛР1, с. 1: лінійний алгоритм <code>a = 15</code>, <code>b = 4</code>, <code>c = a + b</code>, <code>print(c)</code> - те саме, що розділ 2.</li>
+<li>ЛР1, с. 1: типи <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code> і <code>type()</code>.</li>
+<li>ЛР1, с. 8: імена змінних <code>snake_case</code> (<code>remaining_amount</code>, а не <code>q</code>) і константи <code>SECONDS_IN_MINUTE = 60</code>,
+  <code>SECONDS_IN_DAY = 86400</code>. Константи знадобляться в ЛР1, завд. 2 (секунди → дні, години, хвилини).</li>
+<li>ЛР1, завд. 1-3: заборонено <code>if</code>, <code>elif</code>, <code>else</code>, <code>for</code>, <code>while</code> (ЛР1, с. 12) - тобто кожна функція
+  там лінійна, як усе в цьому уроці.</li>
+<li>ЛР1, завд. 3: довгий список параметрів <code>calculate_payment(...)</code> записано в дужках на кількох рядках -
+  це правило переносу з Лекції 1, с. 7-8.</li>
+</ul>
+<hr>
+<p><a href="#/u/prog/uroky">← Усі уроки</a> · <a href="#/u/prog/urok-02">Наступний урок →</a></p>

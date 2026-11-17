@@ -139,7 +139,7 @@ async function home() {
     <details class="later"><summary>Після колоквіумів: 4 іспити</summary><div class="units">${ex}</div></details>
     <details class="later"><summary>Заліки</summary><div class="units">${zl}</div></details>
     <p><a href="kalendar.ics" download>Календар .ics (лише відомі дати колоквіумів і іспитів)</a></p>
-    <p class="footer">Власні конспекти, задачі й тести. Числові відповіді перевірені скриптом. Дати, яких нема в джерелах, позначені «спитати в групі».</p>`;
+    <p class="footer">Власні конспекти, задачі й тести. Числові відповіді тестів перевірені скриптом. Дати, яких нема в джерелах, позначені «спитати в групі».</p>`;
   const b = $("#install");
   if (installEvt) b.hidden = false;
   b.addEventListener("click", async () => { if (!installEvt) return; installEvt.prompt(); await installEvt.userChoice; installEvt = null; b.hidden = true; });

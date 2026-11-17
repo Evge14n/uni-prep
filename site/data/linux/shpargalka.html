@@ -1,0 +1,68 @@
+<h1 id="linux-шпаргалка-1-сторінка">Linux - шпаргалка (1 сторінка)</h1>
+<p><strong>Де я і що тут</strong></p>
+<pre><code>pwd                 де я
+ls -la              що тут (детально, з прихованими)
+cd тека | cd .. | cd ~ | cd -
+/mnt/c, /mnt/d      диски Windows
+explorer.exe .      відкрити теку в Провіднику
+</code></pre>
+<p>Tab - дописати назву. ↑ - попередня команда. Ctrl+R - пошук в історії.</p>
+<p><strong>Файли і теки</strong></p>
+<pre><code>mkdir -p a/b        створити теку
+touch f.py          порожній файл
+cp f.py g.py        копія;   cp -r тека нова
+mv f.py g.py        перейменувати / перемістити
+rm f.py             видалити НАЗАВЖДИ (кошика нема)
+rmdir тека          видалити порожню теку
+</code></pre>
+<p>Перед <code>rm *.щось</code> - спершу <code>ls *.щось</code>. Назви з пробілом - у лапки.</p>
+<p><strong>Подивитись і редагувати</strong></p>
+<pre><code>cat f | less f | head -n 20 f | tail -n 20 f | wc -l f
+nano f.py           Ctrl+O Enter - зберегти, Ctrl+X - вийти
+code .              VS Code у цій теці
+</code></pre>
+<p><strong>Права і sudo</strong></p>
+<pre><code>ls -l               -rwxr-xr-x : власник / група / інші
+chmod +x s.sh       дозволити запуск;  ./s.sh
+chmod 755 | 644     r=4 w=2 x=1
+sudo команда        від root (пароль Ubuntu)
+</code></pre>
+<p>Свої файли - без sudo.</p>
+<p><strong>Пакети</strong></p>
+<pre><code>sudo apt update &amp;&amp; sudo apt upgrade
+sudo apt install назва  |  apt search слово
+</code></pre>
+<p>Python-бібліотеки - лише у venv (pip).</p>
+<p><strong>Процеси</strong></p>
+<pre><code>Ctrl+C зупинити   Ctrl+Z призупинити → fg
+ps aux | grep python    kill PID    kill -9 PID
+top (q)   free -h   df -h
+wsl --shutdown      (у PowerShell) перезапустити Ubuntu
+</code></pre>
+<p><strong>Пайпи і пошук</strong></p>
+<pre><code>к &gt; f    перезаписати    к &gt;&gt; f   дописати    к 2&gt; f   помилки
+к1 | к2  вивід к1 → вхід к2
+grep -n &quot;def &quot; f.py      grep -rn &quot;текст&quot; тека
+printf &quot;5\n&quot; | python lab.py      ввід без клавіатури
+</code></pre>
+<p><strong>Python і лаби</strong></p>
+<pre><code>univer              ~/univer + venv увімкнено, видно (.venv)
+python lab.py
+python -m doctest -v lab.py      внизу Test passed.
+perevir lab.py      doctest + flake8 + mypy
+deactivate
+</code></pre>
+<p><strong>git</strong></p>
+<pre><code>git init | git status | git add . | git commit -m &quot;що&quot;
+git log --oneline | git diff | git restore f.py
+</code></pre>
+<p><strong>bash-скрипт</strong></p>
+<pre><code>#!/bin/bash
+x=5                 без пробілів біля =
+echo &quot;$1&quot;           аргумент, у лапках
+if [ -f &quot;$1&quot; ]; then ... fi
+for f in *.py; do ... done
+</code></pre>
+<p><strong>Помилки</strong>: <code>Permission denied</code> → chmod +x або чужий файл; <code>command not found</code> → нема програми або забув <code>./</code>;
+<code>$'\r'</code> → CRLF, VS Code → LF; <code>externally-managed-environment</code> → увімкни venv; <code>dpkg was interrupted</code> →
+<code>sudo dpkg --configure -a</code>.</p>

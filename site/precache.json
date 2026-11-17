@@ -1,5 +1,5 @@
 {
-"version": "067b2c6a6311",
+"version": "2e40db51de13",
 "files": [
 "./",
 "index.html",
@@ -97,6 +97,10 @@
 "data/eng/shpargalka.html",
 "data/eng/slovnyk.html",
 "data/eng/quiz.json",
+"data/linux/teoriya.html",
+"data/linux/zadachi.html",
+"data/linux/shpargalka.html",
+"data/linux/quiz.json",
 "data/plan.html",
 "data/glossary.html",
 "data/about.html",

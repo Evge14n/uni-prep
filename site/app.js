@@ -154,11 +154,12 @@ const IC = {
 const icon = (n, cls = "") => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ""}</svg>`;
 
 // колір предмета
-const SUBJ = { "an-k1": "an", an: "an", "ma-k2": "ma", ma: "ma", mech: "mech", mol: "mol", prog: "prog", zfp: "zfp", hist: "hist", eng: "eng" };
+const SUBJ = { "an-k1": "an", an: "an", "ma-k2": "ma", ma: "ma", mech: "mech", mol: "mol", prog: "prog", zfp: "zfp", hist: "hist", eng: "eng", linux: "prog" };
 const sk = (id) => SUBJ[id] || "an";
 function kindBadge(u) {
   if (u.kind === "colloquium") return '<span class="badge k">Колоквіум</span>';
   if (u.kind === "exam") return '<span class="badge">Іспит</span>';
+  if (u.kind === "skill") return '<span class="badge z">Навичка</span>'; // ULINUX1
   return '<span class="badge z">Залік</span>';
 }
 // частка питань розділу, на які остання відповідь правильна
@@ -447,6 +448,7 @@ async function subjects() {
   const kol = UNITS.filter((u) => u.kind === "colloquium").map(unitCard).join("");
   const ex = UNITS.filter((u) => u.kind === "exam").map(unitCard).join("");
   const zl = UNITS.filter((u) => u.kind === "zalik").map(unitCard).join("");
+  const skl = UNITS.filter((u) => u.kind === "skill").map(unitCard).join(""); // ULINUX1: навички без дати (Linux)
   app.innerHTML = `
     <h1>Підготовка до колоквіумів і сесії</h1>
     <p class="muted">Перший семестр, 1 курс фізфаку. Зараз - лише два колоквіуми, 30-40 хв на день. Іспити і заліки - після них. Після першого відкриття все працює без інтернету (крім відео).</p>
@@ -460,6 +462,7 @@ async function subjects() {
     <div class="units stagger">${kol}</div>
     <details class="later"><summary>Після колоквіумів: 4 іспити</summary><div class="units">${ex}</div></details>
     <details class="later"><summary>Заліки</summary><div class="units">${zl}</div></details>
+    ${skl ? `<details class="later"><summary>Навички: Linux для лаб</summary><div class="units">${skl}</div></details>` : ""}
     <p><a class="chiplink" href="kalendar.ics" download>${icon("cal")}Календар .ics (лише відомі дати колоквіумів і іспитів)</a></p>
     <p class="footer">Власні конспекти, задачі й тести. Числові відповіді тестів перевірені скриптом. Дати, яких нема в джерелах, позначені «спитати в групі».</p>`;
   stagger(); animateRings();

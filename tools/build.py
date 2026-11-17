@@ -117,6 +117,17 @@ def main():
             nq = len(qd["questions"])
             (out / "quiz.json").write_text(json.dumps(qd, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
             files.append(f"data/{uid}/quiz.json")
+        # UNIFIX1: картки на генерацію («поясни, чому / виведи / задача без підказки») - tools/gen_recall.py
+        gen = udir / "gen.json"
+        ng = 0
+        if gen.exists():
+            gtext = gen.read_text(encoding="utf-8")
+            check_text(gtext, f"{uid}/gen.json", errors)
+            gd = json.loads(gtext)
+            ng = len(gd["cards"])
+            (out / "gen.json").write_text(json.dumps(gd, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+            files.append(f"data/{uid}/gen.json")
+        meta["ng"] = ng
         vids = udir / "videos.json"
         nv = 0
         if vids.exists():

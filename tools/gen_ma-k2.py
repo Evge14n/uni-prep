@@ -487,7 +487,7 @@ add(topic=T_HIGH, type="single",
     options=["sin(x + nπ/2)", "cos(x + nπ/2)", "(-1)ⁿ·sin x", "sin(x + nπ)"],
     answer=0,
     explain="Кожне диференціювання зсуває аргумент синуса на π/2: (sin x)' = cos x = sin(x + π/2). "
-            "cos(x + nπ/2) - це для (cos x)⁽ⁿ⁾. (-1)ⁿ sin x правильно лише для парних n.",
+            "cos(x + nπ/2) - це для (cos x)⁽ⁿ⁾. (-1)ⁿ·sin x збігається з правильною відповіддю лише коли n кратне 4 (при n = 2 маємо -sin x, а (-1)²·sin x = sin x).",
     src="Лекція 9, с. 2")
 
 add(topic=T_HIGH, type="single", calc=True,
@@ -636,8 +636,8 @@ add(topic=T_MEAN, type="single",
     explain="Для будь-яких x₁ < x₂: f(x₂) - f(x₁) = f'(c)(x₂ - x₁) = 0. Значить, усі значення однакові.",
     src="Лекція 10, наслідок 1 з теореми Лагранжа")
 
-add(topic=T_MEAN, type="number", calc=True, tol=1e-4,
-    q="Знайдіть точку c з теореми Лагранжа для f(x) = ln x на відрізку [1; e]. (Відповідь числом з 3 знаками.)",
+add(topic=T_MEAN, type="number", calc=True, tol=5e-4,  # UNIFIX1 п.2: 1,718 (3 знаки) проходить, 1,72 - ні
+    q="Знайдіть точку c з теореми Лагранжа для f(x) = ln x на відрізку [1; e]. (Відповідь округли до 3 знаків після коми.)",
     answer=1.71828,
     verify="1/((log(E)-log(1))/(E-1))",
     gen="solve(Eq(diff(log(x), x), (log(E)-log(1))/(E-1)), x)[0]",

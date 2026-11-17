@@ -1,5 +1,5 @@
 {
-"version": "5e6245331596",
+"version": "57245c5174b3",
 "files": [
 "./",
 "index.html",
@@ -22,12 +22,14 @@
 "data/an-k1/zadachi.html",
 "data/an-k1/shpargalka.html",
 "data/an-k1/quiz.json",
+"data/an-k1/gen.json",
 "data/an-k1/videos.json",
 "data/ma-k2/teoriya.html",
 "data/ma-k2/oznachennya.html",
 "data/ma-k2/zadachi.html",
 "data/ma-k2/shpargalka.html",
 "data/ma-k2/quiz.json",
+"data/ma-k2/gen.json",
 "data/ma-k2/videos.json",
 "data/ma/teoriya.html",
 "data/ma/oznachennya.html",

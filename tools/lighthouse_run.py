@@ -28,7 +28,7 @@ def main():
                              device_scale_factor=2, color_scheme="dark")
         pg = ctx.new_page()
         pg.goto(url, wait_until="networkidle")
-        pg.wait_for_selector(".unit")
+        pg.wait_for_selector("h1")  # будь-яка сторінка, не лише головна
         pg.evaluate("navigator.serviceWorker.ready")
         cdp = ctx.new_cdp_session(pg)
         inst = cdp.send("Page.getInstallabilityErrors")

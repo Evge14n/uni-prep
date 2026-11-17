@@ -90,6 +90,10 @@ self.onmessage = async (ev) => {
     self.postMessage({ type: "error", id: m.id, text: "Python не завантажився: " + e + ". Відкрий сторінку раз з інтернетом." });
     return;
   }
+  // UPROGSEC1: sqlite3 у Pyodide - окреме колесо в py/ (лежить у тому ж офлайн-кеші pyodide-*)
+  if (/^\s*(import|from)\s+sqlite3\b/m.test(m.code)) {
+    try { await py.loadPackage("sqlite3", { messageCallback: () => {} }); } catch (e) { /* покаже ModuleNotFoundError */ }
+  }
   self.postMessage({ type: "started", id: m.id });
   outBuf = "";
   const t0 = performance.now();

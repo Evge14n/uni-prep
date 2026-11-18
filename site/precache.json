@@ -1,5 +1,5 @@
 {
-"version": "2d24055794f0",
+"version": "4a52c902eca9",
 "files": [
 "./",
 "index.html",
@@ -101,6 +101,10 @@
 "data/linux/zadachi.html",
 "data/linux/shpargalka.html",
 "data/linux/quiz.json",
+"data/git/teoriya.html",
+"data/git/zadachi.html",
+"data/git/shpargalka.html",
+"data/git/quiz.json",
 "data/prog-sec/teoriya.html",
 "data/prog-sec/zadachi.html",
 "data/prog-sec/shpargalka.html",

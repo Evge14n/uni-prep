@@ -106,7 +106,7 @@ def main():
     online = "--online" in sys.argv
     errors = []
     all_ids = []
-    units = sorted(p.parent for p in CONTENT.glob("*/videos.json"))
+    units = sorted(p.parent for p in CONTENT.glob("*/videos.json") if p.parent.name != "grafik")  # grafik - свій формат, tools/check_grafik_videos.py
     for udir in units:
         ids = check_unit(udir, errors)
         all_ids += ids

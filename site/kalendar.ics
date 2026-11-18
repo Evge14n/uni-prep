@@ -1,6 +1,1950 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//uni-prep//UK
+PRODID:-//uni-prep//grafik UPLAN1//UK
 CALSCALE:GREGORIAN
-X-WR-CALNAME:Колоквіуми і іспити
+METHOD:PUBLISH
+X-WR-CALNAME:Графік навчання
+X-WR-TIMEZONE:Europe/Kyiv
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+BEGIN:VTIMEZONE
+TZID:Europe/Kyiv
+BEGIN:STANDARD
+DTSTART:19701025T040000
+TZOFFSETFROM:+0300
+TZOFFSETTO:+0200
+TZNAME:EET
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19700329T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0300
+TZNAME:EEST
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:h6@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261119T163000
+DTEND;TZID=Europe/Kyiv:20261119T165300
+SUMMARY:🔴 Істор. сем.6: Історія: семінар 6 у пт
+  20.11 (державність 1917-1921) - повторити готов
+ е
+DESCRIPTION:ДЕДЛАЙН 2026-11-20\n1. Дивись: Лекція 22: У
+ країна в боротьбі за збереження незалеж
+ ності 18-21 рр. | ЗНО ІСТОРІЯ УКРАЇНИ | ПОДКА
+ СТИ https://www.youtube.com/watch?v=fR3NWjKRM5o\n2. Повтори: з
+ апиши 5 ключових подій у порядку\n3. Зроби 
+ сам: перечитай свій файл семінару 6\n4. Пер
+ евір себе: розкажи план вголос за 3 хв\; да
+ ти й імена - лише з плану семінарів і підр
+ учника (не з відео)\nПозначити зроблене: ht
+ tps://t.me/Clodiu_bot?start=g_h6\nГрафік: https://evge14n.github.io/
+ uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261119-0-25b29a@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261119T133000
+DTEND;TZID=Europe/Kyiv:20261119T145000
+SUMMARY:Матан: практичне 14 (оцінка за планом M
+ oodle)
+END:VEVENT
+BEGIN:VEVENT
+UID:z1@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261120T140000
+DTEND;TZID=Europe/Kyiv:20261120T144000
+SUMMARY:🔴 ЗФП ЛР1 Стокс: ЗФП: ЛР 1 (Стокс\, вʼяз
+ кість) - підготовка до пари пн 23.11
+DESCRIPTION:ДЕДЛАЙН 2026-11-23\n1. Дивись: Лаборатор
+ на робота  №1-22 "Визначення коефіцієнта в
+ нутрішнього тертя рідини за методом Сто
+ кса" https://www.youtube.com/watch?v=5CX7fI1-nBc\n2. Повтори: в
+ ипиши в зошит робочу формулу і що вимірю
+ єш\n3. Зроби сам: прочитай повну підготовк
+ у\, заповни шапку протоколу і таблицю (по
+ рожню)\n4. Перевір себе: закрий файл і скаж
+ и вголос: що міряєш\, за якою формулою η\, 
+ які похибки\; 3 питання захисту з файлу\nП
+ означити зроблене: https://t.me/Clodiu_bot?start=g_z1\nГ
+ рафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:an-t1@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261120T160000
+DTEND;TZID=Europe/Kyiv:20261120T162800
+SUMMARY:Ан т.1: Колоквіум (аналітична): тема 1 - 
+ Матриці\, обернена\, ранг
+DESCRIPTION:1. Дивись: ЛА05. Обернена матриця. https
+ ://www.youtube.com/watch?v=OWTyadd7e5k&t=130s\n2. Повтори: випи
+ ши з відео означення або формулу\, яку по
+ казали\, і приклад - у зошит\n3. Зроби сам: з
+ адачі 4\, 5\, 6 з «Задач» сайту - письмово\, б
+ ез підказки\n4. Перевір себе: тест на тему 
+ 8-10 питань (#/q/an-k1/topics)\nПозначити зроблене:
+  https://t.me/Clodiu_bot?start=g_an-t1\nГрафік: https://evge14n.gith
+ ub.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261120-0-f95001@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261120T083000
+DTEND;TZID=Europe/Kyiv:20261120T095000
+SUMMARY:🔴 Історія: семінар 6 (знаменник)
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P1D
+DESCRIPTION:Історія: семінар 6 (знаменник)
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:lm01@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261121T110000
+DTEND;TZID=Europe/Kyiv:20261121T113200
+SUMMARY:Mint 01: Linux Mint\, урок 01: Timeshift - знімок до б
+ удь-яких змін
+DESCRIPTION:1. Дивись: Linux Mint з нуля: встановленн
+ я\, налаштування\, софт і все\, що потрібно
+  знати! https://www.youtube.com/watch?v=Oc_3TQC_Bxw&t=452s\n2. Пов
+ тори: повтори за відео 2-3 команди у своєм
+ у терміналі\n3. Зроби сам: прочитай урок і 
+ зроби вправи «Руками» у своєму термінал
+ і\n4. Перевір себе: розділ «Самоперевірка
+ » в кінці уроку: спершу відповідай сам\, п
+ отім відкрий відповіді\nПозначити зробл
+ ене: https://t.me/Clodiu_bot?start=g_lm01\nГрафік: https://evge14
+ n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm02@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261121T110000
+DTEND;TZID=Europe/Kyiv:20261121T113200
+SUMMARY:Mint 02: Linux Mint\, урок 02: Оновлення - систе
+ ма\, Flatpak\, прошивки\, Python
+DESCRIPTION:1. Дивись: Linux Mint Update Manager vs Terminal: Which S
+ hould You Use? https://www.youtube.com/watch?v=qpd4Ley1mgc&t=27s\n2. По
+ втори: повтори за відео 2-3 команди у своє
+ му терміналі\n3. Зроби сам: прочитай урок 
+ і зроби вправи «Руками» у своєму терміна
+ лі\n4. Перевір себе: розділ «Самоперевірк
+ а» в кінці уроку: спершу відповідай сам\, 
+ потім відкрий відповіді\nПозначити зроб
+ лене: https://t.me/Clodiu_bot?start=g_lm02\nГрафік: https://evge
+ 14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ma-t2@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261122T170000
+DTEND;TZID=Europe/Kyiv:20261122T172800
+SUMMARY:Матан т.2: Колоквіум (матан): тема 2+3 - П
+ охідна: означення і зміст + Диференційов
+ ність
+DESCRIPTION:1. Дивись: ДЧ01. Означення похідної. h
+ ttps://www.youtube.com/watch?v=Dmv82O-5EQU&t=23s\n2. Повтори: ви
+ пиши з відео означення або формулу\, яку 
+ показали\, і приклад - у зошит\n3. Зроби сам
+ : задачі 1\, 8\, 9 з «Задач» сайту - письмово\,
+  без підказки\n4. Перевір себе: тест на тем
+ у 8-10 питань (#/q/ma-k2/topics)\nПозначити зроблен
+ е: https://t.me/Clodiu_bot?start=g_ma-t2\nГрафік: https://evge14n.g
+ ithub.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261123-0-aabe3b@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261123T115000
+DTEND;TZID=Europe/Kyiv:20261123T131000
+SUMMARY:🔴 ЗФП молекулярна: ЛР 1 (Стокс) на пар
+ і
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P1D
+DESCRIPTION:ЗФП молекулярна: ЛР 1 (Стокс) на пар
+ і
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:z2@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261124T153000
+DTEND;TZID=Europe/Kyiv:20261124T155500
+SUMMARY:🔴 ЗФП сем. р.3: ЗФП семінар: робота 3 (д
+ ифузія водяної пари)
+DESCRIPTION:ДЕДЛАЙН 2026-11-30\n1. Дивись: ВИЗНАЧЕНН
+ Я КОЕФІЦІЄНТА ДИФУЗІЇ ВОДЯНОЇ ПАРИ У ПОВ
+ ІТРІ https://www.youtube.com/watch?v=RJGCseUGe1A\n2. Повтори: 
+ випиши в зошит робочу формулу і що вимір
+ юєш\n3. Зроби сам: прочитай підготовку роб
+ оти 3\, запиши хід роботи і формулу D\n4. Пер
+ евір себе: поясни своїми словами\, звідки
+  формула D\nПозначити зроблене: https://t.me/Clodi
+ u_bot?start=g_z2\nГрафік: https://evge14n.github.io/uni-prep/#/grafi
+ k
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:z3@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261124T153000
+DTEND;TZID=Europe/Kyiv:20261124T155300
+SUMMARY:🔴 ЗФП сем. р.16: ЗФП семінар: робота 16 (
+ теплопровідність\, відносний метод)
+DESCRIPTION:ДЕДЛАЙН 2026-11-30\n1. Дивись: 3 Реальні г
+ ази Явища переносу https://www.youtube.com/watch?v=Uqrp7gt
+ aRS8&t=505s\n2. Повтори: випиши в зошит робочу ф
+ ормулу і що вимірюєш\n3. Зроби сам: прочит
+ ай підготовку роботи 16\, запиши формулу λ
+  через еталон\n4. Перевір себе: поясни\, чо
+ му потік через еталон і зразок однаковий
+ \nПозначити зроблене: https://t.me/Clodiu_bot?start=g_z3\
+ nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:an-t4@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261124T164000
+DTEND;TZID=Europe/Kyiv:20261124T170800
+SUMMARY:Ан т.4: Колоквіум (аналітична): тема 4 - 
+ Визначники
+DESCRIPTION:1. Дивись: ЛА02. Визначники 2-го і 3-го 
+ порядку. Властивості визначників. Прави
+ ло Крамера. https://www.youtube.com/watch?v=MrZ6mkdmwBE&t=19s\n2.
+  Повтори: випиши з відео означення або фо
+ рмулу\, яку показали\, і приклад - у зошит\n
+ 3. Зроби сам: задачі 1\, 2\, 3 з «Задач» сайту 
+ - письмово\, без підказки\n4. Перевір себе: 
+ тест на тему 8-10 питань (#/q/an-k1/topics)\nПознач
+ ити зроблене: https://t.me/Clodiu_bot?start=g_an-t4\nГрафі
+ к: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:h7@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261125T163000
+DTEND;TZID=Europe/Kyiv:20261125T170000
+SUMMARY:🔴 Істор. сем.7: Історія: семінар 7 у пт
+  04.12 (рух 20-80-х рр.) + можливо модуль 2
+DESCRIPTION:ДЕДЛАЙН 2026-12-04\n1. Дивись: Лекція 29: П
+ еріод застою або Криза системи\,  1965-1985 рр
+ . | ЗНО ІСТОРІЯ УКРАЇНИ | ПОДКАСТИ https://www.yo
+ utube.com/watch?v=8DwS8UVYg5E&t=341s\n2. Повтори: шістдеся
+ тники\, дисиденти\, Гельсінська група - хт
+ о і коли (звір з планом)\n3. Зроби сам: за пл
+ аном семінару 7 (Плани семінарів 2026.pdf) ск
+ лади відповідь на 2 питання\n4. Перевір се
+ бе: розкажи план вголос за 3 хв\; дати й ім
+ ена - лише з плану семінарів і підручника
+  (не з відео)\nПозначити зроблене: https://t.me/C
+ lodiu_bot?start=g_h7\nГрафік: https://evge14n.github.io/uni-prep/#/g
+ rafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ma-t5@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261126T163000
+DTEND;TZID=Europe/Kyiv:20261126T165800
+SUMMARY:Матан т.5: Колоквіум (матан): тема 5 - Пр
+ авила і таблиця похідних
+DESCRIPTION:1. Дивись: ДЧ03. Правила обчислення п
+ охідних. Арифметичні операції над похід
+ ними. https://www.youtube.com/watch?v=0VZl5xW9lFU&t=180s\n2. Повт
+ ори: випиши з відео означення або формул
+ у\, яку показали\, і приклад - у зошит\n3. Зр
+ оби сам: задачі 2 з «Задач» сайту - письмо
+ во\, без підказки\n4. Перевір себе: тест на 
+ тему 8-10 питань (#/q/ma-k2/topics)\nПозначити зроб
+ лене: https://t.me/Clodiu_bot?start=g_ma-t5\nГрафік: https://evg
+ e14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261126-0-dd7807@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261126T133000
+DTEND;TZID=Europe/Kyiv:20261126T145000
+SUMMARY:Матан: практичне 15 (оцінка за планом M
+ oodle)
+END:VEVENT
+BEGIN:VEVENT
+UID:z4@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261127T140000
+DTEND;TZID=Europe/Kyiv:20261127T142400
+SUMMARY:🔴 ЗФП сем. р.19: ЗФП семінар: робота 19 (
+ критичний стан)
+DESCRIPTION:ДЕДЛАЙН 2026-11-30\n1. Дивись: Критичний 
+ стан речовини https://www.youtube.com/watch?v=4o3BctGZ-BI\n2. 
+ Повтори: випиши в зошит робочу формулу і 
+ що вимірюєш\n3. Зроби сам: прочитай підгот
+ овку роботи 19\, намалюй ізотерми Ван-дер-
+ Ваальса і критичну точку\n4. Перевір себе:
+  поясни\, чому меніск зникає при T_к\nПозна
+ чити зроблене: https://t.me/Clodiu_bot?start=g_z4\nГрафі
+ к: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ma-t9@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261127T160000
+DTEND;TZID=Europe/Kyiv:20261127T163300
+SUMMARY:Матан т.9: Колоквіум (матан): тема 9+10 - 
+ Логарифмічна\, параметрична\, неявна + Ди
+ ференціал + ДЗ практичного 13 (Moodle: логари
+ фмічна похідна\, параметрична і неявна ф
+ ункція\, диференціал)
+DESCRIPTION:1. Дивись: ДЧ08. Приклади. Похідні не
+ явно або параметрично заданих функцій. ht
+ tps://www.youtube.com/watch?v=WqsBwJ9ufl4&t=25s\n2. Повтори: вип
+ иши з відео означення або формулу\, яку п
+ оказали\, і приклад - у зошит\n3. Зроби сам: 
+ задачі 5\, 6\, 7 з «Задач» сайту - письмово\, 
+ без підказки\; потім ДЗ практичного 13 з ф
+ айлу «Практичне заняття-13» у Moodle\n4. Перев
+ ір себе: тест на тему 8-10 питань (#/q/ma-k2/topics)
+ \nПозначити зроблене: https://t.me/Clodiu_bot?start=g_ma-
+ t9\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm03@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261128T110000
+DTEND;TZID=Europe/Kyiv:20261128T112500
+SUMMARY:Mint 03: Linux Mint\, урок 03: Термінал для лаб -
+  теки\, файли\, nano\, запуск\, venv
+DESCRIPTION:1. Дивись: Основні команди Linux: швид
+ кий гайд для початківців https://www.youtube.com/watc
+ h?v=3Gg_WMlHpYc&t=25s\n2. Повтори: повтори за відео 2
+ -3 команди у своєму терміналі\n3. Зроби сам
+ : прочитай урок і зроби вправи «Руками» у
+  своєму терміналі\n4. Перевір себе: розділ
+  «Самоперевірка» в кінці уроку: спершу в
+ ідповідай сам\, потім відкрий відповіді\n
+ Позначити зроблене: https://t.me/Clodiu_bot?start=g_lm03\
+ nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm04@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261128T110000
+DTEND;TZID=Europe/Kyiv:20261128T112400
+SUMMARY:Mint 04: Linux Mint\, урок 04: ЛР1 у терміналі з 
+ нуля
+DESCRIPTION:1. Дивись: Уроки Python з нуля | #2 - Прак
+ тика змінні та арифметичні операції https:/
+ /www.youtube.com/watch?v=BvBW5q5kST0&t=273s\n2. Повтори: повто
+ ри за відео 2-3 команди у своєму терміналі
+ \n3. Зроби сам: прочитай урок і зроби розді
+ л «Крок за кроком» руками\n4. Перевір себе
+ : розділ «Самоперевірка» в кінці уроку: с
+ першу відповідай сам\, потім відкрий від
+ повіді\nПозначити зроблене: https://t.me/Clodiu_bot
+ ?start=g_lm04\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ma-t12@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261129T170000
+DTEND;TZID=Europe/Kyiv:20261129T173300
+SUMMARY:Матан т.12: Колоквіум (матан): тема 12 - В
+ ищі порядки і Лейбніц + ДЗ практичного 14 (
+ Moodle: похідні вищих порядків\, формула Лей
+ бніца)
+DESCRIPTION:1. Дивись: ДЧ10. Похідні і диференціа
+ ли вищих порядків. https://www.youtube.com/watch?v=yPGo7PE6
+ GgE&t=169s\n2. Повтори: випиши з відео означенн
+ я або формулу\, яку показали\, і приклад - 
+ у зошит\n3. Зроби сам: задачі 12\, 13\, 14 з «Зад
+ ач» сайту - письмово\, без підказки\; поті
+ м ДЗ практичного 14 з файлу «Практичне за
+ няття-14» у Moodle\n4. Перевір себе: тест на те
+ му 8-10 питань (#/q/ma-k2/topics)\nПозначити зробле
+ не: https://t.me/Clodiu_bot?start=g_ma-t12\nГрафік: https://evge14
+ n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261130-0-61b80a@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261130T115000
+DTEND;TZID=Europe/Kyiv:20261130T131000
+SUMMARY:🔴 ЗФП молекулярна: семінар (роботи 3\
+ , 16\, 19)
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P1D
+DESCRIPTION:ЗФП молекулярна: семінар (роботи 3\,
+  16\, 19)
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:z5@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261201T153000
+DTEND;TZID=Europe/Kyiv:20261201T161700
+SUMMARY:🔴 ЗФП колоквіум: ЗФП: колоквіум пн 07.
+ 12 - похибки і теорія твоїх робіт
+DESCRIPTION:ДЕДЛАЙН 2026-12-07\n1. Дивись: Відео-пояс
+ нення алгоритму визначення абсолютної т
+ а відносної похибок при медичних вимірю
+ ваннях https://www.youtube.com/watch?v=kKfvxG_44mM\n2. Повтор
+ и: випиши в зошит робочу формулу і що вим
+ ірюєш\n3. Зроби сам: пройди список робіт у 
+ графіку: для кожної - формула і що міряли\
+ ; похибки прямі/непрямі\n4. Перевір себе: т
+ ест сайту «ЗФП» (#/q/zfp/train)\, 10 питань\nПозна
+ чити зроблене: https://t.me/Clodiu_bot?start=g_z5\nГрафі
+ к: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:an-t6@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261201T164000
+DTEND;TZID=Europe/Kyiv:20261201T170800
+SUMMARY:Ан т.6: Колоквіум (аналітична): тема 6 - 
+ Системи рівнянь
+DESCRIPTION:1. Дивись: ЛА10. Невизначені системи 
+ лінійних рівнянь. Теорема Кронекера-Кап
+ елі. https://www.youtube.com/watch?v=gSN-jm3pJiU&t=104s\n2. Повто
+ ри: випиши з відео означення або формулу\
+ , яку показали\, і приклад - у зошит\n3. Зроб
+ и сам: задачі 7\, 8 з «Задач» сайту - письмо
+ во\, без підказки\n4. Перевір себе: тест на 
+ тему 8-10 питань (#/q/an-k1/topics)\nПозначити зроб
+ лене: https://t.me/Clodiu_bot?start=g_an-t6\nГрафік: https://evg
+ e14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ma-t7@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261202T163000
+DTEND;TZID=Europe/Kyiv:20261202T165800
+SUMMARY:Матан т.7: Колоквіум (матан): тема 7 - Ск
+ ладена і обернена функція
+DESCRIPTION:1. Дивись: ДЧ04. Похідна складеної і 
+ оберненої функції. https://www.youtube.com/watch?v=Gphkx7x
+ r_IA&t=24s\n2. Повтори: випиши з відео означенн
+ я або формулу\, яку показали\, і приклад - 
+ у зошит\n3. Зроби сам: задачі 3\, 4 з «Задач» 
+ сайту - письмово\, без підказки\n4. Перевір
+  себе: тест на тему 8-10 питань (#/q/ma-k2/topics)\nП
+ означити зроблене: https://t.me/Clodiu_bot?start=g_ma-t7\n
+ Графік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261202-0-c4ac9b@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261202T083000
+DTEND;TZID=Europe/Kyiv:20261202T095000
+SUMMARY:Матан: практичне 16 (оцінка за планом M
+ oodle)
+END:VEVENT
+BEGIN:VEVENT
+UID:an-t8@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261203T163000
+DTEND;TZID=Europe/Kyiv:20261203T165800
+SUMMARY:Ан т.8: Колоквіум (аналітична): тема 8 - 
+ Вектори
+DESCRIPTION:1. Дивись: АГ01. Вектори в просторі. Л
+ інійна залежність. Базис https://www.youtube.com/watc
+ h?v=kFmzwd3mMrY&t=62s\n2. Повтори: випиши з відео оз
+ начення або формулу\, яку показали\, і при
+ клад - у зошит\n3. Зроби сам: задачі 9\, 10 з «
+ Задач» сайту - письмово\, без підказки\n4. 
+ Перевір себе: тест на тему 8-10 питань (#/q/an-
+ k1/topics)\nПозначити зроблене: https://t.me/Clodiu_bot?s
+ tart=g_an-t8\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261203-0-419a6a@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261203T133000
+DTEND;TZID=Europe/Kyiv:20261203T145000
+SUMMARY:Матан: практичне 17 (оцінка за планом M
+ oodle)
+END:VEVENT
+BEGIN:VEVENT
+UID:lab1@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261204T140000
+DTEND;TZID=Europe/Kyiv:20261204T145000
+SUMMARY:ЛР1 сам: ЛР1: зробити самому в терміна
+ лі і перевірити перед здачею
+DESCRIPTION:1. Дивись: Уроки Python з нуля | #2 - Прак
+ тика змінні та арифметичні операції https:/
+ /www.youtube.com/watch?v=BvBW5q5kST0&t=273s\n2. Повтори: відео
+  вже було в уроці 04 - якщо щось забув\, пер
+ еглянь фрагмент ще раз\n3. Зроби сам: напи
+ ши ЛР1 з нуля в nano: кожне завдання\, doctest пі
+ сля кожної функції\n4. Перевір себе: розді
+ л «Перевір перед здачею» уроку: doctest зеле
+ ні\, flake8 без зауважень\, назви з умови\nПоз
+ начити зроблене: https://t.me/Clodiu_bot?start=g_lab1\nГр
+ афік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:e1@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261204T160000
+DTEND;TZID=Europe/Kyiv:20261204T162900
+SUMMARY:Англ. Present: Англійська: Present Simple і Present 
+ Continuous
+DESCRIPTION:1. Дивись: Теперішній простий & трив
+ алий | Present Simple & Present Continuous | ЗНО АНГЛІЙСЬК
+ А МОВА https://www.youtube.com/watch?v=CRopgtmGrDc\n2. Повтори
+ : випиши 3 приклади з відео у зошит і прид
+ умай 2 свої\n3. Зроби сам: вправи розділу 4.1
+  файлу UNIMOL1\n4. Перевір себе: ключ - розділ 8
+  файлу\nПозначити зроблене: https://t.me/Clodiu_bot?
+ start=g_e1\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261204-0-a0acd0@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261204T083000
+DTEND;TZID=Europe/Kyiv:20261204T095000
+SUMMARY:🔴 Історія: семінар 7 (+ модуль 2 - 04.12 ч
+ и 18.12?)
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P1D
+DESCRIPTION:Історія: семінар 7 (+ модуль 2 - 04.12 чи
+  18.12?)
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:g01@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261205T110000
+DTEND;TZID=Europe/Kyiv:20261205T112200
+SUMMARY:Git 01: Git\, урок 01: Що таке git і GitHub
+DESCRIPTION:1. Дивись: Як встановити Git на Linux Mint 
+ 22 https://www.youtube.com/watch?v=jvSY3PrIBNo\n2. Повтори: пов
+ тори команди з відео в пісочниці (тренув
+ альний репозиторій)\n3. Зроби сам: зроби в
+ прави уроку в терміналі\n4. Перевір себе: 
+ питання самоперевірки уроку: спершу сам\
+ , потім відповіді\nПозначити зроблене: http
+ s://t.me/Clodiu_bot?start=g_g01\nГрафік: https://evge14n.github.io/u
+ ni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g02@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261205T110000
+DTEND;TZID=Europe/Kyiv:20261205T112400
+SUMMARY:Git 02: Git\, урок 02: Встановлення на Mint і gi
+ t config
+DESCRIPTION:1. Дивись: Як встановити Git на Linux Mint 
+ 22 https://www.youtube.com/watch?v=jvSY3PrIBNo&t=75s\n2. Повтори: 
+ повтори команди з відео в пісочниці (тре
+ нувальний репозиторій)\n3. Зроби сам: зроб
+ и вправи уроку в терміналі\n4. Перевір себ
+ е: питання самоперевірки уроку: спершу с
+ ам\, потім відповіді\nПозначити зроблене:
+  https://t.me/Clodiu_bot?start=g_g02\nГрафік: https://evge14n.github
+ .io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g03@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261205T110000
+DTEND;TZID=Europe/Kyiv:20261205T112500
+SUMMARY:Git 03: Git\, урок 03: SSH-ключ і вхід у GitHub
+DESCRIPTION:1. Дивись: #3 Курс GIT - Знайомство з GITH
+ UB. Стягнути та Залити зміни на Віддалени
+ й сервер. SSH зʼєднання https://www.youtube.com/watch?v=PG
+ X_ftUcw-c&t=202s\n2. Повтори: повтори команди з ві
+ део в пісочниці (тренувальний репозитор
+ ій)\n3. Зроби сам: зроби вправи уроку в тер
+ міналі\n4. Перевір себе: питання самопере
+ вірки уроку: спершу сам\, потім відповіді
+ \nПозначити зроблене: https://t.me/Clodiu_bot?start=g_g03
+ \nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:an-t11@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261206T170000
+DTEND;TZID=Europe/Kyiv:20261206T172800
+SUMMARY:Ан т.11: Колоквіум (аналітична): тема 11 
+ - Добутки векторів
+DESCRIPTION:1. Дивись: АГ03. Векторний добуток ве
+ кторів. https://www.youtube.com/watch?v=oO3sfdPK_KE&t=20s\n2. Пов
+ тори: випиши з відео означення або форму
+ лу\, яку показали\, і приклад - у зошит\n3. З
+ роби сам: задачі 11\, 12\, 13 з «Задач» сайту - 
+ письмово\, без підказки\n4. Перевір себе: т
+ ест на тему 8-10 питань (#/q/an-k1/topics)\nПозначи
+ ти зроблене: https://t.me/Clodiu_bot?start=g_an-t11\nГрафі
+ к: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261207-0-fe6ce7@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261207T115000
+DTEND;TZID=Europe/Kyiv:20261207T131000
+SUMMARY:🔴 ЗФП молекулярна: колоквіум
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P1D
+DESCRIPTION:ЗФП молекулярна: колоквіум
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:z6@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261208T153000
+DTEND;TZID=Europe/Kyiv:20261208T161500
+SUMMARY:🔴 ЗФП залік: ЗФП: залік пн 14.12 - звіти\
+ , графіки\, захист
+DESCRIPTION:ДЕДЛАЙН 2026-12-14\n1. Дивись: How to Linearize Da
+ ta in Physics Lab https://www.youtube.com/watch?v=fjiOGTZvpr8\n2. Повт
+ ори: випиши в зошит робочу формулу і що в
+ имірюєш\n3. Зроби сам: перевір\, що всі зві
+ ти дописані\; для 2 робіт з графіком - ліне
+ аризація і нахил\n4. Перевір себе: «Як на с
+ правжньому» ЗФП на сайті (#/q/zfp/real)\nПознач
+ ити зроблене: https://t.me/Clodiu_bot?start=g_z6\nГрафік:
+  https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:an-kr3@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261208T164000
+DTEND;TZID=Europe/Kyiv:20261208T171300
+SUMMARY:🔴 Ан КР3: Аналітична: КР 3 у пн 14.12 (дат
+ а з твого повідомлення 14.09 - звір) - площин
+ а і пряма в просторі
+DESCRIPTION:ДЕДЛАЙН 2026-12-14\n1. Дивись: АГ12. Рівня
+ ння площини в просторі. https://www.youtube.com/watch?v
+ =IrAt9Kb7uhk&t=256s\n2. Повтори: рівняння площини і
+  прямої в просторі - всі види\, з памʼяті\n3
+ . Зроби сам: 3 задачі з «Задач» аналітично
+ ї (площина\, пряма в просторі) з таймером 2
+ 5 хв\n4. Перевір себе: звір з розвʼязаннями
+  на сайті\nПозначити зроблене: https://t.me/Clodiu
+ _bot?start=g_an-kr3\nГрафік: https://evge14n.github.io/uni-prep/#/gr
+ afik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:h8@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261209T163000
+DTEND;TZID=Europe/Kyiv:20261209T170300
+SUMMARY:🔴 Істор. сем.8: Історія: семінар 8 у пт
+  18.12 (незалежність) + модуль 2\, якщо 18.12
+DESCRIPTION:ДЕДЛАЙН 2026-12-18\n1. Дивись: Лекція 31: У
+ країна в умовах незалежності | ЗНО ІСТОР
+ ІЯ УКРАЇНИ | ПОДКАСТИ https://www.youtube.com/watch?v=S2H
+ I2oyiZfg\n2. Повтори: 1991\, Конституція 1996\, Майд
+ ани - дати звір з довідником\n3. Зроби сам: 
+ за планом семінару 8 склади відповідь на 
+ 2 питання\; тест модуля 2 з файлу UNI2\n4. Пере
+ вір себе: розкажи план вголос за 3 хв\; дат
+ и й імена - лише з плану семінарів і підру
+ чника (не з відео)\nПозначити зроблене: http
+ s://t.me/Clodiu_bot?start=g_h8\nГрафік: https://evge14n.github.io/un
+ i-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ma-t16@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261210T163000
+DTEND;TZID=Europe/Kyiv:20261210T170300
+SUMMARY:Матан т.16: Колоквіум (матан): тема 16+17 -
+  Правило Лопіталя + Формула Тейлора + ДЗ п
+ рактичного 15 (Moodle: правило Лопіталя\, фор
+ мула Тейлора)
+DESCRIPTION:1. Дивись: ДЧ16. Приклади. Правило Ло
+ піталя. https://www.youtube.com/watch?v=h84w5cZQhAs&t=52s\n2. Пов
+ тори: випиши з відео означення або форму
+ лу\, яку показали\, і приклад - у зошит\n3. З
+ роби сам: задачі 16\, 17\, 18 з «Задач» сайту - 
+ письмово\, без підказки\; потім ДЗ практи
+ чного 15 з файлу «Практичне заняття-15» у Mo
+ odle\n4. Перевір себе: тест на тему 8-10 питань
+  (#/q/ma-k2/topics)\nПозначити зроблене: https://t.me/Clo
+ diu_bot?start=g_ma-t16\nГрафік: https://evge14n.github.io/uni-prep/#
+ /grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261210-0-d327af@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261210T133000
+DTEND;TZID=Europe/Kyiv:20261210T145000
+SUMMARY:Матан: КР 2 - орієнтовно\, звір у Moodle
+END:VEVENT
+BEGIN:VEVENT
+UID:g04@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261211T140000
+DTEND;TZID=Europe/Kyiv:20261211T143200
+SUMMARY:Git 04: Git\, урок 04: Перший репозиторій - in
+ it\, clone\, status\, add\, commit
+DESCRIPTION:1. Дивись: ПОВНИЙ КУРС по GIT та GITHUB у
+ країнською https://www.youtube.com/watch?v=9CnZihyYjjA&t=5000s\n
+ 2. Повтори: повтори команди з відео в пісо
+ чниці (тренувальний репозиторій)\n3. Зроб
+ и сам: зроби вправи уроку в терміналі\n4. П
+ еревір себе: питання самоперевірки урок
+ у: спершу сам\, потім відповіді\nПозначит
+ и зроблене: https://t.me/Clodiu_bot?start=g_g04\nГрафік: ht
+ tps://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:e2@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261211T160000
+DTEND;TZID=Europe/Kyiv:20261211T162600
+SUMMARY:Англ. to/-ing: Англійська: verbs + to / -ing
+DESCRIPTION:1. Дивись: Інфінітиви & форма -ing | Infin
+ itives & V-ing | ЗНО АНГЛІЙСЬКА МОВА https://www.youtube.
+ com/watch?v=SIJSdQAFiFw\n2. Повтори: випиши 3 приклад
+ и з відео у зошит і придумай 2 свої\n3. Зроб
+ и сам: вправи розділу 4.2\n4. Перевір себе: к
+ люч - розділ 8 файлу\nПозначити зроблене: h
+ ttps://t.me/Clodiu_bot?start=g_e2\nГрафік: https://evge14n.github.io
+ /uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:glabs@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261212T110000
+DTEND;TZID=Europe/Kyiv:20261212T112700
+SUMMARY:Git лаби: Git: Лаби в git - univer-labs покроково
+DESCRIPTION:1. Дивись: Git Workflow for Beginners: From Clone to Rele
+ ase | Git Step by Step #10 https://www.youtube.com/watch?v=2WyNfV82UuA&t=2
+ 0s\n2. Повтори: повтори команди з відео в пі
+ сочниці (тренувальний репозиторій)\n3. Зр
+ оби сам: створи свій univer-labs за інструкціє
+ ю і закоміть ЛР1 (гілка lr1\, тег на здачу)\n4.
+  Перевір себе: питання самоперевірки уро
+ ку: спершу сам\, потім відповіді\nПозначи
+ ти зроблене: https://t.me/Clodiu_bot?start=g_glabs\nГрафік
+ : https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm05@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261212T110000
+DTEND;TZID=Europe/Kyiv:20261212T112600
+SUMMARY:Mint 05: Linux Mint\, урок 05: Налагодження 1 - tra
+ ceback\, print\, assert\, breakpoint
+DESCRIPTION:1. Дивись: Give Me 13 Minutes\, I'll Make Python Type Hin
+ ts and Debugging Click (Tracebacks\, assert) https://www.youtube.com/watch
+ ?v=r-1uKG5U5m0&t=326s\n2. Повтори: повтори за відео 2
+ -3 команди у своєму терміналі\n3. Зроби сам
+ : прочитай урок і зроби вправи «Руками» у
+  своєму терміналі\n4. Перевір себе: розділ
+  «Самоперевірка» в кінці уроку: спершу в
+ ідповідай сам\, потім відкрий відповіді\n
+ Позначити зроблене: https://t.me/Clodiu_bot?start=g_lm05\
+ nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:an-t13@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261213T170000
+DTEND;TZID=Europe/Kyiv:20261213T172800
+SUMMARY:Ан т.13: Колоквіум (аналітична): тема 13 
+ - Пряма на площині
+DESCRIPTION:1. Дивись: АГ06. Загальне рівняння пр
+ ямої на площині https://www.youtube.com/watch?v=SYX7QHfwhDs&t
+ =17s\n2. Повтори: випиши з відео означення а
+ бо формулу\, яку показали\, і приклад - у з
+ ошит\n3. Зроби сам: задачі 16\, 17\, 18 з «Задач
+ » сайту - письмово\, без підказки\n4. Перев
+ ір себе: тест на тему 8-10 питань (#/q/an-k1/topics)
+ \nПозначити зроблене: https://t.me/Clodiu_bot?start=g_an-
+ t13\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261214-0-6478f8@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261214T101000
+DTEND;TZID=Europe/Kyiv:20261214T113000
+SUMMARY:🔴 Аналітична: КР 3 (за твоїм повідомл
+ енням 14.09)
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P1D
+DESCRIPTION:Аналітична: КР 3 (за твоїм повідомл
+ енням 14.09)
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261214-1-7ce4b3@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261214T115000
+DTEND;TZID=Europe/Kyiv:20261214T131000
+SUMMARY:🔴 ЗФП молекулярна: залік
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P1D
+DESCRIPTION:ЗФП молекулярна: залік
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:lm06@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261215T153000
+DTEND;TZID=Europe/Kyiv:20261215T161200
+SUMMARY:Mint 06: Linux Mint\, урок 06: Налагодження 2 - pdb
+  повністю\, post-mortem\, logging
+DESCRIPTION:1. Дивись: Python debugging with Python PDB - commands\, 
+ post mortem and much more | Python PDB tutorial https://www.youtube.com/wa
+ tch?v=SdsHXwN3Ka4\n2. Повтори: повтори за відео 2-3 
+ команди у своєму терміналі\n3. Зроби сам: 
+ прочитай урок і зроби вправи «Руками» у 
+ своєму терміналі\n4. Перевір себе: розділ 
+ «Самоперевірка» в кінці уроку: спершу ві
+ дповідай сам\, потім відкрий відповіді\nП
+ означити зроблене: https://t.me/Clodiu_bot?start=g_lm06\n
+ Графік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ma-test@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261215T164000
+DTEND;TZID=Europe/Kyiv:20261215T170800
+SUMMARY:Матан тест Moodle: Матан: «Тестове завда
+ ння» розділу «Диференціальне числення» 
+ у Moodle (обовʼязкове\, бали в самостійну) - т
+ ермін звір у Moodle
+DESCRIPTION:1. Дивись: ДЧ03. Правила обчислення п
+ охідних. Арифметичні операції над похід
+ ними. https://www.youtube.com/watch?v=0VZl5xW9lFU&t=180s\n2. Повт
+ ори: таблиця похідних - з памʼяті в зошит\
+ n3. Зроби сам: пройди тест у Moodle\n4. Перевір 
+ себе: перед ним - тренування на сайті (#/q/ma
+ -k2/train)\, 10 питань\nПозначити зроблене: https:/
+ /t.me/Clodiu_bot?start=g_ma-test\nГрафік: https://evge14n.github.io/
+ uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ma-t14@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261216T163000
+DTEND;TZID=Europe/Kyiv:20261216T165800
+SUMMARY:Матан т.14: Колоквіум (матан): тема 14 - Т
+ еореми про середнє
+DESCRIPTION:1. Дивись: ДЧ14. Теорема Лагранжа і т
+ еорема Коші про середнє. https://www.youtube.com/watch
+ ?v=SpEbIeeLUtU&t=18s\n2. Повтори: випиши з відео озн
+ ачення або формулу\, яку показали\, і прик
+ лад - у зошит\n3. Зроби сам: задачі 15 з «Зад
+ ач» сайту - письмово\, без підказки\n4. Пер
+ евір себе: тест на тему 8-10 питань (#/q/ma-k2/top
+ ics)\nПозначити зроблене: https://t.me/Clodiu_bot?start=g
+ _ma-t14\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:an-t15@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261217T163000
+DTEND;TZID=Europe/Kyiv:20261217T165800
+SUMMARY:Ан т.15: Колоквіум (аналітична): тема 15 
+ - Площина
+DESCRIPTION:1. Дивись: АГ12. Рівняння площини в п
+ росторі. https://www.youtube.com/watch?v=IrAt9Kb7uhk&t=256s\n2. П
+ овтори: випиши з відео означення або фор
+ мулу\, яку показали\, і приклад - у зошит\n3.
+  Зроби сам: задачі 20\, 21\, 22 з «Задач» сайту
+  - письмово\, без підказки\n4. Перевір себе:
+  тест на тему 8-10 питань (#/q/an-k1/topics)\nПознач
+ ити зроблене: https://t.me/Clodiu_bot?start=g_an-t15\nГраф
+ ік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm07@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261218T140000
+DTEND;TZID=Europe/Kyiv:20261218T142400
+SUMMARY:Mint 07: Linux Mint\, урок 07: ЛР2 у терміналі
+DESCRIPTION:1. Дивись: Умови в Python - ти не повіри
+ ш\, як це просто #5 | Теорія + практика Python ht
+ tps://www.youtube.com/watch?v=uCCd1_ysDgg&t=82s\n2. Повтори: пов
+ тори за відео 2-3 команди у своєму терміна
+ лі\n3. Зроби сам: прочитай урок і зроби роз
+ діл «Крок за кроком» руками\n4. Перевір се
+ бе: розділ «Самоперевірка» в кінці уроку
+ : спершу відповідай сам\, потім відкрий в
+ ідповіді\nПозначити зроблене: https://t.me/Clodiu
+ _bot?start=g_lm07\nГрафік: https://evge14n.github.io/uni-prep/#/graf
+ ik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ma-kr2@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261218T160000
+DTEND;TZID=Europe/Kyiv:20261218T163300
+SUMMARY:Матан КР2: Матан: КР 2 (практичне 18\, ор
+ ієнтовно чт 10.12 - звір дату) - зразок КР 2 з 
+ Moodle
+DESCRIPTION:1. Дивись: ДЧ23. Опуклість графіка фу
+ нкції. Точки перегину. https://www.youtube.com/watch?v=d
+ YJu6N_fH9c&t=22s\n2. Повтори: план дослідження фу
+ нкції - по пунктах у зошит\n3. Зроби сам: ро
+ звʼяжи 3 задачі зразка КР 2 з таймером 25 х
+ в (решту - у наступний вільний день\, якщо 
+ хочеш)\n4. Перевір себе: звір з розвʼязанн
+ ями «Задач» матану на сайті (#/u/ma-k2/zadachi)\nП
+ означити зроблене: https://t.me/Clodiu_bot?start=g_ma-kr2\
+ nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ev-20261218-0-ac39ad@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261218T083000
+DTEND;TZID=Europe/Kyiv:20261218T095000
+SUMMARY:🔴 Історія: семінар 8
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P1D
+DESCRIPTION:Історія: семінар 8
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:lab2@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261219T110000
+DTEND;TZID=Europe/Kyiv:20261219T115000
+SUMMARY:ЛР2 сам: ЛР2: зробити самому в терміна
+ лі і перевірити перед здачею
+DESCRIPTION:1. Дивись: Умови в Python - ти не повіри
+ ш\, як це просто #5 | Теорія + практика Python ht
+ tps://www.youtube.com/watch?v=uCCd1_ysDgg&t=82s\n2. Повтори: від
+ ео вже було в уроці 07 - якщо щось забув\, п
+ ереглянь фрагмент ще раз\n3. Зроби сам: на
+ пиши ЛР2 з нуля в nano: кожне завдання\, doctest 
+ після кожної функції\n4. Перевір себе: роз
+ діл «Перевір перед здачею» уроку: doctest зе
+ лені\, flake8 без зауважень\, назви з умови\nП
+ означити зроблене: https://t.me/Clodiu_bot?start=g_lab2\n
+ Графік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ma-t19@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261220T170000
+DTEND;TZID=Europe/Kyiv:20261220T173300
+SUMMARY:Матан т.19: Колоквіум (матан): тема 19 - Е
+ кстремум і монотонність + ДЗ практичного
+  16 (Moodle: екстремум\, найбільше і найменше 
+ значення на відрізку)
+DESCRIPTION:1. Дивись: ДЧ20. Екстремуми. Необхідн
+ а і достатні умови. https://www.youtube.com/watch?v=tBHiC2U
+ Y0bg&t=20s\n2. Повтори: випиши з відео означенн
+ я або формулу\, яку показали\, і приклад - 
+ у зошит\n3. Зроби сам: задачі 21\, 22\, 25 з «Зад
+ ач» сайту - письмово\, без підказки\; поті
+ м ДЗ практичного 16 з файлу «Практичне за
+ няття-16» у Moodle\n4. Перевір себе: тест на те
+ му 8-10 питань (#/q/ma-k2/topics)\nПозначити зробле
+ не: https://t.me/Clodiu_bot?start=g_ma-t19\nГрафік: https://evge14
+ n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm08@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261222T153000
+DTEND;TZID=Europe/Kyiv:20261222T155700
+SUMMARY:Mint 08: Linux Mint\, урок 08: ЛР3 у терміналі
+DESCRIPTION:1. Дивись: Уроки Python з нуля / #6 - Цикл
+ и та оператори в них (for\, while) https://www.youtube.com
+ /watch?v=VP988twLK_U&t=19s\n2. Повтори: повтори за від
+ ео 2-3 команди у своєму терміналі\n3. Зроби 
+ сам: прочитай урок і зроби розділ «Крок з
+ а кроком» руками\n4. Перевір себе: розділ 
+ «Самоперевірка» в кінці уроку: спершу ві
+ дповідай сам\, потім відкрий відповіді\nП
+ означити зроблене: https://t.me/Clodiu_bot?start=g_lm08\n
+ Графік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g05@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261222T153000
+DTEND;TZID=Europe/Kyiv:20261222T160000
+SUMMARY:Git 05: Git\, урок 05: Історія - log\, diff\, show
+DESCRIPTION:1. Дивись: Основи Git || Базовий функц
+ іонал https://www.youtube.com/watch?v=3h0Lw6I3b5w&t=1966s\n2. Пов
+ тори: повтори команди з відео в пісочниц
+ і (тренувальний репозиторій)\n3. Зроби сам
+ : зроби вправи уроку в терміналі\n4. Перев
+ ір себе: питання самоперевірки уроку: сп
+ ершу сам\, потім відповіді\nПозначити зро
+ блене: https://t.me/Clodiu_bot?start=g_g05\nГрафік: https://evg
+ e14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:e3@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261222T164000
+DTEND;TZID=Europe/Kyiv:20261222T171200
+SUMMARY:Англ. irregular: Англійська: неправильні 
+ дієслова
+DESCRIPTION:1. Дивись: ЯК ВИВЧИТИ НЕПРАВИЛЬНІ Д
+ ІЄСЛОВА: 4 СПОСОБИ + БОНУС ДЛЯ ВАС! | IRREGULAR V
+ ERBS in English https://www.youtube.com/watch?v=NVyJ4rxD1HQ&t=116s\n2. П
+ овтори: випиши 3 приклади з відео у зошит 
+ і придумай 2 свої\n3. Зроби сам: розділ 3 і в
+ прави 4.3\n4. Перевір себе: закрий 2-гу і 3-тю 
+ колонку\, згадай 20 дієслів\nПозначити зро
+ блене: https://t.me/Clodiu_bot?start=g_e3\nГрафік: https://evge
+ 14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:ma-t21@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261223T163000
+DTEND;TZID=Europe/Kyiv:20261223T170300
+SUMMARY:Матан т.21: Колоквіум (матан): тема 21 - О
+ пуклість\, перегин\, асимптоти + ДЗ практи
+ чного 17 (Moodle: опуклість\, перегин\, асимпт
+ оти\, дослідження функції)
+DESCRIPTION:1. Дивись: ДЧ23. Опуклість графіка фу
+ нкції. Точки перегину. https://www.youtube.com/watch?v=d
+ YJu6N_fH9c&t=22s\n2. Повтори: випиши з відео означ
+ ення або формулу\, яку показали\, і прикла
+ д - у зошит\n3. Зроби сам: задачі 23\, 24\, 26 з «
+ Задач» сайту - письмово\, без підказки\; п
+ отім ДЗ практичного 17 з файлу «Практичне
+  заняття-17» у Moodle\n4. Перевір себе: тест на 
+ тему 8-10 питань (#/q/ma-k2/topics)\nПозначити зроб
+ лене: https://t.me/Clodiu_bot?start=g_ma-t21\nГрафік: https://ev
+ ge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:an-t18@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261224T163000
+DTEND;TZID=Europe/Kyiv:20261224T165800
+SUMMARY:Ан т.18: Колоквіум (аналітична): тема 18 
+ - Пряма в просторі
+DESCRIPTION:1. Дивись: АГ13. Рівняння прямої в пр
+ осторі. Формули і приклади. https://www.youtube.com/
+ watch?v=WBZDBXMAeSk&t=172s\n2. Повтори: випиши з відео 
+ означення або формулу\, яку показали\, і п
+ риклад - у зошит\n3. Зроби сам: задачі 23 з «
+ Задач» сайту - письмово\, без підказки\n4. 
+ Перевір себе: тест на тему 8-10 питань (#/q/an-
+ k1/topics)\nПозначити зроблене: https://t.me/Clodiu_bot?s
+ tart=g_an-t18\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lab3@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261225T140000
+DTEND;TZID=Europe/Kyiv:20261225T145000
+SUMMARY:ЛР3 сам: ЛР3: зробити самому в терміна
+ лі і перевірити перед здачею
+DESCRIPTION:1. Дивись: Уроки Python з нуля / #6 - Цикл
+ и та оператори в них (for\, while) https://www.youtube.com
+ /watch?v=VP988twLK_U&t=19s\n2. Повтори: відео вже було 
+ в уроці 08 - якщо щось забув\, переглянь фр
+ агмент ще раз\n3. Зроби сам: напиши ЛР3 з ну
+ ля в nano: кожне завдання\, doctest після кожно
+ ї функції\n4. Перевір себе: розділ «Переві
+ р перед здачею» уроку: doctest зелені\, flake8 б
+ ез зауважень\, назви з умови\nПозначити з
+ роблене: https://t.me/Clodiu_bot?start=g_lab3\nГрафік: https:
+ //evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:e4@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261225T160000
+DTEND;TZID=Europe/Kyiv:20261225T163200
+SUMMARY:Англ. анотація: Англійська: анотація 
+ до статті
+DESCRIPTION:1. Дивись: How to Write an Abstract for a Scientific Arti
+ cle https://www.youtube.com/watch?v=qYkXA6gDRlg\n2. Повтори: вип
+ иши 3 приклади з відео у зошит і придумай 
+ 2 свої\n3. Зроби сам: напиши анотацію за фр
+ азами розділу 5.2\n4. Перевір себе: звір буд
+ ову зі зразком 5.3\nПозначити зроблене: https
+ ://t.me/Clodiu_bot?start=g_e4\nГрафік: https://evge14n.github.io/uni
+ -prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm09@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261226T110000
+DTEND;TZID=Europe/Kyiv:20261226T114700
+SUMMARY:Mint 09: Linux Mint\, урок 09: ЛР4 у терміналі (tur
+ tle)
+DESCRIPTION:1. Дивись: Python: Черепашача графіка (
+ основи з бібліотекою Turtle) (для початківц
+ ів\, для дітей) https://www.youtube.com/watch?v=0SYeUdJVkAA&t=41
+ 3s\n2. Повтори: повтори за відео 2-3 команди 
+ у своєму терміналі\n3. Зроби сам: прочитай
+  урок і зроби розділ «Крок за кроком» рук
+ ами\n4. Перевір себе: розділ «Самоперевір
+ ка» в кінці уроку: спершу відповідай сам\
+ , потім відкрий відповіді\nПозначити зро
+ блене: https://t.me/Clodiu_bot?start=g_lm09\nГрафік: https://ev
+ ge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g06@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261226T110000
+DTEND;TZID=Europe/Kyiv:20261226T112400
+SUMMARY:Git 06: Git\, урок 06: gitignore для Python
+DESCRIPTION:1. Дивись: 02.10 git\, github 04. Файл .gitignore htt
+ ps://www.youtube.com/watch?v=Euf6Lj0285s\n2. Повтори: повтор
+ и команди з відео в пісочниці (тренуваль
+ ний репозиторій)\n3. Зроби сам: зроби впра
+ ви уроку в терміналі\n4. Перевір себе: пит
+ ання самоперевірки уроку: спершу сам\, по
+ тім відповіді\nПозначити зроблене: https://t.
+ me/Clodiu_bot?start=g_g06\nГрафік: https://evge14n.github.io/uni-pre
+ p/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:e5@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261227T170000
+DTEND;TZID=Europe/Kyiv:20261227T173000
+SUMMARY:Англ. усні теми: Англійська: усні тем
+ и About myself / My university
+DESCRIPTION:1. Дивись: Рекомендації\, як скласти
+  розповідь про себе на англійській  мові 
+ "About myself" https://www.youtube.com/watch?v=Z0oXw69Gdw0\n2. Повто
+ ри: випиши 3 приклади з відео у зошит і пр
+ идумай 2 свої\n3. Зроби сам: розділ 6: розка
+ жи кожну тему вголос 2 хв\n4. Перевір себе: 
+ запиши себе на телефон і переслухай\nПоз
+ начити зроблене: https://t.me/Clodiu_bot?start=g_e5\nГра
+ фік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lab4@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261229T153000
+DTEND;TZID=Europe/Kyiv:20261229T162000
+SUMMARY:ЛР4 сам: ЛР4: зробити самому в терміна
+ лі і перевірити перед здачею
+DESCRIPTION:1. Дивись: Python: Черепашача графіка (
+ основи з бібліотекою Turtle) (для початківц
+ ів\, для дітей) https://www.youtube.com/watch?v=0SYeUdJVkAA&t=41
+ 3s\n2. Повтори: відео вже було в уроці 09 - як
+ що щось забув\, переглянь фрагмент ще раз
+ \n3. Зроби сам: напиши ЛР4 з нуля в nano: кожне
+  завдання\, doctest після кожної функції\n4. П
+ еревір себе: розділ «Перевір перед здаче
+ ю» уроку: doctest зелені\, flake8 без зауважень\,
+  назви з умови\nПозначити зроблене: https://t.
+ me/Clodiu_bot?start=g_lab4\nГрафік: https://evge14n.github.io/uni-pr
+ ep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:an-t20@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261229T164000
+DTEND;TZID=Europe/Kyiv:20261229T170800
+SUMMARY:Ан т.20: Колоквіум (аналітична): тема 20 
+ - Криві 2-го порядку (якщо встигнуть)
+DESCRIPTION:1. Дивись: АГ07. Еліпс. Канонічне рів
+ няння. https://www.youtube.com/watch?v=ClrTFbXmg6A&t=16s\n2. Повт
+ ори: випиши з відео означення або формул
+ у\, яку показали\, і приклад - у зошит\n3. Зр
+ оби сам: задачі 24 з «Задач» сайту - письмо
+ во\, без підказки\n4. Перевір себе: тест на 
+ тему 8-10 питань (#/q/an-k1/topics)\nПозначити зроб
+ лене: https://t.me/Clodiu_bot?start=g_an-t20\nГрафік: https://ev
+ ge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g07@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261230T163000
+DTEND;TZID=Europe/Kyiv:20261230T165600
+SUMMARY:Git 07: Git\, урок 07: Гілки - branch\, switch\, merge
+DESCRIPTION:1. Дивись: Git для Початківців | Украї
+ нською Мовою https://www.youtube.com/watch?v=rw0EMRl2QqM&t=1127
+ s\n2. Повтори: повтори команди з відео в пі
+ сочниці (тренувальний репозиторій)\n3. Зр
+ оби сам: зроби вправи уроку в терміналі\n4
+ . Перевір себе: питання самоперевірки ур
+ оку: спершу сам\, потім відповіді\nПознач
+ ити зроблене: https://t.me/Clodiu_bot?start=g_g07\nГрафік
+ : https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g08@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20261231T163000
+DTEND;TZID=Europe/Kyiv:20261231T165500
+SUMMARY:Git 08: Git\, урок 08: Конфлікт і як розвʼяз
+ ати руками
+DESCRIPTION:1. Дивись: #5 Курс GIT - Відновити Вида
+ лені Зміни GIT reset. Дивимось Логи у reflog\, в ч
+ ому користь? https://www.youtube.com/watch?v=YFKlWVoaF8A&t=180s\
+ n2. Повтори: повтори команди з відео в піс
+ очниці (тренувальний репозиторій)\n3. Зро
+ би сам: зроби вправи уроку в терміналі\n4. 
+ Перевір себе: питання самоперевірки уро
+ ку: спершу сам\, потім відповіді\nПозначи
+ ти зроблене: https://t.me/Clodiu_bot?start=g_g08\nГрафік: 
+ https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm10@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270101T140000
+DTEND;TZID=Europe/Kyiv:20270101T144900
+SUMMARY:Mint 10: Linux Mint\, урок 10: ЛР5 у терміналі
+DESCRIPTION:1. Дивись: 21. Знаходження суми ряду 
+ чисел на Python. Приклад рішення https://www.youtube.
+ com/watch?v=zptoEqQXIEc\n2. Повтори: повтори за відео
+  2-3 команди у своєму терміналі\n3. Зроби са
+ м: прочитай урок і зроби розділ «Крок за 
+ кроком» руками\n4. Перевір себе: розділ «С
+ амоперевірка» в кінці уроку: спершу відп
+ овідай сам\, потім відкрий відповіді\nПоз
+ начити зроблене: https://t.me/Clodiu_bot?start=g_lm10\nГр
+ афік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lab5@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270102T110000
+DTEND;TZID=Europe/Kyiv:20270102T115000
+SUMMARY:ЛР5 сам: ЛР5: зробити самому в терміна
+ лі і перевірити перед здачею
+DESCRIPTION:1. Дивись: 21. Знаходження суми ряду 
+ чисел на Python. Приклад рішення https://www.youtube.
+ com/watch?v=zptoEqQXIEc\n2. Повтори: відео вже було в 
+ уроці 10 - якщо щось забув\, переглянь фраг
+ мент ще раз\n3. Зроби сам: напиши ЛР5 з нуля
+  в nano: кожне завдання\, doctest після кожної ф
+ ункції\n4. Перевір себе: розділ «Перевір п
+ еред здачею» уроку: doctest зелені\, flake8 без 
+ зауважень\, назви з умови\nПозначити зроб
+ лене: https://t.me/Clodiu_bot?start=g_lab5\nГрафік: https://evge
+ 14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm11@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270105T153000
+DTEND;TZID=Europe/Kyiv:20270105T162100
+SUMMARY:Mint 11: Linux Mint\, урок 11: ЛР6 у терміналі
+DESCRIPTION:1. Дивись: Bisection Method Explained | Numerical Methods
+  in Python Step-by-Step https://www.youtube.com/watch?v=m7IsOi6k68Y\n2. П
+ овтори: повтори за відео 2-3 команди у сво
+ єму терміналі\n3. Зроби сам: прочитай урок
+  і зроби розділ «Крок за кроком» руками\n4
+ . Перевір себе: розділ «Самоперевірка» в 
+ кінці уроку: спершу відповідай сам\, поті
+ м відкрий відповіді\nПозначити зроблене:
+  https://t.me/Clodiu_bot?start=g_lm11\nГрафік: https://evge14n.githu
+ b.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lab6@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270108T140000
+DTEND;TZID=Europe/Kyiv:20270108T145000
+SUMMARY:ЛР6 сам: ЛР6: зробити самому в терміна
+ лі і перевірити перед здачею
+DESCRIPTION:1. Дивись: Bisection Method Explained | Numerical Methods
+  in Python Step-by-Step https://www.youtube.com/watch?v=m7IsOi6k68Y\n2. П
+ овтори: відео вже було в уроці 11 - якщо що
+ сь забув\, переглянь фрагмент ще раз\n3. Зр
+ оби сам: напиши ЛР6 з нуля в nano: кожне завд
+ ання\, doctest після кожної функції\n4. Переві
+ р себе: розділ «Перевір перед здачею» ур
+ оку: doctest зелені\, flake8 без зауважень\, назв
+ и з умови\nПозначити зроблене: https://t.me/Clodiu
+ _bot?start=g_lab6\nГрафік: https://evge14n.github.io/uni-prep/#/graf
+ ik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm12@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270109T110000
+DTEND;TZID=Europe/Kyiv:20270109T114500
+SUMMARY:Mint 12: Linux Mint\, урок 12: ЛР7 у терміналі
+DESCRIPTION:1. Дивись: 04.09 списки 01. Список (інде
+ кс\, зрізи). Операції зі списками (+\, *\, in\, =
+ =) https://www.youtube.com/watch?v=d64T4zZ5eeo\n2. Повтори: пов
+ тори за відео 2-3 команди у своєму терміна
+ лі\n3. Зроби сам: прочитай урок і зроби роз
+ діл «Крок за кроком» руками\n4. Перевір се
+ бе: розділ «Самоперевірка» в кінці уроку
+ : спершу відповідай сам\, потім відкрий в
+ ідповіді\nПозначити зроблене: https://t.me/Clodiu
+ _bot?start=g_lm12\nГрафік: https://evge14n.github.io/uni-prep/#/graf
+ ik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lab7@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270112T153000
+DTEND;TZID=Europe/Kyiv:20270112T162000
+SUMMARY:ЛР7 сам: ЛР7: зробити самому в терміна
+ лі і перевірити перед здачею
+DESCRIPTION:1. Дивись: 04.09 списки 01. Список (інде
+ кс\, зрізи). Операції зі списками (+\, *\, in\, =
+ =) https://www.youtube.com/watch?v=d64T4zZ5eeo\n2. Повтори: від
+ ео вже було в уроці 12 - якщо щось забув\, п
+ ереглянь фрагмент ще раз\n3. Зроби сам: на
+ пиши ЛР7 з нуля в nano: кожне завдання\, doctest 
+ після кожної функції\n4. Перевір себе: роз
+ діл «Перевір перед здачею» уроку: doctest зе
+ лені\, flake8 без зауважень\, назви з умови\nП
+ означити зроблене: https://t.me/Clodiu_bot?start=g_lab7\n
+ Графік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm13@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270115T140000
+DTEND;TZID=Europe/Kyiv:20270115T143100
+SUMMARY:Mint 13: Linux Mint\, урок 13: Робочий стіл Cinnamon
+  і гарячі клавіші (захід 1)
+DESCRIPTION:1. Дивись: Нарядив Linux Mint на старому 
+ iMac. Кастомізація Cinnamon https://www.youtube.com/watch?v=0b
+ UzVXdR7Lo&t=104s\n2. Повтори: повтори за відео 2-3 к
+ оманди у своєму терміналі\n3. Зроби сам: з
+ ахід 1 уроку: кроки 1-6\n4. Перевір себе: роз
+ діл «Самоперевірка» в кінці уроку: сперш
+ у відповідай сам\, потім відкрий відпові
+ ді\nПозначити зроблене: https://t.me/Clodiu_bot?start=g
+ _lm13\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm13b@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270115T160000
+DTEND;TZID=Europe/Kyiv:20270115T162000
+SUMMARY:Mint 13b: Linux Mint\, урок 13: Робочий стіл Cinnamo
+ n і гарячі клавіші (захід 2)
+DESCRIPTION:1. Дивись: Нарядив Linux Mint на старому 
+ iMac. Кастомізація Cinnamon https://www.youtube.com/watch?v=0b
+ UzVXdR7Lo&t=104s\n2. Повтори: перечитай свої нота
+ тки з заходу 1 (2 хв)\n3. Зроби сам: захід 2 ур
+ оку: «Далі - за бажанням»\n4. Перевір себе: 
+ розділ «Самоперевірка» в кінці уроку: сп
+ ершу відповідай сам\, потім відкрий відп
+ овіді\nПозначити зроблене: https://t.me/Clodiu_bot?s
+ tart=g_lm13b\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm14@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270116T110000
+DTEND;TZID=Europe/Kyiv:20270116T113100
+SUMMARY:Mint 14: Linux Mint\, урок 14: Файли в Nemo і в тер
+ міналі\, кошик (захід 1)
+DESCRIPTION:1. Дивись: Learn Linux Mint - Part 16 - Nemo File Manager
+  3 - Trash vs. Delete - PC Computer Tutorial Series https://www.youtube.co
+ m/watch?v=PN6oMfsU6zk\n2. Повтори: повтори за відео 2
+ -3 команди у своєму терміналі\n3. Зроби сам
+ : захід 1 уроку: кроки 1-6\n4. Перевір себе: р
+ озділ «Самоперевірка» в кінці уроку: спе
+ ршу відповідай сам\, потім відкрий відпо
+ віді\nПозначити зроблене: https://t.me/Clodiu_bot?sta
+ rt=g_lm14\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm14b@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270116T110000
+DTEND;TZID=Europe/Kyiv:20270116T112300
+SUMMARY:Mint 14b: Linux Mint\, урок 14: Файли в Nemo і в тер
+ міналі\, кошик (захід 2)
+DESCRIPTION:1. Дивись: Learn Linux Mint - Part 16 - Nemo File Manager
+  3 - Trash vs. Delete - PC Computer Tutorial Series https://www.youtube.co
+ m/watch?v=PN6oMfsU6zk\n2. Повтори: перечитай свої но
+ татки з заходу 1 (2 хв)\n3. Зроби сам: захід 2 
+ уроку: 7-11\n4. Перевір себе: розділ «Самопе
+ ревірка» в кінці уроку: спершу відповіда
+ й сам\, потім відкрий відповіді\nПозначит
+ и зроблене: https://t.me/Clodiu_bot?start=g_lm14b\nГрафік: 
+ https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm15@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270119T153000
+DTEND;TZID=Europe/Kyiv:20270119T160200
+SUMMARY:Mint 15: Linux Mint\, урок 15: Права\, sudo\, корист
+ увачі і групи (захід 1)
+DESCRIPTION:1. Дивись: 09 Права доступу для Корис
+ тувачів і Груп в Linux https://www.youtube.com/watch?v=3nSkaM
+ lS47o&t=205s\n2. Повтори: повтори за відео 2-3 ком
+ анди у своєму терміналі\n3. Зроби сам: зах
+ ід 1 уроку: кроки 1-5\n4. Перевір себе: розді
+ л «Самоперевірка» в кінці уроку: спершу 
+ відповідай сам\, потім відкрий відповіді
+ \nПозначити зроблене: https://t.me/Clodiu_bot?start=g_lm1
+ 5\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm15b@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270119T153000
+DTEND;TZID=Europe/Kyiv:20270119T155000
+SUMMARY:Mint 15b: Linux Mint\, урок 15: Права\, sudo\, корис
+ тувачі і групи (захід 2)
+DESCRIPTION:1. Дивись: 09 Права доступу для Корис
+ тувачів і Груп в Linux https://www.youtube.com/watch?v=3nSkaM
+ lS47o&t=205s\n2. Повтори: перечитай свої нотатк
+ и з заходу 1 (2 хв)\n3. Зроби сам: захід 2 урок
+ у: 6-10\n4. Перевір себе: розділ «Самопереві
+ рка» в кінці уроку: спершу відповідай са
+ м\, потім відкрий відповіді\nПозначити зр
+ облене: https://t.me/Clodiu_bot?start=g_lm15b\nГрафік: https:/
+ /evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm16@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270119T164000
+DTEND;TZID=Europe/Kyiv:20270119T170800
+SUMMARY:Mint 16: Linux Mint\, урок 16: Програми - apt\, Мен
+ еджер програм\, Flatpak\, deb\, PPA (захід 1)
+DESCRIPTION:1. Дивись: All Ways to Install Software on Linux Mint (So
+ ftware Manager\, APT\, Flatpak\, AppImage\, deb) https://www.youtube.com/w
+ atch?v=7iKeYnQR-I0\n2. Повтори: повтори за відео 2-3 
+ команди у своєму терміналі\n3. Зроби сам: 
+ захід 1 уроку: кроки 1-3\n4. Перевір себе: ро
+ зділ «Самоперевірка» в кінці уроку: спер
+ шу відповідай сам\, потім відкрий відпов
+ іді\nПозначити зроблене: https://t.me/Clodiu_bot?start
+ =g_lm16\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm16b@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270120T163000
+DTEND;TZID=Europe/Kyiv:20270120T165000
+SUMMARY:Mint 16b: Linux Mint\, урок 16: Програми - apt\, Мен
+ еджер програм\, Flatpak\, deb\, PPA (захід 2)
+DESCRIPTION:1. Дивись: All Ways to Install Software on Linux Mint (So
+ ftware Manager\, APT\, Flatpak\, AppImage\, deb) https://www.youtube.com/w
+ atch?v=7iKeYnQR-I0\n2. Повтори: перечитай свої нот
+ атки з заходу 1 (2 хв)\n3. Зроби сам: захід 2 у
+ року: 4-6\n4. Перевір себе: розділ «Самопере
+ вірка» в кінці уроку: спершу відповідай 
+ сам\, потім відкрий відповіді\nПозначити 
+ зроблене: https://t.me/Clodiu_bot?start=g_lm16b\nГрафік: htt
+ ps://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g09@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270122T140000
+DTEND;TZID=Europe/Kyiv:20270122T143200
+SUMMARY:Git 09: Git\, урок 09: Віддалений репозитор
+ ій - remote\, push\, pull\, fetch
+DESCRIPTION:1. Дивись: ПОВНИЙ КУРС по GIT та GITHUB у
+ країнською https://www.youtube.com/watch?v=9CnZihyYjjA&t=16837s\
+ n2. Повтори: повтори команди з відео в піс
+ очниці (тренувальний репозиторій)\n3. Зро
+ би сам: зроби вправи уроку в терміналі\n4. 
+ Перевір себе: питання самоперевірки уро
+ ку: спершу сам\, потім відповіді\nПозначи
+ ти зроблене: https://t.me/Clodiu_bot?start=g_g09\nГрафік: 
+ https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm17@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270123T110000
+DTEND;TZID=Europe/Kyiv:20270123T114600
+SUMMARY:Mint 17: Linux Mint\, урок 17: Драйвери\, прошив
+ ки\, Secure Boot
+DESCRIPTION:1. Дивись: Installing Drivers on Linux Mint? WATCH THIS F
+ IRST! https://www.youtube.com/watch?v=lr49XYQslwc\n2. Повтори: по
+ втори за відео 2-3 команди у своєму термін
+ алі\n3. Зроби сам: прочитай урок і зроби вп
+ рави «Руками» у своєму терміналі\n4. Пере
+ вір себе: розділ «Самоперевірка» в кінці
+  уроку: спершу відповідай сам\, потім від
+ крий відповіді\nПозначити зроблене: https://
+ t.me/Clodiu_bot?start=g_lm17\nГрафік: https://evge14n.github.io/uni-
+ prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm18@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270123T110000
+DTEND;TZID=Europe/Kyiv:20270123T112900
+SUMMARY:Mint 18: Linux Mint\, урок 18: Диски і місце (зах
+ ід 1)
+DESCRIPTION:1. Дивись: How to Check Free Disk Space on Linux (with df
+ \, du\, & ncdu) https://www.youtube.com/watch?v=hdmafdUqw5I&t=49s\n2. По
+ втори: повтори за відео 2-3 команди у своє
+ му терміналі\n3. Зроби сам: захід 1 уроку: к
+ роки 1-6\n4. Перевір себе: розділ «Самопере
+ вірка» в кінці уроку: спершу відповідай 
+ сам\, потім відкрий відповіді\nПозначити 
+ зроблене: https://t.me/Clodiu_bot?start=g_lm18\nГрафік: http
+ s://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm18b@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270124T170000
+DTEND;TZID=Europe/Kyiv:20270124T172000
+SUMMARY:Mint 18b: Linux Mint\, урок 18: Диски і місце (за
+ хід 2)
+DESCRIPTION:1. Дивись: How to Check Free Disk Space on Linux (with df
+ \, du\, & ncdu) https://www.youtube.com/watch?v=hdmafdUqw5I&t=49s\n2. По
+ втори: перечитай свої нотатки з заходу 1 (
+ 2 хв)\n3. Зроби сам: захід 2 уроку: «Далі - за 
+ бажанням»\n4. Перевір себе: розділ «Самоп
+ еревірка» в кінці уроку: спершу відповід
+ ай сам\, потім відкрий відповіді\nПозначи
+ ти зроблене: https://t.me/Clodiu_bot?start=g_lm18b\nГрафік
+ : https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g10@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270126T153000
+DTEND;TZID=Europe/Kyiv:20270126T160200
+SUMMARY:Git 10: Git\, урок 10: GitHub - репозиторій\, README
+ \, Issues
+DESCRIPTION:1. Дивись: ПОВНИЙ КУРС по GIT та GITHUB у
+ країнською https://www.youtube.com/watch?v=9CnZihyYjjA&t=13543s\
+ n2. Повтори: повтори команди з відео в піс
+ очниці (тренувальний репозиторій)\n3. Зро
+ би сам: зроби вправи уроку в терміналі\n4. 
+ Перевір себе: питання самоперевірки уро
+ ку: спершу сам\, потім відповіді\nПозначи
+ ти зроблене: https://t.me/Clodiu_bot?start=g_g10\nГрафік: 
+ https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g11@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270129T140000
+DTEND;TZID=Europe/Kyiv:20270129T143200
+SUMMARY:Git 11: Git\, урок 11: Pull Request - гілка\, рев'ю\, 
+ merge
+DESCRIPTION:1. Дивись: як користуватись GIT-ом і н
+ е 3д💀хнyть?! | git checkout\, git merge\, git fetch\, pull reques
+ ts | (укр) https://www.youtube.com/watch?v=umkXsDGagCI&t=573s\n2. По
+ втори: повтори команди з відео в пісочни
+ ці (тренувальний репозиторій)\n3. Зроби са
+ м: зроби вправи уроку в терміналі\n4. Пере
+ вір себе: питання самоперевірки уроку: с
+ першу сам\, потім відповіді\nПозначити зр
+ облене: https://t.me/Clodiu_bot?start=g_g11\nГрафік: https://e
+ vge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm19@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270130T110000
+DTEND;TZID=Europe/Kyiv:20270130T113200
+SUMMARY:Mint 19: Linux Mint\, урок 19: Процеси і Монітор
+  системи (захід 1)
+DESCRIPTION:1. Дивись: Лінукс процеси. Зрозуміт
+ и\, підкорити та знищити. Детальний розбі
+ р https://www.youtube.com/watch?v=GJ-uM3CmnVA&t=42s\n2. Повтори: 
+ повтори за відео 2-3 команди у своєму терм
+ іналі\n3. Зроби сам: захід 1 уроку: кроки 1-6\
+ n4. Перевір себе: розділ «Самоперевірка» 
+ в кінці уроку: спершу відповідай сам\, по
+ тім відкрий відповіді\nПозначити зробле
+ не: https://t.me/Clodiu_bot?start=g_lm19\nГрафік: https://evge14n.
+ github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm19b@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270130T110000
+DTEND;TZID=Europe/Kyiv:20270130T112000
+SUMMARY:Mint 19b: Linux Mint\, урок 19: Процеси і Моніто
+ р системи (захід 2)
+DESCRIPTION:1. Дивись: Лінукс процеси. Зрозуміт
+ и\, підкорити та знищити. Детальний розбі
+ р https://www.youtube.com/watch?v=GJ-uM3CmnVA&t=42s\n2. Повтори: 
+ перечитай свої нотатки з заходу 1 (2 хв)\n3. 
+ Зроби сам: захід 2 уроку: «Далі - за бажанн
+ ям»\n4. Перевір себе: розділ «Самоперевір
+ ка» в кінці уроку: спершу відповідай сам\
+ , потім відкрий відповіді\nПозначити зро
+ блене: https://t.me/Clodiu_bot?start=g_lm19b\nГрафік: https://e
+ vge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g12@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270202T153000
+DTEND;TZID=Europe/Kyiv:20270202T160100
+SUMMARY:Git 12: Git\, урок 12: Скасувати безпечно - re
+ store\, revert\, reset\, reflog
+DESCRIPTION:1. Дивись: Git Undo Changes for Beginners: Restore\, Reve
+ rt\, Reset and Reflog | Git Step by Step #3 https://www.youtube.com/watch?
+ v=ERKdAKvv008&t=29s\n2. Повтори: повтори команди з 
+ відео в пісочниці (тренувальний репозит
+ орій)\n3. Зроби сам: зроби вправи уроку в т
+ ерміналі\n4. Перевір себе: питання самопе
+ ревірки уроку: спершу сам\, потім відпові
+ ді\nПозначити зроблене: https://t.me/Clodiu_bot?start=g
+ _g12\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g13@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270202T153000
+DTEND;TZID=Europe/Kyiv:20270202T155700
+SUMMARY:Git 13: Git\, урок 13: stash - відкласти зміни
+DESCRIPTION:1. Дивись: Git Stash and Tags: Park Work\, Mark Releases\
+ , Push Tags | Git for Engineers #09 https://www.youtube.com/watch?v=uk58ba
+ hQXpI&t=63s\n2. Повтори: повтори команди з віде
+ о в пісочниці (тренувальний репозиторій)
+ \n3. Зроби сам: зроби вправи уроку в термін
+ алі\n4. Перевір себе: питання самоперевір
+ ки уроку: спершу сам\, потім відповіді\nПо
+ значити зроблене: https://t.me/Clodiu_bot?start=g_g13\nГр
+ афік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g14@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270202T164000
+DTEND;TZID=Europe/Kyiv:20270202T170800
+SUMMARY:Git 14: Git\, урок 14: Теги - позначити здачу
+DESCRIPTION:1. Дивись: Git Stash and Tags: Park Work\, Mark Releases\
+ , Push Tags | Git for Engineers #09 https://www.youtube.com/watch?v=uk58ba
+ hQXpI&t=465s\n2. Повтори: повтори команди з віде
+ о в пісочниці (тренувальний репозиторій)
+ \n3. Зроби сам: зроби вправи уроку в термін
+ алі\n4. Перевір себе: питання самоперевір
+ ки уроку: спершу сам\, потім відповіді\nПо
+ значити зроблене: https://t.me/Clodiu_bot?start=g_g14\nГр
+ афік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g15@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270203T163000
+DTEND;TZID=Europe/Kyiv:20270203T165400
+SUMMARY:Git 15: Git\, урок 15: GitHub Pages
+DESCRIPTION:1. Дивись: Deploy Your Website Using GitHub CLI (gh comma
+ nd) https://www.youtube.com/watch?v=MogaqiK-c-Q\n2. Повтори: пов
+ тори команди з відео в пісочниці (тренув
+ альний репозиторій)\n3. Зроби сам: зроби в
+ прави уроку в терміналі\n4. Перевір себе: 
+ питання самоперевірки уроку: спершу сам\
+ , потім відповіді\nПозначити зроблене: http
+ s://t.me/Clodiu_bot?start=g_g15\nГрафік: https://evge14n.github.io/u
+ ni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g16@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270204T163000
+DTEND;TZID=Europe/Kyiv:20270204T165400
+SUMMARY:Git 16: Git\, урок 16: gh - GitHub з терміналу
+DESCRIPTION:1. Дивись: Deploy Your Website Using GitHub CLI (gh comma
+ nd) https://www.youtube.com/watch?v=MogaqiK-c-Q\n2. Повтори: пов
+ тори команди з відео в пісочниці (тренув
+ альний репозиторій)\n3. Зроби сам: зроби в
+ прави уроку в терміналі\n4. Перевір себе: 
+ питання самоперевірки уроку: спершу сам\
+ , потім відповіді\nПозначити зроблене: http
+ s://t.me/Clodiu_bot?start=g_g16\nГрафік: https://evge14n.github.io/u
+ ni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm20@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270205T140000
+DTEND;TZID=Europe/Kyiv:20270205T143200
+SUMMARY:Mint 20: Linux Mint\, урок 20: systemd і журнали (за
+ хід 1)
+DESCRIPTION:1. Дивись: How To Manage Linux Services with systemctl an
+ d journalctl | Sysadmin Basics https://www.youtube.com/watch?v=3kl62YSU9XA
+ &t=60s\n2. Повтори: повтори за відео 2-3 команд
+ и у своєму терміналі\n3. Зроби сам: захід 1 
+ уроку: кроки 1-6\n4. Перевір себе: розділ «С
+ амоперевірка» в кінці уроку: спершу відп
+ овідай сам\, потім відкрий відповіді\nПоз
+ начити зроблене: https://t.me/Clodiu_bot?start=g_lm20\nГр
+ афік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm20b@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270205T160000
+DTEND;TZID=Europe/Kyiv:20270205T162000
+SUMMARY:Mint 20b: Linux Mint\, урок 20: systemd і журнали (за
+ хід 2)
+DESCRIPTION:1. Дивись: How To Manage Linux Services with systemctl an
+ d journalctl | Sysadmin Basics https://www.youtube.com/watch?v=3kl62YSU9XA
+ &t=60s\n2. Повтори: перечитай свої нотатки з 
+ заходу 1 (2 хв)\n3. Зроби сам: захід 2 уроку: с
+ вій таймер - крок 7\n4. Перевір себе: розділ
+  «Самоперевірка» в кінці уроку: спершу в
+ ідповідай сам\, потім відкрий відповіді\n
+ Позначити зроблене: https://t.me/Clodiu_bot?start=g_lm20b
+ \nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm21@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270206T110000
+DTEND;TZID=Europe/Kyiv:20270206T113700
+SUMMARY:Mint 21: Linux Mint\, урок 21: Мережа і ssh (захід 
+ 1)
+DESCRIPTION:1. Дивись: 10 SSH\, встановлюємо зʼєдна
+ ння між Клієнтом та Сервером https://www.youtube.c
+ om/watch?v=UDh36pbm1qY\n2. Повтори: повтори за відео 
+ 2-3 команди у своєму терміналі\n3. Зроби са
+ м: захід 1 уроку: кроки 1-4\n4. Перевір себе: 
+ розділ «Самоперевірка» в кінці уроку: сп
+ ершу відповідай сам\, потім відкрий відп
+ овіді\nПозначити зроблене: https://t.me/Clodiu_bot?s
+ tart=g_lm21\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm21b@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270206T110000
+DTEND;TZID=Europe/Kyiv:20270206T112500
+SUMMARY:Mint 21b: Linux Mint\, урок 21: Мережа і ssh (захід
+  2)
+DESCRIPTION:1. Дивись: 10 SSH\, встановлюємо зʼєдна
+ ння між Клієнтом та Сервером https://www.youtube.c
+ om/watch?v=UDh36pbm1qY\n2. Повтори: перечитай свої н
+ отатки з заходу 1 (2 хв)\n3. Зроби сам: захід 
+ 2 уроку: «Далі - за бажанням»\n4. Перевір се
+ бе: розділ «Самоперевірка» в кінці уроку
+ : спершу відповідай сам\, потім відкрий в
+ ідповіді\nПозначити зроблене: https://t.me/Clodiu
+ _bot?start=g_lm21b\nГрафік: https://evge14n.github.io/uni-prep/#/gra
+ fik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm22@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270209T153000
+DTEND;TZID=Europe/Kyiv:20270209T160200
+SUMMARY:Mint 22: Linux Mint\, урок 22: bash - змінні\, PATH\, п
+ айпи\, grep\, find
+DESCRIPTION:1. Дивись: How To Use Shell Environment Variables https:/
+ /www.youtube.com/watch?v=9ZpL8iDU7LY\n2. Повтори: повтори з
+ а відео 2-3 команди у своєму терміналі\n3. З
+ роби сам: прочитай урок і зроби вправи «Р
+ уками» у своєму терміналі\n4. Перевір себ
+ е: розділ «Самоперевірка» в кінці уроку: 
+ спершу відповідай сам\, потім відкрий ві
+ дповіді\nПозначити зроблене: https://t.me/Clodiu_b
+ ot?start=g_lm22\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:g17@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270209T153000
+DTEND;TZID=Europe/Kyiv:20270209T155700
+SUMMARY:Git 17: Git\, урок 17: Для профі - rebase\, cherry-pick
+ \, bisect\, worktree\, Actions
+DESCRIPTION:1. Дивись: What is Git Rebase? https://www.youtube.com/wa
+ tch?v=nHcfoHOW4uA\n2. Повтори: повтори команди з в
+ ідео в пісочниці (тренувальний репозито
+ рій)\n3. Зроби сам: зроби вправи уроку в те
+ рміналі\n4. Перевір себе: питання самопер
+ евірки уроку: спершу сам\, потім відповід
+ і\nПозначити зроблене: https://t.me/Clodiu_bot?start=g_g
+ 17\nГрафік: https://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm23@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270212T140000
+DTEND;TZID=Europe/Kyiv:20270212T143200
+SUMMARY:Mint 23: Linux Mint\, урок 23: bash-скрипти і cron
+DESCRIPTION:1. Дивись: How To Write Bash Scripts In Linux - Complete 
+ Guide (Part 15 - CRON Jobs) https://www.youtube.com/watch?v=HOaINcUTSg0&t=
+ 32s\n2. Повтори: повтори за відео 2-3 команди 
+ у своєму терміналі\n3. Зроби сам: прочитай
+  урок і зроби вправи «Руками» у своєму те
+ рміналі\n4. Перевір себе: розділ «Самопер
+ евірка» в кінці уроку: спершу відповідай
+  сам\, потім відкрий відповіді\nПозначити
+  зроблене: https://t.me/Clodiu_bot?start=g_lm23\nГрафік: htt
+ ps://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm24@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270212T160000
+DTEND;TZID=Europe/Kyiv:20270212T162800
+SUMMARY:Mint 24: Linux Mint\, урок 24: git і GitHub з ssh-ключе
+ м
+DESCRIPTION:1. Дивись: ПОВНИЙ КУРС по GIT та GITHUB у
+ країнською https://www.youtube.com/watch?v=9CnZihyYjjA&t=16405s\
+ n2. Повтори: повтори за відео 2-3 команди у 
+ своєму терміналі\n3. Зроби сам: прочитай у
+ рок і зроби вправи «Руками» у своєму тер
+ міналі\n4. Перевір себе: розділ «Самопере
+ вірка» в кінці уроку: спершу відповідай 
+ сам\, потім відкрий відповіді\nПозначити 
+ зроблене: https://t.me/Clodiu_bot?start=g_lm24\nГрафік: http
+ s://evge14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm25@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270213T110000
+DTEND;TZID=Europe/Kyiv:20270213T113200
+SUMMARY:Mint 25: Linux Mint\, урок 25: Безпека - ufw\, онов
+ лення\, що не запускати з sudo
+DESCRIPTION:1. Дивись: Secure Your Linux Mint in 10 Seconds: Firewall
+  Setup for Beginners https://www.youtube.com/watch?v=-hzevolJ9rs\n2. По
+ втори: повтори за відео 2-3 команди у своє
+ му терміналі\n3. Зроби сам: прочитай урок 
+ і зроби вправи «Руками» у своєму терміна
+ лі\n4. Перевір себе: розділ «Самоперевірк
+ а» в кінці уроку: спершу відповідай сам\, 
+ потім відкрий відповіді\nПозначити зроб
+ лене: https://t.me/Clodiu_bot?start=g_lm25\nГрафік: https://evge
+ 14n.github.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm26@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270213T110000
+DTEND;TZID=Europe/Kyiv:20270213T113400
+SUMMARY:Mint 26: Linux Mint\, урок 26: Коли щось зламало
+ сь - GRUB\, старе ядро\, TTY\, live USB
+DESCRIPTION:1. Дивись: I Broke NVIDIA Drivers on Linux Mint (And Fixe
+ d It) https://www.youtube.com/watch?v=7GWObIklRWY&t=335s\n2. Повтор
+ и: повтори за відео 2-3 команди у своєму те
+ рміналі\n3. Зроби сам: прочитай урок і зро
+ би вправи «Руками» у своєму терміналі\n4. 
+ Перевір себе: розділ «Самоперевірка» в к
+ інці уроку: спершу відповідай сам\, потім
+  відкрий відповіді\nПозначити зроблене: h
+ ttps://t.me/Clodiu_bot?start=g_lm26\nГрафік: https://evge14n.github.
+ io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
+BEGIN:VEVENT
+UID:lm27@uni-prep-grafik
+DTSTAMP:20261118T114609Z
+DTSTART;TZID=Europe/Kyiv:20270216T153000
+DTEND;TZID=Europe/Kyiv:20270216T160000
+SUMMARY:Mint 27: Linux Mint\, урок 27: VS Code або VSCodium (піз
+ ніше\, за бажанням)
+DESCRIPTION:1. Дивись: Install and configure VISUAL STUDIO CODE and P
+ YTHON on LINUX https://www.youtube.com/watch?v=IqrW3Y5cQwU\n2. Повто
+ ри: повтори за відео 2-3 команди у своєму т
+ ерміналі\n3. Зроби сам: прочитай урок і зр
+ оби вправи «Руками» у своєму терміналі\n4
+ . Перевір себе: розділ «Самоперевірка» в 
+ кінці уроку: спершу відповідай сам\, поті
+ м відкрий відповіді\nПозначити зроблене:
+  https://t.me/Clodiu_bot?start=g_lm27\nГрафік: https://evge14n.githu
+ b.io/uni-prep/#/grafik
+URL:https://evge14n.github.io/uni-prep/#/grafik
+END:VEVENT
 END:VCALENDAR

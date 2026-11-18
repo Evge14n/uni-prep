@@ -162,8 +162,17 @@ def scrub(v):
     return v
 
 
+def unticks(k, v):
+    """Сайт (rich() в app.js) і бот показують q/explain/options як текст: `код` дав би сирі бектики (видно на 390 px)."""
+    if k in ("q", "explain", "options"):
+        if isinstance(v, list):
+            return [re.sub(r"`([^`]+)`", r"\1", x) for x in v]
+        return re.sub(r"`([^`]+)`", r"\1", v)
+    return v
+
+
 def quiz(qs=None) -> list:
-    return [{k: scrub(v) for k, v in q.items() if not k.startswith("_")} for q in (qs or load_quiz())]
+    return [{k: unticks(k, scrub(v)) for k, v in q.items() if not k.startswith("_")} for q in (qs or load_quiz())]
 
 
 def check(path: Path) -> list:

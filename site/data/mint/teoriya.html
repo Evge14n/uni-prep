@@ -1,0 +1,417 @@
+<h1 id="linux-mint-повністю">Linux Mint - повністю</h1>
+<h2 id="почни-тут">Почни тут</h2>
+<p>Курс для твого ноутбука зі <strong>справжньою Linux Mint</strong> (робочий стіл Cinnamon). Усе, що тут написано, набирається в
+терміналі Mint (Ctrl+Alt+T) або робиться мишкою в Mint.</p>
+<p>Старий курс «Linux за 10 днів» (тека <code>05_Програмування/Linux/</code>) був для ПК. Для ноутбука бери цей. Курс Python
+(тека <code>05_Програмування/Курс/</code> на ПК: уроки Python і довідник функцій) лишається як був - тут лише як запускати все
+те саме в Mint. Коли урок пише «курс Python, урок 07» - це урок тієї теки, а не «Урок 07» цього курсу.</p>
+<p>Файли з ПК (цей курс, <code>Курс/</code>, лаби викладача) на ноутбук переносиш флешкою, через GitHub (урок 24) або пересилаєш
+собі в Telegram - і потім копіюєш у <code>~/univer</code> командою <code>cp</code> (урок 03, 04).</p>
+<h3 id="крок-0-яка-в-тебе-mint-1-хвилина">Крок 0. Яка в тебе Mint (1 хвилина)</h3>
+<pre><code class="language-bash">cat /etc/os-release
+python3 --version
+</code></pre>
+<p>Має бути <code>PRETTY_NAME="Linux Mint 22.3"</code> (або 22, 22.1, 22.2) і <code>UBUNTU_CODENAME=noble</code>, Python 3.12.3. Тоді курс
+підходить дослівно. Mint 22.x підтримується до квітня 2029. Наступна велика версія Mint (на базі Ubuntu 26.04)
+запланована на Різдво 2026 і ще не вийшла (blog.linuxmint.com, березень 2026); коли вийде - урок 02 каже, як
+переходити.</p>
+<p>Якщо бачиш <code>21.x</code> - курс теж майже весь підходить, але Python там 3.10, і спершу варто оновитись (урок 02).</p>
+<h3 id="мова-повідомлень-1-хвилина">Мова повідомлень (1 хвилина)</h3>
+<pre><code class="language-bash">echo $LANG
+</code></pre>
+<p>Якщо бачиш <code>uk_UA.UTF-8</code> - Mint українською, і багато повідомлень <strong>системи</strong> (bash, <code>cp</code>, <code>mkdir</code>, apt, nano,
+Timeshift) будуть українською, а не так, як у курсі. Наприклад, замість <code>bash: python: command not found</code> буде
+<code>bash: python: команду не знайдено</code>. У «Типових помилках» уроків для таких повідомлень дано обидва варіанти.
+Повідомлення самого <strong>Python</strong> (<code>Traceback</code>, <code>NameError</code>, doctest <code>Expected</code>/<code>Got</code>) завжди англійською.</p>
+<p>Шукати помилку в інтернеті легше англійською. Отримати англійський текст: допиши <code>LC_ALL=C</code> перед командою -
+тоді лише ця одна команда говорить англійською:</p>
+<pre><code class="language-bash">LC_ALL=C ls nema-takoyi-teky
+</code></pre>
+<pre><code class="language-text">ls: cannot access 'nema-takoyi-teky': No such file or directory
+</code></pre>
+<h3 id="порядок-так-попросив-сам-спершу-лаби-налагодження-оновлення">Порядок (так попросив сам: спершу лаби, налагодження, оновлення)</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Коли</th>
+<th>Урок</th>
+<th>Що вмітимеш</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>сьогодні</td>
+<td>01 Timeshift</td>
+<td>зробити «збереження гри» системи перед будь-якими змінами</td>
+</tr>
+<tr>
+<td>сьогодні</td>
+<td>02 Оновлення</td>
+<td>оновити систему і Flatpak; не зламати системний Python (кроки 1-3 і 5; прошивки, uv і venv - пізніше)</td>
+</tr>
+<tr>
+<td>сьогодні</td>
+<td>03 Термінал для лаб</td>
+<td>теки, nano, venv, запуск - мінімум для ЛР1</td>
+</tr>
+<tr>
+<td>сьогодні</td>
+<td>04 ЛР1 з нуля</td>
+<td>зробити ЛР1 лише в терміналі</td>
+</tr>
+<tr>
+<td>завтра</td>
+<td>05-06 Налагодження</td>
+<td>traceback, <code>f"{x=}"</code>, assert, breakpoint, pdb повністю, post-mortem, logging + 7 зламаних програм</td>
+</tr>
+<tr>
+<td>далі</td>
+<td>07-12 ЛР2-ЛР7</td>
+<td>кожна лаба в терміналі: будова файлу, запуск, типові помилки, помилки в doctest викладача</td>
+</tr>
+<tr>
+<td>по 1 на день</td>
+<td>13-26</td>
+<td>робочий стіл, файли і Nemo, права, програми, драйвери, диски, процеси, systemd, мережа і ssh, bash, скрипти і cron, git і GitHub, безпека, порятунок</td>
+</tr>
+<tr>
+<td>пізніше</td>
+<td>27 VS Code / VSCodium</td>
+<td>за бажанням, коли термінал уже звичний</td>
+</tr>
+</tbody>
+</table></div>
+<p>Окремо: тека <code>Налагодження - зламані програми/</code> (7 програм з помилками і <code>ЗАВДАННЯ.md</code>), <code>Практика - 4 завдання.md</code>,
+<code>ІСПИТ-САМОПЕРЕВІРКА.md</code> (60 питань), <code>ВИЩЕ ЗА УНІВЕРСИТЕТ - досвід практиків.md</code>, шпаргалка
+<code>_У_ЗОШИТ/Linux Mint - шпаргалка.md</code> (на ПК). Глибше про git - курс у теці <code>05_Програмування/Git-GitHub/</code> (на ПК).</p>
+<h3 id="як-вчити-щоб-запамʼяталось-надовго">Як вчити, щоб запамʼяталось надовго</h3>
+<ul>
+<li><strong>Передбач, потім запусти.</strong> У кожному уроці є розділ, де спершу треба сказати, що виведе команда, і лише потім
+  натиснути Enter. Помилка в передбаченні запамʼятовується краще, ніж правильна відповідь, прочитана готовою.</li>
+<li><strong>Самоперевірка без підглядання.</strong> 5 питань у кінці уроку - відповідай вголос або на папері, тоді відкривай
+  «Відповіді».</li>
+<li><strong>Повтори через день і через тиждень.</strong> Картки «Linux Mint» у боті (тема «Навчання»): увімкнути -
+  напиши боту <code>увімкни колоду мінт</code>, вимкнути - <code>вимкни колоду мінт</code>. Колода типово вимкнена, щоб не заважати
+  колоквіумам.</li>
+<li><strong>Руками, не очима.</strong> Кожну команду з блоків коду набирай сам (Tab допомагає), не копіюй пачкою.</li>
+</ul>
+<h3 id="швидке-налаштування-якщо-хочеш-одразу-без-уроку-03">Швидке налаштування (якщо хочеш одразу, без уроку 03)</h3>
+<p>Скрипт ставить python3-venv, pip, tkinter (для turtle), git, створює <code>~/univer/labs</code> і <code>~/univer/.venv</code> з pytest,
+flake8, black, mypy, ruff, matplotlib, numpy і додає дві команди: <code>univer</code> (перейти в <code>~/univer</code> і увімкнути venv)
+та <code>perevir файл.py</code> (doctest + black + flake8, pycodestyle, ruff до 78 символів + mypy, як вимагає викладач).
+Систему він не оновлює.</p>
+<pre><code class="language-bash">cd ~
+wget -O ustanovka-mint.sh https://evge14n.github.io/uni-prep/files/ustanovka-mint.sh
+less ustanovka-mint.sh
+bash ustanovka-mint.sh
+</code></pre>
+<p>Якщо <code>wget</code> пише помилку <code>404</code> (файл на сайті ще не опублікований) або інтернету нема - скопіюй
+<code>ustanovka-mint.sh</code> з теки цього курсу (лежить поруч з «00 - Почни тут.md») у домашню теку <code>~</code>.</p>
+<p><code>less</code> - щоб <strong>спершу прочитати</strong> скрипт (гортати пробілом, вийти <code>q</code>): чужі скрипти без читання не запускають
+(урок 03). Пароль sudo в Mint показується зірочками - це нормально. Після скрипта відкрий нове вікно термінала.</p>
+<h3 id="що-перевірено-і-як">Що перевірено і як</h3>
+<ul>
+<li>Факти про Mint 22.3 - з офіційних джерел (linuxmint.com, документація Mint, код Mint на GitHub, список пакетів
+  офіційного ISO 22.3): <code>_джерело/ФАКТИ-MINT-22.3.md</code>.</li>
+<li>Кожна команда курсу пройшла перевірку в тестовій Linux Mint 22.3 (офіційний образ команди Mint + пакети з
+  репозиторію Mint): синтаксис кожного блоку і «команда існує в Mint 22.3», а вправи уроків - скриптами
+  <code>_перевірка/uNN.sh</code> (понад тисячу перевірок). Українські тексти повідомлень - з файлів перекладу Ubuntu 24.04
+  (пакет <code>language-pack-uk-base</code>) і самих пакетів Mint; на ноутбуці вони можуть трохи відрізнятись.</li>
+<li>Чого перевірити не можна без твого ноутбука (вікна Cinnamon, драйвер відеокарти, меню GRUB, справжній Wi-Fi) -
+  у тексті позначено «(не перевірено)» або «на ноутбуці буде інакше».</li>
+</ul>
+<h2 id="вище-за-університет-досвід-практиків">Вище за університет: досвід практиків</h2>
+<p>Жоден з 9 курсів, з якими звірено програму (MIT, Cambridge, Stanford, Berkeley, LPI, Linux Foundation, ЛНУ, КПІ),
+не вчить того, що найчастіше ламає Mint у звичайних людей: Timeshift, оновлення ядра і версії, NVIDIA з Secure Boot,
+Flatpak проти deb, гігієну PPA, подвійне завантаження з Windows, порятунок через live USB і TTY. Це - з досвіду
+практиків (r/linuxmint, r/linux4noobs, форум Mint; листопад 2025 - листопад 2026). Бали - на 18.11.2026.
+Повний список з усіма посиланнями - <code>_джерело\ПРОГРАМИ-І-ПРАКТИКИ.md</code>.</p>
+<h3 id="10-правил-які-рятують-систему">10 правил, які рятують систему</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Правило</th>
+<th>Чому (реальний випадок)</th>
+<th>Урок</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Перед оновленням версії, драйвером, PPA - знімок Timeshift</td>
+<td>«PSA: upgrading to 22.3 - make a Timeshift backup first», 108 балів; «Had to use Timeshift for the first time», 96</td>
+<td>01</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Timeshift - не копія документів: лаби - у git/GitHub і на флешку</td>
+<td>домашня тека типово не входить у знімок</td>
+<td>01, 24</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Не вмикай /home у Timeshift і тримай 1-3 знімки</td>
+<td>знімки на 54-60 ГБ і повний диск (82 бали)</td>
+<td>01, 18</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Нове ядро не стартує - GRUB → Advanced options → попереднє ядро</td>
+<td>паніка ядра після оновлення до 7.0, 126 балів</td>
+<td>26</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Чорний екран після оновлення - Ctrl+Alt+F2 (TTY), там виправляєш</td>
+<td>пакет прошивки AMD зламав вхід, 255 балів і 355 коментарів (05.11.2026)</td>
+<td>26, 17</td>
+</tr>
+<tr>
+<td>6</td>
+<td>NVIDIA: драйвер з «Керування драйверами» з позначкою recommended; Secure Boot → MOK</td>
+<td>чорний екран 590 на RTX 3070</td>
+<td>17</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Не <code>apt upgrade -y</code> наосліп - прочитай список</td>
+<td>«drop -y, read the package list»</td>
+<td>02</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Програми: спершу deb з репозиторію, потім перевірений Flatpak; PPA - лише якщо інакше ніяк</td>
+<td>«Deb if available, flatpak if not» (пост 16.01.2026 - 42 бали, ця фраза - його верхній коментар, 55 балів); Snap і deb однієї програми зламали apt</td>
+<td>16</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Не <code>sudo pip</code>, не <code>--break-system-packages</code> - venv, pipx, uv</td>
+<td><code>externally-managed-environment</code> - захист, а не помилка</td>
+<td>02, 03</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Не вставляй команду, якої не розумієш (YouTube, ШІ) - перевір на explainshell.com</td>
+<td>«Most YouTube docker tutorials are actively trying to ruin your system» (18.08.2026, 283 бали: <code>chmod 777</code> і все від root); окремий пост 29.06.2026 - ШІ порадив <code>apt purge</code> і людина стерла сервер</td>
+<td>25</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="пастки-яких-нема-в-підручниках">Пастки, яких нема в підручниках</h3>
+<ul>
+<li><strong>Відʼєднав диск з <code>/etc/fstab</code> - система в аварійному режимі.</strong> Опція <code>nofail</code> (урок 18, 26).</li>
+<li><strong>Диск заповнився журналами до 900 ГБ</strong> - через TTY: <code>sudo journalctl --vacuum-time=2d</code> і шукати, хто пише (урок 18).</li>
+<li><strong>Годинник у Windows «зʼїжджає» на 2-3 години</strong> після Linux - Windows рахує час апаратного годинника місцевим,
+  Linux - UTC (урок 26).</li>
+<li><strong>BitLocker:</strong> спершу зберегти ключ відновлення; Secure Boot не вимикати - після змін завантаження Windows може
+  попросити ключ відновлення (Microsoft, «BitLocker recovery overview»; на ноутбуці не перевірено, урок 26).</li>
+<li><strong>Записав образ Mint не на ту флешку</strong> - перед будь-яким записом <code>lsblk -o NAME,SIZE,MODEL,MOUNTPOINT</code> (урок 18).</li>
+<li><strong>Темна тема сховала галочку</strong> - кнопка «Застосувати» в Диспетчері оновлень сіра, бо невидимий пункт не вибрано (урок 13).</li>
+<li><strong>GUI-програми з <code>sudo</code></strong> лишають файли root у твоїй домашній теці, потім щось «не зберігається» (урок 15).</li>
+<li><strong>Mint-обгортка <code>apt</code></strong> сама додає <code>sudo</code>; <code>apt deb</code> = <code>dpkg -i</code> без залежностей (урок 16).</li>
+<li><strong>У Mint пароль sudo видно зірочками</strong>, а в TTY і <code>passwd</code> - не видно нічого. Обидва варіанти нормальні.</li>
+<li><strong>gh з репозиторію Mint (2.45) зламаний</strong> - ставити з репозиторію GitHub (урок 24).</li>
+<li><strong>У cron нема твого PATH і venv</strong> - лише абсолютні шляхи (урок 23).</li>
+<li><strong><code>awk 'length &gt; 78'</code> у Mint рахує байти</strong> (mawk), і українські рядки здаються «задовгими» - бери <code>grep '.\{79,\}'</code> (урок 22).</li>
+<li><strong>doctest викладача теж помиляється</strong> - ЛР1 завд. 3, ЛР2 точка на межі, ЛР5 пі, ЛР6 <code>is_happy(55, 3)</code>: як це помітити
+  (уроки 04, 07, 10, 11). Не підганяй код під хибний тест - покажи викладачу розрахунок.</li>
+</ul>
+<h3 id="інструменти-2025-2026-яких-нема-в-програмах-університетів">Інструменти 2025-2026, яких нема в програмах університетів</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Інструмент</th>
+<th>Навіщо</th>
+<th>Урок</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>uv</strong> (Astral)</td>
+<td>новий Python поруч із системним за хвилину, швидкі venv</td>
+<td>02</td>
+</tr>
+<tr>
+<td><strong>ruff</strong></td>
+<td>лінтер і форматер, що може замінити flake8 і black (docs.astral.sh/ruff); викладач однаково просить flake8 і black - ruff на додачу</td>
+<td>04</td>
+</tr>
+<tr>
+<td><strong>pipx</strong></td>
+<td>Python-утиліти (uv, black) окремо від системи</td>
+<td>02, 16</td>
+</tr>
+<tr>
+<td><strong>inxi -Fxxxz</strong></td>
+<td>звіт про залізо для форуму без особистих даних</td>
+<td>17, 26</td>
+</tr>
+<tr>
+<td><strong>Flatseal</strong></td>
+<td>права Flatpak-програм</td>
+<td>16</td>
+</tr>
+<tr>
+<td><strong>fwupd / LVFS</strong></td>
+<td>прошивки BIOS і пристроїв з Linux</td>
+<td>02, 17</td>
+</tr>
+<tr>
+<td><strong>pudb, ipdb</strong></td>
+<td>зручніші за pdb налагоджувачі в терміналі</td>
+<td>06</td>
+</tr>
+<tr>
+<td><strong>explainshell.com</strong></td>
+<td>розбирає незнайому команду по частинах</td>
+<td>25</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="що-каже-ринок-праці-для-мотивації-не-для-лаб">Що каже ринок праці (для мотивації, не для лаб)</h3>
+<p>Знання Linux-термінала, git і ssh - базова вимога майже в кожній вакансії Python-розробника, data scientist і
+DevOps (переконайся сам: пошук «Linux» на djinni.co чи dou.ua, 18.11.2026 - (кількість не рахувалась, не перевірено)).
+Сертифікати: LPI Linux Essentials (010-200) - вступний, LPIC-1 - перший професійний; для студента корисніше
+GitHub з охайними лабами, ніж сертифікат.</p>
+<details>
+<summary>Програма курсу: звірка з MIT, Cambridge, Stanford, Berkeley, LPI, ЛНУ, КПІ</summary>
+<p>З чим звірено (усі програми відкрито 18.11.2026, повний список тем і посилання - <code>_джерело\ПРОГРАМИ-І-ПРАКТИКИ.md</code>):
+MIT Missing Semester 2026 (і 2020), Cambridge Part IA Unix Tools 2026-27, Stanford CS 45, Berkeley DeCal Linux SysAdmin
+(осінь 2026), LPI Linux Essentials 010-200 і LPIC-1 v5.0 (101-500/102-500), Linux Foundation LFS101, ЛНУ (фізфак)
+«Програмування в середовищі Linux», КПІ ФПМ «Адміністрування ОС Linux», КПІ ДТЕ «Операційна система UNIX».</p>
+<p>Позначки: <strong>[x]</strong> є в курсі (номер уроку), <strong>[~]</strong> частково, <strong>[ ]</strong> нема - і чому.
+Мета курсу - користувач і «сильний користувач» Mint, який пише лаби з Python у терміналі, а не адміністратор серверів.
+Те, що потрібно лише адміністраторам серверів або програмістам на C, свідомо винесено в «Поза курсом» з поясненням.</p>
+<h3 id="a-робочий-стіл-і-графічний-інтерфейс">A. Робочий стіл і графічний інтерфейс</h3>
+<ul>
+<li>[~] Дистрибутиви, FOSS, ліцензії, що таке Mint і на чому стоїть (Ubuntu 24.04) - 00 (версія, база Ubuntu 24.04, підтримка до 2029), 16 (FOSS, GPL/MIT, <code>/usr/share/doc/*/copyright</code>, <code>main restricted universe multiverse</code>); огляду інших дистрибутивів нема - Прізвище не потрібен (LE 011, LFS101 гл. 2, ЛНУ тиж. 1-2, КПІ ФПМ Л1)</li>
+<li>[x] Робоче середовище Cinnamon: меню, панель, аплети, робочі простори, прилипання вікон, гарячі клавіші - 13 (L1 106.2, LFS101 гл. 4, КПІ ФПМ Л17)</li>
+<li>[x] Налаштування з GUI: дисплей («Екран»), дата і час, живлення - 13; мережа - 21; програми - 16; драйвери - 17 (LFS101 гл. 5)</li>
+<li>[x] Знімки екрана, розкладки клавіатури, тема - 13</li>
+<li>[x] X11 і Wayland (у Mint 22.x Wayland експериментальний) - 13 (L1 106.1)</li>
+<li>[~] Доступність (accessibility) - 13 лише згадано, де налаштування (L1 106.3). Для Прізвище не потрібно.</li>
+<li>[~] Звичайні програми (офіс, браузер, медіа) - 16 (як ставити), без окремого огляду (LE 011.2, LFS101 гл. 6)</li>
+<li>[x] Локаль і мова повідомлень (<code>echo $LANG</code>, <code>LC_ALL=C команда</code>) - 00 «Мова повідомлень», українські тексти помилок у «Типових помилках» 14-27; кодування і кирилиця в назвах файлів, zip і git - 14, 23, 24, 04 (L1 107.3, КПІ ФПМ Л14)</li>
+<li>[ ] Друк (CUPS) - нема: принтера в Прізвище нема; Mint ставить драйвери сам через «Принтери» (L1 108.4, LFS101 гл. 17)</li>
+<li>[~] Наукові інструменти (gnuplot, LaTeX) - лише matplotlib у 08/10 (ЛНУ тиж. 7-10). LaTeX Прізвище заборонено в конспектах.</li>
+</ul>
+<h3 id="b-файлова-система-і-файли">B. Файлова система і файли</h3>
+<ul>
+<li>[x] Шляхи, pwd/ls/cd, абсолютні й відносні, Tab, історія - 03, 14, 22 (усі програми)</li>
+<li>[x] cp/mv/rm/mkdir/touch, шаблони <code>*</code>, безпечне видалення, кошик (<code>gio trash</code>) - 14, 03</li>
+<li>[x] Дерево каталогів (FHS): /home, /etc, /usr, /var, /media, /tmp - 14 (L1 104.7)</li>
+<li>[x] Жорсткі й символічні посилання - 14 (<code>ln -s</code>, пастка <code>rm -r посилання/</code>; <code>ln</code> без <code>-s</code>, <code>ls -li</code>, inode) (L1 104.6)</li>
+<li>[x] Пошук файлів find - 22, 14 (L1 104.7)</li>
+<li>[x] Архіви tar, gzip, zip - 14, 23 (<code>zdaty</code> пакує лабу) (LE 013.1, L1 103.3)</li>
+<li>[x] Довідка man, --help - 22 («Довідка: <code>--help</code> і <code>man</code>»: клавіші less, розділи сторінки, <code>man -k</code>, <code>man 5</code>) (LE 012.2)</li>
+</ul>
+<h3 id="c-права-і-користувачі">C. Права і користувачі</h3>
+<ul>
+<li>[x] rwx, chmod/chown, числовий запис, umask (у Mint 0002) - 15 (LE 015.3, L1 104.5)</li>
+<li>[~] SUID/SGID/sticky - 15 лише sticky на /tmp і що таке s у <code>ls -l /usr/bin/passwd</code> (L1 104.5)</li>
+<li>[x] Користувачі й групи, /etc/passwd, /etc/group, /etc/shadow, <code>usermod -aG</code> - 15 (LE 015.2, L1 107.1)</li>
+<li>[x] sudo, root, pkexec для GUI, чому не sudo для GUI і pip - 15, 25 (L1 110.1)</li>
+</ul>
+<h3 id="d-програми-і-пакети">D. Програми і пакети</h3>
+<ul>
+<li>[x] apt (і Mint-обгортка /usr/local/bin/apt), dpkg, репозиторії - 16 (L1 102.4)</li>
+<li>[x] «Керування програмами», Flatpak, неперевірені Flatpak, Flatseal - 16</li>
+<li>[x] .deb (Captain, <code>apt install ./файл.deb</code>), PPA і їх ризики, ppa-purge, «Джерела програм» → Обслуговування - 16, 25</li>
+<li>[x] Зламаний apt: <code>dpkg --configure -a</code>, <code>apt-get install -f</code>, lock - 16, 26</li>
+<li>[x] pipx і uv для Python-утиліт - 02, 16</li>
+<li>[ ] RPM/DNF - не для Mint (L1 102.5)</li>
+<li>[ ] Спільні бібліотеки ldd/ldconfig - потрібні лише при збиранні C (L1 102.3)</li>
+<li>[~] Збирання з вихідного коду, make - нема; pyenv збирає Python сам (02) (Cambridge, Stanford L11, ЛНУ тиж. 11-14)</li>
+</ul>
+<h3 id="e-оновлення-і-резервні-копії">E. Оновлення і резервні копії</h3>
+<ul>
+<li>[x] «Диспетчер оновлень», ядра, автоматизація, mintupdate-cli - 02</li>
+<li>[x] Оновлення версії Mint (22.x → 22.3, mintupgrade для великої версії) - 02</li>
+<li>[x] Timeshift: налаштування, знімки, відновлення з live USB, місце - 01, 18, 26</li>
+<li>[x] Резервні копії особистих файлів (3-2-1, rsync, git) - 01, 21, 23, 24 (MIT 2020, Cambridge, Berkeley тиж. 8)</li>
+<li>[x] Прошивки fwupd - 02, 17</li>
+<li>[x] Python: системний не чіпати, новий через uv/pyenv, оновлення пакетів у venv - 02</li>
+<li>[x] Час і NTP (<code>timedatectl</code>: <code>System clock synchronized</code>, <code>NTP service</code>, <code>set-ntp</code>; «Дата та час» → «Мережевий час»), годинник при подвійному завантаженні - 26, 13 (L1 108.1)</li>
+</ul>
+<h3 id="f-залізо-драйвери-диски">F. Залізо, драйвери, диски</h3>
+<ul>
+<li>[x] lspci, lsusb, inxi, модулі (<code>lspci -k</code>) - 17 (LE 014.2, L1 101.1)</li>
+<li>[x] «Керування драйверами», NVIDIA, Secure Boot і MOK, dkms - 17</li>
+<li>[x] Розділи, ФС, монтування, /etc/fstab і <code>nofail</code>, lsblk, Disks, SMART - 18 (L1 102.1, 104.1-104.3)</li>
+<li>[x] df/du/ncdu, чистка місця, журнали, Flatpak, старі ядра - 18</li>
+<li>[~] fsck - 26 (у режимі відновлення), без ручного розбору (L1 104.2)</li>
+<li>[~] swap - 18 (<code>swapon --show</code>); LVM - нема (Mint ставить без LVM, якщо не обрати шифрування)</li>
+<li>[ ] Віртуальні машини і контейнери (Docker) - поза курсом: на 1 курсі не потрібні; Docker «з YouTube» - пастка №15 практиків</li>
+</ul>
+<h3 id="g-процеси-systemd-журнали">G. Процеси, systemd, журнали</h3>
+<ul>
+<li>[x] ps/top/htop/kill, сигнали, «Системний монітор» - 19 (L1 103.5)</li>
+<li>[x] jobs, fg/bg, nohup, nice/renice - 19 (L1 103.6)</li>
+<li>[x] systemctl, служби, таймери, <code>systemctl --user</code> - 20 (L1 101.3)</li>
+<li>[~] Цілі завантаження (targets) - 20 і 26 (rescue/emergency), без runlevels SysV (L1 101.3)</li>
+<li>[x] Журнали journalctl, dmesg - 20 (L1 108.2)</li>
+<li>[x] Планування cron, at, systemd-таймери - 23, 20 (L1 107.2)</li>
+</ul>
+<h3 id="h-мережа-і-ssh">H. Мережа і ssh</h3>
+<ul>
+<li>[x] TCP/IP на рівні «що зламалось» - 21 (LE 014.4, L1 109.1)</li>
+<li>[x] ip, ping, nmcli, DNS (resolvectl), ss, curl - 21 (L1 109.2-109.4)</li>
+<li>[x] ssh, ключі ed25519, ssh-copy-id, ~/.ssh/config, scp, rsync - 21, 24 (L1 110.3)</li>
+<li>[x] Брандмауер ufw / gufw - 25 (L1 110.2)</li>
+<li>[ ] Веб-сервер, пошта, VPN-сервер - поза курсом (сервери); VPN-клієнт - 21 коротко</li>
+</ul>
+<h3 id="i-shell-і-скрипти">I. Shell і скрипти</h3>
+<ul>
+<li>[x] Лапки, історія, аліаси, ~/.bashrc - 22 (LE 012.1, L1 105.1)</li>
+<li>[x] Змінні оточення, PATH, <code>~/.local/bin</code> - 22</li>
+<li>[x] Перенаправлення і пайпи - 22</li>
+<li>[x] grep/sed/awk/sort/uniq/cut, регулярні вирази - 22 (L1 103.2, 103.7)</li>
+<li>[x] bash-скрипти: shebang, <code>$1 $@</code>, if/for, функції, <code>set -euo pipefail</code>, shellcheck - 23 (LE 013.3, L1 105.2)</li>
+<li>[x] Редактори nano, micro, vim (вийти), xed - 03, 27 (L1 103.8)</li>
+<li>[ ] tmux - поза курсом (зручно, але не потрібно для лаб; MIT)</li>
+</ul>
+<h3 id="j-git-і-github">J. git і GitHub</h3>
+<ul>
+<li>[x] git init/add/commit/log/diff/restore, .gitignore, гілки - 24 (+ окремий курс Git-GitHub)</li>
+<li>[x] GitHub через ssh-ключ, приватний репозиторій для лаб, gh з офіційного репозиторію - 24</li>
+</ul>
+<h3 id="k-безпека">K. Безпека</h3>
+<ul>
+<li>[x] Оновлення, паролі, блокування екрана, що не запускати з sudo, <code>curl | sudo bash</code> - 25 (LE 015, L1 110.1)</li>
+<li>[x] ssh-ключі, відбитки - 21, 24 (L1 110.3)</li>
+<li>[x] Відкриті порти (<code>ss -tulpn</code>) - 21, 25 (L1 110.2)</li>
+<li>[~] Шифрування диска LUKS - 25: обирається лише при встановленні; Secure Boot - 17</li>
+<li>[x] Не вставляти незрозумілі команди (YouTube, ШІ), explainshell - 25, 26</li>
+<li>[ ] GPG - поза курсом (MIT 2020, Stanford L14)</li>
+</ul>
+<h3 id="l-середовище-розробника">L. Середовище розробника</h3>
+<ul>
+<li>[x] Python 3.12 у Mint, venv, PEP 668, pip/pipx/uv, tkinter - 02, 03</li>
+<li>[x] doctest, pytest, black, flake8, pycodestyle, ruff, mypy - 04, 07-12 (вимоги викладача)</li>
+<li>[x] Налагодження: traceback, print, assert, breakpoint, pdb повністю, post-mortem, logging, <code>-X dev</code>, <code>-W error</code>,
+      faulthandler, cProfile, ipdb, pudb - 05, 06 + 7 зламаних програм (MIT Debugging and Profiling)</li>
+<li>[x] VS Code / VSCodium, розширення Python - 27</li>
+<li>[~] ШІ-агенти для коду (MIT 2026 Agentic Coding) - 27 лише застереження: викладач перевіряє розуміння</li>
+<li>[ ] C/C++, make - поза курсом (не в програмі 1 курсу)</li>
+</ul>
+<h3 id="m-коли-щось-зламалось">M. Коли щось зламалось</h3>
+<ul>
+<li>[~] Встановлення Mint - не вчимо: Mint на ноутбуці вже стоїть. Є лише перевірка версії (00), що інсталятор дає
+      першому користувачу (групи <code>adm</code>, <code>sudo</code> ..., 15), шифрування обирається лише при встановленні (25); live USB - 26</li>
+<li>[x] GRUB, старе ядро, режим відновлення, TTY, nomodeset, boot-repair, аварійний режим після fstab - 26 (L1 101.2, 102.2)</li>
+<li>[x] Повний диск, зламаний apt - 18, 26</li>
+<li>[x] Як просити допомоги: inxi, точний текст помилки - 17, 26</li>
+</ul>
+<h3 id="практика-і-самоперевірка">Практика і самоперевірка</h3>
+<ul>
+<li>[x] 27 уроків «Руками» + <code>Налагодження - зламані програми\</code> (7) + <code>Практика - 4 завдання.md</code></li>
+<li>[x] Іспит 60 питань (3 блоки по 20) - <code>ІСПИТ-САМОПЕРЕВІРКА.md</code></li>
+<li>[x] Перевірка: <code>_перевірка\lint_kurs.py</code> + <code>run_mint.sh cmds</code> + <code>run_mint.sh all</code> у тестовій Mint 22.3</li>
+</ul>
+<p><strong>Покриття того, що потрібно Прізвище як користувачу Mint і студенту з лабами на Python: [x] - є в уроці (перевірено
+пошуком по тексту уроків 18.11.2026, 85 пунктів-ознак), [~] - частково, з поясненням біля кожного.</strong> Частково - це
+теми, які Прізвище зараз не потрібні (огляд дистрибутивів, встановлення Mint, доступність, SUID, LVM, fsck руками,
+targets, ШІ-агенти) або потрібні лише адміністраторам серверів і програмістам на C ([ ] - з причиною біля кожної).</p>
+</details>

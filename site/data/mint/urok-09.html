@@ -1,0 +1,446 @@
+<h1 id="урок-09-лр4-у-терміналі-turtle">Урок 09. ЛР4 у терміналі (turtle)</h1>
+<p><a href="#/u/mint/uroky">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> у ЛР4 програма малює у вікні. Треба знати, як це вікно відкрити з термінала, як його закрити, що робити,
+коли воно не зʼявляється, і як перевіряти математику doctest-ом без вікна взагалі.</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>turtle</strong> («черепашка») - модуль Python для малювання: уявна черепашка повзе по вікну і лишає слід. Вікно малює
+бібліотека <strong>Tk</strong> (через модуль <code>tkinter</code>). На свіжій Mint 22.3 пакета <code>python3-tk</code> нема, його треба поставити один раз.
+Скрипт <code>ustanovka-mint.sh</code> (урок 03) це вже робить.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що</th>
+<th>Команда / рядок коду</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>поставити Tk для turtle (один раз)</td>
+<td><code>sudo apt install python3-tk</code></td>
+</tr>
+<tr>
+<td>перевірити, що Tk є</td>
+<td><code>python3 -c "import tkinter; print(tkinter.TkVersion)"</code> → <code>8.6</code></td>
+</tr>
+<tr>
+<td>запустити малюнок</td>
+<td><code>python3 lr4_1_1.py</code> - відкриється вікно</td>
+</tr>
+<tr>
+<td>тримати вікно відкритим</td>
+<td>останній рядок програми <code>turtle.done()</code></td>
+</tr>
+<tr>
+<td>закрити вікно кліком у ньому</td>
+<td>замість <code>done()</code> - <code>screen.exitonclick()</code></td>
+</tr>
+<tr>
+<td>зупинити програму</td>
+<td>закрити вікно хрестиком ✕; поки ще малює - <code>Ctrl+C</code> у терміналі (не завжди); останній засіб - <code>Ctrl+\</code></td>
+</tr>
+<tr>
+<td>перевірити математику без вікна</td>
+<td><code>python3 -m doctest -v lr4_1_1.py</code> (бо <code>testmod()</code> у тебе під <code>if __name__</code>, крок 3)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Головне про вікно:</p>
+<pre><code class="language-text">python3 lr4_1_1.py
+   │
+   ├─ рядки малювання виконуються, вікно відкрите
+   │
+   ├─ turtle.done()  ← тут програма ЧЕКАЄ: вікно живе, термінал зайнятий
+   │                    (turtle.done - це те саме, що turtle.mainloop)
+   │
+   └─ закрив вікно хрестиком → done() закінчився → програма йде далі → кінець
+</code></pre>
+<p>Якщо <code>turtle.done()</code> нема, вікно закривається відразу після останньої команди (так і написано в ЛР4, с. 1).
+Поки вікно відкрите, термінал не приймає нових команд. Це нормально: закрий вікно хрестиком ✕. <code>Ctrl+C</code> у терміналі
+тут <strong>не допоможе</strong>: у <code>turtle.done()</code> програмою керує Tk (цикл подій вікна), і Python не обробляє Ctrl+C, поки
+Tk чекає. Якщо вікно зависло і не закривається - <code>Ctrl+\</code> у терміналі (крок 4).</p>
+<p>Готових doctest-ів до ЛР4 викладач не дав: є лише PDF. Малюнок doctest-ом не перевіриш, а математику (кути, радіуси,
+моделювання зіткнень) - можна. Для цього є <strong><code>turtle.TNavigator()</code></strong> - «черепашка без вікна»: уміє <code>forward</code>, <code>left</code>,
+<code>goto</code> і рахує позицію, але нічого не малює. Тому doctest з нею працює будь-де, навіть без графіки.</p>
+<h2 id="умова-коротко">Умова коротко</h2>
+<p>Файл: <code>Лабораторна робота_4 (Пайтон).pdf</code>, 21 сторінка. Теорія - с. 1-13, завдання - с. 13-21.</p>
+<ul>
+<li><strong>Завдання 1 (с. 13-16), 11 малюнків.</strong> 1.1 - зірка <code>draw_star(n, length, k=2)</code>: кут повороту 360°·k/n, попередження
+  в консоль, якщо gcd(n, k) ≠ 1, зафарбована, вікно 600 × 600, перевірка на n = 7, length = 150, k = 2. 1.2-1.10 -
+  розети, спіралі, ромби, павутинка, «кристал», троянда в полярних координатах, «сонце», розетка з квадратів: щоразу
+  задано кількість фігур, кут повороту, кольори і <code>speed(0)</code> + <code>hideturtle()</code>. 1.11 - пейзаж з шарів через функції
+  <code>draw_polygon(t, points, color)</code> і <code>draw_bird(t, x, y, size)</code>. Рисунки, як має вийти, - с. 17.</li>
+<li><strong>Завдання 2 (с. 17-18), годинник.</strong> Аналоговий циферблат з трьома стрілками, що рухаються плавно; ліва кнопка миші -
+  перемикання на цифровий <code>HH:MM:SS</code>, права - дата і день тижня внизу; стрілки клавіатури - 3+ колірні теми;
+  спалах на початку хвилини; без миготіння (<code>tracer(0)</code>, <code>update()</code>, <code>ontimer()</code>).</li>
+<li><strong>Завдання 3 (с. 18-21), зіткнення.</strong> Стіна, мала кулька (маса m, старт з L/2 до стіни зі швидкістю v), велика
+  (маса M, стоїть у L). Моделювати <strong>подіями</strong> (момент наступного зіткнення - з рівнянь руху), не кроком dt. Анімація
+  turtle, повний шлях S малої кульки, кількість зіткнень N, графіки matplotlib S(m), S(M), S(L), S(v) по 20+ точок і
+  N(M/m), відповіді на 8 питань з фізики (с. 21). Введені числа перевіряти.</li>
+</ul>
+<p>Теорію turtle - курс Python (тека <code>Курс/</code> на ПК), уроки 05 і 06.</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><strong>1.</strong> Шестикутник «без вікна». Що надрукує останній рядок?</p>
+<pre><code class="language-python">import turtle
+
+nav = turtle.TNavigator()
+for _ in range(6):
+    nav.forward(50)
+    nav.left(60)
+print(nav.position())
+print(round(nav.xcor(), 6), round(nav.ycor(), 6))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">(-0.00,0.00)
+-0.0 0.0
+</code></pre>
+<p>Черепашка повернулась у старт, але float має похибку: x вийшов <code>-3.9e-14</code>, крихітне відʼємне число. Після <code>round</code>
+лишається <strong>відʼємний нуль</strong> <code>-0.0</code>. Для Python <code>-0.0 == 0.0</code> - це <code>True</code>, але doctest порівнює <strong>текст</strong>, і
+<code>-0.0</code> ≠ <code>0.0</code>. Тому в doctest краще писати перевірку так: <code>nav.distance(0, 0) &lt; 1e-9</code> → <code>True</code>.</p>
+</details>
+<p><strong>2.</strong> Кольори по колу (з ЛР4, с. 4). Що надрукує?</p>
+<pre><code class="language-python">colors = [&quot;gold&quot;, &quot;crimson&quot;, &quot;lime&quot;, &quot;cyan&quot;]
+for step in range(6):
+    print(step, colors[step % len(colors)])
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">0 gold
+1 crimson
+2 lime
+3 cyan
+4 gold
+5 crimson
+</code></pre>
+<p><code>step % 4</code> дає 0, 1, 2, 3, 0, 1, ... - індекс «ходить по колу». <code>len(colors)</code> замість числа 4 - щоб код не зламався,
+коли додаси пʼятий колір.</p>
+</details>
+<p><strong>3.</strong> Ти назвав свій файл <code>turtle.py</code> (бо «це ж лаба з turtle») і запустив <code>python3 turtle.py</code>. У файлі:</p>
+<pre><code class="language-python">import turtle
+
+turtle.forward(100)
+turtle.done()
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">AttributeError: partially initialized module 'turtle' has no attribute 'forward' (most likely due to a circular import)
+</code></pre>
+<p><code>import turtle</code> шукає модуль спершу в теці скрипта і знаходить <strong>твій</strong> <code>turtle.py</code>, а не справжній. Твій файл імпортує
+сам себе, і <code>forward</code> у ньому нема. Ліки: перейменуй файл (<code>lr4_1_1.py</code>). Те саме буде з <code>math.py</code>, <code>random.py</code> тощо.</p>
+</details>
+<p><strong>4.</strong> Ти зайшов на ноутбук по ssh (урок 21) або в текстову консоль <code>Ctrl+Alt+F2</code> і запустив малюнок. Що буде?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Вікна відкрити нікуди, останній рядок помилки:</p>
+<pre><code class="language-text">_tkinter.TclError: no display name and no $DISPLAY environment variable
+</code></pre>
+<p><code>DISPLAY</code> - змінна, яка каже програмі, на який екран малювати. У графічному терміналі Cinnamon вона є, у ssh і в TTY -
+нема. Turtle запускай у звичайному терміналі на робочому столі (<code>Ctrl+Alt+T</code>). Doctest з <code>TNavigator</code> працює і там, і там.</p>
+</details>
+<h2 id="крок-за-кроком-у-терміналі">Крок за кроком у терміналі</h2>
+<p><strong>Крок 1. Tk і тека лаби.</strong> Відкрий термінал (<code>Ctrl+Alt+T</code>):</p>
+<pre><code class="language-bash">sudo apt install python3-tk
+python3 -c &quot;import tkinter; print(tkinter.TkVersion)&quot;
+mkdir -p ~/univer/labs/lr4
+cd ~/univer/labs/lr4
+source ~/univer/.venv/bin/activate
+</code></pre>
+<p>Друга команда має надрукувати <code>8.6</code>. Якщо ставив усе скриптом з уроку 03 - першу можна пропустити, а останню
+(<code>source ...</code>) замінює слово <code>univer</code>. Але <code>univer</code> лише переходить у <code>~/univer</code> і вмикає venv - теку лаби він не
+робить, тож після нього: <code>mkdir -p labs/lr4</code> і <code>cd labs/lr4</code>.</p>
+<p><strong>Крок 2. PDF умови поруч.</strong> Файли з чату лежать у теці завантажень. На українській Mint вона зветься <code>~/Завантаження</code>,
+на англійській - <code>~/Downloads</code> (точну назву друкує <code>xdg-user-dir DOWNLOAD</code>). Telegram Desktop зазвичай кладе файли ще
+й у підтеку <code>Telegram Desktop</code> (на твоєму ноутбуці не перевірено - глянь <code>ls</code>). Лапки потрібні, бо в назвах пробіли і
+дужки:</p>
+<pre><code class="language-bash">xdg-user-dir DOWNLOAD
+ls ~/Завантаження ~/Завантаження/&quot;Telegram Desktop&quot;
+cp ~/Завантаження/&quot;Лабораторна робота_4 (Пайтон).pdf&quot; .
+xdg-open &quot;Лабораторна робота_4 (Пайтон).pdf&quot;
+</code></pre>
+<p>Якщо файл у підтеці Telegram, то <code>cp ~/Завантаження/"Telegram Desktop"/"Лабораторна робота_4 (Пайтон).pdf" .</code>
+<code>xdg-open</code> відкриває файл програмою за замовчуванням (для PDF - переглядач документів). Не знайшов файл - пошукай
+по всій домашній теці: <code>find ~ -name "*Пайтон*"</code>.</p>
+<p><strong>Крок 3. Один файл на завдання.</strong> Назви: <code>lr4_1_1.py</code>, <code>lr4_1_2.py</code>, ..., <code>lr4_2_clock.py</code>, <code>lr4_3_balls.py</code>
+(ніколи не <code>turtle.py</code>). Відкрий редактор:</p>
+<pre><code class="language-bash">nano lr4_1_1.py
+</code></pre>
+<p>Структура файлу (заглушки <code>...</code> - місця для твого коду):</p>
+<pre><code class="language-text"># ЛР4, завдання 1.1
+import doctest
+import math
+import turtle
+
+
+def ...(...) -&gt; ...:          ← функції з умови (назви й параметри - як у PDF)
+    &quot;&quot;&quot;Що робить, одним реченням.
+
+    &gt;&gt;&gt; приклад виклику           ← doctest лише для того, що ПОВЕРТАЄ число
+    очікуваний результат
+    &quot;&quot;&quot;
+    ...
+
+
+if __name__ == &quot;__main__&quot;:       ← усе, що малює, - тільки тут
+    doctest.testmod()
+    screen = turtle.Screen()
+    screen.setup(600, 600)
+    ... малювання ...
+    turtle.done()                ← останній рядок
+</code></pre>
+<p>Чому малювання під <code>if __name__ == "__main__":</code>. Команда <code>python3 -m doctest файл.py</code> <strong>імпортує</strong> файл. Усе, що
+стоїть на верхньому рівні, виконається: на ноутбуці вискочить вікно, а без екрана буде <code>TclError</code>. Під <code>if</code> малювання
+запускається лише від <code>python3 lr4_1_1.py</code>, а тести - тихо, без вікна.</p>
+<p>Тому в <strong>твоїх</strong> файлах ЛР4 команда <code>python3 -m doctest -v</code> чесна. На файлах викладача, де <code>doctest.testmod()</code> стоїть
+просто внизу файлу (ЛР1, ЛР5), вона дає чужий провал <code>DebugRunner</code> - там перевіряй <code>python3 файл.py -v</code> або
+<code>perevir</code> (урок 04, «Типові помилки» п. 10).</p>
+<p>Збереження в nano: <code>Ctrl+O</code>, <code>Enter</code>; вихід: <code>Ctrl+X</code> (урок 03).</p>
+<p><strong>Крок 4. Запуск і вікно.</strong></p>
+<pre><code class="language-bash">python3 lr4_1_1.py
+</code></pre>
+<ul>
+<li>Зʼявилось вікно, малюнок готовий - роздивись і закрий хрестиком ✕. Термінал знову приймає команди.</li>
+<li>Хочеш закривати кліком по вікну - заміни <code>turtle.done()</code> на <code>screen.exitonclick()</code> (<code>screen = turtle.Screen()</code>).</li>
+<li>Малює дуже довго (наприклад, нескінченний цикл малювання) - закрий вікно ✕ або клацни в термінал і натисни
+  <code>Ctrl+C</code>. Поки йде малювання, <code>Ctrl+C</code> <strong>може</strong> спрацювати (останній рядок буде <code>KeyboardInterrupt</code> - це не помилка
+  в коді, це ти зупинив програму), а може й ні. Коли програма вже дійшла до <code>turtle.done()</code> - точно ні: там чекає
+  Tk, і Ctrl+C він не бачить. Закривай вікно.</li>
+<li>Вікно зависло і не закривається - останній засіб: у терміналі <code>Ctrl+\</code> (сигнал SIGQUIT - «негайно вийди»).
+  Програма вмирає одразу, без traceback, термінал пише (перевірено в тестовій Mint на звичайній програмі, що чекала):</li>
+</ul>
+<pre><code class="language-text">Quit (core dumped)
+</code></pre>
+<p>На українській Mint - <code>Вихід (збережено знімок оперативної пам’яті)</code>. «Знімок памʼяті» - службовий файл для
+  розбору падіння, тобі він не потрібен. Код виходу - 131 (<code>echo $?</code>).
+- Закрив вікно хрестиком <strong>посеред</strong> малювання - буде помилка <code>turtle.Terminator</code> (вікна вже нема, а черепашка ще
+  малює). Теж не баг: просто дочекайся кінця. Текст цієї помилки тут не відтворено (потрібен екран), опис - у
+  «Курс/ДОВІДНИК-ФУНКЦІЙ.md», розділ turtle → <code>turtle.Terminator</code>.</p>
+<p><strong>Крок 5. Математика - doctest без вікна.</strong> Не пиши doctest, який створює <code>turtle.Turtle()</code> чи <code>turtle.Screen()</code>: він
+відкриє вікно. Винось обчислення у функцію, що <strong>повертає</strong> число, а рух перевіряй через <code>TNavigator</code>.
+Приклад на <strong>іншій</strong> задачі (не з ЛР4): скільки сторін має правильний многокутник, якщо на кожній вершині черепашка
+повертає на <code>turn</code> градусів. Файл <code>bagatokutnyk.py</code>:</p>
+<pre><code class="language-python">def side_count(turn: float) -&gt; int:
+    &quot;&quot;&quot;Скільки сторін має правильний многокутник із поворотом turn.
+
+    &gt;&gt;&gt; side_count(72)
+    5
+    &gt;&gt;&gt; import turtle
+    &gt;&gt;&gt; nav = turtle.TNavigator()
+    &gt;&gt;&gt; for _ in range(side_count(72)):
+    ...     nav.forward(100)
+    ...     nav.left(72)
+    &gt;&gt;&gt; nav.distance(0, 0) &lt; 1e-9
+    True
+    &quot;&quot;&quot;
+    return round(360 / turn)
+</code></pre>
+<pre><code class="language-bash">python3 -m doctest -v bagatokutnyk.py | tail -n 3
+</code></pre>
+<pre><code class="language-text">5 tests in 2 items.
+5 passed and 0 failed.
+Test passed.
+</code></pre>
+<p><code>import turtle</code> стоїть усередині doctest, бо поза тестами модуль у цьому файлі не потрібен. Якби він був угорі
+файлу, flake8 сказав би <code>F401 'turtle' imported but unused</code> (імпортовано, але не використано). У самій лабі <code>turtle</code>
+малює, тож там імпорт угорі - на місці.</p>
+<p>Ідея: «обійшов фігуру - повернувся в старт» перевіряється без жодного вікна. Так само можна перевірити кут своєї зірки
+з 1.1 (після n відрізків черепашка має бути в старті) або координати точок троянди з 1.8.</p>
+<p><strong>Крок 6. Підказки по завданнях</strong> (без розвʼязків - розвʼязок твій).</p>
+<ul>
+<li><strong>1.1 зірка.</strong> Кут - готова формула з умови. <code>math.gcd(n, k)</code> дає найбільший спільний дільник (ДОВІДНИК-ФУНКЦІЙ:
+  <code>math.gcd()</code>). Попередження - звичайний <code>print</code>. Фарба: <code>begin_fill()</code> до циклу, <code>end_fill()</code> після.</li>
+<li><strong>1.2-1.10.</strong> Майже скрізь одна схема: <code>for</code> на N повторів, у тілі - одна фігура і поворот. Колір по колу - як у
+  «Передбач» №2. Зміна товщини чи кольору «першим 12 - одне, наступним 12 - інше» - це умова на номер ітерації
+  (<code>if</code>/<code>elif</code> або цілочисельне ділення <code>//</code>). Потрібне: <code>circle(r)</code>, <code>circle(r, steps=6)</code>, <code>pensize</code>, <code>pencolor</code>,
+  <code>setheading</code>, <code>goto</code>, <code>penup</code>/<code>pendown</code> (ДОВІДНИК, розділ turtle).</li>
+<li><strong>1.8 троянда.</strong> Кут у градусах → радіани: <code>math.radians</code> (ДОВІДНИК: <code>math.radians()</code>); точки сполучай <code>goto</code>,
+  перший перехід - з піднятим пером, щоб не було лінії з центру.</li>
+<li><strong>1.11 пейзаж.</strong> Список точок <code>[(x, y), ...]</code> і цикл <code>for x, y in points</code> (ЛР4, с. 6). Порядок шарів: що
+  намальоване пізніше, лежить зверху.</li>
+<li><strong>2 годинник.</strong> Каркас з 8 кроків - ЛР4, с. 10; формули плавних стрілок - с. 7-8. На Linux права кнопка миші в Tk -
+  <code>btn=3</code> (примітка «може бути btn=2» на с. 9 - про macOS; перевір на своєму ноутбуці кліком). День тижня:
+  <code>datetime.now().strftime("%A")</code> дає англійською (<code>Monday</code>), бо Python за замовчуванням не бере мову системи;
+  простіше мати свій список українських назв і брати з нього за номером <code>datetime.now().weekday()</code> (0 - понеділок).</li>
+<li><strong>3 зіткнення.</strong> Розділи програму на «фізику» (функція, що повертає N і S, - її можна покрити doctest) і «показ»
+  (анімація, графіки). Тоді фізику перевіриш за секунду без вікна. Вхідні дані без набору руками:
+  <code>printf '1\n100\n10\n1\n' | python3 lr4_3_balls.py</code> (порядок - як питає твоя програма).</li>
+<li><strong>Графіки matplotlib</strong> (Завдання 3). <code>plt.show()</code> відкриває вікно (воно теж на Tk). Надійніше зберегти у файл і
+  відкрити переглядачем - тоді графіки не заважають вікну turtle:</li>
+</ul>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+masses = [1, 2, 4, 8]
+times = [3.0, 2.1, 1.5, 1.1]
+plt.plot(masses, times, &quot;o-&quot;)
+plt.xlabel(&quot;m, кг&quot;)
+plt.ylabel(&quot;t, с&quot;)
+plt.title(&quot;Приклад графіка&quot;)
+plt.savefig(&quot;graf.png&quot;)
+</code></pre>
+<pre><code class="language-bash">xdg-open graf.png
+</code></pre>
+<p>(Числа тут вигадані, це лише форма коду. matplotlib стоїть у <code>~/univer/.venv</code>, тож спершу <code>source</code> з кроку 1.)</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що бачиш</th>
+<th>Чому</th>
+<th>Що робити</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ModuleNotFoundError: No module named 'tkinter'</code></td>
+<td>нема пакета <code>python3-tk</code> (на свіжій Mint 22.3 його нема)</td>
+<td><code>sudo apt install python3-tk</code></td>
+</tr>
+<tr>
+<td><code>_tkinter.TclError: no display name and no $DISPLAY environment variable</code></td>
+<td>запуск без графіки: ssh, TTY</td>
+<td>запускай у терміналі на робочому столі</td>
+</tr>
+<tr>
+<td><code>AttributeError: partially initialized module 'turtle' has no attribute 'forward' (most likely due to a circular import)</code></td>
+<td>файл названо <code>turtle.py</code></td>
+<td>перейменуй файл</td>
+</tr>
+<tr>
+<td>вікно блимнуло і зникло</td>
+<td>нема <code>turtle.done()</code> наприкінці</td>
+<td>додай останнім рядком</td>
+</tr>
+<tr>
+<td><code>KeyboardInterrupt</code></td>
+<td>ти натиснув <code>Ctrl+C</code>, поки програма малювала</td>
+<td>нічого, це зупинка</td>
+</tr>
+<tr>
+<td><code>Ctrl+C</code> нічого не робить, вікно висить</td>
+<td>програма в <code>turtle.done()</code>, там чекає Tk</td>
+<td>закрий вікно ✕</td>
+</tr>
+<tr>
+<td><code>Quit (core dumped)</code> (укр. <code>Вихід (збережено знімок оперативної пам’яті)</code>)</td>
+<td>ти натиснув <code>Ctrl+\</code></td>
+<td>нічого, це примусова зупинка</td>
+</tr>
+<tr>
+<td><code>turtle.Terminator</code></td>
+<td>закрив вікно, поки малювалось</td>
+<td>дочекайся кінця малювання</td>
+</tr>
+<tr>
+<td>doctest показує <code>-0.0</code>, а чекав <code>0.0</code></td>
+<td>крихітна похибка float після <code>round</code></td>
+<td>перевіряй <code>distance(...) &lt; 1e-9</code></td>
+</tr>
+<tr>
+<td><code>python3 -m doctest</code> відкриває вікно</td>
+<td>малювання на верхньому рівні файлу</td>
+<td>перенеси під <code>if __name__ == "__main__":</code></td>
+</tr>
+<tr>
+<td><code>cp: cannot stat '/home/evgen/Завантаження/Лабораторна робота_4 (Пайтон).pdf': No such file or directory</code> (укр. <code>cp: не вдалося виконати stat для '...': Немає такого файла або каталогу</code>)</td>
+<td>файл лежить в іншій теці (часто <code>~/Завантаження/Telegram Desktop</code>)</td>
+<td><code>find ~ -name "*Пайтон*"</code> і копіюй звідти</td>
+</tr>
+</tbody>
+</table></div>
+<p>Текст першої помилки не відтворено в тестовій системі (там <code>python3-tk</code> уже стоїть). Що саме дає пакет, видно так:
+<code>dpkg -L python3-tk</code> - у списку тека <code>/usr/lib/python3.12/tkinter</code>, тобто без пакета модуля <code>tkinter</code> просто нема.
+Решта текстів у таблиці - справжні, з Mint 22.3. Повідомлення Python і Tk завжди англійською; повідомлення
+термінала (<code>cp</code>, <code>Quit</code>) на українській Mint - українською (як у дужках), а <code>/home/evgen</code> у тебе - твій логін.</p>
+<p><strong>Пастка в умові завдання 3 (с. 12).</strong> Там написано: кінець, коли мала кулька ліворуч від великої (<code>x_m &lt; x_M</code>),
+летить вправо (<code>v_m &gt; 0</code>) і не швидше за велику (<code>v_m ≤ v_M</code>). Якщо закодувати це дослівно, цикл <strong>не зупиниться</strong>:</p>
+<ul>
+<li>після останнього зіткнення кульок вони стоять <strong>в одній точці</strong>, <code>x_m == x_M</code> (у перевірочній програмі курсу для
+  m = 1, M = 4, L = 10, v = 1 обидві координати однакові: <code>50.000000000000014</code>), тому <code>x_m &lt; x_M</code> хибне;</li>
+<li>при m = M після зіткнення мала кулька зупиняється: <code>v_m = 0.0</code>, і <code>v_m &gt; 0</code> теж хибне.</li>
+</ul>
+<p>Подій більше нема, а умова кінця не спрацювала - програма висить або «зіштовхує» кульки знову в тій самій точці.
+Подумай, яка умова кінця правильна саме для швидкостей (без координат), і перевір її на m = M. Про це варто сказати
+викладачу.</p>
+<h2 id="перевір-перед-здачею">Перевір перед здачею</h2>
+<p>Контрольні числа для завдання 3 (перевірено незалежною програмою; S - шлях малої кульки до останнього удару об стіну):</p>
+<pre><code class="language-text">m = 1, M = 1,   L = 10, v = 1   →  N = 2,   S = 5
+m = 1, M = 4,   L = 10, v = 1   →  N = 4,   S = 25
+m = 1, M = 100, L = 10, v = 1   →  N = 16,  S ≈ 243,1661
+</code></pre>
+<p>Команди для кожного файлу - ті самі, що в уроках 04, 07, 08 (<code>black -l 78</code>, бо викладач хоче рядки до 78 символів,
+а <code>black</code> за замовчуванням робить 88). <code>input()</code> і малювання в тебе під <code>if __name__</code>, тож <code>printf</code> не потрібен:</p>
+<pre><code class="language-bash">cd ~/univer/labs/lr4
+source ~/univer/.venv/bin/activate
+python3 -m doctest -v lr4_1_1.py | tail -n 3
+python3 -m pytest --doctest-modules -q lr4_1_1.py
+python3 -m black -l 78 lr4_1_1.py
+python3 -m flake8 --max-line-length=78 lr4_1_1.py
+python3 -m pycodestyle --max-line-length=78 lr4_1_1.py
+python3 -m ruff check lr4_1_1.py
+python3 -m mypy lr4_1_1.py
+</code></pre>
+<p>Або все одразу: <code>perevir lr4_1_1.py</code> (скорочення з <code>ustanovka-mint.sh</code>, урок 03). Якщо файл питає <code>input()</code> поза
+<code>if __name__</code>, відповіді пишеш після назви через пробіл, кожна - окремий рядок вводу. black він лише перевіряє
+(<code>black: оформлення ок</code>), а виправляє <code>python3 -m black -l 78 файл.py</code>. Якщо зробити просто <code>black</code> без <code>-l 78</code>,
+flake8 потім скаже <code>E501 line too long (80 &gt; 78 characters)</code> - це й є та різниця 88 проти 78.</p>
+<p>Список перед здачею:</p>
+<ul>
+<li>[ ] файл не зветься <code>turtle.py</code>, <code>math.py</code> тощо;</li>
+<li>[ ] малювання під <code>if __name__ == "__main__":</code>, останній рядок - <code>turtle.done()</code> (або <code>exitonclick()</code>);</li>
+<li>[ ] <code>speed(0)</code> і <code>hideturtle()</code> - там, де просить умова;</li>
+<li>[ ] кількість фігур, кути, кольори - як у тексті; картинка схожа на рисунок с. 17;</li>
+<li>[ ] назви функцій і параметри з умови не змінені (<code>draw_star(n, length, k=2)</code>, <code>draw_polygon</code>, <code>draw_bird</code>);</li>
+<li>[ ] змінні з назвами англійською (<code>side_length</code>, а не <code>a</code>);</li>
+<li>[ ] doctest проходить, flake8 мовчить, mypy - <code>Success</code>;</li>
+<li>[ ] у завданні 3 є перевірка введених чисел, підписи осей і заголовки графіків, 20+ точок;</li>
+<li>[ ] можеш пояснити, звідки кожне число (кути 10°, 15°, 59°, 360·k/n).</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Модель окремо від показу.</strong> Фізику (зіткнення) пишуть як чисту функцію «вхід → числа», покривають тестами, а
+  анімацію роблять тонким шаром зверху. Так тестують і ігрові рушії, і наукові симуляції.</li>
+<li><strong>Подієве моделювання</strong> (event-driven) - стандарт для задач з пружними зіткненнями: рахують час до наступної події,
+  а не женуть малий крок dt. Так влаштовані симуляції газу з твердих кульок.</li>
+<li><strong>Графіки - у файли.</strong> На серверах і в автоматичних перевірках (CI) екрана нема, тому <code>savefig</code> у PNG, а не <code>show()</code>.</li>
+<li><strong>Тести без екрана.</strong> Для turtle це <code>TNavigator</code>; для справжніх програм з вікнами - «віртуальний екран» Xvfb.</li>
+<li><strong>Форматування - інструментом.</strong> <code>black</code> і <code>ruff format</code> вирівнюють код самі, людина стиль не править руками.</li>
+</ul>
+<p>Документація: turtle - https://docs.python.org/3/library/turtle.html ; matplotlib <code>savefig</code> -
+https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html</p>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Що робить <code>turtle.done()</code> і що буде без нього?</li>
+<li>Чим <code>turtle.TNavigator()</code> відрізняється від <code>turtle.Turtle()</code> і навіщо він у doctest?</li>
+<li>Чому файл з лабою не можна називати <code>turtle.py</code>?</li>
+<li>Що означає помилка <code>no display name and no $DISPLAY environment variable</code>?</li>
+<li>Чому дослівна умова кінця з с. 12 (<code>x_m &lt; x_M</code>) не спрацьовує після останнього зіткнення кульок?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Запускає цикл подій вікна і тримає вікно відкритим, доки його не закриють; програма на ньому чекає. Без нього
+   вікно закривається одразу після останньої команди.</li>
+<li><code>TNavigator</code> лише рахує позицію і кут, вікна не створює. Тому doctest з ним працює без екрана і не відкриває
+   вікон під час перевірки.</li>
+<li><code>import turtle</code> спершу шукає модуль у теці скрипта, знайде твій файл і імпортує його замість справжнього;
+   буде <code>AttributeError: partially initialized module 'turtle' ...</code>.</li>
+<li>Програма хоче відкрити вікно, а змінної <code>DISPLAY</code> (на який екран малювати) нема: запуск по ssh або в TTY.</li>
+<li>Після зіткнення обидві кульки в одній точці (<code>x_m == x_M</code>), тому строга нерівність хибна; а при m = M ще й
+   <code>v_m = 0</code>, тож <code>v_m &gt; 0</code> теж хибне. Подій нема, умова не спрацьовує - цикл не закінчується.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Умова: <code>Лабораторна робота_4 (Пайтон).pdf</code> викладача - с. 1 (<code>turtle.done()</code>), с. 4 (кольори по колу), с. 6
+  (списки точок), с. 7-10 (годинник, <code>tracer</code>/<code>update</code>/<code>ontimer</code>, миша і клавіші), с. 11-13 (фізика і умова кінця),
+  с. 13-21 (завдання).</li>
+<li>Python, turtle: https://docs.python.org/3/library/turtle.html (відкрито 18.11.2026)</li>
+<li>Python, doctest: https://docs.python.org/3/library/doctest.html (відкрито 18.11.2026)</li>
+<li>Python, tkinter: https://docs.python.org/3/library/tkinter.html (відкрито 18.11.2026)</li>
+<li>matplotlib, savefig: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html (відкрито 18.11.2026)</li>
+<li>black, ключ <code>-l, --line-length</code> і типова довжина 88: вивід <code>python3 -m black --help</code> у Mint 22.3 (18.11.2026)</li>
+<li>Курс Python (тека <code>Курс/</code> на ПК): урок 05 (turtle, matplotlib), урок 06 (анімація turtle);
+  «Курс/ДОВІДНИК-ФУНКЦІЙ.md», розділи turtle і matplotlib.pyplot.</li>
+<li><code>Ctrl+\</code> (SIGQUIT) і <code>Quit (core dumped)</code>, код 131 - перевірено в інтерактивному bash тестової Mint 22.3; українські
+  тексти - з перекладів bash і coreutils (пакет <code>language-pack-uk-base</code>), 18.11.2026.</li>
+<li>Усі виводи в уроці - з тестової Linux Mint 22.3 (python3 3.12.3, matplotlib 3.11, black 26.10), 18.11.2026.</li>
+</ul>

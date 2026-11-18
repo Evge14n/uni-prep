@@ -41,9 +41,14 @@ FORBIDDEN = [
 
 
 def check_text(text, where, errors):
+    # ULINUX2: у .md LaTeX шукаємо поза кодом - `\(` у bash (grep 'str\(', назва файлу з дужками) не LaTeX
+    plain = re.sub(r"```.*?```", lambda m: "\n" * m.group(0).count("\n"), text, flags=re.S)
+    plain = re.sub(r"``[^\n]+?``", "", plain)  # ``код з ` усередині``
+    plain = re.sub(r"`[^`\n]*`", "", plain)
     for pat, name in FORBIDDEN:
-        if pat in text:
-            line = text[: text.index(pat)].count("\n") + 1
+        src = plain if (name.startswith("LaTeX") and where.endswith(".md")) else text
+        if pat in src:
+            line = src[: src.index(pat)].count("\n") + 1
             errors.append(f"{where}:{line}: {name}")
 
 

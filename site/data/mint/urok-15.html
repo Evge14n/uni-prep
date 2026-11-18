@@ -1,0 +1,397 @@
+<h1 id="урок-15-права-sudo-користувачі-і-групи">Урок 15. Права, sudo, користувачі і групи</h1>
+<p><a href="#/u/mint/uroky">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> розуміти «Permission denied», запускати свої скрипти, правильно користуватись <code>sudo</code> і не зламати
+домашню теку власністю root. Плюс - як дати собі доступ до Arduino чи осцилографа через USB (група <code>dialout</code>).</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>Хто ти:</strong> <code>whoami</code> - твій логін, <code>id</code> - номер користувача (uid) і групи. Група <code>sudo</code> = тобі можна адмініструвати.</p>
+<p><strong>Права файлу</strong> видно в <code>ls -l</code> (або коротше - <code>stat -c '%A %a %n' файл</code>):</p>
+<pre><code class="language-text">-rwxrwxr-x  1 evgen evgen  31 ... pryvit.sh
+│└┬┘└┬┘└┬┘     │     │
+│ │  │  │      │     └ група файлу
+│ │  │  │      └────── власник
+│ │  │  └ інші (others):  r-x  читати і запускати
+│ │  └─── група (group):  rwx  читати, змінювати, запускати
+│ └────── власник (user): rwx  читати, змінювати, запускати
+└──────── тип: - файл, d тека, l посилання (урок 14)
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Буква</th>
+<th>Для файлу</th>
+<th>Для теки</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r (read)</td>
+<td>читати вміст</td>
+<td>бачити список файлів</td>
+</tr>
+<tr>
+<td>w (write)</td>
+<td>змінювати</td>
+<td>створювати і видаляти файли в ній</td>
+</tr>
+<tr>
+<td>x (execute)</td>
+<td>запускати як програму</td>
+<td><strong>заходити</strong> в неї (<code>cd</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Числа:</strong> r = 4, w = 2, x = 1, для кожної трійки додаєш:</p>
+<pre><code class="language-text">rwx = 4+2+1 = 7      rw- = 4+2 = 6      r-x = 4+1 = 5      r-- = 4      --- = 0
+
+755 = rwxr-xr-x   скрипт або тека: усі читають і запускають, змінюєш лише ти
+644 = rw-r--r--   звичайний файл: ти змінюєш, інші читають
+600 = rw-------   лише ти (ключі ssh, паролі)
+700 = rwx------   тека лише для тебе
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>chmod +x run.sh</code></td>
+<td>дозволити запуск</td>
+</tr>
+<tr>
+<td><code>chmod 644 lab.py</code></td>
+<td>права числом</td>
+</tr>
+<tr>
+<td><code>chmod o-r zvit.txt</code></td>
+<td>забрати в інших (o) читання (r); <code>u</code> - власник, <code>g</code> - група</td>
+</tr>
+<tr>
+<td><code>sudo chown evgen:evgen файл</code></td>
+<td>змінити власника і групу (лише через sudo)</td>
+</tr>
+<tr>
+<td><code>umask</code></td>
+<td>які права «забирати» в нових файлів</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>umask у Mint = 0002.</strong> Тому нові файли виходять <code>rw-rw-r--</code> (664), нові теки <code>rwxrwxr-x</code> (775): група теж може
+писати. Це не страшно - у кожного користувача Mint своя особиста група з тим самим імʼям (<code>evgen</code>), і в ній лише ти.
+А сама домашня тека має права <code>rwxr-x---</code> (750) - інші користувачі ноутбука в неї не зайдуть.</p>
+<p><strong>sudo - «виконати від імені адміністратора (root)».</strong>
+- Питає <strong>твій</strong> пароль (той, з яким входиш у Mint), не окремий пароль root. У Mint при наборі друкуються
+  <strong>зірочки</strong> <code>*</code> (так налаштовано в Mint, файл <code>/etc/sudoers.d/0pwfeedback</code>), а <code>passwd</code> і текстовий вхід не
+  показують нічого - це нормально.
+- Після правильного пароля <strong>15 хвилин</strong> не питає знову. <code>sudo -k</code> - «забути» пароль одразу (наприклад, перед тим як
+  відійти від ноутбука).
+- <code>sudo -l</code> - що тобі дозволено. Члени групи <code>sudo</code> можуть усе: у <code>/etc/sudoers</code> рядок <code>%sudo ALL=(ALL:ALL) ALL</code>.
+- <strong>root</strong> - окремий всемогутній користувач. Входити ним у Mint не треба: адмін-дії роблять через <code>sudo</code> по одній
+  команді, і кожна записується в журнал.
+- Віконні адмін-програми Mint («Джерела програмного забезпечення», «Користувачі та групи», «Керування системою»)
+  самі питають пароль у вікні через <strong>pkexec</strong>. Їх запускають з меню, <strong>не</strong> через <code>sudo</code>.</p>
+<p><strong>Користувачі і групи - де записані:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Файл</th>
+<th>Що там</th>
+<th>Хто читає</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/etc/passwd</code></td>
+<td>користувачі: логін, uid, домашня тека, оболонка</td>
+<td>усі</td>
+</tr>
+<tr>
+<td><code>/etc/group</code></td>
+<td>групи і хто в них</td>
+<td>усі</td>
+</tr>
+<tr>
+<td><code>/etc/shadow</code></td>
+<td><strong>хеші паролів</strong></td>
+<td>лише root (і група <code>shadow</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code>, <code>groups</code></td>
+<td>мій uid і групи</td>
+</tr>
+<tr>
+<td><code>sudo adduser gost</code></td>
+<td>новий користувач <code>gost</code> (спитає пароль і дані)</td>
+</tr>
+<tr>
+<td><code>sudo usermod -aG dialout "$USER"</code></td>
+<td>додати себе в групу <code>dialout</code> (<strong>-a обовʼязково</strong>), потім вийти і зайти</td>
+</tr>
+<tr>
+<td><code>passwd</code></td>
+<td>змінити свій пароль</td>
+</tr>
+</tbody>
+</table></div>
+<p>Те саме мишкою: меню → «Користувачі та групи» (Users and Groups) - спитає пароль, далі кнопка «Додати», вкладка
+«Групи», «Тип обліківки»: «Адміністратор» або «Стандарт».</p>
+<p><strong>Особливі права - щоб не лякатись літер <code>t</code> і <code>s</code>.</strong> Справжній вивід з Mint 22.3:</p>
+<pre><code class="language-bash">ls -ld /tmp
+ls -l /usr/bin/passwd
+</code></pre>
+<pre><code class="language-text">drwxrwxrwt 6 root root 4096 Nov 18 10:49 /tmp
+-rwsr-xr-x 1 root root 64152 May 30  2024 /usr/bin/passwd
+</code></pre>
+<ul>
+<li><code>t</code> у кінці (sticky bit) на <code>/tmp</code>: писати можуть усі, але <strong>видалити</strong> файл може лише його власник.</li>
+<li><code>s</code> на місці <code>x</code> власника (SUID): програма працює з правами власника файлу (root). Так <code>passwd</code> може записати твій
+  новий пароль у <code>/etc/shadow</code>, куди тобі самому не можна. Самому ставити SUID не треба ніколи.</li>
+</ul>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p>Усе в практичній теці з «Руками» (крок 2). Вивід нижче - з тестової Mint англійською; якщо Mint у тебе українською,
+<code>Permission denied</code> буде <code>Відмовлено у доступі</code>.</p>
+<ol>
+<li>Які права будуть після цього?</li>
+</ol>
+<pre><code class="language-bash">touch zvit.txt
+chmod 640 zvit.txt
+stat -c '%A' zvit.txt
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">-rw-r-----
+</code></pre>
+<p>6 = rw- (ти), 4 = r-- (група), 0 = --- (інші).</p>
+</details>
+<ol start="2">
+<li>Файл <code>pryvit.sh</code> щойно створено (без <code>chmod +x</code>). Що вийде з кожної команди?</li>
+</ol>
+<pre><code class="language-bash">./pryvit.sh
+bash pryvit.sh
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">bash: ./pryvit.sh: Permission denied
+Привіт з скрипта
+</code></pre>
+<p><code>./pryvit.sh</code> - «запусти цей файл як програму», а права x нема. <code>bash pryvit.sh</code> - запускається bash, а він просто
+читає файл, для цього досить r.</p>
+</details>
+<ol start="3">
+<li>Чи прочитаєш ти файл паролів?</li>
+</ol>
+<pre><code class="language-bash">cat /etc/shadow
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">cat: /etc/shadow: Permission denied
+</code></pre>
+<p>Права <code>-rw-r-----</code>, власник root, група shadow. Ти ні те, ні інше. І це правильно: там хеші паролів усіх
+користувачів.</p>
+</details>
+<ol start="4">
+<li>Файл створено через <code>sudo</code>. Чи допишеш ти в нього рядок без sudo?</li>
+</ol>
+<pre><code class="language-bash">sudo touch korin.txt
+echo &quot;рядок&quot; &gt;&gt; korin.txt
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">bash: korin.txt: Permission denied
+</code></pre>
+<p><code>sudo touch</code> створив файл від імені root: власник root, права <code>rw-r--r--</code>, тобі лише читати. Ось так <code>sudo</code> «псує»
+файли у твоїй теці. Лікування - крок 5.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p><strong>Крок 1. Хто я.</strong></p>
+<pre><code class="language-bash">whoami
+id
+groups
+umask
+</code></pre>
+<p>Справжній вивід з тестової Mint 22.3. На ноутбуці uid буде, найімовірніше, 1000, а груп більше: інсталятор Mint
+(пакет ubiquity 24.04.3+mint19 з ISO, шаблон <code>passwd/user-default-groups</code>) додає першого користувача ще в
+<code>adm cdrom dip lpadmin plugdev sambashare debian-tor libvirtd users</code> - у ті з них, що є в системі (останніх двох на
+свіжій Mint нема). Група <code>adm</code> дає читати системні журнали без sudo (урок 20). На ноутбуці не перевірено - глянь
+свій <code>groups</code>.</p>
+<pre><code class="language-text">evgen
+uid=1001(evgen) gid=1001(evgen) groups=1001(evgen),27(sudo)
+evgen sudo
+0002
+</code></pre>
+<p>Головне - є група <code>sudo</code>. Без неї <code>sudo</code> не працюватиме.</p>
+<p><strong>Крок 2. Свій скрипт.</strong></p>
+<pre><code class="language-bash">mkdir -p ~/univer/praktyka/u15
+cd ~/univer/praktyka/u15
+printf 'echo &quot;Привіт з скрипта&quot;\n' &gt; pryvit.sh
+stat -c '%A %a %n' pryvit.sh
+chmod +x pryvit.sh
+stat -c '%A %a %n' pryvit.sh
+./pryvit.sh
+</code></pre>
+<pre><code class="language-text">-rw-rw-r-- 664 pryvit.sh
+-rwxrwxr-x 775 pryvit.sh
+Привіт з скрипта
+</code></pre>
+<p><code>+x</code> додав x усім трьом. Спробуй числами і подивись <code>stat</code> після кожної:</p>
+<pre><code class="language-bash">touch zvit.txt
+chmod 755 pryvit.sh
+chmod 600 zvit.txt
+chmod 644 zvit.txt
+chmod o-r zvit.txt
+stat -c '%A %a %n' pryvit.sh zvit.txt
+</code></pre>
+<pre><code class="language-text">-rwxr-xr-x 755 pryvit.sh
+-rw-r----- 640 zvit.txt
+</code></pre>
+<p><strong>Крок 3. Право x у теки.</strong></p>
+<pre><code class="language-bash">mkdir sekret
+chmod 600 sekret
+cd sekret
+chmod 700 sekret
+</code></pre>
+<p><code>cd</code> скаже <code>bash: cd: sekret: Permission denied</code>: без x у теку не зайти, навіть власнику. <code>chmod 700</code> повертає вхід.</p>
+<p><strong>Крок 4. sudo.</strong></p>
+<pre><code class="language-bash">sudo whoami
+sudo -k
+</code></pre>
+<p>Спершу спитає <code>[sudo] password for evgen:</code> - набери свій пароль (буде видно зірочки) і Enter. Відповідь - <code>root</code>.
+Ще раз <code>sudo whoami</code> протягом 15 хвилин - пароль не питає. Після <code>sudo -k</code> - питає знову. Подивись, що тобі можна:</p>
+<pre><code class="language-bash">sudo -l
+</code></pre>
+<p>Серед рядків буде <code>(ALL : ALL) ALL</code> - усе, бо ти в групі <code>sudo</code>. Ще два рядки <code>(root) NOPASSWD: ...</code> - це Mint
+дозволяє Диспетчеру оновлень без пароля оновлювати кеш (<code>mint-refresh-cache</code>) і перевіряти блокування dpkg.</p>
+<p><strong>Крок 5. Як sudo псує файли в домашній теці і як це лікувати.</strong></p>
+<pre><code class="language-bash">sudo touch korin.txt
+stat -c '%A %U %G %n' korin.txt
+sudo chown &quot;$USER:$USER&quot; korin.txt
+stat -c '%A %U %G %n' korin.txt
+echo &quot;рядок&quot; &gt;&gt; korin.txt
+</code></pre>
+<pre><code class="language-text">-rw-r--r-- root root korin.txt
+-rw-r--r-- evgen evgen korin.txt
+</code></pre>
+<p><code>$USER</code> - це твій логін, bash підставить його сам. Після <code>chown</code> файл знову твій і дописується без sudo. Цілу теку
+повертають з <code>-R</code> (рекурсивно): <code>sudo chown -R "$USER:$USER" ~/univer</code>.</p>
+<p><strong>Крок 6. Файли користувачів.</strong></p>
+<pre><code class="language-bash">stat -c '%A %U %G %n' /etc/passwd /etc/group /etc/shadow
+grep &quot;^$USER:&quot; /etc/passwd | cut -d: -f1,6,7
+</code></pre>
+<pre><code class="language-text">-rw-r--r-- root root /etc/passwd
+-rw-r--r-- root root /etc/group
+-rw-r----- root shadow /etc/shadow
+evgen:/home/evgen:/bin/bash
+</code></pre>
+<p>У <code>/etc/passwd</code> поля розділені <code>:</code>, ми вирізали (<code>cut</code>) 1-ше (логін), 6-те (домашня тека) і 7-ме (оболонка). Пароля
+там нема - лише <code>x</code>, а сам хеш - у <code>/etc/shadow</code>.</p>
+<p><strong>Крок 7. Група для пристроїв (Arduino, осцилограф, будь-що через USB-COM).</strong> Порт <code>/dev/ttyUSB0</code> чи <code>/dev/ttyACM0</code>
+належить групі <code>dialout</code> (так каже правило udev у Mint: <code>KERNEL=="tty[A-Z]*[0-9]|..."</code>, <code>GROUP="dialout"</code>). Без неї програма скаже <code>Permission denied</code> на порт. Додай себе:</p>
+<pre><code class="language-bash">getent group dialout
+sudo usermod -aG dialout &quot;$USER&quot;
+</code></pre>
+<p>Тепер <strong>вийди з сеансу і зайди знову</strong> (або перезавантаж) - групи оновлюються лише при вході. Перевір: <code>groups</code> - у
+списку зʼявився <code>dialout</code>.</p>
+<p><strong>Крок 8. Як Mint запускає свої адмін-вікна.</strong></p>
+<pre><code class="language-bash">grep Exec /usr/share/applications/mintsources.desktop
+</code></pre>
+<pre><code class="language-text">Exec=pkexec mintsources
+</code></pre>
+<p>Пункт меню «Джерела програмного забезпечення» запускає програму через <code>pkexec</code> - вікно саме попросить пароль. Так
+само «Користувачі та групи». Відкрий їх з меню і подивись (нічого не міняй).</p>
+<p><strong>Крок 9. Змінити системний файл правильно</strong> (на майбутнє, коли урок скаже «допиши в /etc/...»):</p>
+<pre><code class="language-bash">sudo -e /etc/hosts
+</code></pre>
+<p><code>sudo -e</code> відкриває <strong>копію</strong> файлу в nano від твого імені, а після збереження сам кладе її на місце від root. Вийдеш
+без змін (Ctrl+X) - побачиш <code>sudo: /etc/hosts unchanged</code>. Так не треба запускати редактор від root.</p>
+<p><strong>Крок 10. Прибрати за собою.</strong></p>
+<pre><code class="language-bash">cd ~
+gio trash ~/univer/praktyka/u15
+</code></pre>
+<h2 id="типові-помилки">Типові помилки</h2>
+<p>Якщо Mint українською - у дужках той самий текст українською (з перекладу <code>language-pack-uk-base</code>). Англійський
+текст для пошуку в інтернеті: <code>LC_ALL=C команда</code>.</p>
+<ul>
+<li><strong><code>bash: ./pryvit.sh: Permission denied</code></strong> (<code>bash: ./pryvit.sh: Відмовлено у доступі</code>) - нема права x:
+  <code>chmod +x pryvit.sh</code> (або запускай <code>bash pryvit.sh</code>).</li>
+<li><strong><code>Permission denied</code> на своєму ж файлі в <code>~</code></strong> - його колись <strong>створили</strong> через <code>sudo</code> (наприклад, новий файл через
+  <code>sudo nano</code> чи <code>sudo touch</code>), і він тепер root-а (<code>stat -c '%U' файл</code> покаже <code>root</code>). Повернути:
+  <code>sudo chown "$USER:$USER" файл</code>, цілу теку - з <code>-R</code>.</li>
+<li><strong>Запускати віконні програми через sudo</strong> (<code>sudo nemo</code>, <code>sudo xed</code>) - вони пишуть свої налаштування в твою теку
+  вже від root, і потім ці програми чи навіть вхід у систему ламаються. Практики радять тоді
+  <code>sudo chown -R "$USER:$USER" "$HOME"</code>. Для системних файлів - <code>sudo -e</code> (крок 9), для тек - у Nemo
+  «Відкрити як адміністратор», лише коли справді треба.</li>
+<li><strong><code>sudo usermod -G dialout</code> без <code>-a</code></strong> - <strong>замінює</strong> всі твої додаткові групи однією <code>dialout</code>, і ти випадаєш з
+  групи <code>sudo</code> (втрачаєш адмін-права). Завжди <code>-aG</code> (append - додати).</li>
+<li><strong>Додав себе в групу, а <code>groups</code> її не показує</strong> - не перезайшов у сеанс.</li>
+<li><strong><code>Sorry, try again.</code></strong> (<code>Вибачте, повторіть спробу.</code>) - неправильний пароль sudo. Після трьох спроб:
+  <code>sudo: 3 incorrect password attempts</code> (<code>sudo: 3 невдалих спроби введення пароля</code>). Перевір розкладку
+  (Super+Space, урок 13) і Caps Lock.</li>
+<li><strong><code>evgen is not in the sudoers file.</code></strong> (<code>evgen немає у файлі sudoers.</code>) - твого користувача нема в групі <code>sudo</code> (так буває з користувачем, створеним
+  як «Стандарт»). Додати може лише адміністратор: «Користувачі та групи» → «Тип обліківки» → «Адміністратор».</li>
+<li><strong><code>chmod 777</code>, «щоб запрацювало»</strong> - дозволяє всім усе. Так роблять у поганих порадах з YouTube. Скрипту досить
+  <code>chmod +x</code>, файлу - 644, теці - 755. Рекурсивне 777 по системних теках ламає систему (sudo і ssh відмовляються
+  працювати з такими правами).</li>
+<li><strong>Забув пароль</strong> - його не «показати»: можна лише задати новий через режим відновлення (recovery mode) в меню
+  GRUB, детально в уроці 26.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Найменші потрібні права</strong> (principle of least privilege): sudo - лише на одну команду, яка справді змінює
+  систему; свої файли - без sudo взагалі.</li>
+<li><strong>Перш ніж <code>sudo</code> - прочитай команду.</strong> Пости r/linux4noobs (2026): найбільше біди - від порад «скопіюй і встав» з
+  <code>chmod 777</code> і роботою від root.</li>
+<li><strong>Редагування системних файлів - через <code>sudo -e</code></strong> (або <code>sudoedit</code>), а не <code>sudo nano</code> чи <code>sudo xed</code>.</li>
+<li><strong>Доступ до пристроїв - через групи</strong> (<code>dialout</code>, <code>plugdev</code>), а не запуск програми від root.</li>
+<li><strong>Ключі й секрети - <code>chmod 600</code></strong>: ssh сам відмовиться працювати з ключем, який можуть читати інші (урок 21).</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Що означає <code>-rw-r-----</code> і яким числом це записати?</li>
+<li>Чому <code>./run.sh</code> пише <code>Permission denied</code>, а <code>bash run.sh</code> працює?</li>
+<li>Чий пароль питає <code>sudo</code> і скільки часу його памʼятає? Як змусити забути?</li>
+<li>Ти створив новий файл через <code>sudo nano ~/univer/labs/lr1/lab2.py</code>, і тепер без sudo він не зберігається. Чому
+   і як виправити?</li>
+<li>Як додати себе в групу <code>dialout</code> і що зробити після цього?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Файл: власник читає і пише, група лише читає, інші нічого. 640.</li>
+<li>У файлу нема права x. <code>bash run.sh</code> запускає bash, а він тільки читає файл - потрібне лише r.</li>
+<li>Твій власний пароль (з яким входиш у Mint). Памʼятає 15 хвилин. <code>sudo -k</code> - забути одразу.</li>
+<li>Новий файл, створений від root, належить root (а вже наявний файл <code>sudo nano</code> зберігає зі старим власником
+   <code>evgen</code> - тому біда саме з новими). <code>sudo chown "$USER:$USER" ~/univer/labs/lr1/lab2.py</code> - і далі редагувати
+   без sudo.</li>
+<li><code>sudo usermod -aG dialout "$USER"</code> (з <code>-a</code>!), потім вийти з сеансу і зайти знову, перевірити <code>groups</code>.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li><code>pwfeedback</code> (зірочки), правила sudo, umask 0002, права <code>/home/evgen</code> 750 (<code>HOME_MODE 0750</code> у <code>/etc/login.defs</code>),
+  <code>/etc/shadow</code> - перевірено в тестовій Mint 22.3 (пакет mintsystem, sudo 1.9.15, <code>sudo -V</code>), 18.11.2026</li>
+<li><code>Exec=pkexec mintsources</code>, <code>cinnamon-settings-users</code> через pkexec - файли пакетів mintsources 2.4.3 і cinnamon 6.6
+  (Mint 22.3), перевірено 18.11.2026</li>
+<li>Українські назви («Користувачі та групи», «Тип обліківки», «Адміністратор», «Стандарт», «Групи») - <code>cinnamon.mo</code> з
+  cinnamon-l10n 6.6.2, перевірено 18.11.2026</li>
+<li>sudo, <code>timestamp_timeout</code>, <code>pwfeedback</code> - https://www.sudo.ws/docs/man/sudoers.man/ - відкрито 18.11.2026</li>
+<li>pam_umask і USERGROUPS_ENAB - https://manpages.ubuntu.com/manpages/noble/man8/pam_umask.8.html - відкрито 18.11.2026</li>
+<li>Порти <code>ttyUSB*</code>, <code>ttyACM*</code> у групі dialout - <code>/usr/lib/udev/rules.d/50-udev-default.rules</code> у Mint 22.3 (рядок 45),
+  перевірено 18.11.2026; udev - https://www.freedesktop.org/software/systemd/man/latest/udev.html - відкрито 18.11.2026</li>
+<li>Фатальні помилки (GUI з sudo, <code>chown -R</code>) - https://easylinuxtipsproject.blogspot.com/p/fatal-mistakes.html -
+  відкрито 18.11.2026</li>
+<li>Не вставляй команди, яких не розумієш - https://www.reddit.com/r/linux4noobs/comments/1vrmeqc/ - відкрито 18.11.2026</li>
+<li>LPI Linux Essentials 010-200, тема 5 (безпека і права) - https://www.lpi.org/our-certifications/exam-010-objectives/ -
+  відкрито 18.11.2026</li>
+</ul>

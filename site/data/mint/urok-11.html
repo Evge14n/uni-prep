@@ -1,0 +1,465 @@
+<h1 id="урок-11-лр6-у-терміналі">Урок 11. ЛР6 у терміналі</h1>
+<p><a href="#/u/mint/uroky">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> до ЛР6 викладач дав готовий файл з doctest-ами для завдання 1. Тут - як його скопіювати (у назві дужки,
+і це вже пастка), як запускати тести, чому два тести не пройдуть навіть у правильного коду, і як робити графіки
+matplotlib для завдань 2-3 без середовища розробки.</p>
+<h2 id="коротко">Коротко</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що</th>
+<th>Команда</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>скопіювати файл з дужками в назві</td>
+<td><code>cp ~/Завантаження/"doctests_lab_6(1).py" lr6_1.py</code></td>
+</tr>
+<tr>
+<td>усі тести, лише провали</td>
+<td><code>python3 -m doctest lr6_1.py</code> (мовчить = усе пройшло)</td>
+</tr>
+<tr>
+<td>підсумок одним рядком</td>
+<td><code>python3 -m doctest -v lr6_1.py \| tail -n 3</code></td>
+</tr>
+<tr>
+<td>коротко по функціях</td>
+<td><code>python3 -m pytest --doctest-modules -q lr6_1.py</code></td>
+</tr>
+<tr>
+<td>графік у файл і відкрити</td>
+<td><code>plt.savefig("graf.png")</code> у коді, потім <code>xdg-open graf.png</code></td>
+</tr>
+<tr>
+<td>зупинити зависле</td>
+<td><code>Ctrl+C</code>, або запуск з <code>timeout 10</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>На відміну від ЛР5, у файлі ЛР6 <strong>нема</strong> <code>doctest.testmod()</code>. Тому <code>python3 lr6_1.py</code> нічого не друкує: тести ніхто не
+запускає. Запускай <code>python3 -m doctest ...</code> (це безпечно: чужого провалу, як у ЛР5, тут не буде) або допиши в кінець
+свій блок <code>if __name__ == "__main__":</code> з <code>doctest.testmod()</code>.</p>
+<p>Завдання 1 має жорстке обмеження (с. 7): <strong>жодних</strong> списків, кортежів, словників, множин, рядків-накопичувачів,
+рекурсії і бібліотек - лише змінні, арифметика, цикли і <code>print</code>. У завданнях 2-3 списки і matplotlib - можна.</p>
+<h2 id="умова-коротко">Умова коротко</h2>
+<p>Файли: <code>Лабораторна_6 (Пайтон).pdf</code> (14 с.) і <code>doctests_lab_6(1).py</code>. Теорія - с. 1-6: дільники і σ(n), пари дільників
+до √n (с. 1-2), суми степенів цифр і алгоритм «черепаха і заєць» (с. 2-3), рекурентний визначник тридіагональної
+матриці (с. 3-4), схема Горнера, бісекція, хорди (с. 4-6).</p>
+<ul>
+<li><strong>Завдання 1 (с. 6-9).</strong> Ввести M, N, α, k. На проміжку [M, N] знайти: а) k-щасливі числа, б) α-досконалі
+  (σ(n) = α·n), в) і те, і те. Кожен пункт - своя функція; заготовки <code>is_happy(n, k)</code>, <code>is_abundant(n, alpha)</code>,
+  <code>print_formatted_numbers(M, N, mode, alpha=2, k=2)</code> - у файлі викладача (36 тестів). Вивід: через кому і пробіл,
+  до 5 чисел у рядку, рядок з 5 чисел закінчується <code>;</code>, усе - крапкою <code>.</code>, нічого не знайдено - порожній рядок.</li>
+<li><strong>Завдання 2 (с. 9-12).</strong> Ланцюжок з N мас на однакових пружинах між стінками. Визначник D_N(ω) рахувати
+  рекурентно; знайти всі N власних частот з точністю ε; перше n, де |D_n(ω)| &lt; a, і перше, де |D_n(ω)| &gt; a; графіки
+  D_n(ω) від n (з лініями ±a і маркером) і D_N(ω) від ω (з власними частотами); контроль для однакових мас - таблиця
+  порівняння з формулою.</li>
+<li><strong>Завдання 3 (с. 13-14).</strong> Корінь полінома на відрізку трьома методами (сканування з кроком ε, бісекція, хорди),
+  значення полінома - схемою Горнера; кожен метод повертає корінь, кількість ітерацій і історію; графіки процесу,
+  збіжності (<code>semilogy</code>) і часу роботи.</li>
+<li><strong>Завдання 4* (с. 14).</strong> Знайти всі корені на великому відрізку з адаптивним кроком (додаткове).</li>
+</ul>
+<p>Теорія рекурентних співвідношень - курс Python (тека <code>Курс/</code> на ПК), урок 07; списки для завдань 2-3 - там же,
+урок 08.</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><strong>1.</strong> Ти набрав без лапок (це навмисно неправильна команда, тому вона не в блоці bash):</p>
+<pre><code class="language-text">cp ~/Завантаження/doctests_lab_6(1).py lr6_1.py
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">bash: syntax error near unexpected token `('
+</code></pre>
+<p>На українській Mint - <code>bash: синтаксична помилка коло неочікуваної лексеми «(»</code> (лексема - «слово» команди).
+Дужки для bash - службові символи (так пишуть групи команд). Назву з дужками, пробілами чи <code>&amp;</code> бери в лапки:
+<code>cp ~/Завантаження/"doctests_lab_6(1).py" lr6_1.py</code>. Інший запис - зворотна скісна риска перед кожною дужкою:
+<code>doctests_lab_6\(1\).py</code>. Саме так допише назву bash, якщо набрати <code>doctests</code> і натиснути <code>Tab</code> (сам <code>Tab</code> у тестовій
+системі не перевірявся - лише те, що запис з <code>\(</code> працює).</p>
+</details>
+<p><strong>2.</strong> Файл скопійовано, функції ще порожні. Що надрукує <code>python3 lr6_1.py</code>?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Нічого. Код виходу 0. У файлі лише три функції з докстрінгами і жодного виклику - тести самі не запускаються. Тому:
+<code>python3 -m doctest -v lr6_1.py | tail -n 3</code>:</p>
+<pre><code class="language-text">36 tests in 4 items.
+0 passed and 36 failed.
+***Test Failed*** 36 failures.
+</code></pre>
+</details>
+<p><strong>3.</strong> Число 55 при k = 3 - щасливе? Порахуй три кроки (кожна цифра в кубі, суму):</p>
+<pre><code class="language-python">print(5**3 + 5**3, 2**3 + 5**3 + 0**3, 1**3 + 3**3 + 3**3)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">250 133 55
+</code></pre>
+<p>55 → 250 → 133 → 55 → ... - цикл без одиниці, отже за означенням з умови (с. 6) 55 <strong>не</strong> 3-щасливе. А тест
+викладача <code>is_happy(55, 3)</code> чекає <code>True</code>. Про це - нижче, у «Що не так у файлі викладача».</p>
+</details>
+<p><strong>4.</strong> Що надрукують ці три рядки (так друкують без списків і рядків-накопичувачів)?</p>
+<pre><code class="language-python">print(1, end=&quot;, &quot;)
+print(2, end=&quot;;\n&quot;)
+print(3, end=&quot;.\n&quot;)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">1, 2;
+3.
+</code></pre>
+<p><code>end</code> - що надрукувати <strong>після</strong> значення замість звичайного переходу на новий рядок. <code>"\n"</code> - перехід на новий рядок.</p>
+</details>
+<p><strong>5.</strong> Не з ЛР6: послідовність «число → його квадрат, лише дві останні цифри», старт з 3. Чи дійде вона до 1?</p>
+<pre><code class="language-python">value = 3
+for step in range(8):
+    value = value * value % 100
+    print(value, end=&quot; &quot;)
+print()
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">9 81 61 21 41 81 61 21 
+</code></pre>
+<p>Ні: після 81 іде коло 81 → 61 → 21 → 41 → 81, і одиниці в ньому нема. Цикл <code>for</code> на 8 кроків - це «підглядання»,
+а програма не знає наперед, скільки кроків робити. Памʼятати всі пройдені числа (у списку) в завданні 1 заборонено -
+тому в теорії (с. 2-3) алгоритм «черепаха і заєць», що помічає коло без жодного списку.</p>
+</details>
+<p><strong>6.</strong> Не з ЛР6: дільники 16 парами «малий - великий».</p>
+<pre><code class="language-python">number = 16
+for small in range(1, 5):
+    if number % small == 0:
+        print(small, number // small)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">1 16
+2 8
+4 4
+</code></pre>
+<p>Кожен дільник до √16 = 4 дає пару (<code>small</code> і <code>number // small</code>), тому далі 4 іти не треба. Але в останньому рядку
+пара - <strong>те саме число двічі</strong>. Якщо додавати обидва числа пари, 4 порахується двічі. Повний квадрат - пастка (с. 2).</p>
+</details>
+<p><strong>7.</strong> Не з ЛР6: що за число?</p>
+<pre><code class="language-python">print(((2 * 10 + 0) * 10 + 2) * 10 + 6)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">2026
+</code></pre>
+<p>Те саме, що 2·10³ + 0·10² + 2·10 + 6, але без жодного степеня: щокроку «попереднє × основу + наступна цифра».
+Це і є ідея схеми Горнера (с. 5) - для полінома замість 10 стоїть x, а замість цифр - коефіцієнти.</p>
+</details>
+<h2 id="крок-за-кроком-у-терміналі">Крок за кроком у терміналі</h2>
+<p><strong>Крок 1. Тека і файли.</strong></p>
+<pre><code class="language-bash">mkdir -p ~/univer/labs/lr6
+cd ~/univer/labs/lr6
+source ~/univer/.venv/bin/activate
+cp ~/Завантаження/&quot;doctests_lab_6(1).py&quot; lr6_1.py
+cp ~/Завантаження/&quot;Лабораторна_6 (Пайтон).pdf&quot; .
+</code></pre>
+<p>Тека завантажень на англійській Mint - <code>~/Downloads</code>, назву друкує <code>xdg-user-dir DOWNLOAD</code>. Telegram Desktop
+зазвичай кладе файли в підтеку <code>~/Завантаження/Telegram Desktop</code> (на твоєму ноутбуці не перевірено). У її назві
+пробіл, тому теж лапки; не знаєш, де файл, - шукай по всій домашній теці:</p>
+<pre><code class="language-bash">cp ~/Завантаження/&quot;Telegram Desktop&quot;/&quot;doctests_lab_6(1).py&quot; lr6_1.py
+find ~ -name &quot;doctests_lab_6*&quot;
+</code></pre>
+<p><strong>Крок 2. Що в файлі.</strong> <code>nano lr6_1.py</code>. Три функції, у кожній - докстрінг з тестами і коментар
+<code># Тут має бути Ваш код</code>. Твій код - замість коментаря. Назви, параметри і рядки з <code>&gt;&gt;&gt;</code> не чіпай. Внизу додай:</p>
+<pre><code class="language-text">if __name__ == &quot;__main__&quot;:
+    doctest.testmod()
+</code></pre>
+<p>і першим рядком файлу - <code>import doctest</code> (без нього буде <code>NameError: name 'doctest' is not defined. Did you forget to import 'doctest'?</code>). Тепер і
+<code>python3 lr6_1.py</code> запускає тести (мовчки, якщо все пройшло).</p>
+<p><strong>Крок 3. Запуск тестів.</strong></p>
+<pre><code class="language-bash">python3 -m doctest lr6_1.py
+python3 -m doctest -v lr6_1.py | tail -n 3
+python3 -m pytest --doctest-modules -q lr6_1.py
+</code></pre>
+<p>Поки функції порожні, кожен провал виглядає так - функція нічого не повернула і нічого не надрукувала:</p>
+<pre><code class="language-text">Failed example:
+    is_abundant(0, 2)
+Expected:
+    False
+Got nothing
+</code></pre>
+<p><code>&lt;BLANKLINE&gt;</code> у тесті означає «надруковано порожній рядок» - це <code>print()</code> без аргументів.</p>
+<p><strong>Крок 4. Підказки до завдання 1</strong> (розвʼязок твій; потрібне - «Курс/ДОВІДНИК-ФУНКЦІЙ.md»: <code>print()</code> з <code>end</code>,
+<code>divmod()</code>, оператори <code>%</code> і <code>//</code>, <code>while</code>).</p>
+<ul>
+<li><strong>Цифри числа без рядків:</strong> остання цифра - <code>n % 10</code>, відкинути її - <code>n //= 10</code>. Степінь цифри - множенням у
+  циклі або <code>**</code> (тут не заборонено).</li>
+<li><strong>Чи прийде послідовність до 1</strong> без списку пройдених чисел - алгоритм «черепаха і заєць» з теорії (с. 2-3).
+  Ідея словами: по тій самій послідовності біжать двоє - «черепаха» робить один крок, «заєць» два. Якщо попереду
+  коло (як у «Передбач» 5: 81 → 61 → 21 → 41 → 81), заєць колись наздожене черепаху - їхні числа стануть рівні.
+  Якщо ж хтось із них дійшов до 1 - відповідь уже є. Памʼятаєш лише два числа, жодного списку. Спершу на папері
+  пройди так ланцюжок 3 → 9 → 81 → ... з «Передбач» 5: на якому кроці числа черепахи і зайця зрівняються? Функцію
+  «наступний член» для ЛР6 (сума степенів цифр) і сам цикл пишеш ти.</li>
+<li>
+<p><strong>Дільники парами до √n</strong> (теорія, с. 2): кожен дільник, менший за √n, дає пару «малий - великий», тож цикл іде
+  лише доки малий у квадраті не більший за n. Пастка - повний квадрат («Передбач» 6: пара <code>4 4</code> для 16; так само
+  6 · 6 = 36) - такий дільник рахується один раз. Перевір свою функцію на 16, 36 і 1 руками, до запуску тестів.</p>
+</li>
+<li>
+<p><strong>Тести з n ≤ 0</strong> (<code>is_abundant(0, 2)</code>, <code>is_abundant(-5, 2)</code> → <code>False</code>) - окрема перевірка на початку функції.</p>
+</li>
+<li><strong>Друк без списку.</strong> Щоб знати, після якого числа ставити <code>.</code>, треба знати, скільки чисел усього. Без списку це
+  означає: спершу пройти проміжок і <strong>порахувати</strong>, потім пройти ще раз і друкувати з потрібним <code>end</code>. Приклад
+  «знати, що останнє» на іншій задачі - цифри числа через кому:</li>
+</ul>
+<pre><code class="language-python">def print_digits(number: int) -&gt; None:
+    &quot;&quot;&quot;Друкує цифри числа через кому, в кінці крапка. Без списків і рядків.
+
+    &gt;&gt;&gt; print_digits(2026)
+    2, 0, 2, 6.
+    &gt;&gt;&gt; print_digits(7)
+    7.
+    &quot;&quot;&quot;
+    divisor = 1
+    while divisor * 10 &lt;= number:
+        divisor *= 10
+    while divisor &gt; 1:
+        print(number // divisor % 10, end=&quot;, &quot;)
+        divisor //= 10
+    print(number % 10, end=&quot;.\n&quot;)
+</code></pre>
+<p><strong>Крок 5. Завдання 2-3: введення, графіки, таблиця.</strong> Тут списки дозволені. Маси одним рядком через пробіл:
+<code>masses = [float(value) for value in input("Маси, кг: ").split()]</code>. Перевірка без набору:
+<code>printf '3\n1 1 1\n1\n' | python3 lr6_2.py</code> (порядок - як питає твоя програма).</p>
+<ul>
+<li><strong>Визначник</strong> - цикл з двома змінними «попередній» і «передпопередній» (формула с. 10), без матриці.</li>
+<li><strong>Власні частоти</strong> - D_N(ω) = 0 точно не буває у float, шукай <strong>зміну знака</strong> на сітці ω і уточнюй бісекцією.
+  Контроль (с. 11): для N = 3, m = 1 кг, k = 1 Н/м формула ω_j = 2·√(k/m)·sin(jπ / (2(N + 1))) дає</li>
+</ul>
+<pre><code class="language-text">j = 1:  0.7654
+j = 2:  1.4142
+j = 3:  1.8478
+</code></pre>
+<p>Твоя програма для однакових мас має дати ті самі числа з точністю ε.
+- <strong>Схема Горнера</strong> (с. 5) - ідея з «Передбач» 7: одне число-накопичувач, яке щокроку множиться на x і отримує
+  наступний коефіцієнт, починаючи зі старшого. Жодних степенів. Перевір на папері для простого полінома, наприклад
+  2x² + 3x + 1 при x = 2: що має вийти і скільки буде множень?</p>
+<ul>
+<li><strong>Бісекція</strong> (с. 5) - приклад на кубічному корені (ітерацій стільки, скільки разів відрізок ділився навпіл):</li>
+</ul>
+<pre><code class="language-python">def cube_root_bisect(value: float, eps: float) -&gt; tuple[float, int]:
+    &quot;&quot;&quot;Кубічний корінь бісекцією і кількість кроків.
+
+    &gt;&gt;&gt; cube_root_bisect(27, 1e-6)
+    (3.0, 25)
+    &gt;&gt;&gt; cube_root_bisect(2, 1e-6)
+    (1.259921, 21)
+    &quot;&quot;&quot;
+    low, high = 0.0, max(1.0, value)
+    steps = 0
+    while high - low &gt; eps:
+        middle = (low + high) / 2
+        if middle**3 &lt; value:
+            low = middle
+        else:
+            high = middle
+        steps += 1
+    return round((low + high) / 2, 6), steps
+</code></pre>
+<p>Для ЛР6 треба ще й <strong>історія</strong> наближень (умова, с. 13): список, у який щокроку додаєш поточні межі чи середину.
+- <strong>Графіки.</strong> Каркас з вигаданими числами - як позначити пороги ±a і знайдену точку (с. 12):</p>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+numbers = [1, 2, 3, 4, 5]
+values = [1.5, -0.8, 2.6, -4.1, 6.3]
+threshold = 3.0
+plt.plot(numbers, values, &quot;o-&quot;, label=&quot;D_n&quot;)
+plt.axhline(threshold, color=&quot;gray&quot;, linestyle=&quot;--&quot;, label=&quot;±a&quot;)
+plt.axhline(-threshold, color=&quot;gray&quot;, linestyle=&quot;--&quot;)
+plt.plot(4, -4.1, &quot;r*&quot;, markersize=15, label=&quot;перше |D_n| &gt; a&quot;)
+plt.xlabel(&quot;n&quot;)
+plt.ylabel(&quot;D_n(ω)&quot;)
+plt.title(&quot;Приклад: пороги і маркер&quot;)
+plt.legend()
+plt.savefig(&quot;porogy.png&quot;)
+</code></pre>
+<pre><code class="language-bash">xdg-open porogy.png
+</code></pre>
+<p>Збіжність методів - <code>plt.semilogy(...)</code> (вісь y логарифмічна), час роботи - <code>plt.bar(назви, часи)</code> і
+  <code>time.perf_counter()</code> (ДОВІДНИК-ФУНКЦІЙ: <code>time.perf_counter()</code>, розділ matplotlib.pyplot).
+- <strong>Таблиця порівняння</strong> - f-рядки з шириною: <code>f"{j:&gt;3} {numeric:&gt;12.8f} {exact:&gt;12.8f} {error:&gt;10.2e}"</code>.</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що бачиш</th>
+<th>Чому</th>
+<th>Що робити</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bash: syntax error near unexpected token `('</code> (укр. <code>bash: синтаксична помилка коло неочікуваної лексеми «(»</code>)</td>
+<td>дужки в назві файлу без лапок</td>
+<td>лапки або <code>\(</code> <code>\)</code></td>
+</tr>
+<tr>
+<td><code>cp: cannot stat '/home/evgen/Завантаження/doctests_lab_6(1).py': No such file or directory</code> (укр. <code>cp: не вдалося виконати stat для '...': Немає такого файла або каталогу</code>)</td>
+<td>файл не в <code>~/Завантаження</code> (часто в <code>Telegram Desktop</code>)</td>
+<td><code>find ~ -name "doctests_lab_6*"</code>, крок 1</td>
+</tr>
+<tr>
+<td><code>NameError: name 'doctest' is not defined. Did you forget to import 'doctest'?</code></td>
+<td>дописав <code>doctest.testmod()</code>, а <code>import doctest</code> забув</td>
+<td><code>import doctest</code> першим рядком</td>
+</tr>
+<tr>
+<td><code>python3 lr6_1.py</code> нічого не друкує</td>
+<td>у файлі нема виклику тестів</td>
+<td><code>python3 -m doctest ...</code> або блок з кроку 2</td>
+</tr>
+<tr>
+<td><code>Got nothing</code></td>
+<td>функція нічого не повертає і не друкує</td>
+<td><code>return True</code> / <code>return False</code>; у <code>print_formatted_numbers</code> - <code>print</code></td>
+</tr>
+<tr>
+<td><code>Expected:</code> <code>&lt;BLANKLINE&gt;</code> <code>Got nothing</code></td>
+<td>для порожнього проміжку нічого не надруковано</td>
+<td><code>print()</code> - порожній рядок</td>
+</tr>
+<tr>
+<td><code>Expected: True</code>, <code>Got: False</code> для <code>is_happy(55, 3)</code> і <code>(136, 3)</code></td>
+<td>помилка в самих тестах</td>
+<td>нижче</td>
+</tr>
+<tr>
+<td>тести «зависли»</td>
+<td><code>is_happy</code> без перевірки циклу крутиться вічно</td>
+<td><code>Ctrl+C</code>; черепаха і заєць</td>
+</tr>
+<tr>
+<td><code>ZeroDivisionError: float division by zero</code></td>
+<td>у методі хорд f(b) = f(a)</td>
+<td>перевір знаменник перед діленням</td>
+</tr>
+<tr>
+<td>flake8: <code>E501 line too long (85 &gt; 78 characters)</code> у рядку тестів</td>
+<td>рядок викладача довший за 78</td>
+<td>його не правиш, див. нижче</td>
+</tr>
+</tbody>
+</table></div>
+<p>Тексти помилок - з тестової Mint 22.3. Python пише англійською завжди; повідомлення самого термінала (<code>bash</code>, <code>cp</code>)
+на українській Mint - українською, як у дужках (<code>/home/evgen</code> у тебе - твій логін). Так виглядає вивід
+<code>python3 -m doctest lr6_1.py</code>, коли твій код правильний (шлях до файлу і номери рядків у тебе будуть інші):</p>
+<pre><code class="language-text">**********************************************************************
+File &quot;.../lr6_1.py&quot;, line 66, in lr6_1.is_happy
+Failed example:
+    is_happy(55, 3)
+Expected:
+    True
+Got:
+    False
+**********************************************************************
+File &quot;.../lr6_1.py&quot;, line 68, in lr6_1.is_happy
+Failed example:
+    is_happy(136, 3)
+Expected:
+    True
+Got:
+    False
+**********************************************************************
+1 items had failures:
+   2 of  13 in lr6_1.is_happy
+***Test Failed*** 2 failures.
+</code></pre>
+<p>а підсумок <code>-v</code>: <code>34 passed and 2 failed.</code> Не підганяй код під ці два тести - тоді він стане неправильним для
+означення з умови.</p>
+<h2 id="що-не-так-у-файлі-викладача">Що не так у файлі викладача</h2>
+<p>Викладач просив надсилати помилки в doctest. Перевірено запуском у тестовій Mint 22.3:</p>
+<ol>
+<li><strong><code>is_happy(55, 3)</code> і <code>is_happy(136, 3)</code> чекають <code>True</code>.</strong> За означенням (с. 6: цикл має містити 1):
+   55 → 250 → 133 → 55 і 136 → 244 → 136 - цикли без одиниці. Правильна функція дає <code>False</code>, і саме ці 2 з 36 тестів
+   не пройдуть. Покажи викладачу ланцюжки.</li>
+<li><strong>Коментар у тестах</strong> «Для k = 1 будь-яке число зводиться до 1 лише якщо воно саме 1» - неправда: 10 → 1 + 0 = 1.
+   Тестів на це нема, але не покладайся на коментар.</li>
+<li><strong>Коментар</strong> «alpha = 1 ... неможливо для n &gt;= 1» суперечить тесту <code>is_abundant(1, 1)</code> → <code>True</code>: σ(1) = 1 = 1·1.
+   Правий тест.</li>
+<li><strong>Назва <code>is_abundant</code>.</strong> «Abundant» англійською - «надлишкове» число (σ(n) &gt; 2n), а функція перевіряє α-досконалість
+   (σ(n) = α·n). Назву не міняй (так вимагає викладач), просто знай.</li>
+<li><strong>flake8 на файлі викладача:</strong> 5 рядків <code>E501</code> (коментарі в тестах довші за 78), 2 × <code>E302</code> (між функціями один
+   порожній рядок замість двох), 2 × <code>E265</code> (<code>#Тут</code> без пробілу після <code>#</code>). E302 і E265 виправиш сам або <code>black -l 78</code>
+   (порожні рядки і пробіл - не тести). E501 у рядках тестів не чіпай - скажи викладачу.</li>
+</ol>
+<h2 id="перевір-перед-здачею">Перевір перед здачею</h2>
+<p>Ті самі команди, що в уроках 04, 07-10. Файл завдання 1 не питає <code>input()</code>, тож <code>printf</code> не потрібен:</p>
+<pre><code class="language-bash">cd ~/univer/labs/lr6
+source ~/univer/.venv/bin/activate
+python3 -m doctest -v lr6_1.py | tail -n 3
+python3 -m pytest --doctest-modules -q lr6_1.py
+python3 -m black -l 78 lr6_1.py
+python3 -m flake8 --max-line-length=78 lr6_1.py
+python3 -m pycodestyle --max-line-length=78 lr6_1.py
+python3 -m ruff check lr6_1.py
+python3 -m mypy lr6_1.py
+grep -n &quot;\[\|{\|append\|join&quot; lr6_1.py
+</code></pre>
+<p>Для <code>lr6_2.py</code> і <code>lr6_3.py</code> - те саме (вони питають <code>input()</code>, тому для pytest - <code>printf "...\n" | ... -q -s</code>, як в
+уроці 04). Або все одразу: <code>perevir lr6_1.py</code> (скорочення з <code>ustanovka-mint.sh</code>, урок 03): відповіді на <code>input()</code>
+пишеш після назви через пробіл, кожна - окремий рядок вводу. black він лише перевіряє (<code>black: оформлення ок</code>), а
+виправляє <code>python3 -m black -l 78 файл.py</code>.</p>
+<ul>
+<li>[ ] <code>34 passed and 2 failed.</code> - і два провали саме <code>is_happy(55, 3)</code>, <code>is_happy(136, 3)</code>; аргумент для викладача готовий;</li>
+<li>[ ] у завданні 1 нема списків, словників, рядків-накопичувачів і рекурсії. Останній <code>grep</code> - <strong>груба підказка, не
+  доказ</strong>: у файлі викладача він знаходить лише рядок докстрінга <code>Форматовано виводить числа з проміжку [M, N].</code>,
+  але не помітить, наприклад, <code>list(...)</code>, <code>tuple(...)</code> чи рекурсію (функція викликає сама себе). Тож перечитай свій
+  код очима; якщо <code>grep</code> знайшов щось твоє - перепиши;</li>
+<li>[ ] вивід <code>print_formatted_numbers</code> збігається з тестами символ у символ (кома і пробіл, <code>;</code> після п'ятого, <code>.</code> в кінці);</li>
+<li>[ ] завдання 2: для однакових мас частоти збігаються з 0.7654, 1.4142, 1.8478 (N = 3, m = 1, k = 1), таблиця похибок є;</li>
+<li>[ ] усі графіки з підписами осей і заголовками, збережені PNG відкриваються <code>xdg-open</code>;</li>
+<li>[ ] змінні з назвами англійською, flake8 мовчить (крім E501 у рядках тестів викладача), mypy без помилок.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Пошук коренів</strong> у науковому Python - <code>scipy.optimize.brentq</code> (бісекція + хорди + інтерполяція, гарантована
+  збіжність) і <code>numpy.roots</code> для поліномів; власні частоти ланцюжка - <code>numpy.linalg.eigvalsh</code> (власні значення
+  симетричної матриці). Писати руками - щоб розуміти, що всередині цих функцій.</li>
+<li><strong>Floyd («черепаха і заєць»)</strong> - стандарт для пошуку циклів без памʼяті: генератори випадкових чисел, звʼязні
+  списки, алгоритм Полларда для розкладу чисел.</li>
+<li><strong>Тести з помилками</strong> в реальних проєктах виправляють через issue (запис «знайшов проблему» на сторінці проєкту в
+  GitHub) або pull request (запропонована автору готова правка коду, урок 24), а не підганяють код - так само, як ти
+  покажеш викладачу 55 і 136.</li>
+<li><strong>Графіки для звіту</strong> зберігають у файли (<code>savefig</code>, часто ще й <code>.svg</code> або <code>.pdf</code>), щоб вставити в документ.</li>
+</ul>
+<p>Документація: matplotlib <code>axhline</code> - https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axhline.html ;
+SciPy <code>brentq</code> - https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brentq.html</p>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Чому <code>cp ~/Завантаження/doctests_lab_6(1).py lr6_1.py</code> дає помилку і як її уникнути?</li>
+<li>Чому <code>python3 lr6_1.py</code> з файлом викладача нічого не друкує?</li>
+<li>Що означає <code>&lt;BLANKLINE&gt;</code> у doctest і як його отримати з функції?</li>
+<li>Чому при пошуку дільників до √n число 36 - пастка?</li>
+<li>Чому <code>is_happy(55, 3)</code> має бути <code>False</code>, хоча тест чекає <code>True</code>?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Дужки - службові символи bash. Назву треба взяти в лапки (<code>"doctests_lab_6(1).py"</code>) або дописати через <code>Tab</code>.</li>
+<li>У файлі тільки визначення функцій; ніхто не викликає <code>doctest.testmod()</code>. Треба <code>python3 -m doctest lr6_1.py</code>
+   або свій блок <code>if __name__ == "__main__":</code>.</li>
+<li>Тест чекає надрукований порожній рядок; його дає <code>print()</code> без аргументів.</li>
+<li>36 = 6 · 6: пара дільника 6 - він сам, і якщо додати обидва, σ або кількість дільників вийде більшою.</li>
+<li>55 → 250 → 133 → 55 - цикл без 1, а за означенням k-щасливе число має прийти до 1. Помилка в тесті.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Умова: <code>Лабораторна_6 (Пайтон).pdf</code> викладача - с. 1-6 теорія (σ(n) і пари дільників с. 1-2, «черепаха і заєць»
+  с. 2-3, визначник с. 3-4, Горнер, бісекція, хорди с. 4-6), с. 6-9 завдання 1 (обмеження с. 7), с. 9-12 завдання 2
+  (рекурентна формула с. 10, контроль с. 11), с. 13-14 завдання 3 і 4*; файл <code>doctests_lab_6(1).py</code> (36 тестів).</li>
+<li>Python, doctest і <code>&lt;BLANKLINE&gt;</code>: https://docs.python.org/3/library/doctest.html (відкрито 18.11.2026)</li>
+<li>Python, <code>print</code> і параметр <code>end</code>: https://docs.python.org/3/library/functions.html#print (відкрито 18.11.2026)</li>
+<li>Bash, службові символи і лапки: https://www.gnu.org/software/bash/manual/bash.html#Quoting (відкрито 18.11.2026)</li>
+<li>matplotlib: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axhline.html ,
+  https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.semilogy.html (відкрито 18.11.2026)</li>
+<li>SciPy <code>brentq</code>: https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brentq.html (відкрито 18.11.2026)</li>
+<li>Українські тексти помилок bash і <code>cp</code> - з перекладів bash і coreutils (пакет <code>language-pack-uk-base</code>), 18.11.2026.</li>
+<li>Курс Python (тека <code>Курс/</code> на ПК): урок 07 (рекурентні співвідношення), урок 08 (списки); «Курс/ДОВІДНИК-ФУНКЦІЙ.md» (<code>print()</code>, <code>divmod()</code>,
+  <code>time.perf_counter()</code>, matplotlib.pyplot).</li>
+<li>Усі виводи - з тестової Linux Mint 22.3 (python3 3.12.3, bash 5.2), 18.11.2026.</li>
+</ul>

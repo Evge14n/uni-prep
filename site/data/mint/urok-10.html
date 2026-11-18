@@ -1,0 +1,506 @@
+<h1 id="урок-10-лр5-у-терміналі">Урок 10. ЛР5 у терміналі</h1>
+<p><a href="#/u/mint/uroky">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> ЛР5 прийшла як блокнот Jupyter (<code>.ipynb</code>), а ти працюєш без Jupyter. Тут - як дістати з блокнота
+заготовки у звичайні <code>.py</code>, як запускати doctest, не потрапивши в пастку «чужого провалу», і де в тестах викладача
+є неточності, про які варто знати заздалегідь.</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong><code>.ipynb</code></strong> - файл Jupyter. Усередині це текст у форматі JSON (JSON - простий текстовий запис даних: списки в
+<code>[...]</code>, пари «ключ: значення» в <code>{...}</code>). Там лежить список «комірок» (cells), частина з них - текст умови, частина -
+код. Python читає JSON модулем <code>json</code>, тож комірку з кодом можна витягти однією командою - функцією <code>klitynka</code> з
+уроку 04.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що</th>
+<th>Команда</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>список комірок / одна комірка у файл</td>
+<td><code>klityny файл.ipynb</code>, <code>klitynka файл.ipynb 4 &gt; lr5_1.py</code> (крок 2)</td>
+</tr>
+<tr>
+<td>запустити тести файлу (у ЛР5 вони багатослівні)</td>
+<td><code>python3 lr5_1.py \| tail -n 3</code></td>
+</tr>
+<tr>
+<td>коротко: скільки функцій пройшли</td>
+<td><code>python3 -m pytest --doctest-modules -q lr5_1.py</code></td>
+</tr>
+<tr>
+<td>обмежити час запуску</td>
+<td><code>timeout 60 python3 lr5_3.py</code> (через 60 с зупинить, код виходу 124)</td>
+</tr>
+<tr>
+<td>перевірити, що нема <code>**</code> і <code>factorial</code></td>
+<td><code>grep -n "\*\*\|factorial" lr5_1.py</code> - має нічого не надрукувати</td>
+</tr>
+</tbody>
+</table></div>
+<p>Головна пастка ЛР5: у кожній заготовці викладача останній рядок - <code>doctest.testmod(verbose=True)</code> <strong>на верхньому рівні</strong>
+файлу. Через це команда <code>python3 -m doctest lr5_1.py</code> спершу тестує... сам модуль doctest і друкує
+<code>***Test Failed*** 1 failures.</code> про клас <code>DebugRunner</code>, якого в тебе нема. Тому в ЛР5 перевіряй <code>python3 lr5_1.py</code>
+або pytest, а <code>python3 -m doctest</code> не бери. Деталі - у «Типових помилках».</p>
+<p>Обмеження з умови (с. 5): у функціях завдання 1 <strong>не можна</strong> вкладених циклів (і явних, і прихованих, як <code>sum(...)</code>
+у тілі циклу), піднесення до степеня <code>**</code> і функції факторіала. Усе - через <strong>коефіцієнт переходу</strong>: наступний доданок
+= попередній × q (теорія, с. 1-2; див. курс Python, тека <code>Курс/</code> на ПК, уроки 06 і 07).</p>
+<h2 id="умова-коротко">Умова коротко</h2>
+<p>Файли: <code>Лабораторна 5 (Пайтон).ipynb</code> (працюєш з ним) і <code>Лабораторна 5 (Пайтон).pdf</code> (те саме для читання, 14 с.).
+Теорія - с. 1-5: рекурентні формули, переповнення float (~1,8·10³⁰⁸) і втрата значущості (~5·10⁻³²⁴), ряд Тейлора
+і умова зупинки через геометричну прогресію.</p>
+<ul>
+<li><strong>Завдання 1 (с. 5-10).</strong> Чотири функції <code>calculate_a</code> ... <code>calculate_d</code> (вираз, сума, добуток, сума з парою
+  рекурентних послідовностей a_k, b_k). Повертають рядок <code>f"{...:.5}"</code>. Заготовки з doctest - с. 6-9, «наївні» версії
+  для порівняння - с. 9-10. Далі: б) знайти дослідом, для яких n і x твої функції і наївні ще дають результат, і
+  пояснити різницю; в) графіки середнього часу роботи твоїх і наївних функцій та їх відношення (готова
+  <code>measure_average_time</code> - с. 6).</li>
+<li><strong>Завдання 2 (с. 10-12).</strong> <code>taylor_sin(x_deg, eps)</code>: sin через ряд Тейлора, кут у градусах → радіани, без
+  періодичності, з умовою зупинки з двох частин (зона спадання і оцінка хвоста), доданок рекурентно; формат
+  <code>"sin({x}) = {value} with accuracy {eps}; N = {N}"</code>.</li>
+<li><strong>Завдання 3 (с. 12-14).</strong> <code>pi_gregory(n_digits)</code> і <code>pi_wallis(n_digits)</code>: π рядом Грегорі-Лейбніца і добутком
+  Валліса, n від 1 до 10, рядок-відповідь за шаблоном.</li>
+</ul>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><strong>1.</strong> Що надрукує (так форматує результат кожна заготовка завдання 1)?</p>
+<pre><code class="language-python">print(f&quot;{2.0:.5}&quot;, f&quot;{0.0355964:.5}&quot;, f&quot;{-2.0877e-09:.5}&quot;, f&quot;{123456.0:.5}&quot;)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">2.0 0.035596 -2.0877e-09 1.2346e+05
+</code></pre>
+<p><code>:.5</code> без літери - це <strong>5 значущих цифр</strong> (а не 5 знаків після коми). Великі й малі числа самі переходять у запис з <code>e</code>.
+Тому порівнювати з тестом треба лише рядок, який повертає <code>return f"{result:.5}"</code> - не змінюй цей рядок.</p>
+</details>
+<p><strong>2.</strong> Межі float. Що надрукує?</p>
+<pre><code class="language-python">print(1e308 * 10, 1e-320 / 1e10, float(&quot;inf&quot;) / float(&quot;inf&quot;))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">inf 0.0 nan
+</code></pre>
+<p>Переповнення дає <code>inf</code> (нескінченність), втрата значущості - <code>0.0</code>, а <code>inf / inf</code> - <code>nan</code> («не число»). Саме так
+ламаються «наївні» версії, а в <code>calculate_d</code> для великих n легко отримати <code>'nan'</code> замість відповіді (див. «Типові помилки»).</p>
+</details>
+<p><strong>3.</strong> Відʼємний нуль. Тест <code>taylor_sin(180, 1e-5)</code> чекає <code>'sin(180) = -0.00000 ...'</code>. Що надрукує?</p>
+<pre><code class="language-python">print(f&quot;{-0.0000004:.5f}&quot;, round(-0.0000004, 5))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">-0.00000 -0.0
+</code></pre>
+<p>Крихітне відʼємне число після округлення лишається «відʼємним нулем». Тест чекає саме мінус, бо сума ряду для 180°
+вийшла трохи меншою за нуль. Знак залежить від того, <strong>які доданки ти включив у суму</strong> - якщо в тебе <code>0.00000</code> без
+мінуса, а в тесті з мінусом (або навпаки), перевір, чи не додаєш ти зайвий доданок.</p>
+</details>
+<p><strong>4.</strong> Ти витяг заготовку завдання 1 у <code>lr5_1.py</code> і, не вписавши ще нічого, запустив <code>python3 -m doctest lr5_1.py</code>.
+Скільки «провалених» блоків буде в кінці виводу?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Два підсумки. Спершу чужий - про сам модуль doctest:</p>
+<pre><code class="language-text">1 items had failures:
+   1 of  21 in __main__.DebugRunner
+66 tests in 121 items.
+65 passed and 1 failed.
+***Test Failed*** 1 failures.
+</code></pre>
+<p>Потім твій - 48 провалів (функції ще порожні):</p>
+<pre><code class="language-text">4 items had failures:
+  12 of  12 in lr5_1.calculate_a
+  12 of  12 in lr5_1.calculate_b
+  10 of  10 in lr5_1.calculate_c
+  14 of  14 in lr5_1.calculate_d
+***Test Failed*** 48 failures.
+</code></pre>
+<p>Перший блок не зникне, навіть коли твій код буде правильний. Причина і ліки - у «Типових помилках».</p>
+</details>
+<p><strong>5.</strong> Не з ЛР5, просто цикл з лічильником. Що надрукує?</p>
+<pre><code class="language-python">step = 1.0
+count = 0
+while step &gt;= 0.1:
+    count += 1
+    step = step / 2
+print(count, step)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">4 0.0625
+</code></pre>
+<p>Тіло виконалось 4 рази: для 1.0, 0.5, 0.25, 0.125. Значення 0.0625 - <strong>перше, що не пройшло</strong> умову: воно вже
+пораховане, але в <code>count</code> не увійшло. Те саме з N у завданні 2: N - скільки доданків <strong>узято</strong> в суму, а перший
+відкинутий доданок (a_N) лише перевірили умовою зупинки (крок 6).</p>
+</details>
+<h2 id="крок-за-кроком-у-терміналі">Крок за кроком у терміналі</h2>
+<p><strong>Крок 1. Тека.</strong></p>
+<pre><code class="language-bash">mkdir -p ~/univer/labs/lr5
+cd ~/univer/labs/lr5
+source ~/univer/.venv/bin/activate
+cp ~/Завантаження/&quot;Лабораторна 5 (Пайтон).ipynb&quot; .
+</code></pre>
+<p>Тека завантажень на англійській Mint - <code>~/Downloads</code> (точну назву друкує <code>xdg-user-dir DOWNLOAD</code>). Telegram Desktop
+зазвичай кладе файли в підтеку <code>~/Завантаження/Telegram Desktop</code> (на твоєму ноутбуці не перевірено). У назві теки
+пробіл, тому її теж у лапки, а якщо не знаєш, де файл, - шукай по всій домашній теці:</p>
+<pre><code class="language-bash">cp ~/Завантаження/&quot;Telegram Desktop&quot;/&quot;Лабораторна 5 (Пайтон).ipynb&quot; .
+find ~ -name &quot;Лабораторна 5*&quot;
+</code></pre>
+<p><strong>Крок 2. Комірки з кодом - у файли.</strong> Функції <code>klityny</code> (список комірок) і <code>klitynka</code> (одна комірка) - з уроку 04,
+крок 3. Якщо ти не дописував їх у <code>~/.bashrc</code>, встав обидва рядки ще раз (вставка в терміналі - <code>Ctrl+Shift+V</code>):</p>
+<pre><code class="language-bash">klityny() { python3 -c 'import json, sys; [print(i, c[&quot;cell_type&quot;], &quot;&quot;.join(c[&quot;source&quot;])[:45].split(&quot;\n&quot;)[0]) for i, c in enumerate(json.load(open(sys.argv[1]))[&quot;cells&quot;])]' &quot;$1&quot;; }
+klitynka() { python3 -c 'import json, sys; print(&quot;&quot;.join(json.load(open(sys.argv[1]))[&quot;cells&quot;][int(sys.argv[2])][&quot;source&quot;]))' &quot;$1&quot; &quot;$2&quot;; }
+klityny &quot;Лабораторна 5 (Пайтон).ipynb&quot;
+</code></pre>
+<p>Вивід (номер, тип комірки, початок першого рядка):</p>
+<pre><code class="language-text">0 markdown # Лабораторна робота 5
+1 markdown ## Теоретичний матеріал
+2 markdown # Практичні завдання
+3 markdown ## Завдання 1
+4 code # Заготовки функцій
+5 code # Наївна реалізація 
+6 markdown ## Завдання 2
+7 code # Заготовка функції
+8 markdown ## Завдання 3. Обчислення числа $\pi$ за форм
+9 code # Заготовка
+</code></pre>
+<p>Кодові комірки - 4 (заготовки завдання 1), 5 (наївні версії), 7 (завдання 2), 9 (завдання 3). Кожну - у свій файл
+(<code>&gt;</code> пише вивід у файл):</p>
+<pre><code class="language-bash">klitynka &quot;Лабораторна 5 (Пайтон).ipynb&quot; 4 &gt; lr5_1.py
+klitynka &quot;Лабораторна 5 (Пайтон).ipynb&quot; 5 &gt; lr5_naive.py
+klitynka &quot;Лабораторна 5 (Пайтон).ipynb&quot; 7 &gt; lr5_2.py
+klitynka &quot;Лабораторна 5 (Пайтон).ipynb&quot; 9 &gt; lr5_3.py
+</code></pre>
+<p>Жодна заготовка ЛР5 не питає <code>input()</code> - тести запускаються без <code>printf</code>.</p>
+<p><strong>Крок 3 (за бажанням). Захистити testmod від імпорту.</strong> Типово заготовку лишаєш як є і перевіряєш <code>python3 lr5_1.py</code>
+або pytest (крок 4) - цього досить. Цей крок потрібен, лише якщо хочеш ще й <code>python3 -m doctest</code> (лише провали, без
+сотень рядків <code>verbose</code>). Тоді в <code>nano lr5_1.py</code> останній рядок заміни так:</p>
+<pre><code class="language-text">було:   doctest.testmod(verbose=True)
+
+стало:  if __name__ == &quot;__main__&quot;:
+            doctest.testmod(verbose=True)
+</code></pre>
+<p>Тести, назви функцій і параметри не міняються - лише «запускай тести, коли файл запущено напряму». Але це все ж
+зміна заготовки, а правило «не переписувати заготовку» трактує викладач - спитай його, перш ніж здавати так.</p>
+<p><strong>Крок 4. Пиши код у функцію і запускай.</strong> Твій код - замість рядка <code># Тут має бути Ваш код</code>. Останній рядок
+<code>return f"{result:.5}"</code> лишається, тому твоя змінна з відповіддю має зватися <strong><code>result</code></strong> (у <code>calculate_b</code> -
+<strong><code>total_sum</code></strong>). Запуск:</p>
+<pre><code class="language-bash">python3 lr5_1.py | tail -n 3
+</code></pre>
+<p>Поки функції порожні:</p>
+<pre><code class="language-text">48 tests in 5 items.
+0 passed and 48 failed.
+***Test Failed*** 48 failures.
+</code></pre>
+<p>Коли все правильно:</p>
+<pre><code class="language-text">48 tests in 5 items.
+48 passed and 0 failed.
+Test passed.
+</code></pre>
+<p>Повний вивід (без <code>tail</code>) - сотні рядків «Trying / Expecting / ok», бо викладач увімкнув <code>verbose=True</code>. Лише
+провали: <code>python3 lr5_1.py | grep -A 6 "^Failed example"</code> (<code>-A 6</code> - ще 6 рядків після знайденого: приклад,
+<code>Expected</code> і <code>Got</code>, або <code>Exception raised</code>, коли функція впала, як на порожній заготовці). Коротко по функціях: <code>python3 -m pytest --doctest-modules -q lr5_1.py</code> → наприкінці
+<code>4 failed</code> або <code>4 passed</code> (і час, у тебе інший). Якщо зробив крок 3 - ще й <code>python3 -m doctest lr5_1.py</code> (мовчить,
+коли все пройшло).</p>
+<p><strong>Крок 5. Підказки до завдання 1</strong> (розвʼязок твій; функції - див. «Курс/ДОВІДНИК-ФУНКЦІЙ.md»: <code>range()</code>, <code>abs()</code>,
+f-рядок, <code>math.factorial()</code> - лише для наївних версій).</p>
+<ul>
+<li>Знайди q_k = a_k / a_(k-1) на папері, як у прикладі теорії (с. 2). Степінь з показником, що росте (k², 2k - 1),
+  теж тримай окремою змінною і множ на сталий множник щокроку - це не вкладений цикл.</li>
+<li>Порядок множень має значення: проміжне число може вилетіти за 1,8·10³⁰⁸ або впасти нижче 5·10⁻³²⁴, хоча відповідь
+  помірна. Пробуй тримати проміжний результат «посередині»: чергуй множення і ділення.</li>
+<li><code>calculate_d</code>: спершу нове b_k, потім a_k (бо a_k бере <strong>нове</strong> b_k - теорія, с. 2). Потрібні лише два попередні
+  a і одне попереднє b - списки не треба.</li>
+</ul>
+<p>Приклад на <strong>іншій</strong> задачі: один доданок ряду для eˣ, a_k = xᵏ / k!. Наївно і через коефіцієнт переходу (на кроці
+<code>step</code> множимо на <code>base / step</code>; <code>base</code> - це x). Наївна версія з <code>**</code> і <code>factorial</code> - лише для порівняння, у ЛР5 так
+не можна:</p>
+<pre><code class="language-python">import math
+
+
+def exp_term_naive(k: int, base: float) -&gt; float:
+    &quot;&quot;&quot;base^k / k! напряму.
+
+    &gt;&gt;&gt; exp_term_naive(3, 2.0)
+    1.3333333333333333
+    &quot;&quot;&quot;
+    return base**k / math.factorial(k)
+
+
+def exp_term(k: int, base: float) -&gt; float:
+    &quot;&quot;&quot;base^k / k! через коефіцієнт переходу base / step.
+
+    &gt;&gt;&gt; exp_term(3, 2.0)
+    1.3333333333333333
+    &gt;&gt;&gt; exp_term(200, 100.0)
+    1.2679769534809638e+25
+    &quot;&quot;&quot;
+    term = 1.0
+    for step in range(1, k + 1):
+        term *= base / step
+    return term
+
+
+for k in (100, 150, 160, 200):
+    try:
+        print(k, exp_term_naive(k, 100.0))
+    except OverflowError as err:
+        print(k, &quot;OverflowError:&quot;, err)
+</code></pre>
+<p>Вивід циклу внизу:</p>
+<pre><code class="language-text">100 1.0715102881254669e+42
+150 1.7502762069260153e+37
+160 OverflowError: (34, 'Numerical result out of range')
+200 OverflowError: (34, 'Numerical result out of range')
+</code></pre>
+<p>Відповідь 10²⁵ цілком «влазить» у float, але наївна версія падає вже на k = 160: 100¹⁶⁰ = 10³²⁰ - більше за межу.
+Так само (з <code>try</code>/<code>except</code> і циклом по n чи x) шукай області для пункту б).</p>
+<p><strong>Пункт в), графіки часу.</strong> Каркас на іншому прикладі: час циклу проти <code>sum()</code>. Для ЛР5 підстав
+<code>measure_average_time</code> з умови і свої функції; відношення часів - третій графік:</p>
+<pre><code class="language-python">import time
+
+import matplotlib.pyplot as plt
+
+
+def measure(func, n, runs=20):
+    start = time.perf_counter()
+    for _ in range(runs):
+        func(n)
+    return (time.perf_counter() - start) / runs
+
+
+def sum_loop(n):
+    total = 0
+    for number in range(n):
+        total += number
+    return total
+
+
+sizes = [1000, 2000, 4000, 8000]
+times_loop = [measure(sum_loop, n) for n in sizes]
+times_builtin = [measure(lambda size: sum(range(size)), n) for n in sizes]
+plt.semilogy(sizes, times_loop, &quot;o-&quot;, label=&quot;цикл&quot;)
+plt.semilogy(sizes, times_builtin, &quot;s-&quot;, label=&quot;sum()&quot;)
+plt.xlabel(&quot;n&quot;)
+plt.ylabel(&quot;середній час, с&quot;)
+plt.legend()
+plt.savefig(&quot;chas.png&quot;)
+</code></pre>
+<pre><code class="language-bash">xdg-open chas.png
+</code></pre>
+<p><code>semilogy</code> - логарифмічна вісь y: часи, що різняться в сотні разів, видно на одному малюнку.</p>
+<p><strong>Крок 6. Завдання 2 (<code>lr5_2.py</code>).</strong> Теорія про зупинку - с. 4, вимоги - с. 10-11. Головне - зрозуміти, що таке N у
+відповіді. Подивись на тест <code>taylor_sin(5.7, 0.001)</code> → <code>N = 1</code>: x = 0,0995 рад, a₀ = 0,0995, |a₁| ≈ 0,000164.
+Оцінка хвоста |a_N| / (1 - q) з теорії - це сума <strong>відкинутих</strong> доданків, починаючи з a_N. Тобто a_N уже не входить
+у суму, а N - кількість доданків a₀ ... a_(N-1).</p>
+<p>Ідея циклу - як у «Передбач» 5: у циклі рахуєш наступний доданок і перевіряєш умову зупинки (с. 4: обидві частини);
+доданок, що пройшов перевірку, додаєш і збільшуєш лічильник, а на першому, що не пройшов, - виходиш. Тоді лічильник
+і є N. Перевір себе на тесті з <code>N = 1</code>: скільки разів має спрацювати додавання? Знаків після коми - скільки в тестах
+(див. «Що не так у файлі викладача»). Якщо захочеш, щоб програма ще й питала кут і точність, - <code>input()</code> клади під
+<code>if __name__ == "__main__":</code>, а перевіряй без набору: <code>printf '180\n1e-5\n' | python3 lr5_2.py</code>.</p>
+<p><strong>Крок 7. Завдання 3 (<code>lr5_3.py</code>).</strong> Перш ніж писати, подивись, як у тестах кількість членів залежить від n:
+5, 50, 500, ... для Грегорі і порівняй з модулем наступного члена 1/(2k+1). Для Валліса - 15, 157, 1570, ...
+(тут є неясність, див. нижче). Ряд Грегорі знакозмінний: знак зручно міняти множенням на -1.</p>
+<p>Великі n рахуються <strong>довго</strong>: у тестовій системі 5 мільйонів кроків циклу - близько 0,7 с, тож <code>pi_gregory(10)</code>
+(5·10⁹ кроків) - приблизно 12 хв, <code>pi_wallis(10)</code> (≈1,6·10¹⁰ кроків) - приблизно 40 хв; на ноутбуці може бути
+повільніше. Тобто <code>python3 lr5_3.py</code>, pytest і <code>perevir lr5_3.py</code> з тестами викладача для n = 10 рахуватимуть
+<strong>близько години</strong>. <code>perevir</code> сам зупиняє doctest через 120 с і пише
+<code>doctest: довше 120 с - зупинив. Якийсь приклад рахує дуже довго - перевір функції по одній у python3 -i lr5_3.py</code>
+(і <code>python3 lr5_3.py -v</code> теж триває ту саму годину). Поки пишеш, перевіряй малі n окремо і з обмеженням часу:</p>
+<pre><code class="language-bash">timeout 60 python3 -c &quot;from lr5_3 import pi_gregory; print(pi_gregory(3))&quot;
+</code></pre>
+<pre><code class="language-text">1 items had no tests:
+    __main__
+0 tests in 1 items.
+0 passed and 0 failed.
+Test passed.
+The Gregory formula gives value 3.140 with the accuracy 3 digits after the decimal point by using 500 members of series.
+</code></pre>
+<p>Перші пʼять рядків - це <code>doctest.testmod(verbose=True)</code> викладача: під час <code>import</code> він тестує «головний» модуль
+команди <code>-c</code>, а там тестів нема. Нижче - твоя відповідь. Якщо <code>timeout</code> зупинив програму, код виходу - 124
+(<code>echo $?</code> одразу після команди). Повний прогін <code>python3 lr5_3.py | tail -n 3</code> - один раз, коли все готово
+(ноутбук на зарядці, можна залишити на годину).</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що бачиш</th>
+<th>Чому</th>
+<th>Що робити</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NameError: name 'result' is not defined</code></td>
+<td>функція ще порожня або твоя змінна зветься інакше</td>
+<td>назви відповідь <code>result</code> (у <code>calculate_b</code> - <code>total_sum</code>)</td>
+</tr>
+<tr>
+<td><code>***Test Failed*** 1 failures.</code> і <code>1 of  21 in __main__.DebugRunner</code></td>
+<td><code>python3 -m doctest</code> + <code>testmod()</code> на верхньому рівні файлу</td>
+<td>перевіряй <code>python3 lr5_1.py</code> або pytest; за бажанням - крок 3</td>
+</tr>
+<tr>
+<td><code>OverflowError: (34, 'Numerical result out of range')</code></td>
+<td>float <code>**</code> дав число понад 1,8·10³⁰⁸</td>
+<td>це наївна версія; у своїй - коефіцієнт переходу</td>
+</tr>
+<tr>
+<td><code>OverflowError: int too large to convert to float</code></td>
+<td>ділення на величезний <code>factorial(k)</code></td>
+<td>те саме</td>
+</tr>
+<tr>
+<td><code>Got: 'nan'</code> у <code>calculate_d(500, 1.2)</code></td>
+<td>далі в сумі <code>inf / inf</code></td>
+<td>коли доданок уже став <code>0.0</code>, наступні теж нульові - подумай, коли зупинитись</td>
+</tr>
+<tr>
+<td><code>Expected: 'sin(180) = -0.00000 ...'</code>, <code>Got: 'sin(180) = 0.00000 ...'</code></td>
+<td>у суму потрапив зайвий доданок a_N</td>
+<td>перечитай крок 6</td>
+</tr>
+<tr>
+<td><code>error: Incompatible return value type (got "str", expected "float")</code></td>
+<td>mypy: у заготовці <code>-&gt; float</code>, а повертає рядок</td>
+<td>див. нижче</td>
+</tr>
+<tr>
+<td>здається, що doctest «завис»</td>
+<td><code>pi_gregory(10)</code>, <code>pi_wallis(10)</code> - мільярди кроків</td>
+<td><code>timeout</code>, малі n окремо</td>
+</tr>
+<tr>
+<td><code>doctest: довше 120 с - зупинив. ...</code> від <code>perevir lr5_3.py</code></td>
+<td>ті самі тести n = 10</td>
+<td>малі n окремо (крок 7); повний прогін - один раз</td>
+</tr>
+<tr>
+<td><code>cp: cannot stat '/home/evgen/Завантаження/Лабораторна 5 (Пайтон).ipynb': No such file or directory</code> (укр. <code>cp: не вдалося виконати stat для '...': Немає такого файла або каталогу</code>)</td>
+<td>файл не в <code>~/Завантаження</code> (часто в <code>Telegram Desktop</code>) або назва без лапок</td>
+<td><code>find ~ -name "Лабораторна 5*"</code>, назву - в лапки</td>
+</tr>
+</tbody>
+</table></div>
+<p>Усі тексти в таблиці - справжні, з тестової Mint 22.3. Python завжди пише англійською; повідомлення самого
+термінала (<code>cp</code>) на українській Mint - українською, як у дужках (<code>/home/evgen</code> у тебе - твій логін). Обидва <code>OverflowError</code> дають наївні функції викладача:
+<code>calculate_a_naive(100, 200.0)</code> і <code>calculate_d_naive(500, 1.2)</code> - <code>(34, ...)</code>, а <code>calculate_b_naive(1000, 0.503795)</code>
+і <code>calculate_c_naive(1000, -1.0005)</code> - <code>int too large</code>.</p>
+<p><strong>Чому <code>python3 -m doctest</code> друкує чужий провал.</strong> Команда запускає модуль doctest як головну програму (<code>__main__</code>) і
+імпортує твій файл. На імпорті виконується рядок <code>doctest.testmod(verbose=True)</code> з файлу викладача. <code>testmod()</code> без
+аргументів тестує модуль <code>__main__</code> - а це зараз сам doctest, і в його власному прикладі для <code>DebugRunner</code> один тест
+не проходить. Вийде:</p>
+<pre><code class="language-text">File &quot;/usr/lib/python3.12/doctest.py&quot;, line 1862, in __main__.DebugRunner
+Failed example:
+    runner.run(test)
+</code></pre>
+<p>і далі твої тести ще раз. Твій код тут ні до чого. Ліки: запуск <code>python3 lr5_1.py</code> або pytest (або, за бажанням,
+крок 3).</p>
+<p><strong>mypy на заготовці</strong> (<code>python3 -m mypy lr5_1.py lr5_naive.py</code>) знайде, крім порожніх змінних, 6 рядків з
+<code>Incompatible return value type (got "str", expected "float")</code>: у <code>calculate_c</code>, <code>calculate_d</code> і в усіх чотирьох
+наївних функціях написано <code>-&gt; float</code>, а повертають вони рядок <code>f"{...}"</code>. Це неточність заготовки: тести від анотації
+не залежать. Виправити <code>-&gt; float</code> на <code>-&gt; str</code> - це не зміна назви, параметрів чи тестів; скажи про це викладачу.</p>
+<h2 id="що-не-так-у-файлі-викладача">Що не так у файлі викладача</h2>
+<p>Викладач просив надсилати знайдені помилки в doctest. Усе нижче перевірено запуском у тестовій Mint 22.3 незалежною
+програмою (вона лежить окремо, не в уроці):</p>
+<ol>
+<li><strong>Формула a) у тексті (с. 5)</strong> - <code>n² + n!</code>, у докстрінгу і тестах - <code>(n² + n)!</code>. Тести рахують за докстрінгом:
+   <code>calculate_a(2, 1.5)</code> = 1,5⁸ / 6! = <code>'0.035596'</code> (з <code>n² + n!</code> було б 1,5⁸ / 6 ≈ 4,27).</li>
+<li><strong>Формула d) у тексті</strong> - <code>5ᵏ</code> у чисельнику, у докстрінгу - <code>x^(k²)</code>. Тести - за докстрінгом: <code>calculate_d(1, 2.0)</code>
+   → <code>'2.0'</code> (з 5ᵏ було б <code>'5.0'</code>).</li>
+<li><strong><code>calculate_a(100, 200.0)</code> → <code>'0.0'</code>.</strong> Справжнє значення ≈ 10⁹⁹⁶¹ - у float не вміщається. <code>'0.0'</code> виходить лише
+   за певного порядку множень і ділень (проміжний результат «тоне» в нуль). Тест перевіряє поведінку float, а не
+   математику.</li>
+<li><strong><code>calculate_b(1000, 0.503795)</code> → <code>'-0.63211'</code>.</strong> Математично доданок при k = 1000 ≈ 10⁷¹⁶, сума величезна. Тест
+   проходить, бо в рекурентному способі доданки дорогою стають <code>0.0</code> і далі лишаються нулем.</li>
+<li><strong>Знаків після коми в <code>taylor_sin</code>.</strong> Текст (с. 11): «порядок ε плюс один знак» (ε = 0,001 → 4 знаки). Тести:
+   рівно порядок ε (<code>taylor_sin(5.7, 0.001)</code> → <code>'0.099'</code>, 3 знаки; ε = 10⁻⁴ → <code>'0.9992'</code>, 4 знаки). Роби як у тестах.</li>
+<li><strong><code>pi_gregory(6)</code> ... <code>(10)</code>.</strong> Сума вказаної в тесті кількості членів не дає очікуваного значення: 500 000 членів
+   дають 3.141591 (π - 2·10⁻⁶), тест чекає <code>3.141592</code>; для 5 000 000 - 3.1415925 проти <code>3.1415926</code>. Для n = 1 ... 5
+   усе збігається.</li>
+<li><strong><code>pi_wallis</code>.</strong> Кількість членів у тестах (15, 157, 1570, 15707, 157079, ...) - це рівно ⌊π/2 · 10ⁿ⌋. Природне
+   правило «зупинись, коли |2P - π| &lt; 10⁻ⁿ» (по одному множнику 2/1, 2/3, 4/3, ...) дає 15, 156, 1570, 15708, 157079:
+   для n = 2 і n = 4 на одиницю інше. Спитай, яке правило зупинки мав на увазі викладач.</li>
+<li><strong>Заготовки <code>calculate_c</code>, <code>calculate_d</code> і наївні</strong>: <code>-&gt; float</code>, а повертають <code>str</code> (див. mypy вище).</li>
+</ol>
+<h2 id="перевір-перед-здачею">Перевір перед здачею</h2>
+<p>Ті самі команди, що в уроках 04, 07-09. Заготовки ЛР5 не питають <code>input()</code>, тож <code>printf</code> не потрібен. Для
+<code>lr5_1.py</code> (так само <code>lr5_2.py</code>):</p>
+<pre><code class="language-bash">cd ~/univer/labs/lr5
+source ~/univer/.venv/bin/activate
+python3 lr5_1.py | tail -n 3
+python3 -m pytest --doctest-modules -q lr5_1.py
+python3 -m black -l 78 lr5_1.py
+python3 -m flake8 --max-line-length=78 lr5_1.py
+python3 -m pycodestyle --max-line-length=78 lr5_1.py
+python3 -m ruff check lr5_1.py
+python3 -m mypy lr5_1.py
+grep -n &quot;\*\*\|factorial&quot; lr5_1.py lr5_2.py
+</code></pre>
+<p>Або все одразу: <code>perevir lr5_1.py</code> (скорочення з <code>ustanovka-mint.sh</code>, урок 03; відповіді на <code>input()</code>, якщо файл
+їх питає, пишеш після назви через пробіл, кожна - окремий рядок вводу). black він лише перевіряє
+(<code>black: оформлення ок</code>), а виправляє <code>python3 -m black -l 78 файл.py</code>. Для <code>lr5_3.py</code> - <strong>без</strong> pytest і <code>perevir</code>
+(тести n = 10 ідуть близько години, крок 7): стиль - тими самими командами black, flake8, pycodestyle, ruff, mypy,
+тести - малі n окремо, повний <code>python3 lr5_3.py | tail -n 3</code> - один раз наприкінці.</p>
+<ul>
+<li>[ ] <code>48 passed and 0 failed.</code> і <code>7 passed and 0 failed.</code>; для <code>lr5_3.py</code> - малі n пройшли, про великі спитав;</li>
+<li>[ ] <code>grep</code> нічого не надрукував (нема <code>**</code> і <code>factorial</code> у твоїх функціях); вкладених циклів нема;</li>
+<li>[ ] змінна з відповіддю - <code>result</code> / <code>total_sum</code>, рядок <code>return f"..."</code> викладача не змінений;</li>
+<li>[ ] <code>flake8</code> мовчить. У <code>lr5_3.py</code> навіть після <code>black -l 78</code> лишиться 24 рядки <code>E501</code>: 22 - у докстрінгах і
+  doctest викладача (рядки-відповіді довші за 78) - їх не ламай, бо тест перестане збігатися, і скажи про це
+  викладачу; ще 2 - у його <code>return</code> (довгий f-рядок): такий рядок можна розбити на два f-рядки, як уже зроблено
+  рядком вище, - текст відповіді від цього не зміниться;</li>
+<li>[ ] пункт б) - таблиця або текст: до яких n, x працює твоя функція і наївна, і <strong>чому</strong> (переповнення де саме);</li>
+<li>[ ] пункт в) - графіки з підписами осей і легендою, відкриваються <code>xdg-open</code>;</li>
+<li>[ ] список «Що не так у файлі викладача» - готовий показати.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Логарифми замість добутків.</strong> Для величезних факторіалів і степенів у науці рахують <code>math.lgamma(k + 1)</code>
+  (логарифм k!) і <code>k * math.log(x)</code>, а число відновлюють <code>exp</code> лише в кінці. Так не буває ні переповнення, ні нулів
+  (у ЛР5 так не можна - там вчать коефіцієнт переходу, але ідея та сама: не дати проміжному числу втекти).</li>
+<li><strong><code>math.fsum</code></strong> - сума з точною компенсацією похибок округлення; <strong><code>decimal</code></strong> і <strong><code>fractions</code></strong> - коли float не
+  вистачає (документація Python, модулі <code>math</code>, <code>decimal</code>).</li>
+<li><strong>Порівняння float</strong> у тестах - через допуск (<code>math.isclose</code>, <code>pytest.approx</code>), а не текстом. Тести викладача
+  порівнюють текст, тому знак нуля й останній знак важать.</li>
+<li><strong>Довгі тести позначають</strong> (у pytest - мітка <code>slow</code>) і запускають окремо, а не щоразу.</li>
+<li><strong>Блокноти в звичайні файли</strong> конвертують командою <code>jupyter nbconvert --to script</code> (потрібен Jupyter) або
+  інструментом <code>jupytext</code>; наша функція <code>klitynka</code> робить те саме для однієї комірки.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Чому <code>python3 -m doctest lr5_1.py</code> показує провал у <code>__main__.DebugRunner</code>, якого в тебе в коді нема?</li>
+<li>Що означає формат <code>f"{x:.5}"</code> і чим він відрізняється від <code>f"{x:.5f}"</code>?</li>
+<li>Чому наївна <code>calculate_a_naive(15, 20.0)</code> падає з <code>OverflowError</code>, хоча відповідь ≈ -7,1·10¹¹⁶ вміщається у float?</li>
+<li>Що таке N у відповіді <code>taylor_sin</code> і чи входить a_N у суму?</li>
+<li>Як перевірити <code>pi_gregory(3)</code>, не чекаючи 12 хвилин на <code>pi_gregory(10)</code>?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Файл викладача на верхньому рівні викликає <code>doctest.testmod()</code>. Під <code>python3 -m doctest</code> головний модуль - сам
+   doctest, і <code>testmod()</code> тестує його власні приклади, один з яких не проходить. Ліки - перевіряти
+   <code>python3 lr5_1.py</code> або pytest; за бажанням (спитавши викладача) - <code>if __name__ == "__main__":</code> перед <code>testmod()</code>.</li>
+<li><code>:.5</code> - 5 значущих цифр, з переходом у запис <code>e</code> для дуже великих чи малих чисел; <code>:.5f</code> - рівно 5 цифр після коми.</li>
+<li>Вона спершу рахує <code>20.0 ** 450</code> ≈ 10⁵⁸⁵ - це більше за 1,8·10³⁰⁸, float переповнюється ще до ділення на факторіал.</li>
+<li>N - кількість доданків у сумі: a₀ ... a_(N-1). Доданок a_N - перший відкинутий, саме його оцінка |a_N| / (1 - q)
+   показує, що хвіст менший за ε.</li>
+<li><code>timeout 60 python3 -c "from lr5_3 import pi_gregory; print(pi_gregory(3))"</code> - лише один малий виклик і з
+   обмеженням часу (5 рядків від <code>testmod</code> викладача над відповіддю - не помилка).</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Умова: <code>Лабораторна 5 (Пайтон).pdf</code> / <code>.ipynb</code> викладача - с. 1-5 теорія (коефіцієнт переходу с. 1-2, пара
+  послідовностей a_k, b_k с. 2, межі float с. 2-3: переповнення с. 2, втрата значущості с. 3, зупинка ряду с. 4), с. 5-10 завдання 1 (обмеження с. 5, <code>measure_average_time</code> с. 6, заготовки с. 6-9,
+  наївні с. 9-10), с. 10-12 завдання 2, с. 12-14 завдання 3.</li>
+<li>Python, doctest (<code>testmod</code>, <code>-v</code>, <code>python -m doctest</code>): https://docs.python.org/3/library/doctest.html (відкрито 18.11.2026)</li>
+<li>Python, json: https://docs.python.org/3/library/json.html (відкрито 18.11.2026)</li>
+<li>Python, float і його межі: https://docs.python.org/3/tutorial/floatingpoint.html (відкрито 18.11.2026)</li>
+<li>Python, <code>math.lgamma</code>, <code>math.fsum</code>, <code>math.isclose</code>: https://docs.python.org/3/library/math.html (відкрито 18.11.2026)</li>
+<li>pytest, doctest-модулі: https://docs.pytest.org/en/stable/how-to/doctest.html (відкрито 18.11.2026)</li>
+<li>matplotlib, <code>semilogy</code>: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.semilogy.html (відкрито 18.11.2026)</li>
+<li>GNU coreutils, <code>timeout</code> (код 124): <code>man timeout</code> у Mint 22.3 (18.11.2026)</li>
+<li><code>perevir</code> і його зупинка через 120 с - функція з <code>ustanovka-mint.sh</code> (поруч з уроками), 18.11.2026.</li>
+<li>Український текст помилки <code>cp</code> - з перекладу coreutils (пакет <code>language-pack-uk-base</code>), 18.11.2026.</li>
+<li>Курс Python (тека <code>Курс/</code> на ПК): уроки 06 і 07 (рекурентні співвідношення); «Курс/ДОВІДНИК-ФУНКЦІЙ.md» (<code>range()</code>, <code>abs()</code>, f-рядок,
+  <code>math.factorial()</code>, <code>time.perf_counter()</code>, matplotlib.pyplot).</li>
+<li>Усі виводи - з тестової Linux Mint 22.3 (python3 3.12.3, pytest 9.2, mypy 2.4), 18.11.2026.</li>
+</ul>

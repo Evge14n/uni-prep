@@ -1,0 +1,452 @@
+<h1 id="урок-03-термінал-для-лаб-теки-файли-nano-запуск-venv">Урок 03. Термінал для лаб - теки, файли, nano, запуск, venv</h1>
+<p><a href="#/u/mint/uroky">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> це мінімум, щоб уже сьогодні сісти за ЛР1 без VS Code: зробити теку, написати файл у nano, запустити,
+подати ввід, зупинити програму і поставити venv з pytest, flake8, mypy.</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>Термінал</strong> відкривається клавішами <strong>Ctrl+Alt+T</strong>. Копіювати в ньому - <strong>Ctrl+Shift+C</strong>, вставити - <strong>Ctrl+Shift+V</strong>.
+Звичайний Ctrl+C у терміналі <strong>не копіює</strong>, а зупиняє програму, що зараз працює.</p>
+<p>Рядок-запрошення (prompt) - термінал чекає команду:</p>
+<pre><code class="language-text">evgen@назва-ноутбука:~/univer/labs/lr1$
+  │        │           │                └ $ - чекаю команду (# - якщо ти root)
+  │        │           └─────────────────── де ти зараз (~ = /home/evgen, домашня тека)
+  │        └─────────────────────────────── імʼя компʼютера
+  └──────────────────────────────────────── твій логін
+</code></pre>
+<p>Файли в Linux - одне дерево з коренем <code>/</code>. Твоє робоче місце для лаб:</p>
+<pre><code class="language-text">/home/evgen/              = ~  (домашня тека)
+└── univer/
+    ├── .venv/            віртуальне середовище Python (крапка = прихована тека)
+    └── labs/
+        ├── lr1/          hello.py, lab1.py ...
+        └── lr2/
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pwd</code></td>
+<td>де я зараз</td>
+</tr>
+<tr>
+<td><code>ls</code>, <code>ls -la</code></td>
+<td>що тут; <code>-l</code> детально, <code>-a</code> з прихованими (імʼя з крапки)</td>
+</tr>
+<tr>
+<td><code>cd тека</code>, <code>cd ..</code>, <code>cd</code>, <code>cd -</code></td>
+<td>зайти; на рівень вище; додому; туди, де був перед цим</td>
+</tr>
+<tr>
+<td><code>mkdir -p ~/univer/labs/lr1</code></td>
+<td>зробити теку разом з усіма проміжними (<code>-p</code>)</td>
+</tr>
+<tr>
+<td><code>touch файл.py</code></td>
+<td>створити порожній файл</td>
+</tr>
+<tr>
+<td><code>cat файл.py</code></td>
+<td>показати вміст файлу</td>
+</tr>
+<tr>
+<td><code>clear</code> або Ctrl+L</td>
+<td>очистити екран</td>
+</tr>
+<tr>
+<td><strong>Tab</strong></td>
+<td>дописати назву файлу чи теки (два Tab - показати варіанти)</td>
+</tr>
+<tr>
+<td><strong>↑</strong>, <code>history</code>, Ctrl+R</td>
+<td>попередня команда; уся історія; пошук в історії</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>nano</strong> - простий редактор у терміналі (версія 7.2). <code>nano hello.py</code> відкриває файл або створює новий.
+Внизу підказки, <code>^</code> = Ctrl, <code>M-</code> = Alt. Усе в таблиці перевірено в nano 7.2 на Mint 22.3:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Клавіші</th>
+<th>Що</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ctrl+S</strong></td>
+<td>зберегти</td>
+</tr>
+<tr>
+<td>Ctrl+O, потім Enter</td>
+<td>зберегти (Write Out) - так написано в підказці</td>
+</tr>
+<tr>
+<td><strong>Ctrl+X</strong></td>
+<td>вийти (якщо не зберіг, спитає <code>Save modified buffer?</code> - Y або N)</td>
+</tr>
+<tr>
+<td><strong>Alt+U</strong></td>
+<td>скасувати (undo). Ctrl+Z тут НЕ скасовує</td>
+</tr>
+<tr>
+<td>Ctrl+W</td>
+<td>пошук (Where Is)</td>
+</tr>
+<tr>
+<td>Ctrl+K / Ctrl+U</td>
+<td>вирізати рядок / вставити</td>
+</tr>
+<tr>
+<td>Ctrl+_</td>
+<td>перейти до рядка за номером (у підказці <code>^/ Go To Line</code>)</td>
+</tr>
+<tr>
+<td>Alt+N</td>
+<td>показати / сховати номери рядків (<code>[ Line numbering enabled ]</code>, укр. <code>[ Нумерація рядків дозволено ]</code>)</td>
+</tr>
+<tr>
+<td>Ctrl+G</td>
+<td>довідка</td>
+</tr>
+</tbody>
+</table></div>
+<p>На українській Mint підказки внизу nano теж українською: <code>^O Виписати</code>, <code>^X Вихід</code>, <code>^W Пошук</code> (переклад nano з
+пакета мови; клавіші ті самі).</p>
+<p>Відкрити файл одразу на рядку 19 (коли flake8 каже «рядок 19»): <code>nano +19 lab1.py</code>.</p>
+<p><strong>Інші редактори коротко:</strong>
+- <strong>micro</strong> - як звичайний блокнот: Ctrl+S зберегти, Ctrl+Q вийти, Ctrl+Z скасувати. Ставиться <code>sudo apt install micro</code>.
+- <strong>vim</strong> - якщо випадково потрапив у нього: натисни <strong>Esc</strong>, набери <code>:q!</code> і Enter (вийти без збереження) або
+  <code>:wq</code> і Enter (зберегти і вийти).
+- <strong>xed</strong> - звичайний віконний редактор Mint: <code>xed hello.py &amp;</code> (<code>&amp;</code> - щоб термінал лишився вільним).</p>
+<p><strong>Запуск Python:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>python3 hello.py</code></td>
+<td>запустити програму</td>
+</tr>
+<tr>
+<td><code>printf "5\n" \| python3 файл.py</code></td>
+<td>подати ввід для <code>input()</code> без клавіатури (<code>\n</code> = Enter)</td>
+</tr>
+<tr>
+<td>Ctrl+C</td>
+<td>зупинити програму (зависла, нескінченний цикл)</td>
+</tr>
+<tr>
+<td><code>python3 -i файл.py</code></td>
+<td>запустити, а потім лишитись у Python з усіма функціями файлу (<code>&gt;&gt;&gt;</code>, вихід Ctrl+D)</td>
+</tr>
+<tr>
+<td><code>source ~/univer/.venv/bin/activate</code></td>
+<td>увімкнути venv, на початку рядка зʼявиться <code>(.venv)</code></td>
+</tr>
+<tr>
+<td><code>deactivate</code></td>
+<td>вимкнути venv</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>venv</strong> (віртуальне середовище) - окрема тека з Python і бібліотеками саме для лаб. Бібліотеки ставиш у неї, а не в
+систему (урок 02 пояснює чому).</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<ol>
+<li>Ти в домашній теці. Що покаже останній рядок?</li>
+</ol>
+<pre><code class="language-bash">cd
+mkdir -p univer/labs/lr1
+cd univer/labs
+cd ..
+pwd
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">/home/evgen/univer
+</code></pre>
+<p><code>cd univer/labs</code> завів у <code>/home/evgen/univer/labs</code>, <code>cd ..</code> - на одну теку вище.</p>
+</details>
+<ol start="2">
+<li>Програма <code>kolo.py</code> з «Руками» (крок 3). Що побачиш?</li>
+</ol>
+<pre><code class="language-bash">printf &quot;2\n&quot; | python3 kolo.py
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">Радіус: Площа: 12.57
+</code></pre>
+<p>Усе в одному рядку: <code>input("Радіус: ")</code> друкує підказку, а «Enter» з printf на екран не потрапляє - він пішов
+одразу в програму.</p>
+</details>
+<ol start="3">
+<li>А тепер з комою, як ми пишемо в зошиті:</li>
+</ol>
+<pre><code class="language-bash">printf &quot;2,5\n&quot; | python3 kolo.py
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<p>Помилка, останній рядок:</p>
+<pre><code class="language-text">ValueError: could not convert string to float: '2,5'
+</code></pre>
+<p>Python розуміє лише крапку: <code>2.5</code>. Це не баг програми, це ввід.</p>
+</details>
+<ol start="4">
+<li>У nano ти набрав рядок і натиснув Ctrl+Z, щоб скасувати. Що буде?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Нічого не скасується, а внизу зʼявиться <code>[ To suspend, type ^T^Z ]</code> (на українській Mint
+<code>[ Для призупинення введіть ^T^Z ]</code>). У nano скасування - <strong>Alt+U</strong>.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p><strong>Крок 0. Доставити пакети для лаб</strong> (на свіжій Mint 22.3 їх нема: venv, pip, tkinter для turtle, git). Попросить
+пароль - замість символів зʼявляються зірочки <code>****</code> (так налаштовано в Mint), це нормально.</p>
+<pre><code class="language-bash">sudo apt update
+sudo apt install python3-venv python3-pip python3-tk git
+</code></pre>
+<p><strong>Крок 1. Тека для ЛР1.</strong></p>
+<pre><code class="language-bash">mkdir -p ~/univer/labs/lr1
+cd ~/univer/labs/lr1
+pwd
+touch hello.py
+ls -la
+</code></pre>
+<pre><code class="language-text">/home/evgen/univer/labs/lr1
+total 8
+drwxrwxr-x 2 evgen evgen 4096 Nov 18 08:53 .
+drwxrwxr-x 3 evgen evgen 4096 Nov 18 08:53 ..
+-rw-rw-r-- 1 evgen evgen    0 Nov 18 08:53 hello.py
+</code></pre>
+<p><code>0</code> - розмір файлу в байтах (поки порожній). <code>.</code> - ця тека, <code>..</code> - тека вище. Дата у тебе своя (можливо, українською).</p>
+<p>Спробуй Tab: набери <code>cd ~/uni</code> і натисни Tab - допишеться <code>univer/</code>.</p>
+<p><strong>Крок 2. Налаштуй nano під Python, потім перша програма.</strong></p>
+<p>У Mint nano типово ставить на Tab справжній символ табуляції, а Python і flake8 хочуть 4 пробіли (інакше
+<code>TabError</code> або flake8 <code>W191 indentation contains tabs</code>). Потрібні опції в <code>/etc/nanorc</code> є, але закоментовані
+(<code># set tabstospaces</code>). Увімкни їх для себе один раз - допиши у свій файл налаштувань <code>~/.nanorc</code>:</p>
+<pre><code class="language-bash">printf 'set tabstospaces\nset tabsize 4\nset linenumbers\nset autoindent\n' &gt;&gt; ~/.nanorc
+cat ~/.nanorc
+</code></pre>
+<pre><code class="language-text">set tabstospaces
+set tabsize 4
+set linenumbers
+set autoindent
+</code></pre>
+<p>Тепер Tab = 4 пробіли, зліва номери рядків, а Enter зберігає відступ попереднього рядка. Команду виконай <strong>один</strong>
+раз (<code>&gt;&gt;</code> дописує в кінець файлу; вдруге рядки просто повторяться - це не шкодить).</p>
+<pre><code class="language-bash">nano hello.py
+</code></pre>
+<p>Набери:</p>
+<pre><code class="language-python">name = input(&quot;Як тебе звати? &quot;)
+print(f&quot;Привіт, {name}!&quot;)
+</code></pre>
+<p>Ctrl+S (зберегти), Ctrl+X (вийти). Далі:</p>
+<pre><code class="language-bash">cat hello.py
+python3 hello.py
+</code></pre>
+<p>Програма спитає імʼя і чекатиме - набери його і натисни Enter. Без клавіатури:</p>
+<pre><code class="language-bash">printf &quot;Прізвище\n&quot; | python3 hello.py
+</code></pre>
+<pre><code class="language-text">Як тебе звати? Привіт, Прізвище!
+</code></pre>
+<p><strong>Крок 3. Ввід числа.</strong> <code>nano kolo.py</code>:</p>
+<pre><code class="language-python">import math
+
+r = float(input(&quot;Радіус: &quot;))
+print(&quot;Площа:&quot;, round(math.pi * r ** 2, 2))
+</code></pre>
+<pre><code class="language-bash">printf &quot;2\n&quot; | python3 kolo.py
+printf &quot;0.5\n&quot; | python3 kolo.py
+</code></pre>
+<pre><code class="language-text">Радіус: Площа: 12.57
+Радіус: Площа: 0.79
+</code></pre>
+<p>Потренуй nano: відкрий <code>nano kolo.py</code>, сховай і знову покажи номери рядків (Alt+N двічі), знайди слово <code>round</code>
+(Ctrl+W, набери, Enter),
+зміни <code>2</code> на <code>3</code> у <code>round(..., 2)</code>, скасуй Alt+U, вийди Ctrl+X і на питання відповідай N.</p>
+<p><strong>Крок 4. Зупинити програму.</strong> <code>nano vichno.py</code>:</p>
+<pre><code class="language-python">import time
+
+n = 0
+while True:
+    n += 1
+    print(&quot;крок&quot;, n)
+    time.sleep(1)
+</code></pre>
+<pre><code class="language-bash">python3 vichno.py
+</code></pre>
+<p>Через кілька секунд натисни Ctrl+C:</p>
+<pre><code class="language-text">крок 1
+крок 2
+крок 3
+^CTraceback (most recent call last):
+  File &quot;/home/evgen/univer/labs/lr1/vichno.py&quot;, line 7, in &lt;module&gt;
+    time.sleep(1)
+KeyboardInterrupt
+</code></pre>
+<p><code>^C</code> - так термінал показує натиснуте Ctrl+C, і Python пише свій текст одразу після нього. <code>KeyboardInterrupt</code> - це
+не помилка в коді, а «тебе перервали з клавіатури».</p>
+<p><strong>Крок 5. Запустити і погратись з функцією.</strong> <code>nano kub.py</code>:</p>
+<pre><code class="language-python">def kub(x: float) -&gt; float:
+    &quot;&quot;&quot;Куб числа.
+
+    &gt;&gt;&gt; kub(2)
+    8
+    &gt;&gt;&gt; kub(-3)
+    -27
+    &quot;&quot;&quot;
+    return x * x * x
+
+
+print(kub(2))
+</code></pre>
+<pre><code class="language-bash">python3 -i kub.py
+</code></pre>
+<p>Спершу файл виконається (надрукує <code>8</code>), потім зʼявиться <code>&gt;&gt;&gt;</code>. Набери <code>kub(3)</code>, Enter, потім <code>kub(1.5)</code>:</p>
+<pre><code class="language-text">8
+&gt;&gt;&gt; kub(3)
+27
+&gt;&gt;&gt; kub(1.5)
+3.375
+&gt;&gt;&gt;
+</code></pre>
+<p>Вийти - Ctrl+D (або <code>exit()</code>).</p>
+<p><strong>Крок 6. venv з інструментами для перевірки лаб.</strong></p>
+<pre><code class="language-bash">python3 -m venv ~/univer/.venv
+source ~/univer/.venv/bin/activate
+which python
+python3 -m pip install pytest flake8 black mypy ruff pycodestyle
+</code></pre>
+<p><code>which python</code> у venv покаже <code>/home/evgen/univer/.venv/bin/python</code>. Кінець справжнього виводу pip (версії у тебе можуть
+бути новіші):</p>
+<pre><code class="language-text">Successfully installed ast-serialize-0.13.1 black-26.10.1 click-8.5.1 flake8-7.5.0 iniconfig-2.3.1 librt-0.16.0 mccabe-0.7.0 mypy-2.4.1 mypy-extensions-1.2.0 packaging-26.3 pathspec-1.1.1 platformdirs-4.14.7 pluggy-1.7.0 pycodestyle-2.15.0 pyflakes-4.1.0 pygments-2.21.0 pytest-9.2.0 pytokens-0.4.1 ruff-0.17.5 typing_extensions-4.16.0
+</code></pre>
+<p>Перевір (venv увімкнено):</p>
+<pre><code class="language-bash">python3 -m pytest --doctest-modules -q kub.py
+python3 -m flake8 --max-line-length=78 kub.py
+python3 -m mypy kub.py
+</code></pre>
+<p>pytest напише <code>1 passed</code>, flake8 - нічого (тиша = зауважень нема), mypy - <code>Success: no issues found in 1 source file</code>.
+Вимкнути venv - <code>deactivate</code> (зникне <code>(.venv)</code>). Кожне нове вікно термінала стартує без venv - вмикай знову.</p>
+<p><strong>Крок 7. Інші редактори (за бажанням).</strong></p>
+<pre><code class="language-bash">sudo apt install micro
+micro hello.py
+xed hello.py &amp;
+</code></pre>
+<p>У micro: допиши щось, Ctrl+S, Ctrl+Q. xed відкриється вікном - знайомий вигляд, як Блокнот.</p>
+<p><strong>Крок 8. Скорочення - скрипт ustanovka-mint.sh.</strong> Він робить кроки 0 і 6 сам (ще ставить matplotlib, numpy, htop,
+tree) і додає дві команди: <code>univer</code> (перейти в <code>~/univer</code> і увімкнути venv) і <code>perevir файл.py</code> (doctest через pytest,
+black, flake8, pycodestyle і ruff до 78 символів, mypy). <code>~/.nanorc</code> (крок 2) він не чіпає.</p>
+<pre><code class="language-bash">cd ~
+wget -O ustanovka-mint.sh https://evge14n.github.io/uni-prep/files/ustanovka-mint.sh
+less ustanovka-mint.sh
+bash ustanovka-mint.sh
+</code></pre>
+<p>Якщо <code>wget</code> пише помилку <code>404</code> (файл на сайті ще не опублікований) або інтернету нема - скопіюй <code>ustanovka-mint.sh</code>
+з теки курсу (лежить поруч з уроками) у домашню теку, а далі так само: <code>less</code>, потім <code>bash</code>.</p>
+<p><code>less</code> - щоб спершу прочитати, що скрипт робить (гортати пробілом, вийти <code>q</code>). Чужі скрипти без читання не запускають.
+Потім <strong>відкрий нове вікно термінала</strong> і:</p>
+<pre><code class="language-bash">univer
+cd labs/lr1
+</code></pre>
+<p>Тепер набери <code>perevir kub.py</code>:</p>
+<pre><code class="language-text">--- doctest (через pytest; зупиню, якщо довше 120 с)
+doctest: усе пройшло (1 passed in 0.01s)
+--- black (лише перевірка, файл не змінює; виправити: black -l 78 kub.py)
+black: оформлення ок
+--- flake8 і pycodestyle (рядок до 78 символів, як каже викладач)
+flake8: зауважень нема
+pycodestyle: зауважень нема
+--- ruff
+ruff: зауважень нема
+--- mypy
+Success: no issues found in 1 source file
+</code></pre>
+<p>Якщо замість <code>black: оформлення ок</code> написано <code>black: ТРЕБА ПЕРЕФОРМАТУВАТИ</code> - виконай те, що там підказано:
+<code>python3 -m black -l 78 kub.py</code> (black сам розставить пробіли й переноси). Решта рядків - або «зауважень нема», або список зауважень з номерами рядків.</p>
+<p>Для <code>hello.py</code> (він питає <code>input()</code>) perevir скаже:</p>
+<pre><code class="language-text">doctest: файл питає input() при запуску. Дай відповіді після назви: perevir hello.py 5
+</code></pre>
+<p>Відповіді на <code>input()</code> пишуть після назви файлу через пробіл, кожна - окремий рядок вводу: <code>perevir lr1_1.py 127</code>
+(урок 04). Doctest-ів у <code>hello.py</code> нема, тож perevir корисний насамперед для лаб, де doctest є.</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<p>Повідомлення bash, <code>mkdir</code> і nano на українській Mint українською (у дужках), повідомлення Python - завжди
+англійською (див. «00 - Почни тут», «Мова повідомлень»).</p>
+<ul>
+<li><strong><code>bash: cd: Univer: No such file or directory</code></strong> (укр. <code>bash: cd: Univer: Немає такого файла або каталогу</code>) -
+  великі й малі літери різні, тека <code>univer</code>. Тисни Tab, не вгадуй.</li>
+<li><strong><code>python3: can't open file '/home/evgen/univer/labs/lr1/Hello.py': [Errno 2] No such file or directory</code></strong> - не та
+  назва або ти не в тій теці. <code>pwd</code> і <code>ls</code>.</li>
+<li><strong><code>bash: python: command not found</code></strong> (укр. <code>bash: python: команду не знайдено</code>) - поза venv у Mint є лише
+  <code>python3</code>. У venv працюють обидва.</li>
+<li><strong><code>/usr/bin/python3: No module named ruff</code></strong> (або pytest, flake8) - venv вимкнено. Подивись, чи є <code>(.venv)</code> на початку
+  рядка, і <code>source ~/univer/.venv/bin/activate</code>.</li>
+<li><strong><code>The virtual environment was not created successfully because ensurepip is not available.</code></strong> - не поставлено
+  <code>python3-venv</code> (крок 0). Після установки видали недороблену теку <code>~/univer/.venv</code> і створи venv знову.</li>
+<li><strong><code>mkdir: cannot create directory ‘...’: No such file or directory</code></strong> - забув <code>-p</code>, а проміжної теки ще нема.
+  Укр.: <code>mkdir: Не вдалося створити каталог «...»: Немає такого файла або каталогу</code>.</li>
+<li><strong>flake8 <code>W191 indentation contains tabs</code></strong> або Python <code>TabError</code> - nano вставив табуляцію: не налаштовано
+  <code>~/.nanorc</code> (крок 2). Налаштуй, а в зламаних рядках видали відступ і набери заново.</li>
+<li><strong>Програма «зависла» і нічого не пише</strong> - найчастіше вона чекає <code>input()</code>. Набери значення і Enter. Справді зависла -
+  Ctrl+C.</li>
+<li><strong>Ctrl+S поза nano (просто в терміналі) «заморожує» вікно</strong> - нічого не друкується. Це старе керування потоком
+  терміналу (ixon). Розморозити - <strong>Ctrl+Q</strong>.</li>
+<li><strong><code>python3 -m doctest файл.py</code></strong> на файлах викладача з <code>doctest.testmod()</code> у кінці показує чужу помилку
+  <code>1 of  21 in __main__.DebugRunner</code>, хоча твій код правильний. Перевіряй <code>python3 файл.py -v</code> або
+  <code>python3 -m pytest --doctest-modules файл.py</code> (детально - урок 04). І памʼятай: <code>python3 файл.py</code> завершується
+  «успішно» (код 0), навіть коли doctest впав - читай вивід.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Один проєкт - один venv</strong>, venv ніколи не кладуть у git і не копіюють між компʼютерами, а перестворюють зі
+  списку <code>requirements.txt</code> (урок 02). Ми тримаємо один venv на всі лаби - для першого курсу цього досить.</li>
+<li><strong>Термінал - перше, чого вчать програмістів:</strong> курс MIT «Missing Semester» (січень 2026) починається саме з лекції
+  про shell. Tab, ↑ і Ctrl+R замість набору вручну економлять години.</li>
+<li><strong>ruff</strong> - «надзвичайно швидкий лінтер і форматер», який, за словами авторів, може замінити flake8 і black. Але
+  викладач просить flake8, pycodestyle, mypy, ruff або black - тому ставимо всі.</li>
+<li><strong>Не вставляй у термінал команду, якої не розумієш</strong> - спершу прочитай (<code>less</code> для скриптів, explainshell.com для
+  рядків). Популярний пост r/linux4noobs (18.08.2026, 283 бали) - саме про це.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Ти в <code>~/univer/labs/lr1</code>. Куди потрапиш після <code>cd ../..</code>?</li>
+<li>Як зберегти файл у nano і вийти? Як скасувати останню дію?</li>
+<li>Програма питає два числа через <code>input()</code>. Як подати 3 і 4 без клавіатури?</li>
+<li>Як зрозуміти, що venv увімкнено, і як його увімкнути?</li>
+<li><code>python3 -m flake8 lab1.py</code> пише <code>/usr/bin/python3: No module named flake8</code>. Що не так?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>/home/evgen/univer</code> (lr1 → labs → univer).</li>
+<li>Ctrl+S (або Ctrl+O і Enter), потім Ctrl+X. Скасувати - Alt+U.</li>
+<li><code>printf "3\n4\n" | python3 файл.py</code> - кожне <code>\n</code> це Enter для чергового <code>input()</code>.</li>
+<li>На початку рядка <code>(.venv)</code>, <code>which python</code> показує шлях з <code>.venv</code>. Увімкнути: <code>source ~/univer/.venv/bin/activate</code>
+   (або <code>univer</code>, якщо запускав ustanovka-mint.sh).</li>
+<li>venv вимкнено, тому запустився системний Python, де flake8 нема. Увімкнути venv і повторити.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Гарячі клавіші Cinnamon 6.6 (Ctrl+Alt+T) і gnome-terminal (Ctrl+Shift+C/V) - зі схем cinnamon-desktop, див.
+  https://github.com/linuxmint/cinnamon-desktop - відкрито 18.11.2026</li>
+<li>Список пакетів ISO Mint 22.3 (нема python3-venv, python3-pip, python3-tk, git) - https://linuxmint.com/download_all.php -
+  відкрито 18.11.2026</li>
+<li>nano 7.2: <code>nano --help</code>, підказки внизу екрана і закоментовані <code># set tabstospaces</code> у <code>/etc/nanorc</code> - перевірено
+  запуском у Mint 22.3, 18.11.2026; посібник https://www.nano-editor.org/docs.php - відкрито 18.11.2026</li>
+<li>Українські повідомлення bash, coreutils, nano - файли перекладу пакета <code>language-pack-uk-base</code> (Ubuntu 24.04),
+  розпаковано в тестовій Mint 22.3, 18.11.2026</li>
+<li>Python venv - https://docs.python.org/3/library/venv.html - відкрито 18.11.2026</li>
+<li>MIT Missing Semester 2026 - https://missing.csail.mit.edu/ - відкрито 18.11.2026</li>
+<li>r/linux4noobs, не вставляй команди, яких не розумієш - https://www.reddit.com/r/linux4noobs/comments/1vrmeqc/ -
+  відкрито 18.11.2026</li>
+<li>ruff - https://docs.astral.sh/ruff/ - відкрито 18.11.2026</li>
+</ul>

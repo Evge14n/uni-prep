@@ -26,7 +26,7 @@ END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
 UID:h6@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261119T163000
 DTEND;TZID=Europe/Kyiv:20261119T165300
 SUMMARY:🔴 Істор. сем.6: Історія: семінар 6 у пт
@@ -47,7 +47,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261119-1330-25b29a38@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261119T133000
 DTEND;TZID=Europe/Kyiv:20261119T145000
 SUMMARY:Матан: практичне 14 (оцінка за планом M
@@ -55,7 +55,7 @@ SUMMARY:Матан: практичне 14 (оцінка за планом M
 END:VEVENT
 BEGIN:VEVENT
 UID:z1@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261120T140000
 DTEND;TZID=Europe/Kyiv:20261120T144000
 SUMMARY:🔴 ЗФП ЛР1 Стокс: ЗФП: ЛР 1 (Стокс\, вʼяз
@@ -76,7 +76,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:an-t1@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261120T160000
 DTEND;TZID=Europe/Kyiv:20261120T162800
 SUMMARY:Ан т.1: Колоквіум (аналітична): тема 1 - 
@@ -94,7 +94,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261120-0830-f95001d7@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261120T083000
 DTEND;TZID=Europe/Kyiv:20261120T095000
 SUMMARY:🔴 Історія: семінар 6 (знаменник)
@@ -106,7 +106,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:lm01@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261121T110000
 DTEND;TZID=Europe/Kyiv:20261121T113200
 SUMMARY:Mint 01: Linux Mint\, урок 01: Timeshift - знімок до б
@@ -126,7 +126,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm02@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261121T113200
 DTEND;TZID=Europe/Kyiv:20261121T121400
 SUMMARY:Mint 02: Linux Mint\, урок 02: Оновлення - систе
@@ -145,7 +145,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ma-t2@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261122T170000
 DTEND;TZID=Europe/Kyiv:20261122T172800
 SUMMARY:Матан т.2: Колоквіум (матан): тема 2+3 - П
@@ -164,7 +164,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261123-1150-aabe3bea@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261123T115000
 DTEND;TZID=Europe/Kyiv:20261123T131000
 SUMMARY:🔴 ЗФП молекулярна: ЛР 1 (Стокс) на пар
@@ -178,7 +178,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:z2@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261124T153000
 DTEND;TZID=Europe/Kyiv:20261124T155500
 SUMMARY:🔴 ЗФП сем. р.3: ЗФП семінар: робота 3 (д
@@ -197,7 +197,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:z3@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261124T155500
 DTEND;TZID=Europe/Kyiv:20261124T161800
 SUMMARY:🔴 ЗФП сем. р.16: ЗФП семінар: робота 16 (
@@ -215,7 +215,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:an-t4@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261124T164000
 DTEND;TZID=Europe/Kyiv:20261124T170800
 SUMMARY:Ан т.4: Колоквіум (аналітична): тема 4 - 
@@ -234,7 +234,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:h7@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261125T163000
 DTEND;TZID=Europe/Kyiv:20261125T170000
 SUMMARY:🔴 Істор. сем.7: Історія: семінар 7 у пт
@@ -256,7 +256,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ma-t5@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261126T163000
 DTEND;TZID=Europe/Kyiv:20261126T165800
 SUMMARY:Матан т.5: Колоквіум (матан): тема 5 - Пр
@@ -275,7 +275,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261126-1330-dd780764@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261126T133000
 DTEND;TZID=Europe/Kyiv:20261126T145000
 SUMMARY:Матан: практичне 15 (оцінка за планом M
@@ -283,7 +283,7 @@ SUMMARY:Матан: практичне 15 (оцінка за планом M
 END:VEVENT
 BEGIN:VEVENT
 UID:z4@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261127T140000
 DTEND;TZID=Europe/Kyiv:20261127T142400
 SUMMARY:🔴 ЗФП сем. р.19: ЗФП семінар: робота 19 (
@@ -301,7 +301,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ma-t9@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261127T160000
 DTEND;TZID=Europe/Kyiv:20261127T163300
 SUMMARY:Матан т.9: Колоквіум (матан): тема 9+10 - 
@@ -324,7 +324,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm03@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261128T110000
 DTEND;TZID=Europe/Kyiv:20261128T112500
 SUMMARY:Mint 03: Linux Mint\, урок 03: Термінал для лаб -
@@ -344,7 +344,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm03b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261128T112500
 DTEND;TZID=Europe/Kyiv:20261128T114500
 SUMMARY:Mint 03b: Linux Mint\, урок 03: Термінал для лаб 
@@ -362,7 +362,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm04@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261128T114500
 DTEND;TZID=Europe/Kyiv:20261128T121400
 SUMMARY:Mint 04: Linux Mint\, урок 04: ЛР1 у терміналі з 
@@ -382,7 +382,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ma-t12@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261129T170000
 DTEND;TZID=Europe/Kyiv:20261129T173300
 SUMMARY:Матан т.12: Колоквіум (матан): тема 12 - В
@@ -404,7 +404,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261130-1150-61b80a44@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261130T115000
 DTEND;TZID=Europe/Kyiv:20261130T131000
 SUMMARY:🔴 ЗФП молекулярна: семінар (роботи 3\
@@ -418,7 +418,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:z5@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261201T153000
 DTEND;TZID=Europe/Kyiv:20261201T161700
 SUMMARY:🔴 ЗФП колоквіум: ЗФП: колоквіум пн 07.
@@ -438,7 +438,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:an-t6@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261201T164000
 DTEND;TZID=Europe/Kyiv:20261201T170800
 SUMMARY:Ан т.6: Колоквіум (аналітична): тема 6 - 
@@ -457,7 +457,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ma-t7@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261202T163000
 DTEND;TZID=Europe/Kyiv:20261202T165800
 SUMMARY:Матан т.7: Колоквіум (матан): тема 7 - Ск
@@ -475,7 +475,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261202-0830-c4ac9bc1@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261202T083000
 DTEND;TZID=Europe/Kyiv:20261202T095000
 SUMMARY:Матан: практичне 16 (оцінка за планом M
@@ -483,7 +483,7 @@ SUMMARY:Матан: практичне 16 (оцінка за планом M
 END:VEVENT
 BEGIN:VEVENT
 UID:an-t8@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261203T163000
 DTEND;TZID=Europe/Kyiv:20261203T165800
 SUMMARY:Ан т.8: Колоквіум (аналітична): тема 8 - 
@@ -501,7 +501,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261203-1330-419a6a0e@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261203T133000
 DTEND;TZID=Europe/Kyiv:20261203T145000
 SUMMARY:Матан: практичне 17 (оцінка за планом M
@@ -509,7 +509,7 @@ SUMMARY:Матан: практичне 17 (оцінка за планом M
 END:VEVENT
 BEGIN:VEVENT
 UID:lm04b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261204T140000
 DTEND;TZID=Europe/Kyiv:20261204T142500
 SUMMARY:Mint 04b: Linux Mint\, урок 04: ЛР1 у терміналі з 
@@ -528,7 +528,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:e1@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261204T160000
 DTEND;TZID=Europe/Kyiv:20261204T162900
 SUMMARY:Англ. Present: Англійська: Present Simple і Present 
@@ -545,7 +545,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261204-0830-a0acd065@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261204T083000
 DTEND;TZID=Europe/Kyiv:20261204T095000
 SUMMARY:🔴 Історія: семінар 7 (+ модуль 2 - 04.12 ч
@@ -559,7 +559,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:lab1@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261205T110000
 DTEND;TZID=Europe/Kyiv:20261205T115000
 SUMMARY:ЛР1 сам: ЛР1: зробити самому в терміна
@@ -579,7 +579,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g01@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261205T115000
 DTEND;TZID=Europe/Kyiv:20261205T121200
 SUMMARY:Git 01: Git\, урок 01: Що таке git і GitHub
@@ -596,7 +596,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:an-t11@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261206T170000
 DTEND;TZID=Europe/Kyiv:20261206T172800
 SUMMARY:Ан т.11: Колоквіум (аналітична): тема 11 
@@ -614,7 +614,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261207-1150-fe6ce746@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261207T115000
 DTEND;TZID=Europe/Kyiv:20261207T131000
 SUMMARY:🔴 ЗФП молекулярна: колоквіум
@@ -626,7 +626,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:z6@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261208T153000
 DTEND;TZID=Europe/Kyiv:20261208T161500
 SUMMARY:🔴 ЗФП залік: ЗФП: залік пн 14.12 - звіти\
@@ -644,7 +644,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:an-kr3@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261208T164000
 DTEND;TZID=Europe/Kyiv:20261208T171300
 SUMMARY:🔴 Ан КР3: Аналітична: КР 3 у пн 14.12 (дат
@@ -664,7 +664,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:h8@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261209T163000
 DTEND;TZID=Europe/Kyiv:20261209T170300
 SUMMARY:🔴 Істор. сем.8: Історія: семінар 8 у пт
@@ -685,7 +685,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ma-t16@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261210T163000
 DTEND;TZID=Europe/Kyiv:20261210T170300
 SUMMARY:Матан т.16: Колоквіум (матан): тема 16+17 -
@@ -707,14 +707,14 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261210-1330-d327af90@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261210T133000
 DTEND;TZID=Europe/Kyiv:20261210T145000
 SUMMARY:Матан: КР 2 - орієнтовно\, звір у Moodle
 END:VEVENT
 BEGIN:VEVENT
 UID:g02@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261211T140000
 DTEND;TZID=Europe/Kyiv:20261211T142400
 SUMMARY:Git 02: Git\, урок 02: Встановлення на Mint і gi
@@ -732,7 +732,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:e2@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261211T160000
 DTEND;TZID=Europe/Kyiv:20261211T162600
 SUMMARY:Англ. to/-ing: Англійська: verbs + to / -ing
@@ -748,7 +748,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g03@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261212T110000
 DTEND;TZID=Europe/Kyiv:20261212T112500
 SUMMARY:Git 03: Git\, урок 03: SSH-ключ і вхід у GitHub
@@ -766,7 +766,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g04@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261212T112500
 DTEND;TZID=Europe/Kyiv:20261212T115700
 SUMMARY:Git 04: Git\, урок 04: Перший репозиторій - in
@@ -784,7 +784,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:an-t13@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261213T170000
 DTEND;TZID=Europe/Kyiv:20261213T172800
 SUMMARY:Ан т.13: Колоквіум (аналітична): тема 13 
@@ -802,7 +802,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261214-1010-6478f8fc@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261214T101000
 DTEND;TZID=Europe/Kyiv:20261214T113000
 SUMMARY:🔴 Аналітична: КР 3 (за твоїм повідомл
@@ -816,7 +816,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261214-1150-7ce4b38f@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261214T115000
 DTEND;TZID=Europe/Kyiv:20261214T131000
 SUMMARY:🔴 ЗФП молекулярна: залік
@@ -828,7 +828,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:glabs@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261215T153000
 DTEND;TZID=Europe/Kyiv:20261215T155700
 SUMMARY:Git лаби: Git: Лаби в git - univer-labs покроково
@@ -846,7 +846,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm05@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261215T155700
 DTEND;TZID=Europe/Kyiv:20261215T162600
 SUMMARY:Mint 05: Linux Mint\, урок 05: Налагодження 1 - tra
@@ -866,7 +866,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ma-test@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261215T164000
 DTEND;TZID=Europe/Kyiv:20261215T170800
 SUMMARY:Матан тест Moodle: Матан: «Тестове завда
@@ -886,7 +886,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ma-t14@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261216T163000
 DTEND;TZID=Europe/Kyiv:20261216T165800
 SUMMARY:Матан т.14: Колоквіум (матан): тема 14 - Т
@@ -904,7 +904,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:an-t15@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261217T163000
 DTEND;TZID=Europe/Kyiv:20261217T165800
 SUMMARY:Ан т.15: Колоквіум (аналітична): тема 15 
@@ -922,7 +922,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm05b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261218T140000
 DTEND;TZID=Europe/Kyiv:20261218T142300
 SUMMARY:Mint 05b: Linux Mint\, урок 05: Налагодження 1 - tr
@@ -940,7 +940,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ma-kr2@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261218T160000
 DTEND;TZID=Europe/Kyiv:20261218T163300
 SUMMARY:Матан КР2: Матан: КР 2 (практичне 18\, ор
@@ -960,7 +960,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ev-20261218-0830-ac39adcb@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261218T083000
 DTEND;TZID=Europe/Kyiv:20261218T095000
 SUMMARY:🔴 Історія: семінар 8
@@ -972,7 +972,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:lm06@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261219T110000
 DTEND;TZID=Europe/Kyiv:20261219T114200
 SUMMARY:Mint 06: Linux Mint\, урок 06: Налагодження 2 - pdb
@@ -992,7 +992,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm06b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261219T114200
 DTEND;TZID=Europe/Kyiv:20261219T121200
 SUMMARY:Mint 06b: Linux Mint\, урок 06: Налагодження 2 - pd
@@ -1011,7 +1011,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ma-t19@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261220T170000
 DTEND;TZID=Europe/Kyiv:20261220T173300
 SUMMARY:Матан т.19: Колоквіум (матан): тема 19 - Е
@@ -1033,7 +1033,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm06c@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261222T153000
 DTEND;TZID=Europe/Kyiv:20261222T160000
 SUMMARY:Mint 06c: Linux Mint\, урок 06: Налагодження 2 - pd
@@ -1052,7 +1052,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g05@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261222T160000
 DTEND;TZID=Europe/Kyiv:20261222T163000
 SUMMARY:Git 05: Git\, урок 05: Історія - log\, diff\, show
@@ -1069,7 +1069,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:e3@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261222T164000
 DTEND;TZID=Europe/Kyiv:20261222T171200
 SUMMARY:Англ. irregular: Англійська: неправильні 
@@ -1087,7 +1087,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:ma-t21@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261223T163000
 DTEND;TZID=Europe/Kyiv:20261223T170300
 SUMMARY:Матан т.21: Колоквіум (матан): тема 21 - О
@@ -1109,7 +1109,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:an-t18@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261224T163000
 DTEND;TZID=Europe/Kyiv:20261224T165800
 SUMMARY:Ан т.18: Колоквіум (аналітична): тема 18 
@@ -1127,7 +1127,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm07@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261225T140000
 DTEND;TZID=Europe/Kyiv:20261225T144900
 SUMMARY:Mint 07: Linux Mint\, урок 07: ЛР2 у терміналі
@@ -1146,7 +1146,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:e4@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261225T160000
 DTEND;TZID=Europe/Kyiv:20261225T163200
 SUMMARY:Англ. анотація: Англійська: анотація 
@@ -1163,7 +1163,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lab2@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261226T110000
 DTEND;TZID=Europe/Kyiv:20261226T115000
 SUMMARY:ЛР2 сам: ЛР2: зробити самому в терміна
@@ -1183,7 +1183,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g06@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261226T115000
 DTEND;TZID=Europe/Kyiv:20261226T121400
 SUMMARY:Git 06: Git\, урок 06: gitignore для Python
@@ -1200,7 +1200,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:e5@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261227T170000
 DTEND;TZID=Europe/Kyiv:20261227T173000
 SUMMARY:Англ. усні теми: Англійська: усні тем
@@ -1218,7 +1218,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm08@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261229T153000
 DTEND;TZID=Europe/Kyiv:20261229T162200
 SUMMARY:Mint 08: Linux Mint\, урок 08: ЛР3 у терміналі
@@ -1236,7 +1236,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:an-t20@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261229T164000
 DTEND;TZID=Europe/Kyiv:20261229T170800
 SUMMARY:Ан т.20: Колоквіум (аналітична): тема 20 
@@ -1254,7 +1254,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g07@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261230T163000
 DTEND;TZID=Europe/Kyiv:20261230T165600
 SUMMARY:Git 07: Git\, урок 07: Гілки - branch\, switch\, merge
@@ -1271,7 +1271,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g08@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20261231T163000
 DTEND;TZID=Europe/Kyiv:20261231T165500
 SUMMARY:Git 08: Git\, урок 08: Конфлікт і як розвʼяз
@@ -1290,7 +1290,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lab3@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270101T140000
 DTEND;TZID=Europe/Kyiv:20270101T145000
 SUMMARY:ЛР3 сам: ЛР3: зробити самому в терміна
@@ -1310,7 +1310,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm09@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270102T110000
 DTEND;TZID=Europe/Kyiv:20270102T114700
 SUMMARY:Mint 09: Linux Mint\, урок 09: ЛР4 у терміналі (tur
@@ -1330,7 +1330,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lab4@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270105T153000
 DTEND;TZID=Europe/Kyiv:20270105T162000
 SUMMARY:ЛР4 сам: ЛР4: зробити самому в терміна
@@ -1351,7 +1351,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm10@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270108T140000
 DTEND;TZID=Europe/Kyiv:20270108T144900
 SUMMARY:Mint 10: Linux Mint\, урок 10: ЛР5 у терміналі
@@ -1369,7 +1369,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lab5@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270109T110000
 DTEND;TZID=Europe/Kyiv:20270109T115000
 SUMMARY:ЛР5 сам: ЛР5: зробити самому в терміна
@@ -1389,7 +1389,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm11@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270112T153000
 DTEND;TZID=Europe/Kyiv:20270112T162100
 SUMMARY:Mint 11: Linux Mint\, урок 11: ЛР6 у терміналі
@@ -1407,7 +1407,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lab6@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270115T140000
 DTEND;TZID=Europe/Kyiv:20270115T145000
 SUMMARY:ЛР6 сам: ЛР6: зробити самому в терміна
@@ -1427,7 +1427,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm12@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270116T110000
 DTEND;TZID=Europe/Kyiv:20270116T114500
 SUMMARY:Mint 12: Linux Mint\, урок 12: ЛР7 у терміналі
@@ -1446,7 +1446,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lab7@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270119T153000
 DTEND;TZID=Europe/Kyiv:20270119T162000
 SUMMARY:ЛР7 сам: ЛР7: зробити самому в терміна
@@ -1466,7 +1466,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm13@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270122T140000
 DTEND;TZID=Europe/Kyiv:20270122T143100
 SUMMARY:Mint 13: Linux Mint\, урок 13: Робочий стіл Cinnamon
@@ -1486,7 +1486,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm13b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270122T160000
 DTEND;TZID=Europe/Kyiv:20270122T162000
 SUMMARY:Mint 13b: Linux Mint\, урок 13: Робочий стіл Cinnamo
@@ -1505,7 +1505,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm14@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270123T110000
 DTEND;TZID=Europe/Kyiv:20270123T113100
 SUMMARY:Mint 14: Linux Mint\, урок 14: Файли в Nemo і в тер
@@ -1525,7 +1525,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm14b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270123T113100
 DTEND;TZID=Europe/Kyiv:20270123T115400
 SUMMARY:Mint 14b: Linux Mint\, урок 14: Файли в Nemo і в тер
@@ -1543,7 +1543,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm15@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270126T153000
 DTEND;TZID=Europe/Kyiv:20270126T160200
 SUMMARY:Mint 15: Linux Mint\, урок 15: Права\, sudo\, корист
@@ -1563,7 +1563,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm15b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270126T160200
 DTEND;TZID=Europe/Kyiv:20270126T162200
 SUMMARY:Mint 15b: Linux Mint\, урок 15: Права\, sudo\, корис
@@ -1581,7 +1581,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm16@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270126T164000
 DTEND;TZID=Europe/Kyiv:20270126T170800
 SUMMARY:Mint 16: Linux Mint\, урок 16: Програми - apt\, Мен
@@ -1601,7 +1601,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm16b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270127T163000
 DTEND;TZID=Europe/Kyiv:20270127T165000
 SUMMARY:Mint 16b: Linux Mint\, урок 16: Програми - apt\, Мен
@@ -1619,7 +1619,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g09@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270129T140000
 DTEND;TZID=Europe/Kyiv:20270129T143200
 SUMMARY:Git 09: Git\, урок 09: Віддалений репозитор
@@ -1637,7 +1637,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm17@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270130T110000
 DTEND;TZID=Europe/Kyiv:20270130T114600
 SUMMARY:Mint 17: Linux Mint\, урок 17: Драйвери\, прошив
@@ -1656,7 +1656,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm18@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270130T114600
 DTEND;TZID=Europe/Kyiv:20270130T121500
 SUMMARY:Mint 18: Linux Mint\, урок 18: Диски і місце (зах
@@ -1675,7 +1675,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm18b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270131T170000
 DTEND;TZID=Europe/Kyiv:20270131T172000
 SUMMARY:Mint 18b: Linux Mint\, урок 18: Диски і місце (за
@@ -1693,7 +1693,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g10@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270202T153000
 DTEND;TZID=Europe/Kyiv:20270202T160200
 SUMMARY:Git 10: Git\, урок 10: GitHub - репозиторій\, README
@@ -1711,7 +1711,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g11@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270205T140000
 DTEND;TZID=Europe/Kyiv:20270205T143200
 SUMMARY:Git 11: Git\, урок 11: Pull Request - гілка\, рев'ю\, 
@@ -1730,7 +1730,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm19@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270206T110000
 DTEND;TZID=Europe/Kyiv:20270206T113200
 SUMMARY:Mint 19: Linux Mint\, урок 19: Процеси і Монітор
@@ -1750,7 +1750,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm19b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270206T113200
 DTEND;TZID=Europe/Kyiv:20270206T115200
 SUMMARY:Mint 19b: Linux Mint\, урок 19: Процеси і Моніто
@@ -1769,7 +1769,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g12@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270209T153000
 DTEND;TZID=Europe/Kyiv:20270209T160100
 SUMMARY:Git 12: Git\, урок 12: Скасувати безпечно - re
@@ -1787,7 +1787,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g13@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270209T160100
 DTEND;TZID=Europe/Kyiv:20270209T162800
 SUMMARY:Git 13: Git\, урок 13: stash - відкласти зміни
@@ -1804,7 +1804,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g14@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270209T164000
 DTEND;TZID=Europe/Kyiv:20270209T170800
 SUMMARY:Git 14: Git\, урок 14: Теги - позначити здачу
@@ -1821,7 +1821,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g15@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270210T163000
 DTEND;TZID=Europe/Kyiv:20270210T165400
 SUMMARY:Git 15: Git\, урок 15: GitHub Pages
@@ -1838,7 +1838,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g16@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270211T163000
 DTEND;TZID=Europe/Kyiv:20270211T165400
 SUMMARY:Git 16: Git\, урок 16: gh - GitHub з терміналу
@@ -1855,7 +1855,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm20@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270212T140000
 DTEND;TZID=Europe/Kyiv:20270212T143200
 SUMMARY:Mint 20: Linux Mint\, урок 20: systemd і журнали (за
@@ -1875,7 +1875,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm20b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270212T160000
 DTEND;TZID=Europe/Kyiv:20270212T162000
 SUMMARY:Mint 20b: Linux Mint\, урок 20: systemd і журнали (за
@@ -1893,7 +1893,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm21@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270213T110000
 DTEND;TZID=Europe/Kyiv:20270213T113700
 SUMMARY:Mint 21: Linux Mint\, урок 21: Мережа і ssh (захід 
@@ -1913,7 +1913,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm21b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270213T113700
 DTEND;TZID=Europe/Kyiv:20270213T120200
 SUMMARY:Mint 21b: Linux Mint\, урок 21: Мережа і ssh (захід
@@ -1932,7 +1932,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm22@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270216T153000
 DTEND;TZID=Europe/Kyiv:20270216T160700
 SUMMARY:Mint 22: Linux Mint\, урок 22: bash - змінні\, PATH\, п
@@ -1951,7 +1951,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm22b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270216T164000
 DTEND;TZID=Europe/Kyiv:20270216T170500
 SUMMARY:Mint 22b: Linux Mint\, урок 22: bash - змінні\, PATH\, п
@@ -1969,7 +1969,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:g17@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270217T163000
 DTEND;TZID=Europe/Kyiv:20270217T165700
 SUMMARY:Git 17: Git\, урок 17: Для профі - rebase\, cherry-pick
@@ -1986,7 +1986,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm23@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270219T140000
 DTEND;TZID=Europe/Kyiv:20270219T143700
 SUMMARY:Mint 23: Linux Mint\, урок 23: bash-скрипти і cron (з
@@ -2006,7 +2006,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm23b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270219T160000
 DTEND;TZID=Europe/Kyiv:20270219T162500
 SUMMARY:Mint 23b: Linux Mint\, урок 23: bash-скрипти і cron (з
@@ -2024,7 +2024,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm24@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270220T110000
 DTEND;TZID=Europe/Kyiv:20270220T113100
 SUMMARY:Mint 24: Linux Mint\, урок 24: git і GitHub з ssh-ключе
@@ -2044,7 +2044,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm24b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270220T113100
 DTEND;TZID=Europe/Kyiv:20270220T115400
 SUMMARY:Mint 24b: Linux Mint\, урок 24: git і GitHub з ssh-ключе
@@ -2062,7 +2062,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm25@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270223T153000
 DTEND;TZID=Europe/Kyiv:20270223T161700
 SUMMARY:Mint 25: Linux Mint\, урок 25: Безпека - ufw\, онов
@@ -2081,7 +2081,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm26@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270226T140000
 DTEND;TZID=Europe/Kyiv:20270226T143400
 SUMMARY:Mint 26: Linux Mint\, урок 26: Коли щось зламало
@@ -2100,7 +2100,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm26b@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270226T160000
 DTEND;TZID=Europe/Kyiv:20270226T162500
 SUMMARY:Mint 26b: Linux Mint\, урок 26: Коли щось зламал
@@ -2119,7 +2119,7 @@ URL:https://evge14n.github.io/uni-prep/#/grafik
 END:VEVENT
 BEGIN:VEVENT
 UID:lm27@uni-prep-grafik
-DTSTAMP:20261118T120826Z
+DTSTAMP:20261118T121914Z
 DTSTART;TZID=Europe/Kyiv:20270227T110000
 DTEND;TZID=Europe/Kyiv:20270227T114500
 SUMMARY:Mint 27: Linux Mint\, урок 27: VS Code або VSCodium (піз

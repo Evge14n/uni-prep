@@ -36,6 +36,21 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git tag</code> - ставить мітку з назвою на збережений знімок (коміт), напр. <code>lr1-zdano</code>. <code>-a</code> (<code>--annotate</code>) - анотований тег: з автором, датою і описом (для здачі - саме такий) (annotate - «додати опис»); <code>-m</code> (<code>--message</code>) - опис анотованого тегу; без <code>-m</code> git відкриє nano (message - «повідомлення»).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-a</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-am</code> = <code>-a</code> і <code>-m</code>.</li>
+<li>Символи <code>~</code> <code>&gt;</code> <code>*</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -82,6 +97,15 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git tag</code>: <code>-n</code> - у списку тегів показати й перший рядок опису (n - number, скільки рядків опису); <code>-d</code> (<code>--delete</code>) - видалити тег у себе (на GitHub - окремо: <code>git push origin --delete ТЕГ</code>) (delete - «видалити»).</li>
+<li><code>git show</code> - показує один збережений знімок (коміт) зі змінами або старий файл. <code>lr1-zdano</code> - тег (мітка на коміті): покаже, що саме було в коміті з цією міткою.</li>
+<li><code>git push</code> - відправляє твої нові знімки (коміти) з компʼютера на GitHub. Назва: push - «штовхнути». <code>--follow-tags</code> - разом з комітами відправити й теги з описом (<code>-a</code>), легкі - ні (follow tags - «прихопити теги»); <code>--delete</code> - видалити гілку або тег на GitHub: <code>git push origin --delete lr3</code>.</li>
+<li><code>git checkout</code> - стара команда: перемикає гілку або стирає зміни у файлі. Назва: check out - «взяти» (як книжку в бібліотеці). <code>lr1-zdano</code> - тег (мітка на коміті): подивитись тодішній стан («відʼєднаний HEAD» - ти не на гілці); назад - <code>git switch main</code>.</li>
+</ul>
+</blockquote>
 <p>Головне правило: <strong>звичайний <code>git push</code> тегів не пушить.</strong> Тег живе лише у тебе, поки ти не відправиш його окремо.</p>
 <h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
 <ol>
@@ -123,8 +147,15 @@
    Дивитися можна, комітити - краще ні (див. «Типові помилки»). Назад: `git switch main`.
    </details></p>
 </li>
-<li>
-<p>Тег <code>lr1-zdano</code> уже є. Ти виправив опечатку і знову пишеш <code>git tag -a lr1-zdano -m "ЛР1 здано ще раз"</code>. Що буде?
+</ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git switch</code> - перемикає на іншу гілку (лінію змін); з <code>-c</code> створює нову.</li>
+</ul>
+</blockquote>
+<ol start="4">
+<li>Тег <code>lr1-zdano</code> уже є. Ти виправив опечатку і знову пишеш <code>git tag -a lr1-zdano -m "ЛР1 здано ще раз"</code>. Що буде?
    <details markdown="block">
 
 <summary>Відповідь</summary>
@@ -134,8 +165,7 @@
    fatal: tag 'lr1-zdano' already exists
    ```
    Код виходу 128, нового тегу нема. Два теги з однією назвою бути не може.
-   </details></p>
-</li>
+   </details></li>
 </ol>
 <h3 id="руками">Руками</h3>
 <p>Пісочниця - клон <code>~/pisochnytsia</code> з Уроку 03. Хеші комітів у тебе будуть інші - це нормально.</p>
@@ -152,17 +182,14 @@ git push
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
 <li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano; <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.</li>
-<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати». <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano; <code>-a</code> (<code>--all</code>) - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні (all - «усі»).</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p><strong>Крок 2. Легкий і анотований тег.</strong></p>
 <pre><code class="language-bash">git tag lr1-chernetka
@@ -175,13 +202,7 @@ lr1-zdano
 lr1-chernetka   ЛР1: завдання 2
 lr1-zdano       ЛР1 здано викладачу
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git tag</code> - ставить на коміт мітку з назвою (напр. lr1-zdano). Назва: tag - «мітка, ярлик». <code>-a</code> - анотований тег: з автором, датою і описом (для здачі - саме такий); <code>-m</code> - опис анотованого тегу; без -m git відкриє nano; <code>-n</code> - у списку тегів показати й перший рядок опису.
-<code>git tag -n</code> для легкого тегу показує повідомлення <strong>коміту</strong> (своє в нього нема), для анотованого - повідомлення <strong>тегу</strong>.</li>
-</ul>
-</blockquote>
+<p><code>git tag -n</code> для легкого тегу показує повідомлення <strong>коміту</strong> (своє в нього нема), для анотованого - повідомлення <strong>тегу</strong>.</p>
 <p><strong>Крок 3. Чим вони різні всередині.</strong></p>
 <pre><code class="language-bash">git show lr1-zdano --stat
 </code></pre>
@@ -203,10 +224,16 @@ Date:   Wed Nov 18 10:20:11 2026 +0000
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git show</code> - показує один коміт з його змінами або старий файл. Назва: show - «показати». <code>--stat</code> - замість рядків змін - лише які файли змінено і скільки рядків; <code>lr1-zdano</code> - тег: покаже, що саме було здано (урок 14 курсу Git).
-У дужках після хешу коміту - які гілки й теги на ньому стоять (як у <code>git log --decorate</code> нижче).
+<li><code>git show</code>: <code>--stat</code> - замість рядків змін - лише які файли змінено і скільки рядків (stat - «статистика»).</li>
+</ul>
+</blockquote>
+<p>У дужках після хешу коміту - які гілки й теги на ньому стоять (як у <code>git log --decorate</code> нижче).
 Спершу йде сам тег (хто поставив, коли, навіщо), потім коміт. <code>git show lr1-chernetka --stat</code> одразу починається з
-<code>commit</code> - у легкого тегу нема ні автора, ні дати.</li>
+<code>commit</code> - у легкого тегу нема ні автора, ні дати.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code> - показує історію комітів, новий зверху. <code>--decorate</code> - показати біля комітів назви гілок і тегів (у терміналі і так увімкнено).</li>
 </ul>
 </blockquote>
 <p>Ще одна перевірка - якого типу обʼєкт стоїть за назвою:</p>
@@ -222,12 +249,12 @@ baa1934 (HEAD -&gt; main, tag: lr1-zdano, tag: lr1-chernetka, origin/main, origi
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git cat-file</code> - показує тип або вміст обʼєкта git (коміт, тег). Назва: cat file - «вивести обʼєкт» (cat - від concatenate, «зчепити»). <code>-t</code> - тип обʼєкта: commit (коміт), tag (анотований тег), tree (тека), blob (файл).</li>
-<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>--decorate</code> - показати біля комітів назви гілок і тегів (у терміналі і так увімкнено); <code>-n</code> - лише N останніх комітів: -n 3 (або коротко -3).
-Легкий тег - просто назва коміту. Анотований - окремий обʼєкт <code>tag</code> у репозиторії, який вказує на коміт.
-<code>--decorate</code> дописує в дужках, які гілки й теги стоять на коміті (у терміналі <code>git log --oneline</code> робить це й сам).</li>
+<li><code>git cat-file</code> - зазирає всередину збереженого знімка (коміту) чи мітки (тегу). Назва: cat file - «вивести обʼєкт» (cat - від concatenate, «зчепити»). <code>-t</code> - тип: commit (коміт), tag (тег з описом), tree (тека), blob (файл) (t - type, «тип»).</li>
+<li><code>git log</code>: <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>-n</code> (<code>--max-count</code>) - лише N останніх комітів: <code>-n 3</code> (або коротко <code>-3</code>) (number - «число»).</li>
 </ul>
 </blockquote>
+<p>Легкий тег - просто назва коміту. Анотований - окремий обʼєкт <code>tag</code> у репозиторії, який вказує на коміт.
+<code>--decorate</code> дописує в дужках, які гілки й теги стоять на коміті (у терміналі <code>git log --oneline</code> робить це й сам).</p>
 <p><strong>Крок 4. Відправити теги на GitHub.</strong></p>
 <pre><code class="language-bash">git push --follow-tags
 git ls-remote --tags origin
@@ -240,12 +267,11 @@ baa1934646dbbd7c5cf498cb02332e01ec470396    refs/tags/lr1-zdano^{}
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git push</code>: <code>--follow-tags</code> - разом з комітами відправити й анотовані теги на них (легкі - ні).</li>
-<li><code>git ls-remote</code> - показує, які гілки й теги є на GitHub. Назва: ls remote - «перелічити на віддаленому»: що лежить на GitHub. <code>--tags</code> - лише теги; <code>origin</code> - яке віддалене репо питати (зазвичай origin).
-<code>git ls-remote --tags origin</code> питає GitHub, які теги <strong>там</strong>. Є лише <code>lr1-zdano</code>: легкий <code>--follow-tags</code> не взяв.
-Рядок з <code>^{}</code> - коміт, на який вказує анотований тег. Легкий відправляємо окремо:</li>
+<li><code>git ls-remote</code> - показує, які гілки й мітки (теги) зараз лежать на GitHub. Назва: ls remote - «перелічити на віддаленому»: що лежить на GitHub. <code>--tags</code> - лише теги (tags - «мітки»); <code>origin</code> - кого питати (зазвичай <code>origin</code> - твій GitHub).</li>
 </ul>
 </blockquote>
+<p><code>git ls-remote --tags origin</code> питає GitHub, які теги <strong>там</strong>. Є лише <code>lr1-zdano</code>: легкий <code>--follow-tags</code> не взяв.
+Рядок з <code>^{}</code> - коміт, на який вказує анотований тег. Легкий відправляємо окремо:</p>
 <pre><code class="language-bash">git push origin lr1-chernetka
 </code></pre>
 <pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
@@ -279,21 +305,20 @@ nothing to commit, working tree clean
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git checkout</code> - старе «перемкнути гілку або повернути файл» (тепер switch і restore). Назва: check out - «взяти» (як книжку в бібліотеці). <code>lr1-zdano</code> - тег: подивитись, що було здано (стан «відʼєднаний HEAD»), назад - git switch main.</li>
-<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан».
-Переклад: «Ти у стані відчепленого HEAD. Можна дивитися і навіть комітити, але ці коміти не належать жодній гілці.
+<li><code>git status</code> - показує, які файли змінено і що піде в наступний коміт (збережений знімок).</li>
+</ul>
+</blockquote>
+<p>Переклад: «Ти у стані відчепленого HEAD. Можна дивитися і навіть комітити, але ці коміти не належать жодній гілці.
 Хочеш їх зберегти - створи гілку <code>git switch -c назва</code>. Повернутися - <code>git switch -</code>».
-Тут можна відкрити файли, запустити doctest - побачиш рівно те, що здавав. Назад на гілку:</li>
+Тут можна відкрити файли, запустити doctest - побачиш рівно те, що здавав. Назад на гілку:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git switch</code>: <code>-c</code> (<code>--create</code>) - створити нову гілку від поточного місця і перейти на неї (create - «створити»); <code>-</code> - назад на попередню гілку (як <code>cd -</code>).</li>
 </ul>
 </blockquote>
 <pre><code class="language-bash">git switch main
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути».</li>
-</ul>
-</blockquote>
 <p><strong>Крок 6. Тег на старіший коміт.</strong> Забув поставити тег одразу? Його можна поставити на будь-який коміт:</p>
 <pre><code class="language-bash">git tag -a lr1-start -m &quot;Почав ЛР1&quot; HEAD~1
 git tag -l &quot;lr1-z*&quot;
@@ -301,11 +326,11 @@ git tag -l &quot;lr1-z*&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git tag</code>: <code>-l</code> - лише теги за шаблоном: git tag -l "lr1-*".
-<code>HEAD~1</code> - коміт перед поточним (можна і хеш з <code>git log --oneline</code>). <code>git tag -l "lr1-z*"</code> показує лише теги,
-що починаються на <code>lr1-z</code>, - тут це <code>lr1-zdano</code>.</li>
+<li><code>git tag</code>: <code>-l</code> (<code>--list</code>) - лише теги за зразком, <code>*</code> - будь-що: <code>git tag -l "lr1-*"</code> (list - «список»).</li>
 </ul>
 </blockquote>
+<p><code>HEAD~1</code> - коміт перед поточним (можна і хеш з <code>git log --oneline</code>). <code>git tag -l "lr1-z*"</code> показує лише теги,
+що починаються на <code>lr1-z</code>, - тут це <code>lr1-zdano</code>.</p>
 <p><strong>Крок 7. Видалити тег</strong> у себе і на GitHub:</p>
 <pre><code class="language-bash">git tag -d lr1-chernetka
 git push origin --delete lr1-chernetka
@@ -314,20 +339,19 @@ git push origin --delete lr1-chernetka
 To github.com:Evge14n/pisochnytsia.git
  - [deleted]         lr1-chernetka
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git tag</code>: <code>-d</code> - видалити тег у себе (на GitHub - окремо: git push origin --delete ТЕГ).</li>
-<li><code>git push</code>: <code>--delete</code> - видалити гілку або тег на GitHub: git push origin --delete lr3.
-Видаляй лише свої чернеткові теги. Тег здачі, який уже бачив викладач, не чіпай (чому - у «Типових помилках»).</li>
-</ul>
-</blockquote>
+<p>Видаляй лише свої чернеткові теги. Тег здачі, який уже бачив викладач, не чіпай (чому - у «Типових помилках»).</p>
 <p><strong>Releases на GitHub (коротко).</strong> На сторінці репо справа є <strong>Releases</strong> → <strong>Draft a new release</strong> → <strong>Choose a tag</strong>
 (вибрати <code>lr1-zdano</code>) → назва і опис → <strong>Publish release</strong>. Реліз - це тег + сторінка з описом і архівами
 <code>Source code (zip)</code> / <code>Source code (tar.gz)</code>. Для лаб досить тегу, реліз - для програм, які хтось завантажує.</p>
 <p><strong>Для лаб:</strong> після здачі кожної лаби - анотований тег <code>lr1-zdano</code> ... <code>lr7-zdano</code> і <code>git push origin lr1-zdano</code>.
 Тоді навіть через пів року <code>git checkout lr3-zdano</code> покаже рівно те, що бачив викладач, а <code>git diff lr3-zdano main</code>
 - що ти міняв після здачі. Як це вбудувати в роботу з лабами - файл «Лаби в git - univer-labs покроково».</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано).</li>
+</ul>
+</blockquote>
 <h3 id="типові-помилки">Типові помилки</h3>
 <ol>
 <li>
@@ -364,10 +388,10 @@ To github.com:Evge14n/pisochnytsia.git
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git branch</code> - показує, створює і видаляє гілки. Назва: branch - «гілка».
-   Правило: хочеш щось правити у старій версії - спершу <code>git switch -c нова-гілка</code>, потім комітить.</li>
+<li><code>git branch</code> - показує, створює і видаляє гілки (окремі лінії змін проєкту).</li>
 </ul>
 </blockquote>
+<p>Правило: хочеш щось правити у старій версії - спершу <code>git switch -c нова-гілка</code>, потім комітить.</p>
 <ol start="5">
 <li><strong><code>fatal: no tag message?</code></strong> - написав <code>git tag -a lr1-test</code> без <code>-m</code>, git відкрив nano, а ти вийшов, нічого не
    написавши. Тег не створено. Пиши відразу з <code>-m "повідомлення"</code>.</li>
@@ -385,20 +409,24 @@ To github.com:Evge14n/pisochnytsia.git
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). Назва: config - від configuration, «налаштування». <code>--global</code> - для тебе на цьому ноутбуці: пише у файл ~/.gitconfig, діє в усіх репо.
-  Після цього звичайний <code>git push</code> сам везе нові анотовані теги (перевірено в 2.43.0).</li>
-<li><strong>Release з терміналу</strong> через gh (Урок 16): <code>gh release create lr1-zdano --title "ЛР1" --notes-from-tag --verify-tag</code></li>
-<li>сторінка релізу з повідомленням тегу; <code>--verify-tag</code> не дасть створити реліз, якщо тегу ще нема на GitHub.
-  <code>bash
-  gh release create lr1-zdano --title "ЛР1" --notes-from-tag --verify-tag</code></li>
+<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). <code>--global</code> - для тебе на цьому ноутбуці: пише у файл <code>~/.gitconfig</code>, діє в усіх репо (global - «загальне»).</li>
 </ul>
+</blockquote>
+<p>Після цього звичайний <code>git push</code> сам везе нові анотовані теги (перевірено в 2.43.0).
+- <strong>Release з терміналу</strong> через gh (Урок 16): <code>gh release create lr1-zdano --title "ЛР1" --notes-from-tag --verify-tag</code>
+  - сторінка релізу з повідомленням тегу; <code>--verify-tag</code> не дасть створити реліз, якщо тегу ще нема на GitHub.
+  <code>bash
+  gh release create lr1-zdano --title "ЛР1" --notes-from-tag --verify-tag</code></p>
+<blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gh release create</code> - робить на GitHub сторінку релізу для тегу. Назва: release create - «створити випуск (реліз)» на GitHub. <code>--title</code> - назва релізу на сайті, напр. --title "ЛР1"; <code>--notes-from-tag</code> - опис релізу взяти з повідомлення анотованого тегу (git tag -a ... -m ...); <code>--verify-tag</code> - не створювати реліз, якщо такого тегу ще нема на GitHub (спершу git push origin ТЕГ); <code>lr1-zdano</code> - тег, для якого реліз (з Git уроку 14).</li>
+<li><code>gh release create</code> - робить на GitHub сторінку випуску для тегу (позначки версії). Назва: <code>gh</code> - gh - від GitHub; офіційна програма GitHub CLI (CLI - «командний рядок»); release create - «створити випуск (реліз)» на GitHub. <code>--title</code> - назва релізу на сайті, напр. <code>--title "ЛР1"</code> (title - «заголовок»); <code>--notes-from-tag</code> - опис релізу взяти з повідомлення тегу, яке писав у <code>git tag -a ... -m</code>; <code>--verify-tag</code> - не створювати реліз, якщо такого тегу ще нема на GitHub (спершу <code>git push origin ТЕГ</code>); <code>lr1-zdano</code> - назва тегу, для якого робиш реліз; тег має вже бути на GitHub.</li>
+</ul>
+</blockquote>
+<ul>
 <li><strong>Захист тегів</strong> у командах: правило (ruleset) на GitHub забороняє видаляти й пересувати теги <code>v*</code>
   (docs.github.com, «About rulesets»).</li>
 </ul>
-</blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>
 <ol>
 <li>Чим тег відрізняється від гілки?</li>

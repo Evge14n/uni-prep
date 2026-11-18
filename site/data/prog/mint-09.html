@@ -44,6 +44,23 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>apt install</code> - ставить програму з інтернету; на «Бажаєте продовжити? [Y/n]» - Enter. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)».</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-c</code> - виконати один рядок коду без файлу: <code>python3 -c 'print(2 ** 10)'</code> (command - «команда»); <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади <code>&gt;&gt;&gt;</code> з опису функцій. Назва: doc test - «тест у документації». <code>-v</code> (<code>--verbose</code>) - докладно: кожен приклад (Trying, Expecting, ok) і підсумок «N passed and M failed» (verbose - «багатослівно»).</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-c</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>~</code> <code>|</code> <code>*</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Головне про вікно:</p>
 <pre><code class="language-text">python3 lr4_1_1.py
    │
@@ -79,6 +96,7 @@ Tk чекає. Якщо вікно зависло і не закриваєтьс
 </ul>
 <p>Теорію turtle - курс Python (на сайті - <a href="#/u/prog/uroky">Уроки Python</a>), уроки 05 і 06.</p>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Крок за кроком у терміналі» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <p><strong>1.</strong> Шестикутник «без вікна». Що надрукує останній рядок?</p>
 <pre><code class="language-python">import turtle
 
@@ -148,16 +166,11 @@ source ~/univer/.venv/bin/activate
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
-<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-c</code> - виконати рядок коду з командного рядка, без файлу: python3 -c 'print(2 ** 10)'.</li>
-<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/univer/.venv/bin/activate</code> - увімкнути venv (окремий Python для лаб); вимкнути - deactivate.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p>Друга команда має надрукувати <code>8.6</code>. Якщо ставив усе скриптом з уроку 03 - першу можна пропустити, а останню
 (<code>source ...</code>) замінює слово <code>univer</code>. Але <code>univer</code> лише переходить у <code>~/univer</code> і вмикає venv - теку лаби він не
@@ -166,6 +179,12 @@ source ~/univer/.venv/bin/activate
 на англійській - <code>~/Downloads</code> (точну назву друкує <code>xdg-user-dir DOWNLOAD</code>). Telegram Desktop зазвичай кладе файли ще
 й у підтеку <code>Telegram Desktop</code> (на твоєму ноутбуці не перевірено - глянь <code>ls</code>). Лапки потрібні, бо в назвах пробіли і
 дужки:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>xdg-user-dir</code> - друкує шлях до теки завантажень, зображень тощо. Назва: XDG user directory - «тека користувача» за правилами freedesktop.org. <code>DOWNLOAD</code> - тека завантажень (туди кладуть файли браузер і Telegram).</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">xdg-user-dir DOWNLOAD
 ls ~/Завантаження ~/Завантаження/&quot;Telegram Desktop&quot;
 cp ~/Завантаження/&quot;Лабораторна робота_4 (Пайтон).pdf&quot; .
@@ -174,7 +193,6 @@ xdg-open &quot;Лабораторна робота_4 (Пайтон).pdf&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>xdg-user-dir</code> - друкує шлях до теки завантажень, зображень тощо. Назва: XDG user directory - «тека користувача» за правилами freedesktop.org. <code>DOWNLOAD</code> - тека завантажень (туди кладуть файли браузер і Telegram).</li>
 <li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
 <li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати». <code>.</code> - «сюди», у поточну теку: cp ~/Завантаження/lab1.py .</li>
 <li><code>xdg-open</code> - відкриває файл у його звичайній програмі. Назва: XDG (X Desktop Group, нині freedesktop.org) + open - «відкрити».</li>
@@ -183,6 +201,12 @@ xdg-open &quot;Лабораторна робота_4 (Пайтон).pdf&quot;
 <p>Якщо файл у підтеці Telegram, то <code>cp ~/Завантаження/"Telegram Desktop"/"Лабораторна робота_4 (Пайтон).pdf" .</code>
 <code>xdg-open</code> відкриває файл програмою за замовчуванням (для PDF - переглядач документів). Не знайшов файл - пошукай
 по всій домашній теці: <code>find ~ -name "*Пайтон*"</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>find</code> - шукає файли й теки за назвою, і в усіх підтеках. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: <code>-name "*.py"</code>; великі й малі літери різні.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 3. Один файл на завдання.</strong> Назви: <code>lr4_1_1.py</code>, <code>lr4_1_2.py</code>, ..., <code>lr4_2_clock.py</code>, <code>lr4_3_balls.py</code>
 (ніколи не <code>turtle.py</code>). Відкрий редактор:</p>
 <pre><code class="language-bash">nano lr4_1_1.py
@@ -243,6 +267,12 @@ if __name__ == &quot;__main__&quot;:       ← усе, що малює, - тіл
 - Закрив вікно хрестиком <strong>посеред</strong> малювання - буде помилка <code>turtle.Terminator</code> (вікна вже нема, а черепашка ще
   малює). Теж не баг: просто дочекайся кінця. Текст цієї помилки тут не відтворено (потрібен екран), опис - у
   <a href="#/u/prog/dovidnyk">Довідник функцій</a>, розділ turtle → <code>turtle.Terminator</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 5. Математика - doctest без вікна.</strong> Не пиши doctest, який створює <code>turtle.Turtle()</code> чи <code>turtle.Screen()</code>: він
 відкриє вікно. Винось обчислення у функцію, що <strong>повертає</strong> число, а рух перевіряй через <code>TNavigator</code>.
 Приклад на <strong>іншій</strong> задачі (не з ЛР4): скільки сторін має правильний многокутник, якщо на кожній вершині черепашка
@@ -271,10 +301,8 @@ Test passed.
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code>: <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
-<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції. <code>-v</code> - докладно: кожен приклад (Trying, Expecting, ok) і підсумок «N passed and M failed».</li>
-<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу. <code>-n</code> - скільки останніх рядків показати: -n 3 (lines).</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>tail</code> - показує останні рядки (файлу чи того, що прийшло через <code>|</code>). Назва: tail - «хвіст». <code>-n</code> (<code>--lines</code>) - скільки останніх рядків показати: <code>-n 3</code>, коротко <code>-3</code> (lines - «рядки»).</li>
 </ul>
 </blockquote>
 <p><code>import turtle</code> стоїть усередині doctest, бо поза тестами модуль у цьому файлі не потрібен. Якби він був угорі
@@ -304,6 +332,13 @@ Test passed.
 <li><strong>Графіки matplotlib</strong> (Завдання 3). <code>plt.show()</code> відкриває вікно (воно теж на Tk). Надійніше зберегти у файл і
   відкрити переглядачем - тоді графіки не заважають вікну turtle:</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+</ul>
+</blockquote>
 <pre><code class="language-python">import matplotlib.pyplot as plt
 
 masses = [1, 2, 4, 8]
@@ -319,7 +354,7 @@ plt.savefig(&quot;graf.png&quot;)
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>xdg-open</code>: <code>graf.png</code> - картинка з лаби - у переглядачі зображень.</li>
+<li><code>xdg-open</code>: <code>graf.png</code> - будь-яка картинка відкриється в переглядачі зображень.</li>
 </ul>
 </blockquote>
 <p>(Числа тут вигадані, це лише форма коду. matplotlib стоїть у <code>~/univer/.venv</code>, тож спершу <code>source</code> з кроку 1.)</p>
@@ -394,6 +429,12 @@ plt.savefig(&quot;graf.png&quot;)
 <code>dpkg -L python3-tk</code> - у списку тека <code>/usr/lib/python3.12/tkinter</code>, тобто без пакета модуля <code>tkinter</code> просто нема.
 Решта текстів у таблиці - справжні, з Mint 22.3. Повідомлення Python і Tk завжди англійською; повідомлення
 термінала (<code>cp</code>, <code>Quit</code>) на українській Mint - українською (як у дужках), а <code>/home/evgen</code> у тебе - твій логін.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>dpkg</code> - ставить один файл <code>.deb</code> і веде список встановлених програм. Назва: Debian package - «пакет Debian». <code>-L</code> (<code>--listfiles</code>) - усі файли, які поставив пакет, те саме, що <code>apt content</code> (list files - «список файлів»).</li>
+</ul>
+</blockquote>
 <p><strong>Пастка в умові завдання 3 (с. 12).</strong> Там написано: кінець, коли мала кулька ліворуч від великої (<code>x_m &lt; x_M</code>),
 летить вправо (<code>v_m &gt; 0</code>) і не швидше за велику (<code>v_m ≤ v_M</code>). Якщо закодувати це дослівно, цикл <strong>не зупиниться</strong>:</p>
 <ul>
@@ -425,18 +466,24 @@ python3 -m mypy lr4_1_1.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s».</li>
-<li><code>python3 -m black</code> - сам гарно оформлює код Python (пробіли, переноси). Назва: black - «чорний»: як у Форда, «будь-який колір, якщо він чорний». <code>-l</code> - найбільша довжина рядка; викладач хоче 78 (black сам ставить 88).</li>
+<li><code>python3 -m pytest</code> - проганяє тести (приклади <code>&gt;&gt;&gt;</code>) і чесно каже: усе пройшло чи ні. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади <code>&gt;&gt;&gt;</code>) у файлах <code>.py</code>; без нього pytest шукає лише функції <code>test_</code>; <code>-q</code> (<code>--quiet</code>) - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s» (quiet - «тихо»).</li>
+<li><code>python3 -m black</code> - сам гарно оформлює код Python (пробіли, переноси). Назва: black - «чорний»: як у Форда, «будь-який колір, якщо він чорний». <code>-l</code> (<code>--line-length</code>) - найбільша довжина рядка; викладач хоче 78, сам black ставить 88 (line length - «довжина рядка»).</li>
 <li><code>python3 -m flake8</code> - шукає помилки стилю і зайвий код, нічого не змінює. Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша дозволена довжина рядка; викладач хоче 78 (типово 79).</li>
-<li><code>python3 -m pycodestyle</code> - перевіряє лише оформлення коду за PEP 8. Назва: Python code style - «стиль коду Python» (раніше програма звалась pep8). <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78 (типово 79).</li>
-<li><code>python3 -m ruff check</code> - швидко шукає помилки в коді, з --fix сам виправляє. Назва: ruff - назва не розшифровується; check - «перевірити».</li>
-<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми. Назва: назва не розшифровується (py - від Python).</li>
+<li><code>python3 -m pycodestyle</code> - перевіряє лише оформлення коду за PEP 8 (правилами стилю Python). Назва: Python code style - «стиль коду Python» (раніше програма звалась pep8). <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78 (типово 79).</li>
+<li><code>python3 -m ruff check</code> - швидко шукає помилки в коді, з --fix сам виправляє.</li>
+<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми.</li>
 </ul>
 </blockquote>
 <p>Або все одразу: <code>perevir lr4_1_1.py</code> (скорочення з <code>ustanovka-mint.sh</code>, урок 03). Якщо файл питає <code>input()</code> поза
 <code>if __name__</code>, відповіді пишеш після назви через пробіл, кожна - окремий рядок вводу. black він лише перевіряє
 (<code>black: оформлення ок</code>), а виправляє <code>python3 -m black -l 78 файл.py</code>. Якщо зробити просто <code>black</code> без <code>-l 78</code>,
 flake8 потім скаже <code>E501 line too long (80 &gt; 78 characters)</code> - це й є та різниця 88 проти 78.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи).</li>
+</ul>
+</blockquote>
 <p>Список перед здачею:</p>
 <ul>
 <li>[ ] файл не зветься <code>turtle.py</code>, <code>math.py</code> тощо;</li>

@@ -45,6 +45,19 @@
 якщо є, інакше Flatpak.</p>
 <p><strong>apt у Mint - обгортка.</strong> Команда <code>apt</code> у Mint - це не справжній apt, а скрипт Mint <code>/usr/local/bin/apt</code>. Він сам
 додає <code>sudo</code> (тому <code>apt install</code> питає пароль і без <code>sudo</code>) і вміє більше. Справжній - <code>/usr/bin/apt</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt install</code> - ставить програму з інтернету; на «Бажаєте продовжити? [Y/n]» - Enter. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)».</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-S</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>|</code> <code>&gt;</code> набирай в англійській розкладці (<code>|</code> - Shift і клавіша <code>\</code>).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -111,9 +124,37 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt update</code> - завантажує свіжий список програм і версій, нічого не ставить.</li>
+<li><code>apt search</code> - шукає програми за словом у назві: <code>i</code> - стоїть, <code>p</code> - ні.</li>
+<li><code>apt show</code> - показує опис програми (пакета): версію, розмір, від чого залежить.</li>
+<li><code>apt remove</code> - видаляє програму, налаштування в /etc лишаються.</li>
+<li><code>apt purge</code> - видаляє програму разом з її налаштуваннями в <code>/etc</code>.</li>
+<li><code>apt autoremove</code> - прибирає програми, що ставились «за компанію» і вже не потрібні. Назва: auto remove - «автоматично прибрати».</li>
+<li><code>apt policy</code> - показує версії програми і з якого сховища (сервера) вона береться. Назва: policy - «політика» (яку версію і звідки бере apt).</li>
+<li><code>apt version</code> - друкує версію встановленої програми (пакета).</li>
+<li><code>apt held</code> - показує програми (пакети), заморожені від оновлень. Назва: held - «утримані» (заморожені від оновлень).</li>
+<li><code>apt contains</code> - каже, з якого пакета (програми з набором файлів) прийшов файл. Назва: contains - «містить» (який пакет містить файл).</li>
+<li><code>apt content</code> - показує, які файли поставила програма (пакет). Назва: content - «вміст» (що всередині пакета).</li>
+<li><code>apt deb</code> - ставить файл .deb, але без залежностей. Назва: deb - від Debian: так звуться файли пакетів .deb.</li>
+<li><code>apt help</code> - показує, яку справжню команду запустить <code>apt</code> у Mint (з <code>sudo</code> чи без).</li>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>apt-cache policy</code> - показує версії програми (пакета) і звідки вона береться. Назва: apt-cache - «кеш apt» (збережений список пакетів); policy - «політика».</li>
+<li><code>dpkg</code> - ставить один файл <code>.deb</code> і веде список встановлених програм. Назва: Debian package - «пакет Debian». <code>-S</code> (<code>--search</code>) - з якого пакета файл, те саме, що <code>apt contains</code> (search - «шукати»); <code>-L</code> (<code>--listfiles</code>) - усі файли, які поставив пакет, те саме, що <code>apt content</code> (list files - «список файлів»); <code>-i</code> (<code>--install</code>) - ставить файл <code>.deb</code>; залежностей сам не докачує (install - «встановити»).</li>
+<li><code>./скрипт</code> - запускає програму за шляхом до її файлу, напр. <code>./файл.sh</code>. Назва: ./ - «звідси».</li>
+</ul>
+</blockquote>
 <p>Порядок завжди: <code>apt update</code>, потім <code>apt install</code>. Про оновлення всієї системи - урок 02.</p>
 <p><strong>dpkg</strong> - нижчий рівень: ставить один .deb і веде список встановленого. <code>dpkg -l пакет</code> (стан: <code>ii</code> = встановлено),
 <code>dpkg -L пакет</code> (файли), <code>dpkg -S файл</code> (чий файл).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>dpkg</code>: <code>-l</code> (<code>--list</code>) - рядок стану пакета: <code>ii</code> - встановлено, <code>rc</code> - видалено, лишились налаштування (list - «список»).</li>
+</ul>
+</blockquote>
 <p><strong>«Керування програмами»</strong> (Software Manager, у меню так і зветься) - «магазин» Mint. Шукає одночасно в apt і на
 Flathub. Біля програми видно формат: «Системний пакунок» або Flatpak. Кнопки «Встановити», «Вилучити», «Запуск».
 Меню (☰) → «Налаштування»:
@@ -166,6 +207,18 @@ Flathub. Біля програми видно формат: «Системний
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>flatpak search</code> - шукає програми на Flathub. Назва: <code>flatpak</code> - flat pack - «пласка упаковка», як меблі в коробці, які збираєш сам.</li>
+<li><code>flatpak install</code> - ставить програму з Flathub. <code>flathub</code> - назва сховища (remote), звідки брати; у Mint flathub підключено одразу.</li>
+<li><code>flatpak run</code> - запускає Flatpak-програму за її ID.</li>
+<li><code>flatpak list</code> - показує встановлені Flatpak-програми. <code>--app</code> - лише програми, без спільних бібліотек (runtimes).</li>
+<li><code>flatpak info</code> - показує версію, розмір і джерело встановленої Flatpak-програми.</li>
+<li><code>flatpak uninstall</code> - видаляє Flatpak-програму або непотрібні бібліотеки. <code>--unused</code> - прибрати спільні бібліотеки (runtimes), які вже не потрібні жодній програмі (unused - «невикористані»).</li>
+<li><code>flatpak update</code> - оновлює всі Flatpak-програми.</li>
+</ul>
+</blockquote>
 <p><strong>Flatseal</strong> (<code>com.github.tchx84.Flatseal</code>, перевірений на Flathub) - вікно, де видно і можна обмежити, що дозволено
 кожному Flatpak: доступ до домашньої теки, мережі, камери.</p>
 <p><strong>.deb з сайту.</strong> Подвійний клік відкриває <strong>«Установник пакунків»</strong> (Captain). У терміналі - <code>sudo apt install ./файл.deb</code>
@@ -175,10 +228,28 @@ VS Code, Google Chrome). Інакше - нова версія лише вруч�
 пакет», а не «що він безпечний». Документація Ubuntu: сторонні сховища - найчастіша причина зламаного оновлення
 системи. Додати: <code>sudo add-apt-repository ppa:власник/назва</code>, прибрати: <code>--remove</code>, відкотити його пакети до
 офіційних - <code>ppa-purge</code>. Мишкою: меню → «Джерела програмного забезпечення» → «Пакунки PPA».</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>add-apt-repository</code> - додає чуже сховище програм (напр. PPA), з <code>-r</code> прибирає. Назва: add apt repository - «додати сховище для apt».</li>
+</ul>
+</blockquote>
 <p><strong>Snap</strong> у Mint вимкнено (Mint блокує <code>snapd</code>). Не вмикай його навмисно - для того самого є Flatpak.</p>
 <p><strong>AppImage</strong> - один файл-програма: <code>chmod +x програма.AppImage</code>, <code>./програма.AppImage</code>. Сам не оновлюється, у меню не
 зʼявляється. Багатьом старим AppImage потрібна бібліотека FUSE 2: на базі Ubuntu 24.04 пакет зветься <code>libfuse2t64</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code> - змінює права файлу: хто може читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>+x</code> - <code>+</code> - додати право, <code>x</code> (execute - «виконувати») - запускати файл як програму; без u/g/o - власнику, групі й іншим.</li>
+</ul>
+</blockquote>
 <p><strong>Python-програми</strong> (не бібліотеки для лаб!), як <code>uv</code> чи <code>ruff</code>, ставлять через <code>pipx</code> - урок 02. Не <code>sudo pip</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>pip</code> - ставить, оновлює і видаляє бібліотеки Python (у venv). Назва: pip installs packages - «pip ставить пакети» (назва, що посилається сама на себе).</li>
+</ul>
+</blockquote>
 <p><strong>Вільні програми (FOSS) і ліцензії.</strong> Майже все в Mint - вільне і відкрите програмне забезпечення (FOSS - Free and
 Open Source Software): код відкритий, його можна читати, змінювати і поширювати. Умови пише <strong>ліцензія</strong>: GPL
 (bash, coreutils, nano, git, ядро Linux) дозволяє все це, але змінену версію, яку поширюєш, теж треба давати з кодом;
@@ -198,19 +269,19 @@ GFDL
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-m</code> - зупинитись після стількох збігів: -m1 - лише перший (max count).</li>
+<li><code>grep</code> - шукає рядки з текстом (у файлах або те, що прийшло через <code>|</code>). Назва: g/re/p з редактора ed: global regular expression print - «скрізь знайти шаблон, надрукувати». <code>-m</code> (<code>--max-count</code>) - зупинитись після стількох збігів: -m1 - лише перший (max count - «найбільше»); <code>^</code> на початку шаблону - «рядок починається з цього тексту».</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
 <li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
-<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>head</code> - показує перші рядки файлу (або того, що прийшло через <code>|</code>). Назва: head - «голова». <code>-5</code> - лише 5 перші рядки (те саме, що <code>-n 5</code>).</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p>Невільне (закрите) теж буває: драйвер NVIDIA (урок 17), частина прошивок і кодеків. Mint ставить його окремо і
 питає. Сховища Ubuntu поділені на частини <code>main restricted universe multiverse</code> (усі чотири ввімкнені у файлі
 <code>/etc/apt/sources.list.d/official-package-repositories.list</code>); у <code>restricted</code> і <code>multiverse</code> - те, що має обмеження
 ліцензії (поділ за ліцензіями - зі слів документації Ubuntu, тут не перевірено).</p>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <ol>
 <li>Що насправді зробить <code>apt install</code> у Mint?</li>
 </ol>
@@ -219,7 +290,7 @@ GFDL
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>apt help</code> - показує, що насправді виконає обгортка apt. Назва: help - «довідка, допомога». <code>install</code> - apt help install - покаже, що install іде через sudo /usr/bin/apt install.</li>
+<li><code>apt help</code>: <code>install</code> - <code>apt help install</code> покаже, що install іде через <code>sudo /usr/bin/apt install</code>.</li>
 </ul>
 </blockquote>
 <details>
@@ -236,7 +307,7 @@ GFDL
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>type</code> - каже, що це за команда і де вона. Назва: type - «тип»: що це за команда. <code>-a</code> - показати ВСІ варіанти з цією назвою: аліас, вбудовану, усі файли в PATH (all).</li>
+<li><code>type</code> - каже, що це за команда і де вона. Назва: type - «тип». <code>-a</code> - показати всі варіанти з цією назвою, а не лише той, що запуститься (all - «усі»).</li>
 </ul>
 </blockquote>
 <details>
@@ -256,7 +327,7 @@ apt is /bin/apt
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>apt help</code>: <code>deb</code> - apt help deb - покаже, що deb = sudo dpkg -i (без докачування залежностей).</li>
+<li><code>apt help</code>: <code>deb</code> - <code>apt help deb</code> покаже, що deb = <code>sudo dpkg -i</code> (без докачування залежностей).</li>
 </ul>
 </blockquote>
 <details>
@@ -265,6 +336,12 @@ apt is /bin/apt
 </code></pre>
 <p>Ні. <code>dpkg -i</code> ставить лише сам файл і <strong>не докачує залежності</strong>. Якщо їх бракує, пакет лишиться недоналаштованим, і
 доведеться <code>sudo apt-get install -f</code>. Тому краще <code>sudo apt install ./файл.deb</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt-get install</code> - ставить програму (пакет); з <code>-f</code> лагодить зламані залежності. Назва: <code>apt-get</code> - apt (Advanced Package Tool) + get - «дістати»; apt-get - «apt, дістань»; install - «встановити». <code>-f</code> (<code>--fix-broken</code>) - докачує залежності, яких бракує, і доналаштовує пакети (fix broken - «полагодити зламане»).</li>
+</ul>
+</blockquote>
 </details>
 <ol start="4">
 <li>Ти поставив програму, а <code>apt install</code> у сусідньому вікні ще працює (або Диспетчер оновлень ставить оновлення).
@@ -300,11 +377,10 @@ nano: /usr/bin/nano
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>apt version</code> - друкує версію встановленого пакета. Назва: version - «версія». <code>python3</code> - версія системного Python (3.12.3...) - той, що не можна видаляти.</li>
-<li><code>dpkg</code> - ставить один .deb і знає, що встановлено. Назва: Debian package - «пакет Debian». <code>-S</code> - з якого пакета файл (те саме, що apt contains); <code>/usr/bin/python3</code> - dpkg -S /usr/bin/python3 - з якого пакета системний Python; <code>-L</code> - усі файли, які поставив пакет (те саме, що apt content); <code>nano</code> - dpkg -L nano - які файли поставив nano.</li>
-<li><code>apt contains</code> - каже, з якого пакета прийшов файл. Назва: contains - «містить» (який пакет містить файл).</li>
-<li><code>apt list</code> - показує список пакетів: встановлених або з оновленнями. Назва: list - «список». <code>--installed</code> - лише пакети, що вже стоять у системі.</li>
-<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> - лише кількість рядків (lines).</li>
+<li><code>apt version</code>: <code>python3</code> - версія системного Python (3.12.3...) - той, що не можна видаляти.</li>
+<li><code>apt list</code> - показує список програм (пакетів): встановлених або з оновленнями. <code>--installed</code> - лише пакети, що вже стоять у системі (installed - «встановлені»).</li>
+<li><code>dpkg</code>: <code>/usr/bin/python3</code> - <code>dpkg -S /usr/bin/python3</code> - з якої програми (пакета) прийшов системний Python.</li>
+<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> (<code>--lines</code>) - лише кількість рядків (lines - «рядки»).</li>
 </ul>
 </blockquote>
 <p>Версія у тебе може бути новішою. Остання команда покаже число пакетів (на свіжій Mint 22.3 близько двох тисяч:
@@ -324,12 +400,6 @@ nano: /usr/bin/nano
      7.2-2build1 500
         500 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>apt policy</code> - показує версії пакета і з якого він сховища. Назва: policy - «політика» (яку версію і звідки бере apt).</li>
-</ul>
-</blockquote>
 <p><code>Installed</code> - що стоїть, <code>Candidate</code> - що поставиться при оновленні, <code>***</code> - поточна. Рядки з адресами - звідки
 пакет (тут сховище Ubuntu, у тебе адреса може бути дзеркалом, наприклад українським). Якщо під версією лише
 <code>100 /var/lib/dpkg/status</code> - пакет <strong>нізвідки</strong> («сторонній»): його поставили з .deb, і оновлень він не отримає.
@@ -339,7 +409,7 @@ nano: /usr/bin/nano
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>2&gt;</code> - пише лише помилки у файл. Назва: redirect stderr - «перенаправити помилки»: 2 - номер потоку помилок.</li>
+<li><code>2&gt;</code> (redirect stderr) - пише лише помилки у файл.</li>
 </ul>
 </blockquote>
 <p>На свіжій системі - порожньо.</p>
@@ -355,13 +425,8 @@ apt autoremove
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>apt update</code> - оновлює список пакетів, нічого не ставить. Назва: update - «оновити» (тут оновлюється лише список пакетів).</li>
-<li><code>apt search</code> - шукає пакети за назвою: i - стоїть, p - ні. Назва: search - «шукати».</li>
-<li><code>apt show</code> - показує опис пакета: версію, розмір, залежності. Назва: show - «показати».</li>
-<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
+<li><code>apt remove</code>: <code>cowsay</code> - пакет-іграшка (корова в терміналі): на ньому зручно вчитись ставити і прибирати програми.</li>
 <li><code>cowsay</code> - корова в терміналі каже твій текст (іграшка для вправ). Назва: cow say - «корова каже».</li>
-<li><code>apt remove</code> - видаляє програму, налаштування в /etc лишаються. Назва: remove - «прибрати, вилучити». <code>cowsay</code> - пакет-іграшка з уроку 16: поставити, спробувати і прибрати.</li>
-<li><code>apt autoremove</code> - прибирає залежності, які вже нікому не потрібні. Назва: auto remove - «автоматично прибрати».</li>
 </ul>
 </blockquote>
 <p><code>apt install</code> покаже, що поставить і скільки місця займе, і спитає <code>Do you want to continue? [Y/n]</code> (українською
@@ -376,10 +441,9 @@ flatpak run com.github.tchx84.Flatseal
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>flatpak</code> - ставить програми з Flathub у «пісочниці», окремо від системи. Назва: flat pack - «пласка упаковка», як меблі в коробці, які збираєш сам. <code>--installations</code> - друкує, куди ставляться Flatpak-програми для всієї системи.</li>
-<li><code>flatpak install</code> - ставить програму з Flathub. Назва: install - «встановити». <code>flathub</code> - назва сховища (remote), звідки брати; у Mint flathub підключено одразу; <code>com.github.tchx84.Flatseal</code> - ID програми: перевернута адреса автора + назва, з точними великими літерами.</li>
-<li><code>flatpak list</code> - показує встановлені Flatpak-програми. Назва: list - «список». <code>--app</code> - лише програми, без спільних бібліотек (runtimes).</li>
-<li><code>flatpak run</code> - запускає Flatpak-програму за її ID. Назва: run - «запустити». <code>com.github.tchx84.Flatseal</code> - ID Flatseal - програми, де видно дозволи кожного Flatpak.</li>
+<li><code>flatpak</code>: <code>--installations</code> - друкує, куди ставляться Flatpak-програми для всієї системи.</li>
+<li><code>flatpak install</code>: <code>com.github.tchx84.Flatseal</code> - ID програми: перевернута адреса автора + назва, з точними великими літерами.</li>
+<li><code>flatpak run</code>: <code>com.github.tchx84.Flatseal</code> - ID Flatseal - програми, де видно дозволи кожного Flatpak.</li>
 </ul>
 </blockquote>
 <p>Перша команда покаже <code>/var/lib/flatpak</code> - туди Mint ставить Flatpak для всієї системи. <code>install</code> спитає підтвердження
@@ -388,12 +452,6 @@ flatpak run com.github.tchx84.Flatseal
 <pre><code class="language-bash">flatpak uninstall com.github.tchx84.Flatseal
 flatpak uninstall --unused
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>flatpak uninstall</code> - видаляє Flatpak-програму або непотрібні бібліотеки. Назва: uninstall - «видалити встановлене». <code>--unused</code> - прибрати runtimes (спільні бібліотеки), які вже не потрібні жодній програмі.</li>
-</ul>
-</blockquote>
 <p>У «Керування програмами» той самий Flatseal позначено як Flatpak, а для програм, що є в обох форматах, видно обидва
 варіанти.</p>
 <p><strong>Крок 5. .deb з сайту</strong> (коли справді треба). Спершу перевір, чи нема програми в «Керування програмами». Нема -
@@ -413,7 +471,7 @@ flatpak uninstall --unused
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>add-apt-repository</code> - додає (з -r прибирає) стороннє сховище, напр. PPA. Назва: add apt repository - «додати сховище для apt». <code>--help</code> - коротка довідка: які є параметри.</li>
+<li><code>add-apt-repository</code>: <code>--help</code> - коротка довідка: які є параметри.</li>
 </ul>
 </blockquote>
 <p>Відкрий меню → «Джерела програмного забезпечення» (спитає пароль). Вкладки: «Офіційні репозиторії», «Пакунки PPA»,
@@ -444,9 +502,7 @@ sudo apt-get install -f
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
-<li><code>dpkg</code>: <code>--configure</code> - доналаштовує розпаковані пакети; з -a - усі, які перервались; <code>-a</code> - з --configure: усі пакети, що чекають налаштування.</li>
-<li><code>apt-get install</code> - ставить пакет; з -f лагодить зламані залежності. Назва: apt-get - «apt, дістань»; install - «встановити». <code>-f</code> - fix - «полагодити»: докачує залежності, яких бракує, і доналаштовує пакети.</li>
+<li><code>dpkg</code>: <code>--configure</code> - доналаштовує розпаковані пакети; з <code>-a</code> - усі, які перервались (configure - «налаштувати»); <code>-a</code> (<code>--pending</code>) - з <code>--configure</code>: усі пакети, що чекають налаштування (pending - «ті, що чекають»).</li>
 </ul>
 </blockquote>
 <p>Перше доналаштовує обірвані пакети, друге (<code>-f</code> = fix) докачує залежності, яких бракує. Те саме після
@@ -461,6 +517,12 @@ sudo apt-get install -f
   може потягти за собою пів робочого столу. <strong>Читай список</strong> «The following packages will be REMOVED» («Такі
   пакунки будуть ВИЛУЧЕНІ:») перед тим, як погодитись.
 - <strong>Snap «не встановлюється»</strong> - так задумано в Mint; бери Flatpak.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>pip install</code> - ставить бібліотеку Python (лише у venv). Назва: pip installs packages - «pip ставить пакети»; install - «встановити».</li>
+</ul>
+</blockquote>
 <h2 id="як-роблять-профі">Як роблять профі</h2>
 <ul>
 <li><strong>Одна програма - один формат.</strong> Не ставлять ту саму програму і з apt, і з Flatpak (і тим паче Snap): дві копії,

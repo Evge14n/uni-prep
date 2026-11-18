@@ -5,6 +5,22 @@
 <h2 id="коротко">Коротко</h2>
 <p><strong>Хто ти:</strong> <code>whoami</code> - твій логін, <code>id</code> - номер користувача (uid) і групи. Група <code>sudo</code> = тобі можна адмініструвати.</p>
 <p><strong>Права файлу</strong> видно в <code>ls -l</code> (або коротше - <code>stat -c '%A %a %n' файл</code>):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long - «довгий»).</li>
+<li><code>stat</code> - показує права, власника, розмір і дати файлу. Назва: status - «стан»: усе, що система знає про файл. <code>-c</code> (<code>--format</code>) - друкувати лише поля з шаблону: <code>%A</code> права буквами, <code>%a</code> числом, <code>%n</code> назва (format).</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-l</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-ld</code> = <code>-l</code> і <code>-d</code>.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <pre><code class="language-text">-rwxrwxr-x  1 evgen evgen  31 ... pryvit.sh
 │└┬┘└┬┘└┬┘     │     │
 │ │  │  │      │     └ група файлу
@@ -40,6 +56,12 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+</ul>
+</blockquote>
 <p><strong>Числа:</strong> r = 4, w = 2, x = 1, для кожної трійки додаєш:</p>
 <pre><code class="language-text">rwx = 4+2+1 = 7      rw- = 4+2 = 6      r-x = 4+1 = 5      r-- = 4      --- = 0
 
@@ -78,6 +100,15 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code> - змінює права файлу: хто може читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>+x</code> - <code>+</code> - додати право, <code>x</code> (execute - «виконувати») - запускати файл як програму; без u/g/o - власнику, групі й іншим; <code>644</code> - rw-r--r--: 6 = rw- (4+2) тобі, 4 = r-- групі й іншим; звичайний файл - ти змінюєш, інші лише читають; <code>o-r</code> - забрати читання (r) в усіх інших (o = others, «інші»).</li>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>chown</code> - змінює, чий файл: власника і групу (зазвичай через <code>sudo</code>). Назва: change owner - «змінити власника».</li>
+<li><code>umask</code> - показує маску: які права НЕ давати новим файлам. Назва: user mask - «маска користувача».</li>
+</ul>
+</blockquote>
 <p><strong>umask у Mint = 0002.</strong> Тому нові файли виходять <code>rw-rw-r--</code> (664), нові теки <code>rwxrwxr-x</code> (775): група теж може
 писати. Це не страшно - у кожного користувача Mint своя особиста група з тим самим імʼям (<code>evgen</code>), і в ній лише ти.
 А сама домашня тека має права <code>rwxr-x---</code> (750) - інші користувачі ноутбука в неї не зайдуть.</p>
@@ -92,6 +123,12 @@
   команді, і кожна записується в журнал.
 - Віконні адмін-програми Mint («Джерела програмного забезпечення», «Користувачі та групи», «Керування системою»)
   самі питають пароль у вікні через <strong>pkexec</strong>. Їх запускають з меню, <strong>не</strong> через <code>sudo</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code>: <code>-k</code> (<code>--reset-timestamp</code>) - забути пароль одразу: наступний sudo знову спитає (інакше памʼятає 15 хвилин); <code>-l</code> (<code>--list</code>) - показати, що тобі дозволено робити через sudo (list - «список»).</li>
+</ul>
+</blockquote>
 <p><strong>Користувачі і групи - де записані:</strong></p>
 <div class="tw"><table>
 <thead>
@@ -145,6 +182,17 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>id</code> - показує твій номер у системі (uid) і групи. Назва: identity - «особа» (ID - ідентифікатор, номер).</li>
+<li><code>groups</code> - друкує групи (набори користувачів зі спільними правами), де ти є. Назва: groups - «групи».</li>
+<li><code>usermod</code> - додає користувача в групу (спільні права) чи змінює його запис; потрібен <code>sudo</code>. Назва: user modify - «змінити (обліковий запис) користувача». <code>-a</code> (<code>--append</code>) - ДОДАТИ до наявних груп, а не замінити їх; працює лише разом з <code>-G</code> (append - «дописати»); <code>-G</code> (<code>--groups</code>) - список додаткових груп через кому, без пробілів (groups - «групи»).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>$ЗМІННА</code> (dollar) - бере значення змінної (назви, під якою bash тримає текст).</li>
+<li><code>passwd</code> - змінює пароль; при наборі нічого не видно, навіть зірочок. Назва: password - «пароль».</li>
+</ul>
+</blockquote>
 <p>Те саме мишкою: меню → «Користувачі та групи» (Users and Groups) - спитає пароль, далі кнопка «Додати», вкладка
 «Групи», «Тип обліківки»: «Адміністратор» або «Стандарт».</p>
 <p><strong>Особливі права - щоб не лякатись літер <code>t</code> і <code>s</code>.</strong> Справжній вивід з Mint 22.3:</p>
@@ -157,9 +205,8 @@ ls -l /usr/bin/passwd
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long); <code>-d</code> - показати саму теку, а не її вміст: ls -ld lr1 (directory).</li>
+<li><code>ls</code>: <code>-d</code> (<code>--directory</code>) - показати саму теку, а не її вміст: ls -ld lr1 (directory - «тека»).</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <ul>
 <li><code>t</code> у кінці (sticky bit) на <code>/tmp</code>: писати можуть усі, але <strong>видалити</strong> файл може лише його власник.</li>
@@ -167,6 +214,7 @@ ls -l /usr/bin/passwd
   новий пароль у <code>/etc/shadow</code>, куди тобі самому не можна. Самому ставити SUID не треба ніколи.</li>
 </ul>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <p>Усе в практичній теці з «Руками» (крок 2). Вивід нижче - з тестової Mint англійською; якщо Mint у тебе українською,
 <code>Permission denied</code> буде <code>Відмовлено у доступі</code>.</p>
 <ol>
@@ -179,10 +227,8 @@ stat -c '%A' zvit.txt
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>touch</code> - створює порожній файл або оновлює його час. Назва: touch - «торкнутися» файлу: оновити час зміни, а як нема - створити.</li>
-<li><code>chmod</code> - змінює права файлу: читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>640</code> - rw-r-----: ти змінюєш, група читає, інші нічого.</li>
-<li><code>stat</code> - показує права, власника, розмір і дати файлу. Назва: status - «стан»: усе, що система знає про файл. <code>-c</code> - друкувати лише поля з шаблону: %A права буквами, %a числом, %n назва.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>touch</code> - створює порожній файл; якщо файл уже є - вміст не чіпає. Назва: touch - «торкнутися» файлу.</li>
+<li><code>chmod</code>: <code>640</code> - rw-r-----: 6 тобі (читати, змінювати), 4 групі (читати), 0 іншим (нічого).</li>
 </ul>
 </blockquote>
 <details>
@@ -200,8 +246,8 @@ bash pryvit.sh
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>./скрипт</code> - запускає свій файл-скрипт з поточної теки. Назва: ./ - «звідси»: крапка = поточна тека, / відділяє теку від файлу. <code>./pryvit.sh</code> - файл pryvit.sh з поточної теки; перший рядок #!/bin/bash каже, чим його виконати.</li>
-<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
+<li><code>bash</code> - програма, що читає й виконує твої команди; <code>bash файл.sh</code> - з файлу. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
+<li><code>./скрипт</code> - запускає програму за шляхом до її файлу, напр. <code>./файл.sh</code>. Назва: ./ - «звідси». <code>./pryvit.sh</code> - файл з поточної теки; перший рядок <code>#!/bin/bash</code> каже, чим його виконати.</li>
 </ul>
 </blockquote>
 <details>
@@ -220,7 +266,7 @@ bash pryvit.sh
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
 </ul>
 </blockquote>
 <details>
@@ -239,10 +285,8 @@ echo &quot;рядок&quot; &gt;&gt; korin.txt
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
 </ul>
 </blockquote>
 <details>
@@ -263,9 +307,6 @@ umask
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>whoami</code> - друкує твій логін. Назва: who am I - «хто я».</li>
-<li><code>id</code> - показує твій номер (uid) і групи. Назва: identity - «особа»: друкує номери (ID) користувача і груп.</li>
-<li><code>groups</code> - друкує групи користувача. Назва: groups - «групи».</li>
-<li><code>umask</code> - показує, які права забирати в нових файлів. Назва: user mask - «маска користувача»: які права НЕ давати новим файлам.</li>
 </ul>
 </blockquote>
 <p>Справжній вивід з тестової Mint 22.3. На ноутбуці uid буде, найімовірніше, 1000, а груп більше: інсталятор Mint
@@ -295,12 +336,10 @@ stat -c '%A %a %n' pryvit.sh
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
-<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>chmod</code>: <code>+x</code> - дозволити запуск (x); у Mint - усім трьом: власнику, групі й іншим.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
 </ul>
 </blockquote>
 <p><code>+x</code> додав x усім трьом. Спробуй числами і подивись <code>stat</code> після кожної:</p>
@@ -317,7 +356,7 @@ stat -c '%A %a %n' pryvit.sh zvit.txt
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>chmod</code>: <code>755</code> - rwxr-xr-x: скрипт чи тека - усі читають і запускають, змінюєш лише ти; <code>600</code> - rw-------: лише ти (ключі ssh, паролі); <code>644</code> - rw-r--r--: звичайний файл - ти змінюєш, інші лише читають; <code>o-r</code> - забрати читання (r) в усіх інших (o = others, «інші»).</li>
+<li><code>chmod</code>: <code>755</code> - rwxr-xr-x: 7 = rwx (4+2+1) тобі, 5 = r-x (4+1) групі й іншим; для скриптів і тек - усі читають і запускають, змінюєш лише ти; <code>600</code> - rw-------: 6 лише тобі (читати і змінювати), групі й іншим 0 - для ключів ssh і паролів.</li>
 </ul>
 </blockquote>
 <p><strong>Крок 3. Право x у теки.</strong></p>
@@ -329,7 +368,7 @@ chmod 700 sekret
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>chmod</code>: <code>700</code> - rwx------: тека лише для тебе.</li>
+<li><code>chmod</code>: <code>700</code> - rwx------: 7 (усе) лише тобі - тека тільки для тебе.</li>
 </ul>
 </blockquote>
 <p><code>cd</code> скаже <code>bash: cd: sekret: Permission denied</code>: без x у теку не зайти, навіть власнику. <code>chmod 700</code> повертає вхід.</p>
@@ -337,22 +376,10 @@ chmod 700 sekret
 <pre><code class="language-bash">sudo whoami
 sudo -k
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>sudo</code>: <code>-k</code> - забути пароль одразу: наступний sudo знову спитає (інакше памʼятає 15 хвилин).</li>
-</ul>
-</blockquote>
 <p>Спершу спитає <code>[sudo] password for evgen:</code> - набери свій пароль (буде видно зірочки) і Enter. Відповідь - <code>root</code>.
 Ще раз <code>sudo whoami</code> протягом 15 хвилин - пароль не питає. Після <code>sudo -k</code> - питає знову. Подивись, що тобі можна:</p>
 <pre><code class="language-bash">sudo -l
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>sudo</code>: <code>-l</code> - показати, що тобі дозволено робити через sudo.</li>
-</ul>
-</blockquote>
 <p>Серед рядків буде <code>(ALL : ALL) ALL</code> - усе, бо ти в групі <code>sudo</code>. Ще два рядки <code>(root) NOPASSWD: ...</code> - це Mint
 дозволяє Диспетчеру оновлень без пароля оновлювати кеш (<code>mint-refresh-cache</code>) і перевіряти блокування dpkg.</p>
 <p><strong>Крок 5. Як sudo псує файли в домашній теці і як це лікувати.</strong></p>
@@ -365,15 +392,14 @@ echo &quot;рядок&quot; &gt;&gt; korin.txt
 <pre><code class="language-text">-rw-r--r-- root root korin.txt
 -rw-r--r-- evgen evgen korin.txt
 </code></pre>
+<p><code>$USER</code> - це твій логін, bash підставить його сам. Після <code>chown</code> файл знову твій і дописується без sudo. Цілу теку
+повертають з <code>-R</code> (рекурсивно): <code>sudo chown -R "$USER:$USER" ~/univer</code>.</p>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>chown</code> - змінює власника і групу файлу (через sudo). Назва: change owner - «змінити власника».</li>
-<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
+<li><code>chown</code>: <code>-R</code> (<code>--recursive</code>) - змінити власника теки і всього, що в ній (recursive - «рекурсивно»: і в усіх підтеках).</li>
 </ul>
 </blockquote>
-<p><code>$USER</code> - це твій логін, bash підставить його сам. Після <code>chown</code> файл знову твій і дописується без sudo. Цілу теку
-повертають з <code>-R</code> (рекурсивно): <code>sudo chown -R "$USER:$USER" ~/univer</code>.</p>
 <p><strong>Крок 6. Файли користувачів.</strong></p>
 <pre><code class="language-bash">stat -c '%A %U %G %n' /etc/passwd /etc/group /etc/shadow
 grep &quot;^$USER:&quot; /etc/passwd | cut -d: -f1,6,7
@@ -386,9 +412,9 @@ evgen:/home/evgen:/bin/bash
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати».</li>
-<li><code>cut</code> - вирізає з рядків потрібні стовпці. Назва: cut - «вирізати»: взяти шматок кожного рядка.</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>grep</code> - шукає рядки з текстом (у файлах або те, що прийшло через <code>|</code>). Назва: g/re/p з редактора ed: global regular expression print - «скрізь знайти шаблон, надрукувати». <code>^</code> на початку шаблону - «рядок починається з цього тексту».</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>cut</code> - вирізає з рядків потрібні стовпці. Назва: cut - «вирізати».</li>
 </ul>
 </blockquote>
 <p>У <code>/etc/passwd</code> поля розділені <code>:</code>, ми вирізали (<code>cut</code>) 1-ше (логін), 6-те (домашня тека) і 7-ме (оболонка). Пароля
@@ -402,7 +428,6 @@ sudo usermod -aG dialout &quot;$USER&quot;
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>getent</code> - показує запис про групу або користувача. Назва: get entries - «отримати записи» з баз системи (користувачі, групи).</li>
-<li><code>usermod</code> - змінює користувача, напр. додає в групу (через sudo). Назва: user modify - «змінити (обліковий запис) користувача». <code>-a</code> - ДОДАТИ до наявних груп, а не замінити їх; працює лише разом з -G; <code>-G</code> - список додаткових груп через кому, без пробілів.</li>
 </ul>
 </blockquote>
 <p>Тепер <strong>вийди з сеансу і зайди знову</strong> (або перезавантаж) - групи оновлюються лише при вході. Перевір: <code>groups</code> - у
@@ -420,7 +445,7 @@ sudo usermod -aG dialout &quot;$USER&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>sudo</code>: <code>-e</code> - безпечно редагувати системний файл: копія відкривається в nano від тебе, а кладе її root.</li>
+<li><code>sudo</code>: <code>-e</code> (<code>--edit</code>) - безпечно редагувати системний файл: копія відкривається в nano від тебе, а кладе її root (edit - «редагувати»).</li>
 </ul>
 </blockquote>
 <p><code>sudo -e</code> відкриває <strong>копію</strong> файлу в nano від твого імені, а після збереження сам кладе її на місце від root. Вийдеш
@@ -432,8 +457,7 @@ gio trash ~/univer/praktyka/u15
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>cd</code>: <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
-<li><code>gio</code> - робота з файлами як у Nemo; gio trash - у кошик. Назва: GIO - GLib Input/Output, «ввід-вивід бібліотеки GLib». <code>trash</code> - команда «кошик»: gio trash ФАЙЛ кладе файл у кошик, як Delete у Nemo.</li>
+<li><code>gio</code> - кладе файли в кошик (<code>gio trash</code>) замість безповоротного <code>rm</code>. Назва: GIO - GLib Input/Output, «ввід-вивід бібліотеки GLib». <code>trash</code> - команда «кошик»: gio trash ФАЙЛ кладе файл у кошик, як Delete у Nemo.</li>
 </ul>
 </blockquote>
 <h2 id="типові-помилки">Типові помилки</h2>
@@ -463,6 +487,15 @@ gio trash ~/univer/praktyka/u15
 <li><strong>Забув пароль</strong> - його не «показати»: можна лише задати новий через режим відновлення (recovery mode) в меню
   GRUB, детально в уроці 26.</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code>: <code>777</code> - rwxrwxrwx: 7 усім трьом - усім усе; майже завжди помилка, див. приклад.</li>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+<li><code>nemo</code> - відкриває теку у вікні файлового менеджера (<code>nemo .</code> - поточну). Назва: капітан Немо з «Наутілуса».</li>
+<li><code>xed</code> - віконний редактор Mint, як Блокнот. Назва: x (набір програм X-Apps від Mint) + ed від editor - «редактор».</li>
+</ul>
+</blockquote>
 <h2 id="як-роблять-профі">Як роблять профі</h2>
 <ul>
 <li><strong>Найменші потрібні права</strong> (principle of least privilege): sudo - лише на одну команду, яка справді змінює

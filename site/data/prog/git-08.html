@@ -50,6 +50,25 @@ g = 9.81
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git status</code> - показує, які файли змінено і що піде в наступний коміт (збережений знімок). <code>--short</code> - коротко: по рядку на файл з двома буквами стану (<code>M</code>, <code>A</code>, <code>??</code>) (short - «коротко»).</li>
+<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано).</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати».</li>
+<li><code>git merge</code> - додає зміни іншої гілки в ту, де ти зараз. <code>--abort</code> - скасувати злиття, що зупинилось на конфлікті: усе як до <code>git merge</code> (abort - «перервати»).</li>
+<li><code>git pull</code> - забирає нові знімки (коміти) з GitHub і одразу додає у твої файли. Назва: pull - «потягнути».</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-m</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-am</code> = <code>-a</code> і <code>-m</code>.</li>
+<li>Символи <code>~</code> <code>&gt;</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Аналогія: двоє редагують один абзац реферату. Хтось має прочитати обидва варіанти і лишити один (або змішати). git цього за тебе не робить - і правильно.</p>
 <h3 id="пісочниця">Пісочниця</h3>
 <p>Дві гілки міняють один і той самий рядок:</p>
@@ -76,34 +95,26 @@ git log --oneline --graph --all
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
 <li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano; <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.</li>
-<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути». <code>-c</code> - створити нову гілку від поточного місця і перейти на неї.</li>
-<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор»: править текст, що тече крізь нього. <code>-i</code> - змінити САМ файл (без -i sed лише показує результат); -i.bak - ще й копія.</li>
-<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>--graph</code> - малює гілки зліва зірочками і лініями; <code>--all</code> - коміти всіх гілок, а не лише поточної.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>git commit</code>: <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»); <code>-a</code> (<code>--all</code>) - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні (all - «усі»).</li>
+<li><code>git switch</code> - перемикає на іншу гілку (лінію змін); з <code>-c</code> створює нову. <code>-c</code> (<code>--create</code>) - створити нову гілку від поточного місця і перейти на неї (create - «створити»).</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>--graph</code> - малює гілки зліва зірочками і лініями; <code>--all</code> - коміти всіх гілок, а не лише поточної.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор». <code>-i</code> (<code>--in-place</code>) - змінити САМ файл (без <code>-i</code> sed лише показує); <code>-i.bak</code> - ще й копія (in-place - «на місці»).</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
-Хеші в тебе будуть інші - дивись на будову.</p>
 </blockquote>
+<p>Хеші в тебе будуть інші - дивись на будову.</p>
 <h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
 <ol>
 <li><code>git merge tochnist</code> - злиття пройде?</li>
 </ol>
 <pre><code class="language-bash">git merge tochnist
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git merge</code> - зливає іншу гілку в поточну. Назва: merge - «злити, обʼєднати».</li>
-</ul>
-</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Ні, конфлікт. Код виходу 1 (<code>echo $?</code>).</p>
@@ -117,6 +128,12 @@ Automatic merge failed; fix conflicts and then commit the result.
 </ol>
 <details>
 <summary>Відповідь</summary>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
+</ul>
+</blockquote>
 <p>Обидва варіанти з маркерами. Рядки, де згоди нема, - лише рядок з <code>g</code>; заголовок і <code>L</code> git злив сам.</p>
 <pre><code class="language-text"># ЛР1: маятник
 &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
@@ -157,13 +174,6 @@ Unmerged paths:
 
 no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан». <code>--short</code> - коротко: по рядку на файл з двома буквами стану (M, A, ??).</li>
-<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано). Назва: diff - від difference, «різниця».</li>
-</ul>
-</blockquote>
 <pre><code class="language-text">UU lr1.py
 </code></pre>
 <pre><code class="language-text">diff --cc lr1.py
@@ -180,6 +190,12 @@ index 7435f88,75aaf89..0000000
   L = 1.0
 </code></pre>
 <p><code>UU</code> - «unmerged» в обох. Під час конфлікту <code>git diff</code> особливий (<code>diff --cc</code>): дві колонки плюсів, бо порівнює з обома батьками.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>diff</code> - показує, чим відрізняються два файли. Назва: difference - «різниця».</li>
+</ul>
+</blockquote>
 <p><strong>Крок 2. Розвʼяжи в nano.</strong> У методичці <code>g = 9.81</code> - лишаємо його.</p>
 <pre><code class="language-bash">nano lr1.py
 </code></pre>
@@ -237,19 +253,18 @@ cat lr1.py
 <pre><code class="language-text">On branch main
 nothing to commit, working tree clean
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git merge</code>: <code>--abort</code> - скасувати злиття з конфліктом: усе як до git merge.</li>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
-</ul>
-</blockquote>
 <pre><code class="language-text"># ЛР1: маятник
 g = 9.81
 L = 2.0
 </code></pre>
 <p>Маркерів нема, файл як до <code>merge</code>. Це кнопка «назад», коли конфлікт заплутаний і хочеться спершу подумати.</p>
 <p><strong>Крок 5. Конфлікт з чужим комітом (через GitHub).</strong> Другий клон <code>~/druhyi-klon</code> грає роль одногрупника на іншому ноутбуці. Працюємо в приватній пісочниці <code>pisochnytsia</code> з уроку 03. <code>git push</code> - відправити свої коміти на GitHub, <code>git pull</code> - забрати чужі (детально - урок 09).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git push</code> - відправляє твої нові знімки (коміти) з компʼютера на GitHub. Назва: push - «штовхнути».</li>
+</ul>
+</blockquote>
 <p>Ти пишеш план здачі і відправляєш:</p>
 <pre><code class="language-bash">cd ~/pisochnytsia
 git pull
@@ -258,14 +273,13 @@ git add plan.txt
 git commit -m &quot;План здачі&quot;
 git push
 </code></pre>
+<p>«Одногрупник» клонує, міняє дату і теж відправляє (якщо <code>~/druhyi-klon</code> уже є - пропусти <code>git clone</code>, натомість <code>cd ~/druhyi-klon</code> і <code>git pull</code>):</p>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git pull</code> - забирає нові коміти з GitHub і зливає у твою гілку. Назва: pull - «потягнути»: забрати нові коміти з GitHub до себе.</li>
-<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub.</li>
+<li><code>git clone</code> - копіює весь проєкт з історією з GitHub до тебе.</li>
 </ul>
 </blockquote>
-<p>«Одногрупник» клонує, міняє дату і теж відправляє (якщо <code>~/druhyi-klon</code> уже є - пропусти <code>git clone</code>, натомість <code>cd ~/druhyi-klon</code> і <code>git pull</code>):</p>
 <pre><code class="language-bash">git clone git@github.com:Evge14n/pisochnytsia.git ~/druhyi-klon
 cd ~/druhyi-klon
 git config user.name &quot;Друг&quot;
@@ -276,8 +290,7 @@ git push
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git clone</code> - копіює весь репо з GitHub до тебе. Назва: clone - «клон, точна копія».</li>
-<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). Назва: config - від configuration, «налаштування».</li>
+<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор).</li>
 </ul>
 </blockquote>
 <p><code>git config</code> без <code>--global</code> діє лише в цьому репо - тут ти «Друг». А ти, не знаючи про це, ставиш свою дату і забираєш зміни:</p>
@@ -310,7 +323,7 @@ git log --format=&quot;%h %an: %s&quot; -n 3
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git log</code>: <code>--format</code> - свій вигляд рядка: %h - хеш, %an - автор, %s - повідомлення; <code>-n</code> - лише N останніх комітів: -n 3 (або коротко -3).</li>
+<li><code>git log</code>: <code>--format</code> - свій вигляд рядка: %h - хеш, %an - автор, %s - повідомлення; <code>-n</code> (<code>--max-count</code>) - лише N останніх комітів: <code>-n 3</code> (або коротко <code>-3</code>) (number - «число»).</li>
 </ul>
 </blockquote>
 <p>(<code>nano</code> або <code>printf</code> - щось одне.) nano для коміту запропонує <code>Merge branch 'main' of github.com:Evge14n/pisochnytsia</code> - лиши як є. Останній рядок показує, хто що зробив (<code>%h</code> - хеш, <code>%an</code> - автор, <code>%s</code> - повідомлення):</p>
@@ -319,6 +332,13 @@ git log --format=&quot;%h %an: %s&quot; -n 3
 89c4ae1 Друг: Здача ЛР1 переноситься на 27.11
 </code></pre>
 <p><strong>Для лаб:</strong> у <code>~/univer/labs</code> конфлікт найчастіше буває, коли ти правиш ЛР3 у двох гілках або на двох компʼютерах (ноутбук і ПК в аудиторії). Правило те саме: <code>git status</code> → <code>nano lr3/lr3.py</code> → прибрати маркери → <code>python3 -m doctest lr3/lr3.py</code> (перевір, що код живий!) → <code>git add</code> → <code>git commit</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади <code>&gt;&gt;&gt;</code> з опису функцій. Назва: doc test - «тест у документації».</li>
+</ul>
+</blockquote>
 <h3 id="типові-помилки">Типові помилки</h3>
 <ul>
 <li>Закомітив файл з маркерами (git дозволяє: <code>git add</code> не перевіряє вміст). Python падає:

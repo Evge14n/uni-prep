@@ -87,6 +87,7 @@ def main():
                 e = kd[k]
                 want = [e[1]] + ([e[3][f]] if f else []) + ([e[4][a]] if a else [])
                 for w in want:
+                    w = w.replace("`", "")  # у підказці `код` показано як <code>
                     if w not in txt:
                         fail(f"{vw}: підказка {k} {f or a or ''}: нема тексту довідника «{w[:40]}»")
                 if box["x"] < 0 or box["y"] < 0 or box["x"] + box["width"] > vw + 1 or box["y"] + box["height"] > vh + 1:

@@ -4,6 +4,19 @@
 повністю, налагодження <strong>після</strong> падіння (post-mortem), як налагоджувати doctest (ним викладач перевіряє лаби),
 <code>logging</code> замість <code>print</code>, корисні прапорці <code>python3 -X ...</code> і два сторонні налагоджувачі (ipdb, pudb).
 Наприкінці - 7 зламаних програм для тренування.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-X</code> - додаткові режими: <code>-X dev</code> - усі попередження, <code>-X faulthandler</code> - де саме впала програма (extra - «додаткове»).</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-X</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> <code>&amp;</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Як ділити.</strong> Захід 1: «Коротко», кроки 1-4. Захід 2: кроки 5-8 (post-mortem і doctest - найважливіше для лаб) і
 тренування (крок 9). Кроки 10-12 (logging, прапорці <code>-X</code>, faulthandler, trace, importtime, cProfile, ipdb, pudb)
 винесено в розділ «Далі - за бажанням» - для ЛР1-ЛР3 вони не потрібні, повернешся, коли захочеш.</p>
@@ -35,6 +48,13 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code>: <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»); <code>-i</code> - спершу виконати файл, потім лишитись у Python з <code>&gt;&gt;&gt;</code> і всіма його функціями (interactive - «інтерактивно»).</li>
+<li><code>python3 -m pdb</code> - запускає програму покроково: рядок за рядком, з паузами. Назва: Python debugger - «налагоджувач Python» (debug - «виловити жуків», помилки). <code>-c</code> - виконати команду pdb одразу після старту; <code>-c continue</code> - їхати до падіння і стати там (command).</li>
+</ul>
+</blockquote>
 <p><strong>Post-mortem</strong> («після смерті») - налагодження вже впалої програми: змінні в момент падіння ще живі, їх можна
 дивитись, але йти далі вже нікуди.</p>
 <h3 id="усі-команди-pdb-які-знадобляться">Усі команди pdb, які знадобляться</h3>
@@ -194,6 +214,12 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>whatis</code> - каже, що це: у терміналі - опис команди, у pdb - тип. Назва: what is - «що це?».</li>
+</ul>
+</blockquote>
 <h3 id="doctest-logging-прапорці-сторонні-налагоджувачі">doctest, logging, прапорці, сторонні налагоджувачі</h3>
 <div class="tw"><table>
 <thead>
@@ -253,11 +279,29 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code>: <code>-W</code> - що робити з попередженнями: <code>-W error</code> робить кожне попередження помилкою (warnings - «попередження»).</li>
+<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи).</li>
+<li><code>python3 -m pytest</code> - проганяє тести (приклади <code>&gt;&gt;&gt;</code>) і чесно каже: усе пройшло чи ні. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади <code>&gt;&gt;&gt;</code>) у файлах <code>.py</code>; без нього pytest шукає лише функції <code>test_</code>; <code>--pdb</code> - при провалі або винятку одразу відкрити pdb у місці падіння.</li>
+<li><code>python3 -m cProfile</code> - показує, які функції скільки разів викликались і скільки часу. Назва: C + profile - «профіль» програми; сам інструмент написаний мовою C. <code>-s</code> (<code>--sort</code>) - як сортувати таблицю: <code>cumtime</code> (загальний час), <code>ncalls</code> (кількість викликів), <code>tottime</code> (sort - «сортувати»).</li>
+<li><code>python3 -m timeit</code> - міряє, скільки триває маленький шматок коду. Назва: time it - «засічи час цього».</li>
+<li><code>python3 -m trace</code> - друкує кожен виконаний рядок програми. Назва: trace - «слід», «простежити». <code>--trace</code> - друкувати кожен рядок перед виконанням: видно шлях програми без <code>print</code>.</li>
+</ul>
+</blockquote>
 <p><code>python3 -m doctest -v файл.py</code> і <code>python3 -m doctest -o FAIL_FAST файл.py</code> - <strong>лише для файлів, де <code>testmod()</code>
 стоїть під <code>if __name__ == "__main__":</code></strong> (або його нема зовсім), як у прикладах цього уроку. На лабах викладача,
 де <code>doctest.testmod()</code> просто внизу файлу і є <code>input()</code>, ця команда дає чужий провал <code>DebugRunner</code> і питає ввід
 (урок 04, «Типові помилки» п. 10) - там <code>python3 лаба.py -v</code> або <code>perevir</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m doctest</code> - перевіряє приклади <code>&gt;&gt;&gt;</code> з опису функцій. Назва: doc test - «тест у документації». <code>-v</code> (<code>--verbose</code>) - докладно: кожен приклад (Trying, Expecting, ok) і підсумок «N passed and M failed» (verbose - «багатослівно»); <code>-o</code> (<code>--option</code>) - увімкнути опцію doctest, напр. <code>-o FAIL_FAST</code> - зупинитись на першому провалі (option - «опція»).</li>
+</ul>
+</blockquote>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <p>Відповіді - справжній вивід з кроків «Руками» нижче (номер кроку в дужках).</p>
 <ol>
 <li>У функції є змінна <code>h</code> (висота). Ти зупинився в pdb і набрав просто <code>h</code>, Enter. Що покаже pdb?</li>
@@ -303,12 +347,11 @@ nano kydok.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
 <li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p>Тіло кинули вгору зі швидкістю 10 м/с, рахуємо висоту <code>h = v0·t - g·t²/2</code> кожні 0.5 с. Набери (номери рядків
 важливі для точок зупинки, тому порожні рядки теж):</p>
@@ -349,12 +392,6 @@ t = 1.5 с   h =  3.964 м
 t = 2.0 с   h =  0.380 м
 готово
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
-</ul>
-</blockquote>
 <p>Тепер під pdb:</p>
 <pre><code class="language-bash">python3 -m pdb kydok.py
 </code></pre>
@@ -441,13 +478,6 @@ The program finished and will be restarted
 -&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
 (Pdb) q
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>python3</code>: <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
-<li><code>python3 -m pdb</code> - запускає програму покроково в налагоджувачі pdb. Назва: Python debugger - «налагоджувач Python» (debug - «виловити жуків», помилки).</li>
-</ul>
-</blockquote>
 <p>Розбір:
 - <code>w</code> показує стек знизу вгору як traceback, тільки «живий»: <code>&gt;</code> - де ми зараз. Два верхні рядки (<code>bdb.py</code>,
   <code>&lt;string&gt;</code>) - це сам pdb, їх пропускай.
@@ -596,6 +626,12 @@ The program finished and will be restarted
 <code>(com)</code> - ти вводиш список команд. <strong><code>c</code> у списку одразу закінчує список</strong> (pdb 3.12 так і робить, у
 документації: будь-яка команда, що продовжує виконання, завершує список). Якщо після <code>c</code> набрати ще й <code>end</code>,
 отримаєш <code>*** NameError: name 'end' is not defined</code>. Список без <code>c</code> закінчуй словом <code>end</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+</ul>
+</blockquote>
 <h3 id="крок-4-ignore-display-until-retval">Крок 4. <code>ignore</code>, <code>display</code>, <code>until</code>, <code>retval</code></h3>
 <pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
 -&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
@@ -809,12 +845,6 @@ Post mortem debugger finished. The /home/evgen/univer/praktyka/nalag2/vymiry.py 
 -&gt; def mean(values):
 (Pdb) q
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>python3 -m pdb</code>: <code>-c</code> - виконати команду pdb одразу після старту; -c continue - їхати до падіння і зупинитись там.</li>
-</ul>
-</blockquote>
 <p><code>values</code> порожній, <code>u</code> показав, яка серія винна: <code>'t3'</code>. Зверху в traceback - рядки самого pdb (<code>pdb.py</code>,
 <code>bdb.py</code>), пропускай їх. Після першого <code>q</code> програма <strong>перезапускається</strong>, тому <code>q</code> двічі.</p>
 <p><strong>Спосіб 2:</strong> програма вже впала в <code>python3 -i</code> - <code>pdb.pm()</code> (post mortem):</p>
@@ -844,12 +874,6 @@ ZeroDivisionError: division by zero
 (Pdb) q
 &gt;&gt;&gt;
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>python3</code>: <code>-i</code> - спершу виконати файл, а потім лишитись у Python з &gt;&gt;&gt; і всіма його функціями.</li>
-</ul>
-</blockquote>
 <p>Тут <code>q</code> повертає в <code>&gt;&gt;&gt;</code> (останній порожній <code>&gt;&gt;&gt;</code> - вихід Ctrl+D).</p>
 <p><strong>Спосіб 3:</strong> <code>pdb.post_mortem()</code> у самому коді - коли падіння ловить <code>try/except</code>. Заміни останній рядок
 <code>vymiry.py</code> на:</p>
@@ -981,12 +1005,6 @@ Got:
    1 of   1 in lab_demo.period
 ***Test Failed*** 1 failures.
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції. <code>-o</code> - увімкнути опцію doctest, напр. -o FAIL_FAST - зупинитись на першому провалі.</li>
-</ul>
-</blockquote>
 <p>У коді це <code>doctest.testmod(optionflags=doctest.FAIL_FAST)</code>. Інші прапорці: <code>doctest.ELLIPSIS</code> (<code>...</code> в очікуваному
 означає «будь-що»), <code>doctest.NORMALIZE_WHITESPACE</code> (не зважати на кількість пробілів). Прапорці - лише для <strong>свого</strong>
 налагодження: doctest викладача не змінюй.</p>
@@ -1066,14 +1084,20 @@ Got:
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code>: <code>-c</code> - виконати рядок коду з командного рядка, без файлу: python3 -c 'print(2 ** 10)'.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>python3</code>: <code>-c</code> - виконати один рядок коду без файлу: <code>python3 -c 'print(2 ** 10)'</code> (command - «команда»).</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
 </ul>
 </blockquote>
 <p><strong>pytest з <code>--pdb</code></strong> зупиняється в місці падіння, але корисний, лише коли doctest впав з <strong>винятком</strong> (Traceback).
 Зроби копію <code>lab_exc.py</code>, де формат уже <code>:.3f</code>, а в другому прикладі навмисно рядок: <code>&gt;&gt;&gt; period("0.25")</code>.
 pytest стоїть у venv (урок 03), тож спершу <code>source ~/univer/.venv/bin/activate</code>:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/univer/.venv/bin/activate</code> - увімкнути venv (окремий Python для лаб); вимкнути - deactivate.</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">python3 -m pytest --doctest-modules --pdb -q lab_exc.py
 </code></pre>
 <pre><code class="language-text">F
@@ -1116,7 +1140,7 @@ FAILED lab_exc.py::lab_exc.period
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>--pdb</code> - при провалі або винятку одразу відкрити pdb у місці падіння; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s».</li>
+<li><code>python3 -m pytest</code>: <code>-q</code> (<code>--quiet</code>) - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s» (quiet - «тихо»).</li>
 </ul>
 </blockquote>
 <p>А коли doctest просто дав інше число (<code>Expected</code>/<code>Got</code>), <code>--pdb</code> зупиняється всередині коду самого pytest
@@ -1150,6 +1174,13 @@ FAILED lab_demo.py::lab_demo.period
 <p><strong>З <code>breakpoint()</code> ввід набирай руками</strong>, не через <code>printf ... |</code>. pdb читає команди з того самого входу, що й
 <code>input()</code>: після <code>printf</code> там уже кінець вводу, pdb отримує його замість команди і зупиняє програму - в кінці
 traceback буде <code>bdb.BdbQuit</code>. Тому <code>python3 лаба.py -v</code>, на <code>input()</code> набери число, а на <code>(Pdb)</code> - команди.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+</ul>
+</blockquote>
 <h3 id="крок-9-тренування">Крок 9. Тренування</h3>
 <p>Тека <strong>«Налагодження - зламані програми»</strong> поруч з уроками курсу: <code>bug_1.py</code> ... <code>bug_7.py</code> і <code>ЗАВДАННЯ.md</code>. Тека
 курсу лежить на ПК; на ноутбук її переносиш флешкою, через GitHub або пересилаєш собі в Telegram архівом (zip;
@@ -1162,12 +1193,18 @@ ls ~/univer/praktyka/zlamani
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати». <code>-r</code> - копіювати теку разом з усім, що всередині (recursive); те саме -R.</li>
+<li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати». <code>-r</code> (<code>--recursive</code>) - копіювати теку разом з усім, що всередині; те саме -R (recursive - «рекурсивно», углиб).</li>
 <li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
 </ul>
 </blockquote>
 <p>Не знаходиш теку - <code>find ~ -name "bug_1.py"</code>. Далі по черзі: прочитай симптом, вибери метод, знайди баг сам, і
 лише потім відкривай підказки. Методи з logging і faulthandler там - лише другий варіант (є і print).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>find</code> - шукає файли й теки за назвою, і в усіх підтеках. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: <code>-name "*.py"</code>; великі й малі літери різні.</li>
+</ul>
+</blockquote>
 <h2 id="далі-за-бажанням-для-лр1-лр3-не-потрібно">Далі - за бажанням (для ЛР1-ЛР3 не потрібно)</h2>
 <p>Кроки 10-12 - інструменти, які знадобляться пізніше, на довгих програмах. Можна пропустити й повернутись згодом.</p>
 <h3 id="крок-10-logging-замість-print">Крок 10. logging замість print</h3>
@@ -1257,7 +1294,7 @@ WARNING height:15 тіло вже впало, h=-5.656
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
 </ul>
 </blockquote>
 <p>Чим краще за <code>print</code>: рядки налагодження не треба видаляти (лише змінити рівень), видно функцію й рядок, можна
@@ -1276,14 +1313,6 @@ python3 -X dev dani.py
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 середнє: 2.007
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>python3</code>: <code>-X</code> - особливі режими: -X dev (усі попередження), -X faulthandler (аварії), -X importtime (час імпорту).</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-</ul>
-</blockquote>
 <p>Без <code>-X dev</code> - лише <code>середнє: 2.007</code>. Правильно: <code>with open("dani.txt") as file:</code>.</p>
 <p><strong><code>-W error</code></strong> - кожне попередження (warning) стає помилкою. <code>chysla.py</code> шукає числа в рядку:</p>
 <pre><code class="language-python">import re
@@ -1303,12 +1332,6 @@ python3 -W error chysla.py
                          ^^^^^^^^^^
 SyntaxError: invalid escape sequence '\d'
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>python3</code>: <code>-W</code> - що робити з попередженнями (warnings): -W error робить кожне попередження помилкою.</li>
-</ul>
-</blockquote>
 <p>Попередження легко не помітити, а з <code>-W error</code> програма не запуститься, поки не виправиш. Виправлення:
 <code>r"\d+\.\d+"</code> (буква <code>r</code> - «сирий» рядок, <code>\</code> у ньому - просто символ).</p>
 <p><strong>Програма зависла.</strong> <code>zavis.py</code> гальмує швидкість по 0.4, поки вона не стане рівно 0 (а через похибку float вона
@@ -1396,11 +1419,7 @@ t = 2.0 с   h =  0.380 м
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3 -m trace</code> - друкує кожен виконаний рядок програми. Назва: trace - «слід», «простежити»: показує шлях програми по рядках. <code>--trace</code> - друкувати кожен рядок перед виконанням (видно шлях програми без print).</li>
-<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
-<li><code>python3 -m timeit</code> - міряє, скільки триває маленький шматок коду. Назва: time it - «засічи час цього».</li>
-<li><code>python3 -m cProfile</code> - показує, які функції скільки разів викликались і скільки часу. Назва: C profile - «профіль» програми; модуль написаний мовою C, тому швидкий. <code>-s</code> - як сортувати таблицю: cumtime (загальний час), ncalls (кількість викликів), tottime.</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>head</code> - показує перші рядки файлу (або того, що прийшло через <code>|</code>). Назва: head - «голова». <code>-12</code> - лише 12 перші рядки (те саме, що <code>-n 12</code>); <code>-14</code> - лише 14 перші рядки (те саме, що <code>-n 14</code>).</li>
 </ul>
 </blockquote>
 <ul>
@@ -1418,8 +1437,7 @@ source ~/univer/.venv/bin/activate
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>./скрипт</code> - запускає свій файл-скрипт з поточної теки. Назва: ./ - «звідси»: крапка = поточна тека, / відділяє теку від файлу.</li>
-<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
+<li><code>pip install</code> - ставить бібліотеку Python (лише у venv). Назва: <code>pip</code> - pip installs packages - «pip ставить пакети» (назва, що посилається сама на себе); pip installs packages - «pip ставить пакети»; install - «встановити».</li>
 </ul>
 </blockquote>
 <p><strong>ipdb</strong> - той самий pdb, але в стилі IPython: кольори, Tab доповнює імена, код навколо видно одразу. Вмикається
@@ -1469,6 +1487,12 @@ bdb.BdbQuit
 <p>Команди ті самі, що в pdb. Неприємність ipdb 0.13.13 з новим IPython 9: після виходу (і після будь-якого
 необробленого винятку) зверху друкується <code>Error in sys.excepthook ... deprecated</code>. Справжня помилка - нижче, після
 <code>Original exception was:</code>. Запуск з першого рядка: <code>python3 -m ipdb kydok.py</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m ipdb</code> - покроковий налагоджувач, як <code>pdb</code>, з кольорами і Tab (є у venv). Назва: IPython debugger - налагоджувач у стилі IPython (кольори, Tab).</li>
+</ul>
+</blockquote>
 <p><strong>pudb</strong> - налагоджувач <strong>на весь екран</strong> термінала, схожий на графічний: код, змінні, стек і точки зупинки видно
 одночасно:</p>
 <pre><code class="language-bash">cd ~/univer/praktyka/nalag2
@@ -1477,11 +1501,17 @@ python3 -m pudb kydok.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3 -m pudb</code> - налагоджувач на весь екран, як графічний (ставиться у venv). Назва: назва не розшифровується; db - від debugger, «налагоджувач».</li>
+<li><code>python3 -m pudb</code> - покроковий налагоджувач на весь екран термінала (є у venv).</li>
 </ul>
 </blockquote>
 <p>Перший запуск показує вікно «Welcome to PudB 2026.1!», потім «Edit Preferences» (налаштування; закрий кнопкою
 <code>&lt; OK &gt;</code>). Екран після кількох <code>n</code> і <code>s</code> (справжній, термінал 100×30):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>&lt;</code> (input redirect) - подає файл програмі замість клавіатури.</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">PuDB 2026.1 - ?:help  n:next  s:step into  b:breakpoint  !:python command line
                                                                    Variables:
                                                                    dt: 0.5

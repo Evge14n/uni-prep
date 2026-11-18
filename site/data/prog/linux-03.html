@@ -32,8 +32,31 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
+<li><code>less</code> - гортає довгий файл по сторінках, вихід q. Назва: less - «менше»: жарт, бо less is more - кращий за старий переглядач more.</li>
+<li><code>head</code> - показує перші рядки файлу (або того, що прийшло через <code>|</code>). Назва: head - «голова». <code>-n</code> (<code>--lines</code>) - скільки перших рядків показати: <code>-n 3</code>, коротко <code>-3</code> (lines - «рядки»).</li>
+<li><code>tail</code> - показує останні рядки (файлу чи того, що прийшло через <code>|</code>). Назва: tail - «хвіст». <code>-n</code> (<code>--lines</code>) - скільки останніх рядків показати: <code>-n 3</code>, коротко <code>-3</code>.</li>
+<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> (<code>--lines</code>) - лише кількість рядків.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-n</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>~</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>nano - простий редактор у терміналі.</strong> <code>nano файл.py</code> відкриває (або створює) файл.
 Підказки внизу: <code>^</code> - це Ctrl.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+</ul>
+</blockquote>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -76,29 +99,28 @@ code .
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
 <li><code>code</code> - відкриває файл або теку у VS Code. Назва: code - від Visual Studio Code («код»). <code>.</code> - крапка = поточна тека: відкрити її всю як проєкт.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
-Відкриється VS Code у режимі WSL (унизу ліворуч зелене «WSL: Ubuntu»). Терміналом усередині VS Code
+</blockquote>
+<p>Відкриється VS Code у режимі WSL (унизу ліворуч зелене «WSL: Ubuntu»). Терміналом усередині VS Code
 (Ctrl+<code>- клавіша ліворуч від 1, або меню Terminal → New Terminal) є Ubuntu. Python-розширення бачить venv: Ctrl+Shift+P →
 «Python: Select Interpreter» →</code>~/univer/.venv/bin/python`.</p>
-</blockquote>
 <p><strong>Кінці рядків.</strong> Windows закінчує рядок двома символами (CRLF, <code>\r\n</code>), Linux - одним (LF, <code>\n</code>).
 Python усе одно, а bash-скрипт з CRLF ламається: <code>bash: $'\r': command not found</code>.
 Перевірити: <code>file скрипт.sh</code> (буде «with CRLF line terminators»). У VS Code внизу праворуч
 напис <code>CRLF</code> - клікни і вибери <code>LF</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>file</code> - каже, що за файл за його вмістом. Назва: file - «файл».</li>
+</ul>
+</blockquote>
 <h3 id="руками-10-хв">Руками (10 хв)</h3>
 <pre><code class="language-bash">cd ~/univer/praktyka
 nano hello.py
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).
-Надрукуй:</li>
-</ul>
-</blockquote>
+<p>Надрукуй:</p>
 <pre><code class="language-python">name = input(&quot;Як тебе звати? &quot;)
 print(f&quot;Привіт, {name}!&quot;)
 </code></pre>
@@ -116,14 +138,8 @@ file hello.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
-<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> - лише кількість рядків (lines).</li>
-<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу. <code>-n</code> - скільки перших рядків показати: -n 3 (lines).</li>
-<li><code>less</code> - гортає довгий файл по сторінках, вихід q. Назва: less - «менше»: жарт, бо less is more - кращий за старий переглядач more.</li>
-<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу. <code>-n</code> - скільки останніх рядків показати: -n 3 (lines).</li>
-<li><code>file</code> - каже, що за файл за його вмістом. Назва: file - «файл»: каже, що це за файл.</li>
-<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+<li><code>#</code> (hash) - коментар: далі до кінця рядка bash не читає.</li>
 </ul>
 </blockquote>
 <h3 id="типові-помилки">Типові помилки</h3>
@@ -153,4 +169,11 @@ file hello.py
 <li><code>code .</code> (крапка - поточна тека).</li>
 <li><code>less</code> показує по екрану, можна гортати назад і шукати <code>/слово</code>; <code>cat</code> вивалює все одразу.</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор». <code>-i</code> (<code>--in-place</code>) - змінити САМ файл (без <code>-i</code> sed лише показує); <code>-i.bak</code> - ще й копія (in-place - «на місці»).</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+</ul>
+</blockquote>
 </details>

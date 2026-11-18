@@ -2,6 +2,20 @@
 <p><strong>Навіщо:</strong> лаби лежать на ноутбуці. Ноутбук може зламатись, а в аудиторії ти сидиш за іншим ПК. GitHub - копія репо в інтернеті: <code>push</code> відправляє туди твої коміти, <code>pull</code> забирає звідти свіжі (свої з іншого компʼютера або одногрупника).</p>
 <h3 id="коротко">Коротко</h3>
 <p><strong>Remote</strong> (віддалений репозиторій) - адреса іншої копії того самого репо. Після <code>git clone</code> вона вже записана під назвою <strong>origin</strong> («звідки взяв»).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git clone</code> - копіює весь проєкт з історією з GitHub до тебе.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-v</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-vv</code> = <code>-v</code> і <code>-v</code>.</li>
+<li>Символи <code>~</code> <code>&gt;</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>origin/main</strong> - це <strong>памʼять</strong> твого git про те, що було в <code>main</code> на GitHub, коли ти востаннє з ним говорив. Вона оновлюється лише при <code>fetch</code>, <code>pull</code> і <code>push</code>. Сам по собі git на GitHub не ходить.</p>
 <pre><code class="language-text">          GitHub (origin)
           A ← B ← C      main
@@ -56,9 +70,29 @@ pull = fetch + merge
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git remote</code> - показує і задає, де лежить твій проєкт на GitHub (<code>origin</code>). Назва: remote - «віддалений»: репо на іншому компʼютері (GitHub). <code>-v</code> (<code>--verbose</code>) - показати й адреси: окремо для fetch (забирати) і push (відправляти) (verbose - «докладно»); <code>origin</code> - звичайне імʼя для копії проєкту на GitHub; <code>git clone</code> ставить його сам.</li>
+<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
+<li><code>git push</code> - відправляє твої нові знімки (коміти) з компʼютера на GitHub. Назва: push - «штовхнути». <code>-u</code> (<code>--set-upstream</code>) - запамʼятати пару «моя гілка - гілка на GitHub»; далі просто <code>git push</code> (set upstream - «задати джерело»).</li>
+<li><code>git fetch</code> - лише дізнається, що нового на GitHub; твої файли не змінює.</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
+<li><code>git pull</code> - забирає нові знімки (коміти) з GitHub і одразу додає у твої файли. Назва: pull - «потягнути».</li>
+<li><code>git status</code> - показує, які файли змінено і що піде в наступний коміт (збережений знімок).</li>
+</ul>
+</blockquote>
 <p>Аналогія: GitHub - спільна дошка оголошень. <code>push</code> - повісив свій листок. <code>fetch</code> - сфотографував дошку (у себе нічого не переписав). <code>pull</code> - сфотографував і переписав нове в зошит.</p>
 <h3 id="пісочниця">Пісочниця</h3>
 <p>Потрібні два клони одного приватного репо: <code>~/pisochnytsia</code> (урок 03) і <code>~/druhyi-klon</code> (урок 08, там <code>git config user.name "Друг"</code>). Немає другого - <code>git clone git@github.com:Evge14n/pisochnytsia.git ~/druhyi-klon</code>, потім у ньому <code>git config user.name "Друг"</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+</ul>
+</blockquote>
 <p>Твої хеші і кількість комітів будуть інші, ніж тут: у прикладі на GitHub спершу лише один коміт <code>Initial commit</code>.</p>
 <h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
 <ol>
@@ -100,11 +134,8 @@ origin  git@github.com:Evge14n/pisochnytsia.git (push)
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>git remote</code> - показує і задає адресу репо на GitHub (origin). Назва: remote - «віддалений»: репо на іншому компʼютері (GitHub). <code>-v</code> - показати й адреси: окремо для fetch (забирати) і push (відправляти).</li>
-<li><code>git branch</code> - показує, створює і видаляє гілки. Назва: branch - «гілка». <code>-v</code> - біля кожної гілки - останній коміт; двічі (-vv) - ще й за якою гілкою GitHub стежить.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>git branch</code> - показує, створює і видаляє гілки (окремі лінії змін проєкту). <code>-v</code> (<code>--verbose</code>) - біля гілки - її останній коміт; <code>-vv</code> - ще й повʼязана гілка на GitHub.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <pre><code class="language-text">* main ff89247 [origin/main] Initial commit
 </code></pre>
@@ -125,14 +156,11 @@ nothing to commit, working tree clean
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
 <li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
-<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан».</li>
-<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати». <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»).</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
 </ul>
 </blockquote>
 <pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
@@ -147,12 +175,6 @@ git add druh.txt
 git commit -m &quot;Привіт від друга&quot;
 git push
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git pull</code> - забирає нові коміти з GitHub і зливає у твою гілку. Назва: pull - «потягнути»: забрати нові коміти з GitHub до себе.</li>
-</ul>
-</blockquote>
 <p>Повертаємось до себе:</p>
 <pre><code class="language-bash">cd ~/pisochnytsia
 git status
@@ -160,13 +182,6 @@ git fetch
 git status
 git log --oneline main..origin/main
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git fetch</code> - забирає новини з GitHub, нічого не зливаючи. Назва: fetch - «принести, забрати».</li>
-<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
-</ul>
-</blockquote>
 <p>Перший <code>git status</code> - <code>up to date</code> (див. передбачення 2). Далі:</p>
 <pre><code class="language-text">From github.com:Evge14n/pisochnytsia
    f405170..15cb00b  main       -&gt; origin/main
@@ -191,7 +206,7 @@ Fast-forward
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git merge</code> - зливає іншу гілку в поточну. Назва: merge - «злити, обʼєднати».</li>
+<li><code>git merge</code> - додає зміни іншої гілки в ту, де ти зараз.</li>
 </ul>
 </blockquote>
 <p><code>git merge</code> без назви зливає те, за чим стежить гілка, тобто <code>origin/main</code>. <code>fetch</code> + <code>merge</code> - рівно те, що робить <code>git pull</code>.</p>
@@ -217,8 +232,8 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git commit</code>: <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.</li>
-<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
+<li><code>git commit</code>: <code>-a</code> (<code>--all</code>) - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні (all - «усі»).</li>
 </ul>
 </blockquote>
 <p>Код виходу 1, на GitHub нічого не змінилось. Цікаво: <code>git status</code> зараз усе ще пише <code>ahead of 'origin/main' by 1 commit</code> - памʼять <code>origin/main</code> стара, <code>push</code> її не оновив. Робимо як радить git:</p>
@@ -244,7 +259,7 @@ git push
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git log</code>: <code>--graph</code> - малює гілки зліва зірочками і лініями; <code>-n</code> - лише N останніх комітів: -n 3 (або коротко -3).</li>
+<li><code>git log</code>: <code>--graph</code> - малює гілки зліва зірочками і лініями; <code>-n</code> (<code>--max-count</code>) - лише N останніх комітів: <code>-n 3</code> (або коротко <code>-3</code>) (number - «число»).</li>
 </ul>
 </blockquote>
 <pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
@@ -269,9 +284,6 @@ branch 'main' set up to track 'origin/main'.
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
-<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
-<li><code>git remote</code>: <code>origin</code> - звичайна назва головного віддаленого репо; git clone ставить її сам.</li>
-<li><code>git push</code>: <code>-u</code> - запамʼятати звʼязок гілки з GitHub; далі просто git push і git pull.</li>
 </ul>
 </blockquote>
 <p><code>-u</code> (повністю <code>--set-upstream</code>) - запамʼятати звʼязок <code>main ↔ origin/main</code>. Потрібно один раз на гілку. Далі просто:</p>
@@ -327,7 +339,10 @@ nothing to commit, working tree clean
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git pull</code>: <code>--ff-only</code> - лише перемотування вперед; якщо в тебе свої коміти - зупинитись, нічого не зливаючи.</li>
+<li><code>git pull</code>: <code>--ff-only</code> - лише перемотування вперед; якщо в тебе свої коміти - зупинитись, нічого не зливаючи (fast-forward only - «лише перемотати»).</li>
+</ul>
+</blockquote>
+<ul>
 <li>Що я ще <strong>не</strong> запушив: <code>git log --oneline origin/main..main</code> (порожньо - усе на GitHub).
   <code>bash
   git log --oneline origin/main..main</code></li>
@@ -342,17 +357,20 @@ nothing to commit, working tree clean
   branch 'lr2' set up to track 'origin/lr2'.
   ```</li>
 </ul>
+<blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). Назва: config - від configuration, «налаштування». <code>--global</code> - для тебе на цьому ноутбуці: пише у файл ~/.gitconfig, діє в усіх репо.</li>
-<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути». <code>-c</code> - створити нову гілку від поточного місця і перейти на неї.</li>
+<li><code>git config</code>: <code>--global</code> - для тебе на цьому ноутбуці: пише у файл <code>~/.gitconfig</code>, діє в усіх репо (global - «загальне»).</li>
+<li><code>git switch</code> - перемикає на іншу гілку (лінію змін); з <code>-c</code> створює нову. <code>-c</code> (<code>--create</code>) - створити нову гілку від поточного місця і перейти на неї (create - «створити»).</li>
+</ul>
+</blockquote>
+<ul>
 <li>Створити репо на GitHub і одразу запушити поточну теку - одна команда gh (урок 16). Вона робить усе з кроку 5 разом: створює репо, додає <code>origin</code>, пушить. Тут лише зразок, <strong>не запускай</strong> у <code>~/git-pisochnytsia-09</code>: <code>pisochnytsia-push</code> на GitHub уже є, і <code>origin</code> уже додано. Знадобиться для нового проєкту (свіжа тека з <code>git init</code> і комітом, без <code>origin</code>), <code>НАЗВА</code> - назва нового репо:
   <code>text
   gh repo create НАЗВА --private --source=. --push</code></li>
 <li>Багато команд ставлять <code>pull.rebase true</code>, щоб історія була прямою, без merge-комітів від <code>pull</code>. Для початку <code>false</code> (злиття) зрозуміліше - його й лишаємо.</li>
 <li><code>--force</code> у спільну гілку не пушать ніколи; якщо справді треба переписати свою гілку - <code>git push --force-with-lease</code> (урок 12).</li>
 </ul>
-</blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>
 <ol>
 <li>Що таке <code>origin</code> і що таке <code>origin/main</code>?</li>

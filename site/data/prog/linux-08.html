@@ -41,6 +41,27 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>python3 -m venv</code> - створює venv - окрему теку з Python і бібліотеками для лаб. Назва: virtual environment - «віртуальне середовище».</li>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/univer/.venv/bin/activate</code> - увімкнути venv (окремий Python для лаб); вимкнути - deactivate.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>univer</code> - переходить у ~/univer і вмикає venv.</li>
+<li><code>deactivate</code> - вимикає venv (окремий Python проєкту): python знову системний. Назва: deactivate - «вимкнути» (venv).</li>
+<li><code>pip install</code> - ставить бібліотеку Python (лише у venv). Назва: <code>pip</code> - pip installs packages - «pip ставить пакети» (назва, що посилається сама на себе); pip installs packages - «pip ставить пакети»; install - «встановити».</li>
+<li><code>pip list</code> - показує встановлені бібліотеки і їхні версії.</li>
+<li><code>which</code> - показує, який саме файл запуститься. Назва: which - «котрий». <code>python</code> - покаже, який python запуститься: у venv - з теки <code>.venv/bin</code>; поза venv у Mint python (без 3) нема - тиша.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-m</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>~</code> <code>|</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Як перевіряти doctest у лабах.</strong> У заготовках викладача в кінці файлу стоїть <code>doctest.testmod()</code>.</p>
 <div class="tw"><table>
 <thead>
@@ -68,18 +89,38 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи).</li>
+</ul>
+</blockquote>
 <p><strong>Пастка: не запускай <code>python -m doctest lab4.py</code> для таких файлів.</strong> Коли в файлі є <code>doctest.testmod()</code>
 не під <code>if __name__ == "__main__":</code>, команда <code>-m doctest</code> змушує його перевіряти ще й сам модуль doctest, і ти
 побачиш чужу помилку <code>1 of 21 in __main__.DebugRunner ***Test Failed***</code>, хоча твій код правильний.
 <code>python -m doctest</code> годиться лише для файлів, де <code>testmod()</code> нема або він під <code>if __name__ == "__main__":</code>.</p>
 <p>Стиль: <code>flake8 --max-line-length=78 lab4.py</code> (викладач просив рядки до 78), <code>mypy lab4.py</code> (типи, знаходить
 <code>str</code> замість <code>int</code>), <code>black -l 78 lab4.py</code> (сам переформатує файл, перед цим зроби коміт або копію).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>flake8</code> - шукає помилки стилю і зайвий код (працює, коли увімкнено venv). Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78.</li>
+</ul>
+</blockquote>
 <p>Вимоги викладача (з файлу «Вимоги викладача»): лаба зарахована, коли проходять <strong>усі doctest</strong>;
 функція повертає через <code>return</code>, а не друкує; код - у наданій функції, назви і doctest не міняти;
 перед здачею flake8, pycodestyle, mypy, ruff або black.</p>
 <p><strong>Якщо в лабі є <code>input()</code> на верхньому рівні файлу</strong> (як у твоїй ЛР3), то pytest скаже «reading from stdin»
 (а <code>perevir</code> підкаже, що робити). Тоді: <code>printf "5\n" | python lab.py</code> - <code>testmod()</code> усередині спрацює, а ввід
 піде з printf.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+</ul>
+</blockquote>
 <p><strong>turtle (ЛР4) у WSL:</strong> на Windows 11 і Windows 10 збірки 19044+ (з WSL з Microsoft Store) вікно відкривається
 як звичайне вікно Windows. Наприкінці потрібен <code>turtle.done()</code>, інакше вікно одразу закриється (так і в методичці ЛР4).
 Головне правило для turtle-лаби: <strong>малювання і <code>turtle.done()</code> - лише під <code>if __name__ == "__main__":</code></strong>.
@@ -95,18 +136,12 @@ nano kvadrat.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>univer</code> - переходить у ~/univer і вмикає venv. Назва: наша назва: «універ» - тека ~/univer для навчання.</li>
-<li><code>which</code> - показує шлях до програми з PATH. Назва: which - «котрий»: котрий файл запуститься. <code>python</code> - у venv покаже ~/univer/.venv/bin/python; поза venv - тиша.</li>
-<li><code>pip list</code> - показує встановлені бібліотеки і їхні версії. Назва: list - «список» встановлених пакетів.</li>
-<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
+<li><code>head</code> - показує перші рядки файлу (або того, що прийшло через <code>|</code>). Назва: head - «голова».</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
 <li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
-Надрукуй (це тренування, не сама лаба):</p>
 </blockquote>
+<p>Надрукуй (це тренування, не сама лаба):</p>
 <pre><code class="language-python">import doctest
 
 
@@ -132,21 +167,18 @@ perevir kvadrat.py               # doctest: усе пройшло (1 passed ...)
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
-<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи). Назва: наша назва: «перевір» - перевірка лаби перед здачею.</li>
-<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.
-Тепер зіпсуй: заміни <code>side * side</code> на <code>side * 2</code>, збережи, і ще раз <code>python kvadrat.py</code> - побачиш
-<code>Failed example</code> з <code>Expected: 9</code> і <code>Got: 6</code>. І <code>perevir kvadrat.py</code> - напише «Є ПОМИЛКИ». Поверни як було.</li>
+<li><code>#</code> (hash) - коментар: далі до кінця рядка bash не читає.</li>
 </ul>
 </blockquote>
+<p>Тепер зіпсуй: заміни <code>side * side</code> на <code>side * 2</code>, збережи, і ще раз <code>python kvadrat.py</code> - побачиш
+<code>Failed example</code> з <code>Expected: 9</code> і <code>Got: 6</code>. І <code>perevir kvadrat.py</code> - напише «Є ПОМИЛКИ». Поверни як було.</p>
 <p>Turtle-перевірка (вікно на 2 секунди):</p>
 <pre><code class="language-bash">python -c &quot;import turtle, time; turtle.circle(50); time.sleep(2)&quot;
 </code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code>: <code>-c</code> - виконати рядок коду з командного рядка, без файлу: python3 -c 'print(2 ** 10)'.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>python3</code>: <code>-c</code> - виконати один рядок коду без файлу: <code>python3 -c 'print(2 ** 10)'</code> (command - «команда»).</li>
 </ul>
 </blockquote>
 <h3 id="типові-помилки">Типові помилки</h3>

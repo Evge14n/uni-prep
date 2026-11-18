@@ -80,13 +80,19 @@ cp ~/Завантаження/&quot;Telegram Desktop&quot;/Лабораторн�
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
-<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/univer/.venv/bin/activate</code> - увімкнути venv (окремий Python для лаб); вимкнути - deactivate.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
 <li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
 <li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати». <code>.</code> - «сюди», у поточну теку: cp ~/Завантаження/lab1.py .</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-p</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
 </ul>
 <p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
@@ -96,7 +102,7 @@ cp ~/Завантаження/&quot;Telegram Desktop&quot;/Лабораторн�
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>find</code> - шукає файли за назвою, часом чи власником. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: -name "*.py"; великі й малі літери різні; <code>~</code> - шукати по всій домашній теці (знайти, куди Telegram зберіг лабу).</li>
+<li><code>find</code> - шукає файли й теки за назвою, і в усіх підтеках. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: <code>-name "*.py"</code>; великі й малі літери різні.</li>
 </ul>
 </blockquote>
 <p>Функції <code>klityny</code> і <code>klitynka</code> - з Уроку 04 (Крок 3). Якщо не дописував їх у <code>~/.bashrc</code>, встав ще раз:</p>
@@ -106,8 +112,8 @@ klitynka() { python3 -c 'import json, sys; print(&quot;&quot;.join(json.load(ope
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>;</code> - розділяє команди в рядку, виконує всі по черзі. Назва: крапка з комою - роздільник команд.</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>;</code> (semicolon) - розділяє команди в рядку, виконує всі по черзі.</li>
 </ul>
 </blockquote>
 <pre><code class="language-bash">klityny Лабораторна_робота_2Пайтон_2026_2027.ipynb
@@ -127,7 +133,7 @@ klitynka() { python3 -c 'import json, sys; print(&quot;&quot;.join(json.load(ope
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>klityny</code> - показує список клітинок .ipynb з номерами. Назва: наша назва: «клітини» - список усіх клітинок .ipynb.</li>
+<li><code>klityny</code> - показує список клітинок .ipynb з номерами.</li>
 </ul>
 </blockquote>
 <p>Клітинка 3 - це і є «дірка» на місці рисунка. Заготовки - клітинки <code>code</code> 5, 8, 10:</p>
@@ -138,8 +144,8 @@ klitynka Лабораторна_робота_2Пайтон_2026_2027.ipynb 10 &g
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>klitynka</code> - друкує одну клітинку з .ipynb за номером. Назва: наша назва: «клітинка» блокнота .ipynb (англ. cell).</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>klitynka</code> - друкує одну клітинку з .ipynb за номером.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
 </ul>
 </blockquote>
 <p>Чому не <code>tasks_for_2_lab.py</code> з чату: у ньому під заголовком «Заготовка до 2 завдання» лежить <strong>копія завдання 1</strong>
@@ -152,8 +158,8 @@ xdg-open ~/Завантаження/&quot;Telegram Desktop&quot;/photo-215169.jp
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
+<li><code>*</code> (asterisk) - будь-які символи в назві; bash сам замінює <code>*</code> на список файлів.</li>
 <li><code>xdg-open</code> - відкриває файл у його звичайній програмі. Назва: XDG (X Desktop Group, нині freedesktop.org) + open - «відкрити».</li>
-<li><code>*</code> - шаблон: будь-які символи в назві файлу. Назва: asterisk («зірочка») - шаблон «будь-які символи».</li>
 </ul>
 </blockquote>
 <h3 id="крок-2-будова-файлів">Крок 2. Будова файлів</h3>
@@ -174,9 +180,9 @@ printf &quot;34.5\n10\n90\n0\n&quot; | python3 lr2_3.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
 </ul>
 </blockquote>
 <p>Коли все готово і doctest пройшли, ось справжній вивід (приклади з с. 15 і с. 19-20):</p>
@@ -201,7 +207,7 @@ git commit -m &quot;ЛР2: завдання 1&quot;
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати». <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»).</li>
 </ul>
 </blockquote>
 <h2 id="підказки-до-завдань-без-розвʼязку">Підказки до завдань (без розвʼязку)</h2>
@@ -263,7 +269,7 @@ print(f&quot;{hypotenuse:.2f} {angle:.2f}&quot;)  # 5.00 53.13
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code>: <code>-c</code> - виконати рядок коду з командного рядка, без файлу: python3 -c 'print(2 ** 10)'.</li>
+<li><code>python3</code>: <code>-c</code> - виконати один рядок коду без файлу: <code>python3 -c 'print(2 ** 10)'</code> (command - «команда»).</li>
 </ul>
 </blockquote>
 <details>
@@ -413,21 +419,27 @@ grep -nE '^\s*(if|elif|else)\b' lr2_1.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code>: <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
-<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу. <code>-n</code> - скільки останніх рядків показати: -n 3 (lines).</li>
-<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s»; <code>-s</code> - не перехоплювати ввід і вивід: потрібен, коли файл питає input().</li>
-<li><code>python3 -m black</code> - сам гарно оформлює код Python (пробіли, переноси). Назва: black - «чорний»: як у Форда, «будь-який колір, якщо він чорний». <code>-l</code> - найбільша довжина рядка; викладач хоче 78 (black сам ставить 88).</li>
+<li><code>python3</code>: <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>tail</code> - показує останні рядки (файлу чи того, що прийшло через <code>|</code>). Назва: tail - «хвіст». <code>-n</code> (<code>--lines</code>) - скільки останніх рядків показати: <code>-n 3</code>, коротко <code>-3</code> (lines - «рядки»).</li>
+<li><code>python3 -m pytest</code> - проганяє тести (приклади <code>&gt;&gt;&gt;</code>) і чесно каже: усе пройшло чи ні. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади <code>&gt;&gt;&gt;</code>) у файлах <code>.py</code>; без нього pytest шукає лише функції <code>test_</code>; <code>-q</code> (<code>--quiet</code>) - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s» (quiet - «тихо»); <code>-s</code> - не перехоплювати ввід і вивід: потрібен, коли файл питає <code>input()</code>.</li>
+<li><code>python3 -m black</code> - сам гарно оформлює код Python (пробіли, переноси). Назва: black - «чорний»: як у Форда, «будь-який колір, якщо він чорний». <code>-l</code> (<code>--line-length</code>) - найбільша довжина рядка; викладач хоче 78, сам black ставить 88 (line length - «довжина рядка»).</li>
 <li><code>python3 -m flake8</code> - шукає помилки стилю і зайвий код, нічого не змінює. Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша дозволена довжина рядка; викладач хоче 78 (типово 79).</li>
-<li><code>python3 -m pycodestyle</code> - перевіряє лише оформлення коду за PEP 8. Назва: Python code style - «стиль коду Python» (раніше програма звалась pep8). <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78 (типово 79).</li>
-<li><code>python3 -m ruff check</code> - швидко шукає помилки в коді, з --fix сам виправляє. Назва: ruff - назва не розшифровується; check - «перевірити».</li>
-<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми. Назва: назва не розшифровується (py - від Python).</li>
-<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-n</code> - показати номер рядка перед кожним збігом (line number); <code>-E</code> - розширені регулярні вирази: |, +, {79,} без зворотних рисок.</li>
+<li><code>python3 -m pycodestyle</code> - перевіряє лише оформлення коду за PEP 8 (правилами стилю Python). Назва: Python code style - «стиль коду Python» (раніше програма звалась pep8). <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78 (типово 79).</li>
+<li><code>python3 -m ruff check</code> - швидко шукає помилки в коді, з --fix сам виправляє.</li>
+<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми.</li>
+<li><code>grep</code> - шукає рядки з текстом (у файлах або те, що прийшло через <code>|</code>). Назва: g/re/p з редактора ed: global regular expression print - «скрізь знайти шаблон, надрукувати». <code>-n</code> (<code>--line-number</code>) - показати номер рядка перед кожним збігом (line number - «номер рядка»); <code>-E</code> (<code>--extended-regexp</code>) - розширені шаблони: <code>|</code> (або), <code>+</code>, <code>{79,}</code> без зворотних рисок (extended - «розширені»); <code>^</code> на початку шаблону - «рядок починається з цього тексту».</li>
 </ul>
 </blockquote>
 <p>Або все одразу для кожного файлу: <code>perevir lr2_1.py 0 0</code>, <code>perevir lr2_2.py 20</code>, <code>perevir lr2_3.py 34.5 10 90 0</code>
 (скорочення з <code>ustanovka-mint.sh</code>, урок 03): відповіді на <code>input()</code> пишеш після назви через пробіл, кожна - окремий
 рядок вводу. black він лише перевіряє (<code>black: оформлення ок</code>), а виправляє <code>python3 -m black -l 78 файл.py</code>.
 Відʼємні відповіді perevir подає правильно: <code>perevir lr2_1.py -5 -5</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи).</li>
+</ul>
+</blockquote>
 <p>Що має бути на правильному коді (тестова Mint 22.3):</p>
 <pre><code class="language-text">16 tests in 2 items.
 16 passed and 0 failed.

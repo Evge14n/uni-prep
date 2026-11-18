@@ -61,6 +61,25 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ssh-keygen</code> - робить пару ключів ssh (секретний і для GitHub) і показує відбитки. Назва: ssh key generator - «генератор ssh-ключів». <code>-t</code> - тип ключа; <code>ed25519</code> - сучасний і короткий, його радить GitHub (type - «тип»); <code>-C</code> - коментар-підпис, щоб упізнати ключ (напр. <code>"evgen-laptop"</code>); пошта не обовʼязкова (comment); <code>ed25519</code> - тип ключа (після <code>-t</code>); <code>-l</code> - показати відбиток (fingerprint) - коротку «назву» ключа, що починається з SHA256 (list); <code>-f</code> - файл: куди записати новий ключ або який ключ читати (з <code>-l</code>) (file - «файл»).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
+<li><code>ssh</code> - заходить у термінал іншого компʼютера по зашифрованому каналу. Назва: Secure Shell - «захищена оболонка». <code>-T</code> - прапорець: не відкривати термінал на тому боці, лише перевірити вхід (<code>ssh -T git@github.com</code>); <code>-t</code> - дати термінал, <code>-T</code> - не давати. GitHub не дає командного рядка, тому для нього завжди <code>-T</code>; якщо вхід вдався, GitHub вітає на імʼя і закриває зʼєднання з кодом 1 - це нормально; <code>git@github.com</code> - користувач git на сервері github.com - так GitHub приймає всіх, а тебе впізнає за ключем.</li>
+<li><code>gh auth login</code> - входить у твій акаунт GitHub, щоб <code>gh</code> міг діяти від тебе. Назва: <code>gh</code> - gh - від GitHub; офіційна програма GitHub CLI (CLI - «командний рядок»); auth - від authentication, «вхід, підтвердження особи»; login - «увійти». <code>-p</code> (<code>--git-protocol</code>) - як git ходитиме на GitHub: <code>ssh</code> (через SSH-ключ) або <code>https</code> (p - protocol, «спосіб звʼязку»); <code>-w</code> (<code>--web</code>) - вхід через браузер: gh покаже одноразовий код, ти вставиш його на github.com (web - «веб»); <code>ssh</code> - з -p: git через SSH; gh знайде ~/.ssh/id_ed25519.pub і запропонує завантажити його на GitHub.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-t</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-lf</code> = <code>-l</code> і <code>-f</code>.</li>
+<li>Символи <code>~</code> <code>|</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Два шляхи: <strong>А</strong> - руками (ключ + сайт, і наприкінці вхід у gh), <strong>Б</strong> - через gh (вхід і ключ разом). Результат однаковий, обери один.</p>
 <h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
 <ol>
@@ -68,6 +87,12 @@
 </ol>
 <details>
 <summary>Відповідь</summary>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long - «довгий»); <code>~/.ssh</code> - показати вміст іншої теки, не заходячи в неї.</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">-rw------- 1 ... id_ed25519
 -rw-r--r-- 1 ... id_ed25519.pub
 </code></pre>
@@ -98,6 +123,12 @@ Overwrite (y/n)?
 </ol>
 <details>
 <summary>Відповідь</summary>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+</ul>
+</blockquote>
 <p><code>1</code>. Це нормально: GitHub пустив, але не дає командного рядка (shell), тому сеанс одразу закривається з кодом 1 (docs.github.com, «Testing your SSH connection»).</p>
 </details>
 <h3 id="руками">Руками</h3>
@@ -127,15 +158,7 @@ The key's randomart image is:
 |                 |
 +----[SHA256]-----+
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>ssh-keygen</code> - робить пару ssh-ключів і показує їхні відбитки. Назва: ssh key generator - «генератор ssh-ключів». <code>-t</code> - тип ключа; ed25519 - сучасний і короткий, його радить GitHub; <code>-C</code> - коментар-підпис, щоб упізнати ключ (напр. "evgen-laptop"); пошта не обовʼязкова; <code>ed25519</code> - тип ключа (після -t).</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-</ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
-<code>-t ed25519</code> - тип ключа (сучасний, короткий), <code>-C</code> - коментар, щоб на сайті було видно, чий ключ. <code>Created directory</code> буде, лише якщо теки <code>~/.ssh</code> ще не було. Пароль-фраза при наборі не видно - це нормально.</p>
-</blockquote>
+<p><code>-t ed25519</code> - тип ключа (сучасний, короткий), <code>-C</code> - коментар, щоб на сайті було видно, чий ключ. <code>Created directory</code> буде, лише якщо теки <code>~/.ssh</code> ще не було. Пароль-фраза при наборі не видно - це нормально.</p>
 <p><strong>Крок 2. Подивись, що вийшло.</strong></p>
 <pre><code class="language-bash">ls -l ~/.ssh
 ssh-keygen -lf ~/.ssh/id_ed25519.pub
@@ -145,15 +168,6 @@ cat ~/.ssh/id_ed25519.pub
 -rw------- 1 evgen evgen 444 Nov 18 10:15 id_ed25519
 -rw-r--r-- 1 evgen evgen 124 Nov 18 10:15 id_ed25519.pub
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long); <code>~/.ssh</code> - показати вміст іншої теки, не заходячи в неї.</li>
-<li><code>ssh-keygen</code>: <code>-l</code> - показати відбиток (fingerprint) ключа - коротку «назву» ключа, що починається з SHA256; <code>-f</code> - файл: куди записати новий ключ або який ключ читати (з -l).</li>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-</ul>
-</blockquote>
 <pre><code class="language-text">256 SHA256:1EvICMx4RFQiriSXCeU4r5KAe5gIDOPxXnihEQYW0Ng 128326252+Evge14n@users.noreply.github.com (ED25519)
 </code></pre>
 <pre><code class="language-text">ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGlkZTr+dT3xLmCXdI04a813+vXMlodgm4heFoijeM3i 128326252+Evge14n@users.noreply.github.com
@@ -174,24 +188,17 @@ ssh-add ~/.ssh/id_ed25519
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>eval</code> - виконує текст як команду bash. Назва: evaluate - «обчислити»: виконати текст як команду bash.</li>
-<li><code>ssh-agent</code> - тримає розблоковані ключі, щоб не вводити пароль щоразу. Назва: ssh agent - «агент», помічник, що тримає ключі. <code>-s</code> - надрукувати налаштування для bash (s - sh): eval їх виконає, і оболонка знайде агента.</li>
-<li><code>ssh-add</code> - додає ключ в ssh-agent, щоб не вводити пароль щоразу. Назва: ssh add - «додати» ключ у ssh-agent. <code>~/.ssh/id_ed25519</code> - приватний ключ (без .pub!), який додати.</li>
-<li><code>$( )</code> - підставляє вивід команди в рядок. Назва: command substitution - «підстановка команди».</li>
+<li><code>eval</code> - виконує текст як команду bash. Назва: evaluate - «обчислити».</li>
+<li><code>$( )</code> (command substitution) - підставляє вивід команди в рядок.</li>
+<li><code>ssh-agent</code> - тримає розблоковані ключі, щоб не вводити пароль щоразу. Назва: ssh agent - «агент». <code>-s</code> - надрукувати команди для bash, які <code>eval</code> виконає, - тоді термінал знайде агента (s - sh).</li>
+<li><code>ssh-add</code> - дає ключ помічнику ssh-agent, щоб пароль ключа не питали щоразу. Назва: ssh add - «додати» (ключ у ssh-agent). <code>~/.ssh/id_ed25519</code> - приватний (секретний) ключ - файл без .pub, саме його додають.</li>
 </ul>
 </blockquote>
 <p><strong>Крок 5. Перевір вхід.</strong></p>
 <pre><code class="language-bash">ssh -T git@github.com
 echo $?
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>ssh</code> - заходить у термінал іншого компʼютера по зашифрованому каналу. Назва: Secure Shell - «захищена оболонка»: зашифрований термінал на іншому компʼютері. <code>-T</code> - прапорець: не відкривати термінал на тому боці, лише перевірити вхід (ssh -T git@github.com). GitHub не дає командного рядка, тому для нього завжди -T; якщо вхід вдався, GitHub вітає на імʼя і закриває зʼєднання з кодом 1 - це нормально (Git урок 03); <code>git@github.com</code> - користувач git на сервері github.com - так GitHub приймає всіх, а тебе впізнає за ключем.</li>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.
-Першого разу ssh не знає github.com і питає (вивід справжній, 18.11.2026):</li>
-</ul>
-</blockquote>
+<p>Першого разу ssh не знає github.com і питає (вивід справжній, 18.11.2026):</p>
 <pre><code class="language-text">The authenticity of host 'github.com (140.82.121.4)' can't be established.
 ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
 This key is not known by any other names.
@@ -215,9 +222,14 @@ gh auth status
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gh auth login</code> - входить у акаунт GitHub для gh (через браузер). Назва: auth - від authentication, «вхід, підтвердження особи»; login - «увійти». <code>-p</code> - як git ходитиме на GitHub: ssh (ключ з уроку 03) або https; <code>-w</code> - вхід через браузер: gh покаже одноразовий код, ти вставиш його на github.com; <code>ssh</code> - з -p: git через SSH; gh знайде ~/.ssh/id_ed25519.pub і запропонує завантажити його на GitHub.</li>
-<li><code>gh auth status</code> - показує, чи gh увійшов у GitHub і яким акаунтом. Назва: auth - від authentication, «вхід»; status - «стан».
-<code>-p ssh</code> - git працюватиме через SSH, <code>-w</code> - вхід через браузер: gh покаже одноразовий код, відкриє github.com, ти вставиш код і натиснеш Authorize. gh знайде твій <code>~/.ssh/id_ed25519.pub</code> і спитає, чи завантажити його на GitHub. Ключ ти вже додав у кроці 3, тож обери <strong>Skip</strong> (пропустити). Дослівний текст питань не перевірено: курс не входить у справжній акаунт. Щоб gh про ключ узагалі не питав, є прапорець <code>--skip-ssh-key</code> (<code>gh auth login --help</code>, gh 2.105.0). <code>gh auth status</code> має показати, що ти увійшов як <code>Evge14n</code>.</li>
+<li><code>gh auth status</code> - показує, чи gh увійшов у GitHub і яким акаунтом. Назва: auth - від authentication, «вхід»; status - «стан».</li>
+</ul>
+</blockquote>
+<p><code>-p ssh</code> - git працюватиме через SSH, <code>-w</code> - вхід через браузер: gh покаже одноразовий код, відкриє github.com, ти вставиш код і натиснеш Authorize. gh знайде твій <code>~/.ssh/id_ed25519.pub</code> і спитає, чи завантажити його на GitHub. Ключ ти вже додав у кроці 3, тож обери <strong>Skip</strong> (пропустити). Дослівний текст питань не перевірено: курс не входить у справжній акаунт. Щоб gh про ключ узагалі не питав, є прапорець <code>--skip-ssh-key</code> (<code>gh auth login --help</code>, gh 2.105.0). <code>gh auth status</code> має показати, що ти увійшов як <code>Evge14n</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh auth login</code>: <code>--help</code> - довідка команди з усіма прапорцями (help - «допомога»).</li>
 </ul>
 </blockquote>
 <h4 id="шлях-б-через-gh">Шлях Б. Через gh</h4>
@@ -241,10 +253,10 @@ gh auth status
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gh repo create</code> - створює репозиторій на GitHub з терміналу. Назва: repository create - «створити репозиторій» на GitHub. <code>--private</code> - приватний репо: бачиш лише ти (і кого запросиш); для лаб - саме так; <code>--add-readme</code> - одразу створити файл README.md.
-Клонуй собі в домашню теку. Адресу SSH видно на сайті: зелена кнопка <strong>Code</strong> → вкладка <strong>SSH</strong>.</li>
+<li><code>gh repo create</code> - створює новий репозиторій (сховище коду) на GitHub з терміналу. Назва: repository create - «створити репозиторій» на GitHub. <code>--private</code> - приватний репо: бачиш лише ти (і кого запросиш); для лаб - саме так (private - «приватний»); <code>--add-readme</code> - одразу створити файл README.md - опис проєкту.</li>
 </ul>
 </blockquote>
+<p>Клонуй собі в домашню теку. Адресу SSH видно на сайті: зелена кнопка <strong>Code</strong> → вкладка <strong>SSH</strong>.</p>
 <pre><code class="language-bash">git clone git@github.com:Evge14n/pisochnytsia.git ~/pisochnytsia
 cd ~/pisochnytsia
 ls
@@ -256,13 +268,13 @@ git remote -v
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git clone</code> - копіює весь репо з GitHub до тебе. Назва: clone - «клон, точна копія». <code>~/pisochnytsia</code> - куди скопіювати; без неї - тека з назвою репо в поточній теці.</li>
+<li><code>git clone</code> - копіює весь проєкт з історією з GitHub до тебе. <code>~/pisochnytsia</code> - куди скопіювати; без неї - тека з назвою репо в поточній теці.</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
+<li><code>git remote</code> - показує і задає, де лежить твій проєкт на GitHub (<code>origin</code>). Назва: remote - «віддалений»: репо на іншому компʼютері (GitHub). <code>-v</code> (<code>--verbose</code>) - показати й адреси: окремо для fetch (забирати) і push (відправляти) (verbose - «докладно»).</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
-<li><code>git remote</code> - показує і задає адресу репо на GitHub (origin). Назва: remote - «віддалений»: репо на іншому компʼютері (GitHub). <code>-v</code> - показати й адреси: окремо для fetch (забирати) і push (відправляти).
-Далі git покаже кілька рядків про завантаження (<code>remote: ...</code>, <code>Receiving objects: 100% ...</code>).</li>
 </ul>
 </blockquote>
+<p>Далі git покаже кілька рядків про завантаження (<code>remote: ...</code>, <code>Receiving objects: 100% ...</code>).</p>
 <pre><code class="language-text">README.md
 </code></pre>
 <pre><code class="language-text">0ee5c1c (HEAD -&gt; main, origin/main, origin/HEAD) Initial commit
@@ -292,7 +304,7 @@ Load key &quot;/home/.../.ssh/id_ed25519&quot;: bad permissions
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>chmod</code> - змінює права файлу: читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>600</code> - rw-------: лише ти (ключі ssh, паролі).</li>
+<li><code>chmod</code> - змінює права файлу: хто може читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>600</code> - rw-------: 6 лише тобі (читати і змінювати), групі й іншим 0 - для ключів ssh і паролів.</li>
 </ul>
 </blockquote>
 <p><strong>3. <code>Overwrite (y/n)?</code></strong> - ключ уже є (див. «Передбач» 3). Відповідай <code>n</code>.</p>
@@ -303,7 +315,7 @@ Load key &quot;/home/.../.ssh/id_ed25519&quot;: bad permissions
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git remote</code>: <code>origin</code> - звичайна назва головного віддаленого репо; git clone ставить її сам.</li>
+<li><code>git remote</code>: <code>origin</code> - звичайне імʼя для копії проєкту на GitHub; <code>git clone</code> ставить його сам.</li>
 </ul>
 </blockquote>
 <p><strong>6. Показав приватний ключ</strong> (вставив <code>id_ed25519</code> у чат, на сайт, у скриншот). Вважай його вкраденим: видали ключ на сайті (Settings → SSH and GPG keys → Delete), створи новий і додай знову.</p>
@@ -323,9 +335,9 @@ Load key &quot;/home/.../.ssh/id_ed25519&quot;: bad permissions
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>ssh-keyscan</code> - питає сервер його ключ, щоб звірити відбиток. Назва: ssh key scan - «сканувати ключ» сервера. <code>-t</code> - лише ключ цього типу, напр. -t ed25519; <code>github.com</code> - сервер, чий ключ питаємо.</li>
-<li><code>ssh-keygen</code>: <code>-</code> - після -f: читати ключ не з файлу, а з труби (ssh-keyscan ... | ssh-keygen -lf -).</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>ssh-keyscan</code> - питає сервер його ключ, щоб звірити відбиток (коротку «назву» ключа). Назва: ssh key scan - «сканувати ключ» сервера. <code>-t</code> - лише ключ цього типу, напр. <code>-t ed25519</code>; <code>github.com</code> - сервер, чий ключ питаємо.</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>ssh-keygen</code>: <code>-</code> - після <code>-f</code>: читати ключ не з файлу, а з труби <code>|</code> (<code>ssh-keyscan ... | ssh-keygen -lf -</code>).</li>
 </ul>
 </blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>

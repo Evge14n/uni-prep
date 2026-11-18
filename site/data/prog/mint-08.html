@@ -33,6 +33,22 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>grep</code> - шукає рядки з текстом (у файлах або те, що прийшло через <code>|</code>). Назва: g/re/p з редактора ed: global regular expression print - «скрізь знайти шаблон, надрукувати». <code>-n</code> (<code>--line-number</code>) - показати номер рядка перед кожним збігом (line number - «номер рядка»).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор». <code>-n</code> (<code>--quiet</code>) - не друкувати всі рядки, лише ті, що позначені командою <code>p</code> (quiet - «тихо»).</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-n</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <pre><code class="language-text">lr3_1.py   is_palindrome, find_palindrom_squares, plot_palindrom_squares
 lr3_2.py   is_prime, digit_sum, find_double_primes, plot_double_primes
 lr3_3.py   is_armstrong, get_armstrong_numbers, nsd_search, nsk_search, common_divisors, plot_armstrong_analysis
@@ -70,14 +86,12 @@ cp ~/Завантаження/&quot;Telegram Desktop&quot;/laba_3.py .
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
-<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/univer/.venv/bin/activate</code> - увімкнути venv (окремий Python для лаб); вимкнути - deactivate.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
 <li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати». <code>.</code> - «сюди», у поточну теку: cp ~/Завантаження/lab1.py .</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p>Якщо <code>cp</code> пише <code>cannot stat</code> - файл деінде, знайди і скопіюй з того шляху, який покаже <code>find</code>:</p>
 <pre><code class="language-bash">find ~ -name &quot;laba_3*&quot;
@@ -85,7 +99,7 @@ cp ~/Завантаження/&quot;Telegram Desktop&quot;/laba_3.py .
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>find</code> - шукає файли за назвою, часом чи власником. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: -name "*.py"; великі й малі літери різні; <code>~</code> - шукати по всій домашній теці (знайти, куди Telegram зберіг лабу).</li>
+<li><code>find</code> - шукає файли й теки за назвою, і в усіх підтеках. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: <code>-name "*.py"</code>; великі й малі літери різні.</li>
 </ul>
 </blockquote>
 <p>Чому <code>laba_3.py</code>, а не <code>.ipynb</code>: у <code>.ipynb</code> у кінці клітинки 3 (заготовка завдання 1) лишився зайвий рядок з
@@ -102,12 +116,6 @@ cp ~/Завантаження/&quot;Telegram Desktop&quot;/laba_3.py .
 150:# 3 Завдання
 263:#4* Завдання
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-n</code> - показати номер рядка перед кожним збігом (line number).</li>
-</ul>
-</blockquote>
 <p>Завдання 1 - з рядка 1 до 68 (перед «2 Завдання»), 2 - з 69 до 149, і так далі; останнє - до кінця файлу.
 <code>sed -n '1,68p'</code> друкує лише рядки 1-68, а <code>&gt;</code> пише їх у новий файл:</p>
 <pre><code class="language-bash">sed -n '1,68p' laba_3.py &gt; lr3_1.py
@@ -126,10 +134,8 @@ wc -l laba_3.py lr3_*.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор»: править текст, що тече крізь нього. <code>-n</code> - не друкувати всі рядки, лише ті, що позначені командою p.</li>
-<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> - лише кількість рядків (lines); <code>lr3_*.py</code> - урок 08: усі частини лаби, і в кінці рядок «загалом».</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> (<code>--lines</code>) - лише кількість рядків (lines - «рядки»); <code>lr3_*.py</code> - кілька файлів шаблоном <code>*</code>: число для кожного і в кінці рядок «загалом».</li>
 </ul>
 </blockquote>
 <p>68 + 81 + 113 + 132 = 394 - жоден рядок не загубився і не повторився. <code>wc -l</code> рахує рядки, а <code>lr3_*.py</code> -
@@ -148,9 +154,9 @@ wc -l laba_3.py lr3_*.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
 </ul>
 </blockquote>
 <p>Рядок <code>numbers, squares = find_palindrom_squares(N)</code> хоче розпакувати два списки, а функція повернула <code>None</code>.
@@ -165,7 +171,7 @@ wc -l laba_3.py lr3_*.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу. <code>-n</code> - скільки останніх рядків показати: -n 3 (lines).</li>
+<li><code>tail</code> - показує останні рядки (файлу чи того, що прийшло через <code>|</code>). Назва: tail - «хвіст». <code>-n</code> (<code>--lines</code>) - скільки останніх рядків показати: <code>-n 3</code>, коротко <code>-3</code>.</li>
 </ul>
 </blockquote>
 <p>Через <code>verbose=True</code> правило «тиша = усе добре» тут не працює: дивись на рядок <code>... passed and 0 failed.</code>
@@ -177,7 +183,7 @@ wc -l laba_3.py lr3_*.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code>: <code>-c</code> - виконати рядок коду з командного рядка, без файлу: python3 -c 'print(2 ** 10)'.</li>
+<li><code>python3</code>: <code>-c</code> - виконати один рядок коду без файлу: <code>python3 -c 'print(2 ** 10)'</code> (command - «команда»).</li>
 </ul>
 </blockquote>
 <p>У тестовій Mint 22.3 з <code>python3-tk</code> це <code>tkagg</code> - графіки відкриваються у вікні. Що буде без нього - «Типові
@@ -208,7 +214,7 @@ git commit -m &quot;ЛР3: завдання 1&quot;
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати». <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»).</li>
 </ul>
 </blockquote>
 <h2 id="підказки-до-завдань-без-розвʼязку">Підказки до завдань (без розвʼязку)</h2>
@@ -351,12 +357,26 @@ Got:
 <p>matplotlib працює без вікон: або ти сам поставив <code>MPLBACKEND=Agg</code>, або нема пакета <code>python3-tk</code> (на свіжій Mint
 22.3 його нема, ставить <code>ustanovka-mint.sh</code> або <code>sudo apt install python3-tk</code>). Під час перевірок з <code>Agg</code> це
 попередження нормальне.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>apt install</code> - ставить програму з інтернету; на «Бажаєте продовжити? [Y/n]» - Enter. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)».</li>
+</ul>
+</blockquote>
 <p><strong>6. ruff: імпорти.</strong> У заготовках <code>import doctest</code> і <code>import matplotlib.pyplot as plt</code> стоять підряд, а ruff
 хоче порожній рядок між стандартною бібліотекою і сторонньою:</p>
 <pre><code class="language-text">I001 [*] Import block is un-sorted or un-formatted
 </code></pre>
 <p><code>[*]</code> означає «вмію виправити сам»: <code>python3 -m ruff check --fix lr3_1.py</code> (викладач теж це радить, ЛР1 с. 9) -
 відповідь <code>Found 1 error (1 fixed, 0 remaining).</code></p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code>: <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>python3 -m ruff check</code> - швидко шукає помилки в коді, з --fix сам виправляє. <code>--fix</code> - самому виправити те, що позначено <code>[*]</code> (напр. прибрати невикористаний import) (fix - «виправити»).</li>
+</ul>
+</blockquote>
 <p><strong>7. ruff у завданні 4:</strong></p>
 <pre><code class="language-text">PIE790 [*] Unnecessary `pass` statement
 </code></pre>
@@ -368,7 +388,7 @@ Got:
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>grep</code>: <code>-E</code> - розширені регулярні вирази: |, +, {79,} без зворотних рисок.</li>
+<li><code>grep</code>: <code>-E</code> (<code>--extended-regexp</code>) - розширені шаблони: <code>|</code> (або), <code>+</code>, <code>{79,}</code> без зворотних рисок (extended - «розширені»).</li>
 </ul>
 </blockquote>
 <p>Один рядок знайдеться точно - <code>lr3_3.py</code>, <code>", ".join(str(d) for d in divs)</code>: це <strong>код викладача</strong> у виводі
@@ -420,13 +440,11 @@ python3 -m mypy lr3_1.py lr3_2.py lr3_3.py lr3_4.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code>: <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
-<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s»; <code>-s</code> - не перехоплювати ввід і вивід: потрібен, коли файл питає input().</li>
-<li><code>python3 -m black</code> - сам гарно оформлює код Python (пробіли, переноси). Назва: black - «чорний»: як у Форда, «будь-який колір, якщо він чорний». <code>-l</code> - найбільша довжина рядка; викладач хоче 78 (black сам ставить 88).</li>
-<li><code>python3 -m ruff check</code> - швидко шукає помилки в коді, з --fix сам виправляє. Назва: ruff - назва не розшифровується; check - «перевірити». <code>--fix</code> - самому виправити те, що позначено [*] (напр. прибрати невикористаний import).</li>
+<li><code>python3 -m pytest</code> - проганяє тести (приклади <code>&gt;&gt;&gt;</code>) і чесно каже: усе пройшло чи ні. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади <code>&gt;&gt;&gt;</code>) у файлах <code>.py</code>; без нього pytest шукає лише функції <code>test_</code>; <code>-q</code> (<code>--quiet</code>) - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s»; <code>-s</code> - не перехоплювати ввід і вивід: потрібен, коли файл питає <code>input()</code>.</li>
+<li><code>python3 -m black</code> - сам гарно оформлює код Python (пробіли, переноси). Назва: black - «чорний»: як у Форда, «будь-який колір, якщо він чорний». <code>-l</code> (<code>--line-length</code>) - найбільша довжина рядка; викладач хоче 78, сам black ставить 88 (line length - «довжина рядка»).</li>
 <li><code>python3 -m flake8</code> - шукає помилки стилю і зайвий код, нічого не змінює. Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша дозволена довжина рядка; викладач хоче 78 (типово 79).</li>
-<li><code>python3 -m pycodestyle</code> - перевіряє лише оформлення коду за PEP 8. Назва: Python code style - «стиль коду Python» (раніше програма звалась pep8). <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78 (типово 79).</li>
-<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми. Назва: назва не розшифровується (py - від Python).</li>
+<li><code>python3 -m pycodestyle</code> - перевіряє лише оформлення коду за PEP 8 (правилами стилю Python). Назва: Python code style - «стиль коду Python» (раніше програма звалась pep8). <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78 (типово 79).</li>
+<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми.</li>
 </ul>
 </blockquote>
 <p>Що має бути на правильному коді (тестова Mint 22.3):</p>

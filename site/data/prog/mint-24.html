@@ -67,6 +67,33 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
+<li><code>git status</code> - показує, які файли змінено і що піде в наступний коміт (збережений знімок).</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт). <code>.</code> - усе в поточній теці і підтеках; спершу глянь git status, щоб не додати зайве.</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати». <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»).</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
+<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано).</li>
+<li><code>git restore</code> - стирає зміни у файлі, повертаючи збережену версію, або скасовує <code>git add</code>.</li>
+<li><code>git switch</code> - перемикає на іншу гілку (лінію змін); з <code>-c</code> створює нову. <code>-c</code> (<code>--create</code>) - створити нову гілку від поточного місця і перейти на неї (create - «створити»).</li>
+<li><code>git merge</code> - додає зміни іншої гілки в ту, де ти зараз.</li>
+<li><code>git remote</code> - показує і задає, де лежить твій проєкт на GitHub (<code>origin</code>). Назва: remote - «віддалений»: репо на іншому компʼютері (GitHub). <code>origin</code> - звичайне імʼя для копії проєкту на GitHub; <code>git clone</code> ставить його сам.</li>
+<li><code>git push</code> - відправляє твої нові знімки (коміти) з компʼютера на GitHub. Назва: push - «штовхнути».</li>
+<li><code>git pull</code> - забирає нові знімки (коміти) з GitHub і одразу додає у твої файли. Назва: pull - «потягнути».</li>
+<li><code>git clone</code> - копіює весь проєкт з історією з GitHub до тебе.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-m</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-am</code> = <code>-a</code> і <code>-m</code>.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> <code>&amp;</code> <code>*</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong><code>.gitignore</code></strong> - список того, що git не бачить. Для лаб:</p>
 <pre><code class="language-text">.venv/
 __pycache__/
@@ -82,19 +109,12 @@ __pycache__/
 <p><strong>Чесність.</strong> Репозиторій з розвʼязками лаб - <strong>приватний</strong> (Private). Публічний репозиторій з розвʼязками до
 дедлайну - це те саме, що дати списати всій групі. Після здачі можна, але спершу спитай викладача.</p>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <ol>
 <li>На новому компʼютері git ще не знає, хто ти. Що буде на першому коміті?</li>
 </ol>
 <pre><code class="language-bash">git commit -m &quot;Функція double&quot;
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-</ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
-</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Відмова. Вивід з <strong>тестової</strong> Mint 22.3 (імʼя компʼютера в ньому замінено на <code>evgen-laptop</code>):</p>
@@ -120,6 +140,12 @@ fatal: empty ident name (for &lt;evgen@evgen-laptop.localdomain&gt;) not allowed
 <code>Особистість автора невідома</code> і <code>*** Будь ласка, скажіть мені, хто ви.</code>, а останній - <code>fatal: не вдалося
 автоматично визначити адресу електронної пошти (отримано "evgen@evgen-laptop.(none)")</code>. Лікується кроком 1
 (<code>git config --global user.name</code> і <code>user.email</code>).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). <code>--global</code> - для тебе на цьому ноутбуці: пише у файл <code>~/.gitconfig</code>, діє в усіх репо (global - «загальне»).</li>
+</ul>
+</blockquote>
 </details>
 <ol start="2">
 <li>Ти змінив <code>lab.py</code> (<code>x * 2</code> → <code>x * 3</code>) і створив новий файл <code>чернетка.py</code>. Що скаже <code>git status</code>?</li>
@@ -145,6 +171,14 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 <li>Після <code>python3 -m venv .venv</code> у теці репозиторію <code>git status --short</code> показує <code>?? .venv/</code>. Що зміниться, коли
    створиш <code>.gitignore</code> з рядком <code>.venv/</code>?</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>python3 -m venv</code> - створює venv - окрему теку з Python і бібліотеками для лаб. Назва: virtual environment - «віртуальне середовище».</li>
+<li><code>git status</code>: <code>--short</code> - коротко: по рядку на файл з двома буквами стану (<code>M</code>, <code>A</code>, <code>??</code>) (short - «коротко»).</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p><code>.venv/</code> зникне зі списку - git його більше не бачить. Замість нього зʼявиться сам <code>.gitignore</code> (його треба
@@ -160,20 +194,27 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 <summary>Відповідь</summary>
 <p>Нема: <code>grep -c triple lab.py</code> дасть <code>0</code>. Файли в теці завжди показують ту гілку, на якій ти стоїш. Після
 <code>git merge sproba</code> функція зʼявиться і в main.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>grep</code> - шукає рядки з текстом (у файлах або те, що прийшло через <code>|</code>). Назва: g/re/p з редактора ed: global regular expression print - «скрізь знайти шаблон, надрукувати». <code>-c</code> (<code>--count</code>) - не показувати рядки, а лише порахувати, скільки їх зі збігом (count - «порахувати»).</li>
+</ul>
+</blockquote>
 </details>
 <h2 id="руками">Руками</h2>
 <p><strong>Крок 1. Налаштувати git (один раз на компʼютер).</strong> git є не на свіжій Mint, а після уроку 03
 (<code>sudo apt install git</code>). Імʼя - як на GitHub:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>apt install</code> - ставить програму з інтернету; на «Бажаєте продовжити? [Y/n]» - Enter. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)».</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">git config --global user.name &quot;Твоє Імʼя Прізвище&quot;
 git config --global init.defaultBranch main
 git config --global core.quotepath false
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). Назва: config - від configuration, «налаштування». <code>--global</code> - для тебе на цьому ноутбуці: пише у файл ~/.gitconfig, діє в усіх репо.</li>
-</ul>
-</blockquote>
 <p>Пошта: на GitHub відкрий Settings → Emails, увімкни «Keep my email addresses private» і скопіюй адресу виду
 <code>...@users.noreply.github.com</code> - тоді справжня пошта не потрапить у коміти. Команда (встав свою адресу):</p>
 <pre><code class="language-text">git config --global user.email &quot;скопійована_адреса@users.noreply.github.com&quot;
@@ -181,6 +222,12 @@ git config --global core.quotepath false
 <p>Перевір: <code>git config --global --list</code>. <code>init.defaultBranch main</code> - щоб основна гілка звалась <code>main</code>, а не <code>master</code>
 (без цього <code>git init</code> друкує довгу підказку <code>hint: Using 'master' as the name for the initial branch</code>).
 <code>ustanovka-mint.sh</code> з уроку 03 два останні рядки вже зробив.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git config</code>: <code>--list</code> - показати всі налаштування рядками ключ=значення (list - «список»).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 2. Тренувальний репозиторій.</strong></p>
 <pre><code class="language-bash">mkdir -p ~/univer/praktyka/git24 &amp;&amp; cd ~/univer/praktyka/git24
 git init
@@ -193,17 +240,13 @@ git log --oneline
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>&amp;&amp;</code> (AND) - друга команда - лише якщо перша вдалась.</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан».</li>
-<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
-<li><code>&amp;&amp;</code> - друга команда - лише якщо перша вдалась. Назва: «і»: друга команда - лише якщо перша вдалась.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
 </ul>
 </blockquote>
 <p>Кінець виводу:</p>
@@ -224,10 +267,7 @@ git status --short
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор»: править текст, що тече крізь нього. <code>-i</code> - змінити САМ файл (без -i sed лише показує результат); -i.bak - ще й копія.</li>
-<li><code>git status</code>: <code>--short</code> - коротко: по рядку на файл з двома буквами стану (M, A, ??).</li>
-<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано). Назва: diff - від difference, «різниця».</li>
-<li><code>git restore</code> - викидає зміни у файлі або забирає його з індексу. Назва: restore - «відновити».</li>
+<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор». <code>-i</code> (<code>--in-place</code>) - змінити САМ файл (без <code>-i</code> sed лише показує); <code>-i.bak</code> - ще й копія (in-place - «на місці»).</li>
 </ul>
 </blockquote>
 <p><code>git diff</code> показує, що саме змінено (<code>-</code> було, <code>+</code> стало):</p>
@@ -251,13 +291,6 @@ git status --short
 git add .gitignore чернетка.py
 git commit -m &quot;gitignore і чернетка&quot;
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
-<li><code>python3 -m venv</code> - створює окреме середовище Python (venv) для бібліотек лаб. Назва: virtual environment - «віртуальне середовище».</li>
-</ul>
-</blockquote>
 <p><strong>Крок 5. Гілка.</strong></p>
 <pre><code class="language-bash">git switch -c sproba
 printf '\n\ndef triple(x: int) -&gt; int:\n    return x * 3\n' &gt;&gt; lab.py
@@ -271,12 +304,9 @@ git branch -d sproba
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути». <code>-c</code> - створити нову гілку від поточного місця і перейти на неї.</li>
-<li><code>git commit</code>: <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.</li>
-<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-c</code> - лише порахувати рядки зі збігом у кожному файлі (count).</li>
-<li><code>git merge</code> - зливає іншу гілку в поточну. Назва: merge - «злити, обʼєднати».</li>
-<li><code>git branch</code> - показує, створює і видаляє гілки. Назва: branch - «гілка». <code>-d</code> - видалити гілку, якщо її коміти вже злито; інакше відмовить.</li>
-<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+<li><code>git commit</code>: <code>-a</code> (<code>--all</code>) - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні (all - «усі»).</li>
+<li><code>git branch</code> - показує, створює і видаляє гілки (окремі лінії змін проєкту). <code>-d</code> (<code>--delete</code>) - видалити гілку, якщо її коміти вже злито (додано в іншу гілку); інакше відмовить (delete - «видалити»).</li>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
 </ul>
 </blockquote>
 <p><code>-am</code> = <code>git add</code> для вже відомих файлів + <code>-m</code>. Справжній вивід злиття і історії:</p>
@@ -298,7 +328,7 @@ a4fbd19 Функція double
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
 </ul>
 </blockquote>
 <p>Скопіюй рядок (виділи і Ctrl+Shift+C). GitHub → аватар → <strong>Settings</strong> → <strong>SSH and GPG keys</strong> → <strong>New SSH key</strong> →
@@ -308,7 +338,7 @@ Title: <code>Mint laptop</code>, Key type: Authentication Key, вставити 
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>ssh</code> - заходить у термінал іншого компʼютера по зашифрованому каналу. Назва: Secure Shell - «захищена оболонка»: зашифрований термінал на іншому компʼютері. <code>-T</code> - прапорець: не відкривати термінал на тому боці, лише перевірити вхід (ssh -T git@github.com). GitHub не дає командного рядка, тому для нього завжди -T; якщо вхід вдався, GitHub вітає на імʼя і закриває зʼєднання з кодом 1 - це нормально (Git урок 03); <code>git@github.com</code> - користувач git на сервері github.com - так GitHub приймає всіх, а тебе впізнає за ключем.</li>
+<li><code>ssh</code> - заходить у термінал іншого компʼютера по зашифрованому каналу. Назва: Secure Shell - «захищена оболонка». <code>-T</code> - прапорець: не відкривати термінал на тому боці, лише перевірити вхід (<code>ssh -T git@github.com</code>); <code>-t</code> - дати термінал, <code>-T</code> - не давати. GitHub не дає командного рядка, тому для нього завжди <code>-T</code>; якщо вхід вдався, GitHub вітає на імʼя і закриває зʼєднання з кодом 1 - це нормально; <code>git@github.com</code> - користувач git на сервері github.com - так GitHub приймає всіх, а тебе впізнає за ключем.</li>
 </ul>
 </blockquote>
 <p>За документацією GitHub має бути (замість USERNAME - твій логін):</p>
@@ -326,12 +356,6 @@ printf '.mypy_cache/\n.ruff_cache/\n.pytest_cache/\n__pycache__/\n' &gt; .gitign
 git add .
 git commit -m &quot;Лаби на початок&quot;
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git add</code>: <code>.</code> - усе в поточній теці і підтеках; спершу глянь git status, щоб не додати зайве.</li>
-</ul>
-</blockquote>
 <p>Далі - відправити:</p>
 <pre><code class="language-bash">cd ~/univer/labs
 git status
@@ -341,12 +365,17 @@ git push -u origin main
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git remote</code> - показує і задає адресу репо на GitHub (origin). Назва: remote - «віддалений»: репо на іншому компʼютері (GitHub). <code>origin</code> - звичайна назва головного віддаленого репо; git clone ставить її сам.</li>
-<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub. <code>-u</code> - запамʼятати звʼязок гілки з GitHub; далі просто git push і git pull.</li>
+<li><code>git push</code>: <code>-u</code> (<code>--set-upstream</code>) - запамʼятати пару «моя гілка - гілка на GitHub»; далі просто <code>git push</code> (set upstream - «задати джерело»).</li>
 </ul>
 </blockquote>
 <p><code>-u</code> запамʼятовує, що <code>main</code> іде в <code>origin/main</code>, і далі досить <code>git push</code> і <code>git pull</code>. У тестовій Mint замість
 GitHub був локальний «сервер» (<code>git init --bare</code>), і <code>git push -u</code> надрукував:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git init</code>: <code>--bare</code> - репо без робочих файлів, лише історія - як «сервер», куди роблять push (bare - «голий»).</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">To /home/evgen/labs.git
  * [new branch]      main -&gt; main
 branch 'main' set up to track 'origin/main'.
@@ -376,6 +405,13 @@ Fast-forward
 community-distributed 2.45.x / 2.46.x version is broken» (cli/cli, docs/install_linux.md, 18.11.2026). Тому став gh
 з <strong>офіційного репозиторію GitHub</strong> - це довгий рядок, копіюй його цілим (він додає ключ і репозиторій GitHub, потім
 gh оновлюватиметься разом з системою через Диспетчер оновлень):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh pr view</code> - показує один запит на злиття (PR) за номером. Назва: <code>gh</code> - gh - від GitHub; офіційна програма GitHub CLI (CLI - «командний рядок»); pr - pull request, «запит на злиття»; view - «переглянути».</li>
+<li><code>gh issue view</code> - показує одне завдання (Issue) з GitHub за номером. Назва: issue - «справа, завдання»; view - «переглянути».</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">(type -p wget &gt;/dev/null || (sudo apt update &amp;&amp; sudo apt install wget -y)) \
     &amp;&amp; sudo mkdir -p -m 755 /etc/apt/keyrings \
     &amp;&amp; out=$(mktemp) &amp;&amp; wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
@@ -389,31 +425,36 @@ gh оновлюватиметься разом з системою через Д
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>type</code> - каже, що це за команда і де вона. Назва: type - «тип»: що це за команда. <code>-p</code> - лише шлях до файлу, або нічого, якщо це не файл (path); <code>wget</code> - з -p у скриптах: є програма - нічого не ставити.</li>
-<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
-<li><code>apt update</code> - оновлює список пакетів, нічого не ставить. Назва: update - «оновити» (тут оновлюється лише список пакетів).</li>
-<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити». <code>-y</code> - одразу відповідає «так» на «Продовжити?» - список того, що поставиться, не встигнеш прочитати.</li>
-<li><code>mkdir</code>: <code>-m</code> - одразу задає права нової теки, напр. -m 700 - лише для тебе.</li>
+<li><code>type</code> - каже, що це за команда і де вона. Назва: type - «тип». <code>-p</code> - лише шлях до файлу, або нічого, якщо це не файл (path - «шлях»); <code>wget</code> - з -p у скриптах: шлях є - програма стоїть, ставити не треба.</li>
 <li><code>wget</code> - завантажує файл з інтернету за адресою. Назва: World Wide Web + get - «дістати з вебу».</li>
-<li><code>tee</code> - показує вивід і одночасно пише у файл. Назва: tee - трійник у трубах (літера T): потік іде у два боки.</li>
-<li><code>chmod</code> - змінює права файлу: читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>go+r</code> - дати читання групі (g = group) та іншим.</li>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>||</code> (OR) - друга команда - лише якщо перша впала.</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>apt update</code> - завантажує свіжий список програм і версій, нічого не ставить.</li>
+<li><code>apt install</code>: <code>-y</code> (<code>--yes</code>) - одразу відповідає «так» на питання - список не встигнеш прочитати (yes - «так»).</li>
+<li><code>\</code> (backslash) - робить наступний символ звичайним; у кінці рядка - перенос.</li>
+<li><code>mkdir</code>: <code>-m</code> (<code>--mode</code>) - одразу задає права нової теки, напр. -m 700 - лише для тебе (mode - «режим» доступу).</li>
+<li><code>$( )</code> (command substitution) - підставляє вивід команди в рядок.</li>
+<li><code>$ЗМІННА</code> (dollar) - бере значення змінної (назви, під якою bash тримає текст).</li>
 <li><code>mktemp</code> - створює тимчасовий файл чи теку і друкує шлях. Назва: make temporary - «зробити тимчасовий» файл чи теку.</li>
-<li><code>dpkg</code> - ставить один .deb і знає, що встановлено. Назва: Debian package - «пакет Debian». <code>--print-architecture</code> - друкує архітектуру системи, напр. amd64.</li>
-<li><code>||</code> - друга команда - лише якщо перша впала. Назва: «або»: друга команда - лише якщо перша впала.</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
-<li><code>$( )</code> - підставляє вивід команди в рядок. Назва: command substitution - «підстановка команди».</li>
-<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
-<li><code>\</code> - екранує символ або переносить команду на новий рядок. Назва: backslash - «зворотна скісна риска».</li>
+<li><code>tee</code> - показує вивід і одночасно пише у файл. Назва: tee - трійник у трубах (літера T): потік іде у два боки.</li>
+<li><code>chmod</code> - змінює права файлу: хто може читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>go+r</code> - дати читання групі (g = group) та іншим.</li>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>dpkg</code> - ставить один файл <code>.deb</code> і веде список встановлених програм. Назва: Debian package - «пакет Debian». <code>--print-architecture</code> - друкує архітектуру системи, напр. amd64.</li>
 </ul>
 </blockquote>
 <p>Перевір: <code>gh --version</code> має показати 2.100 чи новішу, а не 2.45. Потім вхід:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh</code>: <code>--version</code> - показати версію <code>gh</code>; має бути новіша за 2.46 (з cli.github.com), а не 2.45 з apt (version - «версія»).</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">gh auth login -p ssh -w
 </code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gh auth login</code> - входить у акаунт GitHub для gh (через браузер). Назва: auth - від authentication, «вхід, підтвердження особи»; login - «увійти». <code>-p</code> - як git ходитиме на GitHub: ssh (ключ з уроку 03) або https; <code>-w</code> - вхід через браузер: gh покаже одноразовий код, ти вставиш його на github.com; <code>ssh</code> - з -p: git через SSH; gh знайде ~/.ssh/id_ed25519.pub і запропонує завантажити його на GitHub.</li>
+<li><code>gh auth login</code> - входить у твій акаунт GitHub, щоб <code>gh</code> міг діяти від тебе. Назва: auth - від authentication, «вхід, підтвердження особи»; login - «увійти». <code>-p</code> (<code>--git-protocol</code>) - як git ходитиме на GitHub: <code>ssh</code> (через SSH-ключ) або <code>https</code> (p - protocol, «спосіб звʼязку»); <code>-w</code> (<code>--web</code>) - вхід через браузер: gh покаже одноразовий код, ти вставиш його на github.com (web - «веб»); <code>ssh</code> - з -p: git через SSH; gh знайде ~/.ssh/id_ed25519.pub і запропонує завантажити його на GitHub.</li>
 </ul>
 </blockquote>
 <p><code>-p ssh</code> - працювати через ssh, <code>-w</code> - увійти через браузер (gh покаже одноразовий код, його вставляєш на сайті).
@@ -424,11 +465,17 @@ gh repo create labs --private --source=. --push
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gh repo create</code> - створює репозиторій на GitHub з терміналу. Назва: repository create - «створити репозиторій» на GitHub. <code>--private</code> - приватний репо: бачиш лише ти (і кого запросиш); для лаб - саме так; <code>--source</code> - взяти теку, що вже є на ноутбуці, напр. --source=. - поточну; <code>--push</code> - одразу запушити коміти з --source на GitHub.</li>
+<li><code>gh repo create</code> - створює новий репозиторій (сховище коду) на GitHub з терміналу. Назва: repository create - «створити репозиторій» на GitHub. <code>--private</code> - приватний репо: бачиш лише ти (і кого запросиш); для лаб - саме так (private - «приватний»); <code>--source</code> - взяти теку, що вже є на ноутбуці, напр. <code>--source=.</code> - поточну (source - «джерело»); <code>--push</code> - одразу відправити коміти з <code>--source</code> на GitHub (push - «штовхнути»).</li>
 </ul>
 </blockquote>
 <p>(Опції перевірено в <code>gh --help</code> у тестовій Mint; сам вхід - ні, там нема браузера й акаунта. Сніпет офіційного
 репозиторію перевірила сесія курсу git: встановився gh 2.105.0, <code>gh pr view</code> працює.)</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh</code>: <code>--help</code> - довідка (англійською): <code>gh --help</code>, <code>gh pr --help</code>, <code>gh pr merge --help</code> (help - «допомога»).</li>
+</ul>
+</blockquote>
 <p><strong>Хочеш git глибше</strong> (гілки, конфлікти, Pull Request, теги для здачі, GitHub Pages, повний розбір gh) - окремий
 курс <code>05_Програмування\Git-GitHub\</code> (уроки 01-16 і «Лаби в git - univer-labs покроково»), робоче місце там те саме:
 <code>~/univer/labs/lr1</code>...<code>lr7</code>.</p>
@@ -455,6 +502,12 @@ gh repo create labs --private --source=. --push
 <li><strong><code>git restore</code> стер потрібне</strong> - він не питає і не має «назад». Перед ним глянь <code>git diff</code>.</li>
 <li><strong><code>git commit</code> без <code>-m</code></strong> відкриє редактор (у Mint - nano): напиши опис, Ctrl+S, Ctrl+X.</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git rm</code> - видаляє файл з диска і git; <code>--cached</code> - лише з git. <code>-r</code> - цілу теку з усім, що всередині (recursive - «рекурсивно»: і в усіх підтеках); <code>--cached</code> - прибрати лише з git, файл на диску лишається (cached - «з кешу», стара назва індексу).</li>
+</ul>
+</blockquote>
 <h2 id="як-роблять-профі">Як роблять профі</h2>
 <ul>
 <li><strong>Маленькі коміти з людським описом.</strong> Одне завдання або одна правка - один коміт. Книга Pro Git і курс
@@ -486,6 +539,12 @@ gh repo create labs --private --source=. --push
 <li>Академічна чесність: публічні розвʼязки до дедлайну можуть списати інші, а відповідати будеш і ти. Викладач
    перевіряє розуміння.</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git remote</code>: <code>-v</code> (<code>--verbose</code>) - показати й адреси: окремо для fetch (забирати) і push (відправляти) (verbose - «докладно»).</li>
+</ul>
+</blockquote>
 </details>
 <h2 id="джерела">Джерела</h2>
 <ul>

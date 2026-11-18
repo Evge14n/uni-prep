@@ -55,8 +55,34 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
+<li><code>touch</code> - створює порожній файл; якщо файл уже є - вміст не чіпає. Назва: touch - «торкнутися» файлу.</li>
+<li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати». <code>-r</code> (<code>--recursive</code>) - копіювати теку разом з усім, що всередині; те саме -R (recursive - «рекурсивно», углиб).</li>
+<li><code>mv</code> - переносить або перейменовує файл чи теку. Назва: move - «перемістити».</li>
+<li><code>rm</code> - видаляє файли назавжди, без кошика. Назва: remove - «прибрати, видалити». <code>-r</code> (<code>--recursive</code>) - видаляти теки разом з усім, що всередині; <code>-i</code> - питати про кожен файл перед видаленням (interactive - «з питаннями»).</li>
+<li><code>rmdir</code> - видаляє порожню теку. Назва: remove directory - «прибрати теку».</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-p</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-rf</code> = <code>-r</code> і <code>-f</code>.</li>
+<li>Символи <code>~</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Шаблони (wildcards):</strong> <code>*</code> - будь-які символи, <code>?</code> - один символ.
 <code>ls *.py</code> - усі файли Python, <code>cp *.py backup/</code> - скопіювати всі.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>*.py</code> - лише .py файли: bash сам замінює <code>*.py</code> на список таких файлів.</li>
+<li><code>*</code> (asterisk) - будь-які символи в назві; bash сам замінює <code>*</code> на список файлів.</li>
+</ul>
+</blockquote>
 <p><strong>Головне правило:</strong> у Linux <strong>нема кошика</strong>. <code>rm</code> стирає назавжди. Тому:</p>
 <ol>
 <li>Спершу <code>ls</code> з тим самим шаблоном - подивись, що саме видалиш:
@@ -67,21 +93,33 @@
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
-<li><code>rm</code> - видаляє файли назавжди, без кошика. Назва: remove - «прибрати, видалити».</li>
-<li><code>*</code> - шаблон: будь-які символи в назві файлу. Назва: asterisk («зірочка») - шаблон «будь-які символи».</li>
-<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.</li>
+<li><code>#</code> (hash) - коментар: далі до кінця рядка bash не читає.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
-2. Не використовуй <code>rm -rf</code>, поки не розумієш кожну букву. <code>-r</code> - теки з усім вмістом,
+</blockquote>
+<ol start="2">
+<li>Не використовуй <code>rm -rf</code>, поки не розумієш кожну букву. <code>-r</code> - теки з усім вмістом,
    <code>-f</code> - не питати і не скаржитись. Один зайвий пробіл після тильди (між <code>~</code> і <code>/тека</code>) - і замість
-   однієї теки стирається вся домашня тека. (Це приклад словами, такого не вводь.)
-3. Ніколи не запускай <code>rm</code> з <code>sudo</code>, якщо не розумієш навіщо.
-4. Важливе - в git (день 9), тоді навіть видалене можна повернути.
-5. <code>cp</code> і <code>mv</code> <strong>мовчки перезаписують</strong> файл з тим самим ім'ям. Додавай <code>-i</code>: <code>cp -i</code>, <code>mv -i</code> - спитає.</p>
+   однієї теки стирається вся домашня тека. (Це приклад словами, такого не вводь.)</li>
+<li>Ніколи не запускай <code>rm</code> з <code>sudo</code> (виконати як адміністратор, день 04), якщо не розумієш навіщо.</li>
+<li>Важливе - в git (день 9), тоді навіть видалене можна повернути.</li>
+<li><code>cp</code> і <code>mv</code> <strong>мовчки перезаписують</strong> файл з тим самим ім'ям. Додавай <code>-i</code>: <code>cp -i</code>, <code>mv -i</code> - спитає.</li>
+</ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>rm</code>: <code>-f</code> (<code>--force</code>) - не питати і не лаятись, якщо файлу нема (force - «силоміць»).</li>
+<li><code>cp</code>: <code>-i</code> (<code>--interactive</code>) - спитати перед тим, як перезаписати файл, що вже є.</li>
+<li><code>mv</code>: <code>-i</code> (<code>--interactive</code>) - спитати перед тим, як затерти файл з такою самою назвою.</li>
+</ul>
 </blockquote>
 <p><strong>Пробіли й кирилиця в назвах.</strong> Назви тек краще без пробілів: <code>ЛР4</code>, <code>lab_4</code>. Якщо пробіл є -
 бери в лапки: <code>cp "Лабораторна 4.pdf" ЛР4/</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+</ul>
+</blockquote>
 <h3 id="руками-10-хв">Руками (10 хв)</h3>
 <pre><code class="language-bash">cd ~/univer/praktyka
 mkdir -p den2/a/b
@@ -89,10 +127,10 @@ ls -R den2              # покаже дерево тек
 touch den2/a/one.py den2/a/two.py den2/a/notes.txt
 ls den2/a/*.py
 cp den2/a/one.py den2/a/one_backup.py
-mv den2/a/two.py den2/a/b/
-mv den2/a/notes.txt den2/a/note.txt
+mv den2/a/two.py den2/a/b/        # перемістити файл у теку b
+mv den2/a/notes.txt den2/a/note.txt   # перейменувати
 tree den2               # гарне дерево
-rm -i den2/a/one_backup.py     # відповідай y
+rm -i den2/a/one_backup.py     # спитає «remove regular empty file ...?» - набери y і Enter
 rmdir den2/a/b          # помилка: тека не порожня - так і має бути
 ls den2/a/b
 rm den2/a/b/two.py
@@ -109,17 +147,11 @@ cd ~/univer/praktyka
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
-<li><code>ls</code>: <code>-R</code> - показати і вміст усіх підтек, теку за текою (recursive).</li>
-<li><code>touch</code> - створює порожній файл або оновлює його час. Назва: touch - «торкнутися» файлу: оновити час зміни, а як нема - створити.</li>
-<li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати».</li>
-<li><code>mv</code> - переносить або перейменовує файл чи теку. Назва: move - «перемістити». <code>den2/a/b/</code> - куди - наявна тека (з / в кінці): файл ляже в неї під своєю назвою.</li>
-<li><code>tree</code> - малює теки й файли деревом. Назва: tree - «дерево»: малює теки гілками.</li>
-<li><code>rm</code>: <code>-i</code> - питати про кожен файл перед видаленням (interactive).</li>
-<li><code>rmdir</code> - видаляє порожню теку. Назва: remove directory - «прибрати теку».</li>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>ls</code>: <code>-R</code> (<code>--recursive</code>) - показати і вміст усіх підтек, теку за текою.</li>
+<li><code>mv</code>: <code>den2/a/b/</code> - шлях з / в кінці - це тека: файл ляже в неї під своєю назвою.</li>
+<li><code>tree</code> - малює теки й файли деревом. Назва: tree - «дерево».</li>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
 </ul>
 </blockquote>
 <p>Зроби теку для 4-ї лаби (знадобиться в дні 8):</p>

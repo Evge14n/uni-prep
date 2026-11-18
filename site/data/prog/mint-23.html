@@ -11,6 +11,21 @@ set -euo pipefail           -e: зупинитись на першій поми�
 </code></pre>
 <p>Запуск: <code>bash скрипт.sh</code> або один раз <code>chmod +x скрипт.sh</code> (дозвіл на виконання, урок 15), а далі <code>./скрипт.sh</code>.
 Поклав у <code>~/.local/bin</code> (урок 22) - запускається звідусіль просто за назвою.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>bash</code> - програма, що читає й виконує твої команди; <code>bash файл.sh</code> - з файлу. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
+<li><code>chmod</code> - змінює права файлу: хто може читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>+x</code> - <code>+</code> - додати право, <code>x</code> (execute - «виконувати») - запускати файл як програму; без u/g/o - власнику, групі й іншим.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-e</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-euo</code> = <code>-e</code> і <code>-u</code> і <code>-o</code>.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> <code>&amp;</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -45,6 +60,12 @@ set -euo pipefail           -e: зупинитись на першій поми�
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>exit</code> - закінчує скрипт або закриває термінал; число - код виходу (0 - успіх). Назва: exit - «вихід». <code>1</code> - «щось не так» - найчастіший код помилки.</li>
+</ul>
+</blockquote>
 <p><strong>Умови</strong> <code>[ ... ]</code> - пробіли біля дужок обовʼязкові:</p>
 <div class="tw"><table>
 <thead>
@@ -88,6 +109,14 @@ read -r -p &quot;Продовжити? (y/n) &quot; vidp      спитати к�
 </code></pre>
 <p><strong>shellcheck</strong> - програма, яка читає скрипт і знаходить типові помилки (лапки, <code>cd</code> без перевірки тощо).
 У Mint: <code>sudo apt install shellcheck</code>, далі <code>shellcheck скрипт.sh</code>. Тиша = зауважень нема.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>apt install</code> - ставить програму з інтернету; на «Бажаєте продовжити? [Y/n]» - Enter. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)».</li>
+<li><code>shellcheck</code> - шукає типові помилки у bash-скриптах (файлах з командами). Назва: shell check - «перевірка (скрипта) для оболонки» bash.</li>
+</ul>
+</blockquote>
 <p><strong>cron</strong> - служба, яка запускає команди за розкладом (на ISO 22.3 є і працює). Кожен користувач має свою
 таблицю - <strong>crontab</strong>. Рядок таблиці:</p>
 <pre><code class="language-text">┌───────── хвилина (0-59)
@@ -122,16 +151,47 @@ m h dom mon dow   команда
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>crontab</code> - показує і змінює розклад команд, які cron (служба розкладу) запускає сам. Назва: cron table - «таблиця cron»; cron - від грецького chronos, «час». <code>-e</code> - редагувати таблицю в редакторі; перший раз спитає, у якому (edit - «редагувати»); <code>-l</code> - показати свою таблицю (list - «список»).</li>
+</ul>
+</blockquote>
 <p>Три правила cron:
 1. <strong>Свій короткий PATH і <code>/bin/sh</code>.</strong> У cron нема <code>~/.local/bin</code>, venv, аліасів і функцій з <code>~/.bashrc</code>. Пиши
    <strong>повні шляхи</strong>: <code>/home/evgen/univer/.venv/bin/python</code>, <code>/home/evgen/.local/bin/zdaty</code>.
 2. <strong>Вивід пропадає.</strong> Додавай у кінець <code>&gt;&gt; /home/evgen/cron.log 2&gt;&amp;1</code> - тоді і вивід, і помилки будуть у файлі.
 3. <strong><code>%</code> у рядку cron - особливий символ</strong> (означає новий рядок). <code>date +%F</code> треба писати <code>date +\%F</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
+<li><code>2&gt;&amp;1</code> («потік 2 туди ж, куди потік 1»: помилки разом зі звичайним виводом) - помилки йдуть разом зі звичайним виводом.</li>
+<li><code>date</code> - показує дату й час (вигляд задаєш після +). Назва: date - «дата». <code>+%F</code> - формат «рік-місяць-день»: 2026-11-18 (F - full date, «повна дата»).</li>
+</ul>
+</blockquote>
 <p>Ще: cron не «доганяє» пропущене. Якщо о 13:00 ноутбук спав або був вимкнений - запуск просто пропущено.
 Сучасна заміна, яка вміє доганяти, - <strong>таймери systemd</strong> (<code>systemctl --user</code>, опція <code>Persistent=true</code>), урок 20.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl</code> - керує службами (фоновими програмами): показує, запускає, зупиняє, вмикає автозапуск. Назва: system control - «керування системою» (через systemd - програму, що запускає служби). <code>--user</code> - твої власні служби і таймери (з <code>~/.config/systemd/user</code>), без sudo.</li>
+</ul>
+</blockquote>
 <p><strong>at</strong> - «виконати один раз пізніше». На ISO 22.3 його нема: <code>sudo apt install at</code>, далі
 <code>echo "команда" | at 18:00</code> або <code>at now + 10 minutes</code>, список - <code>atq</code>, скасувати - <code>atrm номер</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>at</code> - запускає команду один раз у заданий час. Назва: at - «о» (такій-то годині). <code>18:00</code> - сьогодні о 18:00 (якщо вже минуло - завтра).</li>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>atrm</code> - скасовує заплановане через <code>at</code> завдання за номером з <code>atq</code>. Назва: at remove - «прибрати» завдання <code>at</code>.</li>
+</ul>
+</blockquote>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <ol>
 <li>Скрипт <code>arg.sh</code>:</li>
 </ol>
@@ -143,16 +203,13 @@ cd ~
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>chmod</code> - змінює права файлу: читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>+x</code> - дозволити запуск (x); у Mint - усім трьом: власнику, групі й іншим.</li>
-<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку». <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
-<li><code>./скрипт</code> - запускає свій файл-скрипт з поточної теки. Назва: ./ - «звідси»: крапка = поточна тека, / відділяє теку від файлу.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку». <code>~</code> - домашня тека /home/evgen; <code>~/univer</code> - шлях від неї.</li>
+<li><code>./скрипт</code> - запускає програму за шляхом до її файлу, напр. <code>./файл.sh</code>. Назва: ./ - «звідси».</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <details>
 <summary>Відповідь</summary>
@@ -166,6 +223,12 @@ cd ~
 <ol start="2">
 <li>Два скрипти відрізняються лише рядком <code>set -euo pipefail</code>. Що надрукує кожен?</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>set</code> - вмикає суворий режим: скрипт зупиняється на першій помилці. Назва: set - «встановити» (налаштування самого bash). <code>-e</code> - зупинити скрипт, щойно якась команда впала (errexit - «вийти при помилці»); <code>-u</code> - помилка, якщо скрипт бере змінну, якої нема (nounset - «не задана»); <code>-o</code> - увімкнути налаштування за назвою: <code>-o pipefail</code> (option - «налаштування»); <code>pipefail</code> - з -o: труба <code>|</code> вважається невдалою, якщо впала будь-яка її частина, а не лише остання.</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">printf '#!/bin/bash\ncp nema.txt kopiya.txt\necho &quot;далі&quot;\n' &gt; bez_e.sh
 printf '#!/bin/bash\nset -euo pipefail\ncp nema.txt kopiya.txt\necho &quot;далі&quot;\n' &gt; z_e.sh
 bash bez_e.sh; echo &quot;код $?&quot;
@@ -174,9 +237,7 @@ bash z_e.sh; echo &quot;код $?&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
-<li><code>;</code> - розділяє команди в рядку, виконує всі по черзі. Назва: крапка з комою - роздільник команд.</li>
+<li><code>;</code> (semicolon) - розділяє команди в рядку, виконує всі по черзі.</li>
 </ul>
 </blockquote>
 <details>
@@ -199,10 +260,10 @@ for f in *.py; do echo &quot;файл: $f&quot;; done
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
-<li><code>&amp;&amp;</code> - друга команда - лише якщо перша вдалась. Назва: «і»: друга команда - лише якщо перша вдалась.</li>
-<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
-<li><code>*</code> - шаблон: будь-які символи в назві файлу. Назва: asterisk («зірочка») - шаблон «будь-які символи».</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
+<li><code>&amp;&amp;</code> (AND) - друга команда - лише якщо перша вдалась.</li>
+<li><code>*</code> (asterisk) - будь-які символи в назві; bash сам замінює <code>*</code> на список файлів.</li>
+<li><code>$ЗМІННА</code> (dollar) - бере значення змінної (назви, під якою bash тримає текст).</li>
 </ul>
 </blockquote>
 <details>
@@ -211,6 +272,12 @@ for f in *.py; do echo &quot;файл: $f&quot;; done
 </code></pre>
 <p>Якщо шаблон нічого не знайшов, bash лишає його як є - і цикл один раз проходить з «файлом» <code>*.py</code>. Тому в
 скрипті <code>zdaty</code> нижче стоїть <code>shopt -s nullglob</code>: тоді порожній шаблон дає нуль файлів.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>shopt</code> - вмикає або вимикає налаштування bash. Назва: shell options - «налаштування оболонки» (оболонка - bash, програма для команд). <code>-s</code> - увімкнути налаштування (set - «встановити»); <code>nullglob</code> - шаблон без збігів (<code>*.py</code> у порожній теці) зникає, а не лишається текстом «*.py».</li>
+</ul>
+</blockquote>
 </details>
 <ol start="4">
 <li>Рядок у crontab: <code>30 8 * * 1-5 /home/evgen/.local/bin/nagad</code>. Коли він спрацює? А <code>*/15 * * * *</code>?</li>
@@ -317,6 +384,12 @@ unzip -l &quot;$ZDACHA/$nazva.zip&quot;
   архіві позначку «назви в UTF-8» (перевірено в тестовій Mint: прапорець є за будь-якої мови системи). Linux і
   Python читають такий архів правильно; Windows 10/11 теж мають (на Windows не перевірено). Не впевнений - зроби
   <code>PIB</code> латиницею, напр. <code>Ivanenko_Ivan_FzI-11</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи).</li>
+</ul>
+</blockquote>
 <p>Збережи (Ctrl+S, Ctrl+X) і:</p>
 <pre><code class="language-bash">chmod +x ~/.local/bin/zdaty
 bash -n ~/.local/bin/zdaty
@@ -325,14 +398,19 @@ shellcheck ~/.local/bin/zdaty
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>bash</code>: <code>-n</code> - лише перевірити скрипт на синтаксичні помилки, нічого не виконуючи (no execute).</li>
-<li><code>shellcheck</code> - шукає типові помилки в bash-скриптах. Назва: shell check - «перевірка (скрипта) оболонки».</li>
+<li><code>bash</code>: <code>-n</code> - лише перевірити скрипт на помилки в написанні, нічого не виконуючи (no execute - «не виконувати»).</li>
 </ul>
 </blockquote>
 <p><code>bash -n</code> перевіряє синтаксис, нічого не запускаючи. Обидві команди мають мовчати. (Якщо <code>shellcheck</code> нема -
 <code>sudo apt install shellcheck</code>.)</p>
 <p><strong>Крок 3. Перший запуск - є зауваження.</strong> Набери по черзі три команди: <code>zdaty</code>, <code>zdaty 7</code>, <code>zdaty 0</code>. Якщо
 <code>zdaty</code> «не знаходиться» - урок 22, крок 3 (<code>source ~/.profile</code>).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/.profile</code> - перечитати PATH (теки, де bash шукає програми), щоб зʼявилась ~/.local/bin.</li>
+</ul>
+</blockquote>
 <p>Справжній вивід <code>zdaty 0</code> у тестовій Mint 22.3 (на питання відповів <code>n</code>; шлях у тебе <code>/home/evgen/...</code>):</p>
 <pre><code class="language-text">kub.py:
   doctest  ok
@@ -369,12 +447,6 @@ Archive:  /home/evgen/univer/zdacha/Прізвище_Імʼя_Група_ЛР0.z
 <pre><code class="language-bash">crontab -l
 crontab -e
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>crontab</code> - редагує розклад автоматичних запусків (cron). Назва: cron table - «таблиця cron»; cron - від грецького chronos, «час». <code>-l</code> - показати свою таблицю (list); <code>-e</code> - редагувати таблицю в редакторі (edit); перший раз спитає, у якому.</li>
-</ul>
-</blockquote>
 <p><code>crontab -l</code> скаже <code>no crontab for evgen</code> (таблиці ще нема). <code>crontab -e</code> перший раз спитає редактор. Справжній
 вивід з тестової Mint (там встановлено ще micro і vim, тому список довший; у тебе пунктів може бути менше):</p>
 <pre><code class="language-text">no crontab for evgen - using an empty one
@@ -399,6 +471,13 @@ mkdir -p ~/backup
 <code>*/2 * * * *</code> (кожні 2 хвилини), подивись <code>tail -f ~/cron.log</code> (Ctrl+C - вийти) і <code>ls ~/backup/univer</code>, потім
 поверни <code>0 13</code>. На флешку - заміни шлях на <code>/media/evgen/НАЗВА_ФЛЕШКИ/univer/</code>; якщо флешка не вставлена,
 у лозі буде помилка, і це нормально.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>tail</code> - показує останні рядки (файлу чи того, що прийшло через <code>|</code>). Назва: tail - «хвіст». <code>-f</code> (<code>--follow</code>) - не закінчувати, а показувати нові рядки, щойно їх дописали; вихід Ctrl+C (follow - «стежити»); <code>~/cron.log</code> - журнал, який дописує cron (планувальник задач), - для tail -f.</li>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+</ul>
+</blockquote>
 <p><code>~/backup</code> на тому самому диску - <strong>тренування</strong> (перевірити, що cron працює). Від смерті диска чи крадіжки
 ноутбука така копія не врятує: справжня копія - на флешці чи зовнішньому диску і в git на GitHub (урок 24).</p>
 <p><strong>Крок 6 (за бажанням). at.</strong></p>
@@ -413,14 +492,16 @@ job 2 at Wed Nov 18 10:14:00 2026
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
-<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
-<li><code>at</code> - запускає команду один раз у заданий час. Назва: at - «о» (такій-то годині): виконати один раз у заданий час.</li>
-<li><code>atq</code> - показує заплановані завдання at. Назва: at queue - «черга at»: що заплановано.</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>atq</code> - показує заплановані завдання at. Назва: at queue - «черга at».</li>
 </ul>
 </blockquote>
 <p>Через хвилину зʼявиться файл <code>~/at_spratsyuvav</code>. Скасувати завдання до запуску - <code>atrm 2</code> (номер з <code>atq</code>).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>atrm</code>: <code>2</code> - номер завдання - перше число в рядку <code>atq</code>.</li>
+</ul>
+</blockquote>
 <h2 id="типові-помилки">Типові помилки</h2>
 <p>Якщо Mint українською, bash пише українською - у дужках (справжній запуск з перекладом <code>language-pack-uk-base</code>).
 Англійський текст для пошуку: <code>LC_ALL=C bash скрипт.sh</code>.</p>
@@ -439,6 +520,13 @@ job 2 at Wed Nov 18 10:14:00 2026
 <li><strong>zip з повним шляхом.</strong> <code>zip -qr lr0.zip ~/univer/labs/lr0</code> кладе в архів увесь шлях і сміття. Справжній
   вміст такого архіву:</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор». <code>-i</code> (<code>--in-place</code>) - змінити САМ файл (без <code>-i</code> sed лише показує); <code>-i.bak</code> - ще й копія (in-place - «на місці»).</li>
+<li><code>zip</code> - пакує файли й теки в .zip. Назва: zip - «мчати, свистіти»: формат ZIP (1989), натяк на швидкість. <code>-q</code> (<code>--quiet</code>) - тихо: без рядків adding (quiet - «тихо»); <code>-r</code> (<code>--recurse-paths</code>) - брати теки з усім, що в них; без <code>-r</code> - лише порожня тека (recurse - «рекурсивно»).</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">        0  2026-11-18 10:11   home/evgen/univer/labs/lr0/
       102  2026-11-18 10:11   home/evgen/univer/labs/lr0/kub.py
       117  2026-11-18 10:11   home/evgen/univer/labs/lr0/kvadrat.py
@@ -451,6 +539,13 @@ job 2 at Wed Nov 18 10:14:00 2026
   теки (<code>cd</code>). Числа <code>102</code>, <code>117</code> - розміри файлів у байтах, у тебе свої.
 - <strong>cron «не працює», а руками працює</strong> - майже завжди PATH: у cron нема <code>~/.local/bin</code> і venv. Справжній запис
   у тестовій Mint, коли в cron написали просто <code>univer</code> (аліас з уроку 03):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>python3 -m zipfile</code> - робить і розпаковує .zip засобами Python. Назва: zipfile - вбудований у Python інструмент для .zip; <code>-m</code> - запустити його як програму. <code>-c</code> (<code>--create</code>) - створити архів з файлів і тек, теки - з усім вмістом (create - «створити»).</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">/bin/sh: 1: univer: not found
 </code></pre>
 <p>А PATH, з яким cron запускає команди (теж з тестової Mint):</p>
@@ -462,6 +557,12 @@ job 2 at Wed Nov 18 10:14:00 2026
 <li><strong>Нема <code>&gt;&gt; ~/cron.log 2&gt;&amp;1</code></strong> - помилки cron відправляє «поштою», якої на ноутбуці нема, і вони губляться.</li>
 <li><strong>Чужий скрипт з інтернету</strong> - спершу <code>less скрипт.sh</code> і <code>shellcheck</code>, а не одразу <code>bash</code> (урок 25).</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>less</code> - гортає довгий файл по сторінках, вихід q. Назва: less - «менше»: жарт, бо less is more - кращий за старий переглядач more.</li>
+</ul>
+</blockquote>
 <h2 id="як-роблять-профі">Як роблять профі</h2>
 <ul>
 <li><strong><code>set -euo pipefail</code> + shellcheck - стандарт для bash-скриптів.</strong> Google Shell Style Guide радить bash-скрипти
@@ -473,6 +574,12 @@ job 2 at Wed Nov 18 10:14:00 2026
 <li><strong>Скрипт = документація.</strong> Те, що робиш перед кожною здачею, записане в <code>zdaty</code>, - через місяць не треба
   згадувати, як правильно пакувати.</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl list-timers</code> - показує таймери (запуски за розкладом) і коли вони спрацюють. Назва: list timers - «список таймерів».</li>
+</ul>
+</blockquote>
 <h2 id="самоперевірка">Самоперевірка</h2>
 <ol>
 <li>Навіщо перший рядок <code>#!/bin/bash</code> і що робить <code>chmod +x</code>?</li>

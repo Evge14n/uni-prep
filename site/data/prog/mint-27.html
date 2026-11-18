@@ -44,6 +44,19 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>code</code> - відкриває файл або теку у VS Code. Назва: code - від Visual Studio Code («код»).</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-m</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> <code>&amp;</code> <code>*</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Чому не з «Керування програмами».</strong> VS Code там - <strong>неофіційний</strong> Flatpak <code>com.visualstudio.code</code> з позначкою «Not
 verified», тому Mint його ховає (урок 16). Його README на Flathub сам попереджає: Flatpak працює в ізольованому
 середовищі (sandbox), і вбудований термінал за замовчуванням працює всередині пісочниці - щоб дістатись до
@@ -52,6 +65,7 @@ verified», тому Mint його ховає (урок 16). Його README н�
 <p><strong>Що налаштувати (крок 3-4):</strong> розширення Python, інтерпретатор <code>~/univer/.venv/bin/python</code>, лінійка на 78
 символів, black при збереженні, ШІ вимкнути.</p>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <ol>
 <li>Ти поставив VS Code з .deb. Звідки він оновлюватиметься?</li>
 </ol>
@@ -87,6 +101,14 @@ repository and signing key, which enables auto-update through the system package
 <summary>Відповідь</summary>
 <p>Лише якщо VS Code налаштовано так само (78). Остаточна перевірка - завжди в терміналі: <code>perevir файл.py</code> або
 <code>python3 -m flake8 --max-line-length=78 файл.py</code> (уроки 03-04). Редактор може мати інші налаштування.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи).</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>python3 -m flake8</code> - шукає помилки стилю і зайвий код, нічого не змінює. Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша дозволена довжина рядка; викладач хоче 78 (типово 79).</li>
+</ul>
+</blockquote>
 </details>
 <h2 id="руками">Руками</h2>
 <p><strong>Крок 1 (варіант А). VS Code з офіційного .deb.</strong> Завантаж .deb (кнопка «.deb» на code.visualstudio.com) або
@@ -99,14 +121,13 @@ sudo apt install ./code_latest_amd64.deb
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>$( )</code> (command substitution) - підставляє вивід команди в рядок.</li>
 <li><code>xdg-user-dir</code> - друкує шлях до теки завантажень, зображень тощо. Назва: XDG user directory - «тека користувача» за правилами freedesktop.org. <code>DOWNLOAD</code> - тека завантажень (туди кладуть файли браузер і Telegram).</li>
-<li><code>wget</code> - завантажує файл з інтернету за адресою. Назва: World Wide Web + get - «дістати з вебу». <code>-O</code> - під яким імʼям зберегти; -O - (мінус) означає «на екран», щоб передати далі в трубу |.</li>
-<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
-<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>$( )</code> - підставляє вивід команди в рядок. Назва: command substitution - «підстановка команди».</li>
+<li><code>wget</code> - завантажує файл з інтернету за адресою. Назва: World Wide Web + get - «дістати з вебу». <code>-O</code> (<code>--output-document</code>) - під яким імʼям зберегти файл (output document - «файл для виводу»).</li>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>apt install</code> - ставить програму з інтернету; на «Бажаєте продовжити? [Y/n]» - Enter. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)».</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p>Файл близько 300 МБ. Під час установки зʼявиться питання про репозиторій Microsoft - <strong>Yes</strong> (автооновлення).
 Подвійний клік по .deb у Nemo теж працює - відкриється Captain (урок 16).</p>
@@ -119,15 +140,15 @@ sudo apt update &amp;&amp; sudo apt install codium
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>wget</code>: <code>-q</code> - нічого не писати (тихо).</li>
-<li><code>gpg</code> - працює з ключами; у курсі - перетворює ключ репозиторію. Назва: GNU Privacy Guard - «охоронець приватності GNU». <code>--dearmor</code> - зняти «броню»: текстовий ключ (-----BEGIN PGP ...) перетворити на двійковий, як хоче apt.</li>
+<li><code>wget</code>: <code>-q</code> (<code>--quiet</code>) - нічого не писати (quiet - «тихо»).</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>gpg</code> - шифрує і підписує файли; для apt перетворює ключ у потрібний вигляд. Назва: GNU Privacy Guard - «охоронець приватності GNU». <code>--dearmor</code> - зняти «броню»: текстовий ключ (<code>-----BEGIN PGP ...</code>) перетворити на двійковий, як хоче apt.</li>
 <li><code>tee</code> - показує вивід і одночасно пише у файл. Назва: tee - трійник у трубах (літера T): потік іде у два боки.</li>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали. <code>-e</code> - розуміти \n (новий рядок) і \t (таб) всередині тексту.</li>
-<li><code>apt update</code> - оновлює список пакетів, нічого не ставить. Назва: update - «оновити» (тут оновлюється лише список пакетів).</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&amp;&amp;</code> - друга команда - лише якщо перша вдалась. Назва: «і»: друга команда - лише якщо перша вдалась.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали. <code>-e</code> - розуміти <code>\n</code> (новий рядок) і <code>\t</code> (таб) всередині тексту (escapes - «спецсимволи»).</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>apt update</code> - завантажує свіжий список програм і версій, нічого не ставить.</li>
+<li><code>&amp;&amp;</code> (AND) - друга команда - лише якщо перша вдалась.</li>
 </ul>
 </blockquote>
 <p>Що тут відбувається: 1) завантажити ключ, яким підписано репозиторій, перетворити (<code>--dearmor</code>) і покласти в
@@ -174,11 +195,9 @@ python3 -m flake8 --max-line-length=78 lr1_1.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
-<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s».</li>
-<li><code>python3 -m flake8</code> - шукає помилки стилю і зайвий код, нічого не змінює. Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша дозволена довжина рядка; викладач хоче 78 (типово 79).</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/univer/.venv/bin/activate</code> - увімкнути venv (окремий Python для лаб); вимкнути - deactivate.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>python3 -m pytest</code> - проганяє тести (приклади <code>&gt;&gt;&gt;</code>) і чесно каже: усе пройшло чи ні. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади <code>&gt;&gt;&gt;</code>) у файлах <code>.py</code>; без нього pytest шукає лише функції <code>test_</code>; <code>-q</code> (<code>--quiet</code>) - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s».</li>
 </ul>
 </blockquote>
 <p>(або <code>perevir lr1_1.py</code>, урок 03). Зелена галочка в редакторі - не перевірка. Перевірка - ці команди.</p>
@@ -203,6 +222,14 @@ python3 -m flake8 --max-line-length=78 lr1_1.py
 <li><strong>black «зіпсував» doctest викладача?</strong> Ні: у docstring black лише прибирає пробіли в кінці рядків, а приклади
   doctest не міняє. Довгі рядки doctest лишаться довгими (урок 04, п. 12) - це нормально.</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>;</code> (semicolon) - розділяє команди в рядку, виконує всі по черзі.</li>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+<li><code>*</code> (asterisk) - будь-які символи в назві; bash сам замінює <code>*</code> на список файлів.</li>
+</ul>
+</blockquote>
 <h2 id="як-роблять-профі">Як роблять профі</h2>
 <ul>
 <li><strong>Редактор + термінал, а не редактор замість термінала.</strong> Тести, лінтери і git запускають командами, щоб так само

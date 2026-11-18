@@ -14,8 +14,14 @@ python3 --version
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід. <code>/etc/os-release</code> - системний файл з назвою і версією системи (урок 02).</li>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>--version</code> - надрукувати версію Python, напр. Python 3.12.3.</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід). <code>/etc/os-release</code> - системний файл з назвою і версією системи.</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>--version</code> - надрукувати версію Python, напр. Python 3.12.3.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-O</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>~</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1).</li>
 </ul>
 <p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
@@ -30,8 +36,8 @@ python3 --version
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
-<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>$ЗМІННА</code> (dollar) - бере значення змінної (назви, під якою bash тримає текст).</li>
 </ul>
 </blockquote>
 <p>Якщо бачиш <code>uk_UA.UTF-8</code> - Mint українською, і багато повідомлень <strong>системи</strong> (bash, <code>cp</code>, <code>mkdir</code>, apt, nano,
@@ -121,6 +127,12 @@ Timeshift) будуть українською, а не так, як у курс
 flake8, black, mypy, ruff, matplotlib, numpy і додає дві команди: <code>univer</code> (перейти в <code>~/univer</code> і увімкнути venv)
 та <code>perevir файл.py</code> (doctest + black + flake8, pycodestyle, ruff до 78 символів + mypy, як вимагає викладач).
 Систему він не оновлює.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи).</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">cd ~
 wget -O ustanovka-mint.sh https://evge14n.github.io/uni-prep/files/ustanovka-mint.sh
 less ustanovka-mint.sh
@@ -129,11 +141,11 @@ bash ustanovka-mint.sh
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку». <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
-<li><code>wget</code> - завантажує файл з інтернету за адресою. Назва: World Wide Web + get - «дістати з вебу». <code>-O</code> - під яким імʼям зберегти; -O - (мінус) означає «на екран», щоб передати далі в трубу |.</li>
-<li><code>less</code> - гортає довгий файл по сторінках, вихід q. Назва: less - «менше»: жарт, бо less is more - кращий за старий переглядач more. <code>ustanovka-mint.sh</code> - прочитати чужий скрипт перед запуском (урок 03).</li>
-<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку». <code>~</code> - домашня тека /home/evgen; <code>~/univer</code> - шлях від неї.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>wget</code> - завантажує файл з інтернету за адресою. Назва: World Wide Web + get - «дістати з вебу». <code>-O</code> (<code>--output-document</code>) - під яким імʼям зберегти файл (output document - «файл для виводу»).</li>
+<li><code>less</code> - гортає довгий файл по сторінках, вихід q. Назва: less - «менше»: жарт, бо less is more - кращий за старий переглядач more.</li>
+<li><code>bash</code> - програма, що читає й виконує твої команди; <code>bash файл.sh</code> - з файлу. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
 </ul>
 </blockquote>
 <p>Якщо <code>wget</code> пише помилку <code>404</code> (файл на сайті ще не опублікований) або інтернету нема - скопіюй

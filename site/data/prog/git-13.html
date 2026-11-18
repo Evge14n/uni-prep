@@ -1,5 +1,19 @@
 <h1 id="тема-13-stash-відкласти-зміни">Тема 13. stash - відкласти зміни</h1>
 <p><strong>Навіщо:</strong> пишеш ЛР4 у гілці <code>lr4</code>, половина завдання 2 ще не працює, і тут викладач каже: «в ЛР1 помилка у виводі, виправ до пари». Комітити недописане не хочеться, а перемкнутись на <code>main</code> git не дає. <code>git stash</code> ховає недописане в схованку, а потім повертає.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git stash</code> - ховає ще не збережені в коміт зміни на потім і чистить теку. Назва: stash - «заначка, сховати на потім».</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-u</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-am</code> = <code>-a</code> і <code>-m</code>.</li>
+<li>Символи <code>~</code> <code>&gt;</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <h3 id="коротко">Коротко</h3>
 <p><strong>Stash</strong> (схованка) - окрема полиця в git, куди можна покласти незакомічені зміни. Робоча тека стає чистою, як після коміту, і можна спокійно перемикати гілки.</p>
 <pre><code class="language-text">lr4 (брудна) ──git stash──→ полиця stash@{0}       робоча тека чиста → git switch main → виправив → git switch lr4
@@ -40,6 +54,12 @@ lr4 (знову брудна) ←──git stash pop─┘
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git stash</code>: <code>-u</code> (<code>--include-untracked</code>) - сховати й нові файли (<code>??</code> у <code>git status</code>); без <code>-u</code> вони лишаються (u - untracked, «невідстежувані»); <code>list</code> - список схованок: stash@{0} - найновіша; <code>pop</code> - повернути найновішу схованку і видалити її зі списку; <code>apply</code> - повернути, але лишити в списку (на всяк випадок); <code>drop</code> - видалити схованку без повернення.</li>
+</ul>
+</blockquote>
 <p>Аналогія: прибрав зі столу недописану лабу в шухляду, щоб звільнити місце під терміновий ЛР1. Потім дістав і продовжив. <code>pop</code> - дістав і шухляда порожня, <code>apply</code> - дістав копію, оригінал лишився в шухляді.</p>
 <h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
 <ol>
@@ -47,6 +67,12 @@ lr4 (знову брудна) ←──git stash pop─┘
 </ol>
 <details>
 <summary>Відповідь</summary>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git switch</code> - перемикає на іншу гілку (лінію змін); з <code>-c</code> створює нову.</li>
+</ul>
+</blockquote>
 <p>Відмовить: при перемиканні git мав би прибрати <code>lr4.py</code> разом з твоїми змінами.</p>
 <pre><code class="language-text">error: Your local changes to the following files would be overwritten by checkout:
     lr4.py
@@ -60,6 +86,12 @@ Aborting
 </ol>
 <details>
 <summary>Відповідь</summary>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git status</code> - показує, які файли змінено і що піде в наступний коміт (збережений знімок). <code>--short</code> - коротко: по рядку на файл з двома буквами стану (<code>M</code>, <code>A</code>, <code>??</code>) (short - «коротко»).</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">?? chernetka.txt
 </code></pre>
 <p>Без <code>-u</code> нові (untracked) файли не ховаються - лишаються в теці. <code>git stash -u</code> сховає і їх.</p>
@@ -96,17 +128,16 @@ git commit -m &quot;ЛР4: заготовка&quot;
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути». <code>-c</code> - створити нову гілку від поточного місця і перейти на неї.</li>
-<li><code>git pull</code> - забирає нові коміти з GitHub і зливає у твою гілку. Назва: pull - «потягнути»: забрати нові коміти з GitHub до себе.</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>git switch</code>: <code>-c</code> (<code>--create</code>) - створити нову гілку від поточного місця і перейти на неї (create - «створити»).</li>
+<li><code>git pull</code> - забирає нові знімки (коміти) з GitHub і одразу додає у твої файли. Назва: pull - «потягнути».</li>
 <li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати». <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»).</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p><strong>Крок 2. Недописане - і перемкнутись не виходить.</strong></p>
 <pre><code class="language-bash">printf '# завдання 2 - ще пишу\n' &gt;&gt; lr4.py
@@ -124,8 +155,7 @@ Aborting
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан». <code>--short</code> - коротко: по рядку на файл з двома буквами стану (M, A, ??).</li>
-<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
 </ul>
 </blockquote>
 <p><strong>Крок 3. Простий <code>stash</code> і повернення.</strong></p>
@@ -144,13 +174,7 @@ Changes not staged for commit:
 ...
 Dropped refs/stash@{0} (d72d50356fc7dbbcf1887bc812215b6dabce8eae)
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git stash</code> - ховає незакомічені зміни на потім і чистить теку. Назва: stash - «заначка, сховати на потім». <code>list</code> - список схованок: stash@{0} - найновіша; <code>pop</code> - повернути найновішу схованку і видалити її зі списку.
-<code>chernetka.txt</code> лишилась на місці - простий <code>stash</code> її не взяв.</li>
-</ul>
-</blockquote>
+<p><code>chernetka.txt</code> лишилась на місці - простий <code>stash</code> її не взяв.</p>
 <p><strong>Крок 4. <code>stash -u</code>, термінова правка в <code>main</code>, повернення.</strong></p>
 <pre><code class="language-bash">git stash -u
 git status --short
@@ -163,13 +187,7 @@ git stash apply
 git stash list
 git stash drop
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git stash</code>: <code>-u</code> - сховати й нові файли (?? у git status); без -u вони лишаються в теці; <code>apply</code> - повернути, але лишити в списку (на всяк випадок); <code>drop</code> - видалити схованку без повернення.
-Після <code>stash -u</code> <code>git status --short</code> нічого не друкує - тека чиста, і <code>git switch main</code> проходить. Після <code>apply</code> - <code>lr4.py</code> знову змінений, <code>chernetka.txt</code> знову є, а схованка ще на полиці; <code>drop</code> її прибирає:</li>
-</ul>
-</blockquote>
+<p>Після <code>stash -u</code> <code>git status --short</code> нічого не друкує - тека чиста, і <code>git switch main</code> проходить. Після <code>apply</code> - <code>lr4.py</code> знову змінений, <code>chernetka.txt</code> знову є, а схованка ще на полиці; <code>drop</code> її прибирає:</p>
 <pre><code class="language-text">Dropped refs/stash@{0} (65d8f24b94b7f4ebc41b4ce380162538447b0ad5)
 </code></pre>
 <p><strong>Крок 5. Справжній конфлікт при <code>pop</code>.</strong> Ховаємо зміни, а в той самий рядок <code>lr4.py</code> комітимо інше:</p>
@@ -199,11 +217,11 @@ stash@{0}: WIP on lr4: 5bd6881 ЛР4: заготовка
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git commit</code>: <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.</li>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.
-Маркери як в уроці 08, тільки підписи інші: <code>Updated upstream</code> - те, що зараз у гілці, <code>Stashed changes</code> - те, що було в схованці. Відкрий <code>nano lr4.py</code> і залиш обидві частини, як треба:</li>
+<li><code>git commit</code>: <code>-a</code> (<code>--all</code>) - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні (all - «усі»).</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
 </ul>
 </blockquote>
+<p>Маркери як в уроці 08, тільки підписи інші: <code>Updated upstream</code> - те, що зараз у гілці, <code>Stashed changes</code> - те, що було в схованці. Відкрий <code>nano lr4.py</code> і залиш обидві частини, як треба:</p>
 <pre><code class="language-bash">nano lr4.py
 </code></pre>
 <pre><code class="language-text">def f(x):
@@ -213,10 +231,10 @@ stash@{0}: WIP on lr4: 5bd6881 ЛР4: заготовка
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).
-Потім:</li>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
 </ul>
 </blockquote>
+<p>Потім:</p>
 <pre><code class="language-bash">git add lr4.py
 git stash drop
 git status --short
@@ -249,6 +267,12 @@ No stash entries found.
 </code></pre>
 <p>Схованку вже дістали (<code>pop</code>) або видалили. Перевір <code>git stash list</code>.</p>
 <p><strong>5. Забута полиця.</strong> Схованки не привʼязані до гілки і не йдуть на GitHub (<code>git push</code> їх не відправляє). Через тиждень у <code>git stash list</code> п'ять <code>WIP on lr4</code> - і не памʼятаєш, що де. Не тримай там нічого довго: повернувся - <code>pop</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git push</code> - відправляє твої нові знімки (коміти) з компʼютера на GitHub. Назва: push - «штовхнути».</li>
+</ul>
+</blockquote>
 <h3 id="як-роблять-профі">Як роблять профі</h3>
 <ul>
 <li>Підписують схованку: <code>git stash push -m "ЛР4 завд. 2 недописане"</code> - у <code>stash list</code> буде <code>stash@{0}: On lr4: ЛР4 завд. 2 недописане</code> (<a href="https://git-scm.com/docs/git-stash">git stash</a>).</li>
@@ -256,6 +280,14 @@ No stash entries found.
 <li>Якщо робота довга - замість stash роблять коміт «WIP» у своїй гілці і потім переробляють його (<code>git reset --soft HEAD~1</code>, урок 12): коміт не загубиться і є в reflog.</li>
 <li>Для довгої паралельної роботи над двома гілками - <code>git worktree</code>: друга тека з іншою гілкою того самого репо (<a href="https://git-scm.com/docs/git-worktree">git worktree</a>).</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git stash</code>: <code>-m</code> (<code>--message</code>) - підпис схованки, щоб потім знати, що в ній; <code>-p</code> (<code>--patch</code>) - у <code>git stash show -p</code> - показати зміни; у <code>git stash -p</code> - вибрати шматки (patch - «латка»).</li>
+<li><code>git reset</code> - відкочує гілку на старіший знімок (коміт); <code>--hard</code> стирає зміни назавжди. <code>--soft</code> - гілка назад, а зміни скасованих комітів лишаються готові до нового коміту (soft - «мʼяко»); <code>HEAD~1</code> - на один коміт назад від того, де ти зараз (<code>HEAD~3</code> - на три).</li>
+<li><code>git worktree</code> - відкриває іншу гілку (лінію змін) проєкту в окремій теці. Назва: worktree - «робоче дерево».</li>
+</ul>
+</blockquote>
 <h3 id="для-лаб">Для лаб</h3>
 <p><strong>Для лаб:</strong> робиш ЛР4 у <code>~/univer/labs</code> (гілка <code>lr4</code>), а треба терміново виправити ЛР1 у <code>main</code> перед здачею: <code>git stash -u</code> → <code>git switch main</code> → правка, коміт, push → <code>git switch lr4</code> → <code>git stash pop</code>. Якщо <code>pop</code> дав конфлікт (ти міняв ту саму функцію) - як у кроці 5: nano, <code>git add</code>, <code>git stash drop</code>.</p>
 <h3 id="самоперевірка">Самоперевірка</h3>

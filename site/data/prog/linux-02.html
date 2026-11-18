@@ -1,0 +1,127 @@
+<h1 id="тема-2-день-2-створити-скопіювати-видалити-безпечно">Тема 2. День 2: Створити, скопіювати, видалити безпечно</h1>
+<p><strong>Навіщо:</strong> щоб робити теки для лаб, копії перед правками і не стерти потрібне.</p>
+<h3 id="коротко-5-хв">Коротко (5 хв)</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mkdir ЛР4</code></td>
+<td>створити теку</td>
+</tr>
+<tr>
+<td><code>mkdir -p labs/ЛР4/data</code></td>
+<td>створити з усіма проміжними, без помилки якщо вже є</td>
+</tr>
+<tr>
+<td><code>touch main.py</code></td>
+<td>створити порожній файл (або оновити час зміни)</td>
+</tr>
+<tr>
+<td><code>cp a.py b.py</code></td>
+<td>копія файлу</td>
+</tr>
+<tr>
+<td><code>cp -r ЛР3 ЛР3-копія</code></td>
+<td>копія теки з усім вмістом (<code>-r</code> = рекурсивно)</td>
+</tr>
+<tr>
+<td><code>mv a.py b.py</code></td>
+<td>перейменувати</td>
+</tr>
+<tr>
+<td><code>mv a.py labs/</code></td>
+<td>перемістити в теку</td>
+</tr>
+<tr>
+<td><code>rm файл</code></td>
+<td>видалити файл</td>
+</tr>
+<tr>
+<td><code>rm -r тека</code></td>
+<td>видалити теку з усім вмістом</td>
+</tr>
+<tr>
+<td><code>rmdir тека</code></td>
+<td>видалити лише порожню теку (безпечний варіант)</td>
+</tr>
+<tr>
+<td><code>rm -i файл</code></td>
+<td>спитає «remove?» перед кожним видаленням</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Шаблони (wildcards):</strong> <code>*</code> - будь-які символи, <code>?</code> - один символ.
+<code>ls *.py</code> - усі файли Python, <code>cp *.py backup/</code> - скопіювати всі.</p>
+<p><strong>Головне правило:</strong> у Linux <strong>нема кошика</strong>. <code>rm</code> стирає назавжди. Тому:</p>
+<ol>
+<li>Спершу <code>ls</code> з тим самим шаблоном - подивись, що саме видалиш:
+   <code>ls *.png        # бачу 3 картинки - ок
+   rm *.png</code></li>
+<li>Не використовуй <code>rm -rf</code>, поки не розумієш кожну букву. <code>-r</code> - теки з усім вмістом,
+   <code>-f</code> - не питати і не скаржитись. Один зайвий пробіл після тильди (між <code>~</code> і <code>/тека</code>) - і замість
+   однієї теки стирається вся домашня тека. (Це приклад словами, такого не вводь.)</li>
+<li>Ніколи не запускай <code>rm</code> з <code>sudo</code>, якщо не розумієш навіщо.</li>
+<li>Важливе - в git (день 9), тоді навіть видалене можна повернути.</li>
+<li><code>cp</code> і <code>mv</code> <strong>мовчки перезаписують</strong> файл з тим самим ім'ям. Додавай <code>-i</code>: <code>cp -i</code>, <code>mv -i</code> - спитає.</li>
+</ol>
+<p><strong>Пробіли й кирилиця в назвах.</strong> Назви тек краще без пробілів: <code>ЛР4</code>, <code>lab_4</code>. Якщо пробіл є -
+бери в лапки: <code>cp "Лабораторна 4.pdf" ЛР4/</code>.</p>
+<h3 id="руками-10-хв">Руками (10 хв)</h3>
+<pre><code>cd ~/univer/praktyka
+mkdir -p den2/a/b
+ls -R den2              # покаже дерево тек
+touch den2/a/one.py den2/a/two.py den2/a/notes.txt
+ls den2/a/*.py
+cp den2/a/one.py den2/a/one_backup.py
+mv den2/a/two.py den2/a/b/
+mv den2/a/notes.txt den2/a/note.txt
+tree den2               # гарне дерево
+rm -i den2/a/one_backup.py     # відповідай y
+rmdir den2/a/b          # помилка: тека не порожня - так і має бути
+ls den2/a/b
+rm den2/a/b/two.py
+rmdir den2/a/b          # тепер вийшло
+mkdir &quot;моя тека&quot;
+ls
+rmdir &quot;моя тека&quot;
+cd den2/a
+echo rm *.py            # echo лише ДРУКУЄ, на що розгорнеться шаблон: rm one.py
+echo rm * .py           # з пробілом: rm note.txt one.py .py - тобто ВСЕ. Тому пробіл тут небезпечний
+cd ~/univer/praktyka
+</code></pre>
+<p>Зроби теку для 4-ї лаби (знадобиться в дні 8):</p>
+<pre><code>mkdir -p ~/univer/labs/ЛР4
+</code></pre>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li><code>rm -rf /mnt/d/...</code> - стирає файли <strong>Windows</strong> назавжди, теж без кошика. З <code>/mnt/c</code> і <code>/mnt/d</code> - лише копіювати.</li>
+<li><code>mkdir ЛР 4</code> створює <strong>дві</strong> теки: <code>ЛР</code> і <code>4</code>.</li>
+<li><code>cp тека нова</code> без <code>-r</code> → «-r not specified; omitting directory».</li>
+<li><code>mv lab.py lab.py.bak</code> і забув - потім шукаєш, «де файл». Для копії бери <code>cp</code>.</li>
+<li>Шаблон з випадковим пробілом між <code>*</code> і <code>.py</code> видаляє <strong>все</strong> в теці. Перевірка без ризику - поставити
+  <code>echo</code> перед командою: побачиш, які файли вона зачепила б.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чим <code>mkdir -p a/b/c</code> відрізняється від <code>mkdir a/b/c</code>?</li>
+<li>Як перейменувати <code>lab.py</code> на <code>lab4.py</code>?</li>
+<li>Чому <code>rmdir</code> безпечніший за <code>rm -r</code>?</li>
+<li>Що станеться після <code>cp new.py old.py</code>, якщо <code>old.py</code> вже є?</li>
+<li>Що зробила б команда rm з шаблоном <code>* .py</code> (з пробілом між зірочкою і .py) і як це перевірити без ризику?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>-p</code> створює всі проміжні теки (a, a/b) і не скаржиться, якщо тека вже є. Без <code>-p</code> - помилка, якщо <code>a/b</code> нема.</li>
+<li><code>mv lab.py lab4.py</code>.</li>
+<li><code>rmdir</code> видаляє лише порожню теку, тому файли не загубиш. <code>rm -r</code> видаляє все всередині.</li>
+<li><code>old.py</code> мовчки перезапишеться вмістом <code>new.py</code>. З <code>cp -i</code> спитало б.</li>
+<li>Пробіл робить з шаблону два аргументи: <code>*</code> (усі файли в теці) і <code>.py</code>. Видалила б усі файли. Перевірити:
+   <code>echo</code> або <code>ls</code> з тим самим шаблоном перед <code>rm</code>, і писати <code>*.py</code> разом.</li>
+</ol>
+</details>

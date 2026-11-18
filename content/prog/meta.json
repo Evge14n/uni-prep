@@ -1,15 +1,85 @@
 {
   "id": "prog",
-  "title": "Залік - програмування (Python)",
+  "title": "Програмування: Python, Linux Mint, Git, безпечний код",
   "kind": "zalik",
-  "subject": "Програмування (Python)",
-  "date": "невідома - залік у кінці семестру, спитати",
-  "points": "залік; розподіл балів невідомий - спитати викладача",
-  "format": "Залік, 4,5 кредита; формат (контрольна, тест чи лаби) невідомий - спитати. Лаба зарахована, коли проходять усі doctest; викладач може попросити пояснити будь-який рядок твого коду.",
-  "include": [],
+  "subject": "Програмування (Python) - один шлях по лабах ЛР1-ЛР7",
+  "date": "залік у кінці семестру, лаби - за графіком",
+  "points": "бали заліку - спитати викладача",
+  "format": "Модуль на кожну лабу: відео → урок Python → Mint і Git → лаба в терміналі → pdb → безпечний код → тест.",
+  "include": [
+    "prog-sec",
+    "mint",
+    "git",
+    "linux"
+  ],
+  "tabs": [
+    [
+      "shlyakh",
+      "Шлях"
+    ],
+    [
+      "uroky",
+      "Уроки Python"
+    ],
+    [
+      "dovidnyk",
+      "Довідник"
+    ],
+    [
+      "shpargalky",
+      "Шпаргалки"
+    ],
+    [
+      "vse",
+      "Усе"
+    ]
+  ],
+  "parts": {
+    "mint": {
+      "prefix": "mint",
+      "title": "Linux Mint",
+      "files": {
+        "uroky": "mint",
+        "teoriya": "mint-start",
+        "zadachi": "mint-zadachi",
+        "shpargalka": "mint-shpargalka"
+      }
+    },
+    "git": {
+      "prefix": "git",
+      "title": "Git і GitHub",
+      "split": "teoriya",
+      "files": {
+        "zadachi": "git-zadachi",
+        "shpargalka": "git-shpargalka"
+      }
+    },
+    "prog-sec": {
+      "prefix": "sec",
+      "title": "Безпечний код",
+      "split": "teoriya",
+      "pybox": true,
+      "files": {
+        "zadachi": "sec-zadachi",
+        "shpargalka": "sec-shpargalka"
+      }
+    },
+    "linux": {
+      "prefix": "linux",
+      "title": "Linux у WSL",
+      "split": "teoriya",
+      "files": {
+        "zadachi": "linux-zadachi",
+        "shpargalka": "linux-shpargalka"
+      }
+    }
+  },
   "test": {
     "timer": 30,
     "count": 25,
-    "note": "самоперевірка: що виведе код, помилки, PEP 8, doctest, складність. Формат справжнього заліку невідомий."
+    "units": [
+      "prog"
+    ],
+    "note": "«Як на справжньому» - лише Python, як на заліку (формат справжнього заліку невідомий). Тренування, картки і помилки - з усіх частин: Python, Linux Mint, Git, безпечний код, Linux."
   }
 }

@@ -1,0 +1,237 @@
+<h1 id="тема-13-stash-відкласти-зміни">Тема 13. stash - відкласти зміни</h1>
+<p><strong>Навіщо:</strong> пишеш ЛР4 у гілці <code>lr4</code>, половина завдання 2 ще не працює, і тут викладач каже: «в ЛР1 помилка у виводі, виправ до пари». Комітити недописане не хочеться, а перемкнутись на <code>main</code> git не дає. <code>git stash</code> ховає недописане в схованку, а потім повертає.</p>
+<h3 id="коротко">Коротко</h3>
+<p><strong>Stash</strong> (схованка) - окрема полиця в git, куди можна покласти незакомічені зміни. Робоча тека стає чистою, як після коміту, і можна спокійно перемикати гілки.</p>
+<pre><code class="language-text">lr4 (брудна) ──git stash──→ полиця stash@{0}       робоча тека чиста → git switch main → виправив → git switch lr4
+                                    │
+lr4 (знову брудна) ←──git stash pop─┘
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git stash</code></td>
+<td>сховати зміни у відстежуваних файлах (і в індексі)</td>
+</tr>
+<tr>
+<td><code>git stash -u</code></td>
+<td>те саме + нові файли, яких git ще не знає (untracked)</td>
+</tr>
+<tr>
+<td><code>git stash list</code></td>
+<td>список схованок: <code>stash@{0}</code> - найсвіжіша</td>
+</tr>
+<tr>
+<td><code>git stash pop</code></td>
+<td>повернути найсвіжішу і <strong>видалити</strong> її з полиці</td>
+</tr>
+<tr>
+<td><code>git stash apply</code></td>
+<td>повернути, але <strong>залишити</strong> на полиці</td>
+</tr>
+<tr>
+<td><code>git stash drop</code></td>
+<td>видалити найсвіжішу схованку</td>
+</tr>
+</tbody>
+</table></div>
+<p>Аналогія: прибрав зі столу недописану лабу в шухляду, щоб звільнити місце під терміновий ЛР1. Потім дістав і продовжив. <code>pop</code> - дістав і шухляда порожня, <code>apply</code> - дістав копію, оригінал лишився в шухляді.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li>У гілці <code>lr4</code> файл <code>lr4.py</code> змінений і не закомічений. Що скаже <code>git switch main</code>, якщо в <code>main</code> файлу <code>lr4.py</code> нема?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Відмовить: при перемиканні git мав би прибрати <code>lr4.py</code> разом з твоїми змінами.</p>
+<pre><code class="language-text">error: Your local changes to the following files would be overwritten by checkout:
+    lr4.py
+Please commit your changes or stash them before you switch branches.
+Aborting
+</code></pre>
+<p>Git сам підказує вихід: commit або stash.</p>
+</details>
+<ol start="2">
+<li>Окрім зміненого <code>lr4.py</code>, є новий файл <code>chernetka.txt</code>, якого git ще не бачив. Що покаже <code>git status --short</code> після простого <code>git stash</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">?? chernetka.txt
+</code></pre>
+<p>Без <code>-u</code> нові (untracked) файли не ховаються - лишаються в теці. <code>git stash -u</code> сховає і їх.</p>
+</details>
+<ol start="3">
+<li>Після <code>git stash apply</code> - що покаже <code>git stash list</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Схованка досі там:</p>
+<pre><code class="language-text">stash@{0}: WIP on lr4: 5bd6881 ЛР4: заготовка
+</code></pre>
+<p><code>apply</code> не видаляє. Після <code>pop</code> список був би порожній. WIP = «work in progress», робота в процесі; далі - гілка і останній коміт.</p>
+</details>
+<ol start="4">
+<li><code>pop</code> дав конфлікт. Схованка видалилась чи ні?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Ні. Git пише <code>The stash entry is kept in case you need it again.</code> Розвʼяжи конфлікт, потім <code>git stash drop</code> сам.</p>
+</details>
+<h3 id="руками">Руками</h3>
+<p>Пісочниця <code>~/pisochnytsia</code>. Хеші в тебе будуть інші.</p>
+<p><strong>Крок 1. Гілка <code>lr4</code> із заготовкою.</strong></p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+git switch main
+git pull
+git switch -c lr4
+printf 'def f(x):\n    return x\n' &gt; lr4.py
+git add lr4.py
+git commit -m &quot;ЛР4: заготовка&quot;
+</code></pre>
+<p><strong>Крок 2. Недописане - і перемкнутись не виходить.</strong></p>
+<pre><code class="language-bash">printf '# завдання 2 - ще пишу\n' &gt;&gt; lr4.py
+printf 'ідеї до звіту\n' &gt; chernetka.txt
+git status --short
+git switch main
+</code></pre>
+<pre><code class="language-text"> M lr4.py
+?? chernetka.txt
+error: Your local changes to the following files would be overwritten by checkout:
+    lr4.py
+Please commit your changes or stash them before you switch branches.
+Aborting
+</code></pre>
+<p><strong>Крок 3. Простий <code>stash</code> і повернення.</strong></p>
+<pre><code class="language-bash">git stash
+git status --short
+git stash list
+git stash pop
+</code></pre>
+<pre><code class="language-text">Saved working directory and index state WIP on lr4: 5bd6881 ЛР4: заготовка
+?? chernetka.txt
+stash@{0}: WIP on lr4: 5bd6881 ЛР4: заготовка
+On branch lr4
+Changes not staged for commit:
+...
+    modified:   lr4.py
+...
+Dropped refs/stash@{0} (d72d50356fc7dbbcf1887bc812215b6dabce8eae)
+</code></pre>
+<p><code>chernetka.txt</code> лишилась на місці - простий <code>stash</code> її не взяв.</p>
+<p><strong>Крок 4. <code>stash -u</code>, термінова правка в <code>main</code>, повернення.</strong></p>
+<pre><code class="language-bash">git stash -u
+git status --short
+git switch main
+printf 'print(&quot;ЛР1, виправлено&quot;)\n' &gt; lr1.py
+git add lr1.py
+git commit -m &quot;ЛР1: виправ вивід&quot;
+git switch lr4
+git stash apply
+git stash list
+git stash drop
+</code></pre>
+<p>Після <code>stash -u</code> <code>git status --short</code> нічого не друкує - тека чиста, і <code>git switch main</code> проходить. Після <code>apply</code> - <code>lr4.py</code> знову змінений, <code>chernetka.txt</code> знову є, а схованка ще на полиці; <code>drop</code> її прибирає:</p>
+<pre><code class="language-text">Dropped refs/stash@{0} (65d8f24b94b7f4ebc41b4ce380162538447b0ad5)
+</code></pre>
+<p><strong>Крок 5. Справжній конфлікт при <code>pop</code>.</strong> Ховаємо зміни, а в той самий рядок <code>lr4.py</code> комітимо інше:</p>
+<pre><code class="language-bash">git stash
+printf 'def f(x):\n    return 2 * x\n' &gt; lr4.py
+git commit -am &quot;ЛР4: подвоєння&quot;
+git stash pop
+cat lr4.py
+git status --short
+git stash list
+</code></pre>
+<pre><code class="language-text">Auto-merging lr4.py
+CONFLICT (content): Merge conflict in lr4.py
+...
+The stash entry is kept in case you need it again.
+def f(x):
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream
+    return 2 * x
+=======
+    return x
+# завдання 2 - ще пишу
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Stashed changes
+UU lr4.py
+?? chernetka.txt
+stash@{0}: WIP on lr4: 5bd6881 ЛР4: заготовка
+</code></pre>
+<p>Маркери як в уроці 08, тільки підписи інші: <code>Updated upstream</code> - те, що зараз у гілці, <code>Stashed changes</code> - те, що було в схованці. Відкрий <code>nano lr4.py</code> і залиш обидві частини, як треба:</p>
+<pre><code class="language-bash">nano lr4.py
+</code></pre>
+<pre><code class="language-text">def f(x):
+    return 2 * x
+# завдання 2 - ще пишу
+</code></pre>
+<p>Потім:</p>
+<pre><code class="language-bash">git add lr4.py
+git stash drop
+git status --short
+git commit -m &quot;ЛР4: завдання 2, чернетка&quot;
+</code></pre>
+<pre><code class="language-text">Dropped refs/stash@{0} (d72d50356fc7dbbcf1887bc812215b6dabce8eae)
+M  lr4.py
+?? chernetka.txt
+</code></pre>
+<h3 id="типові-помилки">Типові помилки</h3>
+<p><strong>1. <code>switch</code> не пускає.</strong></p>
+<pre><code class="language-text">error: Your local changes to the following files would be overwritten by checkout:
+    lr4.py
+Please commit your changes or stash them before you switch branches.
+Aborting
+</code></pre>
+<p><code>git stash</code> (або <code>git stash -u</code>, якщо є нові файли), потім <code>git switch main</code>. Повернувшись - <code>git stash pop</code>.</p>
+<p><strong>2. Ховаєш лише новий файл.</strong> Якщо змінених відстежуваних файлів нема, а є тільки новий <code>tmp.txt</code>:</p>
+<pre><code class="language-text">$ git stash
+No local changes to save
+</code></pre>
+<p>Файл не сховано, він далі в теці. Потрібен <code>git stash -u</code>.</p>
+<p><strong>3. Конфлікт при <code>pop</code> - і схованка «досі там».</strong></p>
+<pre><code class="language-text">The stash entry is kept in case you need it again.
+</code></pre>
+<p>Це нормально. Розвʼяжи конфлікт, <code>git add файл</code>, потім <code>git stash drop</code>. Не роби <code>pop</code> вдруге - зміни вже в файлі, лишилось тільки <code>drop</code>.</p>
+<p><strong>4. <code>pop</code>, коли полиця порожня.</strong></p>
+<pre><code class="language-text">$ git stash pop
+No stash entries found.
+</code></pre>
+<p>Схованку вже дістали (<code>pop</code>) або видалили. Перевір <code>git stash list</code>.</p>
+<p><strong>5. Забута полиця.</strong> Схованки не привʼязані до гілки і не йдуть на GitHub (<code>git push</code> їх не відправляє). Через тиждень у <code>git stash list</code> п'ять <code>WIP on lr4</code> - і не памʼятаєш, що де. Не тримай там нічого довго: повернувся - <code>pop</code>.</p>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li>Підписують схованку: <code>git stash push -m "ЛР4 завд. 2 недописане"</code> - у <code>stash list</code> буде <code>stash@{0}: On lr4: ЛР4 завд. 2 недописане</code> (<a href="https://git-scm.com/docs/git-stash">git stash</a>).</li>
+<li>Перед <code>pop</code> дивляться, що всередині: <code>git stash show -p</code> (<a href="https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning">Pro Git 7.3 «Stashing and Cleaning»</a>).</li>
+<li>Якщо робота довга - замість stash роблять коміт «WIP» у своїй гілці і потім переробляють його (<code>git reset --soft HEAD~1</code>, урок 12): коміт не загубиться і є в reflog.</li>
+<li>Для довгої паралельної роботи над двома гілками - <code>git worktree</code>: друга тека з іншою гілкою того самого репо (<a href="https://git-scm.com/docs/git-worktree">git worktree</a>).</li>
+</ul>
+<h3 id="для-лаб">Для лаб</h3>
+<p><strong>Для лаб:</strong> робиш ЛР4 у <code>~/univer/labs</code> (гілка <code>lr4</code>), а треба терміново виправити ЛР1 у <code>main</code> перед здачею: <code>git stash -u</code> → <code>git switch main</code> → правка, коміт, push → <code>git switch lr4</code> → <code>git stash pop</code>. Якщо <code>pop</code> дав конфлікт (ти міняв ту саму функцію) - як у кроці 5: nano, <code>git add</code>, <code>git stash drop</code>.</p>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Навіщо <code>git stash</code>, якщо можна просто закомітити?</li>
+<li>Чим <code>git stash -u</code> відрізняється від <code>git stash</code>?</li>
+<li>Чим <code>git stash pop</code> відрізняється від <code>git stash apply</code>?</li>
+<li>Що робити, якщо <code>git stash pop</code> дав конфлікт?</li>
+<li>Що зробиш, якщо <code>git switch main</code> пише «Your local changes ... would be overwritten by checkout»?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Щоб не робити коміт з недописаним кодом і швидко звільнити робочу теку для іншої гілки.</li>
+<li><code>-u</code> ховає ще й нові файли, яких git не відстежує (untracked).</li>
+<li><code>pop</code> повертає зміни і видаляє схованку, <code>apply</code> повертає і залишає її (видалиш потім <code>drop</code>).</li>
+<li>Розвʼязати конфлікт у файлі (nano), <code>git add файл</code>, потім <code>git stash drop</code> - схованка після конфлікту лишається.</li>
+<li><code>git stash</code> (або <code>git stash -u</code>), <code>git switch main</code>, зробити справу, повернутись і <code>git stash pop</code>.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Pro Git 7.3 «Stashing and Cleaning» - https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning (відкрито 18.11.2026)</li>
+<li>git stash - https://git-scm.com/docs/git-stash (відкрито 18.11.2026)</li>
+<li>git switch - https://git-scm.com/docs/git-switch (відкрито 18.11.2026)</li>
+<li>git worktree - https://git-scm.com/docs/git-worktree (відкрито 18.11.2026)</li>
+</ul>

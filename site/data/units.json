@@ -134,7 +134,9 @@
    }
   ],
   "nq": 114,
-  "nv": 30
+  "nv": 30,
+  "nqAll": 203,
+  "parts": []
  },
  {
   "id": "an",
@@ -181,7 +183,9 @@
    }
   ],
   "nq": 101,
-  "nv": 23
+  "nv": 23,
+  "nqAll": 223,
+  "parts": []
  },
  {
   "id": "mech",
@@ -275,43 +279,75 @@
  },
  {
   "id": "prog",
-  "title": "Залік - програмування (Python)",
+  "title": "Програмування: Python, Linux Mint, Git, безпечний код",
   "kind": "zalik",
-  "subject": "Програмування (Python)",
-  "date": "невідома - залік у кінці семестру, спитати",
-  "points": "залік; розподіл балів невідомий - спитати викладача",
-  "format": "Залік, 4,5 кредита; формат (контрольна, тест чи лаби) невідомий - спитати. Лаба зарахована, коли проходять усі doctest; викладач може попросити пояснити будь-який рядок твого коду.",
-  "include": [],
+  "subject": "Програмування (Python) - один шлях по лабах ЛР1-ЛР7",
+  "date": "залік у кінці семестру, лаби - за графіком",
+  "points": "бали заліку - спитати викладача",
+  "format": "Модуль на кожну лабу: відео → урок Python → Mint і Git → лаба в терміналі → pdb → безпечний код → тест.",
+  "include": [
+   "prog-sec",
+   "mint",
+   "git",
+   "linux"
+  ],
+  "tabs": [
+   [
+    "shlyakh",
+    "Шлях"
+   ],
+   [
+    "uroky",
+    "Уроки Python"
+   ],
+   [
+    "dovidnyk",
+    "Довідник"
+   ],
+   [
+    "shpargalky",
+    "Шпаргалки"
+   ],
+   [
+    "vse",
+    "Усе"
+   ]
+  ],
+  "parts": [
+   "prog-sec",
+   "mint",
+   "git",
+   "linux"
+  ],
   "test": {
    "timer": 30,
    "count": 25,
-   "note": "самоперевірка: що виведе код, помилки, PEP 8, doctest, складність. Формат справжнього заліку невідомий."
+   "units": [
+    "prog"
+   ],
+   "note": "«Як на справжньому» - лише Python, як на заліку (формат справжнього заліку невідомий). Тренування, картки і помилки - з усіх частин: Python, Linux Mint, Git, безпечний код, Linux."
   },
   "ng": 0,
   "pages": [
    {
+    "key": "shlyakh",
+    "title": "Шлях"
+   },
+   {
     "key": "uroky",
-    "title": "Уроки"
-   },
-   {
-    "key": "teoriya",
-    "title": "Теорія"
-   },
-   {
-    "key": "oznachennya",
-    "title": "Означення і теореми"
-   },
-   {
-    "key": "zadachi",
-    "title": "Задачі"
-   },
-   {
-    "key": "shpargalka",
-    "title": "Шпаргалка"
+    "title": "Уроки Python"
    },
    {
     "key": "dovidnyk",
     "title": "Довідник"
+   },
+   {
+    "key": "shpargalky",
+    "title": "Шпаргалки"
+   },
+   {
+    "key": "vse",
+    "title": "Усе"
    },
    {
     "key": "test",
@@ -319,7 +355,8 @@
    }
   ],
   "nq": 103,
-  "nv": 0
+  "nv": 0,
+  "nqAll": 419
  },
  {
   "id": "zfp",
@@ -457,31 +494,53 @@
    "count": 15,
    "note": "самоперевірка за курсом; частину відповідей перевірено запуском команд у Linux Mint 22.3"
   },
-  "ng": 0,
+  "parent": "prog",
+  "moved": {
+   "": "mint",
+   "test": "test",
+   "video": "shlyakh",
+   "uroky": "mint",
+   "teoriya": "mint-start",
+   "zadachi": "mint-zadachi",
+   "shpargalka": "mint-shpargalka",
+   "urok-01": "mint-01",
+   "urok-02": "mint-02",
+   "urok-03": "mint-03",
+   "urok-04": "mint-04",
+   "urok-05": "mint-05",
+   "urok-06": "mint-06",
+   "urok-07": "mint-07",
+   "urok-08": "mint-08",
+   "urok-09": "mint-09",
+   "urok-10": "mint-10",
+   "urok-11": "mint-11",
+   "urok-12": "mint-12",
+   "urok-13": "mint-13",
+   "urok-14": "mint-14",
+   "urok-15": "mint-15",
+   "urok-16": "mint-16",
+   "urok-17": "mint-17",
+   "urok-18": "mint-18",
+   "urok-19": "mint-19",
+   "urok-20": "mint-20",
+   "urok-21": "mint-21",
+   "urok-22": "mint-22",
+   "urok-23": "mint-23",
+   "urok-24": "mint-24",
+   "urok-25": "mint-25",
+   "urok-26": "mint-26",
+   "urok-27": "mint-27"
+  },
+  "ptitle": "Linux Mint",
   "pages": [
-   {
-    "key": "uroky",
-    "title": "Уроки"
-   },
-   {
-    "key": "teoriya",
-    "title": "Теорія"
-   },
-   {
-    "key": "zadachi",
-    "title": "Задачі"
-   },
-   {
-    "key": "shpargalka",
-    "title": "Шпаргалка"
-   },
    {
     "key": "test",
     "title": "Тести"
    }
   ],
   "nq": 81,
-  "nv": 0
+  "nv": 0,
+  "ng": 0
  },
  {
   "id": "linux",
@@ -497,27 +556,25 @@
    "count": 15,
    "note": "самоперевірка за 10 днями курсу; деякі відповіді перевірено запуском команд в Ubuntu"
   },
-  "ng": 0,
+  "parent": "prog",
+  "moved": {
+   "": "linux",
+   "test": "test",
+   "video": "shlyakh",
+   "zadachi": "linux-zadachi",
+   "shpargalka": "linux-shpargalka",
+   "teoriya": "linux"
+  },
+  "ptitle": "Linux у WSL",
   "pages": [
-   {
-    "key": "teoriya",
-    "title": "Теорія"
-   },
-   {
-    "key": "zadachi",
-    "title": "Задачі"
-   },
-   {
-    "key": "shpargalka",
-    "title": "Шпаргалка"
-   },
    {
     "key": "test",
     "title": "Тести"
    }
   ],
   "nq": 72,
-  "nv": 0
+  "nv": 0,
+  "ng": 0
  },
  {
   "id": "git",
@@ -533,27 +590,25 @@
    "count": 15,
    "note": "самоперевірка за курсом; більш як половину відповідей перевірено запуском git 2.43 в Ubuntu"
   },
-  "ng": 0,
+  "parent": "prog",
+  "moved": {
+   "": "git",
+   "test": "test",
+   "video": "shlyakh",
+   "zadachi": "git-zadachi",
+   "shpargalka": "git-shpargalka",
+   "teoriya": "git"
+  },
+  "ptitle": "Git і GitHub",
   "pages": [
-   {
-    "key": "teoriya",
-    "title": "Теорія"
-   },
-   {
-    "key": "zadachi",
-    "title": "Задачі"
-   },
-   {
-    "key": "shpargalka",
-    "title": "Шпаргалка"
-   },
    {
     "key": "test",
     "title": "Тести"
    }
   ],
   "nq": 115,
-  "nv": 0
+  "nv": 0,
+  "ng": 0
  },
  {
   "id": "prog-sec",
@@ -569,26 +624,24 @@
    "count": 15,
    "note": "тренувальний тест без оцінки: де в коді діра і як її закрити; відповіді «що виведе» перевірено запуском коду"
   },
-  "ng": 0,
+  "parent": "prog",
+  "moved": {
+   "": "sec",
+   "test": "test",
+   "video": "shlyakh",
+   "zadachi": "sec-zadachi",
+   "shpargalka": "sec-shpargalka",
+   "teoriya": "sec"
+  },
+  "ptitle": "Безпечний код",
   "pages": [
-   {
-    "key": "teoriya",
-    "title": "Теорія"
-   },
-   {
-    "key": "zadachi",
-    "title": "Задачі"
-   },
-   {
-    "key": "shpargalka",
-    "title": "Шпаргалка"
-   },
    {
     "key": "test",
     "title": "Тести"
    }
   ],
   "nq": 48,
-  "nv": 0
+  "nv": 0,
+  "ng": 0
  }
 ]

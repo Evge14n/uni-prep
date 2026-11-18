@@ -1,0 +1,369 @@
+<h1 id="урок-20-systemd-і-журнали">Урок 20. systemd і журнали</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> коли щось «саме не працює» (Wi-Fi не підключається, звук зник, система довго стартує), відповідь майже
+завжди лежить у журналі. А служби (мережа, брандмауер, оновлення за розкладом) вмикає і вимикає systemd. Тут - як
+подивитись стан служби, як читати журнал і як зробити свій таймер, що сам запускає Python-скрипт.</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>systemd</strong> - перша програма, яку запускає ядро (PID 1). Вона запускає все інше і стежить, щоб воно працювало.
+Одиниця керування - <strong>unit</strong> (юніт):
+- <code>.service</code> - <strong>служба</strong> (демон): програма, що працює у фоні (<code>NetworkManager.service</code> - мережа, <code>cron.service</code> -
+  розклад, <code>ufw.service</code> - брандмауер).
+- <code>.timer</code> - <strong>таймер</strong>: «будильник», що запускає службу за розкладом (як cron, урок 23).
+- <code>.target</code> - група юнітів (наприклад, <code>graphical.target</code> - «система з графікою готова»).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>systemctl status cron</code></td>
+<td>стан служби + останні рядки її журналу</td>
+</tr>
+<tr>
+<td><code>sudo systemctl start / stop / restart cron</code></td>
+<td>запустити / зупинити / перезапустити зараз</td>
+</tr>
+<tr>
+<td><code>sudo systemctl enable / disable cron</code></td>
+<td>вмикати / не вмикати при старті системи (<code>--now</code> - ще й зараз)</td>
+</tr>
+<tr>
+<td><code>systemctl is-active cron</code>, <code>systemctl is-enabled cron</code></td>
+<td>коротка відповідь одним словом</td>
+</tr>
+<tr>
+<td><code>systemctl --failed</code></td>
+<td>що впало</td>
+</tr>
+<tr>
+<td><code>systemctl list-units --type=service</code></td>
+<td>які служби завантажені</td>
+</tr>
+<tr>
+<td><code>systemctl list-timers</code></td>
+<td>таймери: коли наступний запуск</td>
+</tr>
+<tr>
+<td><code>systemctl --user ...</code></td>
+<td>те саме для <strong>твоїх</strong> служб (без sudo)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Стани:</strong> <code>active (running)</code> - працює; <code>active (exited)</code> - одноразова дія виконалась успішно (так буває в <code>ufw</code>);
+<code>inactive (dead)</code> - не працює; <code>failed</code> - упала з помилкою. При старті: <code>enabled</code> - вмикається сама, <code>disabled</code> - ні,
+<code>static</code> - сама не вмикається, її запускає інший юніт (наприклад, таймер).</p>
+<p><strong>Журнал</strong> (journal) - куди systemd складає повідомлення ядра і всіх служб. Читають його <code>journalctl</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що показує</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>journalctl -b</code></td>
+<td>усе з поточного завантаження (b = boot)</td>
+</tr>
+<tr>
+<td><code>journalctl -b -1</code></td>
+<td>з попереднього завантаження (коли система впала і ти перезавантажився)</td>
+</tr>
+<tr>
+<td><code>journalctl --list-boots</code></td>
+<td>список завантажень</td>
+</tr>
+<tr>
+<td><code>journalctl -p err -b</code></td>
+<td>лише помилки (err і гірше) цього завантаження</td>
+</tr>
+<tr>
+<td><code>journalctl -u NetworkManager</code></td>
+<td>лише одна служба (u = unit)</td>
+</tr>
+<tr>
+<td><code>journalctl -f</code></td>
+<td>дивитись наживо, нові рядки з'являються самі (вийти Ctrl+C)</td>
+</tr>
+<tr>
+<td><code>journalctl -xb</code></td>
+<td>поточне завантаження з поясненнями (x) - так просять на форумах</td>
+</tr>
+<tr>
+<td><code>journalctl --since "1 hour ago"</code></td>
+<td>за останню годину</td>
+</tr>
+<tr>
+<td><code>journalctl --disk-usage</code></td>
+<td>скільки місця займає (урок 18)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Рівні важливості (<code>-p</code>): <code>emerg</code> 0, <code>alert</code> 1, <code>crit</code> 2, <code>err</code> 3, <code>warning</code> 4, <code>notice</code> 5, <code>info</code> 6, <code>debug</code> 7.
+<code>-p err</code> = 0-3.</p>
+<p>Журнал довгий, тому він відкривається в «пейджері» <code>less</code>: стрілки/PgDn - гортати, <code>/слово</code> - шукати, <code>q</code> - вийти.
+Журнал інших користувачів і системи бачать root і групи <code>adm</code>, <code>systemd-journal</code>. Першого користувача ноутбука
+інсталятор Mint додає в <code>adm</code> (урок 15, крок 1), тож у тебе <code>journalctl</code> найпевніше покаже все і без sudo (на
+ноутбуці не перевірено - глянь <code>groups</code>). У тестовій системі курсу користувач не в <code>adm</code>, тому нижче команди з <code>sudo</code>:
+так спрацює в будь-якому разі.</p>
+<p><strong>Ядро окремо - <code>dmesg</code></strong> - повідомлення ядра (диски, USB, драйвери, прошивки). На ноутбуці потрібен <code>sudo dmesg</code>:
+ядро Mint (з ISO 22.3) зібране з <code>CONFIG_SECURITY_DMESG_RESTRICT=y</code>, тобто без root ядро свій журнал не показує.
+Те саме без sudo-проблем: <code>sudo journalctl -k -b</code> (<code>-k</code> - лише ядро).</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<ol>
+<li>Що скажуть ці команди для служби, якої в системі взагалі нема?</li>
+</ol>
+<pre><code class="language-bash">systemctl is-active nemaservisu
+systemctl is-enabled nemaservisu
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">inactive
+not-found
+</code></pre>
+<p><code>is-active</code> каже лише «не працює» - йому однаково, є така служба чи ні. А <code>is-enabled</code> чесно пише <code>not-found</code>.
+Тому коли «служба не стартує», спершу перевір назву: <code>systemctl list-unit-files | grep назва</code>.</p>
+</details>
+<ol start="2">
+<li>Ти забув <code>sudo</code>:</li>
+</ol>
+<pre><code class="language-bash">systemctl stop cron
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<p>Справжній вивід з тестової системи:</p>
+<pre><code class="language-text">Failed to stop cron.service: Interactive authentication required.
+See system logs and 'systemctl status cron.service' for details.
+</code></pre>
+<p>Зупиняти системні служби може лише root. На ноутбуці з робочим столом замість цієї помилки може вискочити вікно з
+паролем (не перевірено). Правильно: <code>sudo systemctl stop cron</code>. Дивитись стан (<code>status</code>, <code>is-active</code>) можна без sudo.</p>
+</details>
+<ol start="3">
+<li>Брандмауер <code>ufw</code> у Mint вимкнений (урок 25). Що покаже його служба?</li>
+</ol>
+<pre><code class="language-bash">systemctl status ufw
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<p>Справжній вивід (час і PID у тебе інші):</p>
+<pre><code class="language-text">● ufw.service - Uncomplicated firewall
+     Loaded: loaded (/usr/lib/systemd/system/ufw.service; enabled; preset: enabled)
+     Active: active (exited) since Wed 2026-11-18 10:26:24 UTC; 31s ago
+       Docs: man:ufw(8)
+    Process: 78 ExecStart=/usr/lib/ufw/ufw-init start quiet (code=exited, status=0/SUCCESS)
+   Main PID: 78 (code=exited, status=0/SUCCESS)
+        CPU: 7ms
+</code></pre>
+<p>Служба <code>active (exited)</code>: при старті вона один раз запустила <code>ufw-init</code> і завершилась успішно (<code>status=0/SUCCESS</code>).
+Чи брандмауер <strong>увімкнений</strong>, служба не каже - це видно лише з <code>sudo ufw status</code> (<code>Status: inactive</code>). Не плутай
+стан служби зі станом самої програми.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p><strong>Крок 1. Стан однієї служби.</strong></p>
+<pre><code class="language-bash">systemctl status cron
+</code></pre>
+<p>Справжній вивід з тестової системи (час, PID і пам'ять у тебе інші):</p>
+<pre><code class="language-text">● cron.service - Regular background program processing daemon
+     Loaded: loaded (/usr/lib/systemd/system/cron.service; enabled; preset: enabled)
+     Active: active (running) since Wed 2026-11-18 09:43:44 UTC; 11min ago
+       Docs: man:cron(8)
+   Main PID: 123 (cron)
+      Tasks: 1 (limit: 57708)
+     Memory: 400.0K (peak: 18.8M)
+        CPU: 262ms
+     CGroup: /system.slice/cron.service
+             └─123 /usr/sbin/cron -f -P
+</code></pre>
+<ul>
+<li><code>●</code> зелена - працює, <code>○</code> - не працює, <code>×</code> червоний - впала.</li>
+<li><code>Loaded: ... enabled</code> - вмикається при старті. <code>Active: active (running) since ...</code> - працює з такого часу.</li>
+<li>З <code>sudo systemctl status cron</code> унизу будуть ще останні рядки журналу цієї служби.</li>
+<li>Довгий вивід відкривається в <code>less</code> - вийти <code>q</code>.</li>
+</ul>
+<p>На ноутбуці подивись так само <code>systemctl status NetworkManager</code> (мережа) - у тестовій системі цієї служби нема.</p>
+<p><strong>Крок 2. Що впало і що є.</strong></p>
+<pre><code class="language-bash">systemctl --failed
+systemctl is-system-running
+systemctl list-units --type=service
+</code></pre>
+<p>На здоровому ноутбуці <code>systemctl --failed</code> пише <code>0 loaded units listed.</code>, а <code>is-system-running</code> - <code>running</code>.
+Якщо <code>degraded</code> - щось упало, дивись <code>--failed</code> і журнал тієї служби (крок 4). У тестовій віртуальній системі
+справжній вивід - <code>degraded</code> і кілька впалих юнітів, серед них <code>tpm-udev</code> (там нема чіпа TPM, це нормально для
+неї).</p>
+<p><strong>Крок 3. Таймери - що Mint робить за розкладом.</strong></p>
+<pre><code class="language-bash">systemctl list-timers
+</code></pre>
+<p>Справжній вивід з тестової системи (дати у тебе інші):</p>
+<pre><code class="language-text">NEXT                            LEFT LAST                        PASSED UNIT                         ACTIVATES
+Wed 2026-11-18 09:58:43 UTC 3min 10s -                                - systemd-tmpfiles-clean.timer systemd-tmpfiles-clean.service
+Wed 2026-11-18 16:19:57 UTC       6h Wed 2026-11-18 08:35:42 UTC      - motd-news.timer              motd-news.service
+Thu 2026-11-19 00:00:00 UTC      14h Wed 2026-11-18 08:35:42 UTC      - dpkg-db-backup.timer         dpkg-db-backup.service
+Thu 2026-11-19 02:23:02 UTC      16h Wed 2026-11-18 08:35:42 UTC      - apt-daily.timer              apt-daily.service
+Thu 2026-11-19 04:34:25 UTC      18h Wed 2026-11-18 08:35:42 UTC      - man-db.timer                 man-db.service
+Thu 2026-11-19 06:57:25 UTC      21h Wed 2026-11-18 08:35:42 UTC      - apt-daily-upgrade.timer      apt-daily-upgrade.service
+Sun 2026-11-22 03:10:24 UTC   3 days Wed 2026-11-18 08:35:42 UTC      - e2scrub_all.timer            e2scrub_all.service
+
+7 timers listed.
+Pass --all to see loaded but inactive timers, too.
+</code></pre>
+<ul>
+<li><code>apt-daily.timer</code> - фонове оновлення <strong>списку</strong> пакетів (розклад <code>OnCalendar=*-*-* 6,18:00</code>, з
+  <code>systemctl cat apt-daily.timer</code>), <code>dpkg-db-backup</code> - копія бази пакетів, <code>man-db</code> - індекс довідки.</li>
+<li>На ноутбуці будуть ще <code>fstrim.timer</code> (TRIM для SSD, урок 18) і <code>fwupd-refresh.timer</code> (список прошивок).</li>
+<li><strong>Диспетчер оновлень → Параметри → Автоматизація</strong>: галочки вмикають таймери <code>mintupdate-automation-upgrade.timer</code>
+  (<code>OnCalendar=daily</code>) і <code>mintupdate-automation-autoremove.timer</code> (з коду <code>mintupdate-automation</code>). Без галочок вони
+  <code>disabled</code> - перевір: <code>systemctl list-unit-files "mint*"</code>.</li>
+</ul>
+<p><strong>Крок 4. Журнал: помилки, одна служба, наживо.</strong></p>
+<pre><code class="language-bash">sudo journalctl -p err -b
+sudo journalctl -u cron -b
+sudo journalctl --since &quot;1 hour ago&quot;
+sudo journalctl -f
+</code></pre>
+<p>Останню зупини Ctrl+C. Кожен рядок журналу: дата і час, ім'я комп'ютера, хто пише (служба[PID]), повідомлення.
+На ноутбуці корисні: <code>-u NetworkManager</code> (Wi-Fi), <code>-u bluetooth</code>, <code>-u lightdm</code> (екран входу).</p>
+<p><strong>Крок 5. Коли система впала або перезавантажилась сама.</strong></p>
+<pre><code class="language-bash">sudo journalctl --list-boots
+sudo journalctl -b -1 -p err
+sudo journalctl -b -1 -e
+</code></pre>
+<p><code>--list-boots</code> - номери завантажень: <code>0</code> - поточне, <code>-1</code> - попереднє. <code>-e</code> - одразу в кінець: останні рядки перед
+падінням. Щоб попередні завантаження зберігались, журнал має бути на диску (<code>/var/log/journal</code>) - у Mint так і є
+(у тестовій системі <code>--list-boots</code> показує кілька завантажень).</p>
+<p><strong>Крок 6. Ядро, час старту, коли вмикався.</strong></p>
+<pre><code class="language-bash">sudo dmesg | tail -20
+sudo journalctl -k -b -p warning
+systemd-analyze
+systemd-analyze blame | head
+uptime -s
+last reboot | head -3
+</code></pre>
+<ul>
+<li><code>dmesg</code> - флешку встромив, а вона не з'явилась? <code>sudo dmesg | tail -20</code> одразу після цього покаже, що побачило ядро.</li>
+<li><code>systemd-analyze</code> - скільки тривав старт; <code>blame</code> - хто з служб довше за всіх стартував. Справжній вивід з тестової
+  системи - <code>Startup finished in 689ms (userspace)</code>; на ноутбуці буде довше і з розбивкою <code>firmware + loader +
+  kernel + userspace</code>, бо там справжнє залізо (не перевірено).</li>
+<li><code>uptime -s</code> - коли увімкнули (дата і час, наприклад <code>2026-11-18 09:38:55</code>), <code>last reboot</code> - історія
+  перезавантажень.</li>
+</ul>
+<p><strong>Крок 7. Свій таймер: Python-скрипт щохвилини.</strong> Користувацькі юніти лежать у <code>~/.config/systemd/user/</code>, sudo не
+треба. Спершу скрипт, що дописує поточний час у файл:</p>
+<pre><code class="language-bash">mkdir -p ~/proba/timer ~/.config/systemd/user
+printf 'import datetime\nfrom pathlib import Path\n\nfail = Path.home() / &quot;proba&quot; / &quot;timer&quot; / &quot;chas.txt&quot;\nwith open(fail, &quot;a&quot;) as f:\n    print(datetime.datetime.now().isoformat(timespec=&quot;seconds&quot;), file=f)\n' &gt; ~/proba/timer/zapys.py
+</code></pre>
+<p>Тепер служба і таймер. <code>cat &gt; файл &lt;&lt;'EOF'</code> записує в файл усе до рядка <code>EOF</code> (можна і через <code>nano</code>). <code>%h</code> -
+systemd сам підставить домашню теку:</p>
+<pre><code class="language-bash">cat &gt; ~/.config/systemd/user/zapys.service &lt;&lt;'EOF'
+[Unit]
+Description=Запис часу у файл (проба)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/proba/timer/zapys.py
+EOF
+cat &gt; ~/.config/systemd/user/zapys.timer &lt;&lt;'EOF'
+[Unit]
+Description=Щохвилини запускати zapys.service
+
+[Timer]
+OnCalendar=*:*:00
+
+[Install]
+WantedBy=timers.target
+EOF
+</code></pre>
+<p><code>Type=oneshot</code> - програма відпрацювала і завершилась (не висить постійно). <code>OnCalendar=*:*:00</code> - кожну хвилину на
+нульовій секунді. <code>WantedBy=timers.target</code> - куди «вчепити» таймер при <code>enable</code>. Запускаємо:</p>
+<pre><code class="language-bash">systemctl --user daemon-reload
+systemctl --user start zapys.service
+cat ~/proba/timer/chas.txt
+systemctl --user enable --now zapys.timer
+systemctl --user list-timers
+</code></pre>
+<p><code>daemon-reload</code> - systemd перечитує файли юнітів (після кожної правки). <code>start</code> один раз запускає службу - у файлі
+з'явиться час, наприклад <code>2026-11-18T10:26:55</code>. <code>enable --now</code> - справжній вивід:</p>
+<pre><code class="language-text">Created symlink /home/evgen/.config/systemd/user/timers.target.wants/zapys.timer → /home/evgen/.config/systemd/user/zapys.timer.
+</code></pre>
+<p>У <code>list-timers</code> таймер буде з <code>NEXT</code> - найближча нульова секунда. Через пару хвилин у <code>chas.txt</code> додадуться рядки.
+Журнал служби (<code>--no-hostname</code> - без імені комп'ютера):</p>
+<pre><code class="language-bash">journalctl --user -u zapys.service --no-hostname -n 5
+</code></pre>
+<pre><code class="language-text">Nov 18 10:26:55 systemd[204]: Starting zapys.service - Запис часу у файл (проба)...
+Nov 18 10:26:55 systemd[204]: Finished zapys.service - Запис часу у файл (проба).
+</code></pre>
+<p>Користувацькі таймери працюють, поки ти увійшов у систему (без входу - лише після <code>loginctl enable-linger</code>).
+Прибери за собою:</p>
+<pre><code class="language-bash">systemctl --user disable --now zapys.timer
+rm ~/.config/systemd/user/zapys.service ~/.config/systemd/user/zapys.timer
+systemctl --user daemon-reload
+rm -r ~/proba
+</code></pre>
+<h2 id="типові-помилки">Типові помилки</h2>
+<ul>
+<li><strong>Забув <code>daemon-reload</code> після правки юніта</strong> - systemd працює зі старою версією, а <code>status</code> пише попередження
+  <code>... changed on disk. Run 'systemctl --user daemon-reload' to reload units.</code> Виконай
+  <code>systemctl --user daemon-reload</code> (для системних юнітів - <code>sudo systemctl daemon-reload</code>).</li>
+<li><strong>Помилка в шляху <code>ExecStart</code></strong> (наприклад, <code>/usr/bin/pyton3</code>). Справжній вивід:</li>
+</ul>
+<pre><code class="language-text">Job for zapysbad.service failed because the control process exited with error code.
+See &quot;systemctl --user status zapysbad.service&quot; and &quot;journalctl --user -xeu zapysbad.service&quot; for details.
+</code></pre>
+<p>а в <code>status</code> - <code>status=203/EXEC</code>: «не вдалося запустити програму». Шлях у <code>ExecStart</code> має бути <strong>повним</strong>
+  (<code>/usr/bin/python3</code>, не <code>python3</code>), перевір <code>which python3</code>.
+- <strong><code>Failed to stop cron.service: Interactive authentication required.</code></strong> - забув <code>sudo</code> для системної служби.
+- <strong><code>enable</code> без <code>--now</code></strong> - служба ввімкнеться лише після перезавантаження. <code>--now</code> = ще й запустити зараз.
+- <strong><code>journalctl</code> показує мало і пише <code>Hint: You are currently not seeing messages from other users and the system.</code></strong> -
+  ти не в групі <code>adm</code> (так буває з другим користувачем, якого створили пізніше; першого інсталятор додає в <code>adm</code>).
+  Пиши <code>sudo journalctl ...</code>. Повідомлення systemd (<code>journalctl</code>, <code>systemctl</code>) англійською навіть в українській Mint:
+  перекладу для них у <code>language-pack-uk-base</code> нема (перевірено запуском).
+- <strong>Вимкнув «непотрібну» службу за порадою з інтернету</strong> - і зникла мережа чи звук. Повернути:
+  <code>sudo systemctl enable --now назва</code>. Не вимикай службу, поки не знаєш, що вона робить.</p>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Діагностика за 3 команди:</strong> <code>systemctl --failed</code> → <code>systemctl status назва</code> → <code>sudo journalctl -u назва -b</code>.
+  На форумі просять саме вивід <code>journalctl -xb</code> або <code>journalctl -b -p err</code>, а не «у мене не працює».</li>
+<li><strong>Після збою при старті</strong> (аварійний режим, від'єднаний диск) - <code>journalctl -xb</code> (r/linuxmint, 04.10.2026, урок 26).</li>
+<li><strong>Журнал великий - шукай причину</strong>: якась служба пише помилку щосекунди (r/linuxmint, 24.12.2025: журнали до
+  900 ГБ). <code>sudo journalctl -p err -b | tail</code> покаже, хто.</li>
+<li><strong>Свої регулярні задачі</strong> роблять або через cron (урок 23), або user-таймером systemd, як у кроці 7: у таймера є
+  журнал, <code>Persistent=true</code> (запустить пропущене, якщо ноутбук був вимкнений) і <code>systemctl --user list-timers</code>.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Чим <code>systemctl start</code> відрізняється від <code>systemctl enable</code>?</li>
+<li>Що означає <code>active (exited)</code> у службі <code>ufw</code>?</li>
+<li>Як подивитись лише помилки з попереднього завантаження?</li>
+<li>Як дивитись журнал однієї служби наживо?</li>
+<li>Ти змінив файл <code>~/.config/systemd/user/zapys.timer</code>. Що треба виконати, щоб systemd побачив зміни?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>start</code> запускає службу зараз (до перезавантаження). <code>enable</code> - щоб вона вмикалась при кожному старті системи.
+   <code>enable --now</code> - і те, і те.</li>
+<li>Служба один раз виконала свою дію при старті і успішно завершилась. Це не означає, що брандмауер увімкнений -
+   його стан показує <code>sudo ufw status</code>.</li>
+<li><code>sudo journalctl -b -1 -p err</code>.</li>
+<li><code>sudo journalctl -u назва -f</code> (вийти Ctrl+C).</li>
+<li><code>systemctl --user daemon-reload</code>, а якщо таймер уже працював - ще <code>systemctl --user restart zapys.timer</code>.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>systemd: systemctl, journalctl, systemd.timer, systemd.unit (<code>%h</code>, <code>OnCalendar</code>) -
+  https://www.freedesktop.org/software/systemd/man/latest/systemctl.html ,
+  https://www.freedesktop.org/software/systemd/man/latest/journalctl.html ,
+  https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html ,
+  https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html - відкрито 18.11.2026</li>
+<li>Код <code>mintupdate-automation</code> і <code>/usr/share/linuxmint/mintupdate/automation/index.json</code> (mintupdate 7.1.4) -
+  прочитано в тестовій Mint 22.3, 18.11.2026</li>
+<li>Конфіг ядра <code>linux-modules-6.14.0-37-generic</code> (<code>CONFIG_SECURITY_DMESG_RESTRICT=y</code>) - прочитано з пакета,
+  18.11.2026</li>
+<li>r/linuxmint: nofail і journalctl -xb https://www.reddit.com/r/linuxmint/comments/1wx45gx/ ; журнали 900 ГБ
+  https://www.reddit.com/r/linuxmint/comments/1pu9p8v/ - відкрито 18.11.2026</li>
+<li><code>systemctl</code>, <code>journalctl</code>, <code>systemd-analyze</code>, user-служба і таймер - перевірено запуском у тестовій Mint 22.3
+  (systemd 255), 18.11.2026</li>
+</ul>

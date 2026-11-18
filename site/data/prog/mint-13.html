@@ -1,0 +1,428 @@
+<h1 id="урок-13-робочий-стіл-cinnamon-і-гарячі-клавіші">Урок 13. Робочий стіл Cinnamon і гарячі клавіші</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> щоб працювати в Mint швидко, як у знайомій системі: знайти будь-яку програму за дві секунди, розкласти
+вікна лаби і браузера поруч, перемикати розкладку, налаштувати все під себе і знати, що робити, коли панель «завмерла».</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>Cinnamon</strong> - це робочий стіл Mint: панель, меню, вікна, налаштування. Версія в Mint 22.3 - 6.6.</p>
+<p>Назви пунктів нижче взято з українського перекладу самої Mint (файли перекладу з пакетів <code>cinnamon-l10n</code>,
+<code>mint-translations</code>, <code>captain</code> для Mint 22.3). Тому вони можуть звучати незвично («Сполучення клавішів»,
+«Системні знятки») - зате саме так написано у тебе на екрані. Англійська назва - в дужках, якщо в тебе
+система англійською.</p>
+<p><strong>Що на панелі</strong> (смуга внизу екрана). Типовий набір аплетів (аплет - маленька програма на панелі) у Cinnamon 6.6,
+зліва направо:</p>
+<pre><code class="language-text">[Меню] | [вікна і закріплені програми]          [трей] [Сповіщення] [Принтери] [Змінні носії] [Клавіатура]
+                                                 [Улюблені] [Мережа] [Звук] [Живлення] [Календар-годинник]
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Аплет</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>«Меню» (Menu)</td>
+<td>усі програми і пошук. Відкривається клавішею <strong>Super</strong> (клавіша з віконцем)</td>
+</tr>
+<tr>
+<td>«Групований перелік вікон» (Grouped window list)</td>
+<td>відкриті вікна; програму можна закріпити: права кнопка → «Приєднати до панелі»</td>
+</tr>
+<tr>
+<td>«Змінні носії» (Removable drives)</td>
+<td>флешки: відкрити або безпечно вийняти (урок 14)</td>
+</tr>
+<tr>
+<td>«Клавіатура» (Keyboard)</td>
+<td>поточна розкладка, клік - перемкнути</td>
+</tr>
+<tr>
+<td>«Керування мережею» (Network Manager)</td>
+<td>Wi-Fi, кабель, VPN (урок 21)</td>
+</tr>
+<tr>
+<td>«Звук» (Sound)</td>
+<td>гучність, вибір навушників чи динаміків, мікрофон</td>
+</tr>
+<tr>
+<td>«Керування живленням» (Power Manager)</td>
+<td>батарея і <strong>«Режим живлення»</strong>: «Заощадження енергії», «Збалансоване», «Продуктивність»</td>
+</tr>
+<tr>
+<td>«Календар» (Calendar)</td>
+<td>годинник і календар</td>
+</tr>
+</tbody>
+</table></div>
+<p>Ще там «Сповіщення» (Notifications), «Принтери» (Printers) і «Улюблені» (Favorites - файли, позначені зірочкою).</p>
+<p>Права кнопка на порожньому місці панелі: «Аплети», «Налаштування панелі», «Режим редагування панелі» (перетягувати
+аплети), «Вирішення проблем» → «Перезавантажити Cinnamon».</p>
+<p><strong>Меню (Super).</strong> Натисни Super, почни набирати назву (<code>term</code>, <code>тер</code>, <code>firefox</code>) і Enter - так запускають програми
+профі, мишкою ніхто не шукає. Права кнопка на програмі в меню: «Додати до улюблених» (зʼявиться в лівій колонці
+меню), «Додати до панелі», «Додати на робочий стіл», «Вилучити» (видалити програму).</p>
+<p><strong>Гарячі клавіші Cinnamon 6.6</strong> (типові, перевірено зі схем <code>cinnamon-desktop</code> у Mint 22.3):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Клавіші</th>
+<th>Дія</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Super</td>
+<td>меню</td>
+</tr>
+<tr>
+<td>Ctrl+Alt+T</td>
+<td>термінал</td>
+</tr>
+<tr>
+<td><strong>Ctrl+Alt+L</strong></td>
+<td><strong>заблокувати екран</strong></td>
+</tr>
+<tr>
+<td>Super+L</td>
+<td><strong>НЕ блокування!</strong> Це «Збільшувальне скло» (Looking Glass) - налагоджувач Cinnamon</td>
+</tr>
+<tr>
+<td>Super+D</td>
+<td>показати робочий стіл (сховати всі вікна)</td>
+</tr>
+<tr>
+<td>Super+E</td>
+<td>домашня тека у файловому менеджері Nemo</td>
+</tr>
+<tr>
+<td>Alt+Tab</td>
+<td>перемикати вікна</td>
+</tr>
+<tr>
+<td>Alt+F4</td>
+<td>закрити вікно</td>
+</tr>
+<tr>
+<td>Alt+F10</td>
+<td>розгорнути / згорнути до звичайного розміру</td>
+</tr>
+<tr>
+<td>Super+← / → / ↑ / ↓</td>
+<td>прилипання вікна: ліва чи права половина, верхня чи нижня; чверть - Super+↑, потім Super+→ (крок 2)</td>
+</tr>
+<tr>
+<td>Super+Shift+стрілки</td>
+<td>перенести вікно на інший монітор</td>
+</tr>
+<tr>
+<td>Ctrl+Alt+← / →</td>
+<td>інший робочий простір</td>
+</tr>
+<tr>
+<td>Ctrl+Alt+↑ (або Alt+F1)</td>
+<td>огляд робочих просторів</td>
+</tr>
+<tr>
+<td>Ctrl+Alt+↓</td>
+<td>огляд усіх вікон</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+Alt+← / →</td>
+<td>перенести вікно на сусідній робочий простір</td>
+</tr>
+<tr>
+<td>Alt+F2</td>
+<td>виконати команду</td>
+</tr>
+<tr>
+<td>Super+Space</td>
+<td>наступна розкладка клавіатури</td>
+</tr>
+<tr>
+<td>Super+P</td>
+<td>монітори (дублювати, розширити - для проєктора на парі)</td>
+</tr>
+<tr>
+<td>Print / Alt+Print / Shift+Print</td>
+<td>знімок екрана / вікна / області; з Ctrl - одразу в буфер обміну</td>
+</tr>
+<tr>
+<td>Ctrl+Alt+Esc</td>
+<td>перезапустити Cinnamon (вікна і програми лишаються)</td>
+</tr>
+<tr>
+<td>Ctrl+Alt+Delete</td>
+<td>вийти з сеансу</td>
+</tr>
+<tr>
+<td>Ctrl+Alt+End</td>
+<td>вимкнути компʼютер</td>
+</tr>
+</tbody>
+</table></div>
+<p>У терміналі копіювати - <strong>Ctrl+Shift+C</strong>, вставити - <strong>Ctrl+Shift+V</strong> (детально - урок 03).</p>
+<p><strong>Де міняти:</strong> меню → «Системні налаштування» (System Settings) → «Клавіатура» (Keyboard) → вкладка
+«Сполучення клавішів» (Shortcuts). Там же вкладка «Розкладки» (Layouts).</p>
+<p><strong>Робочі простори</strong> (workspaces) - кілька окремих «столів». Типово їх 4. Зручно: на першому - лаба (термінал + PDF),
+на другому - браузер, на третьому - месенджер. Перемикання Ctrl+Alt+← / →.</p>
+<p><strong>Інші корисні вікна налаштувань</strong> (усі в «Системні налаштування»):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Пункт</th>
+<th>Що там</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>«Теми» (Themes)</td>
+<td>вигляд вікон, піктограм, панелі; вкладка «Налаштування» → «Темний режим»</td>
+</tr>
+<tr>
+<td>«Вікна» (Windows)</td>
+<td>вкладка «Мозаїка» (Tiling): «Увімкнути мозаїчне розташування вікон»</td>
+</tr>
+<tr>
+<td>«Робочі простори» (Workspaces)</td>
+<td>скільки їх і як перемикати</td>
+</tr>
+<tr>
+<td>«Гарячі кути» (Hot Corners)</td>
+<td>дія, коли мишка в куті екрана</td>
+</tr>
+<tr>
+<td>«Аплети», «Десклети», «Розширення»</td>
+<td>додатки до Cinnamon («spices», нижче)</td>
+</tr>
+<tr>
+<td>«Автозапуск програм» (Startup Applications)</td>
+<td>що запускається при вході</td>
+</tr>
+<tr>
+<td>«Керування живленням» (Power Management)</td>
+<td>сон, яскравість, кришка ноутбука</td>
+</tr>
+<tr>
+<td>«Екран» (Display)</td>
+<td>монітори: роздільність, частота, поворот, головний монітор</td>
+</tr>
+<tr>
+<td>«Дата та час» (Date &amp; Time)</td>
+<td>часовий пояс, «Мережевий час» - годинник сам звіряється з інтернетом (урок 26)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Екран і проєктор.</strong> «Системні налаштування» → «Екран» (Display) показує всі монітори прямокутниками. Клацни на
+потрібний - під ним «Роздільність» (Resolution), «Частота поновлення» (Refresh Rate), «Обертання» (Rotation) і
+«Зробити основним» (Set as Primary - на ньому буде панель). Зміни діють після кнопки «Застосувати» (Apply). На парі з
+проєктором швидше <strong>Super+P</strong> (таблиця клавіш вище). Назви - з перекладу
+<code>cinnamon.mo</code> і <code>cinnamon-control-center.mo</code>; як саме виглядає вікно на твоєму ноутбуці - не перевірено (у тестовій
+Mint нема графіки).</p>
+<p><strong>Spices</strong> («спеції») - аплети, десклети (віджети на столі), розширення і теми від спільноти. Ставляться з вкладки
+«Завантаження» (Download) у вікні «Аплети» (там же вкладка «Налаштування» (Manage) - вже встановлені). Mint бере їх з
+cinnamon-spices.linuxmint.com, а Диспетчер оновлень оновлює їх разом із системою (урок 02).</p>
+<p><strong>Екран привітання</strong> (Welcome Screen) відкривається при першому вході. Розділ «Перші кроки» (First Steps) - це список
+справ після встановлення, у кожному кнопка «Запуск»: «Кольори стільниці», «Системні знятки» (Timeshift, урок 01),
+«Керування драйверами» (урок 17), «Кодеки мультимедія», «Керування оновленнями» (у меню ця програма зветься
+«Диспетчер оновлень», урок 02), «Системні налаштування», «Керування програмами» (урок 16), «Мережевий екран»
+(брандмауер, урок 25). Знайти потім: меню → «Екран привітання». Галочка «Показувати це вікно під час запуску» -
+чи показувати його при кожному вході.</p>
+<p><strong>«Інформація про систему»</strong> (System Information, у 22.3 так перейменували System Reports): сторінки USB, GPU, PCI,
+BIOS (там видно режим завантаження і «Безпечне завантаження» - Secure Boot). Нова програма 22.3 «Керування системою»
+(System Administration) має сторінку «Меню завантаження» (як довго показувати меню GRUB).</p>
+<p><strong>X11 чи Wayland.</strong> Це «рушій», що малює вікна. У Mint 22.x типово працює <strong>X11 (Xorg)</strong>. Сеанс Wayland можна вибрати
+на екрані входу (значок біля імені), але в 22.x він <strong>експериментальний</strong> (linuxmint.com, «What's new» 21.3-22.3) -
+для лаб і повсякденної роботи лишай типовий. Перевірити, що зараз: <code>echo $XDG_SESSION_TYPE</code> (<code>x11</code> або <code>wayland</code>).</p>
+<p><strong>Доступність</strong> (лупа, екранна клавіатура, великий текст, озвучення) - теж у «Системних налаштуваннях», пункт про
+доступність (Accessibility; назва може трохи відрізнятись).</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p>Відкрий термінал (Ctrl+Alt+T). <code>gsettings</code> читає налаштування робочого столу. Якщо ти нічого не міняв, буде
+типове значення.</p>
+<ol>
+<li>Яка комбінація блокує екран?</li>
+</ol>
+<pre><code class="language-bash">gsettings get org.cinnamon.desktop.keybindings.media-keys screensaver
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">['&lt;Control&gt;&lt;Alt&gt;l', 'XF86ScreenSaver']
+</code></pre>
+<p>Ctrl+Alt+L (<code>&lt;Control&gt;</code> = Ctrl). <code>XF86ScreenSaver</code> - окрема клавіша «замок», якщо вона є на клавіатурі ноутбука.</p>
+</details>
+<ol start="2">
+<li>А що тоді робить Super+L?</li>
+</ol>
+<pre><code class="language-bash">gsettings get org.cinnamon.desktop.keybindings looking-glass-keybinding
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">['&lt;Super&gt;l']
+</code></pre>
+<p>Super+L відкриває «Збільшувальне скло» (Looking Glass) - налагоджувач для тих, хто пише аплети. Екран він не
+блокує. Звичка з Windows (Win+L) тут підводить.</p>
+</details>
+<ol start="3">
+<li>Скількома комбінаціями відкривається огляд робочих просторів?</li>
+</ol>
+<pre><code class="language-bash">gsettings get org.cinnamon.desktop.keybindings.wm switch-to-workspace-up
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">['&lt;Control&gt;&lt;Alt&gt;Up', '&lt;Alt&gt;F1']
+</code></pre>
+<p>Двома: Ctrl+Alt+↑ і Alt+F1. Одна дія може мати кілька комбінацій - тому значення записане списком у <code>[...]</code>.</p>
+</details>
+<ol start="4">
+<li>Що зараз вибрано в «Теми» → «Налаштування» → «Темний режим»?</li>
+</ol>
+<pre><code class="language-bash">gsettings get org.x.apps.portal color-scheme
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">'default'
+</code></pre>
+<p><code>'default'</code> - це пункт «На розсуд застосунків» (Let applications decide). <code>'prefer-dark'</code> = «Надати перевагу
+темному режиму», <code>'prefer-light'</code> = «Надати перевагу світлому режиму».</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p><strong>Крок 1. Меню без мишки.</strong> Super → набери <code>xed</code> → Enter (відкриється текстовий редактор). Закрий Alt+F4. Тепер
+Super → <code>термінал</code> → права кнопка на «Термінал» → «Додати до улюблених». Знову Super: термінал тепер у лівій колонці.</p>
+<p><strong>Крок 2. Вікна поруч.</strong> Відкрий термінал (Ctrl+Alt+T) і Firefox. Активне вікно - Firefox: Super+→ (права половина).
+Клацни на термінал: Super+← (ліва половина). Так зручно робити лабу: умова в браузері справа, термінал зліва. Спробуй
+ще Super+↑ (верхня половина), потім Super+→ (вийде верхня права чверть). Якщо вікна не прилипають: «Системні
+налаштування» → «Вікна» → «Мозаїка» → увімкни «Увімкнути мозаїчне розташування вікон».</p>
+<p><strong>Крок 3. Робочі простори.</strong> Ctrl+Alt+→ - ти на другому просторі, тут порожньо. Ctrl+Alt+← - назад. Тепер стань на
+Firefox і натисни Ctrl+Shift+Alt+→ - вікно поїхало на другий простір. Ctrl+Alt+↑ - огляд усіх просторів (Esc - вийти).</p>
+<p><strong>Крок 4. Гарячі клавіші в терміналі.</strong> Усі комбінації для робочих просторів одним списком:</p>
+<pre><code class="language-bash">gsettings list-recursively org.cinnamon.desktop.keybindings.wm | grep &quot;switch-to-workspace-[a-z]&quot;
+</code></pre>
+<pre><code class="language-text">org.cinnamon.desktop.keybindings.wm switch-to-workspace-down ['&lt;Control&gt;&lt;Alt&gt;Down']
+org.cinnamon.desktop.keybindings.wm switch-to-workspace-left ['&lt;Control&gt;&lt;Alt&gt;Left']
+org.cinnamon.desktop.keybindings.wm switch-to-workspace-right ['&lt;Control&gt;&lt;Alt&gt;Right']
+org.cinnamon.desktop.keybindings.wm switch-to-workspace-up ['&lt;Control&gt;&lt;Alt&gt;Up', '&lt;Alt&gt;F1']
+</code></pre>
+<p>Збережи всі свої комбінації у файл - знадобиться, якщо колись перевстановиш систему:</p>
+<pre><code class="language-bash">gsettings list-recursively org.cinnamon.desktop.keybindings.media-keys &gt; ~/moi-klavishi.txt
+grep terminal ~/moi-klavishi.txt
+</code></pre>
+<pre><code class="language-text">org.cinnamon.desktop.keybindings.media-keys terminal ['&lt;Primary&gt;&lt;Alt&gt;t']
+</code></pre>
+<p><code>&lt;Primary&gt;</code> - те саме, що Ctrl.</p>
+<p><strong>Крок 5. Змінити комбінацію і повернути як було.</strong> «Системні налаштування» → «Клавіатура» → «Сполучення
+клавішів». Зліва категорія «Панелі запуску» (Launchers), справа «Запустити термінал» (Launch terminal). Клацни на рядок з <code>Ctrl+Alt+T</code> унизу, натисни нову комбінацію, наприклад Super+T. Перевір у терміналі:</p>
+<pre><code class="language-bash">gsettings get org.cinnamon.desktop.keybindings.media-keys terminal
+</code></pre>
+<p>Тепер там твоя нова комбінація. Повернути типову однією командою:</p>
+<pre><code class="language-bash">gsettings reset org.cinnamon.desktop.keybindings.media-keys terminal
+gsettings get org.cinnamon.desktop.keybindings.media-keys terminal
+</code></pre>
+<pre><code class="language-text">['&lt;Primary&gt;&lt;Alt&gt;t']
+</code></pre>
+<p>Своя програма на клавішу: та сама вкладка, кнопка «Додати власне скорочення» (Add custom shortcut) - назва,
+команда (наприклад <code>xed</code>) і комбінація.</p>
+<p><strong>Крок 6. Українська розкладка.</strong> «Системні налаштування» → «Клавіатура» → «Розкладки» → кнопка «+» → знайди
+Ukrainian (у списку може бути українською, назва може трохи відрізнятись) → «Додати». Тепер <strong>Super+Space</strong> перемикає
+EN ↔ UA, а аплет «Клавіатура» на панелі показує поточну. Набери в xed «привіт», перемкни, «hello».</p>
+<h2 id="далі-за-бажанням">Далі - за бажанням</h2>
+<p>Кроки 7-11 - другим заходом, коли основне (кроки 1-6) вже звичне. Найважливіший з них - крок 9 (Ctrl+Alt+Esc).</p>
+<p><strong>Крок 7. Тема і темний режим.</strong> «Системні налаштування» → «Теми». Тут можна вибрати вигляд вікон («Програми»),
+піктограм, панелі («Робочий стіл»). Вкладка «Налаштування» → «Темний режим» → «Надати перевагу темному режиму».
+Перевір командою з «Передбач» 4 - тепер <code>'prefer-dark'</code>. Простіший шлях - «Екран привітання» → «Перші кроки» →
+«Кольори стільниці»: колір і світла чи темна тема.</p>
+<p><strong>Крок 8. Знімок екрана.</strong> Print - увесь екран, Alt+Print - лише активне вікно, Shift+Print - виділи мишкою область.
+З Ctrl (Ctrl+Print тощо) знімок іде одразу в буфер - вставляй у Telegram чи документ Ctrl+V. Без Ctrl - у файл
+з назвою на зразок <code>Знімок екрана з ...png</code> (так у перекладі gnome-screenshot; якщо система англійською -
+<code>Screenshot from ...png</code>) у теці зображень. Клавішу Print обробляє програма <code>gnome-screenshot</code>, а
+вона, коли теку не задано, кладе знімки в теку зображень користувача (на ноутбуці не перевірено). Де ця тека у тебе
+(українською вона може зватись інакше, ніж Pictures):</p>
+<pre><code class="language-bash">xdg-user-dir PICTURES
+</code></pre>
+<p><strong>Крок 9. Перезапуск Cinnamon.</strong> Натисни <strong>Ctrl+Alt+Esc</strong>: панель зникне і зʼявиться за секунду, а вікна і
+програми лишаться. Той самий пункт мишкою: права кнопка на панелі → «Вирішення проблем» → «Перезавантажити Cinnamon».
+Запамʼятай - це перша допомога, коли панель чи меню «застигли».</p>
+<p><strong>Крок 10. Яка в тебе система.</strong></p>
+<pre><code class="language-bash">grep PRETTY_NAME /etc/os-release
+grep DESCRIPTION /etc/linuxmint/info
+</code></pre>
+<pre><code class="language-text">PRETTY_NAME=&quot;Linux Mint 22.3&quot;
+DESCRIPTION=&quot;Linux Mint 22.3 Zena&quot;
+</code></pre>
+<p>Те саме мишкою: меню → «Інформація про систему». Подивись сторінку BIOS: там написано, чи увімкнено «Безпечне
+завантаження» (Secure Boot) - знадобиться в уроці 17.</p>
+<p><strong>Крок 11. Аплет зі spices (за бажанням).</strong> Права кнопка на панелі → «Аплети» → вкладка «Завантаження». Знайди,
+наприклад, аплет погоди, встанови, перейди на вкладку «Налаштування», виділи його і натисни «+» (додати на панель).
+Прибрати: там само «-».</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<ul>
+<li><strong>Натиснув Super+L, щоб заблокувати, а відкрилось дивне вікно з вкладками</strong> - це «Збільшувальне скло» (Looking
+  Glass). Нічого не зламано: закрий його (Esc або хрестик у вікні, не перевірено на ноутбуці). Блокування -
+  <strong>Ctrl+Alt+L</strong>.</li>
+<li><strong>Ctrl+Alt+Backspace - миттєво вбиває весь графічний сеанс</strong>, усі незбережені файли пропадуть. У Mint це
+  увімкнено навмисно (налаштування <code>terminate:ctrl_alt_bksp</code> у пакеті <code>mint-artwork</code>). Не плутай з Ctrl+Alt+Delete
+  (там спершу питає).</li>
+<li><strong>Панель зникла або меню не відкривається</strong> - Ctrl+Alt+Esc. Якщо не допомогло і все застигло - перейти в
+  текстову консоль Ctrl+Alt+F2 (урок 26).</li>
+<li><strong>Темна тема сховала галочку</strong> - на темній темі деякі програми малюють галочки і сірі кнопки майже невидимими.
+  Так у Диспетчері оновлень не видно було, що пункт не вибраний, а кнопка «Застосувати» сіра (r/linuxmint, 12.01.2026,
+  47 балів). Не розумієш, чому кнопка неактивна, - тимчасово «Надати перевагу світлому режиму» і подивись ще раз.</li>
+<li><strong>Super+Space нічого не робить</strong> - у тебе лише одна розкладка. Додай українську (крок 6).</li>
+<li><strong>Ctrl+C у терміналі не копіює</strong>, а зупиняє програму (урок 03). Копіювати - Ctrl+Shift+C.</li>
+<li><strong>Нова комбінація «не працює»</strong> - перевір, чи вона не зайнята іншою дією в «Сполучення клавішів», і постав
+  вільну. Зіпсував - <code>gsettings reset</code> (крок 5).</li>
+<li><strong>Поставив незнайомий аплет і Cinnamon почав гальмувати чи падати</strong> - «Аплети» → вкладка «Налаштування» → вибери
+  його → «-». Якщо через нього не стартує панель - права кнопка на панелі → «Вирішення проблем» →
+  «Повернути типові значення налаштувань» (Restore all settings to default) - але це скине всі налаштування панелі.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Клавіатура замість мишки:</strong> Super + перші літери назви програми, Super+стрілки для вікон, Ctrl+Alt+стрілки для
+  просторів. Курс MIT «Missing Semester» (2026) окремо вчить налаштовувати своє середовище, бо це заощаджує години.</li>
+<li><strong>Один простір - одна справа</strong>: лаба окремо від месенджера, менше відволікань.</li>
+<li><strong>Налаштування - у файл</strong>: <code>gsettings list-recursively ... &gt; файл.txt</code> (крок 4) перед перевстановленням чи
+  великим оновленням. Плюс знімок Timeshift (урок 01).</li>
+<li><strong>Spices ставлять обережно</strong>: лише з офіційного сайту (вкладка «Завантаження»), дивляться оцінку і дату оновлення,
+  непотрібне видаляють. Кожен аплет - чужий код, що працює всередині Cinnamon.</li>
+<li><strong>Не вставляй команди, яких не розумієш</strong> - навіть «просто змінити тему». Спершу прочитай (explainshell.com).</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Якою комбінацією заблокувати екран, коли йдеш з ноутбуком від столу? Що зробить Super+L?</li>
+<li>Як поставити термінал зліва, а браузер справа, кожен на половину екрана?</li>
+<li>Панель «застигла», меню не відкривається. Що натиснути першим, і чи пропадуть відкриті вікна?</li>
+<li>Де змінити гарячу клавішу і як повернути типову, якщо зіпсував?</li>
+<li>Ти додав українську розкладку. Як перемикати мови і де видно, яка зараз?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Ctrl+Alt+L. Super+L відкриває «Збільшувальне скло» (Looking Glass), налагоджувач, - екран лишається
+   незаблокованим.</li>
+<li>Вибрати термінал і Super+←, вибрати браузер і Super+→. Якщо не прилипає - «Вікна» → «Мозаїка» → «Увімкнути
+   мозаїчне розташування вікон».</li>
+<li>Ctrl+Alt+Esc (або права кнопка на панелі → «Вирішення проблем» → «Перезавантажити Cinnamon»). Вікна і програми
+   лишаються, перезапускається лише панель і робочий стіл.</li>
+<li>«Системні налаштування» → «Клавіатура» → «Сполучення клавішів». Повернути: <code>gsettings reset</code> з назвою схеми і
+   ключа, наприклад <code>gsettings reset org.cinnamon.desktop.keybindings.media-keys terminal</code>.</li>
+<li>Super+Space (або клік на аплет «Клавіатура»). Поточну розкладку показує аплет «Клавіатура» на панелі.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Типові гарячі клавіші - схеми <code>org.cinnamon.desktop.keybindings*</code> з пакета cinnamon-desktop-data 6.6.2 (Mint 22.3),
+  прочитано <code>gsettings</code> у тестовій Mint 22.3, 18.11.2026; код https://github.com/linuxmint/cinnamon-desktop - відкрито
+  18.11.2026</li>
+<li>Панель, меню, «Вирішення проблем», «Темний режим», «Мозаїка» - код Cinnamon 6.6 (<code>panel.js</code>, <code>cs_themes.py</code>,
+  <code>cs_windows.py</code>, <code>cs_keyboard.py</code>) з пакетів cinnamon і cinnamon-common репозиторію Mint 22.3,
+  https://github.com/linuxmint/cinnamon - відкрито 18.11.2026</li>
+<li>Українські назви - файли перекладу <code>cinnamon.mo</code>, <code>cinnamon-control-center.mo</code> («Екран», «Роздільність»),
+  <code>mintwelcome.mo</code>, <code>mintreport.mo</code>, <code>mintsysadm.mo</code> з пакетів cinnamon-l10n 6.6.2 і mint-translations 2026.01.08,
+  <code>gnome-screenshot.mo</code> («Знімок екрана з») з пакета gnome-screenshot 41.0+mint2 (репозиторій Mint 22.3),
+  перевірено 18.11.2026</li>
+<li>Ctrl+Alt+Backspace (<code>terminate:ctrl_alt_bksp</code>), тема Mint-Y, 4 робочі простори - <code>mint-artwork.gschema.override</code>
+  з пакета mint-artwork 1.9.3, https://github.com/linuxmint/mint-artwork - відкрито 18.11.2026</li>
+<li>Що нового в 22.3 (System Information, System Administration) - https://www.linuxmint.com/rel_zena_whatsnew.php -
+  відкрито 18.11.2026</li>
+<li>Посібник Mint - https://linuxmint-user-guide.readthedocs.io/en/latest/ - відкрито 18.11.2026</li>
+<li>Темна тема сховала галочку - https://www.reddit.com/r/linuxmint/comments/1qau7py/ - відкрито 18.11.2026</li>
+<li>MIT Missing Semester 2026 - https://missing.csail.mit.edu/ - відкрито 18.11.2026</li>
+</ul>

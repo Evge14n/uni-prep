@@ -1,0 +1,32 @@
+<h1 id="тема-6-помилки">Тема 6. Помилки</h1>
+<div class="pybox" id="pybox"></div>
+
+<p><strong>Що треба з Python:</strong> <code>try/except</code>, модуль <code>traceback</code>, <code>logging</code>.</p>
+<p><strong>Де діра:</strong> показати користувачу весь стектрейс. Там шляхи до файлів, версії бібліотек, шматки SQL -
+готова карта для того, хто шукає діру.</p>
+<p><strong>Як правильно:</strong> користувачу - коротко і з номером, повний текст - у свій журнал (лог).</p>
+<pre><code class="language-python">import traceback
+
+LOG = []                       # журнал; у справжній програмі - logging у файл
+
+
+def handle(request_id, func):
+    try:
+        return func()
+    except Exception:
+        LOG.append(traceback.format_exc())
+        return f&quot;Сталася помилка (код {request_id}). Спробуй пізніше.&quot;
+
+
+print(handle(7, lambda: 1 / 0))
+print(len(LOG), &quot;запис у журналі, останній рядок:&quot;,
+      LOG[0].strip().splitlines()[-1])
+</code></pre>
+<pre><code class="language-text">Сталася помилка (код 7). Спробуй пізніше.
+1 запис у журналі, останній рядок: ZeroDivisionError: division by zero
+</code></pre>
+<p>Інші правила:
+- не ловити все підряд <code>except:</code> і мовчки йти далі - помилка зникає, а дані лишаються напівзмінені;
+- у вебі вимкнути режим налагодження на сервері (<code>DEBUG = False</code> у Django, <code>debug=False</code> у Flask);
+- у журнал не писати паролі й токени.</p>
+<p>OWASP: A10 Mishandling of Exceptional Conditions (CWE-209 - витік деталей у помилці), A02 Security Misconfiguration (debug на сервері).</p>

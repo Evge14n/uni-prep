@@ -1,0 +1,428 @@
+<h1 id="урок-16-програми-apt-керування-програмами-flatpak-deb-ppa">Урок 16. Програми - apt, «Керування програмами», Flatpak, deb, PPA</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> ставити і прибирати програми так, щоб вони оновлювались самі і не ламали систему. У Mint є чотири шляхи
+(apt, Flatpak, .deb з сайту, PPA) - тут, який брати першим і чого боятись.</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>Пакет</strong> - архів з програмою і списком того, що їй потрібно (залежності). <strong>Сховище</strong> (репозиторій) - сервер з
+тисячами перевірених пакетів, звідки система бере і програми, і їх оновлення.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Шлях</th>
+<th>Звідки</th>
+<th>Хто оновлює</th>
+<th>Коли брати</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>apt</strong> (системний пакет)</td>
+<td>сховища Ubuntu 24.04 і Mint</td>
+<td>Диспетчер оновлень</td>
+<td><strong>першим</strong>: python3-..., git, gnuplot, ncdu</td>
+</tr>
+<tr>
+<td><strong>Flatpak</strong></td>
+<td>Flathub</td>
+<td>Диспетчер оновлень (у тому ж списку)</td>
+<td>коли в apt нема або версія дуже стара (Telegram, Zoom, OBS)</td>
+</tr>
+<tr>
+<td><strong>.deb з сайту</strong></td>
+<td>сайт розробника</td>
+<td>лише якщо пакет додав своє сховище</td>
+<td>коли нема ні в apt, ні у Flatpak</td>
+</tr>
+<tr>
+<td><strong>PPA</strong></td>
+<td>особисте сховище на Launchpad</td>
+<td>Диспетчер оновлень</td>
+<td>рідко і обережно</td>
+</tr>
+</tbody>
+</table></div>
+<p>Практики r/linuxmint (16.01.2026, 42 бали) кажуть коротко: <strong>«Deb if available, flatpak if not»</strong> - системний пакет,
+якщо є, інакше Flatpak.</p>
+<p><strong>apt у Mint - обгортка.</strong> Команда <code>apt</code> у Mint - це не справжній apt, а скрипт Mint <code>/usr/local/bin/apt</code>. Він сам
+додає <code>sudo</code> (тому <code>apt install</code> питає пароль і без <code>sudo</code>) і вміє більше. Справжній - <code>/usr/bin/apt</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить (за обгорткою стоїть)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apt update</code></td>
+<td>оновити <strong>список</strong> пакетів (<code>sudo /usr/bin/apt update</code>)</td>
+</tr>
+<tr>
+<td><code>apt search слово</code></td>
+<td>пошук (<code>aptitude search</code>): <code>i</code> - встановлено, <code>p</code> - ні</td>
+</tr>
+<tr>
+<td><code>apt show пакет</code></td>
+<td>опис, розмір, залежності</td>
+</tr>
+<tr>
+<td><code>apt install пакет</code></td>
+<td>встановити (<code>sudo /usr/bin/apt install</code>)</td>
+</tr>
+<tr>
+<td><code>apt remove пакет</code></td>
+<td>видалити програму, налаштування в <code>/etc</code> лишаються</td>
+</tr>
+<tr>
+<td><code>apt purge пакет</code></td>
+<td>видалити разом із системними налаштуваннями</td>
+</tr>
+<tr>
+<td><code>apt autoremove</code></td>
+<td>прибрати залежності, що вже нікому не потрібні</td>
+</tr>
+<tr>
+<td><code>apt policy пакет</code></td>
+<td>яка версія стоїть, яка доступна і <strong>звідки</strong> (<code>apt-cache policy</code>)</td>
+</tr>
+<tr>
+<td><code>apt version пакет</code></td>
+<td>лише встановлена версія</td>
+</tr>
+<tr>
+<td><code>apt held</code></td>
+<td>пакети, «заморожені» від оновлень</td>
+</tr>
+<tr>
+<td><code>apt contains /шлях/файл</code></td>
+<td>з якого пакета файл (<code>dpkg -S</code>)</td>
+</tr>
+<tr>
+<td><code>apt content пакет</code></td>
+<td>які файли поставив пакет (<code>dpkg -L</code>)</td>
+</tr>
+<tr>
+<td><code>apt deb файл.deb</code></td>
+<td>поставити .deb (<code>sudo dpkg -i</code> - <strong>без</strong> докачування залежностей, див. нижче)</td>
+</tr>
+<tr>
+<td><code>apt help команда</code></td>
+<td>показати, що насправді виконається</td>
+</tr>
+</tbody>
+</table></div>
+<p>Порядок завжди: <code>apt update</code>, потім <code>apt install</code>. Про оновлення всієї системи - урок 02.</p>
+<p><strong>dpkg</strong> - нижчий рівень: ставить один .deb і веде список встановленого. <code>dpkg -l пакет</code> (стан: <code>ii</code> = встановлено),
+<code>dpkg -L пакет</code> (файли), <code>dpkg -S файл</code> (чий файл).</p>
+<p><strong>«Керування програмами»</strong> (Software Manager, у меню так і зветься) - «магазин» Mint. Шукає одночасно в apt і на
+Flathub. Біля програми видно формат: «Системний пакунок» або Flatpak. Кнопки «Встановити», «Вилучити», «Запуск».
+Меню (☰) → «Налаштування»:
+- «Коли програма є в різних форматах:» - типово «Показувати всі типи»; можна «Показувати тільки системні пакунки».
+- «Показувати неперевірені пакунки Flatpak (не рекомендовано)» - <strong>вимкнено</strong> і так і лишай. Неперевірений
+  («Неперевірений Flatpak») - його виклав на Flathub не автор програми, а хтось інший. Mint пише:
+  «Не перевірені пакунки Flatpak становлять великий ризик для безпеки». Так, наприклад, захований неофіційний
+  Flatpak VS Code.</p>
+<p><strong>Flatpak</strong> - програма разом з усіма бібліотеками в «пісочниці» (окремо від системи). Займає більше місця, зате не
+залежить від версії Mint. Flathub у Mint увімкнено одразу для всієї системи; програми лежать у <code>/var/lib/flatpak</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flatpak search назва</code></td>
+<td>пошук на Flathub</td>
+</tr>
+<tr>
+<td><code>flatpak install flathub ID</code></td>
+<td>встановити (ID - як <code>com.github.tchx84.Flatseal</code>)</td>
+</tr>
+<tr>
+<td><code>flatpak run ID</code></td>
+<td>запустити з терміналу</td>
+</tr>
+<tr>
+<td><code>flatpak list --app</code></td>
+<td>встановлені програми</td>
+</tr>
+<tr>
+<td><code>flatpak info ID</code></td>
+<td>версія, розмір, звідки</td>
+</tr>
+<tr>
+<td><code>flatpak uninstall ID</code></td>
+<td>видалити</td>
+</tr>
+<tr>
+<td><code>flatpak uninstall --unused</code></td>
+<td>прибрати бібліотеки (runtimes), які вже нікому не треба</td>
+</tr>
+<tr>
+<td><code>flatpak update</code></td>
+<td>оновити все (урок 02)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Flatseal</strong> (<code>com.github.tchx84.Flatseal</code>, перевірений на Flathub) - вікно, де видно і можна обмежити, що дозволено
+кожному Flatpak: доступ до домашньої теки, мережі, камери.</p>
+<p><strong>.deb з сайту.</strong> Подвійний клік відкриває <strong>«Установник пакунків»</strong> (Captain). У терміналі - <code>sudo apt install ./файл.deb</code>
+(з <code>./</code>!): apt сам докачає залежності. Оновлюватись такий пакет буде <strong>лише якщо додав своє сховище</strong> (так роблять
+VS Code, Google Chrome). Інакше - нова версія лише вручну з сайту.</p>
+<p><strong>PPA</strong> (Personal Package Archive) - сховище однієї людини чи команди на Launchpad. Ключ PPA доводить лише «звідки
+пакет», а не «що він безпечний». Документація Ubuntu: сторонні сховища - найчастіша причина зламаного оновлення
+системи. Додати: <code>sudo add-apt-repository ppa:власник/назва</code>, прибрати: <code>--remove</code>, відкотити його пакети до
+офіційних - <code>ppa-purge</code>. Мишкою: меню → «Джерела програмного забезпечення» → «Пакунки PPA».</p>
+<p><strong>Snap</strong> у Mint вимкнено (Mint блокує <code>snapd</code>). Не вмикай його навмисно - для того самого є Flatpak.</p>
+<p><strong>AppImage</strong> - один файл-програма: <code>chmod +x програма.AppImage</code>, <code>./програма.AppImage</code>. Сам не оновлюється, у меню не
+зʼявляється. Багатьом старим AppImage потрібна бібліотека FUSE 2: на базі Ubuntu 24.04 пакет зветься <code>libfuse2t64</code>.</p>
+<p><strong>Python-програми</strong> (не бібліотеки для лаб!), як <code>uv</code> чи <code>ruff</code>, ставлять через <code>pipx</code> - урок 02. Не <code>sudo pip</code>.</p>
+<p><strong>Вільні програми (FOSS) і ліцензії.</strong> Майже все в Mint - вільне і відкрите програмне забезпечення (FOSS - Free and
+Open Source Software): код відкритий, його можна читати, змінювати і поширювати. Умови пише <strong>ліцензія</strong>: GPL
+(bash, coreutils, nano, git, ядро Linux) дозволяє все це, але змінену версію, яку поширюєш, теж треба давати з кодом;
+MIT, BSD, Apache - дозволяють майже все, аби лишили імʼя автора. Ліцензія кожного пакета лежить у
+<code>/usr/share/doc/ПАКЕТ/copyright</code>, повні тексти - у <code>/usr/share/common-licenses/</code>:</p>
+<pre><code class="language-bash">grep -m1 &quot;^License:&quot; /usr/share/doc/bash/copyright /usr/share/doc/git/copyright
+ls /usr/share/common-licenses/ | head -5
+</code></pre>
+<pre><code class="language-text">/usr/share/doc/bash/copyright:License: GPL-3+
+/usr/share/doc/git/copyright:License: GPL-2
+Apache-2.0
+Artistic
+BSD
+CC0-1.0
+GFDL
+</code></pre>
+<p>Невільне (закрите) теж буває: драйвер NVIDIA (урок 17), частина прошивок і кодеків. Mint ставить його окремо і
+питає. Сховища Ubuntu поділені на частини <code>main restricted universe multiverse</code> (усі чотири ввімкнені у файлі
+<code>/etc/apt/sources.list.d/official-package-repositories.list</code>); у <code>restricted</code> і <code>multiverse</code> - те, що має обмеження
+ліцензії (поділ за ліцензіями - зі слів документації Ubuntu, тут не перевірено).</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<ol>
+<li>Що насправді зробить <code>apt install</code> у Mint?</li>
+</ol>
+<pre><code class="language-bash">apt help install
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">&quot;apt install &quot; is equivalent to &quot;sudo /usr/bin/apt install&quot;
+</code></pre>
+<p>Обгортка Mint сама додала <code>sudo</code>. Тому <code>apt install</code> питає пароль, навіть якщо ти не писав <code>sudo</code>.</p>
+</details>
+<ol start="2">
+<li>Скільки програм на імʼя <code>apt</code> знайде bash?</li>
+</ol>
+<pre><code class="language-bash">type -a apt
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">apt is /usr/local/bin/apt
+apt is /usr/bin/apt
+apt is /bin/apt
+</code></pre>
+<p>Першою в PATH стоїть <code>/usr/local/bin</code>, тому запускається обгортка Mint. <code>/bin/apt</code> - той самий файл, що
+<code>/usr/bin/apt</code> (у Mint <code>/bin</code> - посилання на <code>/usr/bin</code>).</p>
+</details>
+<ol start="3">
+<li>А <code>apt deb</code> - те саме, що <code>sudo apt install ./файл.deb</code>?</li>
+</ol>
+<pre><code class="language-bash">apt help deb
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">&quot;apt deb &quot; is equivalent to &quot;sudo dpkg -i&quot;
+</code></pre>
+<p>Ні. <code>dpkg -i</code> ставить лише сам файл і <strong>не докачує залежності</strong>. Якщо їх бракує, пакет лишиться недоналаштованим, і
+доведеться <code>sudo apt-get install -f</code>. Тому краще <code>sudo apt install ./файл.deb</code>.</p>
+</details>
+<ol start="4">
+<li>Ти поставив програму, а <code>apt install</code> у сусідньому вікні ще працює (або Диспетчер оновлень ставить оновлення).
+   Що скаже друга команда?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p><code>apt</code> (у тому числі обгортка Mint) чекає і пише щокілька секунд:</p>
+<pre><code class="language-text">Waiting for cache lock: Could not get lock /var/lib/dpkg/lock-frontend. It is held by process 2915 (python3)...
+</code></pre>
+<p>а <code>apt-get</code> одразу здається:</p>
+<pre><code class="language-text">E: Could not get lock /var/lib/dpkg/lock-frontend. It is held by process 2957 (python3)
+E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?
+</code></pre>
+<p>Номер і назва процесу в дужках у тебе будуть свої (наприклад, Диспетчер оновлень). Пакети одночасно ставить лише
+одна програма. Зачекай, поки та закінчить.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p><strong>Крок 1. Подивись, що в тебе стоїть і звідки.</strong></p>
+<pre><code class="language-bash">apt version python3
+dpkg -S /usr/bin/python3
+apt contains /usr/bin/nano
+dpkg -L nano | grep bin
+apt list --installed | wc -l
+</code></pre>
+<pre><code class="language-text">3.12.3-0ubuntu2.1
+python3-minimal: /usr/bin/python3
+nano: /usr/bin/nano
+/usr/bin
+/usr/bin/nano
+/usr/bin/rnano
+</code></pre>
+<p>Версія у тебе може бути новішою. Остання команда покаже число пакетів (на свіжій Mint 22.3 близько двох тисяч:
+в образі 2005) і ще попередження <code>WARNING: apt does not have a stable CLI interface. Use with caution in scripts.</code> -
+це apt нагадує, що його вивід не для скриптів; на число воно не впливає.</p>
+<p><strong>Крок 2. Звідки пакет.</strong></p>
+<pre><code class="language-bash">apt policy nano
+</code></pre>
+<pre><code class="language-text">nano:
+  Installed: 7.2-2ubuntu0.2
+  Candidate: 7.2-2ubuntu0.2
+  Version table:
+ *** 7.2-2ubuntu0.2 500
+        500 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages
+        500 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages
+        100 /var/lib/dpkg/status
+     7.2-2build1 500
+        500 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages
+</code></pre>
+<p><code>Installed</code> - що стоїть, <code>Candidate</code> - що поставиться при оновленні, <code>***</code> - поточна. Рядки з адресами - звідки
+пакет (тут сховище Ubuntu, у тебе адреса може бути дзеркалом, наприклад українським). Якщо під версією лише
+<code>100 /var/lib/dpkg/status</code> - пакет <strong>нізвідки</strong> («сторонній»): його поставили з .deb, і оновлень він не отримає.
+Список усіх таких:</p>
+<pre><code class="language-bash">apt list --installed 2&gt;/dev/null | grep &quot;,local]&quot;
+</code></pre>
+<p>На свіжій системі - порожньо.</p>
+<p><strong>Крок 3. Поставити і прибрати програму.</strong></p>
+<pre><code class="language-bash">apt update
+apt search cowsay
+apt show cowsay
+apt install cowsay
+cowsay &quot;Привіт, Mint&quot;
+apt remove cowsay
+apt autoremove
+</code></pre>
+<p><code>apt install</code> покаже, що поставить і скільки місця займе, і спитає <code>Do you want to continue? [Y/n]</code> (українською
+<code>Бажаєте продовжити?</code>) - прочитай і натисни Enter. <code>cowsay</code> намалює корову з твоїм текстом. Після <code>remove</code> команда <code>cowsay</code> зникне.</p>
+<p>Те саме мишкою: меню → «Керування програмами» → пошук <code>cowsay</code> → «Встановити» → «Вилучити».</p>
+<p><strong>Крок 4. Flatpak: Flatseal.</strong></p>
+<pre><code class="language-bash">flatpak --installations
+flatpak install flathub com.github.tchx84.Flatseal
+flatpak list --app
+flatpak run com.github.tchx84.Flatseal
+</code></pre>
+<p>Перша команда покаже <code>/var/lib/flatpak</code> - туди Mint ставить Flatpak для всієї системи. <code>install</code> спитає підтвердження
+і, можливо, докачає runtime (спільні бібліотеки). У Flatseal зліва список Flatpak-програм, справа - їхні дозволи.
+Видалити:</p>
+<pre><code class="language-bash">flatpak uninstall com.github.tchx84.Flatseal
+flatpak uninstall --unused
+</code></pre>
+<p>У «Керування програмами» той самий Flatseal позначено як Flatpak, а для програм, що є в обох форматах, видно обидва
+варіанти.</p>
+<p><strong>Крок 5. .deb з сайту</strong> (коли справді треба). Спершу перевір, чи нема програми в «Керування програмами». Нема -
+завантаж <code>.deb</code> з <strong>офіційного</strong> сайту і:</p>
+<pre><code class="language-text">sudo apt install ./назва_файлу.deb
+</code></pre>
+<p>Потім подивись, чи пакет додав своє сховище (тоді він оновлюватиметься):</p>
+<pre><code class="language-bash">ls /etc/apt/sources.list.d/
+</code></pre>
+<p>Файли <code>official-...</code> - офіційні сховища Mint. Зʼявився новий файл з назвою програми чи фірми - пакет
+оновлюватиметься разом із системою.</p>
+<p><strong>Крок 6. PPA - лише подивитись.</strong></p>
+<pre><code class="language-bash">add-apt-repository --help | grep remove
+</code></pre>
+<pre><code class="language-text">  -r, --remove  Remove the specified repository
+</code></pre>
+<p>Відкрий меню → «Джерела програмного забезпечення» (спитає пароль). Вкладки: «Офіційні репозиторії», «Пакунки PPA»,
+«Додаткові сховища», «Ключі автентифікації», «Обслуговування». На останній - «Вилучити сторонні пакунки» і
+«Понизити сторонні пакунки»: так після проблемного PPA повертають усе до офіційних версій. Нічого не міняй, просто закрий.</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<p>Якщо Mint українською, apt і dpkg пишуть українською - варіант у дужках (перші два - справжній запуск у тестовій Mint
+з перекладом <code>language-pack-uk-base</code>, решта - з того самого файлу перекладу). Англійський текст для пошуку:
+<code>LC_ALL=C команда</code>.</p>
+<ul>
+<li><strong><code>E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?</code></strong>
+  (<code>E: Неможливо здобути блокування клієнтської частини (/var/lib/dpkg/lock-frontend), ви маєте root-права?</code>) -
+  запустив <code>apt-get install</code> (або справжній <code>/usr/bin/apt</code>) без <code>sudo</code>. Обгортка <code>apt</code> у Mint додає <code>sudo</code> сама,
+  <code>apt-get</code> - ні.</li>
+<li><strong><code>E: Unable to locate package nema-takoho</code></strong> (<code>E: Не можу знайти пакунок nema-takoho</code>) - нема такого пакета або
+  давно не було <code>apt update</code>. Перевір назву (<code>apt search</code>), зроби <code>apt update</code>.</li>
+<li><strong><code>Could not get lock /var/lib/dpkg/lock-frontend</code></strong> (<code>Не вдалося заблокувати /var/lib/dpkg/lock-frontend.
+  Утримується процесом ...</code>, передбач 4) - інша програма вже ставить пакети. Зачекай. <code>dpkg</code> у такому разі прямо
+  пише: <code>Note: removing the lock file is always wrong, can damage the locked area</code> (<code>Примітка: видаляти файл
+  блокування завжди неправильно, це може пошкодити заблоковану область</code>) - lock-файли <strong>не видаляють</strong>.</li>
+<li><strong><code>E: dpkg was interrupted, you must manually run 'sudo dpkg --configure -a' to correct the problem.</code></strong>
+  (<code>E: dpkg було перервано, ви повинні вручну запустити 'sudo dpkg --configure -a' аби виправити проблему.</code>) -
+  установку перервали (закрили вікно, вимкнулось світло). Лікування:</li>
+</ul>
+<pre><code class="language-bash">sudo dpkg --configure -a
+sudo apt-get install -f
+</code></pre>
+<p>Перше доналаштовує обірвані пакети, друге (<code>-f</code> = fix) докачує залежності, яких бракує. Те саме після
+  <code>apt deb файл.deb</code> (<code>dpkg -i</code>), коли бракує залежностей.
+- <strong><code>error: externally-managed-environment</code> від <code>pip install</code></strong> - не обходь, а став бібліотеки у venv, а програми -
+  через pipx (урок 02).
+- <strong>Порада з інтернету «додай PPA» для того, що є в apt чи на Flathub</strong> - не треба. Кожен PPA - ризик зламати
+  наступне велике оновлення Mint. Додав - запиши собі який, щоб потім прибрати.
+- <strong>«Немає програми в "Керуванні програмами"»</strong> - може, вона є лише як неперевірений Flatpak (схований). Пошукай на flathub.org,
+  хто його виклав; якщо не автор - краще .deb з офіційного сайту.
+- <strong>Видаляти програми, що прийшли з Mint</strong> (наприклад, «щоб звільнити місце») - так ламають систему: <code>apt remove</code>
+  може потягти за собою пів робочого столу. <strong>Читай список</strong> «The following packages will be REMOVED» («Такі
+  пакунки будуть ВИЛУЧЕНІ:») перед тим, як погодитись.
+- <strong>Snap «не встановлюється»</strong> - так задумано в Mint; бери Flatpak.</p>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Одна програма - один формат.</strong> Не ставлять ту саму програму і з apt, і з Flatpak (і тим паче Snap): дві копії,
+  плутанина з налаштуваннями, а Snap поруч з .deb на r/linuxmint (18.10.2026) зламав apt.</li>
+<li><strong>Офіційні джерела першими:</strong> apt → перевірений Flatpak → .deb з офіційного сайту → PPA. Чим нижче, тим більше
+  перевіряють, хто автор.</li>
+<li><strong>Перед PPA або чужим .deb - знімок Timeshift</strong> (урок 01).</li>
+<li><strong>Дозволи Flatpak переглядають у Flatseal</strong>, особливо доступ до всієї домашньої теки.</li>
+<li><strong><code>apt help команда</code></strong> - щоб бачити, що насправді виконає обгортка, перш ніж давати їй <code>sudo</code>.</li>
+<li><strong>Бібліотеки для лаб - у venv, утиліти на Python - у pipx</strong>, системні пакети <code>python3-...</code> - лише через apt (урок 02).</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Чому <code>apt install ncdu</code> у Mint питає пароль, хоча ти не писав <code>sudo</code>?</li>
+<li>Як дізнатись, з якого пакета файл <code>/usr/bin/nano</code> і звідки (з якого сховища) цей пакет?</li>
+<li>Чим <code>sudo apt install ./prog.deb</code> краще за <code>apt deb prog.deb</code>?</li>
+<li>Програма є і в apt, і на Flathub. Що вибрати і чому?</li>
+<li><code>apt install</code> пише <code>Could not get lock /var/lib/dpkg/lock-frontend</code>. Що робити і чого не робити?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>apt</code> у Mint - обгортка <code>/usr/local/bin/apt</code>, вона сама додає <code>sudo</code> до install, remove, update тощо
+   (<code>apt help install</code> це показує).</li>
+<li><code>apt contains /usr/bin/nano</code> (або <code>dpkg -S /usr/bin/nano</code>) → пакет <code>nano</code>; потім <code>apt policy nano</code> - адреси
+   сховищ під версією.</li>
+<li><code>apt install ./...</code> докачає залежності; <code>apt deb</code> = <code>sudo dpkg -i</code>, який їх не ставить (тоді треба
+   <code>sudo apt-get install -f</code>).</li>
+<li>Системний пакет (apt): менше місця, оновлюється разом із системою. Flatpak - якщо в apt нема або версія дуже
+   стара («Deb if available, flatpak if not»).</li>
+<li>Зачекати, поки інша програма (Диспетчер оновлень, інше вікно з apt) закінчить. Lock-файли не видаляти.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Обгортка <code>/usr/local/bin/apt</code> (пакет mintsystem): <code>apt help ...</code>, <code>type -a apt</code>, <code>apt version</code>, <code>apt contains</code>,
+  повідомлення про lock - перевірено запуском у тестовій Mint 22.3, 18.11.2026</li>
+<li><code>_джерело/ФАКТИ-MINT-22.3.md</code> (Flathub, неперевірені Flatpak, Captain, mintsources, PPA, Snap) - 18.11.2026</li>
+<li>Українські назви - <code>mintinstall.mo</code>, <code>mintsources.mo</code>, <code>captain.mo</code> з mint-translations 2026.01.08 і captain 1.1.2;
+  налаштування «Керування програмами» - <code>prefs.py</code> і схема <code>com.linuxmint.install</code> з mintinstall 8.4.0, перевірено 18.11.2026</li>
+<li>Що нового в Mint 22 (неперевірені Flatpak сховані) - https://www.linuxmint.com/rel_wilma_whatsnew.php - відкрито 18.11.2026</li>
+<li>Сторонні сховища (Ubuntu) - https://documentation.ubuntu.com/server/explanation/software/third-party-repository-usage/ -
+  відкрито 18.11.2026</li>
+<li>Snap у Mint, файл <code>nosnap.pref</code> - https://linuxmint-user-guide.readthedocs.io/en/latest/snap.html - відкрито 18.11.2026</li>
+<li>Flatseal на Flathub (перевірений: API verification <code>"verified":true</code>) - https://flathub.org/apps/com.github.tchx84.Flatseal -
+  відкрито 18.11.2026</li>
+<li>AppImage і FUSE 2 (<code>libfuse2t64</code> в Ubuntu 24.04) - https://docs.appimage.org/user-guide/troubleshooting/fuse.html -
+  відкрито 18.11.2026</li>
+<li>dpkg lock FAQ - https://wiki.debian.org/Teams/Dpkg/FAQ#db-lock - відкрито 18.11.2026</li>
+<li>Українські повідомлення apt/dpkg - <code>apt.mo</code>, <code>libapt-pkg6.0.mo</code>, <code>dpkg.mo</code> з language-pack-uk-base 24.04+20260905,
+  перевірено запуском у тестовій Mint 22.3, 18.11.2026; ліцензії - <code>/usr/share/doc/*/copyright</code>, <code>/usr/share/common-licenses</code>
+  у тестовій Mint 22.3, 18.11.2026</li>
+<li>Практики: «Deb if available, flatpak if not» https://www.reddit.com/r/linuxmint/comments/1qeu0rr/ ; .deb без
+  сховища сам не оновлюється, Flatseal https://www.reddit.com/r/linuxmint/comments/1xdyslz/ ; Snap і .deb зламали apt
+  https://www.reddit.com/r/linuxmint/comments/1x982xk/ ; ключ PPA доводить лише «звідки»
+  https://www.reddit.com/r/linuxmint/comments/1sehxf0/ - відкрито 18.11.2026</li>
+</ul>

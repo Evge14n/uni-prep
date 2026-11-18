@@ -1,0 +1,126 @@
+<h1 id="тема-10-день-10-свій-bash-скрипт">Тема 10. День 10: Свій bash-скрипт</h1>
+<p><strong>Навіщо:</strong> команди, які вводиш щоразу перед здачею лаби, - в один файл і запускати одним словом.</p>
+<h3 id="коротко-5-хв">Коротко (5 хв)</h3>
+<p>Bash-скрипт - текстовий файл з командами, по одній на рядок. Те саме, що вводиш руками.</p>
+<pre><code class="language-bash">#!/bin/bash
+# перший рядок (shebang): яким інтерпретатором запускати
+# усе після # - коментар
+
+name=&quot;Євген&quot;                 # змінна: БЕЗ пробілів навколо =
+echo &quot;Привіт, $name&quot;         # $name - взяти значення
+
+echo &quot;Перший аргумент: $1&quot;   # $1, $2 - те, що написали після назви скрипта
+echo &quot;Усього аргументів: $#&quot;
+
+if [ -f &quot;$1&quot; ]; then         # -f: такий файл існує
+    echo &quot;Файл $1 є&quot;
+else
+    echo &quot;Файлу $1 нема&quot;
+fi
+
+for f in *.py; do            # цикл по всіх .py у теці
+    echo &quot;Знайшов: $f&quot;
+done
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Перевірка в <code>[ ]</code></th>
+<th>Що означає</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-f файл</code></td>
+<td>файл існує</td>
+</tr>
+<tr>
+<td><code>-d тека</code></td>
+<td>тека існує</td>
+</tr>
+<tr>
+<td><code>-z "$x"</code></td>
+<td>рядок порожній</td>
+</tr>
+<tr>
+<td><code>"$a" = "$b"</code></td>
+<td>рядки рівні</td>
+</tr>
+<tr>
+<td><code>$n -gt 5</code></td>
+<td>число більше 5 (<code>-lt</code> менше, <code>-eq</code> дорівнює)</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>$?</code> - код завершення останньої команди: 0 = успіх, не 0 = помилка. <code>set -e</code> на початку скрипта -
+зупинитись на першій помилці.</p>
+<p><strong>Запуск:</strong> <code>bash skrypt.sh</code> або <code>chmod +x skrypt.sh</code> і <code>./skrypt.sh</code>.</p>
+<p><strong>Alias</strong> - коротке імʼя для команди, у <code>~/.bashrc</code>: <code>alias ll='ls -la'</code>. Після правки <code>source ~/.bashrc</code>.
+Так зроблені наші <code>univer</code> і <code>perevir</code> (подивись: <code>tail -n 25 ~/.bashrc</code>).</p>
+<h3 id="руками-10-хв-скрипт-перевір-усі-лаби-в-теці">Руками (10 хв): скрипт «перевір усі лаби в теці»</h3>
+<pre><code>cd ~/univer/praktyka
+nano zdaty.sh
+</code></pre>
+<p>Надрукуй:</p>
+<pre><code class="language-bash">#!/bin/bash
+# zdaty.sh - перевірити всі .py у теці перед здачею
+# запуск: ./zdaty.sh ~/univer/labs/ЛР4
+
+folder=&quot;${1:-.}&quot;          # якщо теку не дали - поточна
+source ~/univer/.venv/bin/activate
+
+if [ ! -d &quot;$folder&quot; ]; then
+    echo &quot;Нема теки $folder&quot;
+    exit 1
+fi
+
+ok=0
+bad=0
+for f in &quot;$folder&quot;/*.py; do
+    if python -m pytest --doctest-modules -q -p no:cacheprovider &quot;$f&quot; &lt; /dev/null &gt; /dev/null 2&gt;&amp;1 &amp;&amp; flake8 --max-line-length=78 &quot;$f&quot; &gt; /dev/null; then
+        echo &quot;ГОТОВО  $f&quot;
+        ok=$((ok + 1))
+    else
+        echo &quot;ПРАВИТИ $f&quot;
+        bad=$((bad + 1))
+    fi
+done
+echo &quot;Готово: $ok, правити: $bad&quot;
+</code></pre>
+<p>Далі:</p>
+<pre><code>chmod +x zdaty.sh
+./zdaty.sh ~/univer/labs/ЛР4      # kvadrat.py з дня 8 - ГОТОВО
+./zdaty.sh /nema                   # Нема теки /nema
+echo $?                            # 1 - скрипт повідомив про помилку
+</code></pre>
+<p>Хочеш запускати звідусіль словом <code>zdaty</code>: додай у кінець <code>~/.bashrc</code> рядок
+<code>alias zdaty='~/univer/praktyka/zdaty.sh'</code> і виконай <code>source ~/.bashrc</code>.</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li><code>name = "Євген"</code> з пробілами - bash думає, що <code>name</code> це команда: <code>name: command not found</code>.</li>
+<li><code>$1</code> без лапок: шлях з пробілом розвалиться на два аргументи. Пиши <code>"$1"</code>, <code>"$f"</code>.</li>
+<li><code>[</code> без пробілів: <code>if [-f "$1"]</code> - помилка. Потрібно <code>if [ -f "$1" ]</code>.</li>
+<li>Скрипт, збережений з CRLF (Блокнот Windows) → <code>$'\r': command not found</code>. День 3.</li>
+<li>Забув <code>chmod +x</code> → <code>Permission denied</code>. Або запускай <code>bash zdaty.sh</code>.</li>
+<li>Лаба з <code>input()</code> на верхньому рівні вийде «ПРАВИТИ» (pytest не дає їй читати клавіатуру) - таку перевір
+  руками: <code>printf "5\n" | python лаба.py</code>, як у дні 8.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Навіщо перший рядок <code>#!/bin/bash</code>?</li>
+<li>Що не так у рядку <code>count = 5</code>?</li>
+<li>Як у скрипті взяти перший аргумент і чому його беруть у лапки?</li>
+<li>Що означає <code>$?</code> і яке значення - успіх?</li>
+<li>Як зробити, щоб команда <code>zdaty</code> працювала з будь-якої теки?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Каже системі, що файл треба виконувати через bash (коли запускаєш <code>./скрипт.sh</code>).</li>
+<li>Пробіли навколо <code>=</code>. Правильно <code>count=5</code>.</li>
+<li><code>"$1"</code>. Лапки - щоб шлях з пробілом лишився одним аргументом.</li>
+<li>Код завершення останньої команди; 0 - успіх.</li>
+<li>Додати <code>alias zdaty='~/univer/praktyka/zdaty.sh'</code> у <code>~/.bashrc</code> і виконати <code>source ~/.bashrc</code>
+   (або покласти скрипт у теку з PATH, напр. <code>~/.local/bin</code>).</li>
+</ol>
+</details>

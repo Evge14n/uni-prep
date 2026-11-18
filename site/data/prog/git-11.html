@@ -1,0 +1,278 @@
+<h1 id="тема-11-pull-request-гілка-ревю-merge">Тема 11. Pull Request - гілка, рев'ю, merge</h1>
+<p><strong>Навіщо:</strong> ЛР3 робиш у гілці <code>lr3</code>, а в <code>main</code> вона потрапляє через Pull Request. Так видно всі зміни лаби одним списком, одногрупник або викладач може залишити коментар до рядка, а <code>main</code> лишається робочою.</p>
+<h3 id="коротко">Коротко</h3>
+<p><strong>Pull Request (PR)</strong> - прохання на GitHub: «злий мою гілку <code>lr3</code> у <code>main</code>». У PR є опис, список комітів, усі зміни (вкладка <strong>Files changed</strong>) і коментарі. Номер PR іде в тому ж рахунку, що й issues: якщо в репо вже є issue #1, перший PR буде #2 (у docs дослівно не знайшов - не перевірено).</p>
+<p><strong>Рев'ю</strong> (review) - перевірка чужого коду. Рецензент обирає одне з трьох:
+- <strong>Comment</strong> - просто коментар;
+- <strong>Approve</strong> - «можна зливати»;
+- <strong>Request changes</strong> - «спершу виправ».</p>
+<p>Автор PR <strong>не може</strong> схвалити (Approve) свій власний PR - так прямо пише документація GitHub. Тож зі свого акаунта у своєму PR лишається <strong>Comment</strong>. Approve дає лише інша людина, наприклад одногрупник з доступом до репо. Request changes - теж його кнопка (чи дає GitHub її автору, документація не каже - не перевірено).</p>
+<pre><code class="language-text">main:  A ─────────────── M        ← після злиття
+        \               /
+lr3:     B ── C ── (PR #2, рев'ю) 
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Крок</th>
+<th>Команда або кнопка</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>гілка під лабу</td>
+<td><code>git switch -c lr3</code></td>
+</tr>
+<tr>
+<td>коміти</td>
+<td><code>git add</code>, <code>git commit</code></td>
+</tr>
+<tr>
+<td>гілку на GitHub</td>
+<td><code>git push -u origin lr3</code></td>
+</tr>
+<tr>
+<td>відкрити PR</td>
+<td>жовта плашка <strong>Compare &amp; pull request</strong> або <code>gh pr create</code></td>
+</tr>
+<tr>
+<td>рев'ю</td>
+<td><strong>Files changed</strong> → коментар до рядка → <strong>Review changes</strong></td>
+</tr>
+<tr>
+<td>злити</td>
+<td><strong>Merge pull request</strong> (або Squash / Rebase)</td>
+</tr>
+<tr>
+<td>прибрати за собою</td>
+<td><code>git switch main</code>, <code>git pull</code>, <code>git branch -d lr3</code>, видалити гілку на GitHub</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Три види злиття</strong> на GitHub (кнопка Merge з випадним списком):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Кнопка</th>
+<th>Що зʼявиться в <code>main</code></th>
+<th>Як те саме в git</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Create a merge commit</strong></td>
+<td>усі коміти гілки + окремий коміт злиття з двома батьками</td>
+<td><code>git merge --no-ff</code></td>
+</tr>
+<tr>
+<td><strong>Squash and merge</strong></td>
+<td>один новий коміт «Назва PR (#2)», коміти гілки в <code>main</code> не потрапляють</td>
+<td><code>git merge --squash</code> + <code>git commit</code></td>
+</tr>
+<tr>
+<td><strong>Rebase and merge</strong></td>
+<td>коміти гілки по одному, без коміту злиття, але з <strong>новими</strong> хешами</td>
+<td>rebase + fast-forward</td>
+</tr>
+</tbody>
+</table></div>
+<p>Аналогія: PR - як здати чернетку лаби на перевірку. Викладач пише зауваження на полях (коментарі до рядків), ставить «зараховано» (Approve) або «переробити» (Request changes), і лише потім робота йде в чистовик (<code>main</code>).</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li><code>main</code> не рухалась, тож <code>git merge lr3</code> зробив би fast-forward (урок 07). А що зробить <code>git merge --no-ff lr3</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Створить коміт злиття навіть там, де можна було просто пересунути вказівник. Саме так зливає кнопка «Create a merge commit»:</p>
+<pre><code class="language-text">*   2f51e50 (HEAD -&gt; proba-merge) Merge pull request #2 from Evge14n/lr3
+|\  
+| * c4894c4 (origin/lr3, lr3) ЛР3: завдання 2
+| * 3204bab ЛР3: заготовка
+|/  
+* d850e97 (origin/main, origin/HEAD, main) Initial commit
+</code></pre>
+<p>У дужках - ярлики гілок: ти на <code>proba-merge</code> (<code>HEAD -&gt;</code>), <code>lr3</code> і її копія на GitHub <code>origin/lr3</code> стоять на «завдання 2», а <code>main</code> - ще на «Initial commit».</p>
+</details>
+<ol start="2">
+<li><code>git merge --squash lr3</code> - чи буде одразу новий коміт?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Ні. Git лише складе всі зміни гілки в індекс і скаже <code>Squash commit -- not updating HEAD</code>. <code>git status --short</code> покаже <code>A  lr3.py</code>. Коміт робиш сам: <code>git commit -m "ЛР3 (#2)"</code>. В історії - один коміт замість двох:</p>
+<pre><code class="language-text">* 623fcfe (HEAD -&gt; proba-squash) ЛР3 (#2)
+* d850e97 (origin/main, origin/HEAD, main) Initial commit
+</code></pre>
+</details>
+<ol start="3">
+<li>На GitHub гілку <code>lr3</code> після злиття видалили. Що покаже <code>git branch -r</code> у другому клоні, де не було <code>fetch</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Досі <code>origin/lr3</code>. Git не знає про видалення, поки не спитає GitHub. Прибирає її <code>git fetch --prune</code>:</p>
+<pre><code class="language-text">From github.com:Evge14n/pisochnytsia
+ - [deleted]         (none)     -&gt; origin/lr3
+</code></pre>
+</details>
+<h3 id="руками">Руками</h3>
+<p>Пісочниця <code>~/pisochnytsia</code>. Хеші в тебе будуть інші.</p>
+<p><strong>Крок 1. Гілка з двома комітами і push.</strong></p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+git switch main
+git pull
+git switch -c lr3
+printf 'x = 3\nprint(&quot;ЛР3:&quot;, x)\n' &gt; lr3.py
+git add lr3.py
+git commit -m &quot;ЛР3: заготовка&quot;
+printf 'print(&quot;ЛР3: завдання 2&quot;)\n' &gt;&gt; lr3.py
+git commit -am &quot;ЛР3: завдання 2&quot;
+git push -u origin lr3
+</code></pre>
+<pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
+ * [new branch]      lr3 -&gt; lr3
+branch 'lr3' set up to track 'origin/lr3'.
+</code></pre>
+<p><strong>Крок 2. Відкрити PR на сайті.</strong></p>
+<pre><code class="language-text">github.com/Evge14n/pisochnytsia → жовта плашка над списком файлів → Compare &amp; pull request
+base: main  ←  compare: lr3
+Title: ЛР3
+опис: Заготовка і завдання 2
+Create pull request
+</code></pre>
+<p>Або з терміналу:</p>
+<pre><code class="language-bash">gh pr create --base main --head lr3 --title &quot;ЛР3&quot; --body &quot;Заготовка і завдання 2&quot;
+gh pr list
+</code></pre>
+<p><strong>Крок 3. Рев'ю.</strong> Відкрий PR → вкладка <strong>Files changed</strong>. Наведи мишку на рядок <code>x = 3</code> → синя іконка коментаря → напиши «краще назвати змінну n?» → <strong>Start a review</strong>. Потім угорі <strong>Review changes</strong> → вибери Comment / Approve / Request changes → <strong>Submit review</strong>. Зі свого акаунта у своєму PR вибирай <strong>Comment</strong>: Approve власного PR GitHub не дає, а Approve і Request changes - кнопки одногрупника.</p>
+<p>Те, що рецензент бачить у Files changed, можна побачити і в терміналі. Другий клон (як в уроці 09; якщо його нема - <code>git clone git@github.com:Evge14n/pisochnytsia.git ~/druhyi-klon</code>):</p>
+<pre><code class="language-bash">cd ~/druhyi-klon
+git fetch
+git diff --stat origin/main...origin/lr3
+git diff origin/main...origin/lr3
+</code></pre>
+<pre><code class="language-text"> lr3.py | 3 +++
+ 1 file changed, 3 insertions(+)
+diff --git a/lr3.py b/lr3.py
+new file mode 100644
+index 0000000..549455e
+--- /dev/null
++++ b/lr3.py
+@@ -0,0 +1,3 @@
++x = 3
++print(&quot;ЛР3:&quot;, x)
++print(&quot;ЛР3: завдання 2&quot;)
+</code></pre>
+<p>Три крапки <code>main...lr3</code> = «що змінилось у <code>lr3</code> від місця, де вона відгалузилась від <code>main</code>». Рецензія з gh. Коментар можеш лишити і ти сам:</p>
+<pre><code class="language-bash">gh pr review 2 --comment -b &quot;Глянь назву змінної x&quot;
+</code></pre>
+<p>А ці дві команди - для <strong>одногрупника</strong> у його терміналі, з його акаунта (у тебе як автора <code>--approve</code> не пройде):</p>
+<pre><code class="language-text">gh pr review 2 --approve
+gh pr review 2 --request-changes -b &quot;Додай doctest&quot;
+</code></pre>
+<p><strong>Крок 4. Як виглядатиме історія - модель у git.</strong> Кнопку на сайті в перевірці не натиснеш, тож змоделюємо два види злиття локально, у пробних гілках:</p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+git switch -c proba-merge main
+git merge --no-ff lr3 -m &quot;Merge pull request #2 from Evge14n/lr3&quot;
+git log --oneline --graph -4
+git switch -c proba-squash main
+git merge --squash lr3
+git commit -m &quot;ЛР3 (#2)&quot;
+git log --oneline --graph -3
+git switch main
+git branch -D proba-merge proba-squash
+</code></pre>
+<p>Виводи <code>log</code> - у пунктах 1 і 2 «Передбач». <code>-D</code> (велике) видаляє гілку навіть незлиту - тут можна, це пробні гілки. Повідомлення як на GitHub: merge-коміт - «Merge pull request #2 from Evge14n/lr3» і назва PR другим абзацом; squash - «ЛР3 (#2)» (так виглядають коміти в репо cli/cli і facebook/react, глянув 18.11.2026).</p>
+<p><strong>Крок 5. Злити на сайті і прибрати.</strong> У PR унизу <strong>Merge pull request</strong> → <strong>Confirm merge</strong> → зʼявиться кнопка <strong>Delete branch</strong> - натисни. Потім у терміналі:</p>
+<pre><code class="language-bash">git switch main
+git pull
+git log --oneline --graph -4
+git branch -d lr3
+git fetch --prune
+git branch -a
+</code></pre>
+<p><code>git log</code> покаже (пробіли в кінці рядків графа не важать):</p>
+<pre><code class="language-text">*   0b4e2f1 (HEAD -&gt; main, origin/main, origin/HEAD) Merge pull request #2 from Evge14n/lr3
+|\  
+| * c4894c4 (origin/lr3, lr3) ЛР3: завдання 2
+| * 3204bab ЛР3: заготовка
+|/  
+* d850e97 Initial commit
+</code></pre>
+<p>Зверни увагу: <code>origin/lr3</code> ще є, хоч на сайті гілку видалено. <code>git pull</code> віддалені гілки не прибирає - це робить <code>git fetch --prune</code>. Далі:</p>
+<pre><code class="language-text">Deleted branch lr3 (was c4894c4).
+From github.com:Evge14n/pisochnytsia
+ - [deleted]         (none)     -&gt; origin/lr3
+* main
+  remotes/origin/HEAD -&gt; origin/main
+  remotes/origin/main
+</code></pre>
+<p>Якщо на сайті <strong>не</strong> натиснув Delete branch - видали віддалену гілку з терміналу:</p>
+<pre><code class="language-bash">git push origin --delete lr3
+</code></pre>
+<pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
+ - [deleted]         lr3
+</code></pre>
+<h3 id="типові-помилки">Типові помилки</h3>
+<p><strong>1. Після Squash and merge <code>git branch -d lr3</code> то відмовляє, то видаляє.</strong> У <code>main</code> на GitHub зʼявився новий squash-коміт, а самих комітів <code>lr3</code> там нема. <code>-d</code> видаляє лише злиту гілку, і «злита» він перевіряє так: якщо в тебе є <code>origin/lr3</code> - чи все з <code>lr3</code> є в <code>origin/lr3</code>; якщо <code>origin/lr3</code> нема - чи все є в поточній гілці (<code>main</code>). Тому буває два випадки (обидва перевірено, git 2.43):</p>
+<ul>
+<li><strong><code>origin/lr3</code> уже нема</strong>: на сайті натиснув <strong>Delete branch</strong> і потім зробив <code>git fetch --prune</code> (або сам видалив гілку <code>git push origin --delete lr3</code>). Тоді <code>-d</code> відмовляє, код виходу 1:</li>
+</ul>
+<pre><code class="language-text">error: the branch 'lr3' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D lr3'
+</code></pre>
+<ul>
+<li><strong><code>origin/lr3</code> ще є</strong>: гілку на сайті не видаляв, або видалив, але ще не робив <code>git fetch --prune</code> (звичайний <code>git pull</code> віддалені гілки не прибирає). Тоді <code>-d</code> бачить, що все з <code>lr3</code> лежить в <code>origin/lr3</code>, пише попередження і <strong>видаляє</strong>, код 0:</li>
+</ul>
+<pre><code class="language-text">warning: deleting branch 'lr3' that has been merged to
+         'refs/remotes/origin/lr3', but not yet merged to HEAD
+Deleted branch lr3 (was 6214452).
+</code></pre>
+<p>Попередження чесне: «злита в <code>origin/lr3</code>, але не в HEAD». Тобто git перевірив лише, що лаба запушена, а не що вона в <code>main</code>.</p>
+<p>Якщо <code>-d</code> відмовив, а PR на сайті справді злитий (на сторінці PR позначка Merged, не перевірено) - видаляй силою:</p>
+<pre><code class="language-bash">git branch -D lr3
+</code></pre>
+<p><strong>2. «Your branch is up to date», а на GitHub уже злитий PR.</strong> Після злиття на сайті <code>git switch main</code> пише:</p>
+<pre><code class="language-text">Your branch is up to date with 'origin/main'.
+</code></pre>
+<p>Це неправда лише тому, що git порівнює з останнім, що знав про GitHub. Спершу <code>git pull</code>, і лише потім нова гілка <code>lr4</code> - інакше вона почнеться без ЛР3.</p>
+<p><strong>3. Approve власного PR.</strong> Документація GitHub: «Pull request authors cannot approve their own pull requests». Для схвалення потрібна друга людина з доступом до репо (Settings → Collaborators, не перевірено). <code>gh pr review 2 --approve</code> зі свого акаунта теж не пройде. Для своїх лаб досить Comment собі ж.</p>
+<p><strong>4. Дописав коміт у <code>lr3</code> після злиття PR.</strong> Ці коміти в <code>main</code> не підуть - PR уже закритий. Онови <code>main</code> (<code>git pull</code>) і зроби нову гілку і новий PR.</p>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li>Кожна зміна - через PR, навіть у соло-проєктах: видно, що і навіщо змінено (<a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request">Creating a pull request</a>).</li>
+<li>У налаштуваннях репо вмикають <strong>Automatically delete head branches</strong> (Settings → General → Pull Requests) - гілка зникає сама після злиття (<a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches">docs</a>).</li>
+<li>Захищають <code>main</code> правилами (ruleset): зливати лише через PR з Approve; сторінка документації називає плани Team і Enterprise, тож на безкоштовному плані для приватного репо, схоже, недоступно (не перевірено) (<a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets">About rulesets</a>).</li>
+<li>Багато команд обирають Squash and merge: в <code>main</code> один акуратний коміт на PR (<a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-pull-request-merges">About pull request merges</a>).</li>
+<li>У описі PR пишуть <code>Closes #N</code> - issue закриється при злитті (урок 10).</li>
+<li>Злиття з терміналу: <code>gh pr merge 2 --squash --delete-branch</code> (<a href="https://cli.github.com/manual/gh_pr_merge">gh pr merge</a>).</li>
+</ul>
+<h3 id="для-лаб">Для лаб</h3>
+<p><strong>Для лаб:</strong> у <code>univer-labs</code> кожна лаба - своя гілка <code>lr1</code> ... <code>lr7</code>. Коли лаба готова - PR <code>lr3 → main</code> з описом «що зроблено, які завдання проходять doctest» і <code>Closes #N</code>, якщо закриваєш issue. Перед здачею кинь викладачу посилання на PR: там видно всі зміни лаби одним списком у Files changed. Зливай звичайною кнопкою <strong>Merge pull request</strong> (Create a merge commit): у <code>main</code> лишаються всі коміти лаби - коміт на крок, як у «Лаби в git», - плюс коміт злиття, по якому видно, де була гілка <code>lr3</code>. Після злиття - <code>git switch main</code>, <code>git pull</code>, <code>git branch -d lr3</code>.</p>
+<p>Squash and merge - теж можна, якщо хочеш коротку історію: одна лаба = один коміт у <code>main</code>. Але окремих кроків «завдання 1», «завдання 2» в <code>main</code> тоді не буде, а <code>git branch -d lr3</code> після squash може відмовити (Типова помилка 1) - видаляй <code>git branch -D lr3</code>, коли PR злитий.</p>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Що таке Pull Request і чим він кращий за <code>git merge</code> у себе на ноутбуці?</li>
+<li>Які три відповіді може дати рецензент і хто не може поставити Approve?</li>
+<li>Чим відрізняється історія <code>main</code> після Create a merge commit і після Squash and merge?</li>
+<li>Після squash-злиття <code>git branch -d lr3</code> пише <code>not fully merged</code>. Чому і що робити?</li>
+<li>Які команди виконати на ноутбуці після злиття PR, щоб усе було чисто?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Прохання на GitHub злити гілку в <code>main</code>. Видно всі зміни (Files changed), можна обговорити кожен рядок і дати схвалення до злиття.</li>
+<li>Comment, Approve, Request changes. Автор PR не може схвалити свій PR - зі свого акаунта в нього лише Comment.</li>
+<li>Merge commit: усі коміти гілки + коміт злиття з двома батьками. Squash: лише один новий коміт «Назва (#2)».</li>
+<li>Коміти <code>lr3</code> не потрапили в <code>main</code>, там новий squash-коміт. А <code>origin/lr3</code> уже прибрано (Delete branch на сайті + <code>git fetch --prune</code>), тож <code>-d</code> порівнює з <code>main</code> і не знаходить там комітів <code>lr3</code>. Якщо PR злитий на сайті - <code>git branch -D lr3</code>. (Поки <code>origin/lr3</code> ще є, <code>-d</code> лише попередив би і видалив, код 0.)</li>
+<li><code>git switch main</code>, <code>git pull</code>, <code>git branch -d lr3</code>, і <code>git fetch --prune</code> (або <code>git push origin --delete lr3</code>, якщо на сайті гілку не видалив).</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Creating a pull request - https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request (відкрито 18.11.2026)</li>
+<li>Reviewing proposed changes in a pull request - https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request (відкрито 18.11.2026)</li>
+<li>Approving a pull request with required reviews («Pull request authors cannot approve their own pull requests») - https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/approving-a-pull-request-with-required-reviews (відкрито 18.11.2026)</li>
+<li>About pull request merges - https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-pull-request-merges (відкрито 18.11.2026)</li>
+<li>Merging a pull request - https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/merging-a-pull-request (відкрито 18.11.2026)</li>
+<li>git merge (--no-ff, --squash), git branch, git fetch --prune - https://git-scm.com/docs/git-merge, https://git-scm.com/docs/git-branch, https://git-scm.com/docs/git-fetch (відкрито 18.11.2026)</li>
+<li>gh pr create / review / merge - https://cli.github.com/manual/gh_pr_create, https://cli.github.com/manual/gh_pr_review, https://cli.github.com/manual/gh_pr_merge (відкрито 18.11.2026; прапорці звірено з <code>gh --help</code> 2.105.0)</li>
+</ul>

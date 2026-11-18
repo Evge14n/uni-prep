@@ -1,0 +1,76 @@
+<h1 id="тема-3-функції-й-доступ">Тема 3. Функції й доступ</h1>
+<div class="pybox" id="pybox"></div>
+
+<p><strong>Що треба з Python:</strong> функція отримує аргументи і може кинути виняток <code>raise PermissionError(...)</code>.
+Перевірки - на самому початку функції.</p>
+<p><strong>Три правила:</strong>
+1. <strong>Перевіряй вхід на початку функції</strong> (тип, межі, хто питає).
+2. <strong>Fail closed:</strong> не впевнений - забороняй. Помилка під час перевірки = відмова, не дозвіл.
+3. <strong>Найменші права:</strong> функція робить лише своє (функція «показати нотатку» не вміє видаляти).</p>
+<p><strong>Де діра: IDOR</strong> (Insecure Direct Object Reference). Нотатки лежать за номером, і функція віддає будь-яку
+нотатку за номером, не дивлячись, чия вона:</p>
+<pre><code class="language-python">notes = {
+    1: {&quot;owner&quot;: &quot;anna&quot;, &quot;text&quot;: &quot;мій список покупок&quot;},
+    2: {&quot;owner&quot;: &quot;bob&quot;, &quot;text&quot;: &quot;пароль від Wi-Fi&quot;},
+}
+
+
+def get_note_bad(user, note_id):
+    return notes[note_id][&quot;text&quot;]
+
+
+print(get_note_bad(&quot;anna&quot;, 1))
+print(get_note_bad(&quot;anna&quot;, 2))     # anna поміняла номер у запиті
+</code></pre>
+<pre><code class="language-text">мій список покупок
+пароль від Wi-Fi
+</code></pre>
+<p><strong>Як правильно:</strong> перевірити власника. Якщо нотатки нема або вона чужа - однакова відмова
+(щоб не підказувати, які номери існують).</p>
+<pre><code class="language-python">notes = {
+    1: {&quot;owner&quot;: &quot;anna&quot;, &quot;text&quot;: &quot;мій список покупок&quot;},
+    2: {&quot;owner&quot;: &quot;bob&quot;, &quot;text&quot;: &quot;пароль від Wi-Fi&quot;},
+}
+
+
+def get_note(user, note_id):
+    note = notes.get(note_id)
+    if note is None or note[&quot;owner&quot;] != user:
+        raise PermissionError(&quot;нема доступу&quot;)
+    return note[&quot;text&quot;]
+
+
+print(get_note(&quot;anna&quot;, 1))
+for nid in (2, 99):
+    try:
+        get_note(&quot;anna&quot;, nid)
+    except PermissionError as e:
+        print(nid, &quot;-&gt;&quot;, e)
+</code></pre>
+<pre><code class="language-text">мій список покупок
+2 -&gt; нема доступу
+99 -&gt; нема доступу
+</code></pre>
+<p><strong>Fail open - як НЕ треба:</strong></p>
+<pre><code class="language-python">def is_admin_bad(user, admins):
+    try:
+        return user in admins
+    except Exception:
+        return True          # перевірка зламалась - пускаємо (погано!)
+
+
+def is_admin(user, admins):
+    try:
+        return user in admins
+    except Exception:
+        return False         # зламалась - не пускаємо
+
+
+print(is_admin_bad(&quot;anna&quot;, None), is_admin(&quot;anna&quot;, None))
+</code></pre>
+<pre><code class="language-text">True False
+</code></pre>
+<p><code>"anna" in None</code> кидає <code>TypeError</code>. Погана функція з цього зробила «так, адмін».</p>
+<p>Дрібниця на потім: <code>PermissionError</code> - це різновид <code>OSError</code> (помилок файлів), тож <code>except OSError</code> поруч його
+проковтне. У великій програмі для відмови в доступі роблять свій клас: <code>class AccessDenied(Exception): ...</code>.</p>
+<p>OWASP: A01 Broken Access Control (IDOR - CWE-639), A10 Mishandling of Exceptional Conditions (fail open - CWE-636).</p>

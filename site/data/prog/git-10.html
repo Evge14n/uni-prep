@@ -1,0 +1,246 @@
+<h1 id="тема-10-github-репозиторій-readme-issues">Тема 10. GitHub - репозиторій, README, Issues</h1>
+<p><strong>Навіщо:</strong> репо <code>univer-labs</code> на GitHub має бути зрозумілим з першого погляду: викладач відкриває сторінку і одразу бачить, що де лежить (це робить README). А список «що ще доробити в ЛР3» зручно вести прямо на GitHub у Issues і закривати пункти комітами.</p>
+<h3 id="коротко">Коротко</h3>
+<p><strong>Репозиторій на GitHub</strong> - та сама тека з історією, що й у тебе на ноутбуці, тільки на сервері. Створити його можна двома способами: на сайті або командою <code>gh repo create</code>.</p>
+<p><strong>README.md</strong> - файл-опис у корені репо. GitHub сам показує його під списком файлів. <code>.md</code> значить <strong>Markdown</strong> - простий текст з позначками: <code>#</code> - заголовок, <code>-</code> - пункт списку і т.д.</p>
+<p><strong>Issue</strong> (читається «іш'ю») - картка-завдання в репо: «знайшов помилку», «доробити завдання 2». У кожного issue є номер: <code>#1</code>, <code>#2</code>, ... <strong>Мітка</strong> (label) - кольоровий ярлик на issue: <code>bug</code>, <code>documentation</code>, <code>enhancement</code>.</p>
+<p><strong>«Closes #1» у коміті</strong> - якщо такий коміт потрапить у гілку <code>main</code> на GitHub, issue #1 закриється сам.</p>
+<pre><code class="language-text">сайт: Issues → New issue        ноутбук: правиш файл               GitHub
+  «#1 Описати README»   ───→   git commit -m &quot;...&quot; -m &quot;Closes #1&quot; ─→ git push у main ─→ #1 закрито
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що зробити</th>
+<th>Як</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>створити репо на сайті</td>
+<td><code>+</code> угорі праворуч → <strong>New repository</strong></td>
+</tr>
+<tr>
+<td>створити репо з терміналу</td>
+<td><code>gh repo create назва --private --add-readme --clone</code></td>
+</tr>
+<tr>
+<td>написати README</td>
+<td><code>nano README.md</code>, потім add, commit, push</td>
+</tr>
+<tr>
+<td>створити issue</td>
+<td>вкладка <strong>Issues</strong> → <strong>New issue</strong> або <code>gh issue create</code></td>
+</tr>
+<tr>
+<td>закрити issue комітом</td>
+<td>у повідомленні коміту рядок <code>Closes #1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Приватний чи публічний.</strong> Публічний репо бачить увесь інтернет. Приватний бачиш лише ти і ті, кого ти сам запросив. Для лаб - приватний (щоб не списали). Приватні репо на GitHub Free безкоштовні.</p>
+<p><strong>LICENSE</strong> - файл з ліцензією: що іншим можна робити з твоїм кодом. Якщо ліцензії нема, діє звичайне авторське право: усі права твої, і ніхто не може копіювати чи поширювати твій код. Для лаб ліцензія не потрібна. Для відкритого проєкту - обирають на choosealicense.com (часто MIT).</p>
+<p>Аналогія: репо - це папка-скоросшивач, README - титульний аркуш на ній, issues - стікери «доробити» на обкладинці.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li>Ти робиш коміт з двома <code>-m</code>: <code>git commit -m "Опиши пісочницю в README" -m "Closes #1"</code>. Що покаже <code>git log -1 --format=%B</code> (повний текст останнього коміту)?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Два абзаци з порожнім рядком між ними: кожен <code>-m</code> - окремий абзац.</p>
+<pre><code class="language-text">Опиши пісочницю в README
+
+Closes #1
+
+</code></pre>
+<p>Перший рядок - заголовок коміту (його показує <code>git log --oneline</code>), а <code>Closes #1</code> - у тілі. GitHub шукає ключове слово в усьому тексті коміту.</p>
+</details>
+<ol start="2">
+<li>Репо створено на сайті з галочкою README (або <code>gh repo create ... --add-readme</code>) і склоновано. Скільки комітів покаже <code>git log --oneline</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Один - його зробив сам GitHub, коли створював README:</p>
+<pre><code class="language-text">9bfd519 (HEAD -&gt; main, origin/main, origin/HEAD) Initial commit
+</code></pre>
+<p>(Хеш у тебе буде інший - так з усіма хешами в курсі.) У дужках - ярлики: <code>HEAD -&gt; main</code> - ти зараз на <code>main</code>, <code>origin/main</code> - де <code>main</code> на GitHub, <code>origin/HEAD</code> - гілка за замовчуванням на GitHub. Усі три вказують на цей коміт.</p>
+</details>
+<ol start="3">
+<li>Як потім знайти, яким комітом закрито issue #1? Що покаже <code>git log --oneline --grep="Closes #1"</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p><code>--grep</code> шукає текст у повідомленнях комітів, зокрема в тілі. Покаже лише наш коміт:</p>
+<pre><code class="language-text">b91ce95 (HEAD -&gt; main, origin/main, origin/HEAD) Опиши пісочницю в README
+</code></pre>
+</details>
+<h3 id="руками">Руками</h3>
+<p>Працюємо в пісочниці <code>~/pisochnytsia</code> (приватний репо з уроку 03).</p>
+<p><strong>Крок 1. Issue на сайті.</strong> Відкрий <code>github.com/Evge14n/pisochnytsia</code>:</p>
+<pre><code class="language-text">вкладка Issues → New issue
+  (якщо спитає про шаблон - Open a blank issue)
+Title:        Описати пісочницю в README
+опис:         Зараз у README лише назва
+праворуч Labels → documentation
+Submit new issue
+</code></pre>
+<p>Issue отримає номер. Якщо це перше issue в репо - <code>#1</code>. Якщо в тебе інший номер, далі пиши свій.</p>
+<p>Те саме з терміналу (gh з уроку 02):</p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+gh issue create --title &quot;Описати пісочницю в README&quot; --body &quot;Зараз у README лише назва&quot; --label documentation
+gh issue list
+</code></pre>
+<p>Мітки <code>bug</code>, <code>documentation</code>, <code>enhancement</code>, <code>question</code> та інші GitHub створює в кожному новому репо сам.</p>
+<p><strong>Крок 2. README.md.</strong></p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+git pull
+nano README.md
+</code></pre>
+<p>Зітри все і набери (Ctrl+O, Enter - зберегти, Ctrl+X - вийти):</p>
+<pre><code class="language-markdown"># pisochnytsia
+
+Пісочниця для вправ з **git**. Тут можна ламати.
+
+## Що тут
+
+- `README.md` - цей опис
+- вправи з уроків 04-13
+
+## Як почати
+
+1. Склонувати репо
+2. Змінити файл і зробити коміт
+
+```text
+git clone git@github.com:Evge14n/pisochnytsia.git
+```
+
+Підручник: [Pro Git українською](https://git-scm.com/book/uk/v2)
+</code></pre>
+<p>Що тут з Markdown:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Пишеш</th>
+<th>На GitHub буде</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code># Назва</code></td>
+<td>великий заголовок (<code>##</code> - менший, і так до <code>######</code>)</td>
+</tr>
+<tr>
+<td><code>**git**</code></td>
+<td><strong>жирний</strong> текст</td>
+</tr>
+<tr>
+<td><code>`README.md`</code></td>
+<td>моноширинний шрифт, як код</td>
+</tr>
+<tr>
+<td><code>- пункт</code></td>
+<td>маркований список</td>
+</tr>
+<tr>
+<td><code>1. пункт</code></td>
+<td>нумерований список</td>
+</tr>
+<tr>
+<td>три зворотні лапки ``` і мова</td>
+<td>блок коду</td>
+</tr>
+<tr>
+<td><code>[текст](https://...)</code></td>
+<td>посилання</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Крок 3. Коміт, що закриває issue.</strong></p>
+<pre><code class="language-bash">git add README.md
+git commit -m &quot;Опиши пісочницю в README&quot; -m &quot;Closes #1&quot;
+git log -1 --format=%B
+git push
+</code></pre>
+<p>Вивід коміту і пушу:</p>
+<pre><code class="language-text">[main 4f55914] Опиши пісочницю в README
+ 1 file changed, 18 insertions(+)
+To github.com:Evge14n/pisochnytsia.git
+   e231bed..4f55914  main -&gt; main
+</code></pre>
+<p>Хеші в тебе будуть інші, а числа рядків можуть трохи відрізнятись (залежить, що було в README до того).
+Онови сторінку репо: під файлами тепер гарний README. Відкрий Issues: #1 закрите, і в ньому посилання на твій коміт.</p>
+<p><strong>Крок 4 (за бажанням). Новий репо з терміналу.</strong></p>
+<pre><code class="language-bash">cd ~
+gh repo create proba-gh --private --add-readme --clone
+cd ~/proba-gh
+git log --oneline
+</code></pre>
+<p><code>--private</code> - приватний, <code>--add-readme</code> - одразу з README, <code>--clone</code> - одразу склонувати в поточну теку. Один з <code>--public</code> / <code>--private</code> обовʼязковий, коли пишеш назву: без нього gh не питає, а одразу падає (перевірено, gh 2.105.0):</p>
+<pre><code class="language-text">`--public`, `--private`, or `--internal` required when not running interactively
+</code></pre>
+<p>Діалог з питаннями буде лише від голого <code>gh repo create</code> без жодних аргументів (так каже <code>gh repo create --help</code>). Потім репо <code>proba-gh</code> можна видалити на сайті: Settings → унизу Danger Zone → Delete this repository (не перевірено).</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<p><strong>1. Створив репо на сайті з README, а код уже є на ноутбуці.</strong> Ти зробив <code>git init</code> і коміти в <code>~/univer/labs</code>, а на сайті поставив галочку README. Тепер на GitHub свій коміт «Initial commit», а в тебе свої. Пуш:</p>
+<pre><code class="language-text">$ git push -u origin main
+To github.com:Evge14n/univer-labs.git
+ ! [rejected]        main -&gt; main (fetch first)
+error: failed to push some refs to 'github.com:Evge14n/univer-labs.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+</code></pre>
+<p>Звичайний <code>git pull origin main</code> теж не допоможе:</p>
+<pre><code class="language-text">fatal: refusing to merge unrelated histories
+</code></pre>
+<p>«unrelated histories» - дві історії без спільного предка. Лікування - дозволити злиття один раз:</p>
+<pre><code class="language-bash">git pull --allow-unrelated-histories origin main
+git push -u origin main
+</code></pre>
+<p>Як не потрапити: якщо код уже є на ноутбуці, створюй на сайті <strong>порожній</strong> репо (без README, .gitignore і ліцензії). Документація GitHub прямо про це попереджає.</p>
+<p><strong>2. Написав <code>Closes #1</code>, а issue не закрилось.</strong> Коміт лежить в іншій гілці (наприклад, <code>lr3</code>). Issue закривається, лише коли коміт потрапить у гілку за замовчуванням (<code>main</code>). Злий гілку в <code>main</code> (урок 11) - тоді закриється.</p>
+<p><strong>3. <code>gh</code> з репозиторію Mint.</strong> Пакет gh 2.45 з Mint зламаний (падає на <code>gh issue view</code>). Став gh з офіційного репозиторію GitHub, як в уроці 02.</p>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li>Пишуть <code>Closes #N</code> не в коміті, а в описі Pull Request (урок 11): issue закривається, коли PR зливають, і PR видно в issue як повʼязаний. Ключові слова: close, closes, closed, fix, fixes, fixed, resolve, resolves, resolved (<a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue">docs</a>).</li>
+<li>README у кожному репо: що робить проєкт, як запустити, де шукати допомогу (<a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes">About READMEs</a>).</li>
+<li>Шаблони issue (тека <code>.github/ISSUE_TEMPLATE</code>), щоб усі писали баги в одному форматі (<a href="https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/about-issue-and-pull-request-templates">docs</a>).</li>
+<li>Мітки і списки задач у Markdown: <code>- [ ] завдання 2</code>, <code>- [x] завдання 1</code> (<a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">синтаксис</a>).</li>
+<li>Відкритий код - завжди з LICENSE у корені (<a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository">Licensing a repository</a>, <a href="https://choosealicense.com">choosealicense.com</a>).</li>
+</ul>
+<h3 id="для-лаб">Для лаб</h3>
+<p><strong>Для лаб:</strong> один <strong>приватний</strong> репо <code>univer-labs</code>. Якщо тека <code>~/univer/labs</code> уже з комітами - створи на сайті порожній репо <code>univer-labs</code> (Private, без README) і запуш, як в уроці 09. Або одним рядком gh з самої теки:</p>
+<pre><code class="language-bash">gh repo create univer-labs --private --source . --remote origin --push
+</code></pre>
+<p>Потім README зі списком: <code>lr1/</code> - ЛР1, ... <code>lr7/</code> - ЛР7, і як запускати (<code>python3 lr1/lr1_1.py</code>). На кожне «доробити» (наприклад, «ЛР3: завдання 2 не проходить doctest») - issue з міткою <code>bug</code>, і коміт з <code>Closes #N</code>, коли виправиш. Викладача можна додати в приватний репо: Settings → Collaborators → Add people (не перевірено).</p>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чим приватний репо відрізняється від публічного і який обрати для лаб?</li>
+<li>Як зробити в README заголовок, список і посилання?</li>
+<li>Що написати в коміті, щоб він закрив issue #4, і коли саме воно закриється?</li>
+<li>Ти створив на сайті репо з README, а локально вже є коміти. Що побачиш при <code>git push</code> і як виправити?</li>
+<li>Що буде з твоїм кодом у публічному репо без файлу LICENSE?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Публічний бачать усі в інтернеті, приватний - лише ти і запрошені. Для лаб - приватний.</li>
+<li><code># Заголовок</code>, рядки <code>- пункт</code>, <code>[текст](https://адреса)</code>.</li>
+<li>Рядок <code>Closes #4</code> (або <code>Fixes #4</code>, <code>Resolves #4</code>) у повідомленні коміту. Закриється, коли коміт потрапить у <code>main</code> (гілку за замовчуванням) на GitHub.</li>
+<li><code>! [rejected] main -&gt; main (fetch first)</code>, а <code>git pull</code> скаже <code>refusing to merge unrelated histories</code>. Лікується <code>git pull --allow-unrelated-histories origin main</code>, потім <code>git push -u origin main</code>. Краще одразу створювати порожній репо.</li>
+<li>Діє звичайне авторське право: дивитися і робити форк на GitHub можна, але копіювати і поширювати код без твого дозволу - ні.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Creating a new repository - https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository (відкрито 18.11.2026)</li>
+<li>About repositories (public / private) - https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories (відкрито 18.11.2026)</li>
+<li>Linking a pull request to an issue - https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue (відкрито 18.11.2026)</li>
+<li>Creating an issue - https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue (відкрито 18.11.2026)</li>
+<li>Managing labels - https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels (відкрито 18.11.2026)</li>
+<li>Basic writing and formatting syntax - https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax (відкрито 18.11.2026)</li>
+<li>Licensing a repository - https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository (відкрито 18.11.2026)</li>
+<li>gh repo create, gh issue create - https://cli.github.com/manual/gh_repo_create, https://cli.github.com/manual/gh_issue_create (відкрито 18.11.2026; прапорці звірено з <code>gh --help</code> 2.105.0)</li>
+</ul>

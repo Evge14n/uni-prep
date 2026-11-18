@@ -1,0 +1,118 @@
+<h1 id="тема-9-день-9-git">Тема 9. День 9: git</h1>
+<p><strong>Навіщо:</strong> «збереження гри» для коду. Зламав лабу - повернувся до робочої версії за секунду.</p>
+<h3 id="коротко-5-хв">Коротко (5 хв)</h3>
+<p>git запамʼятовує <strong>знімки (коміти)</strong> теки. Кожен коміт - стан усіх файлів у момент + підпис, що змінив.</p>
+<pre><code>правиш файли  →  git add  →  git commit  →  історія (git log)
+(робоча тека)    (вибрав,      (знімок
+                 що зберегти)   з підписом)
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git init</code></td>
+<td>зробити теку репозиторієм (один раз)</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>що змінено, що вибрано для коміту</td>
+</tr>
+<tr>
+<td><code>git add lab4.py</code></td>
+<td>вибрати файл у наступний коміт (<code>git add .</code> - усе)</td>
+</tr>
+<tr>
+<td><code>git commit -m "Завдання 1 готове"</code></td>
+<td>зробити коміт з підписом</td>
+</tr>
+<tr>
+<td><code>git log --oneline</code></td>
+<td>історія комітів</td>
+</tr>
+<tr>
+<td><code>git diff</code></td>
+<td>що змінено з останнього коміту (вийти - <code>q</code>)</td>
+</tr>
+<tr>
+<td><code>git restore lab4.py</code></td>
+<td><strong>скасувати</strong> незбережені в коміт зміни файлу</td>
+</tr>
+<tr>
+<td><code>git show HEAD~1:lab4.py</code></td>
+<td>показати файл, яким він був один коміт тому</td>
+</tr>
+</tbody>
+</table></div>
+<p>Перед першим комітом git має знати, хто ти (один раз на комп'ютер):</p>
+<pre><code>git config --global user.name &quot;Твоє Імʼя Прізвище&quot;
+git config --global user.email &quot;твоя@пошта&quot;
+</code></pre>
+<p><strong>.gitignore</strong> - файл зі списком того, що git не чіпає. Для Python:</p>
+<pre><code>.venv/
+__pycache__/
+*.png
+</code></pre>
+<p><strong>Коли комітити:</strong> кожне завдання лаби, що проходить doctest, - коміт. Перед великими правками
+(<code>black</code>, переписування функції) - коміт.</p>
+<p>GitHub - сайт, куди можна вивантажити репозиторій (<code>git push</code>). Для лаб не обовʼязково; почни з
+локального git.</p>
+<h3 id="руками-10-хв">Руками (10 хв)</h3>
+<pre><code>cd ~/univer/praktyka
+mkdir den9 &amp;&amp; cd den9
+git init
+printf 'def double(x: int) -&gt; int:\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; double(4)\n    8\n    &quot;&quot;&quot;\n    return x * 2\n' &gt; lab.py
+git status                      # lab.py червоний: untracked
+git add lab.py
+git status                      # зелений: буде в коміті
+git commit -m &quot;Функція double&quot;
+git log --oneline
+printf '.venv/\n__pycache__/\n' &gt; .gitignore
+git add .gitignore
+git commit -m &quot;gitignore&quot;
+sed -i 's/x \* 2/x * 3/' lab.py         # «зламали» код
+python3 -m doctest lab.py              # Failed: Expected 8, Got 12
+git diff                               # видно, що змінилось
+git restore lab.py                     # повернули
+python3 -m doctest lab.py              # тиша - знову все добре
+git log --oneline
+</code></pre>
+<p>Для ЛР4 (один раз):</p>
+<pre><code>cd ~/univer/labs/ЛР4
+git init
+printf '.venv/\n__pycache__/\n*.png\n' &gt; .gitignore
+</code></pre>
+<p>і після кожного готового завдання <code>git add .</code> і <code>git commit -m "Завдання 1"</code>.</p>
+<p>Кириличні назви файлів <code>git status</code> може показувати як <code>\320\233\320\240...</code>. Лікується один раз:
+<code>git config --global core.quotepath false</code> (скрипт установки це вже зробив).</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li><code>Author identity unknown</code> при коміті - не зроблено <code>git config --global user.name/email</code>.</li>
+<li><code>git commit</code> без <code>-m</code> - відкриється редактор (nano або vim). З vim вийти: Esc, потім <code>:q!</code> і Enter.</li>
+<li>Забув <code>git add</code> - коміт «nothing to commit» або без потрібного файлу. Дивись <code>git status</code>.</li>
+<li><code>git init</code> у домашній теці <code>~</code> - тоді git бачить усе підряд. Роби в теці конкретної лаби.</li>
+<li>Додав <code>.venv</code> у git - тисячі файлів. Спершу <code>.gitignore</code>.</li>
+<li><code>git restore</code> назавжди скасовує <strong>незакомічені</strong> зміни файлу. Перед ним глянь <code>git diff</code>.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Яка послідовність команд зберігає зміни у git?</li>
+<li>Як подивитися, що змінилося з останнього коміту?</li>
+<li>Ти зіпсував <code>lab.py</code> і ще не комітив. Як повернути?</li>
+<li>Навіщо <code>.gitignore</code> і що в нього писати для Python?</li>
+<li>Що означає <code>Author identity unknown</code>?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>git add файл</code> (або <code>git add .</code>), потім <code>git commit -m "опис"</code>.</li>
+<li><code>git diff</code> (а <code>git status</code> - які файли).</li>
+<li><code>git restore lab.py</code> - файл стане таким, як в останньому коміті.</li>
+<li>Щоб git не зберігав зайве: <code>.venv/</code>, <code>__pycache__/</code>, картинки-результати.</li>
+<li>git не знає імені та пошти автора. <code>git config --global user.name "Твоє Імʼя Прізвище"</code> і <code>user.email "..."</code>.</li>
+</ol>
+</details>

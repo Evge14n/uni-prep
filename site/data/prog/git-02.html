@@ -1,0 +1,248 @@
+<h1 id="тема-2-встановлення-на-mint-і-git-config">Тема 2. Встановлення на Mint і git config</h1>
+<p><strong>Навіщо:</strong> перш ніж зробити перший коміт ЛР1, git має бути встановлений і знати, хто ти. Налаштування робиться один раз на ноутбук, а потім працює в усіх лабах.</p>
+<h3 id="коротко">Коротко</h3>
+<p>На Linux Mint 22.3 git <strong>не стоїть з коробки</strong>. Ставиш його з репозиторію Mint (<code>apt</code>). Програму <code>gh</code> (GitHub з терміналу, урок 16) ставиш <strong>з офіційного репозиторію GitHub</strong>, а не з Mint: у Mint лежить стара версія 2.45, і вона зламана (частина команд падає з помилкою, бо GitHub прибрав старий API).</p>
+<p><strong>git config</strong> - це налаштування git. <code>--global</code> означає «для мене на цьому ноутбуці»: усе пишеться у файл <code>~/.gitconfig</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Налаштування</th>
+<th>Що дає</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user.name "Твоє Імʼя"</code></td>
+<td>імʼя автора в кожному коміті</td>
+</tr>
+<tr>
+<td><code>user.email "128326252+Evge14n@users.noreply.github.com"</code></td>
+<td>пошта автора; noreply - щоб справжня пошта не світилась у публічних комітах, а GitHub все одно привʼязав коміти до <code>Evge14n</code></td>
+</tr>
+<tr>
+<td><code>init.defaultBranch main</code></td>
+<td>нові репо одразу з гілкою <code>main</code>, як на GitHub (без цього буде <code>master</code> і довга підказка)</td>
+</tr>
+<tr>
+<td><code>core.editor nano</code></td>
+<td>коли git просить написати текст (довге повідомлення коміту), відкривається nano, а не vim</td>
+</tr>
+<tr>
+<td><code>pull.rebase false</code></td>
+<td><code>git pull</code> при розбіжностях робить злиття (урок 08-09), а не падає з помилкою</td>
+</tr>
+<tr>
+<td><code>core.quotepath false</code></td>
+<td>кириличні назви файлів видно як <code>звіт.txt</code>, а не <code>"\320\267\320\262..."</code></td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-text">git config --global ...   →   ~/.gitconfig   (твій файл налаштувань, звичайний текст)
+git config --global --list           - показати все
+git config --list --show-origin      - показати все і З ЯКОГО ФАЙЛУ кожен рядок
+</code></pre>
+<p>Аналогія: <code>~/.gitconfig</code> - це як підпис і адреса на конверті. Один раз написав - і кожен «лист» (коміт) іде з ними.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li>Ти щойно встановив git і нічого не налаштовував. Що покаже <code>git config --global --list</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Помилку, бо файлу <code>~/.gitconfig</code> ще нема:</p>
+<pre><code class="language-text">fatal: unable to read config file '/home/.../.gitconfig': No such file or directory
+</code></pre>
+<p>(<code>/home/...</code> - це твоя домашня тека.) Це не поломка: файл зʼявиться після першого <code>git config --global</code>.</p>
+</details>
+<ol start="2">
+<li>Ти пропустив <code>init.defaultBranch main</code> і робиш <code>git init</code>. Що буде?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Репо створиться, але з гілкою <code>master</code> і довгою підказкою:</p>
+<pre><code class="language-text">hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint: 
+hint:   git config --global init.defaultBranch &lt;name&gt;
+hint: 
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint: 
+hint:   git branch -m &lt;name&gt;
+Initialized empty Git repository in /home/.../proba/.git/
+</code></pre>
+</details>
+<ol start="3">
+<li>Ти помилився в слові і набрав <code>git config --global user.nmae "Твоє Імʼя"</code>. git скаже помилку?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Ні, мовчки збереже. git не знає всіх можливих ключів, тому <code>user.nmae</code> для нього - просто ще один рядок. Видно його лише в <code>git config --global --list</code>. Як прибрати - в «Типові помилки».</p>
+</details>
+<ol start="4">
+<li>Що покаже <code>git config user.name</code> (без <code>--global</code>)?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p><code>Твоє Імʼя</code>. Без <code>--global</code> git читає налаштування з усіх рівнів (системний, твій, репо) і показує підсумкове значення.</p>
+</details>
+<h3 id="руками">Руками</h3>
+<p><strong>Крок 1. git.</strong> Пароль <code>sudo</code> - твій пароль входу в Mint (символи не видно, це нормально).</p>
+<pre><code class="language-bash">sudo apt update
+sudo apt install git
+git --version
+</code></pre>
+<pre><code class="language-text">git version 2.43.0
+</code></pre>
+<p><strong>Крок 2. gh з офіційного репозиторію GitHub.</strong> Скопіюй блок цілком (це один довгий рядок, розбитий <code>\</code>), встав у термінал (Ctrl+Shift+V) і натисни Enter. Сніпет дослівно з документації gh (<code>docs/install_linux.md</code>, 18.11.2026): він додає ключ і адресу репозиторію GitHub, а потім ставить <code>gh</code>.</p>
+<pre><code class="language-bash">(type -p wget &gt;/dev/null || (sudo apt update &amp;&amp; sudo apt install wget -y)) \
+    &amp;&amp; sudo mkdir -p -m 755 /etc/apt/keyrings \
+    &amp;&amp; out=$(mktemp) &amp;&amp; wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    &amp;&amp; cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg &gt; /dev/null \
+    &amp;&amp; sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    &amp;&amp; sudo mkdir -p -m 755 /etc/apt/sources.list.d \
+    &amp;&amp; echo &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main&quot; | sudo tee /etc/apt/sources.list.d/github-cli.list &gt; /dev/null \
+    &amp;&amp; sudo apt update \
+    &amp;&amp; sudo apt install gh -y
+</code></pre>
+<p>Перевір версію і звідки вона:</p>
+<pre><code class="language-bash">gh version
+apt-cache policy gh
+</code></pre>
+<pre><code class="language-text">gh version 2.105.0 (2026-11-17)
+https://github.com/cli/cli/releases/tag/v2.105.0
+</code></pre>
+<pre><code class="language-text">gh:
+  Installed: 2.105.0
+  Candidate: 2.105.0
+  Version table:
+ *** 2.105.0 500
+        500 https://cli.github.com/packages stable/main amd64 Packages
+        100 /var/lib/dpkg/status
+     2.45.0-1ubuntu0.3 500
+        500 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages
+        500 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages
+     2.45.0-1build1 500
+        500 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages
+</code></pre>
+<p>Зірочки <code>***</code> стоять біля версії з <code>cli.github.com</code> - так і треба. Нижче видно ту саму зламану 2.45.0 з репозиторію Ubuntu (на Mint замість <code>archive.ubuntu.com</code> може бути дзеркало). Твоя версія gh може бути новішою за 2.105.0 - це нормально. Оновлюється gh потім разом з усією системою (<code>sudo apt upgrade</code> або Менеджер оновлень).</p>
+<p><strong>Крок 3. Налаштування.</strong> Спершу глянь, що їх ще нема (буде помилка з «Передбач» 1), потім шість рядків:</p>
+<pre><code class="language-bash">git config --global --list
+git config --global user.name &quot;Твоє Імʼя&quot;
+git config --global user.email &quot;128326252+Evge14n@users.noreply.github.com&quot;
+git config --global init.defaultBranch main
+git config --global core.editor nano
+git config --global pull.rebase false
+git config --global core.quotepath false
+git config --global --list
+</code></pre>
+<pre><code class="language-text">user.name=Твоє Імʼя
+user.email=128326252+Evge14n@users.noreply.github.com
+init.defaultbranch=main
+core.editor=nano
+core.quotepath=false
+pull.rebase=false
+</code></pre>
+<p>Зверни увагу: <code>init.defaultBranch</code> git показує малими літерами (<code>defaultbranch</code>) - назви ключів для git нечутливі до регістру.</p>
+<p><strong>Крок 4. Звідки взялось кожне налаштування.</strong> Запускай з домашньої теки (<code>cd ~</code>), не з репо:</p>
+<pre><code class="language-bash">cd ~
+git config --list --show-origin
+</code></pre>
+<pre><code class="language-text">file:/home/.../.gitconfig   user.name=Твоє Імʼя
+file:/home/.../.gitconfig   user.email=128326252+Evge14n@users.noreply.github.com
+file:/home/.../.gitconfig   init.defaultbranch=main
+file:/home/.../.gitconfig   core.editor=nano
+file:/home/.../.gitconfig   core.quotepath=false
+file:/home/.../.gitconfig   pull.rebase=false
+</code></pre>
+<p>Якщо запустити це всередині репо, внизу додадуться рядки <code>file:.git/config</code> - налаштування саме цього репо. <code>--show-origin</code> рятує, коли «я ж налаштував, а git робить інакше»: видно, який файл перебиває.</p>
+<p><strong>Крок 5. Сам файл</strong> - звичайний текст, його можна відкрити й у nano:</p>
+<pre><code class="language-bash">cat ~/.gitconfig
+git config user.name
+</code></pre>
+<pre><code class="language-text">[user]
+    name = Твоє Імʼя
+    email = 128326252+Evge14n@users.noreply.github.com
+[init]
+    defaultBranch = main
+[core]
+    editor = nano
+    quotepath = false
+[pull]
+    rebase = false
+</code></pre>
+<pre><code class="language-text">Твоє Імʼя
+</code></pre>
+<p><strong>Мова виводу.</strong> Курс показує вивід git англійською (так у перевірці і в більшості інструкцій в інтернеті). Пакет git в Ubuntu 24.04 сам не містить перекладів (перевірено: <code>dpkg -L git</code> - нуль файлів <code>.mo</code>), але на Mint з українською мовою переклад може прийти з мовного пакета, і тоді git писатиме українською (не перевірено на ноутбуці). Якщо так і хочеш англійською як у курсі - додавай <code>LANG=C</code> перед командою:</p>
+<pre><code class="language-text">LANG=C git status
+</code></pre>
+<p><strong>Для лаб:</strong> після цього уроку кожен коміт у <code>~/univer/labs</code> буде підписаний «Твоє Імʼя» і noreply-поштою, а нові репо лаб одразу будуть з гілкою <code>main</code> - такою ж, як на GitHub, тож при першому <code>git push</code> (урок 09) нічого не доведеться перейменовувати.</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<p><strong>1. Коміт без налаштувань - <code>Author identity unknown</code>.</strong> Ти це вже бачив у курсі Linux (День 09). Повний текст:</p>
+<pre><code class="language-text">Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email &quot;you@example.com&quot;
+  git config --global user.name &quot;Your Name&quot;
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: empty ident name (for &lt;evgen@...&gt;) not allowed
+</code></pre>
+<p>Замість <code>...</code> git підставить імʼя твого компʼютера. Останній рядок <code>fatal: ...</code> залежить від компʼютера: на Mint там може бути <code>unable to auto-detect email address</code> (не перевірено на ноутбуці). Лікування одне - крок 3.</p>
+<p><strong>2. Помилка в назві ключа.</strong> <code>user.nmae</code> збереглося мовчки (див. «Передбач» 3). Видно в списку:</p>
+<pre><code class="language-text">user.name=Твоє Імʼя
+user.email=128326252+Evge14n@users.noreply.github.com
+user.nmae=Твоє Імʼя
+init.defaultbranch=main
+...
+</code></pre>
+<p>Прибрати зайвий рядок:</p>
+<pre><code class="language-bash">git config --global --unset user.nmae
+</code></pre>
+<p><strong>3. Пропустив крапку в ключі</strong> (<code>git config --global user "Імʼя"</code>):</p>
+<pre><code class="language-text">error: key does not contain a section: user
+</code></pre>
+<p>Ключ завжди <code>розділ.назва</code>: <code>user.name</code>, <code>core.editor</code>.</p>
+<p><strong>4. gh з репозиторію Mint.</strong> Якщо поставити <code>sudo apt install gh</code> без кроку 2, стане 2.45.0, і, наприклад, <code>gh pr view</code> падає з <code>GraphQL: Projects (classic) is being deprecated ...</code> (перевірено 18.11.2026 у Ubuntu 24.04, див. ФАКТИ). Лікування: виконати сніпет з кроку 2 - apt сам оновить gh до версії з <code>cli.github.com</code>.</p>
+<p><strong>5. Справжня пошта замість noreply.</strong> Коміти з <code>user.email</code> = особиста пошта після <code>git push</code> у публічний репо видно всім. Постав noreply (крок 3) до першого коміту.</p>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li><strong>noreply-пошта і приховування пошти.</strong> На сайті: аватарка → Settings → Emails → галочка «Keep my email addresses private». Тоді GitHub сам підставляє noreply-адресу в коміти, зроблені на сайті (docs.github.com, «Setting your commit email address»).</li>
+<li><strong>gh лише з офіційного репозиторію</strong> - так радять самі автори gh з листопада 2025: версії 2.45/2.46 з репозиторіїв дистрибутивів зламані (cli/cli, <code>docs/install_linux.md</code>).</li>
+<li><strong>Конфіг тримають коротким і знають, де він.</strong> <code>git config --list --show-origin</code> - перша команда, коли щось поводиться дивно. Відкрити весь файл у редакторі: <code>git config --global --edit</code> (відкриється nano, бо <code>core.editor</code>).</li>
+<li><strong>Корисні додаткові налаштування</strong>, які часто вмикають (обидва ключі є в git 2.43 - перевірено <code>git help --config</code>):</li>
+<li><code>push.autoSetupRemote true</code> - перший <code>git push</code> нової гілки сам звʼязує її з GitHub (в уроці 09 ти робитимеш це руками через <code>push -u</code>, щоб розуміти, що відбувається);</li>
+<li><code>commit.verbose true</code> - у nano під час коміту видно, що саме ти комітиш.</li>
+<li><strong>Одна пошта на всі репо.</strong> Якщо пошта в комітах різна, GitHub не привʼяже частину комітів до профілю. Тому <code>user.email</code> - глобально, а не в кожному репо окремо.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чому <code>gh</code> ставлять не з репозиторію Mint, а з <code>cli.github.com</code>?</li>
+<li>У який файл пише <code>git config --global</code> і як його подивитись?</li>
+<li>Навіщо <code>init.defaultBranch main</code>?</li>
+<li>Що робить <code>--show-origin</code> і коли він допоможе?</li>
+<li>Ти випадково записав <code>user.nmae</code>. Як це помітити і як прибрати?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>У Mint (Ubuntu 24.04) лежить gh 2.45.0, і він зламаний: частина команд падає, бо GitHub прибрав старий API. Автори gh радять офіційний репозиторій.</li>
+<li>У <code>~/.gitconfig</code>. Подивитись: <code>git config --global --list</code> або <code>cat ~/.gitconfig</code>.</li>
+<li>Щоб нові репо одразу мали гілку <code>main</code>, як на GitHub, і git не писав довгу підказку про <code>master</code>.</li>
+<li>Показує біля кожного налаштування файл, з якого воно взялось. Допомагає, коли налаштування з репо (<code>.git/config</code>) перебиває твоє глобальне.</li>
+<li>Видно в <code>git config --global --list</code> (зайвий рядок <code>user.nmae=...</code>). Прибрати: <code>git config --global --unset user.nmae</code>.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Pro Git, 1.6 «First-Time Git Setup» - https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup (відкрито 18.11.2026)</li>
+<li>git config - https://git-scm.com/docs/git-config (відкрито 18.11.2026)</li>
+<li>GitHub CLI, встановлення на Linux - https://github.com/cli/cli/blob/trunk/docs/install_linux.md (відкрито 18.11.2026)</li>
+<li>Setting your commit email address - https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address (відкрито 18.11.2026)</li>
+<li>Вивід команд - запуск у перевірці <code>_перевірка/u02.sh</code> (git 2.43.0, Ubuntu 24.04, 18.11.2026)</li>
+</ul>

@@ -1,0 +1,260 @@
+<h1 id="тема-1-що-таке-git-і-github">Тема 1. Що таке git і GitHub</h1>
+<p><strong>Навіщо:</strong> у ЛР2 ти переписав функцію, doctest упав, а як було до того, вже не памʼятаєш. git зберігає кожен робочий стан лаби, і до нього можна повернутись. GitHub потрібен, щоб ці стани жили ще й в інтернеті: не пропадуть разом з ноутбуком, і їх можна показати викладачу.</p>
+<h3 id="коротко">Коротко</h3>
+<p>У Дні 09 курсу Linux ти вже робив <code>git init</code>, <code>add</code>, <code>commit</code>. Тепер розберемо, <strong>що саме</strong> при цьому відбувається.</p>
+<ul>
+<li><strong>Репозиторій (репо)</strong> - тека проєкту плюс схована тека <code>.git</code> у ній. У <code>.git</code> git тримає всю історію.</li>
+<li><strong>Коміт</strong> - знімок усіх файлів, за якими стежить git, у певний момент. До знімка додається: хто зробив, коли, повідомлення і посилання на попередній коміт (його називають «батько»). git зберігає саме знімки, а не список змін (Pro Git, 1.3).</li>
+<li><strong>Хеш</strong> - імʼя коміту: 40 символів з <code>0-9</code> і <code>a-f</code>, наприклад <code>4528870a15aba5fc1ba92936c47546f163136254</code>. Він рахується з усього вмісту коміту, тому будь-яка зміна дає інший хеш. Зазвичай досить перших 7 символів: <code>4528870</code>.</li>
+<li><strong>Три зони</strong> (Pro Git 1.3: working tree, staging area, Git directory):</li>
+</ul>
+<pre><code class="language-text"> робоча тека              індекс (staging area)        репозиторій (.git)
+ файли, які ти правиш     що піде в наступний коміт    історія комітів
+
+   lr1.py  ──git add──►    lr1.py  ──git commit──►    076d5fc ◄── 4528870
+                                                       (батько)    (новий)
+</code></pre>
+<p>Аналогія: фото групи. Робоча тека - люди в кімнаті. <code>git add</code> - покликати когось у кадр (індекс). <code>git commit</code> - клацнути фото і підписати його. Альбом фото - репозиторій. Хто не став у кадр, на фото не потрапить, навіть якщо стоїть у кімнаті.</p>
+<p><code>git status --short</code> показує ці зони двома літерами: <strong>ліва - індекс, права - робоча тека</strong> (git-scm.com/docs/git-status).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Вивід</th>
+<th>Що значить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>?? lr1.py</code></td>
+<td>новий файл, git за ним ще не стежить</td>
+</tr>
+<tr>
+<td><code>A  lr1.py</code></td>
+<td>новий файл додано в індекс (A - added)</td>
+</tr>
+<tr>
+<td><code>M lr1.py</code></td>
+<td>файл змінено в робочій теці, в індекс ще не додано</td>
+</tr>
+<tr>
+<td><code>M  lr1.py</code></td>
+<td>зміну додано в індекс, піде в коміт</td>
+</tr>
+<tr>
+<td><code>MM lr1.py</code></td>
+<td>частину змін додано в індекс, а потім файл змінили ще раз</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>git і GitHub - різні речі:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>git</th>
+<th>GitHub</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Що це</td>
+<td>програма на твоєму ноутбуці</td>
+<td>сайт, сервіс компанії GitHub</td>
+</tr>
+<tr>
+<td>Інтернет</td>
+<td>не потрібен</td>
+<td>потрібен</td>
+</tr>
+<tr>
+<td>Що робить</td>
+<td>коміти, історія, гілки</td>
+<td>зберігає копію репо, Issues, Pull Request, сайти (Pages)</td>
+</tr>
+<tr>
+<td>Як керувати</td>
+<td>команди <code>git ...</code></td>
+<td>сайт або команди <code>gh ...</code> (урок 16)</td>
+</tr>
+</tbody>
+</table></div>
+<p>git працює і без GitHub. GitHub - лише одне з місць, куди можна відправити копію репо (є ще GitLab, Codeberg; git той самий).</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<p>Спершу подумай, потім глянь відповідь, потім перевір у терміналі (розділ «Руками»).</p>
+<ol>
+<li>У новому репо створили <code>lr1.py</code>. Що покаже <code>git status --short</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">?? lr1.py
+</code></pre>
+<p>git бачить файл, але ще не стежить за ним.</p>
+</details>
+<ol start="2">
+<li>Файл уже в коміті. Його змінили, зробили <code>git add lr1.py</code>, а потім змінили ще раз. Що покаже <code>git status --short</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">MM lr1.py
+</code></pre>
+<p>Ліва <code>M</code> - перша зміна в індексі. Права <code>M</code> - друга зміна, лише в робочій теці.</p>
+</details>
+<ol start="3">
+<li>У цьому стані (<code>MM</code>) робиш <code>git commit -m "Завдання 1"</code>. Що покаже <code>git status --short</code> після коміту?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text"> M lr1.py
+</code></pre>
+<p>У коміт пішло лише те, що було в індексі. Друга зміна лишилась у робочій теці.</p>
+</details>
+<ol start="4">
+<li>Що покаже <code>git remote -v</code> у репо, створеному через <code>git init</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Нічого (порожньо). Репо живе лише на ноутбуці, GitHub про нього не знає. Звʼязок з GitHub - уроки 03 і 09.</p>
+</details>
+<h3 id="руками">Руками</h3>
+<p>Потрібен встановлений і налаштований git (урок 02). Працюємо в окремій теці, яку не шкода.</p>
+<p><strong>Крок 1. Перший знімок.</strong></p>
+<pre><code class="language-bash">mkdir ~/git-urok01
+cd ~/git-urok01
+git init
+git status
+printf 'print(&quot;ЛР1&quot;)\n' &gt; lr1.py
+git status --short
+git add lr1.py
+git status --short
+git commit -m &quot;Додай lr1.py&quot;
+</code></pre>
+<pre><code class="language-text">Initialized empty Git repository in /home/.../git-urok01/.git/
+</code></pre>
+<pre><code class="language-text">On branch main
+
+No commits yet
+
+nothing to commit (create/copy files and use &quot;git add&quot; to track)
+</code></pre>
+<pre><code class="language-text">?? lr1.py
+</code></pre>
+<pre><code class="language-text">A  lr1.py
+</code></pre>
+<pre><code class="language-text">[main (root-commit) 076d5fc] Додай lr1.py
+ 1 file changed, 1 insertion(+)
+ create mode 100644 lr1.py
+</code></pre>
+<p><code>/home/...</code> - твоя домашня тека. <code>root-commit</code> - перший коміт, у нього нема батька. <code>076d5fc</code> - короткий хеш. <strong>У тебе хеші будуть інші</strong> (у знімок входить час), так буде в усьому курсі.</p>
+<p><strong>Крок 2. Три зони в дії.</strong></p>
+<pre><code class="language-bash">printf 'print(&quot;ЛР1, завд. 1&quot;)\n' &gt; lr1.py
+git status --short
+git add lr1.py
+git status --short
+printf 'print(&quot;ЛР1, завд. 2&quot;)\n' &gt;&gt; lr1.py
+git status --short
+git status
+</code></pre>
+<pre><code class="language-text"> M lr1.py
+</code></pre>
+<pre><code class="language-text">M  lr1.py
+</code></pre>
+<pre><code class="language-text">MM lr1.py
+</code></pre>
+<pre><code class="language-text">On branch main
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+    modified:   lr1.py
+
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+    modified:   lr1.py
+
+</code></pre>
+<p>Той самий файл - у двох списках. «Changes to be committed» - індекс, «Changes not staged» - робоча тека.</p>
+<pre><code class="language-bash">git commit -m &quot;Завдання 1&quot;
+git status --short
+git log --oneline
+</code></pre>
+<pre><code class="language-text">[main 4528870] Завдання 1
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+</code></pre>
+<pre><code class="language-text"> M lr1.py
+</code></pre>
+<pre><code class="language-text">4528870 (HEAD -&gt; main) Завдання 1
+076d5fc Додай lr1.py
+</code></pre>
+<p><code>(HEAD -&gt; main)</code> - ярлик: ти стоїш на гілці <code>main</code>, і вона зараз на цьому коміті (гілки - урок 07). Такі ярлики git друкує лише в терміналі; якщо вивід іде в трубу (<code>git log --oneline | cat</code>), їх нема.</p>
+<p><strong>Крок 3. Що всередині коміту.</strong></p>
+<pre><code class="language-bash">git rev-parse HEAD
+git cat-file -p HEAD
+</code></pre>
+<pre><code class="language-text">4528870a15aba5fc1ba92936c47546f163136254
+</code></pre>
+<pre><code class="language-text">tree 35fa5b63979c4c22106bff356b4fa98889fdefd0
+parent 076d5fc68c220f4d10a4de0aa617daee0d6599ce
+author Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt; 1794996982 +0000
+committer Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt; 1794996982 +0000
+
+Завдання 1
+</code></pre>
+<p><code>HEAD</code> - «коміт, на якому ти зараз». <code>rev-parse</code> показує його повний хеш (40 символів). <code>cat-file -p</code> показує сам коміт: <code>tree</code> - знімок файлів, <code>parent</code> - батько (попередній коміт), далі автор, час і повідомлення. Час записано числом секунд від 1 січня 1970 року, <code>+0000</code> - часовий пояс (на ноутбуці в Україні буде <code>+0200</code> взимку і <code>+0300</code> влітку).</p>
+<p><strong>Крок 4. git без GitHub.</strong></p>
+<pre><code class="language-bash">git remote -v
+</code></pre>
+<p>Вивід порожній - цей репо ніде, крім ноутбука, не існує.</p>
+<p><strong>Для лаб:</strong> кожне готове завдання ЛР - окремий коміт. Завдяки індексу можна закомітити лише <code>lr2.py</code>, а чернетку <code>proba.py</code> поруч не чіпати. А GitHub (урок 03 і далі) - щоб лаби не зникли з ноутбуком і щоб дати викладачу посилання.</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<p><strong>1. Команда git не в репо.</strong></p>
+<pre><code class="language-text">fatal: not a git repository (or any of the parent directories): .git
+</code></pre>
+<p>Ти в теці, де нема <code>.git</code> (наприклад, у <code>~</code>). Перейди в теку репо (<code>cd ~/git-urok01</code>) або створи репо <code>git init</code>.</p>
+<p><strong>2. «Закомітив, а зміни лишились».</strong> Після коміту <code>git status --short</code> показує <code>M lr1.py</code>. Коміт бере лише те, що в індексі. Зроби <code>git add lr1.py</code> і ще один коміт.</p>
+<p><strong>3. «Я закомітив - значить, воно на GitHub».</strong> Ні. Коміт - на ноутбуці. У репо без звʼязку з GitHub <code>git push</code> скаже:</p>
+<pre><code class="language-text">fatal: No configured push destination.
+Either specify the URL from the command-line or configure a remote repository using
+
+    git remote add &lt;name&gt; &lt;url&gt;
+
+and then push using the remote name
+
+    git push &lt;name&gt;
+
+</code></pre>
+<p>Звʼязати репо з GitHub - уроки 03 і 09.</p>
+<p><strong>4. Ctrl+O у nano - це не коміт.</strong> nano зберігає файл у робочу теку. Щоб він потрапив в історію, потрібні <code>git add</code> і <code>git commit</code>.</p>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li><strong>Спершу модель, потім команди.</strong> MIT Missing Semester 2026 починає git саме з моделі даних: знімки, обʼєкти, хеші, посилання - бо тоді команди стають зрозумілими (missing.csail.mit.edu).</li>
+<li><strong><code>git status</code> перед кожним <code>add</code> і <code>commit</code></strong> - звичка, яка рятує від «закомітив не те».</li>
+<li><strong>Малі коміти:</strong> одна думка - один коміт («make each commit a logically separate changeset», Pro Git 5.2).</li>
+<li><strong>git один, хостингів багато:</strong> GitHub, GitLab, Codeberg. Команди git ті самі, різниться лише сайт.</li>
+<li><strong>Pro Git є українською:</strong> https://git-scm.com/book/uk/v2 - розділ 1.3 «Основи Git» якраз про знімки і три зони.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Що таке коміт і що в нього входить, крім файлів?</li>
+<li>Назви три зони git і команди, які переносять файл між ними.</li>
+<li>Що означає <code>MM lr1.py</code> у <code>git status --short</code>?</li>
+<li>Чим git відрізняється від GitHub? Чи можна працювати з git без інтернету?</li>
+<li>Чому в тебе і в уроці різні хеші коміту «Додай lr1.py», хоча файл однаковий?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Знімок усіх відстежуваних файлів. Ще: автор, час, повідомлення і посилання на батька (попередній коміт).</li>
+<li>Робоча тека → <code>git add</code> → індекс → <code>git commit</code> → репозиторій (<code>.git</code>).</li>
+<li>Частина змін файлу вже в індексі (ліва <code>M</code>), а після <code>git add</code> файл змінили ще раз (права <code>M</code>).</li>
+<li>git - програма на ноутбуці, GitHub - сайт, де зберігається копія репо, плюс Issues, Pull Request, Pages. З git можна працювати без інтернету; інтернет потрібен лише для обміну з GitHub.</li>
+<li>Хеш рахується з усього коміту, а туди входять ще час і автор. Інший час → інший хеш.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Pro Git, 1.3 «What is Git?» - https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F (відкрито 18.11.2026)</li>
+<li>Pro Git українською - https://git-scm.com/book/uk/v2 (відкрито 18.11.2026)</li>
+<li>git status, короткий формат - https://git-scm.com/docs/git-status (відкрито 18.11.2026)</li>
+<li>MIT Missing Semester 2026, «Version Control and Git» - https://missing.csail.mit.edu/2026/version-control/ (відкрито 18.11.2026, за ФАКТИ-GIT)</li>
+<li>Pro Git, 5.2 «Contributing to a Project» - https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project (відкрито 18.11.2026)</li>
+<li>Вивід команд - запуск у перевірці <code>_перевірка/u01.sh</code> (git 2.43.0, Ubuntu 24.04, 18.11.2026)</li>
+</ul>

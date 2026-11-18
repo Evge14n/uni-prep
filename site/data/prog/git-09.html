@@ -1,0 +1,310 @@
+<h1 id="тема-9-віддалений-репозиторій-remote-push-pull-fetch">Тема 9. Віддалений репозиторій - remote, push, pull, fetch</h1>
+<p><strong>Навіщо:</strong> лаби лежать на ноутбуці. Ноутбук може зламатись, а в аудиторії ти сидиш за іншим ПК. GitHub - копія репо в інтернеті: <code>push</code> відправляє туди твої коміти, <code>pull</code> забирає звідти свіжі (свої з іншого компʼютера або одногрупника).</p>
+<h3 id="коротко">Коротко</h3>
+<p><strong>Remote</strong> (віддалений репозиторій) - адреса іншої копії того самого репо. Після <code>git clone</code> вона вже записана під назвою <strong>origin</strong> («звідки взяв»).</p>
+<p><strong>origin/main</strong> - це <strong>памʼять</strong> твого git про те, що було в <code>main</code> на GitHub, коли ти востаннє з ним говорив. Вона оновлюється лише при <code>fetch</code>, <code>pull</code> і <code>push</code>. Сам по собі git на GitHub не ходить.</p>
+<pre><code class="language-text">          GitHub (origin)
+          A ← B ← C      main
+            ↑         │
+      push  │         │  fetch (копіює C у твій origin/main, файли НЕ чіпає)
+            │         ↓
+Ноутбук:  A ← B      main          origin/main → C
+                      ↑
+                      └─ merge origin/main  (тепер і main → C)
+
+pull = fetch + merge
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git remote -v</code></td>
+<td>показати адреси remote</td>
+</tr>
+<tr>
+<td><code>git remote add origin git@github.com:Evge14n/РЕПО.git</code></td>
+<td>записати адресу (для репо, створеного <code>git init</code>)</td>
+</tr>
+<tr>
+<td><code>git push -u origin main</code></td>
+<td>перший пуш гілки: відправити і запамʼятати «main ↔ origin/main»</td>
+</tr>
+<tr>
+<td><code>git push</code></td>
+<td>відправити нові коміти (після <code>-u</code> - без аргументів)</td>
+</tr>
+<tr>
+<td><code>git fetch</code></td>
+<td>забрати чужі коміти в <code>origin/main</code>, свої файли не чіпати</td>
+</tr>
+<tr>
+<td><code>git log --oneline main..origin/main</code></td>
+<td>що є на GitHub, чого нема в мене</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td><code>fetch</code> + <code>merge</code> одним махом</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td><code>ahead</code> - у мене є непушнуті коміти; <code>behind</code> - на GitHub є нові</td>
+</tr>
+</tbody>
+</table></div>
+<p>Аналогія: GitHub - спільна дошка оголошень. <code>push</code> - повісив свій листок. <code>fetch</code> - сфотографував дошку (у себе нічого не переписав). <code>pull</code> - сфотографував і переписав нове в зошит.</p>
+<h3 id="пісочниця">Пісочниця</h3>
+<p>Потрібні два клони одного приватного репо: <code>~/pisochnytsia</code> (урок 03) і <code>~/druhyi-klon</code> (урок 08, там <code>git config user.name "Друг"</code>). Немає другого - <code>git clone git@github.com:Evge14n/pisochnytsia.git ~/druhyi-klon</code>, потім у ньому <code>git config user.name "Друг"</code>.</p>
+<p>Твої хеші і кількість комітів будуть інші, ніж тут: у прикладі на GitHub спершу лише один коміт <code>Initial commit</code>.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li>Ти зробив коміт і ще не пушив. Що скаже <code>git status</code>? (Перевіриш у кроці 2.)</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">Your branch is ahead of 'origin/main' by 1 commit.
+  (use &quot;git push&quot; to publish your local commits)
+</code></pre>
+<p><code>ahead</code> - ти попереду GitHub на 1 коміт.</p>
+</details>
+<ol start="2">
+<li>Одногрупник щойно запушив коміт. Ти в <code>~/pisochnytsia</code> пишеш <code>git status</code>, без <code>fetch</code>. Що буде? (Крок 3.)</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">Your branch is up to date with 'origin/main'.
+</code></pre>
+<p>Неправда, але чесна: git порівнює з <strong>памʼяттю</strong> <code>origin/main</code>, а вона стара. Щоб дізнатись правду - <code>git fetch</code>, потім <code>git status</code>.</p>
+</details>
+<ol start="3">
+<li>І ти, і одногрупник зробили по коміту, він запушив першим. Ти пишеш <code>git push</code>. Що буде? (Крок 4.)</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Відмова <code>! [rejected] ... (fetch first)</code>: на GitHub є коміт, якого нема в тебе, і git не дасть його затерти. Спершу <code>git pull</code>, потім <code>git push</code>.</p>
+</details>
+<h3 id="руками">Руками</h3>
+<p><strong>Крок 1. Куди дивиться origin.</strong></p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+git remote -v
+git branch -vv
+</code></pre>
+<pre><code class="language-text">origin  git@github.com:Evge14n/pisochnytsia.git (fetch)
+origin  git@github.com:Evge14n/pisochnytsia.git (push)
+</code></pre>
+<pre><code class="language-text">* main ff89247 [origin/main] Initial commit
+</code></pre>
+<p><code>[origin/main]</code> - твоя <code>main</code> «стежить» за <code>origin/main</code> (так налаштував <code>git clone</code>). Тому <code>git push</code> і <code>git pull</code> працюють без аргументів.</p>
+<p><strong>Крок 2. ahead → push.</strong></p>
+<pre><code class="language-bash">printf 'Нотатки з git\n' &gt; notatky.txt
+git add notatky.txt
+git commit -m &quot;Нотатки&quot;
+git status
+git push
+</code></pre>
+<pre><code class="language-text">On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use &quot;git push&quot; to publish your local commits)
+
+nothing to commit, working tree clean
+</code></pre>
+<pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
+   ff89247..f405170  main -&gt; main
+</code></pre>
+<p><code>ff89247..f405170 main -&gt; main</code> - на GitHub <code>main</code> пересунули з коміту <code>ff89247</code> на <code>f405170</code>. (У терміналі над цим ще будуть рядки прогресу <code>Enumerating objects...</code>: git показує прогрес, коли вивід іде на екран (git-scm.com/docs/git-push, <code>--progress</code>). Це нормально.) Тепер <code>git status</code> скаже <code>Your branch is up to date with 'origin/main'.</code></p>
+<p><strong>Крок 3. Одногрупник пушить → fetch → behind.</strong></p>
+<pre><code class="language-bash">cd ~/druhyi-klon
+git pull
+printf 'Привіт від друга\n' &gt; druh.txt
+git add druh.txt
+git commit -m &quot;Привіт від друга&quot;
+git push
+</code></pre>
+<p>Повертаємось до себе:</p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+git status
+git fetch
+git status
+git log --oneline main..origin/main
+</code></pre>
+<p>Перший <code>git status</code> - <code>up to date</code> (див. передбачення 2). Далі:</p>
+<pre><code class="language-text">From github.com:Evge14n/pisochnytsia
+   f405170..15cb00b  main       -&gt; origin/main
+</code></pre>
+<pre><code class="language-text">On branch main
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use &quot;git pull&quot; to update your local branch)
+
+nothing to commit, working tree clean
+</code></pre>
+<pre><code class="language-text">15cb00b (origin/main, origin/HEAD) Привіт від друга
+</code></pre>
+<p><code>main..origin/main</code> читай «що є в origin/main, чого нема в main». Файлу <code>druh.txt</code> у теці ще нема: <code>fetch</code> лише подивився. Тепер можна спокійно вирішити, чи брати. Беремо:</p>
+<pre><code class="language-bash">git merge
+</code></pre>
+<pre><code class="language-text">Updating f405170..15cb00b
+Fast-forward
+ druh.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 druh.txt
+</code></pre>
+<p><code>git merge</code> без назви зливає те, за чим стежить гілка, тобто <code>origin/main</code>. <code>fetch</code> + <code>merge</code> - рівно те, що робить <code>git pull</code>.</p>
+<p><strong>Крок 4. <code>rejected</code> → pull → push.</strong> Обидва комітять, одногрупник пушить першим:</p>
+<pre><code class="language-bash">cd ~/druhyi-klon
+printf 'Ще рядок\n' &gt;&gt; druh.txt
+git commit -am &quot;Друг: ще рядок&quot;
+git push
+cd ~/pisochnytsia
+printf 'Ще нотатка\n' &gt;&gt; notatky.txt
+git commit -am &quot;Ще нотатка&quot;
+git push
+</code></pre>
+<pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
+ ! [rejected]        main -&gt; main (fetch first)
+error: failed to push some refs to 'github.com:Evge14n/pisochnytsia.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+</code></pre>
+<p>Код виходу 1, на GitHub нічого не змінилось. Цікаво: <code>git status</code> зараз усе ще пише <code>ahead of 'origin/main' by 1 commit</code> - памʼять <code>origin/main</code> стара, <code>push</code> її не оновив. Робимо як радить git:</p>
+<pre><code class="language-bash">git pull
+</code></pre>
+<p>Тут файли різні (<code>notatky.txt</code> і <code>druh.txt</code>), тож конфлікту нема, але гілки розійшлись - буде merge-коміт. На Mint відкриється nano з повідомленням <code>Merge branch 'main' of github.com:Evge14n/pisochnytsia</code> - Ctrl+O, Enter, Ctrl+X.</p>
+<pre><code class="language-text">From github.com:Evge14n/pisochnytsia
+   15cb00b..5446a97  main       -&gt; origin/main
+Merge made by the 'ort' strategy.
+ druh.txt | 1 +
+ 1 file changed, 1 insertion(+)
+</code></pre>
+<pre><code class="language-bash">git log --oneline --graph -n 4
+git push
+</code></pre>
+<pre><code class="language-text">*   018be59 (HEAD -&gt; main) Merge branch 'main' of github.com:Evge14n/pisochnytsia
+|\
+| * 5446a97 (origin/main, origin/HEAD) Друг: ще рядок
+* | 38016dd Ще нотатка
+|/
+* 15cb00b Привіт від друга
+</code></pre>
+<pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
+   5446a97..018be59  main -&gt; main
+</code></pre>
+<p>Якби ви правили ті самі рядки - <code>git pull</code> дав би конфлікт, і далі все як в уроці 08.</p>
+<p><strong>Крок 5. Свій репо з нуля → <code>push -u</code>.</strong> Буває навпаки: репо зроблено <code>git init</code> на ноутбуці, а на GitHub його ще нема. Створи на сайті <strong>порожній</strong> приватний репо <code>pisochnytsia-push</code> (кнопка <strong>+</strong> → <strong>New repository</strong>, Private, <strong>без</strong> README, .gitignore і ліцензії - інакше історії не збіжуться). Потім:</p>
+<pre><code class="language-bash">mkdir ~/git-pisochnytsia-09
+cd ~/git-pisochnytsia-09
+git init
+printf 'print(&quot;ЛР1&quot;)\n' &gt; lr1.py
+git add lr1.py
+git commit -m &quot;ЛР1: початок&quot;
+git remote add origin git@github.com:Evge14n/pisochnytsia-push.git
+git push -u origin main
+</code></pre>
+<pre><code class="language-text">To github.com:Evge14n/pisochnytsia-push.git
+ * [new branch]      main -&gt; main
+branch 'main' set up to track 'origin/main'.
+</code></pre>
+<p><code>-u</code> (повністю <code>--set-upstream</code>) - запамʼятати звʼязок <code>main ↔ origin/main</code>. Потрібно один раз на гілку. Далі просто:</p>
+<pre><code class="language-bash">git status
+git push
+</code></pre>
+<pre><code class="language-text">On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+</code></pre>
+<pre><code class="language-text">Everything up-to-date
+</code></pre>
+<p><strong>Для лаб:</strong> репо <code>~/univer/labs</code> живе на GitHub (<code>univer-labs</code>, приватний). Ритуал: сів працювати - <code>git pull</code>; закінчив - <code>git add</code>, <code>git commit</code>, <code>git push</code>. Перед тим як іти з аудиторії, <code>git status</code> має сказати <code>up to date</code>, а не <code>ahead</code> - інакше ЛР лишилась лише на чужому ПК. Удома перед роботою <code>git fetch</code> і <code>git status</code>, щоб побачити, чи не пушив ти щось з університету.</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li><code>! [rejected] main -&gt; main (fetch first)</code> (повний текст у кроці 4) - на GitHub є коміти, яких нема в тебе. Лікування: <code>git pull</code>, за потреби розвʼязати конфлікт (урок 08), <code>git push</code>. <strong>Не</strong> <code>git push --force</code>: він затре чужі коміти на GitHub (урок 12).</li>
+<li>
+<p>Перший <code>git push</code> у новому репо, без <code>-u</code>:
+  ```text
+  fatal: The current branch main has no upstream branch.
+  To push the current branch and set the remote as upstream, use</p>
+<p>git push --set-upstream origin main</p>
+</li>
+</ul>
+<p>To have this happen automatically for branches without a tracking
+  upstream, see 'push.autoSetupRemote' in 'git help config'.
+  <code>Зроби, що написано: `git push -u origin main` (те саме, що `--set-upstream`).
+- `git push`, а remote ще не додано:</code>text
+  fatal: No configured push destination.
+  Either specify the URL from the command-line or configure a remote repository using</p>
+<pre><code>  git remote add &lt;name&gt; &lt;url&gt;
+</code></pre>
+<p>and then push using the remote name</p>
+<pre><code>  git push &lt;name&gt;
+</code></pre>
+<p><code>Спершу `git remote add origin git@github.com:Evge14n/РЕПО.git`.
+- `git remote add origin ...` удруге (код 3):</code>text
+  error: remote origin already exists.
+  <code>Подивись `git remote -v`. Якщо адреса неправильна - `git remote set-url origin` і правильна адреса.
+- `git pull` при розбіжних гілках, а `pull.rebase` не налаштовано (уроку 02 не робив):</code>text
+  hint: You have divergent branches and need to specify how to reconcile them.
+  ...
+  fatal: Need to specify how to reconcile divergent branches.
+  <code>``
+  Один раз:</code>git config --global pull.rebase false<code>(зливати, як у цьому курсі), потім знову</code>git pull`.</p>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li>Не тягнуть наосліп: <code>git fetch</code>, глянути <code>git log --oneline main..origin/main</code> (і <code>git diff main origin/main</code>), потім <code>git merge</code>. Або <code>git pull --ff-only</code> - тягне, лише якщо можна просто перемотати, інакше зупиняється і нічого не зливає (git-scm.com/docs/git-pull).
+  <code>bash
+  git pull --ff-only</code></li>
+<li>Що я ще <strong>не</strong> запушив: <code>git log --oneline origin/main..main</code> (порожньо - усе на GitHub).
+  <code>bash
+  git log --oneline origin/main..main</code></li>
+<li>Щоб не писати <code>-u</code> для кожної нової гілки - <code>push.autoSetupRemote</code> (git-scm.com/docs/git-config; у git 2.43 на Mint працює, перевірено запуском):
+  <code>bash
+  git config --global push.autoSetupRemote true
+  git switch -c lr2
+  git push</code>
+  ```text
+  To github.com:Evge14n/pisochnytsia-push.git</li>
+<li>[new branch]      lr2 -&gt; lr2
+  branch 'lr2' set up to track 'origin/lr2'.
+  ```</li>
+<li>Створити репо на GitHub і одразу запушити поточну теку - одна команда gh (урок 16). Вона робить усе з кроку 5 разом: створює репо, додає <code>origin</code>, пушить. Тут лише зразок, <strong>не запускай</strong> у <code>~/git-pisochnytsia-09</code>: <code>pisochnytsia-push</code> на GitHub уже є, і <code>origin</code> уже додано. Знадобиться для нового проєкту (свіжа тека з <code>git init</code> і комітом, без <code>origin</code>), <code>НАЗВА</code> - назва нового репо:
+  <code>text
+  gh repo create НАЗВА --private --source=. --push</code></li>
+<li>Багато команд ставлять <code>pull.rebase true</code>, щоб історія була прямою, без merge-комітів від <code>pull</code>. Для початку <code>false</code> (злиття) зрозуміліше - його й лишаємо.</li>
+<li><code>--force</code> у спільну гілку не пушать ніколи; якщо справді треба переписати свою гілку - <code>git push --force-with-lease</code> (урок 12).</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Що таке <code>origin</code> і що таке <code>origin/main</code>?</li>
+<li>Чим <code>git fetch</code> відрізняється від <code>git pull</code>?</li>
+<li><code>git status</code> пише <code>ahead of 'origin/main' by 2 commits</code>. Що це значить і що робити?</li>
+<li>Ти отримав <code>! [rejected] main -&gt; main (fetch first)</code>. Твої дії?</li>
+<li>Навіщо <code>-u</code> у <code>git push -u origin main</code> і коли його писати?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>origin</code> - назва адреси репо на GitHub (з <code>git clone</code> або <code>git remote add</code>). <code>origin/main</code> - памʼять твого git про <code>main</code> на GitHub з останнього <code>fetch</code>/<code>pull</code>/<code>push</code>.</li>
+<li><code>fetch</code> лише забирає нові коміти в <code>origin/main</code>, файли не чіпає. <code>pull</code> = <code>fetch</code> + <code>merge</code>, тобто ще й зливає в твою гілку.</li>
+<li>У тебе 2 коміти, яких нема на GitHub. <code>git push</code>.</li>
+<li><code>git pull</code> (якщо конфлікт - розвʼязати, як в уроці 08), потім <code>git push</code>. Не <code>--force</code>.</li>
+<li>Запамʼятати звʼязок гілки з <code>origin/main</code>, щоб далі писати просто <code>git push</code>/<code>git pull</code>. Один раз - при першому пуші нової гілки (після <code>git clone</code> для <code>main</code> уже зроблено).</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Pro Git, розд. 2.5 «Working with Remotes»: https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes - відкрито 18.11.2026</li>
+<li>Pro Git, розд. 3.5 «Remote Branches»: https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches - відкрито 18.11.2026</li>
+<li>git push: https://git-scm.com/docs/git-push - відкрито 18.11.2026</li>
+<li>git pull (<code>--ff-only</code>, <code>pull.rebase</code>): https://git-scm.com/docs/git-pull - відкрито 18.11.2026</li>
+<li>git fetch: https://git-scm.com/docs/git-fetch - відкрито 18.11.2026</li>
+<li>git config, <code>push.autoSetupRemote</code>: https://git-scm.com/docs/git-config - відкрито 18.11.2026</li>
+<li>GitHub, «Pushing commits to a remote repository»: https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository - відкрито 18.11.2026</li>
+<li>GitHub, «Getting changes from a remote repository»: https://docs.github.com/en/get-started/using-git/getting-changes-from-a-remote-repository - відкрито 18.11.2026</li>
+<li>gh repo create: https://cli.github.com/manual/gh_repo_create - відкрито 18.11.2026</li>
+</ul>

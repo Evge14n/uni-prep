@@ -1,0 +1,308 @@
+<h1 id="тема-12-скасувати-безпечно-restore-revert-reset-reflog">Тема 12. Скасувати безпечно - restore, revert, reset, reflog</h1>
+<p><strong>Навіщо:</strong> у ЛР2 зіпсував робочу функцію, закомітив не те, або вже запушив помилку на GitHub. У git майже все можна повернути - треба лише знати, яка команда для якого випадку і яка з них небезпечна.</p>
+<h3 id="коротко">Коротко</h3>
+<p>Згадай три зони з уроку 01: <strong>робоча тека</strong> (файли, які бачиш) → <strong>індекс</strong> (що піде в коміт) → <strong>історія</strong> (коміти). Кожна команда скасування працює зі своєю зоною:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що скасовує</th>
+<th>Безпечно після push?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git restore файл</code></td>
+<td>зміни в робочій теці (повертає файл як в останньому коміті)</td>
+<td>так, коміти не чіпає</td>
+</tr>
+<tr>
+<td><code>git restore --staged файл</code></td>
+<td><code>git add</code> (зміни лишаються у файлі)</td>
+<td>так</td>
+</tr>
+<tr>
+<td><code>git commit --amend</code></td>
+<td>переписує <strong>останній</strong> коміт</td>
+<td><strong>ні</strong>, лише до push</td>
+</tr>
+<tr>
+<td><code>git reset --soft HEAD~1</code></td>
+<td>прибирає останній коміт, зміни лишаються в індексі</td>
+<td><strong>ні</strong>, лише до push</td>
+</tr>
+<tr>
+<td><code>git revert ХЕШ</code></td>
+<td>робить <strong>новий</strong> коміт, протилежний до старого</td>
+<td><strong>так</strong>, це і є спосіб після push</td>
+</tr>
+<tr>
+<td><code>git reset --hard ...</code></td>
+<td>пересуває гілку і <strong>затирає</strong> робочу теку</td>
+<td>ні, і обережно</td>
+</tr>
+<tr>
+<td><code>git reflog</code></td>
+<td>показує, де був HEAD - звідси рятують «втрачені» коміти</td>
+<td>-</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>HEAD~1</code> - «один коміт перед поточним». <code>HEAD@{1}</code> - «де HEAD був один крок тому» (з журналу reflog).</p>
+<p><strong>Reflog</strong> - журнал git: кожен коміт, перемикання, reset записується туди. Тому навіть після <code>reset --hard</code> закомічене не зникає одразу: записи reflog живуть 90 днів (а недосяжні коміти - 30), потім git може їх прибрати. Незакомічене reflog <strong>не</strong> рятує.</p>
+<p>Аналогія: <code>revert</code> - як дописати в зошит «пункт 3 - помилка, правильно так», а <code>reset</code> - як вирвати сторінку. Вирвати можна лише зі свого чорновика (до push), а не з журналу, який уже бачили інші.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li>Ти зробив <code>git add rozrahunok.py</code>, а потім <code>git restore --staged rozrahunok.py</code>. Що буде з твоїми змінами у файлі? Що покаже <code>git status --short</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Зміни лишаються у файлі, просто вже не в індексі. До: <code>M  rozrahunok.py</code> (M у першій колонці - в індексі), після: <code>M rozrahunok.py</code> (M у другій - лише в робочій теці).</p>
+</details>
+<ol start="2">
+<li>Останній коміт «Додай висоту» ще не запушений. Після <code>git reset --soft HEAD~1</code> - де файл <code>vysota.py</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Коміту нема, а файл на місці і вже в індексі: <code>git status --short</code> показує <code>A  vysota.py</code>. Можна дописати і закомітити заново.</p>
+</details>
+<ol start="3">
+<li>Коміт «Спроба: g = 0» уже на GitHub. Скільки комітів стане після <code>git revert --no-edit HEAD</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>На один <strong>більше</strong>: старий коміт лишається, а поверх - новий, що його скасовує.</p>
+<pre><code class="language-text">31e6c9b (HEAD -&gt; main) Revert &quot;Спроба: g = 0&quot;
+78dc358 (origin/main, origin/HEAD) Спроба: g = 0
+07ae21c Додай висоту h = 2.5
+</code></pre>
+<p>Ярлик <code>origin/main</code> показує: на GitHub поки лише «Спроба», revert ще треба запушити.</p>
+</details>
+<ol start="4">
+<li>Після <code>git reset --hard HEAD~1</code> коміт «Важливий файл» зник з <code>git log</code>. Чи покаже його <code>git reflog -3</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Так, другим рядком, як <code>HEAD@{1}</code>:</p>
+<pre><code class="language-text">31e6c9b (HEAD -&gt; main, origin/main, origin/HEAD) HEAD@{0}: reset: moving to HEAD~1
+b319df5 HEAD@{1}: commit: Важливий файл
+31e6c9b (HEAD -&gt; main, origin/main, origin/HEAD) HEAD@{2}: revert: Revert &quot;Спроба: g = 0&quot;
+</code></pre>
+<p>Ярлики стоять там, де коміт зараз має гілку: <code>HEAD@{0}</code> і <code>HEAD@{2}</code> - той самий коміт <code>31e6c9b</code>, на ньому зараз <code>main</code>. У <code>b319df5</code> ярликів нема - на нього вже не вказує жодна гілка, його памʼятає лише reflog.</p>
+</details>
+<h3 id="руками">Руками</h3>
+<p>Пісочниця <code>~/pisochnytsia</code>, гілка <code>main</code>. Хеші в тебе будуть інші.</p>
+<p><strong>Крок 1. Підготовка.</strong></p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+git switch main
+git pull
+printf 'g = 9.8\nprint(&quot;g =&quot;, g)\n' &gt; rozrahunok.py
+git add rozrahunok.py
+git commit -m &quot;Додай розрахунок g&quot;
+</code></pre>
+<p><strong>Крок 2. <code>restore</code> - зіпсував файл, ще не add.</strong></p>
+<pre><code class="language-bash">printf 'g = 100\n' &gt; rozrahunok.py
+git status --short
+git restore rozrahunok.py
+cat rozrahunok.py
+</code></pre>
+<pre><code class="language-text"> M rozrahunok.py
+g = 9.8
+print(&quot;g =&quot;, g)
+</code></pre>
+<p>Увага: <code>git restore</code> затирає незакомічені зміни <strong>назавжди</strong>. Перед ним глянь <code>git diff</code>.</p>
+<p><strong>Крок 3. <code>restore --staged</code> - зайвий add.</strong></p>
+<pre><code class="language-bash">printf 'print(&quot;кінець&quot;)\n' &gt;&gt; rozrahunok.py
+git add rozrahunok.py
+git status --short
+git restore --staged rozrahunok.py
+git status --short
+git restore rozrahunok.py
+</code></pre>
+<pre><code class="language-text">M  rozrahunok.py
+ M rozrahunok.py
+</code></pre>
+<p><strong>Крок 4. <code>--amend</code> - помилка в повідомленні (до push).</strong></p>
+<pre><code class="language-bash">printf 'g = 9.81\nprint(&quot;g =&quot;, g)\n' &gt; rozrahunok.py
+git commit -am &quot;Уточни g до 9.18&quot;
+git commit --amend -m &quot;Уточни g до 9.81&quot;
+git log --oneline -2
+</code></pre>
+<pre><code class="language-text">[main 2058b78] Уточни g до 9.81
+ Date: Wed Nov 18 10:18:55 2026 +0000
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+2058b78 (HEAD -&gt; main) Уточни g до 9.81
+539e4ed Додай розрахунок g
+</code></pre>
+<p><code>--amend</code> не править старий коміт, а робить новий замість нього (інший хеш). Рядок <code>Date:</code> - git показує, що дата автора лишилась від старого коміту. Забув файл у коміті? <code>git add файл</code>, потім <code>git commit --amend --no-edit</code> (повідомлення те саме).</p>
+<p><strong>Крок 5. <code>reset --soft</code> - переробити останній коміт (до push).</strong></p>
+<pre><code class="language-bash">printf 'h = 2\n' &gt; vysota.py
+git add vysota.py
+git commit -m &quot;Додай висоту&quot;
+git reset --soft HEAD~1
+git status --short
+printf 'h = 2.5\n' &gt; vysota.py
+git add vysota.py
+git commit -m &quot;Додай висоту h = 2.5&quot;
+git log --oneline -3
+</code></pre>
+<pre><code class="language-text">A  vysota.py
+07ae21c (HEAD -&gt; main) Додай висоту h = 2.5
+2058b78 Уточни g до 9.81
+539e4ed Додай розрахунок g
+</code></pre>
+<p><strong>Крок 6. <code>revert</code> - помилка вже на GitHub.</strong></p>
+<pre><code class="language-bash">git push
+printf 'g = 0\n' &gt; rozrahunok.py
+git commit -am &quot;Спроба: g = 0&quot;
+git push
+git revert --no-edit HEAD
+git log --oneline -3
+cat rozrahunok.py
+git push
+</code></pre>
+<pre><code class="language-text">[main 31e6c9b] Revert &quot;Спроба: g = 0&quot;
+ Date: Wed Nov 18 10:18:55 2026 +0000
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+...
+g = 9.81
+print(&quot;g =&quot;, g)
+To github.com:Evge14n/pisochnytsia.git
+   78dc358..31e6c9b  main -&gt; main
+</code></pre>
+<p><code>--no-edit</code> - взяти готове повідомлення <code>Revert "..."</code>. Без нього відкриється nano з цим повідомленням (Ctrl+O, Enter, Ctrl+X). Замість <code>HEAD</code> можна дати хеш будь-якого старішого коміту.</p>
+<p><strong>Крок 7. <code>reset --hard</code> і порятунок через reflog.</strong></p>
+<blockquote>
+<p><strong>Увага.</strong> <code>git reset --hard</code> пересуває гілку назад і <strong>затирає</strong> робочу теку. Коміти можна врятувати через reflog, а незакомічені зміни - ні. Тут ми робимо це навмисно, у пісочниці, з усім закоміченим.</p>
+</blockquote>
+<pre><code class="language-bash">printf 'важливо\n' &gt; vazhlyve.txt
+git add vazhlyve.txt
+git commit -m &quot;Важливий файл&quot;
+git reset --hard HEAD~1
+ls vazhlyve.txt
+git reflog -3
+git reset --hard HEAD@{1}
+cat vazhlyve.txt
+git push
+</code></pre>
+<pre><code class="language-text">HEAD is now at 31e6c9b Revert &quot;Спроба: g = 0&quot;
+ls: cannot access 'vazhlyve.txt': No such file or directory
+31e6c9b (HEAD -&gt; main, origin/main, origin/HEAD) HEAD@{0}: reset: moving to HEAD~1
+b319df5 HEAD@{1}: commit: Важливий файл
+31e6c9b (HEAD -&gt; main, origin/main, origin/HEAD) HEAD@{2}: revert: Revert &quot;Спроба: g = 0&quot;
+HEAD is now at b319df5 Важливий файл
+важливо
+</code></pre>
+<p>Файл повернувся з тим самим вмістом. Можна і за хешем з reflog: <code>git reset --hard b319df5</code> (у тебе свій хеш).</p>
+<p><strong>Чому не <code>git push --force</code>.</strong> Якщо зробити <code>reset</code> вже запушеного коміту, звичайний push відмовить (див. «Типові помилки»). «Пробити» його можна силою:</p>
+<pre><code class="language-text">git push --force              # НЕ в спільну гілку: GitHub стане як у тебе, а чужі коміти, яких ти не бачив, зникнуть
+git push --force-with-lease   # «сила з перевіркою»: відмовить, якщо на GitHub зʼявилось щось, чого ти ще не забрав
+</code></pre>
+<p>Документація git про <code>--force</code>: «It can cause the remote repository to lose commits». Тому в <code>main</code> і будь-яку гілку, з якою працює ще хтось, силою не пушать взагалі - лише <code>revert</code>. <code>--force-with-lease</code> - для своєї гілки, якщо дуже треба переписати історію.</p>
+<p><strong>Пастка <code>--force-with-lease</code>.</strong> Він порівнює GitHub з тим, що ти востаннє <strong>забрав</strong> (<code>origin/main</code>), а не з тим, що ти бачив очима. Тож після <code>git fetch</code> він уже не захищає (перевірено, git 2.43): одногрупник запушив коміт, ти зробив <code>reset</code> свого поганого коміту і пушиш:</p>
+<pre><code class="language-text">$ git push --force-with-lease          # ще не робив fetch - захист спрацював
+ ! [rejected]        main -&gt; main (stale info)
+$ git fetch                            # забрав новини: тепер origin/main = коміт одногрупника
+$ git push --force-with-lease          # перевірка пройшла - і коміт одногрупника на GitHub зник
+ + 4a74266...ff6aa7d main -&gt; main (forced update)
+</code></pre>
+<p>Тому перед будь-яким push силою спершу глянь, що є на GitHub і нема в тебе: <code>git fetch</code>, потім <code>git log --oneline main..origin/main</code>. Якщо там є чужі коміти - силою не пуш, а <code>git pull</code> і <code>git revert</code>.</p>
+<p><strong>Що сталося → чим лікувати:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що сталося</th>
+<th>Чим лікувати</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>зіпсував файл, ще не <code>add</code></td>
+<td><code>git restore файл</code></td>
+</tr>
+<tr>
+<td>зробив <code>add</code> не того файлу</td>
+<td><code>git restore --staged файл</code></td>
+</tr>
+<tr>
+<td>помилка в повідомленні останнього коміту, ще не push</td>
+<td><code>git commit --amend -m "нове"</code></td>
+</tr>
+<tr>
+<td>забув файл в останньому коміті, ще не push</td>
+<td><code>git add файл</code>, <code>git commit --amend --no-edit</code></td>
+</tr>
+<tr>
+<td>хочу переробити останній коміт, ще не push</td>
+<td><code>git reset --soft HEAD~1</code></td>
+</tr>
+<tr>
+<td>поганий коміт уже на GitHub</td>
+<td><code>git revert --no-edit ХЕШ</code>, потім <code>git push</code></td>
+</tr>
+<tr>
+<td>коміт «зник» після <code>reset --hard</code></td>
+<td><code>git reflog</code>, потім <code>git reset --hard HEAD@{N}</code></td>
+</tr>
+<tr>
+<td>зробив <code>reset</code> після push, і push відмовив</td>
+<td><code>git pull</code> (поверне коміт), потім <code>git revert</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="типові-помилки">Типові помилки</h3>
+<p><strong>1. <code>restore</code> нового файлу.</strong> Файл ще ні разу не був у коміті - git про нього не знає:</p>
+<pre><code class="language-text">$ git restore novyi.txt
+error: pathspec 'novyi.txt' did not match any file(s) known to git
+</code></pre>
+<p>Непотрібний новий файл просто видали: <code>rm novyi.txt</code>.</p>
+<p><strong>2. <code>reset</code> після push - і push не проходить.</strong></p>
+<pre><code class="language-text">$ git push
+To github.com:Evge14n/pisochnytsia.git
+ ! [rejected]        main -&gt; main (non-fast-forward)
+error: failed to push some refs to 'github.com:Evge14n/pisochnytsia.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+</code></pre>
+<p>Не пробивай силою. <code>git pull</code> поверне коміт з GitHub (<code>Fast-forward</code>), а далі скасовуй правильно - <code>git revert</code>.</p>
+<p><strong>3. <code>reset --hard</code> з незакоміченими змінами.</strong> Дописав у файл, не закомітив, зробив <code>git reset --hard</code> - дописане зникло, і в reflog його нема (reflog знає лише коміти). Перед <code>--hard</code> завжди <code>git status</code>, а що шкода - закоміть або сховай (<code>git stash</code>, урок 13).</p>
+<p><strong>4. <code>git revert</code> без <code>--no-edit</code> «завис».</strong> Він відкрив nano з повідомленням. Збережи і вийди: Ctrl+O, Enter, Ctrl+X.</p>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li>Після push - лише <code>revert</code>, історію спільних гілок не переписують (<a href="https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things">Pro Git 2.4 «Undoing Things»</a>).</li>
+<li><code>--force-with-lease</code> замість <code>--force</code>, і лише у свою гілку (<a href="https://git-scm.com/docs/git-push">git push</a>).</li>
+<li>На GitHub <code>main</code> роблять захищеною гілкою: «By default, GitHub blocks force pushes on all protected branches» (чи доступно для приватного репо на безкоштовному плані - не перевірено) (<a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches">About protected branches</a>).</li>
+<li>Що саме робить <code>reset</code> з трьома зонами - <a href="https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified">Pro Git 7.7 «Reset Demystified»</a>.</li>
+<li>Скасувати злитий PR на GitHub - кнопка Revert на сторінці PR, вона робить revert-PR (<a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/reverting-a-pull-request">Reverting a pull request</a>).</li>
+</ul>
+<h3 id="для-лаб">Для лаб</h3>
+<p><strong>Для лаб:</strong> перед ризикованою правкою ЛР5 (переписати функцію, запустити <code>black</code>) - коміт. Зламав і не комітив - <code>git restore lr5/lr5_1.py</code>. Закомітив з помилкою в повідомленні - <code>--amend</code>, поки не запушив. Уже на GitHub (викладач міг бачити) - тільки <code>git revert</code>. Загубив коміт після експериментів з <code>reset</code> - <code>git reflog</code> у <code>~/univer/labs</code>.</p>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чим <code>git restore файл</code> відрізняється від <code>git restore --staged файл</code>?</li>
+<li>Чому після push треба <code>git revert</code>, а не <code>git reset</code>?</li>
+<li>Що робить <code>git reset --soft HEAD~1</code> і коли ним можна користуватись?</li>
+<li>Ти зробив <code>git reset --hard HEAD~1</code> і загубив коміт. Як його повернути?</li>
+<li>Чим <code>git push --force-with-lease</code> безпечніший за <code>git push --force</code>?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Перша повертає вміст файлу з останнього коміту (зміни зникають), друга лише виймає файл з індексу (зміни лишаються у файлі).</li>
+<li><code>revert</code> додає новий коміт і не переписує історію, яку вже бачать інші. Після <code>reset</code> push відмовить, а сила затре чужі коміти.</li>
+<li>Прибирає останній коміт, а його зміни лишає в індексі. Лише до push.</li>
+<li><code>git reflog</code> - знайти рядок <code>commit: ...</code> (тут <code>HEAD@{1}</code>), потім <code>git reset --hard HEAD@{1}</code>.</li>
+<li>Він відмовить, якщо на GitHub зʼявились коміти, яких ти ще не забрав (<code>git fetch</code>), тож чужу роботу не затре. Але після <code>git fetch</code> він про них уже «знає» і затре - тому спершу <code>git log --oneline main..origin/main</code>: якщо там чужі коміти, силою не пуш.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Pro Git 2.4 «Undoing Things» - https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things (відкрито 18.11.2026)</li>
+<li>Pro Git 7.7 «Reset Demystified» - https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified (відкрито 18.11.2026)</li>
+<li>git restore, git revert, git reset, git reflog - https://git-scm.com/docs/git-restore, https://git-scm.com/docs/git-revert, https://git-scm.com/docs/git-reset, https://git-scm.com/docs/git-reflog (відкрито 18.11.2026)</li>
+<li>git gc (reflog 90 і 30 днів) - https://git-scm.com/docs/git-gc (відкрито 18.11.2026)</li>
+<li>git push (--force, --force-with-lease) - https://git-scm.com/docs/git-push (відкрито 18.11.2026)</li>
+<li>About protected branches - https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches (відкрито 18.11.2026)</li>
+</ul>

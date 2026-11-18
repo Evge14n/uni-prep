@@ -1,0 +1,132 @@
+<h1 id="тема-7-день-7-пайпи-перенаправлення-grep">Тема 7. День 7: Пайпи, перенаправлення, grep</h1>
+<p><strong>Навіщо:</strong> знайти, де в лабах функція, зберегти вивід у файл, порахувати рядки - однією командою.</p>
+<h3 id="коротко-5-хв">Коротко (5 хв)</h3>
+<p><strong>Перенаправлення:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Запис</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>команда &gt; файл</code></td>
+<td>вивід у файл (файл <strong>перезаписується</strong>)</td>
+</tr>
+<tr>
+<td><code>команда &gt;&gt; файл</code></td>
+<td>дописати в кінець файлу</td>
+</tr>
+<tr>
+<td><code>команда 2&gt; файл</code></td>
+<td>помилки (stderr) у файл</td>
+</tr>
+<tr>
+<td><code>команда &gt; файл 2&gt;&amp;1</code></td>
+<td>і вивід, і помилки в один файл</td>
+</tr>
+<tr>
+<td><code>команда &lt; файл</code></td>
+<td>взяти ввід з файлу (замість клавіатури)</td>
+</tr>
+<tr>
+<td><code>команда &gt; /dev/null</code></td>
+<td>викинути вивід</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Пайп <code>|</code></strong> - вивід однієї команди стає входом наступної:
+<code>ls | wc -l</code> - скільки файлів; <code>history | grep git</code> - які git-команди я вводив.</p>
+<p><strong>grep - знайти рядки з текстом:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grep "def " lab.py</code></td>
+<td>рядки з <code>def</code></td>
+</tr>
+<tr>
+<td><code>grep -n</code></td>
+<td>з номерами рядків</td>
+</tr>
+<tr>
+<td><code>grep -i</code></td>
+<td>без різниці великі/малі</td>
+</tr>
+<tr>
+<td><code>grep -r "turtle" .</code></td>
+<td>у всіх файлах теки і підтек</td>
+</tr>
+<tr>
+<td><code>grep -c</code></td>
+<td>лише кількість рядків</td>
+</tr>
+<tr>
+<td><code>grep -v</code></td>
+<td>рядки, де цього <strong>нема</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Інші корисні:</strong> <code>wc -l</code> (рядки), <code>sort</code>, <code>uniq -c</code> (порахувати однакові сусідні), <code>head</code>, <code>tail</code>,
+<code>find . -name "*.py"</code> (знайти файли за назвою).</p>
+<p><strong>Ввід для програми з input().</strong> Програма питає число - можна подати без клавіатури:</p>
+<pre><code>printf &quot;5\n&quot; | python3 lab.py
+printf &quot;3\n4\n&quot; | python3 lab.py      # два input() - два рядки
+python3 lab.py &lt; vvid.txt
+</code></pre>
+<p>Зручно, коли ганяєш ту саму перевірку багато разів.</p>
+<h3 id="руками-10-хв">Руками (10 хв)</h3>
+<pre><code>cd ~/univer/praktyka
+printf 'def area(r):\n    return 3.14 * r * r\n\n\ndef perimeter(r):\n    return 2 * 3.14 * r\n\nprint(area(2))\n' &gt; geom.py
+grep &quot;def &quot; geom.py
+grep -n &quot;def &quot; geom.py
+grep -c &quot;def &quot; geom.py               # 2
+grep -v &quot;^$&quot; geom.py                 # без порожніх рядків
+python3 geom.py &gt; out.txt
+cat out.txt
+python3 geom.py &gt;&gt; out.txt
+cat out.txt                          # два рядки
+python3 nema.py 2&gt; err.txt
+cat err.txt                          # No such file or directory
+ls / | wc -l
+find ~/univer -name &quot;*.py&quot; -not -path &quot;*/.venv/*&quot; | head
+printf 'name = input()\nprint(&quot;Привіт,&quot;, name)\n' &gt; hi.py
+printf &quot;Євген\n&quot; | python3 hi.py
+history | grep cd | tail -5
+</code></pre>
+<p>Якщо на цьому ПК чи ноутбуці лаби лежать у <code>~/univer/prog</code> або <code>~/univer/labs</code>:</p>
+<pre><code>grep -rn &quot;import doctest&quot; ~/univer/labs
+grep -rl &quot;turtle&quot; ~/univer/labs
+</code></pre>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li><code>python3 lab.py &gt; lab.py</code> - <strong>стирає твій код</strong>: <code>&gt;</code> спершу обнуляє файл. Вивід пиши в інший файл.</li>
+<li><code>&gt;</code> замість <code>&gt;&gt;</code> - старий вміст пропав.</li>
+<li><code>grep def</code> без лапок і з пробілом: <code>grep def area geom.py</code> шукає «def» у файлах <code>area</code> і <code>geom.py</code>.
+  Фраза з пробілом - у лапках: <code>grep "def area" geom.py</code>.</li>
+<li><code>grep -r</code> по всьому диску (<code>/</code> чи <code>/mnt/d</code>) - дуже довго. Шукай у конкретній теці.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чим <code>&gt;</code> відрізняється від <code>&gt;&gt;</code>?</li>
+<li>Як порахувати, скільки функцій (<code>def</code>) у файлі <code>lab4.py</code>?</li>
+<li>Як запустити <code>lab.py</code>, що питає одне число, і подати йому 10 без клавіатури?</li>
+<li>Що робить <code>2&gt;</code>?</li>
+<li>Чому <code>python3 lab.py &gt; lab.py</code> - погана ідея?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>&gt;</code> перезаписує файл, <code>&gt;&gt;</code> дописує в кінець.</li>
+<li><code>grep -c "def " lab4.py</code>.</li>
+<li><code>printf "10\n" | python3 lab.py</code> (або <code>echo 10 | python3 lab.py</code>).</li>
+<li>Перенаправляє помилки (потік stderr) у файл.</li>
+<li>Перед запуском <code>&gt;</code> очищає <code>lab.py</code>, тож Python запускає вже порожній файл, а код зник.</li>
+</ol>
+</details>

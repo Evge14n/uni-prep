@@ -20,7 +20,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from prog_e2e import SHOTS, goto, serve  # noqa: E402
 
 U = "git"
-TABS = ["teoriya", "zadachi", "shpargalka", "test"]
+# UPROGONE: теорія розрізана на сторінки «Тема N» усередині prog (git = Тема 0, git-01 ... git-18)
+TABS = ["git"] + [f"git-{n:02d}" for n in range(1, 19)] + ["git-zadachi", "git-shpargalka", "test"]
 CHECK_JS = """() => {
   const doc = document.querySelector('article.doc') || document.body;
   const t = doc.innerText;
@@ -57,14 +58,13 @@ def main():
             page.on("pageerror", lambda e: errs.append(str(e)))
             page.on("response", lambda r: errs.append(f"{r.status} {r.url}") if r.status >= 400 else None)
             goto(page, base, "/subjects")
-            info = page.evaluate("""() => { const a = document.querySelector('a[href="#/u/git"]');
-                if (!a) return null; const d = a.closest('details'); return {sum: d ? d.querySelector('summary').textContent : '', text: a.textContent}; }""")
-            if not info or "Git" not in info["text"]:
-                fail(f"{w}px: картки git у «Предметах» нема: {info}")
-            else:
-                print(f"{w}px: картка: {info['text'].strip()[:70]!r} у групі {info['sum'].strip()[:30]!r}")
+            # UPROGONE: окремого розділу нема - лише «Програмування», де ця частина всередині
+            info = page.evaluate("""() => ({old: document.querySelectorAll('a[href="#/u/git"]').length,
+                prog: document.querySelectorAll('a.unit[href="#/u/prog"]').length})""")
+            if info["old"] or info["prog"] != 1:
+                fail(f"{w}px: у «Предметах» старий розділ або нема «Програмування»: {info}")
             for tab in TABS:
-                goto(page, base, f"/u/{U}/{tab}")
+                goto(page, base, f"/u/prog/{tab}")
                 page.wait_for_timeout(400)
                 st["states"] += 1
                 r = page.evaluate(CHECK_JS)
@@ -74,11 +74,13 @@ def main():
                         fail(f"{w}px {tab}: {k}")
                 if not r["tabsVisible"]:
                     fail(f"{w}px {tab}: вкладка за краєм екрана")
-                if tab == "teoriya":
-                    tem = [x for x in r["h2"] if x.startswith("Тема ")]
-                    if len(tem) != 19:
-                        fail(f"{w}px теорія: тем {len(tem)}, чекав 19: {tem[:3]}...")
-                if tab == "zadachi":
+                if tab == "git" and not any(x.startswith("Тема 0.") for x in r["h2"]):
+                    fail(f"{w}px покажчик git: нема «Тема 0»: {r['h2'][:3]}")
+                if tab.startswith("git-") and tab[4:].isdigit():
+                    h1 = page.evaluate("(document.querySelector('article.doc h1') || {}).textContent || ''")
+                    if not h1.startswith(f"Тема {int(tab[4:])}."):
+                        fail(f"{w}px {tab}: заголовок {h1!r}")
+                if tab == "git-zadachi":
                     blob = " ".join(r["h2"] + r["h3"])
                     if "Іспит" not in blob or "Чотири завдання" not in blob:
                         fail(f"{w}px задачі: нема розділів практики/іспиту: {r['h2']}")
@@ -91,12 +93,12 @@ def main():
         page = ctx.new_page()
         perrs = []
         page.on("pageerror", lambda e: perrs.append(str(e)))
-        goto(page, base, f"/u/{U}/test")
+        goto(page, base, "/u/prog/test")
         quiz = json.loads(page.evaluate(f"fetch('data/{U}/quiz.json').then(r => r.text())"))
         bank = {}
         for q in quiz["questions"]:
             bank.setdefault(q["q"], []).append(q)
-        page.click(f'a[href="#/q/{U}/real"]')
+        goto(page, base, f"/q/{U}/real")
         page.wait_for_selector(".card.q", timeout=10000)
         right_planned = 0
         for i in range(15):
@@ -136,7 +138,7 @@ def main():
         # ---- 4. офлайн ----
         ctx = br.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, service_workers="allow")
         page = ctx.new_page()
-        goto(page, base, f"/u/{U}/teoriya")
+        goto(page, base, "/u/prog/git")
         page.wait_for_function("navigator.serviceWorker.controller !== null", timeout=30000)
         page.wait_for_function("""async () => { const k = await caches.keys(); const n = k.find(x => x.startsWith('uniprep-'));
             if (!n) return false; const c = await caches.open(n); return (await c.keys()).length > 90; }""", timeout=60000)
@@ -144,10 +146,10 @@ def main():
         page.reload()
         ok = {}
         for tab in TABS:
-            goto(page, base, f"/u/{U}/{tab}")
+            goto(page, base, f"/u/prog/{tab}")
             page.wait_for_timeout(300)
             ok[tab] = page.evaluate("(document.querySelector('article.doc') || document.body).innerText.length")
-        page.click(f'a[href="#/q/{U}/real"]')
+        goto(page, base, f"/q/{U}/real")
         page.wait_for_selector(".card.q", timeout=10000)
         ok["test_started"] = True
         page.screenshot(path=str(SHOTS / "git-offline-test-390.png"))

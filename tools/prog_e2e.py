@@ -132,7 +132,7 @@ def main():
                     if b in txt:
                         fail(f"{w}px {key}: у тексті '{b}'")
                 cur = page.evaluate("(document.querySelector('.tabs a[aria-current]')||{}).textContent")
-                if key.startswith("urok") and cur != "Уроки":
+                if key.startswith("urok") and cur not in ("Уроки", "Уроки Python"):  # UPROGONE: вкладка «Уроки Python»
                     fail(f"{key}: активна вкладка {cur}, а не Уроки")
                 if key == "urok-01":
                     page.screenshot(path=str(SHOTS / f"prog-{key}-{w}.png"))

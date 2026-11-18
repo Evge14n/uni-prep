@@ -1,0 +1,135 @@
+<h1 id="тема-1-день-1-термінал-і-де-які-файли">Тема 1. День 1: Термінал і де які файли</h1>
+<p><strong>Навіщо:</strong> у терміналі ти пишеш команду, Enter - Linux виконує. Усе інше в курсі на цьому стоїть.</p>
+<h3 id="коротко-5-хв">Коротко (5 хв)</h3>
+<p>Відкрий «Ubuntu» з меню Пуск. Бачиш рядок-запрошення:</p>
+<pre><code>evgen@NOUT:~$
+ │     │   │ └ $ - чекаю команду (у root тут #)
+ │     │   └── ~ - де ти зараз (~ = твоя домашня тека)
+ │     └────── ім'я комп'ютера
+ └──────────── ім'я користувача
+</code></pre>
+<p><strong>Як влаштовані файли.</strong> У Windows є диски C:, D:. У Linux одне «дерево», корінь - <code>/</code>.</p>
+<pre><code>/                      корінь
+├── home/evgen/        твоя домашня тека, вона ж ~
+│   └── univer/        лаби (зробив скрипт установки)
+├── mnt/c/             диск C: Windows
+├── mnt/d/             диск D: Windows (якщо є)
+├── usr/bin/           програми (python3, git, ls)
+└── tmp/               тимчасове, чиститься
+</code></pre>
+<ul>
+<li>Шлях <strong>абсолютний</strong> починається з <code>/</code>: <code>/home/evgen/univer</code>.</li>
+<li><strong>Відносний</strong> - від того місця, де ти зараз: <code>univer/labs</code>.</li>
+<li><code>.</code> - ця тека, <code>..</code> - тека вище, <code>~</code> - домашня.</li>
+<li>Великі й малі літери різні: <code>Lab.py</code> і <code>lab.py</code> - два різні файли.</li>
+<li>Роздільник <code>/</code>, а не <code>\</code> як у Windows.</li>
+</ul>
+<p><strong>Команди дня:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pwd</code></td>
+<td>де я (print working directory)</td>
+</tr>
+<tr>
+<td><code>ls</code></td>
+<td>що тут лежить</td>
+</tr>
+<tr>
+<td><code>ls -la</code></td>
+<td>детально (<code>-l</code>), з прихованими (<code>-a</code>, імена з крапкою)</td>
+</tr>
+<tr>
+<td><code>cd тека</code></td>
+<td>зайти в теку</td>
+</tr>
+<tr>
+<td><code>cd ..</code></td>
+<td>на рівень вище</td>
+</tr>
+<tr>
+<td><code>cd</code> або <code>cd ~</code></td>
+<td>додому</td>
+</tr>
+<tr>
+<td><code>cd -</code></td>
+<td>туди, де був перед цим</td>
+</tr>
+<tr>
+<td><code>clear</code> або Ctrl+L</td>
+<td>очистити екран</td>
+</tr>
+<tr>
+<td><code>команда --help</code></td>
+<td>коротка довідка</td>
+</tr>
+<tr>
+<td><code>man команда</code></td>
+<td>повна довідка (вийти - <code>q</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Дві клавіші, що економлять години:</strong>
+- <strong>Tab</strong> - дописує назву файлу чи теки. Набери <code>cd uni</code> і Tab - стане <code>cd univer/</code>.
+  Два Tab підряд - покаже варіанти. Особливо рятує з кириличними назвами.
+- <strong>Стрілка ↑</strong> - попередня команда. Ctrl+R - пошук по історії.</p>
+<p><strong>Скопіювати і вставити</strong> у вікні Ubuntu: виділи мишкою і натисни Enter (або Ctrl+Shift+C) - скопійовано;
+вставити - права кнопка миші або Ctrl+Shift+V. (Ctrl+C без виділення - це не «копіювати», а «зупинити
+програму», день 6. У новому Windows Terminal Ctrl+C з виділеним текстом копіює.)</p>
+<h3 id="руками-10-хв">Руками (10 хв)</h3>
+<pre><code>pwd                      # /home/evgen
+ls
+ls -la                   # бачиш .bashrc - приховані файли з крапкою
+cd univer
+pwd                      # /home/evgen/univer
+ls
+cd ..
+pwd                      # знову /home/evgen
+cd /mnt/c/Users
+ls                       # користувачі Windows - знайди своє ім'я
+cd ~
+cd /usr/bin
+ls | head                # перші 10 програм
+cd -                     # назад додому
+ls --help | head -20
+man ls                   # погортай пробілом, вийди q
+</code></pre>
+<p>Відкрий свою домашню теку в Провіднику Windows:</p>
+<pre><code>cd ~
+explorer.exe .
+</code></pre>
+<p><strong>Завдання:</strong> не дивлячись нижче, дійди до теки <code>~/univer/labs</code> двома способами: одним абсолютним
+шляхом і кроками <code>cd</code> по одній теці.</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li><code>cd Univer</code> → «No such file or directory». Регістр! Тека <code>univer</code>. Тисни Tab, а не вгадуй.</li>
+<li><code>cd C:\Users</code> - так у Linux не буде. Правильно <code>cd /mnt/c/Users</code>.</li>
+<li>Назва з пробілом: <code>cd Мої документи</code> - Linux бачить два слова. Треба <code>cd "Мої документи"</code> або
+  <code>cd Мої\ документи</code> (Tab сам поставить <code>\</code>).</li>
+<li>Працювати з лабами в <code>/mnt/c/...</code> можна, але повільно. Лаби тримай у <code>~/univer/labs</code>.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Ти в <code>/home/evgen/univer/labs</code>. Куди потрапиш після <code>cd ../..</code>?</li>
+<li>Чим відрізняються <code>ls</code> і <code>ls -a</code>?</li>
+<li>Як у Linux називається диск D: Windows?</li>
+<li>Що означає <code>~</code> у шляху?</li>
+<li>Ти набрав <code>cd lab</code> і Tab нічого не дописав. Чому так може бути?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>/home/evgen</code>. Кожне <code>..</code> - на теку вище: labs → univer → evgen.</li>
+<li><code>ls -a</code> показує ще й приховані файли, чиї імена починаються з крапки (<code>.bashrc</code>, <code>.venv</code>), і <code>.</code> та <code>..</code>.</li>
+<li><code>/mnt/d</code>.</li>
+<li>Твоя домашня тека, <code>/home/evgen</code>.</li>
+<li>Такої теки тут нема (можливо, вона в іншому місці або називається з великої), або є кілька варіантів
+   на <code>lab...</code> - тоді другий Tab покаже їх список.</li>
+</ol>
+</details>

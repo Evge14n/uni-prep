@@ -1,0 +1,168 @@
+<h1 id="linux-за-10-днів-по-15-хв">Linux за 10 днів по 15 хв</h1>
+<p>Щоб писати і запускати лаби з Python в Ubuntu (WSL) на ноутбуці. День = одна тема: 5 хв прочитати,
+10 хв зробити руками в терміналі, 5 питань самоперевірки. Усі вправи «Руками» прогнано скриптом
+у справжній Ubuntu 24.04 (87 перевірок, 17.11.2026).</p>
+<h2 id="тема-0-встановлення-ubuntu-vs-code-усе-для-лаб">Тема 0. Встановлення: Ubuntu, VS Code, усе для лаб</h2>
+<h3 id="крок-0-що-таке-wsl-коротко">Крок 0. Що таке WSL, коротко</h3>
+<p>WSL - це справжня Ubuntu всередині Windows. Не віртуалка з окремим вікном, а термінал: відкрив
+«Ubuntu» з меню Пуск - і ти в Linux. Файли Windows там теж видно (диск C: це <code>/mnt/c</code>).</p>
+<h3 id="крок-1-перевір-версію-windows-1-хв">Крок 1. Перевір версію Windows (1 хв)</h3>
+<p>Win + R → <code>winver</code> → Enter. Дивись рядок «Збірка ОС» (OS Build).</p>
+<ul>
+<li>Windows 11 - усе працює, включно з вікнами turtle.</li>
+<li>Windows 10, збірка 19044 або більша (19045 теж) - усе працює, включно з вікнами turtle
+  (потрібен свіжий WSL: <code>wsl --update</code>, крок 2).
+  → Перевірено на твоєму ПК 17.11.2026: Windows 10 збірка 19045, WSL 3.0.5, вікно Tk у WSL відкривається.</li>
+<li>Windows 10, збірка від 19041 до 19043 - Ubuntu встановиться, але вікна (turtle) з Linux не відкриються.
+  Тоді або онови Windows (Параметри → Оновлення), або turtle-лабу запускай звичайним Python у Windows (крок 6).</li>
+<li>Менше 19041 - спершу онови Windows.</li>
+</ul>
+<p>Джерела: Microsoft, «Install WSL» (Windows 10 2004+, збірка 19041+) і «Run Linux GUI apps with WSL»
+(«Windows 10 Build 19044+ or Windows 11»), learn.microsoft.com, перевірено 17.11.2026.</p>
+<h3 id="крок-2-встановити-ubuntu-10-20-хв-більшість-чекати">Крок 2. Встановити Ubuntu (10-20 хв, більшість - чекати)</h3>
+<ol>
+<li>Пуск → набери <code>PowerShell</code> → правою кнопкою → «Запуск від імені адміністратора».</li>
+<li>Введи і натисни Enter:
+   <code>wsl --install</code>
+   Ставить WSL і Ubuntu (Ubuntu - за замовчуванням).</li>
+<li>Перезавантаж ноутбук, коли попросить.</li>
+<li>Після перезавантаження відкриється вікно Ubuntu (або відкрий «Ubuntu» з меню Пуск).
+   Воно попросить:
+   - <strong>username</strong> - ім'я в Linux, маленькими латинськими, без пробілів, напр. <code>evgen</code>;
+   - <strong>password</strong> - пароль. Коли друкуєш, <strong>нічого не видно, навіть зірочок</strong>. Це нормально.
+     Запам'ятай його: він потрібен для <code>sudo</code> (день 4).</li>
+<li>Побачиш рядок типу <code>evgen@NOUT:~$</code> - ти в Linux.</li>
+</ol>
+<p>Якщо <code>wsl --install</code> пише, що WSL уже є, - просто відкрий «Ubuntu» з меню Пуск.
+Якщо Ubuntu нема в меню: <code>wsl --install -d Ubuntu</code> в адмінському PowerShell.</p>
+<p>Одразу після встановлення (у звичайному PowerShell):</p>
+<pre><code>wsl --update
+wsl --version
+</code></pre>
+<p><code>wsl --update</code> ставить найновіший WSL з Microsoft Store - саме він уміє відкривати вікна (turtle) на Windows 10.
+<code>wsl --version</code> має показати кілька рядків (WSL version, WSLg version). Якщо пише, що такої команди нема, -
+WSL старий, повтори <code>wsl --update</code>.</p>
+<h3 id="крок-3-встановити-vs-code-з-розширеннями-5-хв">Крок 3. Встановити VS Code з розширеннями (5 хв)</h3>
+<ol>
+<li>Скачай VS Code з https://code.visualstudio.com і встав <strong>у Windows</strong> (не в Ubuntu).
+   У майстрі встановлення залиш галочку <strong>«Add to PATH»</strong> - без неї не працюватиме <code>code .</code> з Ubuntu.</li>
+<li>Відкрий VS Code → ліворуч значок «Extensions» (чотири квадратики) → встанови:
+   - <strong>WSL</strong> (від Microsoft, id <code>ms-vscode-remote.remote-wsl</code>);
+   - <strong>Python</strong> (від Microsoft, id <code>ms-python.python</code>).</li>
+<li>Закрий і заново відкрий вікно Ubuntu (щоб воно побачило <code>code</code>).</li>
+<li>Після першого <code>code .</code> з Ubuntu (крок 5) зайди в Extensions: біля Python буде кнопка
+   <strong>«Install in WSL: Ubuntu»</strong> - натисни. Розширення з Windows саме в Ubuntu не працює, без цього не буде
+   вибору інтерпретатора і підказок.</li>
+</ol>
+<h3 id="крок-4-усе-для-лаб-одним-скриптом-5-20-хв">Крок 4. Усе для лаб одним скриптом (5-20 хв)</h3>
+<p>У вікні Ubuntu по черзі (після кожного рядка Enter):</p>
+<pre><code>cd ~
+wget -O ustanovka.sh https://evge14n.github.io/uni-prep/files/ustanovka.sh
+less ustanovka.sh
+bash ustanovka.sh
+</code></pre>
+<ul>
+<li><code>wget</code> скачує файл (<code>-O ustanovka.sh</code> - зберегти саме під цим імʼям, навіть якщо скачуєш удруге), <code>less</code> показує, що в ньому (гортати стрілками, вийти - <code>q</code>).
+  Завжди дивись, що за скрипт, перш ніж запускати.</li>
+<li><code>bash ustanovka.sh</code> попросить пароль Ubuntu (символи не видно). Перший раз оновлення йде довго.
+  <strong>Не закривай вікно, поки не з'явиться «Готово»</strong> - якщо закрити посередині, Ubuntu обірве
+  встановлення (див. «Якщо щось пішло не так»).</li>
+</ul>
+<p>Що робить скрипт (той самий файл лежить у <code>Linux\ustanovka.sh</code>):
+1. Оновлює Ubuntu (<code>apt update</code>, <code>apt upgrade</code>).
+2. Ставить python3, venv, pip, python3-tk (для turtle), pytest, flake8, git, nano, tree.
+3. Робить теку <code>~/univer</code> і в ній віртуальне середовище <code>.venv</code> з pytest, flake8, black,
+   pycodestyle, ruff, mypy, matplotlib, numpy (те, що просить викладач).
+4. Робить теку <code>~/univer/labs</code> для лаб і <code>~/univer/praktyka</code> для вправ курсу.
+5. Додає дві команди: <code>univer</code> (перейти в ~/univer і увімкнути venv) і <code>perevir файл.py</code>
+   (doctest + flake8 + mypy одним махом).</p>
+<p>Потім один раз скажи git, хто ти:</p>
+<pre><code>git config --global user.name &quot;Твоє Імʼя Прізвище&quot;
+git config --global user.email &quot;твоя@пошта&quot;
+</code></pre>
+<h3 id="крок-5-перевір-що-все-працює-2-хв">Крок 5. Перевір, що все працює (2 хв)</h3>
+<p>Закрий і знову відкрий Ubuntu, потім:</p>
+<pre><code>univer
+python --version
+type perevir
+code .
+</code></pre>
+<ul>
+<li><code>univer</code> - рядок почнеться з <code>(.venv)</code>. Це значить, що venv увімкнено.</li>
+<li><code>python --version</code> - Python 3.12.x.</li>
+<li><code>type perevir</code> - перший рядок «perevir is a function». Як нею користуватись - день 8.</li>
+<li><code>code .</code> - відкриється VS Code, внизу ліворуч зелене «WSL: Ubuntu». Перший раз довантажує
+  сервер у Ubuntu, це хвилина.</li>
+</ul>
+<p>Перевірка turtle (вікно має з'явитися на 2 секунди):</p>
+<pre><code>python -c &quot;import turtle; turtle.forward(100); turtle.left(90); turtle.forward(50); import time; time.sleep(2)&quot;
+</code></pre>
+<h3 id="крок-6-де-тримати-лаби-і-як-віддати-файл">Крок 6. Де тримати лаби і як віддати файл</h3>
+<p><strong>Рекомендую:</strong> лаби в Linux, у <code>~/univer/labs/ЛР4</code> і т. д. Там усе працює найшвидше
+(Microsoft прямо радить тримати файли проєкту у файловій системі WSL, а не в <code>/mnt/c</code>).</p>
+<ul>
+<li>Відкрити теку лаби у Провіднику Windows (щоб скинути файл викладачу, на флешку, у Moodle):
+  <code>cd ~/univer/labs/ЛР4
+  explorer.exe .</code>
+  Крапка в кінці обов'язкова. Адреса в Провіднику буде <code>\\wsl.localhost\Ubuntu\home\evgen\...</code>.</li>
+<li>Забрати файл з Windows у Linux (напр. заготовку з «Завантажень»):
+  <code>cp /mnt/c/Users/IMYA/Downloads/lab4.py ~/univer/labs/ЛР4/</code>
+  Замість <code>IMYA</code> - імʼя Windows-користувача (подивись: <code>ls /mnt/c/Users</code>). Апостроф у команду не пиши:
+  bash сприйме його як лапку і чекатиме продовження (рядок <code>&gt;</code>; вийти - Ctrl+C).</li>
+</ul>
+<p>Якщо лаби вже лежать у теці Windows і хочеш працювати прямо там - можна. Тоді один раз:</p>
+<pre><code>NO_APT=1 bash ustanovka.sh &quot;C:\Users\IMYA\Documents\Програмування&quot;
+</code></pre>
+<p>(<code>NO_APT=1</code> - не оновлювати Ubuntu вдруге), і в <code>~/univer/prog</code> буде посилання на цю теку.
+Працює, просто повільніше на великих теках.</p>
+<p><strong>ЛР4 (turtle) і цей курс не сперечаються.</strong> Розбір ЛР4 (<code>Лабораторні\ЛР4\</code>) радить для turtle звичайний Python
+у Windows - це найпростіше і точно працює. У WSL turtle теж працює, якщо <code>wsl --version</code> друкує рядок <code>WSLg version</code>
+(крок 2) і стоїть <code>python3-tk</code> (його ставить <code>ustanovka.sh</code>). Обирай будь-що; Linux у цьому курсі - для решти:
+перевірки <code>perevir</code>, git, скрипти.</p>
+<p><strong>Turtle (ЛР4), якщо вікно не з'явилося</strong> (стара збірка Windows 10, крок 1): той самий файл
+запускай звичайним Python у Windows - відкрий його у VS Code <strong>без WSL</strong> (File → Open Folder на
+Windows-теці) або в IDLE і натисни Run. Код однаковий, різниця лише де запускаєш.</p>
+<h3 id="якщо-щось-пішло-не-так">Якщо щось пішло не так</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що бачиш</th>
+<th>Що зробити</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>E: dpkg was interrupted, you must manually run 'sudo dpkg --configure -a'</code></td>
+<td><code>sudo dpkg --configure -a</code>, потім знову <code>bash ustanovka.sh</code></td>
+</tr>
+<tr>
+<td><code>Could not get lock /var/lib/dpkg/lock-frontend</code></td>
+<td>Ubuntu сама ставить оновлення у фоні. Зачекай 5 хв і повтори</td>
+</tr>
+<tr>
+<td><code>code: command not found</code></td>
+<td>VS Code встановлено без «Add to PATH» або не перевідкрив Ubuntu. Перевстанови з галочкою</td>
+</tr>
+<tr>
+<td><code>WslRegisterDistribution failed with error: 0x80370102</code> або «Virtual Machine Platform»</td>
+<td>на ноутбуці вимкнена віртуалізація. Увімкни в BIOS/UEFI (Intel VT-x або AMD-V/SVM, зазвичай вкладка Advanced або CPU Configuration), потім знову <code>wsl --install</code></td>
+</tr>
+<tr>
+<td><code>sudo: ... incorrect password</code></td>
+<td>пароль Ubuntu (крок 2), не Windows. Забув - у PowerShell: <code>wsl -u root passwd ІМЯ_В_UBUNTU</code> (те імʼя, що в рядку перед @)</td>
+</tr>
+<tr>
+<td><code>bash: $'\r': command not found</code></td>
+<td>скрипт збережено з кінцями рядків Windows (CRLF). Виправити: <code>sed -i 's/\r$//' файл.sh</code></td>
+</tr>
+<tr>
+<td><code>error: externally-managed-environment</code> при <code>pip install</code></td>
+<td>ти не у venv. Спершу <code>univer</code> (або <code>source ~/univer/.venv/bin/activate</code>)</td>
+</tr>
+<tr>
+<td>Ubuntu «зникла» посеред довгої команди</td>
+<td>WSL вимикається, коли закрито всі вікна Ubuntu. Тримай вікно відкритим до кінця</td>
+</tr>
+</tbody>
+</table></div>
+<p>Повністю перезапустити Ubuntu (якщо все зависло): у PowerShell <code>wsl --shutdown</code>, потім знову відкрити Ubuntu.</p>

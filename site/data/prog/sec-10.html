@@ -1,0 +1,41 @@
+<h1 id="тема-10-база-даних">Тема 10. База даних</h1>
+<div class="pybox" id="pybox"></div>
+
+<p><strong>Головне:</strong> лише параметризовані запити (<code>?</code> у SQLite, <code>%s</code> у psycopg для PostgreSQL), ніколи f-рядок чи <code>+</code>.
+Увага: <code>%s</code> у psycopg - це мітка, значення йде ДРУГИМ аргументом <code>execute(sql, (name,))</code>. А оператор Python
+<code>"... %s" % name</code> - це знову склеювання рядка, тобто діра.</p>
+<p><strong>Пастка: параметром можна передати лише ЗНАЧЕННЯ.</strong> Назву колонки чи таблиці (<code>ORDER BY колонка</code>) параметром не
+передаси. Тоді - лише вибір зі списку дозволених:</p>
+<pre><code class="language-python">import sqlite3
+
+con = sqlite3.connect(&quot;:memory:&quot;)
+con.execute(&quot;CREATE TABLE marks (name TEXT, mark INTEGER)&quot;)
+con.executemany(&quot;INSERT INTO marks VALUES (?, ?)&quot;,
+                [(&quot;anna&quot;, 90), (&quot;bob&quot;, 75), (&quot;ira&quot;, 82)])
+
+ALLOWED = {&quot;name&quot;, &quot;mark&quot;}
+
+
+def top(order_by):
+    if order_by not in ALLOWED:
+        raise ValueError(&quot;так сортувати не можна&quot;)
+    return con.execute(f&quot;SELECT name FROM marks ORDER BY {order_by}&quot;).fetchall()
+
+
+print(top(&quot;mark&quot;))
+try:
+    top(&quot;mark; DROP TABLE marks&quot;)
+except ValueError as e:
+    print(e)
+</code></pre>
+<pre><code class="language-text">[('bob',), ('ira',), ('anna',)]
+так сортувати не можна
+</code></pre>
+<p>Тут f-рядок безпечний лише тому, що <code>order_by</code> - точно одне зі слів списку. (SQLite і так не виконає два
+запити через <code>;</code>, але в <code>ORDER BY</code> можна вставити підзапит, тому перевірка списком - обовʼязкова.)</p>
+<p><strong>Найменші права:</strong> програма заходить у базу користувачем, який може лише те, що їй треба (читати і писати
+свої таблиці), а не адміном бази. Тоді інʼєкція не зможе видалити таблиці чи дістатись до інших баз - хоча
+дані своїх таблиць усе одно під загрозою. Права зменшують шкоду, а не замінюють параметри.</p>
+<p><strong>Ще:</strong> резервні копії бази (і перевірка, що з них можна відновитись), паролі - хешем (тема 9),
+особисті дані - лише ті, що справді потрібні.</p>
+<p>OWASP: A05 Injection (CWE-89), A02 Security Misconfiguration (зайві права).</p>

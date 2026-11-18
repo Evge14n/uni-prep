@@ -1,0 +1,292 @@
+<h1 id="тема-5-історія-log-diff-show">Тема 5. Історія - log, diff, show</h1>
+<p><strong>Навіщо:</strong> у ЛР3 вчора все працювало, сьогодні doctest падає. Історія git відповідає на три питання: що я міняв, коли і як файл виглядав раніше. Без неї ти шукаєш помилку наосліп.</p>
+<h3 id="коротко">Коротко</h3>
+<p>Коміти лежать ланцюжком: кожен знає свого «батька» (попередній коміт). <code>HEAD</code> - це «де я зараз», тобто останній коміт поточної гілки.</p>
+<pre><code class="language-text">27d6c77 ← 10bffb8 ← 228f08c ← HEAD
+(double)  (README)  (triple)
+
+HEAD~1 = на 1 коміт назад (10bffb8)
+HEAD~2 = на 2 коміти назад (27d6c77)
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що показує</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git log</code></td>
+<td>усі коміти: хеш, автор, дата, повідомлення (новий зверху)</td>
+</tr>
+<tr>
+<td><code>git log --oneline</code></td>
+<td>те саме коротко: 7 знаків хешу + повідомлення</td>
+</tr>
+<tr>
+<td><code>git log --oneline -n 2</code></td>
+<td>лише 2 останні коміти</td>
+</tr>
+<tr>
+<td><code>git log --stat -n 1</code></td>
+<td>останній коміт + які файли і скільки рядків змінено</td>
+</tr>
+<tr>
+<td><code>git log --oneline -- README.md</code></td>
+<td>лише коміти, які чіпали цей файл</td>
+</tr>
+<tr>
+<td><code>git log --oneline --graph --all</code></td>
+<td>усі гілки малюнком (знадобиться в уроці 07)</td>
+</tr>
+<tr>
+<td><code>git diff</code></td>
+<td>що змінено в робочій теці, але ще НЕ додано (<code>add</code>)</td>
+</tr>
+<tr>
+<td><code>git diff --staged</code></td>
+<td>що вже додано і піде в наступний коміт</td>
+</tr>
+<tr>
+<td><code>git show</code></td>
+<td>останній коміт разом з його змінами</td>
+</tr>
+<tr>
+<td><code>git show HEAD~2:lr1.py</code></td>
+<td>файл таким, яким він був 2 коміти тому</td>
+</tr>
+<tr>
+<td><code>git blame lr1.py</code></td>
+<td>для кожного рядка: який коміт і хто його написав</td>
+</tr>
+</tbody>
+</table></div>
+<p>Як читати <code>diff</code>: рядок з <code>-</code> прибрали, рядок з <code>+</code> додали, рядки з пробілом на початку - контекст (не змінились). <code>@@ -3,4 +3,4 @@</code> - «шматок від 3-го рядка, 4 рядки».</p>
+<p>Аналогія: <code>git log</code> - це зміст зошита з датами, <code>git show</code> - одна сторінка, <code>git diff</code> - що ти дописав олівцем і ще не обвів ручкою.</p>
+<p>Довгий вивід <code>git log</code> відкривається в програмі перегляду (pager): гортай стрілками або пробілом, вийти - клавіша <code>q</code>.</p>
+<h3 id="пісочниця">Пісочниця</h3>
+<p>Нова тека лише для цього уроку, три коміти (<code>printf ... &gt;&gt;</code> дописує в кінець файлу):</p>
+<pre><code class="language-bash">mkdir ~/git-pisochnytsia-05
+cd ~/git-pisochnytsia-05
+git init
+printf 'def double(x):\n    return x * 2\n' &gt; lr1.py
+git add lr1.py
+git commit -m &quot;ЛР1: функція double&quot;
+printf '# Мої лаби\n' &gt; README.md
+git add README.md
+git commit -m &quot;Додай README&quot;
+printf '\n\ndef triple(x):\n    return x * 3\n' &gt;&gt; lr1.py
+git commit -am &quot;ЛР1: функція triple&quot;
+</code></pre>
+<p>Перший коміт пише так:</p>
+<pre><code class="language-text">[main (root-commit) 27d6c77] ЛР1: функція double
+ 1 file changed, 2 insertions(+)
+ create mode 100644 lr1.py
+</code></pre>
+<p><code>root-commit</code> - «коміт без батька», найперший. <strong>У тебе хеші й дати будуть інші</strong> (хеш залежить від часу й автора) - це нормально, дивись на будову виводу.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li><code>git log --oneline -n 1</code> - який коміт покаже: перший чи останній?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Останній: новий завжди зверху. <code>(HEAD -&gt; main)</code> - «ти тут, на гілці main».</p>
+<pre><code class="language-text">228f08c (HEAD -&gt; main) ЛР1: функція triple
+</code></pre>
+</details>
+<ol start="2">
+<li><code>git log --oneline -- README.md</code> - скільки рядків буде?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Один: README змінював лише один коміт. <code>--</code> відділяє назви файлів від решти.</p>
+<pre><code class="language-text">10bffb8 Додай README
+</code></pre>
+</details>
+<ol start="3">
+<li><code>git show HEAD~2:lr1.py</code> - що виведе?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Файл з найпершого коміту, ще без <code>triple</code>. Робоча тека при цьому не змінюється - це лише показ.</p>
+<pre><code class="language-text">def double(x):
+    return x * 2
+</code></pre>
+</details>
+<h3 id="руками">Руками</h3>
+<p><strong>Крок 1. Усі види log.</strong></p>
+<pre><code class="language-bash">git log
+</code></pre>
+<pre><code class="language-text">commit 228f08c9c75289074d6c150c847c63d52ef76502 (HEAD -&gt; main)
+Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
+Date:   Wed Nov 18 14:09:00 2026 +0200
+
+    ЛР1: функція triple
+
+commit 10bffb830ea0342d178c79b80cac40ac20c5d1de
+Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
+Date:   Wed Nov 18 14:06:00 2026 +0200
+
+    Додай README
+
+commit 27d6c77ad6890c4d92ada320eb61ca3ee8a23159
+Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
+Date:   Wed Nov 18 14:03:00 2026 +0200
+
+    ЛР1: функція double
+</code></pre>
+<p>Повний хеш - 40 знаків. Скрізь, де треба вказати коміт, вистачає перших 7 (<code>228f08c</code>).</p>
+<pre><code class="language-bash">git log --oneline
+git log --stat -n 1
+</code></pre>
+<pre><code class="language-text">228f08c (HEAD -&gt; main) ЛР1: функція triple
+10bffb8 Додай README
+27d6c77 ЛР1: функція double
+</code></pre>
+<pre><code class="language-text">commit 228f08c9c75289074d6c150c847c63d52ef76502 (HEAD -&gt; main)
+Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
+Date:   Wed Nov 18 14:09:00 2026 +0200
+
+    ЛР1: функція triple
+
+ lr1.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+</code></pre>
+<p>4 рядки, бо два порожні рядки перед <code>def triple</code> теж рахуються.</p>
+<p><strong>Крок 2. diff: до <code>add</code> і після.</strong> Міняємо 3 на 4 (наче випадково):</p>
+<pre><code class="language-bash">sed -i 's/x \* 3/x * 4/' lr1.py
+git diff
+</code></pre>
+<pre><code class="language-text">diff --git a/lr1.py b/lr1.py
+index c5825fd..a12de39 100644
+--- a/lr1.py
++++ b/lr1.py
+@@ -3,4 +3,4 @@ def double(x):
+
+
+ def triple(x):
+-    return x * 3
++    return x * 4
+</code></pre>
+<p>Тепер додай і знову спитай <code>git diff</code>:</p>
+<pre><code class="language-bash">git add lr1.py
+git diff
+git diff --staged
+</code></pre>
+<p>Перший <code>git diff</code> - <strong>порожньо</strong>. Зміна нікуди не зникла: вона переїхала в індекс, і її показує <code>git diff --staged</code> (той самий текст, що вище). Звідси правило: перед <code>git commit</code> глянь <code>git diff --staged</code> - побачиш рівно те, що піде в коміт.</p>
+<pre><code class="language-bash">git commit -m &quot;ЛР1: triple множить на 4&quot;
+</code></pre>
+<p><strong>Крок 3. show і blame.</strong></p>
+<pre><code class="language-bash">git show
+</code></pre>
+<pre><code class="language-text">commit c31063a0603f59f6ed8bd5ce73761102df2a7dac (HEAD -&gt; main)
+Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
+Date:   Wed Nov 18 14:12:00 2026 +0200
+
+    ЛР1: triple множить на 4
+
+diff --git a/lr1.py b/lr1.py
+index c5825fd..a12de39 100644
+--- a/lr1.py
++++ b/lr1.py
+@@ -3,4 +3,4 @@ def double(x):
+
+
+ def triple(x):
+-    return x * 3
++    return x * 4
+</code></pre>
+<p>Порівняти два будь-які коміти (тут: 2 коміти тому і зараз), лише список файлів:</p>
+<pre><code class="language-bash">git diff HEAD~2 HEAD --stat
+</code></pre>
+<pre><code class="language-text"> lr1.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+</code></pre>
+<p>Хто і коли написав кожен рядок:</p>
+<pre><code class="language-bash">git blame lr1.py
+</code></pre>
+<pre><code class="language-text">^27d6c77 (Твоє Імʼя 2026-11-18 14:03:00 +0200 1) def double(x):
+^27d6c77 (Твоє Імʼя 2026-11-18 14:03:00 +0200 2)     return x * 2
+228f08c9 (Твоє Імʼя 2026-11-18 14:09:00 +0200 3) 
+228f08c9 (Твоє Імʼя 2026-11-18 14:09:00 +0200 4) 
+228f08c9 (Твоє Імʼя 2026-11-18 14:09:00 +0200 5) def triple(x):
+c31063a0 (Твоє Імʼя 2026-11-18 14:12:00 +0200 6)     return x * 4
+</code></pre>
+<p><code>^</code> перед хешем - це найперший коміт. Рядок 6 змінив останній коміт - ось де шукати, хто «зламав» <code>triple</code>.</p>
+<p>І малюнок історії (поки пряма лінія, гілки будуть в уроці 07):</p>
+<pre><code class="language-bash">git log --oneline --graph --all
+</code></pre>
+<pre><code class="language-text">* c31063a (HEAD -&gt; main) ЛР1: triple множить на 4
+* 228f08c ЛР1: функція triple
+* 10bffb8 Додай README
+* 27d6c77 ЛР1: функція double
+</code></pre>
+<p><strong>Для лаб:</strong> у <code>~/univer/labs</code> (теки <code>lr1</code> ... <code>lr7</code>) історію однієї лаби дає <code>git log --oneline -- lr3</code>. Перед кожним комітом - <code>git diff --staged</code>, щоб у коміт не потрапило зайве. Якщо ЛР2 вчора працювала, а сьогодні ні - <code>git diff HEAD~1 HEAD</code> покаже, що саме ти поміняв, а <code>git show HEAD~1:lr2/lr2.py</code> - вчорашню версію файлу.</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li><code>git log</code> у репо, де ще нема жодного коміту:
+  <code>text
+  fatal: your current branch 'main' does not have any commits yet</code>
+  Це не поломка - спершу зроби перший <code>git commit</code>.</li>
+<li>Коміт, якого нема (комітів 4, а просиш на 9 назад):
+  <code>text
+  fatal: ambiguous argument 'HEAD~9': unknown revision or path not in the working tree.
+  Use '--' to separate paths from revisions, like this:
+  'git &lt;command&gt; [&lt;revision&gt;...] -- [&lt;file&gt;...]'</code>
+  Глянь <code>git log --oneline</code> і порахуй, скільки комітів насправді.</li>
+<li>Файлу не було в тому коміті (<code>git show HEAD~1:lr2.py</code>):
+  <code>text
+  fatal: path 'lr2.py' does not exist in 'HEAD~1'</code>
+  Перевір назву і теку (<code>lr2/lr2.py</code>, а не <code>lr2.py</code>).</li>
+<li><code>git diff</code> порожній, хоча ти щось міняв - ти вже зробив <code>git add</code>. Дивись <code>git diff --staged</code>.</li>
+<li>Екран <code>git log</code> «завис» і внизу <code>(END)</code> або <code>:</code> - це pager. Натисни <code>q</code>.</li>
+</ul>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li>Короткий псевдонім для малюнка історії - його ставлять майже всі (Pro Git, розд. 2.7 «Git Aliases»):
+  <code>bash
+  git config --global alias.lg "log --oneline --graph --all"
+  git lg -n 2</code>
+  ```text</li>
+<li>c31063a (HEAD -&gt; main) ЛР1: triple множить на 4</li>
+<li>228f08c ЛР1: функція triple
+  ```</li>
+<li>Пошук коміту, де зʼявився або зник текст («pickaxe», <code>-S</code>): коли зламався рядок, а ти не знаєш, коли.
+  <code>bash
+  git log -S "triple" --oneline</code>
+  <code>text
+  228f08c ЛР1: функція triple</code></li>
+<li><code>git log -p -- lr1.py</code> - уся історія одного файлу разом зі змінами в кожному коміті.</li>
+<li><code>git diff --word-diff</code> - різниця по словах, а не по рядках; зручно для README і звітів.</li>
+<li>На GitHub те саме є в браузері: у файлі кнопки <strong>History</strong> (log цього файлу) і <strong>Blame</strong> (docs.github.com, «Viewing a file»).</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чим відрізняються <code>git diff</code> і <code>git diff --staged</code>?</li>
+<li>Що означає <code>HEAD~2</code>?</li>
+<li>Як подивитися, яким був <code>lr1.py</code> три коміти тому, не змінюючи файл у теці?</li>
+<li>Як побачити лише ті коміти, що чіпали <code>README.md</code>?</li>
+<li>Ти бачиш у <code>git log</code> екран з <code>(END)</code> внизу. Що робити?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>git diff</code> - зміни, ще не додані (<code>add</code>); <code>git diff --staged</code> - додані, ті, що підуть у коміт.</li>
+<li>Коміт на 2 кроки назад від поточного (<code>HEAD</code> - поточний, <code>HEAD~1</code> - попередній).</li>
+<li><code>git show HEAD~3:lr1.py</code> - лише показ, файл у робочій теці лишається як є.</li>
+<li><code>git log --oneline -- README.md</code>.</li>
+<li>Натиснути <code>q</code> - це програма перегляду (pager), вона чекає, поки ти дочитаєш.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Pro Git, 2-ге вид., розд. 2.3 «Viewing the Commit History»: https://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History - відкрито 18.11.2026</li>
+<li>Pro Git, розд. 2.7 «Git Aliases»: https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases - відкрито 18.11.2026</li>
+<li>git log: https://git-scm.com/docs/git-log - відкрито 18.11.2026</li>
+<li>git diff: https://git-scm.com/docs/git-diff - відкрито 18.11.2026</li>
+<li>git show: https://git-scm.com/docs/git-show - відкрито 18.11.2026</li>
+<li>git blame: https://git-scm.com/docs/git-blame - відкрито 18.11.2026</li>
+<li>Як називати коміти (<code>HEAD~2</code>): https://git-scm.com/docs/gitrevisions - відкрито 18.11.2026</li>
+<li>GitHub, «Viewing a file» (History, Blame): https://docs.github.com/en/repositories/working-with-files/using-files/viewing-and-understanding-files - відкрито 18.11.2026</li>
+</ul>

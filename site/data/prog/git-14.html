@@ -1,0 +1,350 @@
+<h1 id="тема-14-теги-позначити-здачу">Тема 14. Теги - позначити здачу</h1>
+<p><strong>Навіщо:</strong> ти здав ЛР1, а через тиждень ще щось у ній підправив. Викладач питає: «А що саме ти показував мені на парі?»
+Тег - це наліпка <code>lr1-zdano</code> на коміт, який ти здав. Вона не зсувається, тож відповідь завжди одна команда.</p>
+<h3 id="коротко">Коротко</h3>
+<p><strong>Тег</strong> - назва, яку назавжди приклеїли до одного коміту. Гілка (Урок 07) - теж назва коміту, але вона <strong>їде вперед</strong>
+з кожним новим комітом. Тег стоїть на місці.</p>
+<pre><code class="language-text">                           lr1-zdano (тег - стоїть)
+                               │
+  a1b2c3d ──── 73942e5 ──── baa1934 ──── 99d1fc7
+                                            │
+                                          main (гілка - їде вперед з кожним комітом)
+</code></pre>
+<p>Аналогія: гілка - закладка, яку ти перекладаєш на сторінку, де зупинився. Тег - наліпка «здав тут» на конкретній сторінці.</p>
+<p>Теги бувають двох видів:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Вид</th>
+<th>Як створити</th>
+<th>Що зберігає</th>
+<th>Коли брати</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>легкий</td>
+<td><code>git tag lr1-chernetka</code></td>
+<td>лише назву → коміт</td>
+<td>для себе, на хвилину</td>
+</tr>
+<tr>
+<td><strong>анотований</strong></td>
+<td><code>git tag -a lr1-zdano -m "ЛР1 здано"</code></td>
+<td>назву, автора, дату, повідомлення</td>
+<td><strong>здача, версія</strong> - усе, що бачать інші</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git tag</code></td>
+<td>список тегів</td>
+</tr>
+<tr>
+<td><code>git tag -n</code></td>
+<td>список з першим рядком повідомлення</td>
+</tr>
+<tr>
+<td><code>git tag -a lr1-start -m "..." HEAD~1</code></td>
+<td>тег на старіший коміт (тут - на попередній)</td>
+</tr>
+<tr>
+<td><code>git show lr1-zdano</code></td>
+<td>хто, коли і з яким повідомленням поставив тег + сам коміт</td>
+</tr>
+<tr>
+<td><code>git push --follow-tags</code></td>
+<td>пушить коміти <strong>і анотовані</strong> теги (легкі - ні!)</td>
+</tr>
+<tr>
+<td><code>git push origin lr1-zdano</code></td>
+<td>пушить один тег будь-якого виду</td>
+</tr>
+<tr>
+<td><code>git tag -d lr1-chernetka</code></td>
+<td>видалити тег у себе</td>
+</tr>
+<tr>
+<td><code>git push origin --delete lr1-chernetka</code></td>
+<td>видалити тег на GitHub</td>
+</tr>
+<tr>
+<td><code>git checkout lr1-zdano</code></td>
+<td>подивитися файли, якими вони були на здачі (detached HEAD, нижче)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Головне правило: <strong>звичайний <code>git push</code> тегів не пушить.</strong> Тег живе лише у тебе, поки ти не відправиш його окремо.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li>
+<p>У тебе два нові коміти, ти їх уже запушив. Тепер <code>git tag -a lr1-zdano -m "ЛР1 здано викладачу"</code> і <code>git push</code>.
+   Що напише <code>git push</code> і чи буде тег на GitHub?
+   <details markdown="block">
+
+<summary>Відповідь</summary>
+
+
+   ```text
+   Everything up-to-date
+   ```
+   Тегу на GitHub **нема**: `git push` без прапорців відправляє лише гілку, а нових комітів у ній нема.
+   Тег треба відправити окремо (крок 4 у «Руками»).
+   </details></p>
+</li>
+<li>
+<p>Є легкий тег <code>lr1-chernetka</code> і анотований <code>lr1-zdano</code> на тому самому коміті. Запускаєш <code>git push --follow-tags</code>.
+   Скільки тегів поїде на GitHub?
+   <details markdown="block">
+
+<summary>Відповідь</summary>
+
+
+   Один - `lr1-zdano`. `--follow-tags` бере лише **анотовані** теги. Легкий доведеться пушити окремо:
+   `git push origin lr1-chernetka`.
+   </details></p>
+</li>
+<li>
+<p><code>git checkout lr1-zdano</code> - на якій гілці ти опинишся?
+   <details markdown="block">
+
+<summary>Відповідь</summary>
+
+
+   Ні на якій. git напише `You are in 'detached HEAD' state` - «HEAD відчеплений»: ти стоїш на коміті, а не на гілці.
+   Дивитися можна, комітити - краще ні (див. «Типові помилки»). Назад: `git switch main`.
+   </details></p>
+</li>
+<li>
+<p>Тег <code>lr1-zdano</code> уже є. Ти виправив опечатку і знову пишеш <code>git tag -a lr1-zdano -m "ЛР1 здано ще раз"</code>. Що буде?
+   <details markdown="block">
+
+<summary>Відповідь</summary>
+
+
+   ```text
+   fatal: tag 'lr1-zdano' already exists
+   ```
+   Код виходу 128, нового тегу нема. Два теги з однією назвою бути не може.
+   </details></p>
+</li>
+</ol>
+<h3 id="руками">Руками</h3>
+<p>Пісочниця - клон <code>~/pisochnytsia</code> з Уроку 03. Хеші комітів у тебе будуть інші - це нормально.</p>
+<p><strong>Крок 1. Два коміти «лаби» і push.</strong></p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+printf 'print(&quot;ЛР1, завдання 1&quot;)\n' &gt; lr1.py
+git add lr1.py
+git commit -m &quot;ЛР1: завдання 1&quot;
+printf 'print(&quot;ЛР1, завдання 2&quot;)\n' &gt;&gt; lr1.py
+git commit -am &quot;ЛР1: завдання 2&quot;
+git push
+</code></pre>
+<p><strong>Крок 2. Легкий і анотований тег.</strong></p>
+<pre><code class="language-bash">git tag lr1-chernetka
+git tag -a lr1-zdano -m &quot;ЛР1 здано викладачу&quot;
+git tag
+git tag -n
+</code></pre>
+<pre><code class="language-text">lr1-chernetka
+lr1-zdano
+lr1-chernetka   ЛР1: завдання 2
+lr1-zdano       ЛР1 здано викладачу
+</code></pre>
+<p><code>git tag -n</code> для легкого тегу показує повідомлення <strong>коміту</strong> (своє в нього нема), для анотованого - повідомлення <strong>тегу</strong>.</p>
+<p><strong>Крок 3. Чим вони різні всередині.</strong></p>
+<pre><code class="language-bash">git show lr1-zdano --stat
+</code></pre>
+<pre><code class="language-text">tag lr1-zdano
+Tagger: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
+Date:   Wed Nov 18 10:20:11 2026 +0000
+
+ЛР1 здано викладачу
+
+commit baa1934646dbbd7c5cf498cb02332e01ec470396 (HEAD -&gt; main, tag: lr1-zdano, tag: lr1-chernetka, origin/main, origin/HEAD)
+Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
+Date:   Wed Nov 18 10:20:11 2026 +0000
+
+    ЛР1: завдання 2
+
+ lr1.py | 1 +
+ 1 file changed, 1 insertion(+)
+</code></pre>
+<p>У дужках після хешу коміту - які гілки й теги на ньому стоять (як у <code>git log --decorate</code> нижче).
+Спершу йде сам тег (хто поставив, коли, навіщо), потім коміт. <code>git show lr1-chernetka --stat</code> одразу починається з
+<code>commit</code> - у легкого тегу нема ні автора, ні дати.</p>
+<p>Ще одна перевірка - якого типу обʼєкт стоїть за назвою:</p>
+<pre><code class="language-bash">git cat-file -t lr1-chernetka
+git cat-file -t lr1-zdano
+git log --oneline --decorate -n 2
+</code></pre>
+<pre><code class="language-text">commit
+tag
+baa1934 (HEAD -&gt; main, tag: lr1-zdano, tag: lr1-chernetka, origin/main, origin/HEAD) ЛР1: завдання 2
+73942e5 ЛР1: завдання 1
+</code></pre>
+<p>Легкий тег - просто назва коміту. Анотований - окремий обʼєкт <code>tag</code> у репозиторії, який вказує на коміт.
+<code>--decorate</code> дописує в дужках, які гілки й теги стоять на коміті (у терміналі <code>git log --oneline</code> робить це й сам).</p>
+<p><strong>Крок 4. Відправити теги на GitHub.</strong></p>
+<pre><code class="language-bash">git push --follow-tags
+git ls-remote --tags origin
+</code></pre>
+<pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
+ * [new tag]         lr1-zdano -&gt; lr1-zdano
+d0e7a5c2ff6b6ed977afd50e6136c51b1a49219c    refs/tags/lr1-zdano
+baa1934646dbbd7c5cf498cb02332e01ec470396    refs/tags/lr1-zdano^{}
+</code></pre>
+<p><code>git ls-remote --tags origin</code> питає GitHub, які теги <strong>там</strong>. Є лише <code>lr1-zdano</code>: легкий <code>--follow-tags</code> не взяв.
+Рядок з <code>^{}</code> - коміт, на який вказує анотований тег. Легкий відправляємо окремо:</p>
+<pre><code class="language-bash">git push origin lr1-chernetka
+</code></pre>
+<pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
+ * [new tag]         lr1-chernetka -&gt; lr1-chernetka
+</code></pre>
+<p><strong>Крок 5. Подивитися на здану версію.</strong></p>
+<pre><code class="language-bash">git checkout lr1-zdano
+git status
+</code></pre>
+<pre><code class="language-text">Note: switching to 'lr1-zdano'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c &lt;new-branch-name&gt;
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at baa1934 ЛР1: завдання 2
+HEAD detached at lr1-zdano
+nothing to commit, working tree clean
+</code></pre>
+<p>Переклад: «Ти у стані відчепленого HEAD. Можна дивитися і навіть комітити, але ці коміти не належать жодній гілці.
+Хочеш їх зберегти - створи гілку <code>git switch -c назва</code>. Повернутися - <code>git switch -</code>».
+Тут можна відкрити файли, запустити doctest - побачиш рівно те, що здавав. Назад на гілку:</p>
+<pre><code class="language-bash">git switch main
+</code></pre>
+<p><strong>Крок 6. Тег на старіший коміт.</strong> Забув поставити тег одразу? Його можна поставити на будь-який коміт:</p>
+<pre><code class="language-bash">git tag -a lr1-start -m &quot;Почав ЛР1&quot; HEAD~1
+git tag -l &quot;lr1-z*&quot;
+</code></pre>
+<p><code>HEAD~1</code> - коміт перед поточним (можна і хеш з <code>git log --oneline</code>). <code>git tag -l "lr1-z*"</code> показує лише теги,
+що починаються на <code>lr1-z</code>, - тут це <code>lr1-zdano</code>.</p>
+<p><strong>Крок 7. Видалити тег</strong> у себе і на GitHub:</p>
+<pre><code class="language-bash">git tag -d lr1-chernetka
+git push origin --delete lr1-chernetka
+</code></pre>
+<pre><code class="language-text">Deleted tag 'lr1-chernetka' (was baa1934)
+To github.com:Evge14n/pisochnytsia.git
+ - [deleted]         lr1-chernetka
+</code></pre>
+<p>Видаляй лише свої чернеткові теги. Тег здачі, який уже бачив викладач, не чіпай (чому - у «Типових помилках»).</p>
+<p><strong>Releases на GitHub (коротко).</strong> На сторінці репо справа є <strong>Releases</strong> → <strong>Draft a new release</strong> → <strong>Choose a tag</strong>
+(вибрати <code>lr1-zdano</code>) → назва і опис → <strong>Publish release</strong>. Реліз - це тег + сторінка з описом і архівами
+<code>Source code (zip)</code> / <code>Source code (tar.gz)</code>. Для лаб досить тегу, реліз - для програм, які хтось завантажує.</p>
+<p><strong>Для лаб:</strong> після здачі кожної лаби - анотований тег <code>lr1-zdano</code> ... <code>lr7-zdano</code> і <code>git push origin lr1-zdano</code>.
+Тоді навіть через пів року <code>git checkout lr3-zdano</code> покаже рівно те, що бачив викладач, а <code>git diff lr3-zdano main</code>
+- що ти міняв після здачі. Як це вбудувати в роботу з лабами - файл «Лаби в git - univer-labs покроково».</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ol>
+<li>
+<p><strong>Тег не зʼявився на GitHub.</strong> Ти зробив <code>git push</code>, а він написав <code>Everything up-to-date</code>. Звичайний push теги
+   не везе. Виправлення: <code>git push origin lr1-zdano</code> (будь-який тег) або <code>git push --follow-tags</code> (лише анотовані).</p>
+</li>
+<li>
+<p><strong><code>fatal: tag 'lr1-zdano' already exists</code></strong> - назва зайнята. Якщо тег ще <strong>не</strong> пушив - <code>git tag -d lr1-zdano</code>
+   і створи знову. Якщо вже на GitHub і його бачив викладач - не пересувай (його клони мають старий, і ви
+   говоритимете про різні версії). Краще новий тег: <code>lr1-zdano-2</code> з повідомленням, що змінено.</p>
+</li>
+<li>
+<p><strong><code>git switch</code> на тег не працює:</strong>
+   <code>text
+   fatal: a branch is expected, got tag 'lr1-zdano'
+   hint: If you want to detach HEAD at the commit, try again with the --detach option.</code>
+   <code>switch</code> переходить лише на гілки. На тег - <code>git switch --detach lr1-zdano</code> або <code>git checkout lr1-zdano</code>.</p>
+</li>
+<li>
+<p><strong>Коміт у detached HEAD «зник».</strong> Ти на тезі зробив коміт і пішов на <code>main</code>. git попереджає:
+   ```text
+   Warning: you are leaving 1 commit behind, not connected to
+   any of your branches:</p>
+<p>99d1fc7 Правка на тезі</p>
+</li>
+</ol>
+<p>If you want to keep it by creating a new branch, this may be a good time
+   to do so with:</p>
+<pre><code>git branch &lt;new-branch-name&gt; 99d1fc7
+</code></pre>
+<p><code>Одразу після цього коміт ще можна врятувати гілкою: `HEAD@{1}` - «де HEAD був один крок тому» (reflog, Урок 12).</code>bash
+   git branch lr1-pravka HEAD@{1}
+   <code>``
+   Правило: хочеш щось правити у старій версії - спершу</code>git switch -c нова-гілка`, потім комітить.</p>
+<ol start="5">
+<li><strong><code>fatal: no tag message?</code></strong> - написав <code>git tag -a lr1-test</code> без <code>-m</code>, git відкрив nano, а ти вийшов, нічого не
+   написавши. Тег не створено. Пиши відразу з <code>-m "повідомлення"</code>.</li>
+</ol>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li><strong>Версії у форматі <code>v1.4.2</code></strong> (Semantic Versioning): більша цифра - зламана сумісність, середня - нова можливість,
+  менша - виправлення. Тег <code>v1.4.2</code> = випуск програми. https://semver.org</li>
+<li><strong>Лише анотовані теги для випусків.</strong> Pro Git: «It's generally recommended that you create annotated tags»,
+  легкі - для тимчасових міток. Профі часто ще й <strong>підписують</strong> тег ключем: <code>git tag -s</code> (GitHub показує «Verified»).</li>
+<li><strong><code>push.followTags</code></strong> - щоб не забувати теги, один раз:
+  <code>bash
+  git config --global push.followTags true</code>
+  Після цього звичайний <code>git push</code> сам везе нові анотовані теги (перевірено в 2.43.0).</li>
+<li><strong>Release з терміналу</strong> через gh (Урок 16): <code>gh release create lr1-zdano --title "ЛР1" --notes-from-tag --verify-tag</code></li>
+<li>сторінка релізу з повідомленням тегу; <code>--verify-tag</code> не дасть створити реліз, якщо тегу ще нема на GitHub.
+  <code>bash
+  gh release create lr1-zdano --title "ЛР1" --notes-from-tag --verify-tag</code></li>
+<li><strong>Захист тегів</strong> у командах: правило (ruleset) на GitHub забороняє видаляти й пересувати теги <code>v*</code>
+  (docs.github.com, «About rulesets»).</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чим тег відрізняється від гілки?</li>
+<li>Чому для здачі краще анотований тег, а не легкий?</li>
+<li>Ти зробив <code>git tag -a lr2-zdano -m "ЛР2 здано"</code> і <code>git push</code>. Викладач не бачить тегу на GitHub. Чому і що зробити?</li>
+<li>Що означає <code>detached HEAD</code> і як повернутися назад?</li>
+<li>Як подивитися, які теги є на GitHub, не відкриваючи сайт?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Гілка їде вперед з кожним новим комітом, тег назавжди стоїть на одному коміті.</li>
+<li>Анотований зберігає автора, дату і повідомлення («ЛР2 здано»), це окремий обʼєкт; його бере <code>git push --follow-tags</code>.
+   Легкий - лише назва, без «хто і коли».</li>
+<li>Звичайний <code>git push</code> теги не пушить. <code>git push origin lr2-zdano</code> (або <code>git push --follow-tags</code>).</li>
+<li>HEAD стоїть на коміті, а не на гілці (після <code>git checkout тег</code>). Нові коміти тут не належать жодній гілці.
+   Назад - <code>git switch main</code> (або <code>git switch -</code>).</li>
+<li><code>git ls-remote --tags origin</code>.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Pro Git, 2.6 «Git Basics - Tagging»: https://git-scm.com/book/en/v2/Git-Basics-Tagging (відкрито 18.11.2026)</li>
+<li>git-scm.com/docs/git-tag: https://git-scm.com/docs/git-tag (відкрито 18.11.2026)</li>
+<li>git-scm.com/docs/git-push (<code>--follow-tags</code>, <code>--delete</code>): https://git-scm.com/docs/git-push (відкрито 18.11.2026)</li>
+<li>docs.github.com, «Managing releases in a repository»:
+  https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository (відкрито 18.11.2026)</li>
+<li>cli.github.com, <code>gh release create</code>: https://cli.github.com/manual/gh_release_create (відкрито 18.11.2026)</li>
+<li>docs.github.com, «About rulesets»:
+  https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets
+  (відкрито 18.11.2026)</li>
+<li>Semantic Versioning 2.0.0: https://semver.org (відкрито 18.11.2026)</li>
+</ul>

@@ -1,0 +1,92 @@
+<h1 id="тема-5-день-5-пакети-apt">Тема 5. День 5: Пакети: apt</h1>
+<p><strong>Навіщо:</strong> у Linux програми не качають з сайтів, а ставлять однією командою з перевіреного сховища.</p>
+<h3 id="коротко-5-хв">Коротко (5 хв)</h3>
+<p><code>apt</code> - менеджер пакетів Ubuntu. Пакет = програма або бібліотека.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sudo apt update</code></td>
+<td>оновити <strong>список</strong> пакетів (нічого не ставить)</td>
+</tr>
+<tr>
+<td><code>sudo apt upgrade</code></td>
+<td>поставити оновлення всього встановленого</td>
+</tr>
+<tr>
+<td><code>sudo apt install tree</code></td>
+<td>встановити пакет</td>
+</tr>
+<tr>
+<td><code>sudo apt remove tree</code></td>
+<td>видалити пакет</td>
+</tr>
+<tr>
+<td><code>apt search turtle</code></td>
+<td>знайти пакет за словом</td>
+</tr>
+<tr>
+<td><code>apt show python3-tk</code></td>
+<td>опис пакета</td>
+</tr>
+<tr>
+<td><code>apt list --installed \| grep python3</code></td>
+<td>що з python3 встановлено</td>
+</tr>
+</tbody>
+</table></div>
+<p>Порядок завжди: спершу <code>update</code>, потім <code>install</code> або <code>upgrade</code>. Раз на тиждень - <code>sudo apt update &amp;&amp; sudo apt upgrade</code>.
+<code>&amp;&amp;</code> - «другу команду лише якщо перша пройшла без помилки».</p>
+<p><strong>Де шукати, чи програма є:</strong> <code>which python3</code> → <code>/usr/bin/python3</code>. <code>python3 --version</code> - версія.</p>
+<p><strong>apt чи pip?</strong>
+- <code>apt</code> - для системи: python3, git, nano, python3-tk.
+- <code>pip</code> - для Python-бібліотек у <strong>venv</strong> твого проєкту: matplotlib, numpy, pytest (день 8).
+- <code>pip install</code> поза venv в Ubuntu 24.04 дає помилку <code>externally-managed-environment</code>. Це захист,
+  щоб не зламати системний Python. Не обходь її прапорцем <code>--break-system-packages</code> - просто увімкни venv.</p>
+<h3 id="руками-10-хв">Руками (10 хв)</h3>
+<pre><code>sudo apt update
+apt list --upgradable           # що можна оновити
+which tree
+apt show tree | head -5
+sudo apt install cowsay         # кумедна програма для тренування
+/usr/games/cowsay &quot;Привіт, Linux&quot;
+sudo apt remove cowsay
+/usr/games/cowsay &quot;ще є?&quot;       # No such file or directory - видалено
+dpkg -l python3-tk | tail -1    # ii = встановлено (його поставив ustanovka.sh)
+deactivate 2&gt;/dev/null         # вимкнути venv, якщо був увімкнений (рядок без (.venv))
+pip install requests            # error: externally-managed-environment - так і треба (буває, думає кілька секунд)
+python3 -m venv --help | head -3
+</code></pre>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li><code>apt install</code> без <code>sudo</code> → «Permission denied» / «are you root?».</li>
+<li><code>install</code> без <code>update</code> після довгої перерви → «Unable to locate package» або 404. Спершу <code>sudo apt update</code>.</li>
+<li><code>Could not get lock /var/lib/dpkg/lock-frontend</code> - інший apt уже працює (часто автооновлення
+  у фоні). Зачекай кілька хвилин. Не видаляй lock-файли.</li>
+<li>Закрив вікно Ubuntu посеред <code>upgrade</code> → наступного разу «dpkg was interrupted». Виправлення:
+  <code>sudo dpkg --configure -a</code>. (Так сталося і в мене під час налаштування твого ПК 17.11.)</li>
+<li><code>sudo pip install</code> або <code>--break-system-packages</code> - ламає системний Python. Бібліотеки - у venv.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чим <code>apt update</code> відрізняється від <code>apt upgrade</code>?</li>
+<li>Як встановити програму <code>htop</code>?</li>
+<li>Що означає <code>&amp;&amp;</code> у <code>sudo apt update &amp;&amp; sudo apt upgrade</code>?</li>
+<li>Чому <code>pip install numpy</code> поза venv дає <code>externally-managed-environment</code>?</li>
+<li>Що робити, якщо бачиш «dpkg was interrupted»?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>update</code> лише оновлює список доступних версій, <code>upgrade</code> реально ставить новіші версії встановлених пакетів.</li>
+<li><code>sudo apt update</code>, потім <code>sudo apt install htop</code>.</li>
+<li>Друга команда виконається лише якщо перша завершилась успішно.</li>
+<li>Ubuntu захищає системний Python від сторонніх пакетів (правило PEP 668). Ставити треба у venv.</li>
+<li><code>sudo dpkg --configure -a</code> - доналаштує обірвані пакети; потім повторити свою команду.</li>
+</ol>
+</details>

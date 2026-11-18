@@ -1,0 +1,418 @@
+<h1 id="шпаргалки">Шпаргалки</h1>
+<p>Усе на одній сторінці. Розгорни потрібну.</p>
+<details open>
+<summary>Python</summary>
+<pre><code>7/2=3.5  7//2=3  -7//2=-4  7%2=1  -7%2=1
+n%10 остання цифра   n//10%10 передостання
+input() -&gt; str!  &quot;2&quot;+&quot;3&quot;=&quot;23&quot;  int(input())
+True=1 False=0   &quot;так&quot;*(x&gt;0)
+a if умова else b   (вираз, не оператор)
+not &gt; and &gt; or      0 &lt; x &lt; 10
+range(1,10,2): 1 3 5 7 9  (stop не входить)
+while: змінна з умови міняється всередині
+break - вихід; for...else - якщо без break
+НСД: while b: a, b = b, a % b
+НСК = a*b // НСД;  дільники до d*d &lt;= n
+Фібоначчі: p, c = c, p + c  (одночасно!)
+ряд eˣ: a = a * x / n;  S = S + a
+ε: while abs(cur - prev) &gt;= eps
+бісекція: f(a)*f(c) &lt; 0 -&gt; b = c
+  кроків ≈ log₂((b - a) / ε)
+Горнер: v = v * x + coef
+lst[-1] останній  lst[1:3]  lst[::-1]
+append -&gt; None!   b = a НЕ копія: a.copy()
+[[0]*m for _ in range(n)]  не [[0]*m]*n
+(5,) кортеж   (5) число
+sorted(.., key=lambda r: (-r[1], r[0]))
+sum(1 for x in lst if x % 2 == 0)
+f&quot;{x:.2f}&quot; f&quot;{s:&lt;10}&quot; f&quot;{n:&gt;5}&quot; f&quot;{x:.3g}&quot;
+print(a, b, sep=&quot;, &quot;, end=&quot;&quot;)
+</code></pre>
+<p><strong>Функція:</strong> без <code>return</code> повертає <code>None</code>. Один <code>return</code>, частини через <code>\n</code>. Назву і doctest
+із заготовки не міняти.</p>
+<p><strong>doctest:</strong> порівнює вивід <strong>як текст</strong>: рядок у лапках, зайвий пробіл - падіння.
+<code>python -m doctest -v file.py</code>.</p>
+<p><strong>PEP 8:</strong> 4 пробіли; рядок до 79; 2 порожні рядки між функціями; пробіли навколо <code>=</code> і після
+коми; <code>snake_case</code>, <code>UPPER_CASE</code> для констант; не <code>list</code>, <code>sum</code>, <code>str</code>, <code>id</code> як імена;
+назви змістовні (<code>last_digit</code>, а не <code>a</code>).</p>
+<p><strong>Лінтери:</strong> pycodestyle (PEP 8), flake8 (+ невикористане), ruff (швидше), mypy (типи),
+black (переформатовує).</p>
+<p><strong>Помилки:</strong> <code>TypeError</code> "2"+3; <code>ValueError</code> int("abc"); <code>ZeroDivisionError</code>;
+<code>IndexError</code> lst[10]; <code>KeyError</code> d["нема"]; <code>NameError</code> нема змінної.</p>
+<p><strong>Залік:</strong> формат і бали невідомі - спитати викладача.</p>
+</details>
+<details>
+<summary>Linux Mint</summary>
+<p>Курс: <code>05_Програмування\Linux-Mint\</code>. Термінал Ctrl+Alt+T; копіювати/вставити - Ctrl+Shift+C / V.
+Помилка українською, а шукати треба англійською: <code>LC_ALL=C команда</code> (урок 00).</p>
+<p><strong>Перед зміною системи - знімок:</strong> <code>sudo timeshift --create --comments "перед ..."</code></p>
+<pre><code class="language-text">sudo apt update      apt list --upgradable      sudo apt upgrade (прочитай список, без -y)
+flatpak update       fwupdmgr get-updates (прошивки)      sudo timeshift --list
+</code></pre>
+<p><strong>Python</strong> - системний python3 (3.12) не чіпати і не видаляти; бібліотеки - лише у venv:</p>
+<pre><code class="language-text">sudo apt install python3-venv python3-pip python3-tk git
+python3 -m venv ~/univer/.venv    source ~/univer/.venv/bin/activate    (deactivate - вимкнути)
+pip install pytest flake8 black mypy ruff     pip list --outdated     pip install -U пакет
+</code></pre>
+<p><code>externally-managed-environment</code> = ти поза venv. Не <code>sudo pip</code>, не <code>--break-system-packages</code>.</p>
+<p><strong>Лаба</strong> (<code>univer</code> = cd + venv; <code>univer</code>, <code>perevir</code> і htop ставить <code>ustanovka-mint.sh</code>):</p>
+<pre><code class="language-text">mkdir -p ~/univer/labs/lr1 &amp;&amp; cd ~/univer/labs/lr1    nano lr1_1.py (Ctrl+S, Ctrl+X)
+python3 lr1_1.py -v                              doctest з подробицями
+python3 -m pytest --doctest-modules -q lr1_1.py  doctest з чесним кодом виходу
+printf &quot;127\n&quot; | python3 -m pytest --doctest-modules -q -s lr1_1.py   якщо є input()
+perevir lr1_1.py [відповіді на input()]   doctest, black, flake8, pycodestyle, ruff (78), mypy
+</code></pre>
+<p><code>python3 -m doctest файл.py</code> на файлі з <code>doctest.testmod()</code> у кінці тестує ще й сам doctest і пише
+чужий провал <code>... in __main__.DebugRunner</code> - твій код ні до чого. Бери <code>-v</code>, pytest або <code>perevir</code>.</p>
+<p><strong>Налагодження:</strong></p>
+<pre><code class="language-text">print(f&quot;{x=}&quot;)    breakpoint()    python3 -i lab.py (змінні після падіння)
+python3 -m pdb lab.py: n s c l ll p pp w u d  b 12  b 12, x &gt; 5  tbreak  cl 1  r  until  j  q
+python3 -m pdb -c continue lab.py (post-mortem)   python3 -X dev lab.py   python3 -W error lab.py
+</code></pre>
+<p><strong>Файли, пошук, місце:</strong></p>
+<pre><code class="language-text">pwd  ls -la  cd ~  cd ..  cd -    Tab - дописати    Ctrl+R - пошук в історії    man команда (q)
+cp -i a b   mv -i a b   rm -i файл   gio trash файл (у смітник)   mkdir -p a/b   ln -s ціль імʼя
+grep -rn &quot;print(&quot; ~/univer/labs    find ~/univer -name &quot;*.py&quot; -mtime -1
+df -h /    du -h --max-depth=1 | sort -h    lsblk -o NAME,SIZE,MODEL,MOUNTPOINT
+</code></pre>
+<p><strong>Права, програми, процеси, журнали:</strong></p>
+<pre><code class="language-text">chmod +x run.sh   ls -l   id   groups   sudo -k      sudo apt install ./файл.deb (з ./)
+apt search назва   sudo apt install назва   sudo apt remove назва   sudo apt autoremove
+htop (F9 вбити, F10 вийти)   pgrep -af назва   kill PID   Ctrl+C   flatpak list
+systemctl status NetworkManager    systemctl --failed    sudo journalctl -b -p err
+</code></pre>
+<p><strong>Мережа, git, безпека:</strong></p>
+<pre><code class="language-text">ip -br a   ping -c 3 1.1.1.1   ping -c 3 linuxmint.com   nmcli device status   sudo ss -tulpn
+ssh-keygen -t ed25519   ssh -T git@github.com   sudo ufw enable   sudo ufw status verbose
+git status   git add .   git commit -m &quot;ЛР1 завд. 1&quot;   git log --oneline   git push
+</code></pre>
+<p><strong>Cinnamon:</strong> Super - меню, Ctrl+Alt+L - заблокувати (Super+L - НЕ блокування), Super+D - стіл,
+Super+E - домашня тека, Super+стрілки - половина екрана, Ctrl+Alt+←/→ - робочий простір,
+Ctrl+Alt+Esc - перезапустити Cinnamon, Print - знімок екрана.
+<strong>Не завантажується:</strong> Shift/Esc при старті → GRUB → Advanced options → старе ядро. Чорний екран →
+Ctrl+Alt+F2 (TTY), назад Ctrl+Alt+F7. Зовсім погано → live USB → Timeshift → відновити.</p>
+</details>
+<details>
+<summary>Git і GitHub</summary>
+<h2 id="один-раз-на-ноутбуці-уроки-02-03">Один раз на ноутбуці (уроки 02-03)</h2>
+<pre><code>sudo apt install git
+git config --global user.name &quot;Твоє Імʼя&quot;
+git config --global user.email &quot;128326252+Evge14n@users.noreply.github.com&quot;
+git config --global init.defaultBranch main
+git config --global core.editor nano
+git config --global pull.rebase false
+git config --global core.quotepath false
+ssh-keygen -t ed25519 -C &quot;128326252+Evge14n@users.noreply.github.com&quot;
+ssh -T git@github.com            (відповідь: Hi Evge14n! You've successfully authenticated...)
+gh auth login -p ssh -w
+</code></pre>
+<h2 id="три-зони">Три зони</h2>
+<pre><code>робоча тека  --git add--&gt;  індекс (staging)  --git commit--&gt;  репозиторій  --git push--&gt;  GitHub
+             &lt;-git restore-                   &lt;-restore --staged-                  &lt;-git pull--
+</code></pre>
+<h2 id="щодня-уроки-04-06">Щодня (уроки 04-06)</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git status</code></td>
+<td>що змінено і що піде в коміт</td>
+</tr>
+<tr>
+<td><code>git add файл</code> / <code>git add .</code></td>
+<td>вибрати в коміт</td>
+</tr>
+<tr>
+<td><code>git commit -m "Завд. 2: перевірка вводу"</code></td>
+<td>знімок; перший рядок ≤ 50 знаків, що змінено</td>
+</tr>
+<tr>
+<td><code>git log --oneline --graph --all</code></td>
+<td>історія з гілками</td>
+</tr>
+<tr>
+<td><code>git diff</code> / <code>git diff --staged</code></td>
+<td>що змінено / що вже в індексі</td>
+</tr>
+<tr>
+<td><code>git show HEAD</code></td>
+<td>останній коміт повністю</td>
+</tr>
+<tr>
+<td><code>.gitignore</code></td>
+<td><code>.venv/</code> <code>__pycache__/</code> <code>*.pyc</code> <code>.pytest_cache/</code></td>
+</tr>
+<tr>
+<td><code>git rm --cached -r .venv</code></td>
+<td>прибрати з git, лишити на диску</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="гілки-і-конфлікт-уроки-07-08">Гілки і конфлікт (уроки 07-08)</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git switch -c lr3</code></td>
+<td>нова гілка і перейти</td>
+</tr>
+<tr>
+<td><code>git switch main</code></td>
+<td>назад на main</td>
+</tr>
+<tr>
+<td><code>git merge lr3</code></td>
+<td>злити lr3 у поточну</td>
+</tr>
+<tr>
+<td><code>git branch -d lr3</code></td>
+<td>видалити злиту гілку</td>
+</tr>
+<tr>
+<td><code>git merge --abort</code></td>
+<td>скасувати злиття з конфліктом</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD          ← твоя версія
+=======
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; lr3           ← версія з гілки
+</code></pre>
+<ul>
+<li>Конфлікт: відкрив у nano, лишив правильне, прибрав маркери, <code>git add файл</code>, <code>git commit</code>.</li>
+</ul>
+<h2 id="github-уроки-09-11-16">GitHub (уроки 09-11, 16)</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git clone git@github.com:Evge14n/univer-labs.git</code></td>
+<td>скачати репо</td>
+</tr>
+<tr>
+<td><code>git push -u origin lr3</code></td>
+<td>перший пуш гілки</td>
+</tr>
+<tr>
+<td><code>git push</code> / <code>git pull</code></td>
+<td>відправити / забрати і злити</td>
+</tr>
+<tr>
+<td><code>git fetch</code></td>
+<td>лише забрати, не зливати</td>
+</tr>
+<tr>
+<td><code>gh pr create --fill</code></td>
+<td>Pull Request з гілки</td>
+</tr>
+<tr>
+<td><code>gh pr merge --squash --delete-branch</code></td>
+<td>злити PR</td>
+</tr>
+<tr>
+<td>- «rejected (fetch first)» = на GitHub є нове: <code>git pull</code>, потім <code>git push</code>.</td>
+<td></td>
+</tr>
+<tr>
+<td>- «Closes #3» у коміті закриває issue 3, коли коміт потрапить у main.</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="скасувати-уроки-12-13">Скасувати (уроки 12-13)</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Сталося</th>
+<th>Лікування</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>зіпсував файл, не комітив</td>
+<td><code>git restore файл</code></td>
+</tr>
+<tr>
+<td>додав у індекс зайве</td>
+<td><code>git restore --staged файл</code></td>
+</tr>
+<tr>
+<td>помилка в останньому коміті, ще не push</td>
+<td><code>git commit --amend</code> або <code>git reset --soft HEAD~1</code></td>
+</tr>
+<tr>
+<td>поганий коміт уже на GitHub</td>
+<td><code>git revert хеш</code> (новий коміт)</td>
+</tr>
+<tr>
+<td>«загубив» коміт після reset --hard</td>
+<td><code>git reflog</code>, потім <code>git reset --hard HEAD@{1}</code></td>
+</tr>
+<tr>
+<td>треба терміново на іншу гілку</td>
+<td><code>git stash</code>, потім повернувся - <code>git stash pop</code></td>
+</tr>
+<tr>
+<td>- <code>git push --force</code> у спільну гілку - НІКОЛИ. Якщо дуже треба у своїй: <code>--force-with-lease</code>.</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="здача-лр-урок-14-лаби-в-git">Здача ЛР (урок 14, «Лаби в git»)</h2>
+<pre><code>git switch -c lr3            (на початку лаби)
+git status                   (подивись, що змінено)
+git add lr3 &amp;&amp; git commit -m &quot;Завд. 1: ...&quot;   (після кожного завдання з зеленим doctest)
+git switch main &amp;&amp; git merge lr3
+git tag -a lr3-zdano -m &quot;ЛР3 здано&quot;
+git push origin main lr3-zdano
+</code></pre>
+<ul>
+<li><code>--follow-tags</code> везе лише анотовані теги (<code>-a</code>). GitHub Pages на безкоштовному плані - лише з публічного репо.</li>
+</ul>
+</details>
+<details>
+<summary>Безпечний код</summary>
+<pre><code>ПРАВИЛО 0: усе ззовні - вороже,
+поки не перевірив (ввід, файл, URL,
+cookie, JSON, назва файлу)
+
+ВВІД      int() у try/except + межі
+          ніколи eval(ввід), exec(ввід)
+          текст -&gt; дані: json.loads,
+          ast.literal_eval
+ІНʼЄКЦІЇ  SQL: &quot;... WHERE name = ?&quot;,
+          (name,)
+          НЕ f-рядок, НЕ +
+          shell: subprocess.run([...]),
+          без shell=True
+ДОСТУП    перевірка на початку функції
+          чий обʼєкт? (IDOR)
+          fail closed: помилка = відмова
+ЛІМІТИ    len(ввід) ДО роботи
+          розмір файлу, к-сть спроб
+ФАЙЛИ     p = (BASE / name).resolve()
+          p.is_relative_to(BASE)
+СЕКРЕТИ   не в коді: os.environ, .env
+          .env у .gitignore,
+          читати: python-dotenv
+          витік у git -&gt; замінити ключ
+          токени: secrets, НЕ random
+ПОМИЛКИ   користувачу коротко + код
+          traceback - лише в лог
+          DEBUG = False на сервері
+PIP       venv + requirements.txt
+          pip-audit (з дефісом!)
+          назву - з сайту проєкту,
+          на pypi.org звір автора
+URL       лише https, timeout
+          SSRF: список дозволених хостів
+          хост: urlparse(url).hostname
+XSS       html.escape(все від людей)
+          посилання - лише https
+ПАРОЛІ    Argon2id (argon2-cffi)
+          НЕ sha256, НЕ відкрито
+ТОКЕНИ    порівнювати лише так:
+          hmac.compare_digest(
+            a.encode(), b.encode())
+БАЗА      параметри; колонка - зі списку
+          права БД - мінімальні
+</code></pre>
+<p>OWASP Top 10:2025: A01 доступ (IDOR, path traversal, SSRF, CSRF) · A02 налаштування · A03 ланцюг постачання (pip) ·
+A04 криптографія · A05 інʼєкції (SQL, команди, XSS, eval) · A06 небезпечний дизайн · A07 автентифікація ·
+A08 цілісність · A09 логи й тривоги · A10 обробка помилок (fail open, витік у помилці).</p>
+</details>
+<details>
+<summary>Linux у WSL</summary>
+<p><strong>Де я і що тут</strong></p>
+<pre><code>pwd                 де я
+ls -la              що тут (детально, з прихованими)
+cd тека             зайти;  cd ..  вище;  cd ~  додому
+/mnt/c, /mnt/d      диски Windows
+explorer.exe .      відкрити теку в Провіднику
+</code></pre>
+<p>Tab - дописати назву. ↑ - попередня команда. Ctrl+R - пошук в історії.</p>
+<p><strong>Файли і теки</strong></p>
+<pre><code>mkdir -p a/b        створити теку
+touch f.py          порожній файл
+cp f.py g.py        копія (cp -r тека нова - теку)
+mv f.py g.py        перейменувати / перемістити
+rm f.py             видалити НАЗАВЖДИ (кошика нема)
+rmdir тека          видалити порожню теку
+</code></pre>
+<p>Перед <code>rm *.щось</code> - спершу <code>ls *.щось</code>. Назви з пробілом - у лапки.</p>
+<p><strong>Подивитись і редагувати</strong></p>
+<pre><code>cat f               весь файл
+less f              гортати, q - вийти
+tail -n 20 f        кінець (head - початок)
+nano f.py           Ctrl+O Enter - зберегти, Ctrl+X - вийти
+code .              VS Code у цій теці
+</code></pre>
+<p><strong>Права і sudo</strong></p>
+<pre><code>ls -l               -rwxr-xr-x : власник / група / інші
+chmod +x s.sh       дозволити запуск, потім ./s.sh
+chmod 755 s.sh      r=4 w=2 x=1
+sudo команда        від root (пароль Ubuntu)
+</code></pre>
+<p>Свої файли - без sudo.</p>
+<p><strong>Пакети</strong></p>
+<pre><code>sudo apt update
+sudo apt upgrade
+sudo apt install назва
+</code></pre>
+<p>Python-бібліотеки - лише у venv (pip).</p>
+<p><strong>Процеси</strong></p>
+<pre><code>Ctrl+C              зупинити;  Ctrl+Z - призупинити, fg - назад
+pgrep -af python    PID усіх python
+kill PID            зупинити (kill -9 PID - силою)
+top                 хто їсть процесор, q - вийти
+wsl --shutdown      (у PowerShell) перезапустити Ubuntu
+</code></pre>
+<p><strong>Пайпи і пошук</strong></p>
+<pre><code>к &gt; f    перезаписати    к &gt;&gt; f   дописати    к 2&gt; f   помилки
+к1 | к2  вивід к1 → вхід к2
+grep -n &quot;def &quot; f.py      grep -rn &quot;текст&quot; тека
+printf &quot;5\n&quot; | python lab.py      ввід без клавіатури
+</code></pre>
+<p><strong>Python і лаби</strong></p>
+<pre><code>univer              ~/univer + venv увімкнено, видно (.venv)
+python lab.py       doctest (testmod у файлі) + програма
+python lab.py -v    doctest з подробицями
+perevir lab.py      doctest (pytest) + flake8 78 + mypy
+deactivate
+</code></pre>
+<p>Не <code>python -m doctest</code>, якщо в файлі є <code>doctest.testmod()</code> - чужий «DebugRunner Failed».</p>
+<p><strong>git</strong></p>
+<pre><code>git init
+git status
+git add .
+git commit -m &quot;що зробив&quot;
+git log --oneline
+git diff
+git restore f.py
+</code></pre>
+<p><strong>bash-скрипт</strong></p>
+<pre><code>#!/bin/bash
+x=5                 без пробілів біля =
+echo &quot;$1&quot;           аргумент, у лапках
+if [ -f &quot;$1&quot; ]; then ... fi
+for f in *.py; do ... done
+</code></pre>
+<p><strong>Помилки</strong>: <code>Permission denied</code> → chmod +x або чужий файл; <code>command not found</code> → нема програми або забув <code>./</code>;
+<code>$'\r'</code> → CRLF, VS Code → LF; <code>externally-managed-environment</code> → увімкни venv; <code>dpkg was interrupted</code> →
+<code>sudo dpkg --configure -a</code>.</p>
+</details>

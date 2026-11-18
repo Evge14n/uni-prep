@@ -1,0 +1,52 @@
+<h1 id="тема-9-веб-застосунок-owasp">Тема 9. Веб-застосунок (OWASP)</h1>
+<div class="pybox" id="pybox"></div>
+
+<p><strong>Автентифікація</strong> - хто ти (логін). <strong>Авторизація</strong> - що тобі можна (див. тему 3, IDOR).</p>
+<p><strong>XSS</strong> (cross-site scripting): ввід користувача потрапляє на сторінку як HTML і виконується як JavaScript
+у браузері ІНШИХ людей. Збережений XSS - коли текст зберігся (коментар) і показується всім.</p>
+<pre><code class="language-python">import html
+
+comment = &quot;&lt;script&gt;alert(1)&lt;/script&gt;&quot;     # «коментар» користувача
+print(&quot;&lt;p&gt;&quot; + comment + &quot;&lt;/p&gt;&quot;)             # погано
+print(&quot;&lt;p&gt;&quot; + html.escape(comment) + &quot;&lt;/p&gt;&quot;)  # добре
+</code></pre>
+<pre><code class="language-text">&lt;p&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&lt;/p&gt;
+</code></pre>
+<p>Після <code>html.escape</code> браузер показує текст як текст. Це працює для тексту в HTML і для атрибута в лапках,
+але не для посилань: <code>href="javascript:..."</code> екранування не рятує - у посиланнях від користувача пускай лише
+схему <code>https</code>. Шаблонізатори (Jinja2 у Flask, шаблони Django) екранують
+самі - не вимикай це (<code>|safe</code>, <code>Markup</code>) для вводу користувача.</p>
+<p><strong>CSRF:</strong> чужий сайт змушує твій браузер надіслати запит на сайт, де ти залогінений (браузер сам додає твої
+cookie). Захист: CSRF-токен у формах (у Django і Flask-WTF є готовий), cookie з <code>SameSite=Lax</code>, зміни лише через POST.</p>
+<p><strong>Паролі:</strong> ніколи не зберігати відкрито і не «шифрувати». Зберігати <strong>хеш повільною функцією з сіллю</strong>.
+OWASP Password Storage Cheat Sheet: перший вибір Argon2id (мінімум 19 МіБ памʼяті, 2 ітерації, 1 потік),
+якщо його нема - scrypt, bcrypt - лише для старих систем (і він бере лише перші 72 байти пароля). Звичайний SHA-256 для паролів -
+<strong>ні</strong>: він швидкий, відеокарта перебирає мільярди за секунду.</p>
+<pre><code class="language-python"># не запускати: у браузері нема argon2-cffi - запускай у терміналі на ПК
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+
+ph = PasswordHasher()   # типово 64 МіБ, 3 ітерації, 4 потоки - вище за мінімум OWASP
+stored = ph.hash(&quot;мій-пароль&quot;)      # це й зберігаємо в базі
+print(stored[:9])                   # $argon2id
+print(ph.verify(stored, &quot;мій-пароль&quot;))
+try:
+    ph.verify(stored, &quot;не-той&quot;)
+except VerifyMismatchError:
+    print(&quot;неправильний пароль&quot;)
+</code></pre>
+<pre><code class="language-text">$argon2id
+True
+неправильний пароль
+</code></pre>
+<p><strong>Порівняння секретів</strong> (токен, код з листа) - <code>hmac.compare_digest(a, b)</code>, а не <code>a == b</code>: звичайне <code>==</code> зупиняється
+на першій різниці, і за часом відповіді можна вгадувати символи по одному. Рядки <code>compare_digest</code> бере лише
+латинські (ASCII): на <code>"абв"</code> він кидає <code>TypeError</code>, тому для вводу користувача порівнюй байти - <code>.encode()</code>.</p>
+<pre><code class="language-python">import hmac
+
+print(hmac.compare_digest(b&quot;abc123&quot;, b&quot;abc123&quot;), hmac.compare_digest(&quot;абв&quot;.encode(), b&quot;abc123&quot;))
+</code></pre>
+<pre><code class="language-text">True False
+</code></pre>
+<p>OWASP: A05 Injection (XSS - CWE-79), A01 (CSRF - CWE-352), A07 Authentication Failures, A04 Cryptographic Failures (слабкий хеш пароля - CWE-916).</p>

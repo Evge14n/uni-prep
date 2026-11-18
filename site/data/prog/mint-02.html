@@ -101,6 +101,13 @@
 </ol>
 <pre><code class="language-bash">pip install requests
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>pip install</code> - ставить бібліотеку Python (лише у venv). Назва: pip installs packages; install - «встановити».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Що буде?</p>
 <details>
 <summary>Відповідь</summary>
@@ -121,6 +128,12 @@ Mint, бібліотеки став у venv. На свіжій Mint, де ще �
 </ol>
 <pre><code class="language-bash">head -1 /usr/bin/mintupdate
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
+</ul>
+</blockquote>
 <p>Що там і що це означає для тебе?</p>
 <details>
 <summary>Відповідь</summary>
@@ -136,6 +149,15 @@ Mint, бібліотеки став у venv. На свіжій Mint, де ще �
 </ol>
 <pre><code class="language-bash">apt-get -s remove python3 | grep -c '^Remv'
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt-get remove</code> - видаляє пакет; з -s лише показує, що видалив би. Назва: remove - «прибрати, вилучити». <code>-s</code> - лише симуляція: показує, що зробив би, нічого не видаляє, sudo не треба.</li>
+<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-c</code> - лише порахувати рядки зі збігом у кожному файлі (count).</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>У тестовій Mint 22.3 (без робочого столу) - <code>124</code>. Серед них <code>mintupdate</code>, <code>mintsources</code>, <code>mintsystem</code>, <code>timeshift</code>,
@@ -146,6 +168,12 @@ Mint, бібліотеки став у venv. На свіжій Mint, де ще �
 </ol>
 <pre><code class="language-bash">python3 --version
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>--version</code> - надрукувати версію Python, напр. Python 3.12.3.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">Python 3.12.3
@@ -158,10 +186,25 @@ Mint, бібліотеки став у venv. На свіжій Mint, де ще �
 <pre><code class="language-bash">cat /etc/os-release
 uname -r
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід. <code>/etc/os-release</code> - системний файл з назвою і версією системи (урок 02).</li>
+<li><code>uname</code> - показує назву і версію ядра Linux. Назва: Unix name - «імʼя Unix-системи». <code>-r</code> - версія ядра, яке працює зараз.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 2. Оновлення в терміналі, уважно.</strong></p>
 <pre><code class="language-bash">sudo apt update
 apt list --upgradable
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>apt update</code> - оновлює список пакетів, нічого не ставить. Назва: update - «оновити» (тут оновлюється лише список пакетів).</li>
+<li><code>apt list</code> - показує список пакетів: встановлених або з оновленнями. Назва: list - «список». <code>--upgradable</code> - лише пакети, для яких є новіша версія (список свіжий після sudo apt update).</li>
+</ul>
+</blockquote>
 <p>Вивід <code>apt list --upgradable</code> (початок; у тебе пакети будуть свої):</p>
 <pre><code class="language-text">Listing...
 alsa-ucm-conf/noble-updates 1.2.10-1ubuntu5.16 all [upgradable from: 1.2.10-1ubuntu5.14]
@@ -172,6 +215,12 @@ apt ще допише першим рядком <code>WARNING: apt does not have
 це попередження для тих, хто пише скрипти, тобі можна не зважати (у звичайному терміналі його нема).</p>
 <pre><code class="language-bash">sudo apt upgrade
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt upgrade</code> - ставить оновлення всіх пакетів. Назва: upgrade - «перейти на новішу версію».</li>
+</ul>
+</blockquote>
 <p>apt покаже список і спитає. Справжній вивід (скорочено, у середині ще 70 імен пакетів):</p>
 <pre><code class="language-text">The following upgrades have been deferred due to phasing:
   alsa-ucm-conf distro-info libdistro-info-perl libegl-mesa0 libegl1-mesa-dev
@@ -189,6 +238,13 @@ Do you want to continue? [Y/n]
 <pre><code class="language-bash">mintupdate-cli list
 sudo mintupdate-cli upgrade -r
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mintupdate-cli list</code> - показує доступні оновлення з позначкою security. Назва: list - «список».</li>
+<li><code>mintupdate-cli upgrade</code> - ставить оновлення, як Диспетчер оновлень. Назва: upgrade - «перейти на новішу версію». <code>-r</code> - спершу оновити кеш (список пакетів), потім ставити.</li>
+</ul>
+</blockquote>
 <p><code>mintupdate-cli list</code> (початок справжнього виводу):</p>
 <pre><code class="language-text">security        aom                                           3.8.2-2ubuntu0.2
 package         apparmor                                      4.0.1really4.0.1-0ubuntu0.24.04.9
@@ -198,6 +254,13 @@ security        apt                                           2.8.4ubuntu0.1
 <pre><code class="language-bash">flatpak update
 flatpak uninstall --unused
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>flatpak update</code> - оновлює всі Flatpak-програми. Назва: update - «оновити».</li>
+<li><code>flatpak uninstall</code> - видаляє Flatpak-програму або непотрібні бібліотеки. Назва: uninstall - «видалити встановлене». <code>--unused</code> - прибрати runtimes (спільні бібліотеки), які вже не потрібні жодній програмі.</li>
+</ul>
+</blockquote>
 <p>Коли все свіже, буде <code>Nothing to do.</code> і <code>Nothing unused to uninstall</code>.</p>
 <p><strong>Крок 4. Прошивки (пізніше, для ЛР1 не потрібно)</strong> (fwupd - служба, що бере прошивки з сайту LVFS від
 виробників). Ноутбук - на зарядці.</p>
@@ -206,6 +269,15 @@ fwupdmgr refresh
 fwupdmgr get-updates
 fwupdmgr update
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>fwupdmgr get-devices</code> - показує пристрої, прошивку яких можна оновити. Назва: get devices - «отримати пристрої».</li>
+<li><code>fwupdmgr refresh</code> - завантажує свіжий список прошивок з LVFS. Назва: refresh - «освіжити».</li>
+<li><code>fwupdmgr get-updates</code> - показує, для яких пристроїв є нова прошивка. Назва: get updates - «отримати оновлення».</li>
+<li><code>fwupdmgr update</code> - ставить нові прошивки на залізо. Назва: update - «оновити».</li>
+</ul>
+</blockquote>
 <p><code>get-devices</code> - які пристрої вміють оновлюватись, <code>refresh</code> - свіжий список прошивок, <code>get-updates</code> - що є нового,
 <code>update</code> - поставити (може попросити перезавантаження). Назви команд перевірено з <code>fwupdmgr --help</code> у Mint 22.3,
 а сам прохід на залізі - <strong>не перевірено</strong> (у тестовій системі нема справжніх пристроїв і служба fwupd не стартує).
@@ -215,6 +287,13 @@ fwupdmgr update
 python3 --version
 type -a python3
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>which</code> - показує шлях до програми з PATH. Назва: which - «котрий»: котрий файл запуститься.</li>
+<li><code>type</code> - каже, що це за команда і де вона. Назва: type - «тип»: що це за команда. <code>-a</code> - показати ВСІ варіанти з цією назвою: аліас, вбудовану, усі файли в PATH (all); <code>python3</code> - де лежить програма і чи вона перша в PATH.</li>
+</ul>
+</blockquote>
 <p>Справжній вивід:</p>
 <pre><code class="language-text">/usr/bin/python3
 Python 3.12.3
@@ -229,6 +308,14 @@ uv - швидкий менеджер Python і пакетів (від Astral). p
 pipx install uv
 pipx ensurepath
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
+<li><code>pipx install</code> - ставить програму на Python в окремий venv. Назва: pipx - pip для програм (як npx); install - «встановити».</li>
+<li><code>pipx ensurepath</code> - додає ~/.local/bin у PATH, щоб працювали програми з pipx. Назва: pipx - «pip для програм»; ensure path - «забезпечити, щоб було в PATH».</li>
+</ul>
+</blockquote>
 <p>Справжній вивід <code>pipx install uv</code> (версія у тебе може бути новіша):</p>
 <pre><code class="language-text">installing uv...
 ⚠️  Note: '/home/evgen/.local/bin' is not on your PATH environment variable.
@@ -248,6 +335,13 @@ done! ✨ 🌟 ✨
 Installed Python 3.13.18 in 1.24s
  + cpython-3.13.18-linux-x86_64-gnu (python3.13)
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>./скрипт</code> - запускає свій файл-скрипт з поточної теки. Назва: ./ - «звідси»: крапка = поточна тека, / відділяє теку від файлу. <code>~/.local/bin/uv</code> - програма, якої ще нема в PATH (урок 02), - кличуть за повним шляхом.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+</blockquote>
 <p>Venv на 3.13 для пробної теки. <strong><code>--seed</code> обовʼязково</strong> - без нього у venv не буде pip:</p>
 <pre><code class="language-bash">mkdir -p ~/proba313
 cd ~/proba313
@@ -259,6 +353,15 @@ python --version
 <pre><code class="language-text">/home/evgen/proba313/.venv/bin/python
 Python 3.13.18
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела.</li>
+<li><code>which</code>: <code>python</code> - у venv покаже ~/univer/.venv/bin/python; поза venv - тиша.</li>
+</ul>
+</blockquote>
 <p>Вимкнути venv - <code>deactivate</code>. Прибрати пробу: <code>cd ~</code> і <code>rm -r ~/proba313</code>. Для лаб поки лишайся на системному 3.12 у <code>~/univer/.venv</code> (урок 03), якщо викладач
 не просить іншу версію.</p>
 <p><strong>Альтернатива - pyenv</strong> (теж пізніше і лише за потреби; не перевірено в Mint 22.3: pyenv збирає Python з вихідного коду, для цього треба
@@ -275,6 +378,13 @@ Python 3.13.18
 <pre><code class="language-bash">source ~/univer/.venv/bin/activate
 pip list --outdated
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>source</code>: <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
+<li><code>pip list</code> - показує встановлені бібліотеки і їхні версії. Назва: list - «список» встановлених пакетів. <code>--outdated</code> - лише застарілі пакети: Version - стоїть, Latest - найновіша (потрібен інтернет).</li>
+</ul>
+</blockquote>
 <p>Справжній вивід у venv, де застаріли pip і six:</p>
 <pre><code class="language-text">Package Version Latest Type
 ------- ------- ------ -----
@@ -285,6 +395,14 @@ six     1.16.0  1.17.0 wheel
 <pre><code class="language-bash">python3 -m pip freeze &gt; ~/univer/requirements.txt
 cat ~/univer/requirements.txt
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code>: <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m pip freeze</code> - друкує список пакетів з точними версіями (для requirements.txt). Назва: pip installs packages - «pip ставить пакети»; freeze - «заморозити» версії.</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 8. Перестворити venv (після уроку 03; потрібно після нової версії Python або якщо venv зламався).</strong>
 Venv не оновлюють - його створюють заново зі списку:</p>
 <pre><code class="language-bash">~/univer/.venv/bin/python -m pip freeze &gt; ~/univer/requirements.txt
@@ -293,6 +411,14 @@ rm -r ~/univer/.venv
 python3 -m venv ~/univer/.venv
 ~/univer/.venv/bin/python -m pip install -r ~/univer/requirements.txt
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>./скрипт</code>: <code>~/univer/.venv/bin/python</code> - повний шлях: запустити саме python з venv, а не той, що першим знайдеться в PATH.</li>
+<li><code>rm</code> - видаляє файли назавжди, без кошика. Назва: remove - «прибрати, видалити». <code>-r</code> - видаляти теки разом з усім, що всередині (recursive).</li>
+<li><code>python3 -m venv</code> - створює окреме середовище Python (venv) для бібліотек лаб. Назва: virtual environment - «віртуальне середовище». <code>~/univer/.venv</code> - наш venv на всі лаби; крапка на початку - тека прихована (ls -a її покаже).</li>
+</ul>
+</blockquote>
 <p><code>pyvenv.cfg</code> показує, з якого Python зроблено venv (рядок <code>version = 3.12.3</code>). Файли лаб у <code>~/univer/labs</code>
 при цьому не чіпаються - видаляється лише тека <code>.venv</code>.</p>
 <h2 id="типові-помилки">Типові помилки</h2>

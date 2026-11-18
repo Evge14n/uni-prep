@@ -260,6 +260,16 @@ print(&quot;Разом:&quot;, total, &quot;кг&quot;)
 cd ~/univer/praktyka/nalag1
 nano period.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <h3 id="крок-1-прочитай-traceback-знизу-вгору">Крок 1. Прочитай traceback знизу вгору</h3>
 <p>Набери в <code>period.py</code> (період маятника <code>T = 2π·√(l/g)</code>), збережи Ctrl+O, Enter, вийди Ctrl+X:</p>
 <pre><code class="language-python">import math
@@ -289,6 +299,12 @@ main()
                                         ^^^^^^
 NameError: name 'lenght' is not defined. Did you mean: 'lengths'?
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+</ul>
+</blockquote>
 <p>Знизу вгору: <code>NameError</code> - імені <code>lenght</code> нема. Де: рядок 13, функція <code>main</code>, <code>^^^^^^</code> під <code>lenght</code>. Підказка
 каже <code>lengths</code>, але ми мали на увазі <code>length</code> (одне число з циклу). Рядок 16 - лише «звідки викликали».</p>
 <h3 id="крок-2-помилка-глибше-ніж-здається">Крок 2. Помилка глибше, ніж здається</h3>
@@ -348,6 +364,12 @@ Traceback (most recent call last):
                          ^^^^^^^^^^^^^^^^^^^^^
 ValueError: math domain error
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code>: <code>-O</code> - оптимізація: викидає всі assert, тож перевірки assert мовчки не працюють.</li>
+</ul>
+</blockquote>
 <h3 id="крок-4-python3-i-зазирнути-всередину-після-падіння">Крок 4. <code>python3 -i</code> - зазирнути всередину після падіння</h3>
 <p><code>-i</code> (interactive) після кінця програми (і після падіння теж) відкриває Python <code>&gt;&gt;&gt;</code>, де вже є все з файлу:</p>
 <pre><code class="language-bash">python3 -i period.py
@@ -381,6 +403,12 @@ Traceback (most recent call last):
 NameError: name 'lengths' is not defined
 &gt;&gt;&gt;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code>: <code>-i</code> - спершу виконати файл, а потім лишитись у Python з &gt;&gt;&gt; і всіма його функціями.</li>
+</ul>
+</blockquote>
 <p>Тут видно глобальні імена (<code>G</code>, <code>period</code>) і можна викликати функції руками. А <code>lengths</code> нема: це <strong>локальна</strong>
 змінна <code>main</code>, вона зникла разом з функцією. Щоб побачити локальні змінні місця падіння, є <code>pdb.pm()</code> (урок 06).
 Вихід з <code>&gt;&gt;&gt;</code> - Ctrl+D.</p>
@@ -503,6 +531,14 @@ bdb.BdbQuit
                       ^^^^^^^^^^^^^
 bdb.BdbQuit
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <h3 id="крок-6-print-налагодження-fx-type-stderr">Крок 6. print-налагодження: <code>f"{x=}"</code>, <code>type</code>, stderr</h3>
 <p>Створи <code>masa.py</code> з «Передбач» (пункт 2) і запусти. Число <code>23</code> - підозріле. Додай друк змінних <strong>у потік помилок</strong>
 (stderr), щоб він не змішувався зі справжнім виводом:</p>
@@ -534,6 +570,13 @@ cat debug.txt
 mass_1='2' mass_2='3' total='23'
 type(total)=&lt;class 'str'&gt;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
+<li><code>2&gt;</code> - пише лише помилки у файл. Назва: redirect stderr - «перенаправити помилки»: 2 - номер потоку помилок.</li>
+</ul>
+</blockquote>
 <p>(Відповіді <code>2</code> і <code>3</code> прийшли з <code>printf</code>, тому їх не видно після запрошень.) <code>/dev/null</code> - «чорна діра»,
 усе, що туди пишеш, зникає. Виправ сам: <code>float(input(...))</code>, і прибери налагоджувальні <code>print</code>.</p>
 <h2 id="типові-помилки">Типові помилки</h2>

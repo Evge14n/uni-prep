@@ -1,10 +1,11 @@
 {
-"version": "894967a242d7",
+"version": "e9cc3ee99705",
 "files": [
 "./",
 "index.html",
 "grafik.js",
 "app.js",
+"komandy.js",
 "pyrun.js",
 "py-worker.js",
 "style.css",
@@ -65,6 +66,7 @@
 "data/prog/shpargalka.html",
 "data/prog/dovidnyk.html",
 "data/prog/shlyakh.html",
+"data/prog/komandy.html",
 "data/prog/shpargalky.html",
 "data/prog/vse.html",
 "data/prog/lab-4.html",
@@ -86,6 +88,7 @@
 "data/prog/urok-08.html",
 "data/prog/urok-09.html",
 "data/prog/moduli.json",
+"data/prog/komandy.json",
 "data/prog/zadachi/urok01.py",
 "data/prog/zadachi/urok02.py",
 "data/prog/zadachi/urok03.py",

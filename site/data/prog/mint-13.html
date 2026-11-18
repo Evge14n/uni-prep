@@ -233,9 +233,22 @@ BIOS (там видно режим завантаження і «Безпечн�
 <p><strong>X11 чи Wayland.</strong> Це «рушій», що малює вікна. У Mint 22.x типово працює <strong>X11 (Xorg)</strong>. Сеанс Wayland можна вибрати
 на екрані входу (значок біля імені), але в 22.x він <strong>експериментальний</strong> (linuxmint.com, «What's new» 21.3-22.3) -
 для лаб і повсякденної роботи лишай типовий. Перевірити, що зараз: <code>echo $XDG_SESSION_TYPE</code> (<code>x11</code> або <code>wayland</code>).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>$ЗМІННА</code> (dollar) - бере значення змінної (назви, під якою bash тримає текст).</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Доступність</strong> (лупа, екранна клавіатура, великий текст, озвучення) - теж у «Системних налаштуваннях», пункт про
 доступність (Accessibility; назва може трохи відрізнятись).</p>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <p>Відкрий термінал (Ctrl+Alt+T). <code>gsettings</code> читає налаштування робочого столу. Якщо ти нічого не міняв, буде
 типове значення.</p>
 <ol>
@@ -246,9 +259,8 @@ BIOS (там видно режим завантаження і «Безпечн�
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gsettings get</code> - друкує значення одного налаштування робочого столу. Назва: get - «отримати, взяти». <code>org.cinnamon.desktop.keybindings.media-keys</code> - схема гарячих клавіш Cinnamon для програм і «мультимедіа» (термінал, блокування); <code>screensaver</code> - ключ: комбінація, що блокує екран.</li>
+<li><code>gsettings get</code> - друкує значення одного налаштування робочого столу. Назва: <code>gsettings</code> - G(Lib) settings - «налаштування» через бібліотеку GLib. <code>org.cinnamon.desktop.keybindings.media-keys</code> - схема гарячих клавіш Cinnamon для програм і «мультимедіа» (термінал, блокування); <code>screensaver</code> - ключ: комбінація, що блокує екран.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <details>
 <summary>Відповідь</summary>
@@ -330,9 +342,9 @@ org.cinnamon.desktop.keybindings.wm switch-to-workspace-up ['&lt;Control&gt;&lt;
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>gsettings list-recursively</code> - друкує всі налаштування схеми зі значеннями. Назва: list recursively - «перелічити все, з усіма вкладеними».</li>
-<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати».</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>grep</code> - шукає рядки з текстом (у файлах або те, що прийшло через <code>|</code>). Назва: g/re/p з редактора ed: global regular expression print - «скрізь знайти шаблон, надрукувати».</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
 </ul>
 </blockquote>
 <p>Збережи всі свої комбінації у файл - знадобиться, якщо колись перевстановиш систему:</p>
@@ -344,8 +356,8 @@ grep terminal ~/moi-klavishi.txt
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
 </ul>
 </blockquote>
 <p><code>&lt;Primary&gt;</code> - те саме, що Ctrl.</p>
@@ -368,7 +380,7 @@ gsettings get org.cinnamon.desktop.keybindings.media-keys terminal
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gsettings reset</code> - повертає налаштування до типового значення. Назва: reset - «скинути» (до типового). <code>terminal</code> - ключ схеми ...media-keys: комбінація для терміналу (типово Ctrl+Alt+T).</li>
+<li><code>gsettings reset</code> - повертає налаштування до типового значення. <code>terminal</code> - ключ схеми ...media-keys: комбінація для терміналу (типово Ctrl+Alt+T).</li>
 </ul>
 </blockquote>
 <p>Своя програма на клавішу: та сама вкладка, кнопка «Додати власне скорочення» (Add custom shortcut) - назва,

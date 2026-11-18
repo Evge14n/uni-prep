@@ -59,6 +59,28 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nmcli device</code> - показує, чи підключені Wi-Fi і кабель. Назва: <code>nmcli</code> - NetworkManager command-line interface - «NetworkManager з командного рядка» (NetworkManager - служба мережі); device - «пристрій»: мережеві пристрої очима NetworkManager. <code>status</code> - таблиця DEVICE TYPE STATE CONNECTION: пристрій, тип, стан, до якої мережі підключений.</li>
+<li><code>nmcli dev</code> - показує мережеві пристрої і Wi-Fi поруч (скорочено від <code>device</code>). Назва: dev - скорочення від device, «пристрій».</li>
+<li><code>ip a</code> - показує Wi-Fi, кабель і їхні IP-адреси (номери в мережі). Назва: ip - Internet Protocol, «інтернет-протокол» (правила звʼязку в мережі); a - address, «адреса».</li>
+<li><code>ip r</code> - показує, через який роутер (шлюз) іде інтернет. Назва: ip - Internet Protocol, «інтернет-протокол»; r - route, «маршрут».</li>
+<li><code>ping</code> - перевіряє, чи відповідає компʼютер чи сайт за адресою. Назва: назва від звуку сонара «пінг»: послав сигнал - чекаєш луну. <code>-c</code> - скільки пакетів послати і зупинитись (c - count, «кількість»); без -c ping іде вічно; <code>1.1.1.1</code> - адреса сервера Cloudflare, що завжди відповідає: перевіряє інтернет без DNS (перетворення імен сайтів на адреси).</li>
+<li><code>resolvectl status</code> - показує, хто перетворює імена сайтів на адреси (DNS-сервери). Назва: resolve control - «керування розвʼязуванням імен» (імʼя сайту → IP-адреса).</li>
+<li><code>curl</code> - звертається до сайту за адресою і показує відповідь. Назва: client URL - «клієнт для URL» (URL - адреса в інтернеті). <code>-I</code> (<code>--head</code>) - лише заголовки - службові рядки на початку відповіді; перший - код, напр. <code>HTTP/2 200</code> (head - «голова»).</li>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>ss</code> - показує, на яких портах (номерах «дверей» у мережі) чекають програми. Назва: socket statistics - «статистика сокетів» (сокет - «гніздо» для мережевого звʼязку). <code>-t</code> (<code>--tcp</code>) - зʼєднання TCP - звичайні надійні (ssh, сайти) (tcp); <code>-u</code> (<code>--udp</code>) - зʼєднання UDP - швидкі, без перевірки доставки (DNS, відео) (udp); <code>-l</code> (<code>--listening</code>) - лише ті, що слухають, тобто чекають підключень (listening - «слухають»); <code>-p</code> (<code>--processes</code>) - яка програма тримає порт; чужі програми видно лише з sudo (processes - «процеси», запущені програми); <code>-n</code> (<code>--numeric</code>) - номери портів цифрами (22), а не назвами (ssh) (numeric - «числами»).</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-c</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-br</code> = <code>-b</code> і <code>-r</code>.</li>
+<li>Символи <code>~</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Сходинки діагностики</strong> - йди зверху вниз, перша сходинка, що не працює, і є поломка:</p>
 <pre><code class="language-text">1. nmcli device status        Wi-Fi &quot;connected&quot;?           ні → Wi-Fi (крок 3)
 2. ip -br a                   є адреса (напр. 192.168.x.x)? ні → роутер не дав адресу
@@ -69,6 +91,12 @@
 </code></pre>
 <p><strong>ssh</strong> (Secure Shell) - зашифрований вхід у термінал іншого компʼютера: <code>ssh користувач@адреса</code>. Замість пароля
 краще <strong>ключ</strong> - пара файлів:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ssh</code> - заходить у термінал іншого компʼютера по зашифрованому каналу. Назва: Secure Shell - «захищена оболонка».</li>
+</ul>
+</blockquote>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -131,14 +159,32 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ssh-keygen</code> - робить пару ключів ssh (секретний і для GitHub) і показує відбитки. Назва: ssh key generator - «генератор ssh-ключів». <code>-t</code> - тип ключа; <code>ed25519</code> - сучасний і короткий, його радить GitHub (type - «тип»); <code>-C</code> - коментар-підпис, щоб упізнати ключ (напр. <code>"evgen-laptop"</code>); пошта не обовʼязкова (comment); <code>ed25519</code> - тип ключа (після <code>-t</code>).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>ssh-copy-id</code> - кладе твій публічний ключ на сервер, щоб входити без пароля. Назва: ssh copy identity - «скопіювати посвідчення» (публічний ключ) на сервер.</li>
+<li><code>scp</code> - копіює файли на інший компʼютер або звідти (через ssh). Назва: secure copy - «безпечне копіювання» (через ssh).</li>
+<li><code>rsync</code> - копіює теки, а повторно - лише змінене. Назва: remote sync - «віддалена синхронізація». <code>-a</code> (<code>--archive</code>) - архівний режим: усе з підтеками, права і час зміни (archive - «архів»); <code>-v</code> (<code>--verbose</code>) - писати, що копіюється (verbose - «багатослівно»).</li>
+</ul>
+</blockquote>
 <p><strong>ssh-сервера на Mint нема</strong> (пакета <code>openssh-server</code> нема на ISO 22.3), тобто ніхто не може зайти на твій
 ноутбук по ssh. Клієнт <code>ssh</code> є. Сервер не став, поки не треба. Якщо колись знадобиться (зайти на ноутбук з іншого
 компʼютера): <code>sudo apt install openssh-server</code>, потім <code>sudo ufw allow ssh</code> (урок 25), а коли вхід по ключу
 запрацює - вимкнути вхід паролем (<code>PasswordAuthentication no</code> у файлі в <code>/etc/ssh/sshd_config.d/</code>).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt install</code> - ставить програму з інтернету; на «Бажаєте продовжити? [Y/n]» - Enter. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)».</li>
+<li><code>ufw allow</code> - відкриває в брандмауері вхід до служби чи порту (номера «дверей»). Назва: <code>ufw</code> - Uncomplicated Firewall - «нескладний брандмауер». <code>ssh</code> - служба ssh, тобто порт 22/tcp (назву ufw бере з <code>/etc/services</code>).</li>
+</ul>
+</blockquote>
 <p><strong>VPN коротко.</strong> На ISO 22.3 є додатки NetworkManager для OpenVPN і PPTP. Якщо університет чи робота дасть файл
 <code>.ovpn</code>: аплет мережі → «Мережні зʼєднання» → <code>+</code> → імпорт збереженої конфігурації VPN (назви пунктів - не
 перевірено в Cinnamon GUI). Далі VPN вмикається в тому ж аплеті. Роби саме за інструкцією того, хто дав VPN.</p>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <ol>
 <li>Інтернет є (<code>ping -c 3 1.1.1.1</code> працює). Що скаже ping для імені, якого не існує?</li>
 </ol>
@@ -148,10 +194,9 @@ echo $?
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>ping</code> - перевіряє, чи доходять пакети до адреси. Назва: назва від звуку сонара «пінг»: послав сигнал - чекаєш луну. <code>-c</code> - скільки пакетів послати і зупинитись (c - count, «кількість»); без -c ping іде вічно; <code>nema.invalid</code> - домен .invalid спеціально ніколи не існує - для перевірки відповіді «такого імені нема».</li>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>ping</code>: <code>nema.invalid</code> - домен .invalid спеціально ніколи не існує - для перевірки відповіді «такого імені нема».</li>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <details>
 <summary>Відповідь</summary>
@@ -169,12 +214,6 @@ echo $?
 <pre><code class="language-bash">rsync -av lr1/ backup-lr1/
 rsync -av lr1 backup2/
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>rsync</code> - копіює теки, а повторно - лише змінене. Назва: remote sync - «віддалена синхронізація»: копіює і між компʼютерами. <code>-a</code> - архівний режим: усе з підтеками, права і час зміни (archive); <code>-v</code> - писати, що копіюється (verbose).</li>
-</ul>
-</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">sending incremental file list
@@ -214,6 +253,13 @@ Load key &quot;/home/evgen/.ssh/id_ed25519&quot;: bad permissions
 evgen@localhost: Permission denied (publickey).
 </code></pre>
 <p>Лікується <code>chmod 600 ~/.ssh/id_ed25519</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code> - змінює права файлу: хто може читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>600</code> - rw-------: 6 лише тобі (читати і змінювати), групі й іншим 0 - для ключів ssh і паролів.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+</ul>
+</blockquote>
 </details>
 <ol start="4">
 <li>Ти вперше підключаєшся до сервера (тут - GitHub). Що спитає ssh і що з цим робити?</li>
@@ -223,7 +269,7 @@ evgen@localhost: Permission denied (publickey).
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>ssh</code> - заходить у термінал іншого компʼютера по зашифрованому каналу. Назва: Secure Shell - «захищена оболонка»: зашифрований термінал на іншому компʼютері. <code>-T</code> - прапорець: не відкривати термінал на тому боці, лише перевірити вхід (ssh -T git@github.com). GitHub не дає командного рядка, тому для нього завжди -T; якщо вхід вдався, GitHub вітає на імʼя і закриває зʼєднання з кодом 1 - це нормально (Git урок 03); <code>git@github.com</code> - користувач git на сервері github.com - так GitHub приймає всіх, а тебе впізнає за ключем.</li>
+<li><code>ssh</code>: <code>-T</code> - прапорець: не відкривати термінал на тому боці, лише перевірити вхід (<code>ssh -T git@github.com</code>); <code>-t</code> - дати термінал, <code>-T</code> - не давати. GitHub не дає командного рядка, тому для нього завжди <code>-T</code>; якщо вхід вдався, GitHub вітає на імʼя і закриває зʼєднання з кодом 1 - це нормально; <code>git@github.com</code> - користувач git на сервері github.com - так GitHub приймає всіх, а тебе впізнає за ключем.</li>
 </ul>
 </blockquote>
 <details>
@@ -246,14 +292,6 @@ IP-адреса в дужках у тебе може бути інша.</p>
 ip r
 resolvectl status
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>ip a</code> - показує мережеві пристрої і їхні IP-адреси. Назва: ip - Internet Protocol, «інтернет-протокол»; a - address, «адреса».</li>
-<li><code>ip r</code> - показує маршрути; default via - це шлюз (роутер). Назва: ip - Internet Protocol; r - route, «маршрут».</li>
-<li><code>resolvectl status</code> - показує, які DNS-сервери використовує система. Назва: resolve control - «керування розвʼязуванням імен» (імʼя сайту → IP-адреса).</li>
-</ul>
-</blockquote>
 <p>Справжній вивід з <strong>тестової</strong> Mint 22.3 - це віртуальна машина, тому там один «кабель» <code>eth0</code>, а не Wi-Fi:</p>
 <pre><code class="language-text">lo               UNKNOWN        127.0.0.1/8 ::1/128
 eth0             UP             172.29.180.211/20 fe80::215:5dff:fed7:9f51/64
@@ -268,13 +306,6 @@ default via 172.29.176.1 dev eth0 proto kernel onlink
 ping -c 3 linuxmint.com
 curl -I https://linuxmint.com
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>ping</code>: <code>1.1.1.1</code> - адреса DNS-сервера Cloudflare: зручно перевіряти інтернет без участі DNS.</li>
-<li><code>curl</code> - звертається до сайту за адресою і показує відповідь. Назва: client URL - «клієнт для URL», тобто для адрес у мережі. <code>-I</code> - лише заголовки відповіді (head - «голова»), перший рядок - код, напр. HTTP/2 200.</li>
-</ul>
-</blockquote>
 <p>Добре, коли в ping <code>3 packets transmitted, 3 received, 0% packet loss</code>, а curl першим рядком пише <code>HTTP/2 200</code>.
 Справжній кінець ping у тестовій Mint:</p>
 <pre><code class="language-text">--- 1.1.1.1 ping statistics ---
@@ -291,10 +322,8 @@ rfkill list
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>nmcli device</code> - показує, чи підключені Wi-Fi і кабель. Назва: device - «пристрій»: мережеві пристрої очима NetworkManager. <code>status</code> - таблиця DEVICE TYPE STATE CONNECTION: пристрій, тип, стан, до якої мережі підключений.</li>
-<li><code>nmcli dev</code> - те саме, що nmcli device (скорочено). Назва: dev - скорочення від device, «пристрій».</li>
-<li><code>nmcli radio</code> - показує чи вмикає Wi-Fi (nmcli radio wifi on). Назва: radio - «радіо»: перемикачі Wi-Fi і мобільного інтернету. <code>wifi</code> - показати стан Wi-Fi: enabled - увімкнено, disabled - вимкнено.</li>
-<li><code>rfkill list</code> - показує, чи не заблоковано Wi-Fi і Bluetooth. Назва: list - «список»: блокування кожного радіопристрою.</li>
+<li><code>nmcli radio</code> - показує, чи ввімкнений Wi-Fi, і вмикає його (<code>nmcli radio wifi on</code>). Назва: radio - «радіо»: перемикачі Wi-Fi і мобільного інтернету. <code>wifi</code> - показати стан Wi-Fi: enabled - увімкнено, disabled - вимкнено.</li>
+<li><code>rfkill list</code> - показує, чи не заблоковано Wi-Fi і Bluetooth. Назва: <code>rfkill</code> - radio frequency kill - «вимикач радіо».</li>
 </ul>
 </blockquote>
 <p><code>nmcli device status</code> - таблиця <code>DEVICE TYPE STATE CONNECTION</code>. Твій Wi-Fi пристрій має бути <code>connected</code> і мати
@@ -315,16 +344,15 @@ rfkill list
 <li>Не допомогло → <code>sudo systemctl restart NetworkManager</code> (служби - урок 20).</li>
 <li>Wi-Fi пристрою взагалі нема в <code>nmcli device status</code> → драйвер, «Керування драйверами» (урок 17).</li>
 </ol>
-<p><strong>Крок 4. Хто слухає порти.</strong></p>
-<pre><code class="language-bash">sudo ss -tulpn
-</code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
-<li><code>ss</code> - показує, які програми слухають мережеві порти. Назва: socket statistics - «статистика сокетів» (сокет - «гніздо» для мережевого звʼязку). <code>-t</code> - зʼєднання TCP (ssh, https); <code>-u</code> - зʼєднання UDP (DNS, мультимедіа); <code>-l</code> - лише ті, що слухають (чекають підключень); <code>-p</code> - яка програма тримає порт; чужі програми видно лише з sudo; <code>-n</code> - номери портів цифрами (22), а не назвами (ssh).</li>
+<li><code>systemctl restart</code> - перезапускає службу (фонову програму): зупинити і запустити. Назва: <code>systemctl</code> - system control - «керування системою» (через systemd - програму, що запускає служби).</li>
 </ul>
 </blockquote>
+<p><strong>Крок 4. Хто слухає порти.</strong></p>
+<pre><code class="language-bash">sudo ss -tulpn
+</code></pre>
 <p><code>-t</code> TCP, <code>-u</code> UDP, <code>-l</code> лише ті, що слухають, <code>-p</code> яка програма (тому <code>sudo</code>), <code>-n</code> номери замість назв.
 Справжній вивід у тестовій Mint (там для перевірок поставлено ssh-сервер, тому є порт 22):</p>
 <pre><code class="language-text">Netid State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
@@ -345,13 +373,6 @@ tcp   LISTEN 0      4096            [::]:22           [::]:*    users:((&quot;sy
 <p><strong>Крок 5. ssh-ключ.</strong> Підпис після <code>-C</code> - будь-який текст, щоб упізнати ключ (пошта не обовʼязкова).</p>
 <pre><code class="language-bash">ssh-keygen -t ed25519 -C &quot;evgen-laptop&quot;
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>ssh-keygen</code> - робить пару ssh-ключів і показує їхні відбитки. Назва: ssh key generator - «генератор ssh-ключів». <code>-t</code> - тип ключа; ed25519 - сучасний і короткий, його радить GitHub; <code>-C</code> - коментар-підпис, щоб упізнати ключ (напр. "evgen-laptop"); пошта не обовʼязкова; <code>ed25519</code> - тип ключа (після -t).</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-</ul>
-</blockquote>
 <p>На перше питання - просто Enter (типове місце), далі двічі пароль ключа (passphrase). З паролем безпечніше:
 якщо ноутбук вкрадуть, ключ без пароля не спрацює. Символи пароля не видно. Справжній сеанс (у тестовій Mint пароль
 ключа порожній, а «малюнок» і відбиток у тебе будуть інші):</p>
@@ -390,14 +411,19 @@ cat ~/.ssh/id_ed25519.pub
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long); <code>-a</code> - показати й приховані (назва з крапки), разом з . і .. (all); <code>~/.ssh</code> - показати вміст іншої теки, не заходячи в неї.</li>
-<li><code>ssh-keygen</code>: <code>-l</code> - показати відбиток (fingerprint) ключа - коротку «назву» ключа, що починається з SHA256; <code>-f</code> - файл: куди записати новий ключ або який ключ читати (з -l).</li>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long - «довгий»); <code>-a</code> (<code>--all</code>) - показати й приховані (назва з крапки), разом з . і .. (all - «усі»); <code>~/.ssh</code> - показати вміст іншої теки, не заходячи в неї.</li>
+<li><code>ssh-keygen</code>: <code>-l</code> - показати відбиток (fingerprint) - коротку «назву» ключа, що починається з SHA256 (list); <code>-f</code> - файл: куди записати новий ключ або який ключ читати (з <code>-l</code>) (file - «файл»).</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
 </ul>
 </blockquote>
 <p>(тут лише потрібні рядки виводу). <code>cat</code> покаже один рядок <code>ssh-ed25519 AAAAC3...  evgen-laptop</code> - це і є те, що
 дають GitHub чи серверу. Якщо права не такі: <code>chmod 700 ~/.ssh</code> і <code>chmod 600 ~/.ssh/id_ed25519</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code>: <code>700</code> - rwx------: 7 (усе) лише тобі - тека тільки для тебе.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 6. Перше підключення до GitHub</strong> (ключ туди ще не додано - урок 24):</p>
 <pre><code class="language-bash">ssh -T git@github.com
 </code></pre>
@@ -411,7 +437,7 @@ rsync -av ~/univer/labs/ ~/backup/labs/
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
 </ul>
 </blockquote>
 <p>Вдруге rsync нічого не копіює (<code>sending incremental file list</code> і одразу підсумок) - бо нічого не змінилось. Тому
@@ -456,6 +482,12 @@ exit                                     вийти з сервера (або Ct
 <li><strong><code>WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!</code></strong> - відбиток сервера не той, що в <code>known_hosts</code>. Справжній
   вивід (у тестовій Mint відбиток GitHub навмисно зіпсовано):</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ssh</code>: <code>-v</code> - прапорець: докладно (verbose) - що ssh пробує крок за кроком і який ключ пропонує (рядки Offering public key).</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -478,6 +510,12 @@ Host key verification failed.
   Твій ноутбук так відповідає завжди: сервера на Mint нема.
 - <strong><code>Connection timed out</code></strong> - адреса не та, або брандмауер чи мережа (напр. гостьовий Wi-Fi) блокує порт 22
   (цей текст у тестовій Mint не відтворено).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ssh-keygen</code>: <code>-R</code> - прибрати з known_hosts (списку знайомих серверів) записи про сервер, напр. <code>-R github.com</code> (remove).</li>
+</ul>
+</blockquote>
 <h2 id="як-роблять-профі">Як роблять профі</h2>
 <ul>
 <li><strong>Ключі ed25519 з паролем, паролі для входу вимкнені.</strong> GitHub у документації генерує саме

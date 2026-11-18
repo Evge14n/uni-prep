@@ -58,6 +58,26 @@ Broadcom Wi-Fi              → «Керування драйверами» (м�
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>inxi</code> - показує, що за залізо і які драйвери. <code>-G</code> (<code>--graphics</code>) - лише відеокарта, дисплей і драйвер (graphics - «графіка»); <code>-F</code> (<code>--full</code>) - повний звіт: усі основні розділи (System, CPU, Graphics, Network...) (full - «повний»); <code>-x</code> (<code>--extra</code>) - більше подробиць; <code>-xx</code> і <code>-xxx</code> - ще більше (extra - «додатково»); <code>-z</code> (<code>--filter</code>) - ховає MAC-адреси, серійні номери, IP - для форуму (filter - «фільтр»).</li>
+<li><code>lspci</code> - перелічує внутрішні пристрої і, з -k, їхні драйвери. Назва: list PCI - «перелічити пристрої PCI» (внутрішня шина компʼютера). <code>-k</code> - для кожного пристрою - драйвер ядра (Kernel driver in use) і модулі (kernel - «ядро»).</li>
+<li><code>lsusb</code> - перелічує USB-пристрої. Назва: list USB - «перелічити USB-пристрої».</li>
+<li><code>rfkill list</code> - показує, чи не заблоковано Wi-Fi і Bluetooth. Назва: <code>rfkill</code> - radio frequency kill - «вимикач радіо».</li>
+<li><code>nvidia-smi</code> - показує стан карти NVIDIA і версію драйвера. Назва: NVIDIA System Management Interface - «інтерфейс керування системою NVIDIA».</li>
+<li><code>dkms</code> - сам перезбирає сторонні драйвери після оновлення ядра (серця Linux). Назва: Dynamic Kernel Module Support - «підтримка динамічних модулів ядра». <code>status</code> - «стан»: по рядку на кожен драйвер і ядро; installed - зібрано і встановлено.</li>
+<li><code>mokutil</code> - каже, чи увімкнено Secure Boot (захищене завантаження). Назва: MOK utility - «інструмент для MOK» (Machine Owner Key, «ключ власника»). <code>--sb-state</code> - стан Secure Boot: enabled - увімкнено, disabled - вимкнено.</li>
+<li><code>driver-manager</code> - відкриває «Керування драйверами» (напр. драйвер NVIDIA). Назва: driver manager - «керування драйверами».</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-G</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>|</code> набирай в англійській розкладці (<code>|</code> - Shift і клавіша <code>\</code>).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>«Керування драйверами»</strong> (англійською Driver Manager, у старих статтях «Менеджер драйверів»): Меню → Адміністрування →
 Керування драйверами. Пароль програма спитає, коли застосовуватимеш зміни (ставить пакети через PackageKit, з коду
 mintdrivers 1.8.8). Назви в програмі (з українського перекладу mintdrivers 1.8.8):</p>
@@ -97,7 +117,14 @@ mintdrivers 1.8.8). Назви в програмі (з українського 
 питання ставить пакет драйвера). Ubuntu має й готові підписані модулі NVIDIA (<code>linux-modules-nvidia-580-generic</code>) -
 з ними MOK не потрібен. Який варіант поставить Driver Manager - не перевірено на залізі; дізнаєшся командою
 <code>dkms status</code> (якщо там є <code>nvidia</code> - це DKMS).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+</ul>
+</blockquote>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <ol>
 <li>На ноутбуці з двома відеокартами (Intel + NVIDIA) або у віртуальній машині ти шукаєш відеокарту так:</li>
 </ol>
@@ -106,11 +133,9 @@ mintdrivers 1.8.8). Назви в програмі (з українського 
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>lspci</code> - перелічує внутрішні пристрої і, з -k, їхні драйвери. Назва: list PCI - «перелічити пристрої PCI» (внутрішня шина компʼютера). <code>-k</code> - для кожного пристрою - драйвер ядра (Kernel driver in use) і модулі.</li>
-<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-A</code> - показати ще стільки рядків ПІСЛЯ збігу: -A 3 (after); <code>-i</code> - без різниці між великими й малими літерами (ignore case).</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>grep</code> - шукає рядки з текстом (у файлах або те, що прийшло через <code>|</code>). Назва: g/re/p з редактора ed: global regular expression print - «скрізь знайти шаблон, надрукувати». <code>-A</code> (<code>--after-context</code>) - показати ще стільки рядків ПІСЛЯ збігу: -A 3 (after - «після»); <code>-i</code> (<code>--ignore-case</code>) - без різниці між великими й малими літерами (ignore case - «не зважати на регістр»).</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p>Що буде, якщо карта записана як «3D controller»?</p>
 <details>
@@ -123,8 +148,8 @@ mintdrivers 1.8.8). Назви в програмі (з українського 
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>grep</code>: <code>-E</code> - розширені регулярні вирази: |, +, {79,} без зворотних рисок.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>grep</code>: <code>-E</code> (<code>--extended-regexp</code>) - розширені шаблони: <code>|</code> (або), <code>+</code>, <code>{79,}</code> без зворотних рисок (extended - «розширені»).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
 </ul>
 </blockquote>
 <p>Приклад для ноутбука з Intel і NVIDIA (<strong>у тебе буде інше</strong>: адреси, моделі, драйвери):</p>
@@ -149,7 +174,7 @@ mintdrivers 1.8.8). Назви в програмі (з українського 
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>inxi</code> - показує, що за залізо і які драйвери. Назва: назва не розшифровується (так назвав автор програми). <code>-c</code> - кольори; -c0 - без кольорів (для файлу чи форуму); <code>-F</code> - повний звіт: усі основні розділи (System, CPU, Graphics, Network...); <code>-x</code> - більше подробиць; -xx і -xxx - ще більше; <code>-z</code> - ховає MAC-адреси, серійні номери, IP - для форуму.</li>
+<li><code>inxi</code>: <code>-c</code> (<code>--color</code>) - кольори; <code>-c0</code> - без кольорів, для файлу чи форуму (color - «колір»).</li>
 </ul>
 </blockquote>
 <details>
@@ -177,12 +202,6 @@ mintdrivers 1.8.8). Назви в програмі (з українського 
 lspci -k | grep -A3 -iE &quot;vga|3d&quot;
 inxi -Fxz
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>inxi</code>: <code>-G</code> - лише відеокарта, дисплей і драйвер.</li>
-</ul>
-</blockquote>
 <p>У тестовій системі курсу справжньої відеокарти нема, тому тут - <strong>приклад для ноутбука</strong> (у тебе будуть свої
 моделі, версії й числа):</p>
 <pre><code class="language-text">Graphics:
@@ -206,9 +225,7 @@ driver-manager
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
-<li><code>timeshift</code> - робить і відновлює знімки системи. Назва: time shift - «зсув у часі»: повернути систему в минуле. <code>--create</code> - зробити знімок зараз; <code>--comments</code> - підпис до знімка, напр. --comments "перед драйвером" (видно в стовпці Description).</li>
-<li><code>driver-manager</code> - відкриває «Керування драйверами» (напр. драйвер NVIDIA). Назва: driver manager - «керування драйверами».</li>
+<li><code>timeshift</code> - робить знімок системи і повертає її до знімка, якщо щось зламалось. Назва: time shift - «зсув у часі». <code>--create</code> - зробити знімок зараз; <code>--comments</code> - підпис до знімка, напр. <code>--comments "перед драйвером"</code> (видно в стовпці Description).</li>
 </ul>
 </blockquote>
 <p>Далі мишкою: вибери драйвер з позначкою «рекомендовані» → «Застосувати зміни» → дочекайся кінця →
@@ -220,14 +237,6 @@ inxi -G
 dkms status
 mokutil --sb-state
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>nvidia-smi</code> - показує стан карти NVIDIA і версію драйвера. Назва: NVIDIA System Management Interface - «інтерфейс керування системою NVIDIA».</li>
-<li><code>dkms</code> - перезбирає драйвери під кожне ядро; status - що зібрано. Назва: Dynamic Kernel Module Support - «підтримка динамічних модулів ядра». <code>status</code> - «стан»: по рядку на кожен модуль і ядро, наприкінці installed - зібрано і встановлено.</li>
-<li><code>mokutil</code> - каже, чи увімкнено Secure Boot. Назва: MOK utility - «інструмент для MOK» (Machine Owner Key, «ключ власника»). <code>--sb-state</code> - стан Secure Boot: enabled - увімкнено, disabled - вимкнено.</li>
-</ul>
-</blockquote>
 <ul>
 <li><code>nvidia-smi</code> малює табличку. Дивись верхній рядок <code>Driver Version: 580...</code> і назву карти в середині. Таблиця
   є - драйвер працює.</li>
@@ -242,17 +251,16 @@ mokutil --sb-state
 lspci -k | grep -A3 -i net
 lsusb
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>rfkill list</code> - показує, чи не заблоковано Wi-Fi і Bluetooth. Назва: list - «список»: блокування кожного радіопристрою.</li>
-<li><code>lsusb</code> - перелічує USB-пристрої. Назва: list USB - «перелічити USB-пристрої».</li>
-</ul>
-</blockquote>
 <p><code>rfkill list</code> пише по блоку на кожен радіопристрій з рядками <code>Soft blocked</code> і <code>Hard blocked</code>:
 - <code>Soft blocked: yes</code> - вимкнено програмно (режим «у літаку» або аплет). Увімкнути: <code>rfkill unblock wifi</code>
   (або <code>rfkill unblock bluetooth</code>).
 - <code>Hard blocked: yes</code> - вимкнено кнопкою або Fn-клавішею на ноутбуці, або в BIOS. Команда не допоможе.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>rfkill unblock</code> - знімає програмне блокування з Wi-Fi чи Bluetooth. <code>wifi</code> - Wi-Fi (те саме - wlan); <code>bluetooth</code> - Bluetooth.</li>
+</ul>
+</blockquote>
 <p><code>lspci -k</code> для Wi-Fi показує <code>Network controller</code> і рядок <code>Kernel driver in use</code>. Нема цього рядка - драйвер не
 підхопився, відкрий «Керування драйверами». Вбудований Bluetooth і USB Wi-Fi шукай у <code>lsusb</code>.
 (У тестовій системі нема ні Wi-Fi, ні USB: там <code>rfkill</code> пише <code>cannot open /dev/rfkill: No such file or directory</code>.
@@ -261,21 +269,41 @@ lsusb
 тачпада, SSD - <code>fwupdmgr get-updates</code> і <code>fwupdmgr update</code> (урок 02, крок 4). Якщо ти вручну перевстановив пакет
 прошивки або драйвера (так лагодили AMD RX 9060/9070 у листопаді 2026, урок 02), онови <strong>initramfs</strong> - маленький
 стартовий образ, з якого ядро бере драйвери і прошивки ще до того, як змонтує диск:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>fwupdmgr get-updates</code> - показує, для яких пристроїв є нова прошивка. Назва: <code>fwupdmgr</code> - firmware update manager - «менеджер оновлення прошивок»; get updates - «отримати оновлення».</li>
+<li><code>fwupdmgr update</code> - ставить нові прошивки на залізо.</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">sudo update-initramfs -u -k all
 </code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>update-initramfs</code> - перезбирає стартовий образ ядра (initramfs) у /boot. Назва: update initial RAM filesystem - «оновити початкову файлову систему в памʼяті». <code>-u</code> - оновити наявний образ (update); <code>-k</code> - для якого ядра: версія з uname -r або all - для всіх встановлених.</li>
+<li><code>update-initramfs</code> - перезбирає стартовий файл, з якого Linux бере драйвери при увімкненні. Назва: update initial RAM filesystem - «оновити початкову файлову систему в памʼяті». <code>-u</code> - оновити наявний образ (update - «оновити»); <code>-k</code> - для якого ядра: версія з <code>uname -r</code> або <code>all</code> - для всіх встановлених.</li>
 </ul>
 </blockquote>
 <p><code>-u</code> - оновити наявний образ, <code>-k all</code> - для всіх встановлених ядер (з довідки <code>update-initramfs</code>). Потім
 <code>sudo reboot</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>reboot</code> - перезавантажує компʼютер (зазвичай <code>sudo reboot</code>). Назва: reboot - «перезавантажити» (re - «знову», boot - «запуск»).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 6. Чорний екран після драйвера</strong> - не панікуй, система ціла:
 1. Ctrl+Alt+F2 - текстовий вхід (TTY), логін і пароль як звичайно.
 2. Відкотися знімком: <code>sudo timeshift --restore</code> (урок 01), або прибери драйвер за назвою пакета з <code>dkms status</code>
    чи <code>apt list --installed | grep nvidia-driver</code>.
 3. Якщо навіть TTY не видно - у GRUB параметр <code>nomodeset</code>, старе ядро, live USB: урок 26.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>timeshift</code>: <code>--restore</code> - відновити систему зі знімка (спитає, з якого і куди), потім перезавантаження.</li>
+<li><code>apt list</code> - показує список програм (пакетів): встановлених або з оновленнями. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)». <code>--installed</code> - лише пакети, що вже стоять у системі (installed - «встановлені»).</li>
+</ul>
+</blockquote>
 <h2 id="типові-помилки">Типові помилки</h2>
 <ul>
 <li><strong><code>grep -i vga</code> нічого не знайшов</strong> - карта записана як <code>3D controller</code>. Шукай <code>grep -A3 -iE "vga|3d"</code>.</li>
@@ -309,6 +337,13 @@ lsusb
   AMD RX 9060/9070 (255 балів, 355 коментарів). Лагодили з TTY: <code>sudo apt update</code>,
   <code>sudo apt install linux-firmware-amd-graphics</code>, <code>sudo update-initramfs -u -k all</code>, <code>sudo reboot</code>.</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt update</code> - завантажує свіжий список програм і версій, нічого не ставить.</li>
+<li><code>apt install</code> - ставить програму з інтернету; на «Бажаєте продовжити? [Y/n]» - Enter.</li>
+</ul>
+</blockquote>
 <h2 id="самоперевірка">Самоперевірка</h2>
 <ol>
 <li>Що треба зробити з драйверами на ноутбуці з відео Intel і Wi-Fi Intel після встановлення Mint?</li>

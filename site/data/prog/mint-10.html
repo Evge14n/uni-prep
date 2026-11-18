@@ -22,7 +22,7 @@
 </tr>
 <tr>
 <td>запустити тести файлу (у ЛР5 вони багатослівні)</td>
-<td><code>python3 lr5_1.py \| tail -n 3</code></td>
+<td><code>python3 lr5_1.py | tail -n 3</code></td>
 </tr>
 <tr>
 <td>коротко: скільки функцій пройшли</td>
@@ -34,14 +34,42 @@
 </tr>
 <tr>
 <td>перевірити, що нема <code>**</code> і <code>factorial</code></td>
-<td><code>grep -n "\*\*\|factorial" lr5_1.py</code> - має нічого не надрукувати</td>
+<td><code>grep -n "\*\*|factorial" lr5_1.py</code> - має нічого не надрукувати</td>
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>klityny</code> - показує список клітинок .ipynb з номерами.</li>
+<li><code>klitynka</code> - друкує одну клітинку з .ipynb за номером.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>tail</code> - показує останні рядки (файлу чи того, що прийшло через <code>|</code>). Назва: tail - «хвіст». <code>-n</code> (<code>--lines</code>) - скільки останніх рядків показати: <code>-n 3</code>, коротко <code>-3</code> (lines - «рядки»).</li>
+<li><code>python3 -m pytest</code> - проганяє тести (приклади <code>&gt;&gt;&gt;</code>) і чесно каже: усе пройшло чи ні. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади <code>&gt;&gt;&gt;</code>) у файлах <code>.py</code>; без нього pytest шукає лише функції <code>test_</code>; <code>-q</code> (<code>--quiet</code>) - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s» (quiet - «тихо»).</li>
+<li><code>timeout</code> - зупиняє команду, якщо вона працює задовго. Назва: time out - «час вийшов».</li>
+<li><code>grep</code> - шукає рядки з текстом (у файлах або те, що прийшло через <code>|</code>). Назва: g/re/p з редактора ed: global regular expression print - «скрізь знайти шаблон, надрукувати». <code>-n</code> (<code>--line-number</code>) - показати номер рядка перед кожним збігом (line number - «номер рядка»).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-n</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Головна пастка ЛР5: у кожній заготовці викладача останній рядок - <code>doctest.testmod(verbose=True)</code> <strong>на верхньому рівні</strong>
 файлу. Через це команда <code>python3 -m doctest lr5_1.py</code> спершу тестує... сам модуль doctest і друкує
 <code>***Test Failed*** 1 failures.</code> про клас <code>DebugRunner</code>, якого в тебе нема. Тому в ЛР5 перевіряй <code>python3 lr5_1.py</code>
 або pytest, а <code>python3 -m doctest</code> не бери. Деталі - у «Типових помилках».</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m doctest</code> - перевіряє приклади <code>&gt;&gt;&gt;</code> з опису функцій. Назва: doc test - «тест у документації».</li>
+</ul>
+</blockquote>
 <p>Обмеження з умови (с. 5): у функціях завдання 1 <strong>не можна</strong> вкладених циклів (і явних, і прихованих, як <code>sum(...)</code>
 у тілі циклу), піднесення до степеня <code>**</code> і функції факторіала. Усе - через <strong>коефіцієнт переходу</strong>: наступний доданок
 = попередній × q (теорія, с. 1-2; див. курс Python, на сайті - <a href="#/u/prog/uroky">Уроки Python</a>, уроки 06 і 07).</p>
@@ -62,6 +90,7 @@
   Валліса, n від 1 до 10, рядок-відповідь за шаблоном.</li>
 </ul>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Крок за кроком у терміналі» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <p><strong>1.</strong> Що надрукує (так форматує результат кожна заготовка завдання 1)?</p>
 <pre><code class="language-python">print(f&quot;{2.0:.5}&quot;, f&quot;{0.0355964:.5}&quot;, f&quot;{-2.0877e-09:.5}&quot;, f&quot;{123456.0:.5}&quot;)
 </code></pre>
@@ -140,25 +169,29 @@ cp ~/Завантаження/&quot;Лабораторна 5 (Пайтон).ipyn
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/univer/.venv/bin/activate</code> - увімкнути venv (окремий Python для лаб); вимкнути - deactivate.</li>
 <li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати». <code>.</code> - «сюди», у поточну теку: cp ~/Завантаження/lab1.py .</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p>Тека завантажень на англійській Mint - <code>~/Downloads</code> (точну назву друкує <code>xdg-user-dir DOWNLOAD</code>). Telegram Desktop
 зазвичай кладе файли в підтеку <code>~/Завантаження/Telegram Desktop</code> (на твоєму ноутбуці не перевірено). У назві теки
 пробіл, тому її теж у лапки, а якщо не знаєш, де файл, - шукай по всій домашній теці:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>xdg-user-dir</code> - друкує шлях до теки завантажень, зображень тощо. Назва: XDG user directory - «тека користувача» за правилами freedesktop.org. <code>DOWNLOAD</code> - тека завантажень (туди кладуть файли браузер і Telegram).</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">cp ~/Завантаження/&quot;Telegram Desktop&quot;/&quot;Лабораторна 5 (Пайтон).ipynb&quot; .
 find ~ -name &quot;Лабораторна 5*&quot;
 </code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>find</code> - шукає файли за назвою, часом чи власником. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: -name "*.py"; великі й малі літери різні; <code>~</code> - шукати по всій домашній теці (знайти, куди Telegram зберіг лабу).</li>
+<li><code>find</code> - шукає файли й теки за назвою, і в усіх підтеках. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: <code>-name "*.py"</code>; великі й малі літери різні.</li>
 </ul>
 </blockquote>
 <p><strong>Крок 2. Комірки з кодом - у файли.</strong> Функції <code>klityny</code> (список комірок) і <code>klitynka</code> (одна комірка) - з уроку 04,
@@ -170,9 +203,8 @@ klityny &quot;Лабораторна 5 (Пайтон).ipynb&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>klityny</code> - показує список клітинок .ipynb з номерами. Назва: наша назва: «клітини» - список усіх клітинок .ipynb.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>;</code> - розділяє команди в рядку, виконує всі по черзі. Назва: крапка з комою - роздільник команд.</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>;</code> (semicolon) - розділяє команди в рядку, виконує всі по черзі.</li>
 </ul>
 </blockquote>
 <p>Вивід (номер, тип комірки, початок першого рядка):</p>
@@ -194,17 +226,16 @@ klitynka &quot;Лабораторна 5 (Пайтон).ipynb&quot; 5 &gt; lr5_na
 klitynka &quot;Лабораторна 5 (Пайтон).ipynb&quot; 7 &gt; lr5_2.py
 klitynka &quot;Лабораторна 5 (Пайтон).ipynb&quot; 9 &gt; lr5_3.py
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>klitynka</code> - друкує одну клітинку з .ipynb за номером. Назва: наша назва: «клітинка» блокнота .ipynb (англ. cell).</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-</ul>
-</blockquote>
 <p>Жодна заготовка ЛР5 не питає <code>input()</code> - тести запускаються без <code>printf</code>.</p>
 <p><strong>Крок 3 (за бажанням). Захистити testmod від імпорту.</strong> Типово заготовку лишаєш як є і перевіряєш <code>python3 lr5_1.py</code>
 або pytest (крок 4) - цього досить. Цей крок потрібен, лише якщо хочеш ще й <code>python3 -m doctest</code> (лише провали, без
 сотень рядків <code>verbose</code>). Тоді в <code>nano lr5_1.py</code> останній рядок заміни так:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">було:   doctest.testmod(verbose=True)
 
 стало:  if __name__ == &quot;__main__&quot;:
@@ -217,14 +248,6 @@ klitynka &quot;Лабораторна 5 (Пайтон).ipynb&quot; 9 &gt; lr5_3.
 <strong><code>total_sum</code></strong>). Запуск:</p>
 <pre><code class="language-bash">python3 lr5_1.py | tail -n 3
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
-<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу. <code>-n</code> - скільки останніх рядків показати: -n 3 (lines).</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
-</ul>
-</blockquote>
 <p>Поки функції порожні:</p>
 <pre><code class="language-text">48 tests in 5 items.
 0 passed and 48 failed.
@@ -240,6 +263,12 @@ Test passed.
 <code>Expected</code> і <code>Got</code>, або <code>Exception raised</code>, коли функція впала, як на порожній заготовці). Коротко по функціях: <code>python3 -m pytest --doctest-modules -q lr5_1.py</code> → наприкінці
 <code>4 failed</code> або <code>4 passed</code> (і час, у тебе інший). Якщо зробив крок 3 - ще й <code>python3 -m doctest lr5_1.py</code> (мовчить,
 коли все пройшло).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>grep</code>: <code>-A</code> (<code>--after-context</code>) - показати ще стільки рядків ПІСЛЯ збігу: -A 3 (after - «після»); <code>^</code> на початку шаблону - «рядок починається з цього тексту».</li>
+</ul>
+</blockquote>
 <p><strong>Крок 5. Підказки до завдання 1</strong> (розвʼязок твій; функції - див. <a href="#/u/prog/dovidnyk">Довідник функцій</a>: <code>range()</code>, <code>abs()</code>,
 f-рядок, <code>math.factorial()</code> - лише для наївних версій).</p>
 <ul>
@@ -342,6 +371,12 @@ plt.savefig(&quot;chas.png&quot;)
 і є N. Перевір себе на тесті з <code>N = 1</code>: скільки разів має спрацювати додавання? Знаків після коми - скільки в тестах
 (див. «Що не так у файлі викладача»). Якщо захочеш, щоб програма ще й питала кут і точність, - <code>input()</code> клади під
 <code>if __name__ == "__main__":</code>, а перевіряй без набору: <code>printf '180\n1e-5\n' | python3 lr5_2.py</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+</ul>
+</blockquote>
 <p><strong>Крок 7. Завдання 3 (<code>lr5_3.py</code>).</strong> Перш ніж писати, подивись, як у тестах кількість членів залежить від n:
 5, 50, 500, ... для Грегорі і порівняй з модулем наступного члена 1/(2k+1). Для Валліса - 15, 157, 1570, ...
 (тут є неясність, див. нижче). Ряд Грегорі знакозмінний: знак зручно міняти множенням на -1.</p>
@@ -351,6 +386,12 @@ plt.savefig(&quot;chas.png&quot;)
 <strong>близько години</strong>. <code>perevir</code> сам зупиняє doctest через 120 с і пише
 <code>doctest: довше 120 с - зупинив. Якийсь приклад рахує дуже довго - перевір функції по одній у python3 -i lr5_3.py</code>
 (і <code>python3 lr5_3.py -v</code> теж триває ту саму годину). Поки пишеш, перевіряй малі n окремо і з обмеженням часу:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи).</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">timeout 60 python3 -c &quot;from lr5_3 import pi_gregory; print(pi_gregory(3))&quot;
 </code></pre>
 <pre><code class="language-text">1 items had no tests:
@@ -363,14 +404,19 @@ The Gregory formula gives value 3.140 with the accuracy 3 digits after the decim
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>timeout</code> - зупиняє команду, якщо вона працює задовго. Назва: time out - «час вийшов».</li>
-<li><code>python3</code>: <code>-c</code> - виконати рядок коду з командного рядка, без файлу: python3 -c 'print(2 ** 10)'.</li>
+<li><code>python3</code>: <code>-c</code> - виконати один рядок коду без файлу: <code>python3 -c 'print(2 ** 10)'</code> (command - «команда»).</li>
 </ul>
 </blockquote>
 <p>Перші пʼять рядків - це <code>doctest.testmod(verbose=True)</code> викладача: під час <code>import</code> він тестує «головний» модуль
 команди <code>-c</code>, а там тестів нема. Нижче - твоя відповідь. Якщо <code>timeout</code> зупинив програму, код виходу - 124
 (<code>echo $?</code> одразу після команди). Повний прогін <code>python3 lr5_3.py | tail -n 3</code> - один раз, коли все готово
 (ноутбук на зарядці, можна залишити на годину).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+</ul>
+</blockquote>
 <h2 id="типові-помилки">Типові помилки</h2>
 <div class="tw"><table>
 <thead>
@@ -451,6 +497,12 @@ Failed example:
 <code>Incompatible return value type (got "str", expected "float")</code>: у <code>calculate_c</code>, <code>calculate_d</code> і в усіх чотирьох
 наївних функціях написано <code>-&gt; float</code>, а повертають вони рядок <code>f"{...}"</code>. Це неточність заготовки: тести від анотації
 не залежать. Виправити <code>-&gt; float</code> на <code>-&gt; str</code> - це не зміна назви, параметрів чи тестів; скажи про це викладачу.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми.</li>
+</ul>
+</blockquote>
 <h2 id="що-не-так-у-файлі-викладача">Що не так у файлі викладача</h2>
 <p>Викладач просив надсилати знайдені помилки в doctest. Усе нижче перевірено запуском у тестовій Mint 22.3 незалежною
 програмою (вона лежить окремо, не в уроці):</p>
@@ -491,14 +543,10 @@ grep -n &quot;\*\*\|factorial&quot; lr5_1.py lr5_2.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code>: <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
-<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s».</li>
-<li><code>python3 -m black</code> - сам гарно оформлює код Python (пробіли, переноси). Назва: black - «чорний»: як у Форда, «будь-який колір, якщо він чорний». <code>-l</code> - найбільша довжина рядка; викладач хоче 78 (black сам ставить 88).</li>
+<li><code>python3 -m black</code> - сам гарно оформлює код Python (пробіли, переноси). Назва: black - «чорний»: як у Форда, «будь-який колір, якщо він чорний». <code>-l</code> (<code>--line-length</code>) - найбільша довжина рядка; викладач хоче 78, сам black ставить 88 (line length - «довжина рядка»).</li>
 <li><code>python3 -m flake8</code> - шукає помилки стилю і зайвий код, нічого не змінює. Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша дозволена довжина рядка; викладач хоче 78 (типово 79).</li>
-<li><code>python3 -m pycodestyle</code> - перевіряє лише оформлення коду за PEP 8. Назва: Python code style - «стиль коду Python» (раніше програма звалась pep8). <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78 (типово 79).</li>
-<li><code>python3 -m ruff check</code> - швидко шукає помилки в коді, з --fix сам виправляє. Назва: ruff - назва не розшифровується; check - «перевірити».</li>
-<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми. Назва: назва не розшифровується (py - від Python).</li>
-<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-n</code> - показати номер рядка перед кожним збігом (line number).</li>
+<li><code>python3 -m pycodestyle</code> - перевіряє лише оформлення коду за PEP 8 (правилами стилю Python). Назва: Python code style - «стиль коду Python» (раніше програма звалась pep8). <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78 (типово 79).</li>
+<li><code>python3 -m ruff check</code> - швидко шукає помилки в коді, з --fix сам виправляє.</li>
 </ul>
 </blockquote>
 <p>Або все одразу: <code>perevir lr5_1.py</code> (скорочення з <code>ustanovka-mint.sh</code>, урок 03; відповіді на <code>input()</code>, якщо файл

@@ -48,6 +48,26 @@ git clone git@github.com:Evge14n/pisochnytsia.git ~/pisochnytsia
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
+<li><code>git clone</code> - копіює весь проєкт з історією з GitHub до тебе.</li>
+<li><code>git status</code> - показує, які файли змінено і що піде в наступний коміт (збережений знімок).</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт). <code>.</code> - усе в поточній теці і підтеках; спершу глянь git status, щоб не додати зайве.</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати». <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»); <code>-a</code> (<code>--all</code>) - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні (all - «усі»).</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-m</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-am</code> = <code>-a</code> і <code>-m</code>.</li>
+<li>Символи <code>~</code> <code>&gt;</code> <code>*</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Гарне повідомлення коміту</strong> (Pro Git, 5.2):
 - перший рядок - до ~50 знаків, коротко <strong>що змінено</strong>;
 - якщо треба пояснити <strong>чому</strong> - порожній рядок, далі текст з переносом рядків приблизно на 72 знаки;
@@ -110,6 +130,12 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 </ol>
 <details>
 <summary>Відповідь</summary>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git status</code>: <code>--short</code> - коротко: по рядку на файл з двома буквами стану (<code>M</code>, <code>A</code>, <code>??</code>) (short - «коротко»).</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">?? lr2.py
 </code></pre>
 <p><code>-a</code> бере лише файли, за якими git уже стежить. Новий файл треба один раз додати руками: <code>git add lr2.py</code>.</p>
@@ -141,16 +167,12 @@ git status
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан».</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <pre><code class="language-text">On branch main
 
@@ -178,14 +200,6 @@ Changes to be committed:
     new file:   lr1.py
 
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
-<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів.</li>
-</ul>
-</blockquote>
 <pre><code class="language-text">[main (root-commit) 3347fd3] Додай заготовку ЛР1
  1 file changed, 1 insertion(+)
  create mode 100644 lr1.py
@@ -214,9 +228,7 @@ git status --short
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git commit</code>: <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.</li>
-<li><code>git status</code>: <code>--short</code> - коротко: по рядку на файл з двома буквами стану (M, A, ??).</li>
-<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
 </ul>
 </blockquote>
 <pre><code class="language-text">?? lr2.py
@@ -262,7 +274,7 @@ Date:   Wed Nov 18 10:29:45 2026 +0000
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git log</code>: <code>-n</code> - лише N останніх комітів: -n 3 (або коротко -3); <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
+<li><code>git log</code>: <code>-n</code> (<code>--max-count</code>) - лише N останніх комітів: <code>-n 3</code> (або коротко <code>-3</code>) (number - «число»).</li>
 </ul>
 </blockquote>
 <pre><code class="language-text">3b15e01 (HEAD -&gt; main) Почни ЛР2: заготовка програми
@@ -276,7 +288,7 @@ f30faf1 Додай ввід x у ЛР1
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git clone</code> - копіює весь репо з GitHub до тебе. Назва: clone - «клон, точна копія». <code>~/pisochnytsia</code> - куди скопіювати; без неї - тека з назвою репо в поточній теці.</li>
+<li><code>git clone</code>: <code>~/pisochnytsia</code> - куди скопіювати; без неї - тека з назвою репо в поточній теці.</li>
 </ul>
 </blockquote>
 <pre><code class="language-bash">cd ~/pisochnytsia
@@ -341,11 +353,11 @@ index b72a1f6..419e6aa 100644
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git add</code>: <code>-p</code> - питає про кожен шматок змін окремо: y - додати, n - ні, q - вийти.
-  Набери <code>y</code> і Enter. Так з одного файлу можна зробити два акуратні коміти: виправлення окремо, налагоджувальний <code>print</code> - не комітити взагалі.</li>
-<li><strong><code>commit.verbose true</code></strong> (урок 02) - у nano під час коміту видно саму зміну, легше написати точне повідомлення.</li>
+<li><code>git add</code>: <code>-p</code> (<code>--patch</code>) - питає про кожен шматок змін окремо: <code>y</code> - додати, <code>n</code> - ні, <code>q</code> - вийти (patch - «латка»).</li>
 </ul>
 </blockquote>
+<p>Набери <code>y</code> і Enter. Так з одного файлу можна зробити два акуратні коміти: виправлення окремо, налагоджувальний <code>print</code> - не комітити взагалі.
+- <strong><code>commit.verbose true</code></strong> (урок 02) - у nano під час коміту видно саму зміну, легше написати точне повідомлення.</p>
 <h3 id="самоперевірка">Самоперевірка</h3>
 <ol>
 <li>Чим <code>git init</code> відрізняється від <code>git clone</code>?</li>
@@ -363,6 +375,12 @@ index b72a1f6..419e6aa 100644
 <li>Перший рядок до ~50 знаків, порожній рядок, пояснення з переносом ~72; наказовий спосіб («Додай ...», «Виправ ...»).</li>
 <li>На ноутбуці є 1 коміт, якого ще нема на GitHub. Його треба відправити <code>git push</code>.</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git push</code> - відправляє твої нові знімки (коміти) з компʼютера на GitHub. Назва: push - «штовхнути».</li>
+</ul>
+</blockquote>
 </details>
 <h3 id="джерела">Джерела</h3>
 <ul>

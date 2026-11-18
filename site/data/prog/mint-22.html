@@ -2,6 +2,20 @@
 <p><a href="#/u/prog/mint">← Усі уроки</a></p>
 <p><strong>Навіщо:</strong> однією командою знайти всі <code>print(</code> у лабах, рядки довші за 78 символів, файли, змінені сьогодні, і
 зрозуміти, чому «команда не знаходиться» після <code>pipx install</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>pipx install</code> - ставить програму, написану на Python, окремо від системи (у свій venv). Назва: <code>pipx</code> - pip + x - «pip для програм»; pipx - «pip для програм»; install - «встановити».</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-k</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-rn</code> = <code>-r</code> і <code>-n</code>.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> <code>&amp;</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <h2 id="коротко">Коротко</h2>
 <p>Термінал і nano - урок 03. Тут - те, з чого складаються команди.</p>
 <p><strong>Змінні.</strong></p>
@@ -14,6 +28,13 @@ echo &quot;Сьогодні $(date +%A)&quot;   $(команда) - підста
 <p><strong>Змінні оточення</strong> (environment) - ті, що успадковують програми, запущені з термінала: <code>HOME</code>, <code>PATH</code>, <code>USER</code>.
 Звичайна змінна живе лише в цьому bash; <code>export x</code> робить її змінною оточення. Подивитись: <code>printenv HOME</code>, усі -
 <code>env</code>. Python читає їх через <code>os.environ</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>export</code> - робить змінну (іменоване значення) видимою для програм, запущених звідси. Назва: export - «вивезти, експортувати».</li>
+<li><code>printenv</code> - друкує змінні оточення (значення, які бачать усі запущені програми). Назва: print environment - «надрукувати оточення» (змінні оточення). <code>HOME</code> - назва змінної - БЕЗ $.</li>
+</ul>
+</blockquote>
 <p><strong>PATH</strong> - список тек через <code>:</code>, де bash шукає команди. Набрав <code>flake8</code> - bash іде по теках PATH зліва направо
 і запускає перший знайдений файл.</p>
 <pre><code class="language-bash">echo &quot;$PATH&quot; | tr &quot;:&quot; &quot;\n&quot;
@@ -21,17 +42,23 @@ echo &quot;Сьогодні $(date +%A)&quot;   $(команда) - підста
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
-<li><code>tr</code> - замінює окремі символи в тексті. Назва: translate - «перекласти»: замінити одні символи іншими.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>$ЗМІННА</code> (dollar) - бере значення змінної (назви, під якою bash тримає текст).</li>
+<li><code>tr</code> - замінює окремі символи в тексті. Назва: translate - «перекласти».</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p>Перші рядки - на кшталт <code>/home/evgen/.local/bin</code>, <code>/usr/local/sbin</code>, <code>/usr/local/bin</code>, <code>/usr/sbin</code>, <code>/usr/bin</code>.
 <strong><code>~/.local/bin</code></strong> - туди ставлять свої команди <code>pipx</code> і <code>uv</code> (урок 02). У Mint її додає файл <code>~/.profile</code>, але
 <strong>лише якщо тека вже була в момент входу в систему</strong>. Тому після першого <code>pipx install</code> нова команда може «не
 знаходитись», поки не вийдеш із сеансу і не зайдеш знову (або <code>source ~/.profile</code>).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/.profile</code> - перечитати PATH (теки, де bash шукає програми), щоб зʼявилась ~/.local/bin.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+</ul>
+</blockquote>
 <p><strong>Де команда?</strong></p>
 <div class="tw"><table>
 <thead>
@@ -63,8 +90,23 @@ echo &quot;Сьогодні $(date +%A)&quot;   $(команда) - підста
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>type</code> - каже, що це за команда і де вона. Назва: type - «тип». <code>python3</code> - яку саме python3 запустить bash і де вона лежить.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+<li><code>which</code> - показує, який саме файл запуститься. Назва: which - «котрий».</li>
+</ul>
+</blockquote>
 <p><strong>Довідка: <code>--help</code> і <code>man</code>.</strong> Майже кожна команда має коротку довідку <code>команда --help</code> і повну сторінку
 посібника <code>man команда</code>:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>man</code> - відкриває повний посібник до команди. Назва: manual - «посібник».</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">grep --help | head -3
 man grep
 man -k crontab
@@ -76,10 +118,10 @@ Example: grep -i 'hello world' menu.h main.c
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>--help</code> - коротка довідка про всі прапорці; українською, якщо система українська.</li>
-<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
-<li><code>man</code> - відкриває повний посібник до команди. Назва: manual - «посібник». <code>-k</code> - шукати команди, в назві чи короткому описі яких є слово (як apropos).</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>grep</code> - шукає рядки з текстом (у файлах або те, що прийшло через <code>|</code>). Назва: g/re/p з редактора ed: global regular expression print - «скрізь знайти шаблон, надрукувати». <code>--help</code> - коротка довідка про всі прапорці; українською, якщо система українська.</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>head</code> - показує перші рядки файлу (або того, що прийшло через <code>|</code>). Назва: head - «голова». <code>-3</code> - лише 3 перші рядки (те саме, що <code>-n 3</code>).</li>
+<li><code>man</code>: <code>-k</code> (<code>--apropos</code>) - шукати команди за словом у назві чи короткому описі (keyword - «ключове слово»).</li>
 </ul>
 </blockquote>
 <p>Якщо Mint українською, <code>--help</code> теж українською (<code>Використання: grep [ПАРАМЕТР]... ШАБЛОНИ [ФАЙЛ]...</code>);
@@ -89,12 +131,31 @@ Example: grep -i 'hello world' menu.h main.c
 <code>man -k слово</code> шукає команди за словом в описі. Номер у дужках, як <code>crontab(5)</code>, - розділ посібника: <code>man 5 crontab</code>
 - формат файлу, <code>man crontab</code> - сама команда. (Сторінки <code>man</code> - з пакетів man-db і manpages, вони є на ISO 22.3;
 у тестовій Mint їх нема, тому вигляд сторінок там не перевірено.)</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>man</code>: <code>5</code> - номер розділу: 1 - команди, 5 - формати файлів, 8 - команди адміністратора.</li>
+</ul>
+</blockquote>
 <p><strong>Аліаси і <code>~/.bashrc</code>.</strong> <code>~/.bashrc</code> - файл, який bash читає при кожному новому вікні термінала. У Mint він уже
 має аліаси <code>ll</code> (<code>ls -alF</code>), <code>la</code>, <code>l</code> і читає ще файл <code>~/.bash_aliases</code>, якщо той є - свої аліаси пиши туди.
 Після правки - <code>source ~/.bashrc</code> або нове вікно.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-a</code> (<code>--all</code>) - показати й приховані (назва з крапки), разом з . і .. (all - «усі»); <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long - «довгий»); <code>-F</code> (<code>--classify</code>) - позначки після назви: / - тека, * - можна запускати (classify - «розрізняти»).</li>
+<li><code>source</code>: <code>~/.bashrc</code> - перечитати свої налаштування після правки, без нового вікна.</li>
+</ul>
+</blockquote>
 <p><strong>Історія.</strong> ↑ - попередня команда. <strong>Ctrl+R</strong> і почни набирати - пошук в історії (ще Ctrl+R - старіша, Enter -
 виконати, Esc - взяти в рядок). <code>!!</code> - уся попередня команда: <code>sudo !!</code> = «те саме, але з sudo». У Mint історія
 тримає 1000 команд (<code>HISTSIZE=1000</code> у <code>~/.bashrc</code>), а команда, що починається з <strong>пробілу</strong>, не запамʼятовується.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+</ul>
+</blockquote>
 <p><strong>Потоки і перенаправлення.</strong> У програми три потоки: ввід (stdin, 0), вивід (stdout, 1), помилки (stderr, 2).</p>
 <div class="tw"><table>
 <thead>
@@ -125,15 +186,15 @@ Example: grep -i 'hello world' menu.h main.c
 <td>ввід з файлу замість клавіатури</td>
 </tr>
 <tr>
-<td><code>к1 \| к2</code></td>
+<td><code>к1 | к2</code></td>
 <td>вивід к1 стає вводом к2 (пайп)</td>
 </tr>
 <tr>
-<td><code>к1 \|&amp; к2</code></td>
+<td><code>к1 |&amp; к2</code></td>
 <td>те саме разом з помилками</td>
 </tr>
 <tr>
-<td><code>команда \| tee файл</code></td>
+<td><code>команда | tee файл</code></td>
 <td>і на екран, і у файл</td>
 </tr>
 <tr>
@@ -142,6 +203,12 @@ Example: grep -i 'hello world' menu.h main.c
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+</ul>
+</blockquote>
 <p><strong>Фільтри</strong> - команди, які беруть текст і віддають текст, тому їх ставлять у пайпи:</p>
 <div class="tw"><table>
 <thead>
@@ -197,11 +264,28 @@ Example: grep -i 'hello world' menu.h main.c
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>find</code> - шукає файли й теки за назвою, і в усіх підтеках. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: <code>-name "*.py"</code>; великі й малі літери різні; <code>.</code> - шукати тут і в усіх підтеках.</li>
+<li><code>xargs</code> - бере рядки з труби <code>|</code> і дописує їх словами після команди. Назва: extended arguments - «розширені аргументи» (аргументи - слова після команди).</li>
+<li><code>sort</code> - впорядковує рядки. Назва: sort - «сортувати, впорядкувати». <code>-r</code> (<code>--reverse</code>) - навпаки: від більшого до меншого (reverse - «навпаки»); <code>-n</code> (<code>--numeric-sort</code>) - як числа: 9 менше за 10 (без <code>-n</code> - як текст, і 10 іде перед 9) (numeric).</li>
+<li><code>uniq</code> - склеює однакові сусідні рядки (з -c - рахує). Назва: unique - «єдиний, неповторний»: прибрати повтори. <code>-c</code> (<code>--count</code>) - писати перед рядком, скільки разів він ішов підряд (count - «рахувати»).</li>
+<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> (<code>--lines</code>) - лише кількість рядків (lines - «рядки»).</li>
+<li><code>cut</code> - вирізає з рядків потрібні стовпці. Назва: cut - «вирізати». <code>-f</code> (<code>--fields</code>) - які поля взяти: <code>-f1</code> або <code>-f1,6,7</code> або <code>-f2-4</code> (fields - «поля»).</li>
+<li><code>head</code>: <code>-n</code> (<code>--lines</code>) - скільки перших рядків показати: <code>-n 3</code>, коротко <code>-3</code>.</li>
+<li><code>tail</code> - показує останні рядки (файлу чи того, що прийшло через <code>|</code>). Назва: tail - «хвіст». <code>-n</code> (<code>--lines</code>) - скільки останніх рядків показати: <code>-n 3</code>, коротко <code>-3</code>; <code>-f</code> (<code>--follow</code>) - не закінчувати, а показувати нові рядки, щойно їх дописали; вихід Ctrl+C (follow - «стежити»).</li>
+<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор». <code>-n</code> (<code>--quiet</code>) - не друкувати всі рядки, лише ті, що позначені командою <code>p</code> (quiet - «тихо»).</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>awk</code> - бере з рядків потрібні стовпці (поля). Назва: awk - перші літери авторів: Aho, Weinberger, Kernighan (Bell Labs, 1977).</li>
+</ul>
+</blockquote>
 <p><strong>Регулярні вирази</strong> (шаблони для grep, sed): <code>^</code> початок рядка, <code>$</code> кінець, <code>.</code> будь-який символ, <code>*</code> попереднє
 0 і більше разів, <code>[0-9]</code> одна цифра, <code>.\{79,\}</code> - 79 і більше будь-яких символів (з <code>-E</code>: <code>.{79,}</code>).</p>
 <p><strong>Код виходу</strong> <code>$?</code>: 0 - успіх, не 0 - помилка. <code>к1 &amp;&amp; к2</code> - к2 лише якщо к1 успішна; <code>к1 || к2</code> - лише якщо
 к1 впала.</p>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <p>Усі приклади - у практичній теці з «Руками» (крок 1).</p>
 <ol>
 <li>Що створить кожен <code>mkdir</code>?</li>
@@ -214,7 +298,6 @@ ls
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
-<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
 </ul>
 </blockquote>
 <details>
@@ -226,6 +309,12 @@ lr2
 </code></pre>
 <p>Дві теки, <code>ЛР</code> і <code>1</code>: без лапок пробіл розбив значення на два аргументи. <code>mkdir "$lab"</code> зробить одну теку <code>ЛР 1</code>.
 Прибери зайве: <code>rmdir ЛР 1</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>rmdir</code> - видаляє порожню теку. Назва: remove directory - «прибрати теку».</li>
+</ul>
+</blockquote>
 </details>
 <ol start="2">
 <li>Що надрукує кожен рядок?</li>
@@ -238,9 +327,7 @@ bash -c 'echo &quot;x=$x&quot;'
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»). <code>-c</code> - виконати команди з рядка в новому bash: bash -c 'echo привіт'.</li>
-<li><code>export</code> - робить змінну видимою для запущених програм. Назва: export - «вивезти, експортувати»: передати змінну програмам-нащадкам.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>bash</code> - програма, що читає й виконує твої команди; <code>bash файл.sh</code> - з файлу. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»). <code>-c</code> - виконати команди з рядка в новому bash: <code>bash -c 'echo привіт'</code> (command - «команда»).</li>
 </ul>
 </blockquote>
 <details>
@@ -260,15 +347,19 @@ cat out.txt
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
 </ul>
 </blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Помилка - на екрані, <code>out.txt</code> - <strong>порожній</strong>: <code>&gt;</code> перенаправляє лише stdout, а помилки йдуть у stderr. Щоб
 зловити і помилки: <code>python3 nema.py &gt; out.txt 2&gt;&amp;1</code>. Тоді в <code>out.txt</code> буде (шлях у тебе свій):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>2&gt;&amp;1</code> («потік 2 туди ж, куди потік 1»: помилки разом зі звичайним виводом) - помилки йдуть разом зі звичайним виводом.</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">python3: can't open file '/home/evgen/univer/praktyka/bash22/nema.py': [Errno 2] No such file or directory
 </code></pre>
 </details>
@@ -277,12 +368,6 @@ cat out.txt
 </ol>
 <pre><code class="language-bash">awk 'length &gt; 78' lr2/mayatnyk.py
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>awk</code> - бере з рядків потрібні стовпці (поля). Назва: awk - перші літери авторів: Aho, Weinberger, Kernighan (Bell Labs, 1977).</li>
-</ul>
-</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">    &quot;&quot;&quot;Період маятника в секундах для довжини нитки length у метрах.&quot;&quot;&quot;
@@ -290,6 +375,12 @@ cat out.txt
 <p>Рядок надрукувався, хоча в ньому 71 символ. У Mint <code>awk</code> - це <strong>mawk</strong>, і <code>length</code> рахує <strong>байти</strong>, а кожна
 українська літера в UTF-8 - 2 байти (тут 116 байт). flake8 рахує символи. Правильно - через grep, він рахує
 символи: <code>grep -n '.\{79,\}' lr2/mayatnyk.py</code> - тиша, довгих рядків нема.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>grep</code>: <code>-n</code> (<code>--line-number</code>) - показати номер рядка перед кожним збігом (line number - «номер рядка»).</li>
+</ul>
+</blockquote>
 </details>
 <h2 id="руками">Руками</h2>
 <p><strong>Крок 1. Практична тека з трьома маленькими файлами</strong> (свої лаби не чіпаємо):</p>
@@ -302,11 +393,9 @@ printf 'x = 5\nPrint(x)\n# тут print( лише в коментарі\n' &gt; 
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>mkdir</code>: <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
-<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>&amp;&amp;</code> - друга команда - лише якщо перша вдалась. Назва: «і»: друга команда - лише якщо перша вдалась.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>mkdir</code>: <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
+<li><code>&amp;&amp;</code> (AND) - друга команда - лише якщо перша вдалась.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
 </ul>
 </blockquote>
 <p><strong>Крок 2. Змінні і лапки.</strong></p>
@@ -319,12 +408,6 @@ printenv HOME
 Привіт, $name
 /home/evgen
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>printenv</code> - друкує змінні оточення. Назва: print environment - «надрукувати оточення» (змінні оточення). <code>HOME</code> - назва змінної - БЕЗ $.</li>
-</ul>
-</blockquote>
 <p><strong>Крок 3. Своя команда в <code>~/.local/bin</code>.</strong></p>
 <pre><code class="language-bash">mkdir -p ~/.local/bin
 printf '#!/bin/bash\necho &quot;Привіт з ~/.local/bin&quot;\n' &gt; ~/.local/bin/pryvit
@@ -333,7 +416,7 @@ chmod +x ~/.local/bin/pryvit
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>chmod</code> - змінює права файлу: читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>+x</code> - дозволити запуск (x); у Mint - усім трьом: власнику, групі й іншим.</li>
+<li><code>chmod</code> - змінює права файлу: хто може читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>+x</code> - <code>+</code> - додати право, <code>x</code> (execute - «виконувати») - запускати файл як програму; без u/g/o - власнику, групі й іншим.</li>
 </ul>
 </blockquote>
 <p>Тепер набери <code>pryvit</code>. Якщо тека <code>~/.local/bin</code> щойно зʼявилась, її ще нема в PATH - bash скаже
@@ -341,13 +424,6 @@ chmod +x ~/.local/bin/pryvit
 <pre><code class="language-bash">source ~/.profile
 type pryvit
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/.profile</code> - перечитати PATH, напр. щоб зʼявилась ~/.local/bin (урок 22).</li>
-<li><code>type</code> - каже, що це за команда і де вона. Назва: type - «тип»: що це за команда.</li>
-</ul>
-</blockquote>
 <p>і знову <code>pryvit</code>:</p>
 <pre><code class="language-text">pryvit is /home/evgen/.local/bin/pryvit
 Привіт з ~/.local/bin
@@ -365,10 +441,9 @@ alias ll='ls -alF'
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>source</code>: <code>~/.bashrc</code> - перечитати налаштування після правки (аліаси, функції).</li>
-<li><code>type</code>: <code>gst</code> - перевірити свій аліас (урок 22).</li>
-<li><code>alias</code> - дає коротке імʼя довгій команді. Назва: alias - «псевдонім, інше імʼя». <code>ll</code> - alias ll - показати, на що замінюється ll (у Mint - ls -alF з ~/.bashrc).</li>
-<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+<li><code>alias</code> - дає коротке імʼя (аліас) довгій команді. Назва: alias - «псевдонім, інше імʼя». <code>ll</code> - <code>alias ll</code> - показати, на що замінюється ll (у Mint - <code>ls -alF</code> з <code>~/.bashrc</code>).</li>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
+<li><code>type</code>: <code>gst</code> - свій аліас (скорочення): type покаже, на що він замінюється.</li>
 </ul>
 </blockquote>
 <p>Назву аліасу перевір заздалегідь: <code>type назва</code> має відповісти <code>not found</code>. Інакше аліас сховає справжню програму
@@ -383,7 +458,7 @@ grep -v &quot;^$&quot; lr1/kolo.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>grep</code>: <code>-r</code> - шукати в усіх файлах теки і підтек (recursive); <code>-n</code> - показати номер рядка перед кожним збігом (line number); <code>.</code> - з -r: шукати в поточній теці і всіх підтеках; <code>-i</code> - без різниці між великими й малими літерами (ignore case); <code>-c</code> - лише порахувати рядки зі збігом у кожному файлі (count); <code>--include</code> - з -r: шукати лише у файлах за шаблоном, --include="*.py"; <code>-l</code> - лише назви файлів, де є збіг (list); <code>-v</code> - навпаки: рядки, де шаблону НЕМА (invert).</li>
+<li><code>grep</code>: <code>-r</code> (<code>--recursive</code>) - шукати в усіх файлах теки і підтек (recursive - «рекурсивно», углиб); <code>.</code> - з -r: шукати в поточній теці і всіх підтеках; <code>-i</code> (<code>--ignore-case</code>) - без різниці між великими й малими літерами (ignore case - «не зважати на регістр»); <code>-c</code> (<code>--count</code>) - не показувати рядки, а лише порахувати, скільки їх зі збігом (count - «порахувати»); <code>--include</code> - з -r: шукати лише у файлах за шаблоном, <code>--include="*.py"</code> (include - «включити»); <code>-l</code> (<code>--files-with-matches</code>) - лише назви файлів, де є збіг (list - «список»); <code>-v</code> (<code>--invert-match</code>) - навпаки: рядки, де шаблону НЕМА (invert - «перевернути»); <code>^</code> на початку шаблону - «рядок починається з цього тексту».</li>
 </ul>
 </blockquote>
 <p>Справжній вивід перших двох (порядок файлів у тебе може бути інший):</p>
@@ -408,9 +483,7 @@ find . -name &quot;*.py&quot; | xargs grep -c &quot;print&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>find</code> - шукає файли за назвою, часом чи власником. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: -name "*.py"; великі й малі літери різні; <code>.</code> - шукати тут і в усіх підтеках; <code>-mtime</code> - за днем зміни: -mtime -1 - змінені менше доби тому (modification time).</li>
-<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> - лише кількість рядків (lines).</li>
-<li><code>xargs</code> - робить з рядків входу аргументи команди. Назва: extended arguments - «розширені аргументи»: рядки з входу стають аргументами.</li>
+<li><code>find</code>: <code>-mtime</code> - за днем зміни: -mtime -1 - змінені менше доби тому (modification time).</li>
 </ul>
 </blockquote>
 <p>Справжній вивід третьої команди:</p>
@@ -437,10 +510,7 @@ grep -rn &quot;print(&quot; . | cut -d: -f1 | sort | uniq -c
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>grep</code>: <code>-h</code> - не писати назву файлу перед рядком (це НЕ довідка); <code>-o</code> - друкувати лише знайдений шматок, а не весь рядок (only); <code>-E</code> - розширені регулярні вирази: |, +, {79,} без зворотних рисок.</li>
-<li><code>sort</code> - впорядковує рядки. Назва: sort - «сортувати, впорядкувати». <code>-r</code> - навпаки: від більшого до меншого; <code>-n</code> - як числа: 9 менше за 10 (без -n - як текст, і 10 іде перед 9).</li>
-<li><code>uniq</code> - склеює однакові сусідні рядки (з -c - рахує). Назва: unique - «єдиний, неповторний»: прибрати повтори. <code>-c</code> - писати перед рядком, скільки разів він ішов підряд.</li>
-<li><code>cut</code> - вирізає з рядків потрібні стовпці. Назва: cut - «вирізати»: взяти шматок кожного рядка. <code>-f</code> - які поля взяти: -f1 або -f1,6,7 або -f2-4.</li>
+<li><code>grep</code>: <code>-h</code> (<code>--no-filename</code>) - не писати назву файлу перед рядком; це НЕ довідка (довга назва --no-filename); <code>-o</code> (<code>--only-matching</code>) - друкувати лише знайдений шматок, а не весь рядок (only - «лише»); <code>-E</code> (<code>--extended-regexp</code>) - розширені шаблони: <code>|</code> (або), <code>+</code>, <code>{79,}</code> без зворотних рисок (extended - «розширені»).</li>
 </ul>
 </blockquote>
 <p>Перше - які функції викликаються найчастіше (<code>-o</code> друкує лише знайдений шматок, <code>-h</code> - без імені файлу). Друге -
@@ -472,11 +542,16 @@ T
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>tee</code> - показує вивід і одночасно пише у файл. Назва: tee - трійник у трубах (літера T): потік іде у два боки.</li>
-<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор»: править текст, що тече крізь нього. <code>-n</code> - не друкувати всі рядки, лише ті, що позначені командою p.</li>
 </ul>
 </blockquote>
 <p><code>sed</code> без <code>-i</code> лише показує результат, файл не міняє. <code>sed -i</code> міняє файл на місці - перед ним зроби копію
 (<code>sed -i.bak ...</code> лишить <code>файл.bak</code>) або коміт у git.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sed</code>: <code>-i</code> (<code>--in-place</code>) - змінити САМ файл (без <code>-i</code> sed лише показує); <code>-i.bak</code> - ще й копія (in-place - «на місці»).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 9. Код виходу, &amp;&amp; і ||.</strong></p>
 <pre><code class="language-bash">grep -q &quot;def&quot; lr1/kolo.py; echo $?
 grep -q &quot;class&quot; lr1/kolo.py; echo $?
@@ -493,10 +568,9 @@ NameError: name 'Print' is not defined. Did you mean: 'print'?
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>grep</code>: <code>-q</code> - нічого не друкувати, лише код виходу: 0 - знайшов, 1 - ні (quiet).</li>
-<li><code>;</code> - розділяє команди в рядку, виконує всі по черзі. Назва: крапка з комою - роздільник команд.</li>
-<li><code>||</code> - друга команда - лише якщо перша впала. Назва: «або»: друга команда - лише якщо перша впала.</li>
-<li><code>2&gt;&amp;1</code> - помилки йдуть разом зі звичайним виводом. Назва: «потік 2 туди ж, куди потік 1»: помилки разом зі звичайним виводом.</li>
+<li><code>grep</code>: <code>-q</code> (<code>--quiet</code>) - нічого не друкувати, лише код виходу: 0 - знайшов, 1 - ні.</li>
+<li><code>;</code> (semicolon) - розділяє команди в рядку, виконує всі по черзі.</li>
+<li><code>||</code> (OR) - друга команда - лише якщо перша впала.</li>
 </ul>
 </blockquote>
 <p><strong>Крок 10. Для справжніх лаб</strong> (тека <code>~/univer/labs</code> з уроку 04):</p>
@@ -532,6 +606,14 @@ grep -rn --include=&quot;*.py&quot; -c &quot;^def &quot; .
 <li><strong>Нова команда в <code>~/.local/bin</code> «не знаходиться»</strong> - тека додалась у PATH лише при наступному вході (крок 3).</li>
 <li><strong><code>sudo</code> не бачить твоїх аліасів і <code>~/.local/bin</code></strong> - у sudo свій, безпечний PATH. Свої команди від root не запускай.</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>find</code>: <code>-print0</code> - розділяти назви невидимим нуль-символом - для <code>xargs -0</code>, коли в назвах пробіли (print zero).</li>
+<li><code>*</code> (asterisk) - будь-які символи в назві; bash сам замінює <code>*</code> на список файлів.</li>
+<li><code>xargs</code>: <code>-0</code> (<code>--null</code>) - назви розділені нульовим байтом (з <code>find -print0</code>) - не ламаються на пробілах (null).</li>
+</ul>
+</blockquote>
 <h2 id="як-роблять-профі">Як роблять профі</h2>
 <ul>
 <li><strong>Маленькі команди + пайпи.</strong> Філософія Unix: кожна програма робить одне, а пайпи їх зʼєднують. Курс MIT
@@ -542,6 +624,12 @@ grep -rn --include=&quot;*.py&quot; -c &quot;^def &quot; .
 <li><strong>Аліаси - лише для себе.</strong> У скриптах (урок 23) пишуть повні команди: аліасів там нема.</li>
 <li><strong>Перевірка рядка перед запуском</strong> - explainshell.com розбирає будь-яку команду по шматках.</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt install</code> - ставить програму з інтернету; на «Бажаєте продовжити? [Y/n]» - Enter. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)».</li>
+</ul>
+</blockquote>
 <h2 id="самоперевірка">Самоперевірка</h2>
 <ol>
 <li>Чим відрізняються <code>echo "$name"</code> і <code>echo '$name'</code>?</li>

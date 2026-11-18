@@ -62,11 +62,35 @@ HEAD~2 = на 2 коміти назад (27d6c77)
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code> - показує історію комітів, новий зверху. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>-n</code> (<code>--max-count</code>) - лише N останніх комітів: <code>-n 3</code> (або коротко <code>-3</code>) (number - «число»); <code>--stat</code> - під кожним комітом - які файли змінено і скільки рядків; <code>--graph</code> - малює гілки зліва зірочками і лініями; <code>--all</code> - коміти всіх гілок, а не лише поточної.</li>
+<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано). <code>--staged</code> - різниця між індексом і останнім комітом (знімком): що саме піде в наступний коміт (staged - «підготовлене»).</li>
+<li><code>git show</code> - показує один збережений знімок (коміт) зі змінами або старий файл.</li>
+<li><code>git blame</code> - показує, хто, коли і в якому коміті (збереженому знімку) змінив кожен рядок. Назва: blame - «звинуватити».</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-n</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-am</code> = <code>-a</code> і <code>-m</code>.</li>
+<li>Символи <code>~</code> <code>&gt;</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Як читати <code>diff</code>: рядок з <code>-</code> прибрали, рядок з <code>+</code> додали, рядки з пробілом на початку - контекст (не змінились). <code>@@ -3,4 +3,4 @@</code> - «шматок від 3-го рядка, 4 рядки».</p>
 <p>Аналогія: <code>git log</code> - це зміст зошита з датами, <code>git show</code> - одна сторінка, <code>git diff</code> - що ти дописав олівцем і ще не обвів ручкою.</p>
 <p>Довгий вивід <code>git log</code> відкривається в програмі перегляду (pager): гортай стрілками або пробілом, вийти - клавіша <code>q</code>.</p>
 <h3 id="пісочниця">Пісочниця</h3>
 <p>Нова тека лише для цього уроку, три коміти (<code>printf ... &gt;&gt;</code> дописує в кінець файлу):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">mkdir ~/git-pisochnytsia-05
 cd ~/git-pisochnytsia-05
 git init
@@ -83,18 +107,15 @@ git commit -am &quot;ЛР1: функція triple&quot;
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
 <li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
 <li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano; <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати». <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»); <code>-a</code> (<code>--all</code>) - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні (all - «усі»).</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p>Перший коміт пише так:</p>
 <pre><code class="language-text">[main (root-commit) 27d6c77] ЛР1: функція double
@@ -153,12 +174,6 @@ Date:   Wed Nov 18 14:03:00 2026 +0200
 
     ЛР1: функція double
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів.</li>
-</ul>
-</blockquote>
 <p>Повний хеш - 40 знаків. Скрізь, де треба вказати коміт, вистачає перших 7 (<code>228f08c</code>).</p>
 <pre><code class="language-bash">git log --oneline
 git log --stat -n 1
@@ -167,12 +182,6 @@ git log --stat -n 1
 10bffb8 Додай README
 27d6c77 ЛР1: функція double
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git log</code>: <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>--stat</code> - під кожним комітом - які файли змінено і скільки рядків; <code>-n</code> - лише N останніх комітів: -n 3 (або коротко -3).</li>
-</ul>
-</blockquote>
 <pre><code class="language-text">commit 228f08c9c75289074d6c150c847c63d52ef76502 (HEAD -&gt; main)
 Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
 Date:   Wed Nov 18 14:09:00 2026 +0200
@@ -201,8 +210,7 @@ index c5825fd..a12de39 100644
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор»: править текст, що тече крізь нього. <code>-i</code> - змінити САМ файл (без -i sed лише показує результат); -i.bak - ще й копія.</li>
-<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано). Назва: diff - від difference, «різниця».</li>
+<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор». <code>-i</code> (<code>--in-place</code>) - змінити САМ файл (без <code>-i</code> sed лише показує); <code>-i.bak</code> - ще й копія (in-place - «на місці»).</li>
 </ul>
 </blockquote>
 <p>Тепер додай і знову спитай <code>git diff</code>:</p>
@@ -210,12 +218,6 @@ index c5825fd..a12de39 100644
 git diff
 git diff --staged
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git diff</code>: <code>--staged</code> - різниця між індексом і останнім комітом: що саме піде в наступний коміт.</li>
-</ul>
-</blockquote>
 <p>Перший <code>git diff</code> - <strong>порожньо</strong>. Зміна нікуди не зникла: вона переїхала в індекс, і її показує <code>git diff --staged</code> (той самий текст, що вище). Звідси правило: перед <code>git commit</code> глянь <code>git diff --staged</code> - побачиш рівно те, що піде в коміт.</p>
 <pre><code class="language-bash">git commit -m &quot;ЛР1: triple множить на 4&quot;
 </code></pre>
@@ -239,12 +241,6 @@ index c5825fd..a12de39 100644
 -    return x * 3
 +    return x * 4
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git show</code> - показує один коміт з його змінами або старий файл. Назва: show - «показати».</li>
-</ul>
-</blockquote>
 <p>Порівняти два будь-які коміти (тут: 2 коміти тому і зараз), лише список файлів:</p>
 <pre><code class="language-bash">git diff HEAD~2 HEAD --stat
 </code></pre>
@@ -254,7 +250,7 @@ index c5825fd..a12de39 100644
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git diff</code>: <code>--stat</code> - замість рядків - підсумок: які файли і скільки рядків змінено; <code>HEAD</code> - різниця з останнім комітом: і в індексі, і не в індексі разом.</li>
+<li><code>git diff</code>: <code>--stat</code> - замість рядків - підсумок: які файли і скільки рядків змінено (stat - від statistics, «статистика»); <code>HEAD</code> - різниця з останнім комітом (<code>HEAD</code> - де ти зараз): і додане через <code>git add</code>, і ні.</li>
 </ul>
 </blockquote>
 <p>Хто і коли написав кожен рядок:</p>
@@ -267,12 +263,6 @@ index c5825fd..a12de39 100644
 228f08c9 (Твоє Імʼя 2026-11-18 14:09:00 +0200 5) def triple(x):
 c31063a0 (Твоє Імʼя 2026-11-18 14:12:00 +0200 6)     return x * 4
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git blame</code> - показує, хто і в якому коміті змінив кожен рядок. Назва: blame - «звинуватити»: хто написав цей рядок.</li>
-</ul>
-</blockquote>
 <p><code>^</code> перед хешем - це найперший коміт. Рядок 6 змінив останній коміт - ось де шукати, хто «зламав» <code>triple</code>.</p>
 <p>І малюнок історії (поки пряма лінія, гілки будуть в уроці 07):</p>
 <pre><code class="language-bash">git log --oneline --graph --all
@@ -282,12 +272,6 @@ c31063a0 (Твоє Імʼя 2026-11-18 14:12:00 +0200 6)     return x * 4
 * 10bffb8 Додай README
 * 27d6c77 ЛР1: функція double
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git log</code>: <code>--graph</code> - малює гілки зліва зірочками і лініями; <code>--all</code> - коміти всіх гілок, а не лише поточної.</li>
-</ul>
-</blockquote>
 <p><strong>Для лаб:</strong> у <code>~/univer/labs</code> (теки <code>lr1</code> ... <code>lr7</code>) історію однієї лаби дає <code>git log --oneline -- lr3</code>. Перед кожним комітом - <code>git diff --staged</code>, щоб у коміт не потрапило зайве. Якщо ЛР2 вчора працювала, а сьогодні ні - <code>git diff HEAD~1 HEAD</code> покаже, що саме ти поміняв, а <code>git show HEAD~1:lr2/lr2.py</code> - вчорашню версію файлу.</p>
 <h3 id="типові-помилки">Типові помилки</h3>
 <ul>
@@ -322,20 +306,33 @@ c31063a0 (Твоє Імʼя 2026-11-18 14:12:00 +0200 6)     return x * 4
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). Назва: config - від configuration, «налаштування». <code>--global</code> - для тебе на цьому ноутбуці: пише у файл ~/.gitconfig, діє в усіх репо.</li>
-<li><code>git lg</code> - наш псевдонім: git log --oneline --graph --all. Назва: lg - скорочення від log; наш псевдонім (alias) з уроку 05 курсу Git. <code>-n</code> - лише N останніх комітів: git lg -n 2 (як у git log).</li>
+<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). <code>--global</code> - для тебе на цьому ноутбуці: пише у файл <code>~/.gitconfig</code>, діє в усіх репо (global - «загальне»).</li>
+<li><code>git lg</code> - малює історію: наше коротке імʼя для <code>git log --oneline --graph --all</code>. Назва: lg - скорочення від log («журнал»); наше коротке імʼя (alias) для довшої команди. <code>-n</code> - лише N останніх комітів: <code>git lg -n 2</code> (n - number, «кількість»).</li>
+</ul>
+</blockquote>
+<ul>
 <li>Пошук коміту, де зʼявився або зник текст («pickaxe», <code>-S</code>): коли зламався рядок, а ти не знаєш, коли.
   <code>bash
   git log -S "triple" --oneline</code>
   <code>text
   228f08c ЛР1: функція triple</code></li>
 </ul>
+<blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>git log</code>: <code>-S</code> - лише коміти, де цей текст зʼявився або зник у коді: -S triple.</li>
+</ul>
+</blockquote>
+<ul>
 <li><code>git log -p -- lr1.py</code> - уся історія одного файлу разом зі змінами в кожному коміті.</li>
 <li><code>git diff --word-diff</code> - різниця по словах, а не по рядках; зручно для README і звітів.</li>
 <li>На GitHub те саме є в браузері: у файлі кнопки <strong>History</strong> (log цього файлу) і <strong>Blame</strong> (docs.github.com, «Viewing a file»).</li>
+</ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code>: <code>-p</code> (<code>--patch</code>) - показати самі зміни (diff) кожного коміту (patch - «латка»).</li>
+<li><code>git diff</code>: <code>--word-diff</code> - показує зміни по словах: <code>[-старе-]{+нове+}</code> в одному рядку (word - «слово»).</li>
 </ul>
 </blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>

@@ -56,6 +56,19 @@
 <summary>Відповідь</summary>
 
 
+   &gt; **Нове тут:**
+   &gt;
+   &gt; - `git status` - показує, які файли змінено і що піде в наступний коміт (збережений знімок). `--short` - коротко: по рядку на файл з двома буквами стану (`M`, `A`, `??`) (short - «коротко»).
+   &gt;
+   &gt; **Як читати:**
+   &gt;
+   &gt; - Слово з мінусом (як `-m` тут) - **прапорець**: уточнює, що саме зробити команді.
+   &gt; - Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.
+   &gt; - Короткі можна склеювати: `-am` = `-a` і `-m`.
+   &gt; - Символи `~` `&gt;` набирай в англійській розкладці (`~` - Shift і клавіша ліворуч від 1).
+   &gt;
+   &gt; Усе про кожну команду - у вкладці [«Команди»](#/u/prog/komandy), а тут торкнись команди в коді - вискочить підказка.
+
    ```text
    ?? index.html
    ```
@@ -74,22 +87,44 @@
    Pages завжди бере те, що зараз лежить у вибраній гілці на GitHub.
    </details></p>
 </li>
-<li>
-<p>Ти випадково закомітив файл з паролем, а потім зробив <code>git rm</code> і ще один коміт. Пароля в репо вже нема?
+</ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git rev-list</code> - перелічує або рахує збережені знімки (коміти) гілки. Назва: rev list - від revision list, «список версій» (версія = коміт). <code>--count</code> - лише число комітів, без списку (count - «порахувати»); <code>origin/main</code> - скільки комітів на GitHub (те, що знав останній <code>git fetch</code>).</li>
+</ul>
+</blockquote>
+<ol start="3">
+<li>Ти випадково закомітив файл з паролем, а потім зробив <code>git rm</code> і ще один коміт. Пароля в репо вже нема?
    <details markdown="block">
 
 <summary>Відповідь</summary>
 
 
+   &gt; **Нове тут:**
+   &gt;
+   &gt; - `git rm` - видаляє файл з диска і git; `--cached` - лише з git.
+
    Є. Його нема в **останньому** коміті, але в історії він лишився: `git show HEAD~1:parol.txt` його покаже.
    У публічному репо історію бачать усі. Тому секрети в репо не кладуть **взагалі** (див. «Типові помилки»).
-   </details></p>
-</li>
+   </details></li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git show</code> - показує один збережений знімок (коміт) зі змінами або старий файл.</li>
+</ul>
+</blockquote>
 <h3 id="руками">Руками</h3>
 <p>Хеші комітів у тебе будуть інші.</p>
 <p><strong>Крок 1. Публічний репо на сайті.</strong> Справа вгорі <strong>+</strong> → <strong>New repository</strong> → Repository name: <code>fizyka-storinka</code> →
 <strong>Public</strong> → <strong>Add README</strong>: On → <strong>Create repository</strong>. (Через gh, Урок 16: <code>gh repo create fizyka-storinka --public --add-readme</code>.)</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh repo create</code> - створює новий репозиторій (сховище коду) на GitHub з терміналу. Назва: <code>gh</code> - gh - від GitHub; офіційна програма GitHub CLI (CLI - «командний рядок»); repository create - «створити репозиторій» на GitHub. <code>--public</code> - публічний: бачать усі (портфоліо, GitHub Pages) (public - «відкритий»); <code>--add-readme</code> - одразу створити файл README.md - опис проєкту.</li>
+</ul>
+</blockquote>
 <p>Клонуй і створи сторінку:</p>
 <pre><code class="language-bash">git clone git@github.com:Evge14n/fizyka-storinka.git ~/fizyka-storinka
 cd ~/fizyka-storinka
@@ -98,12 +133,11 @@ nano index.html
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git clone</code> - копіює весь репо з GitHub до тебе. Назва: clone - «клон, точна копія».</li>
+<li><code>git clone</code> - копіює весь проєкт з історією з GitHub до тебе.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
 <li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p>Набери в nano (Ctrl+O, Enter - зберегти; Ctrl+X - вийти):</p>
 <pre><code class="language-html">&lt;!doctype html&gt;
@@ -148,13 +182,13 @@ index.html
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
-<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub.</li>
-<li><code>git ls-files</code> - перелічує файли, які відстежує git. Назва: ls files - «перелічити файли» (ls - від list, «список»).</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».
-<code>git ls-files</code> - які файли в репо. <code>index.html</code> має бути <strong>в корені</strong> (без теки перед назвою).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати». <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»).</li>
+<li><code>git push</code> - відправляє твої нові знімки (коміти) з компʼютера на GitHub. Назва: push - «штовхнути».</li>
+<li><code>git ls-files</code> - перелічує файли, за якими стежить git (що є в репо). Назва: ls files - «перелічити файли» (ls - від list, «список»).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
 </ul>
 </blockquote>
+<p><code>git ls-files</code> - які файли в репо. <code>index.html</code> має бути <strong>в корені</strong> (без теки перед назвою).</p>
 <p><strong>Крок 3. Увімкнути Pages на сайті.</strong> У репо <code>fizyka-storinka</code>:</p>
 <pre><code class="language-text">Settings → (ліве меню, розділ «Code, planning, and automation») Pages
   → Build and deployment → Source: Deploy from a branch
@@ -174,11 +208,11 @@ index.html
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>curl</code> - звертається до сайту за адресою і показує відповідь. Назва: client URL - «клієнт для URL», тобто для адрес у мережі. <code>-s</code> - тихо: без смужки прогресу і без повідомлень curl; <code>-o</code> - записати відповідь у файл замість екрана; -o /dev/null - просто викинути її; <code>-w</code> - після завершення надрукувати те, що просиш, напр. '%{http_code}\n' - код відповіді сервера; <code>/dev/null</code> - «чорна діра»: усе, що туди записати, зникає.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».
-Для твого uni-prep 18.11.2026 це дало <code>200</code>, а для ще не створеної <code>fizyka-storinka</code> - <code>404</code>:</li>
+<li><code>curl</code> - звертається до сайту за адресою і показує відповідь. Назва: client URL - «клієнт для URL» (URL - адреса в інтернеті). <code>-s</code> (<code>--silent</code>) - тихо: без смужки прогресу і без повідомлень curl (silent - «тихо»); <code>-o</code> (<code>--output</code>) - записати відповідь у файл замість екрана; <code>-o /dev/null</code> - просто викинути її (output - «вивід»); <code>-w</code> (<code>--write-out</code>) - після завершення надрукувати те, що просиш, напр. <code>'%{http_code}\n'</code> - код відповіді сервера (write-out); <code>/dev/null</code> - «чорна діра»: усе, що туди записати, зникає.</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
 </ul>
 </blockquote>
+<p>Для твого uni-prep 18.11.2026 це дало <code>200</code>, а для ще не створеної <code>fizyka-storinka</code> - <code>404</code>:</p>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\n' https://evge14n.github.io/uni-prep/
 </code></pre>
 <p><strong>Крок 5. Оновити сторінку.</strong> Кожен push у <code>main</code> = новий запуск і нова версія сайту.</p>
@@ -190,12 +224,12 @@ git push
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор»: править текст, що тече крізь нього. <code>-i</code> - змінити САМ файл (без -i sed лише показує результат); -i.bak - ще й копія.</li>
-<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано). Назва: diff - від difference, «різниця».</li>
-<li><code>git commit</code>: <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.
-<code>git diff</code> покаже:</li>
+<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор». <code>-i</code> (<code>--in-place</code>) - змінити САМ файл (без <code>-i</code> sed лише показує); <code>-i.bak</code> - ще й копія (in-place - «на місці»).</li>
+<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано).</li>
+<li><code>git commit</code>: <code>-a</code> (<code>--all</code>) - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні (all - «усі»).</li>
 </ul>
 </blockquote>
+<p><code>git diff</code> покаже:</p>
 <pre><code class="language-text">-  &lt;h1&gt;Привіт! Це моя сторінка з фізики&lt;/h1&gt;
 +  &lt;h1&gt;Вітаю! Це моя сторінка з фізики&lt;/h1&gt;
 </code></pre>
@@ -213,8 +247,14 @@ git push
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>touch</code> - створює порожній файл або оновлює його час. Назва: touch - «торкнутися» файлу: оновити час зміни, а як нема - створити.
-<code>touch</code> створює порожній файл. Крапка на початку = прихований файл: звичайний <code>ls</code> його не покаже, <code>ls -a</code> - покаже.</li>
+<li><code>touch</code> - створює порожній файл; якщо файл уже є - вміст не чіпає. Назва: touch - «торкнутися» файлу.</li>
+</ul>
+</blockquote>
+<p><code>touch</code> створює порожній файл. Крапка на початку = прихований файл: звичайний <code>ls</code> його не покаже, <code>ls -a</code> - покаже.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-a</code> (<code>--all</code>) - показати й приховані (назва з крапки), разом з . і .</li>
 </ul>
 </blockquote>
 <p><strong>Приклад - твій uni-prep.</strong> https://evge14n.github.io/uni-prep/ - це репо <code>Evge14n/uni-prep</code>, публічне. Він публікується
@@ -271,14 +311,12 @@ sending passwords or credit card numbers».</p>
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>git rm</code> - прибирає файл з git (з --cached - файл лишається на диску). Назва: rm - від remove, «прибрати».</li>
-<li><code>git show</code> - показує один коміт з його змінами або старий файл. Назва: show - «показати».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.
-   Файлу нема в теці, але старий коміт його памʼятає. Якщо справжній пароль чи токен потрапив на GitHub -
-   <strong>спершу зміни сам пароль/токен</strong> (вважай його вкраденим), а вже потім думай про чистку історії.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
 </ul>
 </blockquote>
+<p>Файлу нема в теці, але старий коміт його памʼятає. Якщо справжній пароль чи токен потрапив на GitHub -
+   <strong>спершу зміни сам пароль/токен</strong> (вважай його вкраденим), а вже потім думай про чистку історії.</p>
 <h3 id="як-роблять-профі">Як роблять профі</h3>
 <ul>
 <li><strong>Pages через GitHub Actions</strong> замість «з гілки»: сайт збирається програмою (Vite, Hugo, MkDocs) і публікується

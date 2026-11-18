@@ -355,6 +355,19 @@ sort(), sorted()                            O(n log n)
 </code></pre>
 <p><code>values</code> змінився, хоча ми «нічого з ним не робили». Бо <code>alias = values</code> скопіювало
 <strong>посилання</strong>, а не список. Лекція: «одна пляшка - дві етикетки»:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>alias</code> - дає коротке імʼя (аліас) довгій команді. Назва: alias - «псевдонім, інше імʼя».</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-m</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>*</code> набирай в англійській розкладці.</li>
+</ul>
+<p>Усе про кожну команду - у довіднику «05_Програмування/КОМАНДИ - довідник.md» (на сайті - вкладка «Команди»).</p>
+</blockquote>
 <pre><code>після alias = values             після alias = values.copy()
 
 values ──┐                       values ──► [1, 2, 3, 4, 5, 6]
@@ -791,6 +804,12 @@ print(board)
 <p><code>* 3</code> повторило <strong>посилання</strong> на один і той самий рядок <code>[0, 0, 0]</code>. Змінили «перший рядок» -
 змінився єдиний рядок, на який дивляться всі три комірки. Правильно:
 <code>[[0] * 3 for _ in range(3)]</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>*</code> (asterisk) - будь-які символи в назві; bash сам замінює <code>*</code> на список файлів.</li>
+</ul>
+</blockquote>
 </details>
 <p><strong>Фрагмент 4</strong> (хотіли прибрати всі парні)</p>
 <pre><code class="language-python">values = [1, 2, 2, 3, 4]
@@ -974,10 +993,9 @@ print(min_index, temperatures[min_index])
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
-<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції. <code>-v</code> - докладно: кожен приклад (Trying, Expecting, ok) і підсумок «N passed and M failed».</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади <code>&gt;&gt;&gt;</code> з опису функцій. Назва: doc test - «тест у документації». <code>-v</code> (<code>--verbose</code>) - докладно: кожен приклад (Trying, Expecting, ok) і підсумок «N passed and M failed» (verbose - «багатослівно»).</li>
 </ul>
-<p>Усе про кожну команду - у довіднику «05_Програмування/КОМАНДИ - довідник.md» (на сайті - вкладка «Команди»).</p>
 </blockquote>
 <p>Спершу всі тести червоні. Ти дописуєш тіло функції замість <code>pass</code> - тести стають зеленими.</p>
 <p><strong>Задача 1. <code>remove_spikes(readings, limit)</code> - прибрати викиди датчика.</strong> Повернути <strong>новий</strong>
@@ -1173,6 +1191,12 @@ if __name__ == &quot;__main__&quot;:
 <h2 id="7-поясни-чому">7. Поясни чому</h2>
 <p><strong>Питання 1.</strong> Чому після <code>alias = values; alias.append(1)</code> змінюється і <code>values</code>, а після
 <code>copy_x = x; copy_x = copy_x + 1</code> (числа) <code>x</code> не змінюється?</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>;</code> (semicolon) - розділяє команди в рядку, виконує всі по черзі.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Еталон</summary>
 <p>Змінна - ім'я, прив'язане до об'єкта. <code>alias = values</code> прив'язує друге ім'я до <strong>того самого</strong>

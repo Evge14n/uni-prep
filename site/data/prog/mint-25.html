@@ -43,14 +43,44 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudoedit</code> - безпечно редагує системний файл; спитає пароль (видно зірочки). Назва: sudo + edit - «редагувати» через sudo (те саме, що <code>sudo -e</code>).</li>
+<li><code>less</code> - гортає довгий файл по сторінках, вихід q. Назва: less - «менше»: жарт, бо less is more - кращий за старий переглядач more.</li>
+<li><code>shellcheck</code> - шукає типові помилки у bash-скриптах (файлах з командами). Назва: shell check - «перевірка (скрипта) для оболонки» bash.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-f</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-not</code> = <code>-n</code> і <code>-o</code> і <code>-t</code>.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Незнайому команду перевір на <strong>explainshell.com</strong>: сайт розбирає рядок по шматках. Пост r/linux4noobs
 «Most YouTube docker tutorials are actively trying to ruin your system» (18.08.2026, 283 бали) - про «поради» з
 YouTube на кшталт <code>chmod 777</code> і роботи від root; в іншому пості (29.06.2026) людина виконала пораду ШІ з
 <code>apt purge</code> і стерла сервер.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code> - змінює права файлу: хто може читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>777</code> - rwxrwxrwx: 7 усім трьом - усім усе; майже завжди помилка, див. приклад.</li>
+<li><code>apt purge</code> - видаляє програму разом з її налаштуваннями в <code>/etc</code>. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)».</li>
+</ul>
+</blockquote>
 <p><strong>Брандмауер ufw</strong> (Uncomplicated Firewall) - фільтр вхідних підключень. На Mint 22.3 встановлений, але <strong>вимкнений</strong>
 (<code>Status: inactive</code>), Welcome радить його увімкнути. Після <code>sudo ufw enable</code> типові правила: <strong>вхідні - заборонено,
 вихідні - дозволено</strong>. Тобто інтернет, оновлення, GitHub працюють як раніше, а до ноутбука ззовні не підключитись.
 Мишкою - <strong>gufw</strong> («Налаштування брандмауера» в меню).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>ufw enable</code> - вмикає брандмауер (захист від чужих підключень), і при старті теж. Назва: <code>ufw</code> - Uncomplicated Firewall - «нескладний брандмауер».</li>
+</ul>
+</blockquote>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -77,6 +107,15 @@ YouTube на кшталт <code>chmod 777</code> і роботи від root; в
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ufw status</code> - показує, чи увімкнений брандмауер (захист) і які правила. <code>verbose</code> - докладно: журнал і типові правила (Default: deny incoming...); <code>numbered</code> - правила з номерами - для sudo ufw delete НОМЕР.</li>
+<li><code>ufw disable</code> - вимикає брандмауер (захист) - і при старті системи теж.</li>
+<li><code>ufw allow</code> - відкриває в брандмауері вхід до служби чи порту (номера «дверей»). <code>ssh</code> - служба ssh, тобто порт 22/tcp (назву ufw бере з <code>/etc/services</code>).</li>
+<li><code>ufw delete</code> - видаляє правило брандмауера (захисту від чужих підключень).</li>
+</ul>
+</blockquote>
 <p><strong>Решта звичок:</strong>
 - <strong>Оновлення</strong> - «Диспетчер оновлень», урок 02. Вразливості закривають саме оновлення.
 - <strong>Програми</strong> - з «Керування програмами» / apt. PPA і неперевірені Flatpak - лише коли розумієш навіщо (урок 16).
@@ -92,6 +131,12 @@ YouTube на кшталт <code>chmod 777</code> і роботи від root; в
 - <strong>Розширення браузера</strong> - мінімум і лише з офіційного каталогу. Розширення бачить усі сторінки, які ти відкриваєш.
 - <strong>Фішинг</strong> - найчастіша атака і на Linux: лист «підтвердіть пароль» з посиланням. Пароль вводь лише на сайті,
   який відкрив сам (закладка), дивись на адресу. На GitHub і пошті - двофакторний вхід.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>lsblk</code> - показує диски, флешки і розділи деревом. Назва: list block devices - «список блокових пристроїв» (дисків і розділів). <code>-f</code> (<code>--fs</code>) - файлова система, мітка, UUID і вільне місце кожного розділу (filesystems).</li>
+</ul>
+</blockquote>
 <p><strong>Антивірус.</strong> Чесно: віруси для Linux існують (переважно для серверів), але для домашньої Mint головний ризик -
 не «вірус сам заліз», а <strong>ти сам запустив</strong> щось погане з sudo. Посібник Easy Linux Tips (оновлено 30.05.2026, для
 Mint і Ubuntu) прямо радить антивірус не ставити: вірус не встановиться без твого пароля або без того, що ти сам
@@ -99,19 +144,12 @@ Mint і Ubuntu) прямо радить антивірус не ставити: 
 одного досвідченого автора, а не правило Mint. Якщо треба перевірити файл для
 когось на Windows - у репозиторії є <code>clamav</code>.</p>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <ol>
 <li>Свіжа Mint 22.3. Що покаже команда?</li>
 </ol>
 <pre><code class="language-bash">sudo ufw status
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
-<li><code>ufw status</code> - показує, чи увімкнений брандмауер і які правила. Назва: status - «стан».</li>
-</ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
-</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">Status: inactive
@@ -121,6 +159,12 @@ Mint і Ubuntu) прямо радить антивірус не ставити: 
 <ol start="2">
 <li>Ти ввімкнув ufw. Чи відкриються сайти і чи буде працювати <code>git push</code>?</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git push</code> - відправляє твої нові знімки (коміти) з компʼютера на GitHub. Назва: push - «штовхнути».</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Так. Типове правило: <code>deny (incoming), allow (outgoing)</code> - забороняються лише <strong>вхідні</strong> підключення (хтось ззовні
@@ -129,6 +173,12 @@ Mint і Ubuntu) прямо радить антивірус не ставити: 
 <ol start="3">
 <li>Поза venv: <code>pip install requests</code>. Що буде? І чи допоможе sudo?</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>pip install</code> - ставить бібліотеку Python (лише у venv). Назва: <code>pip</code> - pip installs packages - «pip ставить пакети» (назва, що посилається сама на себе); pip installs packages - «pip ставить пакети»; install - «встановити».</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Справжній початок виводу:</p>
@@ -145,6 +195,12 @@ Mint і Ubuntu) прямо радить антивірус не ставити: 
 <ol start="4">
 <li><code>journalctl _COMM=sudo</code> без sudo. Чи побачиш записи про sudo? Залежить від груп - спершу <code>groups</code>.</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>journalctl</code> - показує журнал системи: повідомлення програм і служб (фонових програм). Назва: journal control - «керування журналом» (systemd - програма, що запускає служби). <code>_COMM=sudo</code> - лише записи програми sudo (COMM - command, назва програми).</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>У тестовій Mint користувач лише в групі <code>sudo</code>, і там спершу така підказка (справжній вивід):</p>
@@ -162,13 +218,6 @@ Mint і Ubuntu) прямо радить антивірус не ставити: 
 sudo ufw enable
 sudo ufw status verbose
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>ufw status</code>: <code>verbose</code> - докладно: журнал і типові правила (Default: deny incoming...).</li>
-<li><code>ufw enable</code> - вмикає брандмауер (і при старті системи). Назва: enable - «увімкнути».</li>
-</ul>
-</blockquote>
 <p>Справжній вивід двох останніх команд у тестовій Mint 22.3:</p>
 <pre><code class="language-text">Firewall is active and enabled on system startup
 Status: active
@@ -178,6 +227,12 @@ New profiles: skip
 </code></pre>
 <p>Перевір, що інтернет працює: <code>curl -I https://linuxmint.com</code> (урок 21). Те саме мишкою: меню → «Налаштування
 брандмауера» (gufw) → перемикач «Стан».</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>curl</code> - звертається до сайту за адресою і показує відповідь. Назва: client URL - «клієнт для URL» (URL - адреса в інтернеті). <code>-I</code> (<code>--head</code>) - лише заголовки - службові рядки на початку відповіді; перший - код, напр. <code>HTTP/2 200</code> (head - «голова»).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 2. Хто і що робив з sudo.</strong></p>
 <pre><code class="language-bash">sudo journalctl _COMM=sudo -n 5 --no-pager
 last -n 5
@@ -185,8 +240,8 @@ last -n 5
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>journalctl</code> - показує журнал системи і служб. Назва: journal control - «керування журналом» systemd. <code>-n</code> - лише останні N рядків, напр. -n 5; <code>--no-pager</code> - вивести все одразу, без пейджера less (для труб і &gt; файл); <code>_COMM=sudo</code> - лише записи програми sudo (COMM - назва програми).</li>
-<li><code>last</code> - показує останні входи і перезавантаження. Назва: last - «останні»: останні входи в систему і перезавантаження. <code>-n</code> - показати лише стільки останніх рядків: last -n 5.</li>
+<li><code>journalctl</code>: <code>-n</code> (<code>--lines</code>) - лише останні N рядків, напр. <code>-n 5</code> (number - «кількість»); <code>--no-pager</code> - вивести все одразу, а не в less (переглядачі, де гортають і виходять q).</li>
+<li><code>last</code> - показує останні входи і перезавантаження. Назва: last - «останні». <code>-n</code> (<code>--limit</code>) - показати лише стільки останніх рядків: <code>last -n 5</code> (n - number, «число»).</li>
 </ul>
 </blockquote>
 <p>Кожен виклик sudo - у журналі: хто, з якої теки і яку команду. Рядок з тестової Mint (імʼя компʼютера замінено на
@@ -196,13 +251,19 @@ last -n 5
 <p>Після дати - імʼя компʼютера, далі <code>sudo[номер процесу]</code>, хто запускав і що. <code>last</code> показує входи в систему і
 перезавантаження. У тестовій машині там лише рядки <code>reboot   system boot ...</code>; на ноутбуці будуть і твої входи.
 Побачив команду, якої не запускав, - привід розібратись.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>reboot</code> - перезавантажує компʼютер (зазвичай <code>sudo reboot</code>). Назва: reboot - «перезавантажити» (re - «знову», boot - «запуск»).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 3. Відкриті порти.</strong> Як в уроці 21:</p>
 <pre><code class="language-bash">sudo ss -tulpn
 </code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>ss</code> - показує, які програми слухають мережеві порти. Назва: socket statistics - «статистика сокетів» (сокет - «гніздо» для мережевого звʼязку). <code>-t</code> - зʼєднання TCP (ssh, https); <code>-u</code> - зʼєднання UDP (DNS, мультимедіа); <code>-l</code> - лише ті, що слухають (чекають підключень); <code>-p</code> - яка програма тримає порт; чужі програми видно лише з sudo; <code>-n</code> - номери портів цифрами (22), а не назвами (ssh).</li>
+<li><code>ss</code> - показує, на яких портах (номерах «дверей» у мережі) чекають програми. Назва: socket statistics - «статистика сокетів» (сокет - «гніздо» для мережевого звʼязку). <code>-t</code> (<code>--tcp</code>) - зʼєднання TCP - звичайні надійні (ssh, сайти) (tcp); <code>-u</code> (<code>--udp</code>) - зʼєднання UDP - швидкі, без перевірки доставки (DNS, відео) (udp); <code>-l</code> (<code>--listening</code>) - лише ті, що слухають, тобто чекають підключень (listening - «слухають»); <code>-p</code> (<code>--processes</code>) - яка програма тримає порт; чужі програми видно лише з sudo (processes - «процеси», запущені програми); <code>-n</code> (<code>--numeric</code>) - номери портів цифрами (22), а не назвами (ssh) (numeric - «числами»).</li>
 </ul>
 </blockquote>
 <p>Усе, що слухає на <code>127.0.0.1</code> / <code>127.0.0.53</code> / <code>[::1]</code>, доступне лише з самого ноутбука. Порти на <code>0.0.0.0</code> або
@@ -213,26 +274,26 @@ last -n 5
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>find</code> - шукає файли за назвою, часом чи власником. Назва: find - «знайти». <code>-not</code> - заперечення наступної умови: <code>-not -user "$USER"</code> - чужі файли; <code>-user</code> - лише файли, власник яких - цей користувач; <code>~</code> - шукати по всій домашній теці (знайти, куди Telegram зберіг лабу).</li>
-<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>2&gt;</code> - пише лише помилки у файл. Назва: redirect stderr - «перенаправити помилки»: 2 - номер потоку помилок.</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
-<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>find</code> - шукає файли й теки за назвою, і в усіх підтеках. Назва: find - «знайти». <code>-not</code> - заперечення наступної умови: <code>-not -user "$USER"</code> - чужі файли (not - «не»); <code>-user</code> - лише файли, власник яких - цей користувач (user); <code>~</code> - шукати по всій домашній теці (знайти, куди Telegram зберіг лабу).</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>$ЗМІННА</code> (dollar) - бере значення змінної (назви, під якою bash тримає текст).</li>
+<li><code>2&gt;</code> (redirect stderr) - пише лише помилки у файл.</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>head</code> - показує перші рядки файлу (або того, що прийшло через <code>|</code>). Назва: head - «голова».</li>
 </ul>
 </blockquote>
 <p>Порожньо - добре. Якщо щось є - поверни собі: <code>sudo chown -R "$USER:$USER" ~/назва_теки</code> (саме ту теку, що
 знайшлась).</p>
-<p><strong>Крок 5. Чи зашифрований диск.</strong></p>
-<pre><code class="language-bash">lsblk -f
-</code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>lsblk</code> - показує диски, флешки і розділи деревом. Назва: list block devices - «список блокових пристроїв» (дисків і розділів). <code>-f</code> - файлова система, мітка, UUID і вільне місце кожного розділу (filesystems).</li>
+<li><code>chown</code> - змінює, чий файл: власника і групу (зазвичай через <code>sudo</code>). Назва: change owner - «змінити власника». <code>-R</code> (<code>--recursive</code>) - змінити власника теки і всього, що в ній (recursive - «рекурсивно»: і в усіх підтеках).</li>
 </ul>
 </blockquote>
+<p><strong>Крок 5. Чи зашифрований диск.</strong></p>
+<pre><code class="language-bash">lsblk -f
+</code></pre>
 <p>У стовпці <code>FSTYPE</code> шукай <code>crypto_LUKS</code>. Нема - диск не зашифрований; для ноутбука, який носиш в університет, варто
 подумати про це при наступному перевстановленні (з резервною копією!).</p>
 <p><strong>Крок 6. Перевірка чужої команди - тренування.</strong> Скопіюй в explainshell.com рядок
@@ -255,6 +316,12 @@ last -n 5
 <li><strong>Резервна копія на тому самому диску</strong> (як тренувальна <code>~/backup</code> з уроків 21 і 23) - помре разом з диском.
   3-2-1: флешка або зовнішній диск і GitHub.</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>;</code> (semicolon) - розділяє команди в рядку, виконує всі по черзі.</li>
+</ul>
+</blockquote>
 <h2 id="як-роблять-профі">Як роблять профі</h2>
 <ul>
 <li><strong>Найменші права.</strong> Працюють звичайним користувачем, sudo - лише на конкретну команду, яку розуміють.</li>

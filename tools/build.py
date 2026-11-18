@@ -78,6 +78,8 @@ def md_to_html(text):
     )
     # таблиці - у прокручуваній обгортці (щоб не було горизонтальної прокрутки сторінки)
     html = html.replace("<table>", '<div class="tw"><table>').replace("</table>", "</table></div>")
+    # UCMD1: у клітинці таблиці `printf "5\n" \| python3` - «\|» лише екранує «|» для Markdown; показувати «|»
+    html = re.sub(r"<t([dh])([^>]*)>(.*?)</t\1>", lambda m: m.group(0).replace("\\|", "|"), html, flags=re.S)
     return mini_markup(html)
 
 

@@ -77,7 +77,25 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>passwd</code> - змінює пароль; при наборі нічого не видно, навіть зірочок. Назва: password - «пароль».</li>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>dpkg</code> - ставить один файл <code>.deb</code> і веде список встановлених програм. Назва: Debian package - «пакет Debian». <code>--configure</code> - доналаштовує розпаковані пакети; з <code>-a</code> - усі, які перервались (configure - «налаштувати»); <code>-a</code> (<code>--pending</code>) - з <code>--configure</code>: усі пакети, що чекають налаштування (pending - «ті, що чекають»).</li>
+<li><code>apt-get install</code> - ставить програму (пакет); з <code>-f</code> лагодить зламані залежності. Назва: <code>apt-get</code> - apt (Advanced Package Tool) + get - «дістати»; apt-get - «apt, дістань»; install - «встановити». <code>-f</code> (<code>--fix-broken</code>) - докачує залежності, яких бракує, і доналаштовує пакети (fix broken - «полагодити зламане»).</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-a</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-xb</code> = <code>-x</code> і <code>-b</code>.</li>
+<li>Символи <code>~</code> <code>&gt;</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><em>Спершу відповідай подумки, нічого не запускаючи, і лише тоді розкрий «Відповідь». Файли з цих прикладів зʼявляться в розділі «Руками» нижче - запусти й перевір себе, коли його пройдеш.</em></p>
 <ol>
 <li>У тебе ще й Windows, і після кожного запуску Windows годинник у Mint (або навпаки) неправильний на 2-3 години.
 Подивись налаштування часу:</li>
@@ -89,7 +107,6 @@
 <ul>
 <li><code>timedatectl</code> - показує і змінює час, пояс і звірку годинника. Назва: time date control - «керування часом і датою».</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <p>Який рядок про це?</p>
 <details>
@@ -112,6 +129,13 @@ System clock synchronized: yes
 (у <code>systemctl status systemd-timesyncd</code> видно <code>ConditionVirtualization=!container was not met</code>), а на ноутбуці має
 бути <code>active</code> (не перевірено). Якщо <code>inactive</code> на ноутбуці - <code>sudo timedatectl set-ntp true</code> або «Системні
 налаштування» → «Дата та час» → «Мережевий час».</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl status</code> - показує стан служби (фонової програми) і останні рядки її журналу. Назва: <code>systemctl</code> - system control - «керування системою» (через systemd - програму, що запускає служби).</li>
+<li><code>timedatectl set-ntp</code> - вмикає чи вимикає звірку часу з інтернетом. Назва: set NTP - «встановити NTP» (Network Time Protocol, звірка часу).</li>
+</ul>
+</blockquote>
 </details>
 <ol start="2">
 <li>Відкрито Диспетчер оновлень, а ти в терміналі ставиш пакет. Що скажуть <code>apt</code> і <code>apt-get</code>?</li>
@@ -153,9 +177,9 @@ systemctl --failed
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>uname</code> - показує назву і версію ядра Linux. Назва: Unix name - «імʼя Unix-системи». <code>-r</code> - версія ядра, яке працює зараз.</li>
-<li><code>df</code> - показує вільне місце на дисках. Назва: disk free - «вільне на диску». <code>-h</code> - розміри в K, M, G замість кілобайтних блоків (human-readable); <code>/</code> - корінь - розділ, де стоїть система.</li>
-<li><code>systemctl</code> - керує службами systemd: стан, запуск, зупинка, автозапуск. Назва: system control - «керування системою» (systemd). <code>--failed</code> - лише юніти, що впали з помилкою.</li>
+<li><code>uname</code> - показує версію ядра (головної програми Linux) і тип процесора. Назва: Unix name - «імʼя Unix-системи». <code>-r</code> (<code>--kernel-release</code>) - версія ядра, яке працює зараз (release - «випуск»).</li>
+<li><code>df</code> - показує вільне місце на дисках. Назва: disk free - «вільне на диску». <code>-h</code> (<code>--human-readable</code>) - розміри в K, M, G замість кілобайтних блоків (human-readable); <code>/</code> - корінь - розділ, де стоїть система.</li>
+<li><code>systemctl</code>: <code>--failed</code> - лише служби й таймери (юніти), що впали з помилкою (failed - «зазнали невдачі»).</li>
 </ul>
 </blockquote>
 <ol start="3">
@@ -182,6 +206,12 @@ GRUB_CMDLINE_LINUX_DEFAULT=&quot;$GRUB_CMDLINE_LINUX_DEFAULT &quot;
 <p>Перевір: <code>cat /etc/default/grub.d/98_mintsysadm.cfg</code>. Меню на кожному старті з таймаутом 1-3 с - нормально, а
 «Grub Customizer» ставити не треба (r/linuxmint, 15.10.2026, 64 бали). Перезавантажся і просто <strong>подивись</strong> на
 меню: перший рядок - Linux Mint, далі «Advanced options for Linux Mint ...». Нічого не вибирай.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 3. Зроби live USB заздалегідь.</strong> Образ Mint 22.3 Cinnamon важить 3,1 ГБ (3 091 660 800 байт на
 дзеркалі mirrors.kernel.org), тож флешка потрібна 4 ГБ або більше. <strong>Усе на ній зітреться.</strong>
 1. Завантаж ISO Mint 22.3 Cinnamon і файл <code>sha256sum.txt</code> з linuxmint.com (сторінка Download) у теку «Завантаження».
@@ -193,10 +223,10 @@ sha256sum -c sha256sum.txt --ignore-missing
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>$( )</code> (command substitution) - підставляє вивід команди в рядок.</li>
 <li><code>xdg-user-dir</code> - друкує шлях до теки завантажень, зображень тощо. Назва: XDG user directory - «тека користувача» за правилами freedesktop.org. <code>DOWNLOAD</code> - тека завантажень (туди кладуть файли браузер і Telegram).</li>
-<li><code>sha256sum</code> - рахує і перевіряє контрольну суму файлу. Назва: SHA-256 sum - «контрольна сума» за алгоритмом SHA-256 (Secure Hash Algorithm). <code>-c</code> - перевірити файли за списком «сума  назва» (як sha256sum.txt з сайту Mint); <code>--ignore-missing</code> - з -c: мовчати про файли зі списку, яких у теці нема; <code>sha256sum.txt</code> - файл зі списком сум, який лежить поруч з ISO на сайті Mint.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>$( )</code> - підставляє вивід команди в рядок. Назва: command substitution - «підстановка команди».</li>
+<li><code>sha256sum</code> - рахує «відбиток» файлу (контрольну суму), щоб перевірити, що він цілий. Назва: SHA-256 sum - «контрольна сума» за алгоритмом SHA-256 (Secure Hash Algorithm). <code>-c</code> (<code>--check</code>) - перевірити файли за списком «сума  назва», як sha256sum.txt з сайту Mint (check); <code>--ignore-missing</code> - з <code>-c</code>: мовчати про файли зі списку, яких у теці нема; <code>sha256sum.txt</code> - файл зі списком сум, який лежить поруч з ISO на сайті Mint.</li>
 </ul>
 </blockquote>
 <p><code>xdg-user-dir DOWNLOAD</code> друкує шлях до теки завантажень (назва залежить від мови). Має бути рядок
@@ -206,6 +236,12 @@ sha256sum -c sha256sum.txt --ignore-missing
 4. Меню → «Запис образу на USB-нагромаджувач» → вибери ISO → вибери флешку (<strong>звір розмір і модель!</strong>) →
    «Записати» → дочекайся «Образ було успішно записано».
 5. Підпиши флешку і поклади поруч з ноутбуком.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>lsblk</code> - показує диски, флешки і розділи деревом. Назва: list block devices - «список блокових пристроїв» (дисків і розділів). <code>-o</code> (<code>--output</code>) - які колонки показати: -o NAME,SIZE,MOUNTPOINT (output).</li>
+</ul>
+</blockquote>
 <p>Завантажитись з неї: увімкнути ноутбук і натиснути клавішу меню завантаження - у різних виробників різна (часто F12,
 F11, F10 або Esc; для твого ноутбука не перевірено - глянь на сайті виробника).</p>
 <p><strong>Крок 4. Збери «паспорт» системи для форуму</strong> (поки все працює - щоб було з чим порівняти):</p>
@@ -216,12 +252,11 @@ head -4 ~/inxi.txt
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>inxi</code> - показує, що за залізо і які драйвери. Назва: назва не розшифровується (так назвав автор програми). <code>-F</code> - повний звіт: усі основні розділи (System, CPU, Graphics, Network...); <code>-x</code> - більше подробиць; -xx і -xxx - ще більше; <code>-z</code> - ховає MAC-адреси, серійні номери, IP - для форуму.</li>
-<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
-<li><code>journalctl</code> - показує журнал системи і служб. Назва: journal control - «керування журналом» systemd. <code>-b</code> - лише поточне завантаження (b - boot); -b -1 - попереднє; <code>-p</code> - лише ця важливість і гірше: -p err - помилки, -p warning - ще й попередження; <code>err</code> - після -p: рівень «помилка» і все гірше.</li>
-<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>inxi</code> - показує, що за залізо і які драйвери. <code>-F</code> (<code>--full</code>) - повний звіт: усі основні розділи (System, CPU, Graphics, Network...) (full - «повний»); <code>-x</code> (<code>--extra</code>) - більше подробиць; <code>-xx</code> і <code>-xxx</code> - ще більше (extra - «додатково»); <code>-z</code> (<code>--filter</code>) - ховає MAC-адреси, серійні номери, IP - для форуму (filter - «фільтр»).</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>journalctl</code> - показує журнал системи: повідомлення програм і служб (фонових програм). Назва: journal control - «керування журналом» (systemd - програма, що запускає служби). <code>-b</code> (<code>--boot</code>) - лише з останнього ввімкнення компʼютера; <code>-b -1</code> - попереднє (boot - «завантаження»); <code>-p</code> (<code>--priority</code>) - лише ця важливість і гірше: <code>-p err</code> - помилки, <code>-p warning</code> - ще й попередження (priority); <code>err</code> - після <code>-p</code>: рівень «помилка» і все гірше.</li>
+<li><code>head</code> - показує перші рядки файлу (або того, що прийшло через <code>|</code>). Назва: head - «голова». <code>-4</code> - лише 4 перші рядки (те саме, що <code>-n 4</code>).</li>
 </ul>
 </blockquote>
 <p><code>-Fxxxz</code> - усе (F), максимум деталей (xxx), без MAC і серійних номерів (z). Файл складається з розділів
@@ -237,8 +272,7 @@ sudo apt-get install -f
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>dpkg</code> - ставить один .deb і знає, що встановлено. Назва: Debian package - «пакет Debian». <code>--audit</code> - шукає недоналаштовані й зламані пакети; тиша - усе гаразд; <code>--configure</code> - доналаштовує розпаковані пакети; з -a - усі, які перервались; <code>-a</code> - з --configure: усі пакети, що чекають налаштування.</li>
-<li><code>apt-get install</code> - ставить пакет; з -f лагодить зламані залежності. Назва: apt-get - «apt, дістань»; install - «встановити». <code>-f</code> - fix - «полагодити»: докачує залежності, яких бракує, і доналаштовує пакети.</li>
+<li><code>dpkg</code>: <code>--audit</code> - шукає недоналаштовані й зламані пакети; тиша - усе гаразд (audit - «перевірка»).</li>
 </ul>
 </blockquote>
 <p>Коли все гаразд, <code>dpkg --audit</code> і <code>dpkg --configure -a</code> нічого не друкують, а <code>apt-get install -f</code> закінчується
@@ -249,9 +283,27 @@ sudo apt-get install -f
 - диск повний - урок 18 (<code>df -h /</code>, <code>sudo journalctl --vacuum-time=2d</code>, <code>sudo apt autoremove --purge</code>);
 - зависла програма - <code>top</code>, <code>kill PID</code> (урок 19);
 - потім <code>sudo reboot</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>timeshift</code> - робить знімок системи і повертає її до знімка, якщо щось зламалось. Назва: time shift - «зсув у часі». <code>--list</code> - список знімків: Num, Name (дата і час), Tags, Description; <code>--restore</code> - відновити систему зі знімка (спитає, з якого і куди), потім перезавантаження.</li>
+<li><code>journalctl</code>: <code>--vacuum-time</code> - стерти записи, старші за час, напр. <code>--vacuum-time=2weeks</code> (потрібен sudo; vacuum - «пилосос»).</li>
+<li><code>apt autoremove</code> - прибирає програми, що ставились «за компанію» і вже не потрібні. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)»; auto remove - «автоматично прибрати». <code>--purge</code> - заодно стирає системні налаштування цих пакетів у <code>/etc</code>, як <code>apt purge</code> (purge - «вичистити»).</li>
+<li><code>kill</code> - надсилає програмі сигнал (команду) «зупинись» за її номером PID. Назва: kill - «вбити». <code>PID</code> - номер процесу (запущеної програми) з <code>pgrep -af назва</code> або <code>ps aux</code> (другий стовпець).</li>
+<li><code>reboot</code> - перезавантажує компʼютер (зазвичай <code>sudo reboot</code>). Назва: reboot - «перезавантажити» (re - «знову», boot - «запуск»).</li>
+</ul>
+</blockquote>
 <p>Свіжий приклад (05.11.2026, 255 балів): пакет <code>linux-firmware-amd-graphics</code> зламав екран входу на AMD RX 9060/9070,
 лагодили з TTY: <code>sudo apt update</code>, <code>sudo apt install linux-firmware-amd-graphics</code>, <code>sudo update-initramfs -u -k all</code>,
 <code>sudo reboot</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt update</code> - завантажує свіжий список програм і версій, нічого не ставить.</li>
+<li><code>apt install</code> - ставить програму з інтернету; на «Бажаєте продовжити? [Y/n]» - Enter.</li>
+<li><code>update-initramfs</code> - перезбирає стартовий файл, з якого Linux бере драйвери при увімкненні. Назва: update initial RAM filesystem - «оновити початкову файлову систему в памʼяті». <code>-u</code> - оновити наявний образ (update - «оновити»); <code>-k</code> - для якого ядра: версія з <code>uname -r</code> або <code>all</code> - для всіх встановлених (kernel - «ядро»).</li>
+</ul>
+</blockquote>
 <p><strong>Б. Нове ядро не стартує</strong> (r/linuxmint, 28.07.2026, 126 балів: оновлення до ядра 7.0).
 1. При старті меню GRUB (крок 2, або Esc/Shift) → «Advanced options for Linux Mint ...» → вибери рядок з
    <strong>попереднім</strong> ядром (без <code>(recovery mode)</code>).
@@ -304,6 +356,16 @@ Press Enter for maintenance
 <code>systemctl reboot</code> (урок 18). Якщо nano при збереженні пише <code>Error writing /etc/fstab: Read-only file system</code>
 (українською <code>Помилка під час спроби записати /etc/fstab: Файлова система тільки для зчитування</code>) - диск ще лише
 для читання: вийди з nano (Ctrl+X, <code>N</code>), спершу <code>mount -o remount,rw /</code>, потім знову <code>nano /etc/fstab</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>journalctl</code>: <code>-x</code> (<code>--catalog</code>) - додати пояснення до відомих повідомлень; <code>-xb</code> так просять на форумах (catalog - «довідник»).</li>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+<li><code>findmnt</code> - показує, який диск до якої теки підключено; <code>--verify</code> перевіряє <code>/etc/fstab</code>. Назва: find mount - «знайти монтування». <code>--verify</code> - перевіряє записи fstab: чи є такий диск, тека, файлова система (verify - «перевірити»).</li>
+<li><code>systemctl reboot</code> - перезавантажує компʼютер.</li>
+<li><code>mount</code> - підключає диск до теки або показує, що куди підключено. Назва: mount - «закріпити, змонтувати» (підключити диск до теки). <code>-o</code> (<code>--options</code>) - параметри через кому: -o remount,rw - перепідключити той самий диск із дозволом запису (options - «параметри»); <code>remount,rw</code> - remount - перепідключити, rw (read-write) - читати і писати; ro - лише читати; <code>/</code> - корінь - головний диск системи, на якому стоїть сама Mint.</li>
+</ul>
+</blockquote>
 <p><strong>Д. Зламався apt.</strong> Після обриву світла чи закритого посеред оновлення вікна <code>apt</code> (і <code>sudo apt-get</code>) пише
 (справжній текст apt 2.8 з тестової системи, де перерване встановлення змодельовано на копії бази пакетів):</p>
 <pre><code class="language-text">E: dpkg was interrupted, you must manually run 'sudo dpkg --configure -a' to correct the problem.
@@ -311,6 +373,12 @@ Press Enter for maintenance
 <p>По черзі: <code>sudo dpkg --configure -a</code> (доробити перервану установку), <code>sudo apt-get install -f</code> (довставити
 залежності), <code>sudo apt update</code>, <code>sudo apt upgrade</code>. Якщо винна стороння програма (PPA, <code>.deb</code> з сайту) - прибери її
 (урок 16). Те саме вміє пункт <code>dpkg</code> у recovery mode.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt upgrade</code> - ставить новіші версії всіх встановлених програм. Назва: upgrade - «перейти на новішу версію».</li>
+</ul>
+</blockquote>
 <p><strong>Е. Нема меню GRUB, чорний екран з <code>grub rescue&gt;</code></strong> (часто після видалення розділу чи Windows-оновлення,
 r/linuxmint, 12.05.2026). Завантажся з live USB. <strong>Boot Repair</strong> у live-сесії Mint 22.3 уже стоїть (пакет
 <code>boot-repair</code> є в списку пакетів ISO і видаляється лише після встановлення), тому PPA, про який пишуть старі статті,
@@ -328,6 +396,13 @@ r/linuxmint, 12.05.2026). Завантажся з live USB. <strong>Boot Repair<
   вимірювань TPM Windows може попросити ключ відновлення (стаття Microsoft «BitLocker recovery overview»; на
   ноутбуці не перевірено).
 - <strong>Secure Boot</strong> лиши ввімкненим; драйвери - через MOK (урок 17).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>timedatectl set-timezone</code> - змінює часовий пояс. Назва: set time zone - «встановити часовий пояс». <code>Europe/Kyiv</code> - пояс Києва (UTC+2, влітку +3); стара назва Europe/Kiev у списку вже не значиться.</li>
+<li><code>timedatectl set-local-rtc</code> - годинник плати: 1 - місцевий час, 0 - UTC. Назва: set local RTC - «годинник плати в місцевому часі».</li>
+</ul>
+</blockquote>
 <h2 id="як-просити-допомоги">Як просити допомоги</h2>
 <ul>
 <li>Форум <strong>forums.linuxmint.com</strong> (англійською), r/linuxmint. Напиши: що робив перед поломкою, що бачиш (точний текст
@@ -339,6 +414,14 @@ r/linuxmint, 12.05.2026). Завантажся з live USB. <strong>Boot Repair<
   слово. Особливо небезпечні: <code>rm -rf</code> з <code>/</code> або <code>*</code>, <code>dd</code>, <code>mkfs</code>, <code>chmod -R 777</code>, <code>sudo</code> перед тим, що з інтернету
   «треба просто вставити».</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code> - змінює права файлу: хто може читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>777</code> - rwxrwxrwx: 7 усім трьом - усім усе; майже завжди помилка, див. приклад; <code>-R</code> (<code>--recursive</code>) - змінити права теки і всього, що в ній (recursive - «рекурсивно»: і в усіх підтеках).</li>
+<li><code>apt purge</code> - видаляє програму разом з її налаштуваннями в <code>/etc</code>.</li>
+<li><code>rm</code> - видаляє файли назавжди, без кошика. Назва: remove - «прибрати, видалити». <code>-r</code> (<code>--recursive</code>) - видаляти теки разом з усім, що всередині (recursive - «рекурсивно», углиб); <code>-f</code> (<code>--force</code>) - не питати і не лаятись, якщо файлу нема (force - «силоміць»).</li>
+</ul>
+</blockquote>
 <h2 id="типові-помилки">Типові помилки</h2>
 <ul>
 <li><strong>Перевстановлювати Mint при першій проблемі.</strong> Спершу драбина: TTY → знімок → старе ядро → recovery → live USB.</li>

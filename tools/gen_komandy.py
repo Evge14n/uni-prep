@@ -17,6 +17,7 @@ OUT = ROOT / "content" / "prog"
 sys.path.insert(0, str(SRC))
 from build_dovidnyk import entry_md, ordered  # noqa: E402
 from check import GROUPS  # noqa: E402
+from annotate import name_part  # noqa: E402  (UCMD1: «Назва:» лише там, де вона щось додає)
 
 NAMES_FILE = Path(r"D:\Універ\00_Загальне\_імена-не-на-сайт.txt")
 
@@ -66,7 +67,7 @@ def main():
                 fl[f["flag"]] = f["what"]
                 if f.get("long"):
                     fl[f["long"]] = f["what"]
-            data[e["key"]] = [e["id"], e["short"], e["name_from"], fl, {a["arg"]: a["what"] for a in e.get("args", [])}]
+            data[e["key"]] = [e["id"], e["short"], name_part(e), fl, {a["arg"]: a["what"] for a in e.get("args", [])}]
     md = "\n".join(L)
     js = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
     for w in private_names():  # сайт публічний: імена з прикладів (echo "Привіт, ...") - нейтральні, як у gen_mint

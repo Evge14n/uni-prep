@@ -57,6 +57,27 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git rebase</code> - переписує твої коміти (знімки) поверх іншої гілки - історія змінюється. Назва: rebase - «перенести основу». <code>main</code> - на що переносити: твої коміти стануть після останнього коміту <code>main</code>; <code>--continue</code> - після розвʼязаного конфлікту (і <code>git add</code>) - йти далі (continue - «продовжити»); <code>-i</code> (<code>--interactive</code>) - відкрити список комітів у редакторі: обʼєднати (squash), перейменувати (reword), викинути (drop) (interactive - «діалогово»); <code>HEAD~3</code> - з <code>-i</code>: редагувати останні 3 коміти.</li>
+<li><code>git cherry-pick</code> - копіює один потрібний коміт (знімок змін) з іншої гілки в твою. Назва: cherry-pick - «вибирати вишеньки».</li>
+<li><code>git bisect</code> - шукає зміну (коміт), що зламала код, ділячи історію навпіл. Назва: bisect - «розрізати навпіл». <code>start</code> - почати пошук.</li>
+<li><code>git worktree</code> - відкриває іншу гілку (лінію змін) проєкту в окремій теці. Назва: worktree - «робоче дерево». <code>-b</code> - з <code>add</code>: створити нову гілку для цієї теки (branch - «гілка»).</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. <code>-S</code> - лише коміти, де цей текст зʼявився або зник у коді: -S triple.</li>
+<li><code>git grep</code> - шукає текст лише у файлах, за якими стежить git. Назва: grep - від g/re/p, команди старого редактора: «знайти шаблон і надрукувати». <code>-n</code> (<code>--line-number</code>) - показати номер рядка біля кожного збігу (n - line number, «номер рядка»).</li>
+<li><code>git blame</code> - показує, хто, коли і в якому коміті (збереженому знімку) змінив кожен рядок. Назва: blame - «звинуватити». <code>-L</code> - лише ці рядки: <code>-L 1,6</code> - з 1-го по 6-й (L - від line, «рядок»).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-i</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-am</code> = <code>-a</code> і <code>-m</code>.</li>
+<li>Символи <code>~</code> <code>&gt;</code> <code>&amp;</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Rebase</strong> - «перенести основу». Merge (урок 07) зводить дві гілки новим комітом з двома батьками. Rebase натомість <strong>переписує</strong> твої коміти заново поверх <code>main</code>: зміни ті самі, а коміти нові (інші хеші). Історія виходить прямою лінією:</p>
 <pre><code class="language-text">до:                          merge:                       rebase:
 A ← B ← D     (main)         A ← B ← D ← M   (main)       A ← B ← D ← C'   (lr6)
@@ -68,6 +89,13 @@ A ← B ← D     (main)         A ← B ← D ← M   (main)       A ← B ← 
 <p>Аналогія: merge - дописати в зошит «а тут я звів дві чернетки». Rebase - переписати чернетку начисто так, ніби ти почав її вже після нового параграфа. Переписувати можна лише свою чернетку, а не ту, яку вже здав.</p>
 <h3 id="пісочниця">Пісочниця</h3>
 <p>Окрема тека, щоб нічого не зачепити. <code>.gitignore</code> з <code>__pycache__/</code> - бо <code>python3 -m doctest</code> створює цю теку (урок 06).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади <code>&gt;&gt;&gt;</code> з опису функцій. Назва: doc test - «тест у документації».</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">mkdir ~/git-pisochnytsia-17
 cd ~/git-pisochnytsia-17
 git init
@@ -88,29 +116,31 @@ python3 -m doctest lab.py &amp;&amp; echo &quot;тести ok&quot;
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
 <li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
 <li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
-<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції.</li>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>&amp;&amp;</code> - друга команда - лише якщо перша вдалась. Назва: «і»: друга команда - лише якщо перша вдалась.</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати». <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»).</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>&amp;&amp;</code> (AND) - друга команда - лише якщо перша вдалась.</li>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
-<code>python3 -m doctest lab.py</code> мовчить, якщо всі тести пройшли, тому <code>&amp;&amp; echo</code> - щоб побачити «тести ok». Хеші в тебе будуть інші.</p>
 </blockquote>
+<p><code>python3 -m doctest lab.py</code> мовчить, якщо всі тести пройшли, тому <code>&amp;&amp; echo</code> - щоб побачити «тести ok». Хеші в тебе будуть інші.</p>
 <h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
 <ol>
 <li>Гілка <code>lr6-perymetr</code> відійшла від першого коміту, а в <code>main</code> потім зʼявився коміт «Додай README». Після <code>git rebase main</code> (крок 1): чи буде на <code>git log --oneline --graph --all</code> розгалуження? Чи лишиться хеш коміту «ЛР6: периметр» тим самим?</li>
 </ol>
 <details>
 <summary>Відповідь</summary>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code>: <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>--graph</code> - малює гілки зліва зірочками і лініями; <code>--all</code> - коміти всіх гілок, а не лише поточної.</li>
+</ul>
+</blockquote>
 <p>Розгалуження не буде - пряма лінія. Хеш <strong>зміниться</strong> (у перевірці було <code>6d3c8fd</code> → <code>2c7a26c</code>): rebase робить новий коміт з тими самими змінами, але з іншим батьком. Тому і золоте правило.</p>
 </details>
 <ol start="2">
@@ -118,6 +148,12 @@ python3 -m doctest lab.py &amp;&amp; echo &quot;тести ok&quot;
 </ol>
 <details>
 <summary>Відповідь</summary>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git cherry-pick</code>: <code>eksperyment</code> - назва гілки = її ОСТАННІЙ коміт; інший коміт - за хешем з <code>git log</code>.</li>
+</ul>
+</blockquote>
 <p>Ні. Назва гілки в cherry-pick означає <strong>лише її останній коміт</strong>. У <code>main</code> приїде тільки «Додай тест kub(-1)» (новий коміт з новим хешем), а «Спроба» лишиться на <code>eksperyment</code>. <code>python3 -m doctest lab.py kub.py</code> → <code>тести ok</code>.</p>
 </details>
 <ol start="3">
@@ -157,11 +193,10 @@ git log --oneline --graph --all
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути». <code>-c</code> - створити нову гілку від поточного місця і перейти на неї.</li>
-<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>--graph</code> - малює гілки зліва зірочками і лініями; <code>--all</code> - коміти всіх гілок, а не лише поточної.
-Гілки розійшлись. (Яка з двох гілок намальована вище - залежить від часу комітів; у тебе може бути навпаки.) Тепер на своїй гілці - rebase на <code>main</code>:</li>
+<li><code>git switch</code> - перемикає на іншу гілку (лінію змін); з <code>-c</code> створює нову. <code>-c</code> (<code>--create</code>) - створити нову гілку від поточного місця і перейти на неї (create - «створити»).</li>
 </ul>
 </blockquote>
+<p>Гілки розійшлись. (Яка з двох гілок намальована вище - залежить від часу комітів; у тебе може бути навпаки.) Тепер на своїй гілці - rebase на <code>main</code>:</p>
 <pre><code class="language-bash">git switch lr6-perymetr
 git rebase main
 git log --oneline --graph --all
@@ -171,13 +206,7 @@ git log --oneline --graph --all
 * efdf84a (main) Додай README
 * c387d25 ЛР6: функція kvadrat
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git rebase</code> - переписує твої коміти поверх іншої гілки (нові хеші). Назва: rebase - «перенести основу»: переписати свої коміти поверх іншої гілки. <code>main</code> - на що переносити: свої коміти стануть після останнього коміту main.
-Пряма лінія, а коміт «ЛР6: периметр» тепер <code>2c7a26c</code> (був <code>6d3c8fd</code>). Злиття стає простим перемотуванням:</li>
-</ul>
-</blockquote>
+<p>Пряма лінія, а коміт «ЛР6: периметр» тепер <code>2c7a26c</code> (був <code>6d3c8fd</code>). Злиття стає простим перемотуванням:</p>
 <pre><code class="language-bash">git switch main
 git merge lr6-perymetr
 git branch -d lr6-perymetr
@@ -192,8 +221,8 @@ Deleted branch lr6-perymetr (was 2c7a26c).
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git merge</code> - зливає іншу гілку в поточну. Назва: merge - «злити, обʼєднати».</li>
-<li><code>git branch</code> - показує, створює і видаляє гілки. Назва: branch - «гілка». <code>-d</code> - видалити гілку, якщо її коміти вже злито; інакше відмовить.</li>
+<li><code>git merge</code> - додає зміни іншої гілки в ту, де ти зараз.</li>
+<li><code>git branch</code> - показує, створює і видаляє гілки (окремі лінії змін проєкту). <code>-d</code> (<code>--delete</code>) - видалити гілку, якщо її коміти вже злито (додано в іншу гілку); інакше відмовить (delete - «видалити»).</li>
 </ul>
 </blockquote>
 <p><strong>Крок 2. Конфлікт під час rebase: <code>--abort</code> і <code>--continue</code>.</strong> Обидві гілки міняють перший рядок README.</p>
@@ -218,10 +247,10 @@ Could not apply 81c95ee... README: що в ЛР6
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git commit</code>: <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.
-Маркери ті самі, що в уроці 08. Увага: під час rebase <strong><code>HEAD</code> - це <code>main</code></strong> (на нього переносимо), а твій коміт - нижня частина:</li>
+<li><code>git commit</code>: <code>-a</code> (<code>--all</code>) - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні (all - «усі»).</li>
 </ul>
 </blockquote>
+<p>Маркери ті самі, що в уроці 08. Увага: під час rebase <strong><code>HEAD</code> - це <code>main</code></strong> (на нього переносимо), а твій коміт - нижня частина:</p>
 <pre><code class="language-bash">cat README.md
 </code></pre>
 <pre><code class="language-text">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
@@ -233,10 +262,10 @@ Could not apply 81c95ee... README: що в ЛР6
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.
-Злякався - <code>--abort</code> повертає все, як було до rebase:</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
 </ul>
 </blockquote>
+<p>Злякався - <code>--abort</code> повертає все, як було до rebase:</p>
 <pre><code class="language-bash">git rebase --abort
 git log --oneline -1
 </code></pre>
@@ -245,31 +274,25 @@ git log --oneline -1
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git rebase</code>: <code>--abort</code> - скасувати весь rebase: усе як до нього.
-Тепер по-справжньому: rebase, прибрати маркери в nano (лишити один рядок <code># Лабораторна 6 - квадрат і периметр</code>), <code>add</code>, <code>--continue</code>.</li>
+<li><code>git rebase</code>: <code>--abort</code> - скасувати весь rebase: усе як до нього (abort - «перервати»).</li>
 </ul>
 </blockquote>
+<p>Тепер по-справжньому: rebase, прибрати маркери в nano (лишити один рядок <code># Лабораторна 6 - квадрат і периметр</code>), <code>add</code>, <code>--continue</code>.</p>
 <pre><code class="language-bash">git rebase main
 nano README.md
 </code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).
-Або замість nano одним рядком:</li>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
 </ul>
 </blockquote>
+<p>Або замість nano одним рядком:</p>
 <pre><code class="language-bash">printf '# Лабораторна 6 - квадрат і периметр\n' &gt; README.md
 git add README.md
 git rebase --continue
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git rebase</code>: <code>--continue</code> - після розвʼязаного конфлікту (git add) - йти далі.
-<code>--continue</code> відкриє nano з повідомленням коміту - не міняй, Ctrl+O, Enter, Ctrl+X.</li>
-</ul>
-</blockquote>
+<p><code>--continue</code> відкриє nano з повідомленням коміту - не міняй, Ctrl+O, Enter, Ctrl+X.</p>
 <pre><code class="language-text">[detached HEAD 6b9e8d1] README: що в ЛР6
  1 file changed, 1 insertion(+), 1 deletion(-)
 Successfully rebased and updated refs/heads/lr6-readme.
@@ -298,10 +321,10 @@ ed5d80b wip 2
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.
-Далі <strong>один</strong> з двох способів.</li>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
 </ul>
 </blockquote>
+<p>Далі <strong>один</strong> з двох способів.</p>
 <p><em>Спосіб А - інтерактивний rebase</em> (<code>-i</code>). Він відкриває nano зі списком комітів (старіший зверху):</p>
 <pre><code class="language-bash">git rebase -i HEAD~3
 </code></pre>
@@ -321,13 +344,7 @@ pick 59b1785 wip 3
 # d, drop &lt;commit&gt; = remove commit
 ...
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git rebase</code>: <code>-i</code> - відкрити список комітів у редакторі: злити (squash), перейменувати (reword), викинути (drop); <code>HEAD~3</code> - з -i: редагувати останні 3 коміти.
-Заміни <code>pick</code> на <code>squash</code> у 2-му і 3-му рядках (перший лишається <code>pick</code>), Ctrl+O, Enter, Ctrl+X:</li>
-</ul>
-</blockquote>
+<p>Заміни <code>pick</code> на <code>squash</code> у 2-му і 3-му рядках (перший лишається <code>pick</code>), Ctrl+O, Enter, Ctrl+X:</p>
 <pre><code class="language-text">pick 6ef0101 wip
 squash ed5d80b wip 2
 squash 59b1785 wip 3
@@ -355,10 +372,10 @@ git commit -m &quot;ЛР6: функція kub з doctest&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git reset</code> - пересуває гілку назад на інший коміт (--hard стирає зміни). Назва: reset - «скинути, повернути до». <code>--soft</code> - гілка назад, а зміни скасованих комітів лишаються в індексі - готові до нового коміту.
-Після будь-якого способу:</li>
+<li><code>git reset</code> - відкочує гілку на старіший знімок (коміт); <code>--hard</code> стирає зміни назавжди. <code>--soft</code> - гілка назад, а зміни скасованих комітів лишаються готові до нового коміту (soft - «мʼяко»).</li>
 </ul>
 </blockquote>
+<p>Після будь-якого способу:</p>
 <pre><code class="language-bash">git log --oneline -3
 </code></pre>
 <pre><code class="language-text">a7feeab (HEAD -&gt; lr6-kub) ЛР6: функція kub з doctest
@@ -393,13 +410,7 @@ python3 -m doctest lab.py kub.py &amp;&amp; echo &quot;тести ok&quot;
 ...
 тести ok
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git cherry-pick</code> - копіює один коміт з іншої гілки в поточну. Назва: cherry-pick - «вибирати вишеньки»: взяти лише потрібний коміт. <code>eksperyment</code> - назва гілки = її ОСТАННІЙ коміт; інший коміт - за хешем з git log.
-(Гілки на малюнку можуть стояти в іншому порядку.) Два коміти з однаковою назвою, але різними хешами: <code>61c1e31</code> на <code>eksperyment</code> і його копія <code>acdf84c</code> у <code>main</code>. Рядок <code>Date:</code> - git каже, що дата автора взята з оригіналу. Будь-який інший коміт береш за хешем з <code>git log --oneline eksperyment</code>: <code>git cherry-pick a8caffc</code> (у тебе свій хеш) або <code>git cherry-pick eksperyment~1</code> (передостанній на гілці).</li>
-</ul>
-</blockquote>
+<p>(Гілки на малюнку можуть стояти в іншому порядку.) Два коміти з однаковою назвою, але різними хешами: <code>61c1e31</code> на <code>eksperyment</code> і його копія <code>acdf84c</code> у <code>main</code>. Рядок <code>Date:</code> - git каже, що дата автора взята з оригіналу. Будь-який інший коміт береш за хешем з <code>git log --oneline eksperyment</code>: <code>git cherry-pick a8caffc</code> (у тебе свій хеш) або <code>git cherry-pick eksperyment~1</code> (передостанній на гілці).</p>
 <p><strong>Крок 5. <code>bisect</code> - знайти коміт, що зламав doctest.</strong> Спершу зробимо історію, де один коміт непомітно ламає <code>kvadrat</code>:</p>
 <pre><code class="language-bash">for i in 1 2 3; do echo &quot;# крок $i&quot; &gt;&gt; lab.py; git commit -qam &quot;Крок $i&quot;; done
 sed -i 's/x \* x/x * 2/' lab.py
@@ -425,13 +436,13 @@ Got:
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git commit</code>: <code>-q</code> - нічого не писати після коміту.</li>
-<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор»: править текст, що тече крізь нього. <code>-i</code> - змінити САМ файл (без -i sed лише показує результат); -i.bak - ще й копія.</li>
-<li><code>;</code> - розділяє команди в рядку, виконує всі по черзі. Назва: крапка з комою - роздільник команд.</li>
-<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».
-<code>echo $?</code> - код виходу попередньої команди: <code>0</code> - тести пройшли, <code>1</code> - впали. Саме за цим кодом <code>git bisect run</code> вирішуватиме, добрий коміт чи ні.</li>
+<li><code>;</code> (semicolon) - розділяє команди в рядку, виконує всі по черзі.</li>
+<li><code>$ЗМІННА</code> (dollar) - бере значення змінної (назви, під якою bash тримає текст).</li>
+<li><code>git commit</code>: <code>-q</code> (<code>--quiet</code>) - нічого не писати після коміту (quiet - «тихо»).</li>
+<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор». <code>-i</code> (<code>--in-place</code>) - змінити САМ файл (без <code>-i</code> sed лише показує); <code>-i.bak</code> - ще й копія (in-place - «на місці»).</li>
 </ul>
 </blockquote>
+<p><code>echo $?</code> - код виходу попередньої команди: <code>0</code> - тести пройшли, <code>1</code> - впали. Саме за цим кодом <code>git bisect run</code> вирішуватиме, добрий коміт чи ні.</p>
 <pre><code class="language-bash">git log --oneline -8
 git bisect start
 git bisect bad
@@ -453,10 +464,10 @@ Bisecting: 3 revisions left to test after this (roughly 2 steps)
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git bisect</code> - шукає коміт, що зламав код, ділячи історію навпіл. Назва: bisect - «розрізати навпіл»: двійковий пошук коміту, що зламав код. <code>start</code> - почати пошук; <code>bad</code> - поточний коміт поганий (тест падає).
-<code>bad</code> без хешу - «поточний коміт поганий». <code>good HEAD~7</code> - «7 комітів тому (<code>acdf84c</code>) ще працювало». Git сам перейшов на середину - «Крок 3». Перевір його вручну:</li>
+<li><code>git bisect</code>: <code>bad</code> - поточний коміт поганий (тест падає).</li>
 </ul>
 </blockquote>
+<p><code>bad</code> без хешу - «поточний коміт поганий». <code>good HEAD~7</code> - «7 комітів тому (<code>acdf84c</code>) ще працювало». Git сам перейшов на середину - «Крок 3». Перевір його вручну:</p>
 <pre><code class="language-bash">python3 -m doctest lab.py
 git bisect good
 </code></pre>
@@ -509,14 +520,6 @@ git blame -L 1,6 lab.py
 <pre><code class="language-text">fd85200 (HEAD -&gt; main) Виправ kvadrat: x * x
 25e9cd6 Крок 4: дрібна правка
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>git log</code>: <code>-S</code> - лише коміти, де цей текст зʼявився або зник у коді: -S triple.</li>
-<li><code>git grep</code> - шукає текст у файлах репо (лише відстежуваних git). Назва: grep - від g/re/p, команди старого редактора: «знайти шаблон і надрукувати». <code>-n</code> - показати номер рядка біля кожного збігу.</li>
-<li><code>git blame</code> - показує, хто і в якому коміті змінив кожен рядок. Назва: blame - «звинуватити»: хто написав цей рядок. <code>-L</code> - лише ці рядки: -L 1,6 - з 1-го по 6-й.</li>
-</ul>
-</blockquote>
 <pre><code class="language-text">kub.py:1:def kub(x):
 lab.py:1:def kvadrat(x):
 perymetr.py:1:def perymetr(a, b):
@@ -545,10 +548,10 @@ HEAD is now at fd85200 Виправ kvadrat: x * x
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git worktree</code> - відкриває іншу гілку того ж репо в окремій теці. Назва: worktree - «робоче дерево»: ще одна тека з іншою гілкою того ж репо. <code>-b</code> - з add: створити нову гілку для цієї теки; <code>list</code> - усі теки цього репо і їхні гілки.
-У новій теці - гілка <code>lr7</code>. Комітиш там, як звичайно:</li>
+<li><code>git worktree</code>: <code>list</code> - усі теки цього репо і їхні гілки.</li>
 </ul>
 </blockquote>
+<p>У новій теці - гілка <code>lr7</code>. Комітиш там, як звичайно:</p>
 <pre><code class="language-bash">cd ~/git-pisochnytsia-17-lr7
 printf 'print(&quot;ЛР7&quot;)\n' &gt; lr7.py
 git add lr7.py
@@ -580,12 +583,12 @@ nano .github/workflows/test.yml
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git pull</code> - забирає нові коміти з GitHub і зливає у твою гілку. Назва: pull - «потягнути»: забрати нові коміти з GitHub до себе.</li>
+<li><code>git pull</code> - забирає нові знімки (коміти) з GitHub і одразу додає у твої файли. Назва: pull - «потягнути».</li>
 <li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати». <code>.</code> - «сюди», у поточну теку: cp ~/Завантаження/lab1.py .</li>
-<li><code>mkdir</code>: <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.
-Вміст (відступи - пробілами, не Tab: у YAML це важливо):</li>
+<li><code>mkdir</code>: <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
 </ul>
 </blockquote>
+<p>Вміст (відступи - пробілами, не Tab: у YAML це важливо):</p>
 <pre><code class="language-yaml">name: Тести
 
 on: [push]
@@ -617,21 +620,21 @@ git push
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub.
-На сайті: репо → вкладка <strong>Actions</strong> → запуск «CI: doctest на кожен push» → <code>test</code> → крок <code>Doctest</code> з виводом <code>-v</code> (кожен тест і <code>Test passed.</code>). Біля коміту на головній сторінці - жовта крапка (йде), потім зелена галочка або червоний хрестик. З терміналу (gh, урок 16):</li>
+<li><code>git push</code> - відправляє твої нові знімки (коміти) з компʼютера на GitHub. Назва: push - «штовхнути».</li>
 </ul>
 </blockquote>
+<p>На сайті: репо → вкладка <strong>Actions</strong> → запуск «CI: doctest на кожен push» → <code>test</code> → крок <code>Doctest</code> з виводом <code>-v</code> (кожен тест і <code>Test passed.</code>). Біля коміту на головній сторінці - жовта крапка (йде), потім зелена галочка або червоний хрестик. З терміналу (gh, урок 16):</p>
 <pre><code class="language-bash">gh run list --limit 3
 gh run watch
 </code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gh run list</code> - показує останні запуски GitHub Actions. Назва: run list - «список запусків» (GitHub Actions). <code>--limit</code> - скільки запусків показати (типово 20), напр. --limit 3.</li>
-<li><code>gh run watch</code> - стежить наживо за запуском GitHub Actions. Назва: run watch - «стежити за запуском».
-(Сам запуск на GitHub не перевірено - у перевірці курсу GitHub підмінено. Перевірено: файл - правильний YAML з цими ключами, а команда кроку <code>Doctest</code> на цих файлах виходить з 0, на зламаному <code>lab.py</code> - з 1.)</li>
+<li><code>gh run list</code> - показує останні автоперевірки на GitHub (запуски GitHub Actions). Назва: <code>gh</code> - gh - від GitHub; офіційна програма GitHub CLI (CLI - «командний рядок»); run list - «список запусків» (GitHub Actions). <code>--limit</code> - скільки запусків показати (типово 20), напр. <code>--limit 3</code> (limit - «межа»).</li>
+<li><code>gh run watch</code> - показує наживо, як іде автоперевірка GitHub Actions. Назва: run watch - «стежити за запуском».</li>
 </ul>
 </blockquote>
+<p>(Сам запуск на GitHub не перевірено - у перевірці курсу GitHub підмінено. Перевірено: файл - правильний YAML з цими ключами, а команда кроку <code>Doctest</code> на цих файлах виходить з 0, на зламаному <code>lab.py</code> - з 1.)</p>
 <p>Для публічних репо Actions на звичайних раннерах безкоштовні; для приватних на GitHub Free є місячний ліміт ($12 «included compute usage», це близько 2000 хв Linux за $0.006/хв) - на doctest лаб вистачить із запасом.</p>
 <h3 id="ще-кілька-слів-знати-що-існує">Ще кілька слів (знати, що існує)</h3>
 <ul>
@@ -725,6 +728,12 @@ fatal: 'main' is already used by worktree at '/home/.../git-pisochnytsia-17'
 <li>Навіщо <code>git worktree</code>, якщо є <code>git switch</code> і <code>git stash</code>?</li>
 <li>Де лежить workflow GitHub Actions і що в ньому означають <code>on: [push]</code> і <code>run:</code>?</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git stash</code> - ховає ще не збережені в коміт зміни на потім і чистить теку. Назва: stash - «заначка, сховати на потім».</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповіді</summary>
 <ol>

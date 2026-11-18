@@ -25,13 +25,20 @@ done
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
-<li><code>[</code> - перевіряє умову: код 0 - так, 1 - ні. Назва: [ - друга назва команди test («перевірити»); ] лише закриває умову. <code>-f</code> - правда, якщо є такий звичайний файл (file); <code>]</code> - закриває умову, обовʼязково останнім словом і через пробіл.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
-<li><code>;</code> - розділяє команди в рядку, виконує всі по черзі. Назва: крапка з комою - роздільник команд.</li>
-<li><code>*</code> - шаблон: будь-які символи в назві файлу. Назва: asterisk («зірочка») - шаблон «будь-які символи».</li>
-<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.</li>
+<li><code>#</code> (hash) - коментар: далі до кінця рядка bash не читає.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>$ЗМІННА</code> (dollar) - бере значення змінної (назви, під якою bash тримає текст).</li>
+<li><code>[</code> - перевіряє умову: чи є тека, чи рівні числа тощо. Назва: [ - друга назва команди test («перевірити»); ] лише закриває умову. <code>-f</code> - правда, якщо є такий звичайний файл (file - «файл»); <code>]</code> - закриває умову, обовʼязково останнім словом і через пробіл.</li>
+<li><code>;</code> (semicolon) - розділяє команди в рядку, виконує всі по черзі.</li>
+<li><code>*</code> (asterisk) - будь-які символи в назві; bash сам замінює <code>*</code> на список файлів.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-f</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-la</code> = <code>-l</code> і <code>-a</code>.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> <code>&amp;</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
 </ul>
 <p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
@@ -67,9 +74,32 @@ done
 </table></div>
 <p><code>$?</code> - код завершення останньої команди: 0 = успіх, не 0 = помилка. <code>set -e</code> на початку скрипта -
 зупинитись на першій помилці.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>set</code> - вмикає суворий режим: скрипт зупиняється на першій помилці. Назва: set - «встановити» (налаштування самого bash). <code>-e</code> - зупинити скрипт, щойно якась команда впала (errexit - «вийти при помилці»).</li>
+</ul>
+</blockquote>
 <p><strong>Запуск:</strong> <code>bash skrypt.sh</code> або <code>chmod +x skrypt.sh</code> і <code>./skrypt.sh</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>bash</code> - програма, що читає й виконує твої команди; <code>bash файл.sh</code> - з файлу. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
+<li><code>chmod</code> - змінює права файлу: хто може читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>+x</code> - <code>+</code> - додати право, <code>x</code> (execute - «виконувати») - запускати файл як програму; без u/g/o - власнику, групі й іншим.</li>
+</ul>
+</blockquote>
 <p><strong>Alias</strong> - коротке імʼя для команди, у <code>~/.bashrc</code>: <code>alias ll='ls -la'</code>. Після правки <code>source ~/.bashrc</code>.
 Так зроблені наші <code>univer</code> і <code>perevir</code> (подивись: <code>tail -n 25 ~/.bashrc</code>).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>alias</code> - дає коротке імʼя (аліас) довгій команді. Назва: alias - «псевдонім, інше імʼя».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/.bashrc</code> - перечитати свої налаштування після правки, без нового вікна.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>tail</code> - показує останні рядки (файлу чи того, що прийшло через <code>|</code>). Назва: tail - «хвіст». <code>-n</code> (<code>--lines</code>) - скільки останніх рядків показати: <code>-n 3</code>, коротко <code>-3</code> (lines - «рядки»).</li>
+</ul>
+</blockquote>
 <h3 id="руками-10-хв-скрипт-перевір-усі-лаби-в-теці">Руками (10 хв): скрипт «перевір усі лаби в теці»</h3>
 <pre><code class="language-bash">cd ~/univer/praktyka
 nano zdaty.sh
@@ -79,10 +109,9 @@ nano zdaty.sh
 <ul>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
 <li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.
-Надрукуй:</li>
 </ul>
 </blockquote>
+<p>Надрукуй:</p>
 <pre><code class="language-bash">#!/bin/bash
 # zdaty.sh - перевірити всі .py у теці перед здачею
 # запуск: ./zdaty.sh ~/univer/labs/ЛР4
@@ -111,17 +140,17 @@ echo &quot;Готово: $ok, правити: $bad&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
-<li><code>[</code>: <code>-d</code> - правда, якщо є така тека (directory); <code>!</code> - заперечення: [ ! -d тека ] - правда, якщо теки НЕМА.</li>
-<li><code>exit</code> - виходить зі скрипта або термінала з кодом. Назва: exit - «вихід». <code>1</code> - «щось не так» - найчастіший код помилки.</li>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
-<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s»; <code>-p</code> - увімкнути або вимкнути додаток pytest; -p no:cacheprovider - не створювати теку .pytest_cache.</li>
-<li><code>flake8</code> - перевірка стилю і зайвого коду (команда з venv). Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78.</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>$( )</code> - підставляє вивід команди в рядок. Назва: command substitution - «підстановка команди».
-Далі:</li>
+<li><code>$( )</code> (command substitution) - підставляє вивід команди в рядок.</li>
+<li><code>source</code>: <code>~/univer/.venv/bin/activate</code> - увімкнути venv (окремий Python для лаб); вимкнути - deactivate.</li>
+<li><code>[</code>: <code>-d</code> - правда, якщо є така тека (directory - «тека»); <code>!</code> - заперечення: [ ! -d тека ] - правда, якщо теки НЕМА.</li>
+<li><code>exit</code> - закінчує скрипт або закриває термінал; число - код виходу (0 - успіх). Назва: exit - «вихід». <code>1</code> - «щось не так» - найчастіший код помилки.</li>
+<li><code>python3 -m pytest</code> - проганяє тести (приклади <code>&gt;&gt;&gt;</code>) і чесно каже: усе пройшло чи ні. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади <code>&gt;&gt;&gt;</code>) у файлах <code>.py</code>; без нього pytest шукає лише функції <code>test_</code>; <code>-q</code> (<code>--quiet</code>) - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s» (quiet - «тихо»); <code>-p</code> - увімкнути або вимкнути додаток pytest; <code>-p no:cacheprovider</code> - не створювати теку <code>.pytest_cache</code> (plugin - «додаток»).</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>flake8</code> - шукає помилки стилю і зайвий код (працює, коли увімкнено venv). Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78.</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
 </ul>
 </blockquote>
+<p>Далі:</p>
 <pre><code class="language-bash">chmod +x zdaty.sh
 ./zdaty.sh ~/univer/labs/ЛР4      # kvadrat.py з дня 8 - ГОТОВО
 ./zdaty.sh /nema                   # Нема теки /nema
@@ -130,8 +159,7 @@ echo $?                            # 1 - скрипт повідомив про 
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>chmod</code> - змінює права файлу: читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>+x</code> - дозволити запуск (x); у Mint - усім трьом: власнику, групі й іншим.</li>
-<li><code>./скрипт</code> - запускає свій файл-скрипт з поточної теки. Назва: ./ - «звідси»: крапка = поточна тека, / відділяє теку від файлу.</li>
+<li><code>./скрипт</code> - запускає програму за шляхом до її файлу, напр. <code>./файл.sh</code>. Назва: ./ - «звідси».</li>
 </ul>
 </blockquote>
 <p>Хочеш запускати звідусіль словом <code>zdaty</code>: додай у кінець <code>~/.bashrc</code> рядок
@@ -146,6 +174,13 @@ echo $?                            # 1 - скрипт повідомив про 
 <li>Лаба з <code>input()</code> на верхньому рівні вийде «ПРАВИТИ» (pytest не дає їй читати клавіатуру) - таку перевір
   руками: <code>printf "5\n" | python лаба.py</code>, як у дні 8.</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+</ul>
+</blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>
 <ol>
 <li>Навіщо перший рядок <code>#!/bin/bash</code>?</li>

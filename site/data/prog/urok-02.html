@@ -89,6 +89,17 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>flake8</code> - шукає помилки стилю і зайвий код (працює, коли увімкнено venv). Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Символи <code>~</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1).</li>
+</ul>
+<p>Усе про кожну команду - у довіднику «05_Програмування/КОМАНДИ - довідник.md» (на сайті - вкладка «Команди»).</p>
+</blockquote>
 <h3 id="pass-і-присвоєння"><code>pass</code> і присвоєння</h3>
 <pre><code class="language-python">def future_feature():
     pass
@@ -303,12 +314,28 @@ print(&quot;{} + {} = {}&quot;.format(2, 3, 5))
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>\</code> (backslash) - робить наступний символ звичайним; у кінці рядка - перенос.</li>
+<li><code>type</code> - каже, що це за команда і де вона. Назва: type - «тип».</li>
+<li><code>id</code> - показує твій номер у системі (uid) і групи. Назва: identity - «особа» (ID - ідентифікатор, номер).</li>
+</ul>
+</blockquote>
 <p>Інструменти (с. 12-14): <strong>лінтери</strong> знаходять проблеми, не запускаючи код (<code>pycodestyle</code> - лише PEP 8;
 <code>flake8</code> - PEP 8 + невикористані імена; <code>pylint</code> - глибше, ставить оцінку з 10; <code>mypy</code> - перевіряє
 типи). <strong>Форматери</strong> самі переписують код (<code>black</code> - «безкомпромісний», ширина 88; <code>autopep8</code>;
 <code>isort</code> - сортує імпорти). Запуск: <code>pip install flake8 black</code>, потім <code>flake8 my_program.py</code>.
 У Linux Mint <code>pip install</code> працює лише всередині venv (<code>source ~/univer/.venv/bin/activate</code>), інакше
 помилка <code>externally-managed-environment</code> - курс Linux-Mint, уроки 02-03.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>pip install</code> - ставить бібліотеку Python (лише у venv). Назва: <code>pip</code> - pip installs packages - «pip ставить пакети» (назва, що посилається сама на себе); pip installs packages - «pip ставить пакети»; install - «встановити».</li>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/univer/.venv/bin/activate</code> - увімкнути venv (окремий Python для лаб); вимкнути - deactivate.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+</ul>
+</blockquote>
 <p>Приклад з лекції (с. 14-15), сума цифр двозначного числа. Спершу «до PEP 8» (працює, але читати важко):</p>
 <pre><code class="language-python"># не запускати: приклад поганого стилю, flake8 знайде 7 зауважень
 x=int(input(&quot;Введіть двозначне число &quot;))

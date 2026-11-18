@@ -3,6 +3,20 @@
 <h3 id="коротко-5-хв">Коротко (5 хв)</h3>
 <p><strong>Хто ти:</strong> <code>whoami</code> → <code>evgen</code>. <code>id</code> → твої групи (є <code>sudo</code> - значить, можеш бути адміністратором).</p>
 <p><strong>Права файлу</strong> - у <code>ls -l</code>:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long - «довгий»).</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-l</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-ld</code> = <code>-l</code> і <code>-d</code>.</li>
+<li>Символи <code>~</code> <code>&gt;</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <pre><code class="language-text">-rwxr-xr--  1 evgen evgen  512 Nov 17 10:00 run.sh
 │└┬┘└┬┘└┬┘    │     │
 │ │  │  │     │     └ група
@@ -17,16 +31,48 @@
 <code>rwx</code> = 4+2+1 = 7, <code>r-x</code> = 4+1 = 5, <code>r--</code> = 4. Тому:
 - <code>chmod 755 run.sh</code> → rwxr-xr-x (скрипт: усі можуть запускати, змінює лише власник);
 - <code>chmod 644 lab.py</code> → rw-r--r-- (звичайний файл).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code> - змінює права файлу: хто може читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>755</code> - rwxr-xr-x: 7 = rwx (4+2+1) тобі, 5 = r-x (4+1) групі й іншим; для скриптів і тек - усі читають і запускають, змінюєш лише ти; <code>644</code> - rw-r--r--: 6 = rw- (4+2) тобі, 4 = r-- групі й іншим; звичайний файл - ти змінюєш, інші лише читають.</li>
+</ul>
+</blockquote>
 <p><strong>Простіше буквами:</strong> <code>chmod +x run.sh</code> - дозволити запуск, <code>chmod -w file</code> - заборонити зміну.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code>: <code>+x</code> - <code>+</code> - додати право, <code>x</code> (execute - «виконувати») - запускати файл як програму; без u/g/o - власнику, групі й іншим; <code>-w</code> - це НЕ прапорець, а права: забрати w (змінювати) - файл стане лише для читання.</li>
+</ul>
+</blockquote>
 <p><strong>Запуск свого скрипта:</strong> <code>./run.sh</code> (<code>./</code> = «з цієї теки»). Без <code>chmod +x</code> буде «Permission denied».
 Можна і без прав: <code>bash run.sh</code>, <code>python3 lab.py</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>bash</code> - програма, що читає й виконує твої команди; <code>bash файл.sh</code> - з файлу. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+</ul>
+</blockquote>
 <p><strong>sudo - «зробити від імені адміністратора (root)».</strong> <code>sudo apt install ...</code> спитає <strong>твій</strong> пароль
 Ubuntu (символи не видно). Пароль памʼятається ~15 хв.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>apt install</code> - ставить програму з інтернету; на «Бажаєте продовжити? [Y/n]» - Enter. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)».</li>
+</ul>
+</blockquote>
 <p>Правила:
 - <code>sudo</code> - лише для системного: <code>apt</code>, файли поза домашньою текою.
 - Свої файли (<code>~/...</code>) <strong>ніколи</strong> не чіпай через <code>sudo</code>: файли стануть власністю root, і потім
   без <code>sudo</code> їх не зміниш. Ознака: у <code>ls -l</code> власник <code>root</code>.
 - <code>sudo pip install</code> - не роби. Python-пакети для лаб - у venv (день 8).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>pip install</code> - ставить бібліотеку Python (лише у venv). Назва: <code>pip</code> - pip installs packages - «pip ставить пакети» (назва, що посилається сама на себе); pip installs packages - «pip ставить пакети»; install - «встановити».</li>
+</ul>
+</blockquote>
 <p><strong>Особливість WSL:</strong> файли на <code>/mnt/c</code> і <code>/mnt/d</code> показують права як <code>rwxrwxrwx</code> - це диск Windows,
 справжні права там вирішує Windows. <code>chmod</code> на них зазвичай нічого не змінює.</p>
 <h3 id="руками-10-хв">Руками (10 хв)</h3>
@@ -52,22 +98,19 @@ ls -ld /mnt/c            # drwxrwxrwx - диск Windows
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>whoami</code> - друкує твій логін. Назва: who am I - «хто я».</li>
-<li><code>id</code> - показує твій номер (uid) і групи. Назва: identity - «особа»: друкує номери (ID) користувача і груп.</li>
+<li><code>id</code> - показує твій номер у системі (uid) і групи. Назва: identity - «особа» (ID - ідентифікатор, номер).</li>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long); <code>-d</code> - показати саму теку, а не її вміст: ls -ld lr1 (directory).</li>
-<li><code>./скрипт</code> - запускає свій файл-скрипт з поточної теки. Назва: ./ - «звідси»: крапка = поточна тека, / відділяє теку від файлу.</li>
-<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
-<li><code>chmod</code> - змінює права файлу: читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>+x</code> - дозволити запуск (x); у Mint - усім трьом: власнику, групі й іншим; <code>600</code> - rw-------: лише ти (ключі ssh, паролі); <code>755</code> - rwxr-xr-x: скрипт чи тека - усі читають і запускають, змінюєш лише ти.</li>
-<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
-<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>ls</code>: <code>-d</code> (<code>--directory</code>) - показати саму теку, а не її вміст: ls -ld lr1 (directory - «тека»).</li>
+<li><code>#</code> (hash) - коментар: далі до кінця рядка bash не читає.</li>
+<li><code>chmod</code>: <code>600</code> - rw-------: 6 лише тобі (читати і змінювати), групі й іншим 0 - для ключів ssh і паролів.</li>
+<li><code>./скрипт</code> - запускає програму за шляхом до її файлу, напр. <code>./файл.sh</code>. Назва: ./ - «звідси».</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <h3 id="типові-помилки">Типові помилки</h3>
 <ul>
@@ -78,6 +121,13 @@ ls -ld /mnt/c            # drwxrwxrwx - диск Windows
   воно в рядку перед @) - задаси новий.</li>
 <li>Запускаєш <code>run.sh</code> без <code>./</code> → «command not found». Поточна тека не шукається автоматично.</li>
 </ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chown</code> - змінює, чий файл: власника і групу (зазвичай через <code>sudo</code>). Назва: change owner - «змінити власника». <code>-R</code> (<code>--recursive</code>) - змінити власника теки і всього, що в ній (recursive - «рекурсивно»: і в усіх підтеках).</li>
+<li><code>chmod</code>: <code>777</code> - rwxrwxrwx: 7 усім трьом - усім усе; майже завжди помилка, див. приклад.</li>
+</ul>
+</blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>
 <ol>
 <li>Що означають права <code>-rw-r--r--</code>?</li>
@@ -86,6 +136,12 @@ ls -ld /mnt/c            # drwxrwxrwx - диск Windows
 <li>Чий пароль питає <code>sudo</code> у WSL?</li>
 <li>Чому не можна <code>sudo nano ~/univer/labs/lab.py</code>?</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповіді</summary>
 <ol>

@@ -207,7 +207,7 @@ const Cmd = (() => {
     close(false);
     opener = btn;
     const [id, short, name, fl, ar] = e;
-    let body = `<p class="cks"><code>${escH(btn.dataset.k)}</code> - ${rt(short)}.</p><p class="muted ckn">Назва: ${rt(name)}</p>`;
+    let body = `<p class="cks"><code>${escH(btn.dataset.k)}</code> - ${rt(short)}.</p>` + (name ? `<p class="muted ckn">Назва: ${rt(name)}</p>` : "");
     const f = btn.dataset.f;
     if (f) {
       const parts = fl[f] ? [[f, fl[f]]] : [...f.slice(1)].map((c) => ["-" + c, fl["-" + c] || "дивись у довіднику"]);

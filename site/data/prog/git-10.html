@@ -2,6 +2,19 @@
 <p><strong>Навіщо:</strong> репо <code>univer-labs</code> на GitHub має бути зрозумілим з першого погляду: викладач відкриває сторінку і одразу бачить, що де лежить (це робить README). А список «що ще доробити в ЛР3» зручно вести прямо на GitHub у Issues і закривати пункти комітами.</p>
 <h3 id="коротко">Коротко</h3>
 <p><strong>Репозиторій на GitHub</strong> - та сама тека з історією, що й у тебе на ноутбуці, тільки на сервері. Створити його можна двома способами: на сайті або командою <code>gh repo create</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh repo create</code> - створює новий репозиторій (сховище коду) на GitHub з терміналу. Назва: <code>gh</code> - gh - від GitHub; офіційна програма GitHub CLI (CLI - «командний рядок»); repository create - «створити репозиторій» на GitHub.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-m</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>~</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>README.md</strong> - файл-опис у корені репо. GitHub сам показує його під списком файлів. <code>.md</code> значить <strong>Markdown</strong> - простий текст з позначками: <code>#</code> - заголовок, <code>-</code> - пункт списку і т.д.</p>
 <p><strong>Issue</strong> (читається «іш'ю») - картка-завдання в репо: «знайшов помилку», «доробити завдання 2». У кожного issue є номер: <code>#1</code>, <code>#2</code>, ... <strong>Мітка</strong> (label) - кольоровий ярлик на issue: <code>bug</code>, <code>documentation</code>, <code>enhancement</code>.</p>
 <p><strong>«Closes #1» у коміті</strong> - якщо такий коміт потрапить у гілку <code>main</code> на GitHub, issue #1 закриється сам.</p>
@@ -38,6 +51,14 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh repo create</code>: <code>--private</code> - приватний репо: бачиш лише ти (і кого запросиш); для лаб - саме так (private - «приватний»); <code>--add-readme</code> - одразу створити файл README.md - опис проєкту; <code>--clone</code> - одразу завантажити новий репо собі в поточну теку (clone - «копія»).</li>
+<li><code>gh issue create</code> - створює на GitHub завдання чи зауваження (Issue) у репо. Назва: issue - «питання, справа».</li>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+</ul>
+</blockquote>
 <p><strong>Приватний чи публічний.</strong> Публічний репо бачить увесь інтернет. Приватний бачиш лише ти і ті, кого ти сам запросив. Для лаб - приватний (щоб не списали). Приватні репо на GitHub Free безкоштовні.</p>
 <p><strong>LICENSE</strong> - файл з ліцензією: що іншим можна робити з твоїм кодом. Якщо ліцензії нема, діє звичайне авторське право: усі права твої, і ніхто не може копіювати чи поширювати твій код. Для лаб ліцензія не потрібна. Для відкритого проєкту - обирають на choosealicense.com (часто MIT).</p>
 <p>Аналогія: репо - це папка-скоросшивач, README - титульний аркуш на ній, issues - стікери «доробити» на обкладинці.</p>
@@ -47,6 +68,14 @@
 </ol>
 <details>
 <summary>Відповідь</summary>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати». <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»).</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. <code>--format</code> - свій вигляд рядка: %h - хеш, %an - автор, %s - повідомлення.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+</ul>
+</blockquote>
 <p>Два абзаци з порожнім рядком між ними: кожен <code>-m</code> - окремий абзац.</p>
 <pre><code class="language-text">Опиши пісочницю в README
 
@@ -60,6 +89,12 @@ Closes #1
 </ol>
 <details>
 <summary>Відповідь</summary>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code>: <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
+</ul>
+</blockquote>
 <p>Один - його зробив сам GitHub, коли створював README:</p>
 <pre><code class="language-text">9bfd519 (HEAD -&gt; main, origin/main, origin/HEAD) Initial commit
 </code></pre>
@@ -70,6 +105,12 @@ Closes #1
 </ol>
 <details>
 <summary>Відповідь</summary>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code>: <code>--grep</code> - лише коміти, у повідомленні яких є це слово.</li>
+</ul>
+</blockquote>
 <p><code>--grep</code> шукає текст у повідомленнях комітів, зокрема в тілі. Покаже лише наш коміт:</p>
 <pre><code class="language-text">b91ce95 (HEAD -&gt; main, origin/main, origin/HEAD) Опиши пісочницю в README
 </code></pre>
@@ -94,14 +135,12 @@ gh issue list
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>gh issue create</code> - створює Issue на GitHub. Назва: issue - «питання, справа»: завдання чи зауваження в репо; create - «створити». <code>--title</code> - назва Issue; без неї gh спитає сам; <code>--body</code> - опис Issue; <code>--label</code> - мітка: bug, documentation, enhancement (є в кожному новому репо).</li>
-<li><code>gh issue list</code> - показує список Issues репо. Назва: issue - «справа, завдання»; list - «список».</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>gh issue create</code>: <code>--title</code> - назва Issue; без неї gh спитає сам (title - «заголовок»); <code>--body</code> - опис Issue (body - «тіло», основний текст); <code>--label</code> - мітка: bug, documentation, enhancement (є в кожному новому репо) (label - «ярлик»).</li>
+<li><code>gh issue list</code> - показує список завдань (Issues) проєкту на GitHub. Назва: issue - «справа, завдання»; list - «список».</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
-Мітки <code>bug</code>, <code>documentation</code>, <code>enhancement</code>, <code>question</code> та інші GitHub створює в кожному новому репо сам.</p>
 </blockquote>
+<p>Мітки <code>bug</code>, <code>documentation</code>, <code>enhancement</code>, <code>question</code> та інші GitHub створює в кожному новому репо сам.</p>
 <p><strong>Крок 2. README.md.</strong></p>
 <pre><code class="language-bash">cd ~/pisochnytsia
 git pull
@@ -110,11 +149,10 @@ nano README.md
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git pull</code> - забирає нові коміти з GitHub і зливає у твою гілку. Назва: pull - «потягнути»: забрати нові коміти з GitHub до себе.</li>
-<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).
-Зітри все і набери (Ctrl+O, Enter - зберегти, Ctrl+X - вийти):</li>
+<li><code>git pull</code> - забирає нові знімки (коміти) з GitHub і одразу додає у твої файли. Назва: pull - «потягнути».</li>
 </ul>
 </blockquote>
+<p>Зітри все і набери (Ctrl+O, Enter - зберегти, Ctrl+X - вийти):</p>
 <pre><code class="language-markdown"># pisochnytsia
 
 Пісочниця для вправ з **git**. Тут можна ламати.
@@ -184,12 +222,10 @@ git push
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
-<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--format</code> - свій вигляд рядка: %h - хеш, %an - автор, %s - повідомлення.</li>
-<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub.
-Вивід коміту і пушу:</li>
+<li><code>git push</code> - відправляє твої нові знімки (коміти) з компʼютера на GitHub. Назва: push - «штовхнути».</li>
 </ul>
 </blockquote>
+<p>Вивід коміту і пушу:</p>
 <pre><code class="language-text">[main 4f55914] Опиши пісочницю в README
  1 file changed, 18 insertions(+)
 To github.com:Evge14n/pisochnytsia.git
@@ -203,15 +239,7 @@ gh repo create proba-gh --private --add-readme --clone
 cd ~/proba-gh
 git log --oneline
 </code></pre>
-<blockquote>
-<p><strong>Нове тут:</strong></p>
-<ul>
-<li><code>cd</code>: <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
-<li><code>gh repo create</code> - створює репозиторій на GitHub з терміналу. Назва: repository create - «створити репозиторій» на GitHub. <code>--private</code> - приватний репо: бачиш лише ти (і кого запросиш); для лаб - саме так; <code>--add-readme</code> - одразу створити файл README.md; <code>--clone</code> - одразу склонувати новий репо в поточну теку.</li>
-<li><code>git log</code>: <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.
-<code>--private</code> - приватний, <code>--add-readme</code> - одразу з README, <code>--clone</code> - одразу склонувати в поточну теку. Один з <code>--public</code> / <code>--private</code> обовʼязковий, коли пишеш назву: без нього gh не питає, а одразу падає (перевірено, gh 2.105.0):</li>
-</ul>
-</blockquote>
+<p><code>--private</code> - приватний, <code>--add-readme</code> - одразу з README, <code>--clone</code> - одразу склонувати в поточну теку. Один з <code>--public</code> / <code>--private</code> обовʼязковий, коли пишеш назву: без нього gh не питає, а одразу падає (перевірено, gh 2.105.0):</p>
 <pre><code class="language-text">`--public`, `--private`, or `--internal` required when not running interactively
 </code></pre>
 <p>Діалог з питаннями буде лише від голого <code>gh repo create</code> без жодних аргументів (так каже <code>gh repo create --help</code>). Потім репо <code>proba-gh</code> можна видалити на сайті: Settings → унизу Danger Zone → Delete this repository (не перевірено).</p>
@@ -237,13 +265,19 @@ git push -u origin main
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git pull</code>: <code>--allow-unrelated-histories</code> - дозволити злити дві історії без спільного початку (репо на сайті створили з README).</li>
-<li><code>git push</code>: <code>-u</code> - запамʼятати звʼязок гілки з GitHub; далі просто git push і git pull.
-Як не потрапити: якщо код уже є на ноутбуці, створюй на сайті <strong>порожній</strong> репо (без README, .gitignore і ліцензії). Документація GitHub прямо про це попереджає.</li>
+<li><code>git pull</code>: <code>--allow-unrelated-histories</code> - злити дві історії без спільного початку (репо на сайті створили з README) (unrelated - «не повʼязані»).</li>
+<li><code>git push</code>: <code>-u</code> (<code>--set-upstream</code>) - запамʼятати пару «моя гілка - гілка на GitHub»; далі просто <code>git push</code> (set upstream - «задати джерело»).</li>
 </ul>
 </blockquote>
+<p>Як не потрапити: якщо код уже є на ноутбуці, створюй на сайті <strong>порожній</strong> репо (без README, .gitignore і ліцензії). Документація GitHub прямо про це попереджає.</p>
 <p><strong>2. Написав <code>Closes #1</code>, а issue не закрилось.</strong> Коміт лежить в іншій гілці (наприклад, <code>lr3</code>). Issue закривається, лише коли коміт потрапить у гілку за замовчуванням (<code>main</code>). Злий гілку в <code>main</code> (урок 11) - тоді закриється.</p>
 <p><strong>3. <code>gh</code> з репозиторію Mint.</strong> Пакет gh 2.45 з Mint зламаний (падає на <code>gh issue view</code>). Став gh з офіційного репозиторію GitHub, як в уроці 02.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh issue view</code> - показує одне завдання (Issue) з GitHub за номером. Назва: issue - «справа, завдання»; view - «переглянути».</li>
+</ul>
+</blockquote>
 <h3 id="як-роблять-профі">Як роблять профі</h3>
 <ul>
 <li>Пишуть <code>Closes #N</code> не в коміті, а в описі Pull Request (урок 11): issue закривається, коли PR зливають, і PR видно в issue як повʼязаний. Ключові слова: close, closes, closed, fix, fixes, fixed, resolve, resolves, resolved (<a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue">docs</a>).</li>
@@ -259,8 +293,14 @@ git push -u origin main
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gh repo create</code>: <code>--source</code> - взяти теку, що вже є на ноутбуці, напр. --source=. - поточну; <code>--remote</code> - як назвати віддалений репо в git, напр. --remote=origin; <code>--push</code> - одразу запушити коміти з --source на GitHub; <code>.</code> - після --source: поточна тека; <code>origin</code> - після --remote: стандартна назва віддаленого репо.
-Потім README зі списком: <code>lr1/</code> - ЛР1, ... <code>lr7/</code> - ЛР7, і як запускати (<code>python3 lr1/lr1_1.py</code>). На кожне «доробити» (наприклад, «ЛР3: завдання 2 не проходить doctest») - issue з міткою <code>bug</code>, і коміт з <code>Closes #N</code>, коли виправиш. Викладача можна додати в приватний репо: Settings → Collaborators → Add people (не перевірено).</li>
+<li><code>gh repo create</code>: <code>--source</code> - взяти теку, що вже є на ноутбуці, напр. <code>--source=.</code> - поточну (source - «джерело»); <code>--remote</code> - під яким іменем git памʼятатиме адресу репо на GitHub, зазвичай <code>--remote=origin</code> (remote - «віддалений»); <code>--push</code> - одразу відправити коміти з <code>--source</code> на GitHub (push - «штовхнути»); <code>.</code> - після <code>--source</code>: поточна тека; <code>origin</code> - після <code>--remote</code>: звична назва для адреси репо на GitHub.</li>
+</ul>
+</blockquote>
+<p>Потім README зі списком: <code>lr1/</code> - ЛР1, ... <code>lr7/</code> - ЛР7, і як запускати (<code>python3 lr1/lr1_1.py</code>). На кожне «доробити» (наприклад, «ЛР3: завдання 2 не проходить doctest») - issue з міткою <code>bug</code>, і коміт з <code>Closes #N</code>, коли виправиш. Викладача можна додати в приватний репо: Settings → Collaborators → Add people (не перевірено).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
 </ul>
 </blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>

@@ -38,6 +38,24 @@
 </table></div>
 <p><strong>Пайп <code>|</code></strong> - вивід однієї команди стає входом наступної:
 <code>ls | wc -l</code> - скільки файлів; <code>history | grep git</code> - які git-команди я вводив.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> (<code>--lines</code>) - лише кількість рядків (lines - «рядки»).</li>
+<li><code>history</code> - показує список уже набраних команд з номерами. Назва: history - «історія» набраних команд.</li>
+<li><code>grep</code> - шукає рядки з текстом (у файлах або те, що прийшло через <code>|</code>). Назва: g/re/p з редактора ed: global regular expression print - «скрізь знайти шаблон, надрукувати».</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-l</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-not</code> = <code>-n</code> і <code>-o</code> і <code>-t</code>.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>grep - знайти рядки з текстом:</strong></p>
 <div class="tw"><table>
 <thead>
@@ -73,8 +91,22 @@
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>grep</code>: <code>-n</code> (<code>--line-number</code>) - показати номер рядка перед кожним збігом (line number - «номер рядка»); <code>-i</code> (<code>--ignore-case</code>) - без різниці між великими й малими літерами (ignore case - «не зважати на регістр»); <code>-r</code> (<code>--recursive</code>) - шукати в усіх файлах теки і підтек (recursive - «рекурсивно», углиб); <code>.</code> - з -r: шукати в поточній теці і всіх підтеках; <code>-c</code> (<code>--count</code>) - не показувати рядки, а лише порахувати, скільки їх зі збігом (count - «порахувати»); <code>-v</code> (<code>--invert-match</code>) - навпаки: рядки, де шаблону НЕМА (invert - «перевернути»).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+</ul>
+</blockquote>
 <p><strong>Інші корисні:</strong> <code>wc -l</code> (рядки), <code>sort</code>, <code>uniq -c</code> (порахувати однакові сусідні), <code>head</code>, <code>tail</code>,
 <code>find . -name "*.py"</code> (знайти файли за назвою).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>uniq</code> - склеює однакові сусідні рядки (з -c - рахує). Назва: unique - «єдиний, неповторний»: прибрати повтори. <code>-c</code> (<code>--count</code>) - писати перед рядком, скільки разів він ішов підряд (count - «рахувати»).</li>
+<li><code>find</code> - шукає файли й теки за назвою, і в усіх підтеках. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: <code>-name "*.py"</code>; великі й малі літери різні; <code>.</code> - шукати тут і в усіх підтеках.</li>
+</ul>
+</blockquote>
 <p><strong>Ввід для програми з input().</strong> Програма питає число - можна подати без клавіатури:</p>
 <pre><code class="language-bash">printf &quot;5\n&quot; | python3 lab.py
 printf &quot;3\n4\n&quot; | python3 lab.py      # два input() - два рядки
@@ -83,16 +115,13 @@ python3 lab.py &lt; vvid.txt
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
-<li><code>&lt;</code> - подає файл програмі замість клавіатури. Назва: input redirect - «ввід з файлу».</li>
-<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+<li><code>#</code> (hash) - коментар: далі до кінця рядка bash не читає.</li>
+<li><code>&lt;</code> (input redirect) - подає файл програмі замість клавіатури.</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
-Зручно, коли ганяєш ту саму перевірку багато разів.</p>
 </blockquote>
+<p>Зручно, коли ганяєш ту саму перевірку багато разів.</p>
 <h3 id="руками-10-хв">Руками (10 хв)</h3>
 <pre><code class="language-bash">cd ~/univer/praktyka
 printf 'def area(r):\n    return 3.14 * r * r\n\n\ndef perimeter(r):\n    return 2 * 3.14 * r\n\nprint(area(2))\n' &gt; geom.py
@@ -116,19 +145,17 @@ history | grep cd | tail -5
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-n</code> - показати номер рядка перед кожним збігом (line number); <code>-c</code> - лише порахувати рядки зі збігом у кожному файлі (count); <code>-v</code> - навпаки: рядки, де шаблону НЕМА (invert).</li>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
-<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>/</code> - корінь системи: bin, etc, home, usr .</li>
-<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> - лише кількість рядків (lines).</li>
-<li><code>find</code> - шукає файли за назвою, часом чи власником. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: -name "<em>.py"; великі й малі літери різні; <code>-not</code> - заперечення наступної умови: <code>-not -user "$USER"</code> - чужі файли; <code>-path</code> - шлях (а не лише назва) підходить під шаблон: -path '</em>/.venv/*'.</li>
-<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
-<li><code>history</code> - показує список уже набраних команд з номерами. Назва: history - «історія» набраних команд.</li>
-<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
-<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
-<li><code>2&gt;</code> - пише лише помилки у файл. Назва: redirect stderr - «перенаправити помилки»: 2 - номер потоку помилок.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>2&gt;</code> (redirect stderr) - пише лише помилки у файл.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
+<li><code>grep</code>: <code>^</code> на початку шаблону - «рядок починається з цього тексту».</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
+<li><code>ls</code>: <code>/</code> - корінь системи: bin, etc, home, usr .</li>
+<li><code>find</code>: <code>-not</code> - заперечення наступної умови: <code>-not -user "$USER"</code> - чужі файли (not - «не»); <code>-path</code> - весь шлях (а не лише назва) підходить під шаблон: <code>-path '*/.venv/*'</code> (path - «шлях»).</li>
+<li><code>head</code> - показує перші рядки файлу (або того, що прийшло через <code>|</code>). Назва: head - «голова».</li>
+<li><code>tail</code> - показує останні рядки (файлу чи того, що прийшло через <code>|</code>). Назва: tail - «хвіст». <code>-5</code> - лише 5 останні рядки (те саме, що <code>-n 5</code>).</li>
 </ul>
 </blockquote>
 <p>Якщо на цьому ПК чи ноутбуці лаби лежать у <code>~/univer/prog</code> або <code>~/univer/labs</code>:</p>
@@ -138,7 +165,7 @@ grep -rl &quot;turtle&quot; ~/univer/labs
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>grep</code>: <code>-r</code> - шукати в усіх файлах теки і підтек (recursive); <code>-l</code> - лише назви файлів, де є збіг (list).</li>
+<li><code>grep</code>: <code>-l</code> (<code>--files-with-matches</code>) - лише назви файлів, де є збіг (list - «список»).</li>
 </ul>
 </blockquote>
 <h3 id="типові-помилки">Типові помилки</h3>
@@ -166,4 +193,10 @@ grep -rl &quot;turtle&quot; ~/univer/labs
 <li>Перенаправляє помилки (потік stderr) у файл.</li>
 <li>Перед запуском <code>&gt;</code> очищає <code>lab.py</code>, тож Python запускає вже порожній файл, а код зник.</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>echo</code> - друкує на екран текст, який йому дали. Назва: echo - «луна»: повторює те, що йому дали.</li>
+</ul>
+</blockquote>
 </details>

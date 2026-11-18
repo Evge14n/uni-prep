@@ -56,6 +56,23 @@
 <p>Одногрупника грає другий клон <code>~/druhyi-klon</code> (урок 08, у ньому <code>user.name</code> = «Друг»). Спільне репо - твоя приватна
 пісочниця <code>pisochnytsia</code>. Якщо <code>~/druhyi-klon</code> ще нема: <code>git clone git@github.com:Evge14n/pisochnytsia.git ~/druhyi-klon</code>,
 потім у ньому <code>git config user.name "Друг"</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git clone</code> - копіює весь проєкт з історією з GitHub до тебе.</li>
+<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор).</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-m</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Короткі можна склеювати: <code>-am</code> = <code>-a</code> і <code>-m</code>.</li>
+<li>Символи <code>~</code> <code>|</code> <code>&gt;</code> <code>*</code> <code>#</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1; <code>|</code> - Shift і клавіша <code>\</code>; <code>#</code> - Shift і 3 (в українській розкладці там №)).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Заготовка <code>para/kinematyka.py</code> (рівно так, 9 рядків, відступи - 4 пробіли):</p>
 <pre><code class="language-text">def shliakh(v0, a, t):
     &quot;&quot;&quot;Шлях при рівноприскореному русі, м (до 0.01).
@@ -75,6 +92,14 @@
 - у файлі нема маркерів <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>;
 - <code>git log --oneline --graph</code> показує обидві гілки і обидва злиття;
 - гілки <code>formula</code> і <code>okruhlennia</code> видалено (на GitHub і в себе).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль Python (вбудований чи поставлений через pip) як програму, напр. <code>python3 -m venv</code> (module - «модуль»).</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади <code>&gt;&gt;&gt;</code> з опису функцій. Назва: doc test - «тест у документації».</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>--graph</code> - малює гілки зліва зірочками і лініями.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Підказка 1 - з чого почати</summary>
 <p>Спершу заготовка в <code>main</code> і push - щоб обидва клони почали з одного місця. Свою гілку <code>okruhlennia</code> створи <strong>одразу після
@@ -92,6 +117,16 @@ push</strong>, ще до того, як одногрупник щось зроб
 і злий його <strong>у свою гілку</strong>: <code>git merge origin/main</code>. Далі - як в уроці 08: маркери, nano, doctest, <code>git add</code>, <code>git commit</code>,
 <code>git push</code>. PR оновиться сам - він показує гілку, а не окремі коміти.</p>
 </details>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git fetch</code> - лише дізнається, що нового на GitHub; твої файли не змінює.</li>
+<li><code>git merge</code> - додає зміни іншої гілки в ту, де ти зараз. <code>origin/main</code> - злити те, що <code>git fetch</code> приніс з GitHub (<code>git pull</code> = <code>fetch</code> + <code>merge</code>).</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати».</li>
+<li><code>git push</code> - відправляє твої нові знімки (коміти) з компʼютера на GitHub. Назва: push - «штовхнути».</li>
+</ul>
+</blockquote>
 <details>
 <summary>Підказка 4 - який рядок лишити</summary>
 <p>Ні «свій», ні «чужий»: у кожному лише одна з двох правок. Потрібен <strong>третій</strong> рядок, де є і <code>/ 2</code>, і <code>round(..., 2)</code>.</p>
@@ -114,23 +149,16 @@ git switch -c okruhlennia
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
-<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути». <code>-c</code> - створити нову гілку від поточного місця і перейти на неї.</li>
-<li><code>git pull</code> - забирає нові коміти з GitHub і зливає у твою гілку. Назва: pull - «потягнути»: забрати нові коміти з GitHub до себе.</li>
-<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>git switch</code> - перемикає на іншу гілку (лінію змін); з <code>-c</code> створює нову. <code>-c</code> (<code>--create</code>) - створити нову гілку від поточного місця і перейти на неї (create - «створити»).</li>
+<li><code>git pull</code> - забирає нові знімки (коміти) з GitHub і одразу додає у твої файли. Назва: pull - «потягнути».</li>
+<li><code>git commit</code>: <code>-m</code> (<code>--message</code>) - повідомлення коміту одразу в команді; без <code>-m</code> відкриється nano (message - «повідомлення»).</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> (<code>--parents</code>) - створює й усі проміжні теки шляху; тека вже є - без помилки (parents - «батьківські»).</li>
 <li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
-<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції.</li>
-<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу. <code>-n</code> - скільки останніх рядків показати: -n 3 (lines).</li>
-<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
-<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
-<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub.</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
-<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>|</code> (pipe) - вивід лівої команди йде на вхід правої.</li>
+<li><code>tail</code> - показує останні рядки (файлу чи того, що прийшло через <code>|</code>). Назва: tail - «хвіст». <code>-n</code> (<code>--lines</code>) - скільки останніх рядків показати: <code>-n 3</code>, коротко <code>-3</code> (lines - «рядки»).</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
-У nano вставляєш заготовку з умови. <code>| tail -n 1</code> - показати лише останній рядок звіту doctest:</p>
 </blockquote>
+<p>У nano вставляєш заготовку з умови. <code>| tail -n 1</code> - показати лише останній рядок звіту doctest:</p>
 <pre><code class="language-text">***Test Failed*** 2 failures.
 [main a786b16] ЛР4: заготовка викладача
  1 file changed, 9 insertions(+)
@@ -160,11 +188,11 @@ git push -u origin formula
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git commit</code>: <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.</li>
-<li><code>git push</code>: <code>-u</code> - запамʼятати звʼязок гілки з GitHub; далі просто git push і git pull.
-У nano рядок 9 → <code>return v0 * t + a * t ** 2 / 2</code>.</li>
+<li><code>git commit</code>: <code>-a</code> (<code>--all</code>) - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні (all - «усі»).</li>
+<li><code>git push</code>: <code>-u</code> (<code>--set-upstream</code>) - запамʼятати пару «моя гілка - гілка на GitHub»; далі просто <code>git push</code> (set upstream - «задати джерело»).</li>
 </ul>
 </blockquote>
+<p>У nano рядок 9 → <code>return v0 * t + a * t ** 2 / 2</code>.</p>
 <pre><code class="language-text">***Test Failed*** 1 failures.
 [formula ad64fa8] ЛР4: формула шляху з / 2
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -181,11 +209,11 @@ gh pr merge formula --merge
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gh pr create</code> - створює Pull Request з поточної гілки. Назва: pr - pull request, «запит на злиття» гілки в main; create - «створити». <code>--base</code> - куди зливати: --base main; <code>--head</code> - яку гілку зливати; без нього - поточна; <code>--title</code> - назва PR; <code>--body</code> - опис PR; рядок Closes #1 закриє Issue №1 при злитті.</li>
-<li><code>gh pr merge</code> - зливає Pull Request (як кнопка Merge на сайті). Назва: pr - pull request; merge - «злити». <code>--merge</code> - звичайне злиття з комітом злиття (Create a merge commit).
-Після <code>gh pr merge</code> гілку <code>formula</code> на GitHub видали кнопкою <strong>Delete branch</strong> на сторінці PR.</li>
+<li><code>gh pr create</code> - створює на GitHub запит злити твою гілку в <code>main</code> (PR). Назва: <code>gh</code> - gh - від GitHub; офіційна програма GitHub CLI (CLI - «командний рядок»); pr - pull request, «запит на злиття» гілки в main; create - «створити». <code>--base</code> - куди зливати: <code>--base main</code> (base - «основа»); <code>--head</code> - яку гілку зливати; без нього - поточна (head - «голова», верхівка твоєї гілки); <code>--title</code> - назва PR (title - «заголовок»); <code>--body</code> - опис PR; рядок <code>Closes #1</code> закриє Issue №1 при злитті (body - «основний текст»).</li>
+<li><code>gh pr merge</code> - зливає запит (PR) у <code>main</code> на GitHub, як кнопка Merge. Назва: pr - pull request; merge - «злити». <code>--merge</code> - звичайне злиття з окремим комітом злиття (Create a merge commit) (merge - «злити»).</li>
 </ul>
 </blockquote>
+<p>Після <code>gh pr merge</code> гілку <code>formula</code> на GitHub видали кнопкою <strong>Delete branch</strong> на сторінці PR.</p>
 <p><strong>Крок 3. Ти: округлення у гілці okruhlennia.</strong> Гілка відгалузилась від <code>main</code> ще до злиття formula - про формулу вона не знає.</p>
 <pre><code class="language-bash">cd ~/pisochnytsia
 nano para/kinematyka.py
@@ -231,14 +259,12 @@ def shliakh(v0, a, t):
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git fetch</code> - забирає новини з GitHub, нічого не зливаючи. Назва: fetch - «принести, забрати».</li>
-<li><code>git merge</code> - зливає іншу гілку в поточну. Назва: merge - «злити, обʼєднати». <code>origin/main</code> - злити те, що git fetch приніс з GitHub (git pull = fetch + merge).</li>
-<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан». <code>--short</code> - коротко: по рядку на файл з двома буквами стану (M, A, ??).</li>
-<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.
-<code>HEAD</code> - твоя гілка, <code>origin/main</code> - те, що прийшло з GitHub (формула одногрупника). <code>?? para/__pycache__/</code> - тека, яку
-створив doctest; у пісочниці нема <code>.gitignore</code> з уроку 06, тому git її бачить. Не додавай її в коміт (<code>git add</code> лише файлу).</li>
+<li><code>git status</code> - показує, які файли змінено і що піде в наступний коміт (збережений знімок). <code>--short</code> - коротко: по рядку на файл з двома буквами стану (<code>M</code>, <code>A</code>, <code>??</code>) (short - «коротко»).</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити» (уміє склеїти кілька файлів в один вивід).</li>
 </ul>
 </blockquote>
+<p><code>HEAD</code> - твоя гілка, <code>origin/main</code> - те, що прийшло з GitHub (формула одногрупника). <code>?? para/__pycache__/</code> - тека, яку
+створив doctest; у пісочниці нема <code>.gitignore</code> з уроку 06, тому git її бачить. Не додавай її в коміт (<code>git add</code> лише файлу).</p>
 <p>Відкрий nano і заміни <strong>всі пʼять рядків</strong> від <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> до <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; origin/main</code> одним:</p>
 <pre><code class="language-text">    return round(v0 * t + a * t ** 2 / 2, 2)
 </code></pre>
@@ -253,11 +279,11 @@ git push
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано). Назва: diff - від difference, «різниця». <code>--check</code> - шукає зайві пробіли в кінці рядків і маркери конфлікту (&lt;&lt;&lt;&lt;&lt;&lt;&lt;).
-doctest і <code>git diff --check</code> мовчать - тести пройшли і маркерів нема. <code>git commit</code> відкриє nano з готовим повідомленням -
-просто Ctrl+X:</li>
+<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано). <code>--check</code> - шукає пробіли в кінці рядків і забуті позначки <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> після злиття гілок (check - «перевірити»).</li>
 </ul>
 </blockquote>
+<p>doctest і <code>git diff --check</code> мовчать - тести пройшли і маркерів нема. <code>git commit</code> відкриє nano з готовим повідомленням -
+просто Ctrl+X:</p>
 <pre><code class="language-text">[okruhlennia e38cd66] Merge remote-tracking branch 'origin/main' into okruhlennia
 To github.com:Evge14n/pisochnytsia.git
    91bb560..e38cd66  okruhlennia -&gt; okruhlennia
@@ -289,15 +315,15 @@ git fetch --prune
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>--graph</code> - малює гілки зліва зірочками і лініями; <code>-n</code> - лише N останніх комітів: -n 3 (або коротко -3).</li>
-<li><code>git branch</code> - показує, створює і видаляє гілки. Назва: branch - «гілка». <code>-d</code> - видалити гілку, якщо її коміти вже злито; інакше відмовить.</li>
-<li><code>git fetch</code>: <code>--prune</code> - прибрати в себе origin/ГІЛКА, яких на GitHub уже нема (видалили після PR).
-Як читати граф знизу вгору: від заготовки <code>a786b16</code> пішли дві лінії - <code>ad64fa8</code> (одногрупник) і <code>91bb560</code> (ти).
-Лінія одногрупника першою зійшлась у <code>main</code> (<code>6cdbf70</code>, PR #1). Потім у твоїй гілці <code>e38cd66</code> - твоє злиття
-<code>main</code> у <code>okruhlennia</code> (<code>|/</code> і <code>|/|</code> - лінія з <code>main</code> заходить у твою гілку). І зверху <code>985bf3e</code> - PR #2.
-Номери PR у тебе будуть інші (у пісочниці вже були PR з уроку 11).</li>
+<li><code>git log</code>: <code>-n</code> (<code>--max-count</code>) - лише N останніх комітів: <code>-n 3</code> (або коротко <code>-3</code>) (number - «число»).</li>
+<li><code>git branch</code> - показує, створює і видаляє гілки (окремі лінії змін проєкту). <code>-d</code> (<code>--delete</code>) - видалити гілку, якщо її коміти вже злито (додано в іншу гілку); інакше відмовить (delete - «видалити»).</li>
+<li><code>git fetch</code>: <code>--prune</code> - прибрати в себе <code>origin/ГІЛКА</code>, яких на GitHub уже нема (prune - «обрізати», як садівник гілки).</li>
 </ul>
 </blockquote>
+<p>Як читати граф знизу вгору: від заготовки <code>a786b16</code> пішли дві лінії - <code>ad64fa8</code> (одногрупник) і <code>91bb560</code> (ти).
+Лінія одногрупника першою зійшлась у <code>main</code> (<code>6cdbf70</code>, PR #1). Потім у твоїй гілці <code>e38cd66</code> - твоє злиття
+<code>main</code> у <code>okruhlennia</code> (<code>|/</code> і <code>|/|</code> - лінія з <code>main</code> заходить у твою гілку). І зверху <code>985bf3e</code> - PR #2.
+Номери PR у тебе будуть інші (у пісочниці вже були PR з уроку 11).</p>
 <p><strong>Крок 6. Одногрупник: забрати результат.</strong></p>
 <pre><code class="language-bash">cd ~/druhyi-klon
 git switch main
@@ -315,11 +341,11 @@ a786b16 Твоє Імʼя: ЛР4: заготовка викладача
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git log</code>: <code>--format</code> - свій вигляд рядка: %h - хеш, %an - автор, %s - повідомлення.
-Коміти злиття PR робить GitHub: автор - той, хто натиснув Merge (у перевірці його звуть <code>Evge14n</code>; на справжньому
-GitHub - імʼя з твого профілю, не перевірено).</li>
+<li><code>git log</code>: <code>--format</code> - свій вигляд рядка: %h - хеш, %an - автор, %s - повідомлення.</li>
 </ul>
 </blockquote>
+<p>Коміти злиття PR робить GitHub: автор - той, хто натиснув Merge (у перевірці його звуть <code>Evge14n</code>; на справжньому
+GitHub - імʼя з твого профілю, не перевірено).</p>
 </details>
 <p><strong>Що перевірити в кінці:</strong>
 - <code>python3 -m doctest para/kinematyka.py</code> мовчить у <strong>обох</strong> клонах (у <code>main</code>);
@@ -327,6 +353,12 @@ GitHub - імʼя з твого профілю, не перевірено).</li>
 - <code>git log --oneline --graph -n 8</code> - два «Merge pull request» і твоє злиття в гілці, як у розвʼязку;
 - <code>git branch -a</code> у <code>~/pisochnytsia</code> - нема ні <code>okruhlennia</code>, ні <code>remotes/origin/okruhlennia</code>;
 - <code>git status</code> в обох клонах: <code>Your branch is up to date with 'origin/main'.</code></p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git branch</code>: <code>-a</code> (<code>--all</code>) - і твої гілки, і ті, що на GitHub (<code>remotes/origin/...</code>).</li>
+</ul>
+</blockquote>
 <p><strong>Типові пастки:</strong>
 - <strong><code>git pull</code>, стоячи на своїй гілці, не приносить <code>main</code>.</strong> Гілка <code>okruhlennia</code> стежить за <code>origin/okruhlennia</code>, тож
   pull завантажить <code>main</code>, але зливати не буде:
@@ -355,6 +387,13 @@ GitHub - імʼя з твого профілю, не перевірено).</li>
 1. <code>git add .</code> - і в коміт полетіли <code>.venv/</code>, <code>__pycache__/</code> і файл вимірювань на <strong>200 МБ</strong> (ще не запушено);
 2. хотів скасувати незакомічену правку, а набрав <code>git reset --hard HEAD~1</code> - і зник коміт із завданням 3;
 3. закомітив файл з токеном доступу до GitHub прямо в коді - і <strong>запушив</strong>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git add</code>: <code>.</code> - усе в поточній теці і підтеках; спершу глянь git status, щоб не додати зайве.</li>
+<li><code>git reset</code> - відкочує гілку на старіший знімок (коміт); <code>--hard</code> стирає зміни назавжди. <code>--hard</code> - НЕБЕЗПЕЧНО: гілка назад і файли теж; незбережені зміни зникають назавжди (hard - «жорстко»); <code>HEAD~1</code> - на один коміт назад від того, де ти зараз (<code>HEAD~3</code> - на три).</li>
+</ul>
+</blockquote>
 <p>Треба все виправити так, щоб у гілці <code>lr3</code> лишилось лише потрібне, а токен більше нікому не був корисний.</p>
 <p><strong>Тренажер, а не справжні лаби.</strong> Усе робимо в <code>~/trenazher</code> - копії «univer-labs» з власним «GitHub»: <strong>голим</strong> (bare)
 репо <code>~/trenazher/github/univer-labs.git</code>. Голий репо - це репо без робочої теки, лише історія; саме так репо зберігає
@@ -377,14 +416,14 @@ git commit -m &quot;ЛР3: завдання 1&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати». <code>--bare</code> - репо без робочих файлів, лише історія - як «сервер», куди роблять push; <code>-b</code> - назва першої гілки, напр. -b main.</li>
-<li><code>git clone</code> - копіює весь репо з GitHub до тебе. Назва: clone - «клон, точна копія». <code>~/trenazher/github/univer-labs.git</code> - можна клонувати й з теки на диску (голе репо - «тренажер GitHub» у курсі).</li>
-<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
-<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
-<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.
-<code>git clone</code> порожнього репо попередить <code>warning: You appear to have cloned an empty repository.</code> - так і має бути.</li>
+<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати». <code>--bare</code> - репо без робочих файлів, лише історія - як «сервер», куди роблять push (bare - «голий»); <code>-b</code> (<code>--initial-branch</code>) - назва першої гілки, напр. <code>-b main</code> (branch - «гілка»).</li>
+<li><code>git clone</code>: <code>~/trenazher/github/univer-labs.git</code> - можна клонувати й з теки на диску - «голого» репо без файлів, як на GitHub.</li>
+<li><code>printf</code> - друкує текст; <code>\n</code> у ньому - Enter (новий рядок). Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>&gt;</code> (redirect) - пише вивід у файл, старий вміст стирає.</li>
 </ul>
 </blockquote>
+<p><code>git clone</code> порожнього репо попередить <code>warning: You appear to have cloned an empty repository.</code> - так і має бути.</p>
 <p><strong>Аварія 1 (відтвори):</strong> venv (тут - імітація з одного файлу), doctest (він створює <code>__pycache__</code>), великі дані
 (<code>truncate -s 200M</code> миттєво робить файл на 200 МБ з нулів) і <code>git add .</code>:</p>
 <pre><code class="language-bash">mkdir -p .venv/bin
@@ -405,8 +444,7 @@ git commit -m &quot;ЛР3: завдання 2&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>truncate</code> - робить файл точно заданого розміру. Назва: truncate - «обрізати»: зробити файл точно потрібного розміру. <code>-s</code> - потрібний розмір: 200M, 1G; 0 - обнулити файл.</li>
-<li><code>git add</code>: <code>.</code> - усе в поточній теці і підтеках; спершу глянь git status, щоб не додати зайве.</li>
+<li><code>truncate</code> - робить файл точно заданого розміру. Назва: truncate - «обрізати». <code>-s</code> (<code>--size</code>) - потрібний розмір: <code>200M</code>, <code>1G</code>; <code>0</code> - обнулити файл (size - «розмір»).</li>
 </ul>
 </blockquote>
 <p><strong>Що треба отримати після аварії 1:</strong> коміт «ЛР3: завдання 2» містить лише <code>lr3/lr3_2.py</code> і <code>.gitignore</code>; у <strong>жодному</strong>
@@ -417,6 +455,12 @@ git commit -m &quot;ЛР3: завдання 2&quot;
 <p>Ще не запушено - отже останній коміт можна переписати (<code>--amend</code>, урок 12). Прибрати з git, лишивши на диску, -
 <code>git rm -r --cached</code> (урок 06). А щоб <code>git add .</code> більше так не робив - <code>.gitignore</code>.</p>
 </details>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git rm</code> - видаляє файл з диска і git; <code>--cached</code> - лише з git. <code>-r</code> - цілу теку з усім, що всередині (recursive - «рекурсивно»: і в усіх підтеках); <code>--cached</code> - прибрати лише з git, файл на диску лишається (cached - «з кешу», стара назва індексу).</li>
+</ul>
+</blockquote>
 <details>
 <summary>Розвʼязок А1</summary>
 <p>Спершу подивись, що саме в коміті:</p>
@@ -432,10 +476,10 @@ git commit -m &quot;ЛР3: завдання 2&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git show</code> - показує один коміт з його змінами або старий файл. Назва: show - «показати». <code>--stat</code> - замість рядків змін - лише які файли змінено і скільки рядків; <code>--oneline</code> - заголовок коміту одним рядком: короткий хеш і повідомлення; <code>HEAD</code> - останній коміт (так і без аргументу).
-<code>Bin 0 -&gt; 209715200 bytes</code> - двійковий файл на 200 МБ. Лікуємо:</li>
+<li><code>git show</code> - показує один збережений знімок (коміт) зі змінами або старий файл. <code>--stat</code> - замість рядків змін - лише які файли змінено і скільки рядків (stat - «статистика»); <code>--oneline</code> - заголовок коміту одним рядком: короткий хеш (номер коміту) і повідомлення (one line - «один рядок»); <code>HEAD</code> - останній коміт - той, де ти зараз (так і без аргументу).</li>
 </ul>
 </blockquote>
+<p><code>Bin 0 -&gt; 209715200 bytes</code> - двійковий файл на 200 МБ. Лікуємо:</p>
 <pre><code class="language-bash">printf '.venv/\n__pycache__/\n*.pyc\n*.bin\n' &gt; .gitignore
 git rm -r --cached .venv lr3/__pycache__ lr3/vymiry.bin
 git add .gitignore
@@ -463,12 +507,11 @@ D  lr3/vymiry.bin
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git rm</code> - прибирає файл з git (з --cached - файл лишається на диску). Назва: rm - від remove, «прибрати». <code>-r</code> - рекурсивно: щоб прибрати цілу теку з усім вмістом; <code>--cached</code> - прибрати лише з git (з індексу), файл на диску лишається.</li>
-<li><code>git commit</code>: <code>--amend</code> - переробити останній коміт: додати в нього забуте або змінити повідомлення; <code>--no-edit</code> - з --amend: лишити старе повідомлення, не відкривати nano.
-<code>D</code> у <code>git status --short</code> - «видалено з git» (файли на диску на місці). <code>--amend --no-edit</code> замінив коміт новим
-(інший хеш <code>495ec62</code>) з тим самим повідомленням. Тепер <code>*.bin</code> ігнорується - великі дані вимірювань у git не кладуть.</li>
+<li><code>git commit</code>: <code>--amend</code> - переробити останній коміт: додати в нього забуте або змінити повідомлення (amend - «виправити»); <code>--no-edit</code> - з --amend: лишити старе повідомлення, не відкривати nano.</li>
 </ul>
 </blockquote>
+<p><code>D</code> у <code>git status --short</code> - «видалено з git» (файли на диску на місці). <code>--amend --no-edit</code> замінив коміт новим
+(інший хеш <code>495ec62</code>) з тим самим повідомленням. Тепер <code>*.bin</code> ігнорується - великі дані вимірювань у git не кладуть.</p>
 <p><strong>Чому <code>--amend</code>, а не новий коміт «Прибрав сміття».</strong> Новий коміт прибрав би файл лише з <strong>наступних</strong> знімків, а коміт
 <code>8695fa7</code> з 200 МБ лишився б в історії - і <code>git push</code> повіз би його. GitHub блокує пуш файлів понад 100 МіБ, тож пуш
 відхилили б, хоч у теці файла вже «нема». <code>--amend</code> до push - коміт з 200 МБ просто не потрапляє в гілку.</p>
@@ -488,8 +531,7 @@ git reset --hard HEAD~1
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git reset</code> - пересуває гілку назад на інший коміт (--hard стирає зміни). Назва: reset - «скинути, повернути до». <code>--hard</code> - НЕБЕЗПЕЧНО: гілка назад і файли теж; незакомічені зміни зникають назавжди; <code>HEAD~1</code> - на один коміт назад (HEAD~3 - на три).</li>
-<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+<li><code>&gt;&gt;</code> (append) - дописує вивід у кінець файлу.</li>
 </ul>
 </blockquote>
 <p><strong>Що треба отримати після аварії 2:</strong> коміт «ЛР3: завдання 3» знову в гілці, <code>lr3/lr3_3.py</code> на місці, doctest мовчить.</p>
@@ -497,6 +539,12 @@ git reset --hard HEAD~1
 <summary>Підказка А2</summary>
 <p>Коміт не зник - на нього просто більше не показує гілка. Журнал усіх рухів HEAD - <code>git reflog</code> (урок 12).</p>
 </details>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git reflog</code> - журнал, де ти побував в історії; рятує «загублені» коміти (знімки). Назва: reflog - від reference log, «журнал посилань»: куди ходив <code>HEAD</code> (позначка «де ти»).</li>
+</ul>
+</blockquote>
 <details>
 <summary>Розвʼязок А2</summary>
 <pre><code class="language-bash">git log --oneline -3
@@ -517,13 +565,12 @@ lr3_1.py  lr3_2.py  __pycache__  vymiry.bin
 <p><strong>Нове тут:</strong></p>
 <ul>
 <li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
-<li><code>git reflog</code> - журнал, куди ходив HEAD; рятує «загублені» коміти. Назва: reflog - від reference log, «журнал посилань»: куди ходив HEAD.
-(<code>ls</code> у терміналі друкує назви в рядок і сортує за правилами мови системи: так в англійській і українській; порядок
-і колонки в тебе можуть трохи відрізнятись.) Зверни увагу: <code>lr3_3.py</code> зник, а <code>__pycache__</code> і <code>vymiry.bin</code> - ні. <code>reset --hard</code> не чіпає файли, яких нема в git
-(ігноровані й нові). У reflog видно всю історію аварій, навіть <code>commit (amend)</code> і старий коміт <code>8695fa7</code> з 200 МБ.
-Потрібний рядок - <code>HEAD@{1}: commit: ЛР3: завдання 3</code>:</li>
 </ul>
 </blockquote>
+<p>(<code>ls</code> у терміналі друкує назви в рядок і сортує за правилами мови системи: так в англійській і українській; порядок
+і колонки в тебе можуть трохи відрізнятись.) Зверни увагу: <code>lr3_3.py</code> зник, а <code>__pycache__</code> і <code>vymiry.bin</code> - ні. <code>reset --hard</code> не чіпає файли, яких нема в git
+(ігноровані й нові). У reflog видно всю історію аварій, навіть <code>commit (amend)</code> і старий коміт <code>8695fa7</code> з 200 МБ.
+Потрібний рядок - <code>HEAD@{1}: commit: ЛР3: завдання 3</code>:</p>
 <pre><code class="language-bash">git reset --hard HEAD@{1}
 python3 -m doctest lr3/lr3_3.py
 </code></pre>
@@ -532,17 +579,17 @@ python3 -m doctest lr3/lr3_3.py
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git reset</code>: <code>HEAD@{1}</code> - туди, де HEAD був крок тому за git reflog - так скасовують невдалий reset.
-Чернетки <code># чернетка</code> нема - її ми і хотіли викинути. <strong>Як треба було одразу:</strong> незакомічену правку скасовує
-<code>git restore</code> (коміти не чіпає):</li>
+<li><code>git reset</code>: <code>HEAD@{1}</code> - туди, де HEAD був крок тому за git reflog - так скасовують невдалий reset.</li>
 </ul>
 </blockquote>
+<p>Чернетки <code># чернетка</code> нема - її ми і хотіли викинути. <strong>Як треба було одразу:</strong> незакомічену правку скасовує
+<code>git restore</code> (коміти не чіпає):</p>
 <pre><code class="language-bash">git restore lr3/lr3_3.py
 </code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git restore</code> - викидає зміни у файлі або забирає його з індексу. Назва: restore - «відновити».</li>
+<li><code>git restore</code> - стирає зміни у файлі, повертаючи збережену версію, або скасовує <code>git add</code>.</li>
 </ul>
 </blockquote>
 </details>
@@ -564,6 +611,13 @@ branch 'lr3' set up to track 'origin/lr3'.
 <p>Що потрапило на GitHub - те вже могли скопіювати (клони, форки, кеш). Тому спершу роблять токен <strong>марним</strong>, а вже
 потім прибирають з коду. Перевір: чи бачить <code>git log -S текст</code> коміт з токеном після <code>git revert</code>?</p>
 </details>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code>: <code>-S</code> - лише коміти, де цей текст зʼявився або зник у коді: -S triple.</li>
+<li><code>git revert</code> - робить новий знімок (коміт), що скасовує зміни старого.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Розвʼязок А3</summary>
 <p><strong>Крок 1 - одразу, ще до git: відклич токен.</strong> Документація GitHub: «as a first step you need to revoke and/or rotate
@@ -595,12 +649,17 @@ TOKEN = &quot;ghp_vyhadanyi_dlia_trenazhera&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git revert</code> - новим комітом скасовує зміни старого коміту. Назва: revert - «повернути назад». <code>--no-edit</code> - взяти готове повідомлення «Revert ...», не відкриваючи nano; <code>HEAD</code> - скасувати останній коміт; можна будь-який хеш з git log.</li>
-<li><code>git log</code>: <code>-S</code> - лише коміти, де цей текст зʼявився або зник у коді: -S triple.</li>
-<li><code>git show</code>: <code>HEAD~1:lr3/nalashtuvannia.py</code> - файл таким, яким він був коміт тому; шлях - від кореня репо.
-<code>git log -S текст</code> - коміти, де цей текст зʼявився або зник. Обидва коміти на місці, і <code>git show HEAD~1:файл</code> досі
+<li><code>git revert</code>: <code>--no-edit</code> - взяти готове повідомлення «Revert ...», не відкриваючи nano (no edit - «не редагувати»); <code>HEAD</code> - скасувати останній коміт (<code>HEAD</code> - де ти зараз); можна будь-який хеш з <code>git log</code>.</li>
+<li><code>git show</code>: <code>HEAD~1:lr3/nalashtuvannia.py</code> - <code>КОМІТ:ФАЙЛ</code> - файл таким, яким він був у тому коміті (<code>~1</code> - коміт тому); шлях - від головної теки репо.</li>
+</ul>
+</blockquote>
+<p><code>git log -S текст</code> - коміти, де цей текст зʼявився або зник. Обидва коміти на місці, і <code>git show HEAD~1:файл</code> досі
 друкує токен. <code>git -C тека</code> - виконати git так, ніби ти в тій теці: тут - у «GitHub». Там те саме. <strong>Revert прибирає
-токен з файлів, але не з історії</strong> - будь-хто з доступом до репо знайде його за хвилину.</li>
+токен з файлів, але не з історії</strong> - будь-хто з доступом до репо знайде його за хвилину.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git</code>: <code>-C</code> - працювати, ніби ти в цій теці, без <code>cd</code> (C - від change directory, «зміни теку»).</li>
 </ul>
 </blockquote>
 <p><strong>Крок 3. Правильна версія: токен зі змінної середовища.</strong></p>
@@ -617,6 +676,12 @@ git push
 repository», у форках, у PR, у кешованих сторінках GitHub за хешем коміту. А <code>--force</code> у спільну гілку ще й знищить
 чужі коміти (урок 12). Тому: відкликати токен - обовʼязково і першим; переписувати історію - лише у своєму репо,
 лише разом з відкликанням, і це вже поза курсом.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git push</code>: <code>--force</code> - НЕБЕЗПЕЧНО: затерти історію на GitHub своєю, чужі коміти зникнуть (force - «силою»).</li>
+</ul>
+</blockquote>
 <p><strong>Якби помітив до push</strong> - було б як в аварії 1: виправив файл, <code>git add</code>, <code>git commit --amend --no-edit</code>, і токен
 ніколи не покинув би ноутбук.</p>
 </details>
@@ -628,11 +693,11 @@ git -C ~/trenazher/github/univer-labs.git ls-tree -r --name-only lr3
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git ls-files</code> - перелічує файли, які відстежує git. Назва: ls files - «перелічити файли» (ls - від list, «список»).</li>
-<li><code>git ls-tree</code> - перелічує файли, що лежать у коміті чи гілці. Назва: ls tree - «перелічити дерево»: файли в знімку коміту. <code>-r</code> - заходити в підтеки (без -r теки видно одним рядком tree); <code>--name-only</code> - лише шляхи, без прав, типу і хешу.
-<code>git status --short</code> - порожньо. Обидва списки однакові (у тебе і на «GitHub»):</li>
+<li><code>git ls-files</code> - перелічує файли, за якими стежить git (що є в репо). Назва: ls files - «перелічити файли» (ls - від list, «список»).</li>
+<li><code>git ls-tree</code> - перелічує файли в коміті (збереженому знімку) чи гілці. Назва: ls tree - «перелічити дерево». <code>-r</code> - заходити в підтеки (без <code>-r</code> тека - один рядок <code>tree</code>) (recursive - «рекурсивно»); <code>--name-only</code> - лише шляхи, без прав, типу і хешу (name only - «лише назви»).</li>
 </ul>
 </blockquote>
+<p><code>git status --short</code> - порожньо. Обидва списки однакові (у тебе і на «GitHub»):</p>
 <pre><code class="language-text">.gitignore
 README.md
 lr3/lr3_1.py
@@ -650,6 +715,12 @@ lr3/nalashtuvannia.py
 - <strong><code>git reset --hard</code> замість <code>git restore</code>.</strong> <code>restore файл</code> - скасувати правку у файлі; <code>reset --hard HEAD~1</code> - викинути
   цілий коміт. Незакомічене після <code>--hard</code> не врятує навіть reflog.
 - <strong>Revert «прибрав» токен - і на цьому все.</strong> Ні: поки токен не відкликано, він робочий, а в історії його видно.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m venv</code> - створює venv - окрему теку з Python і бібліотеками для лаб. Назва: virtual environment - «віртуальне середовище».</li>
+</ul>
+</blockquote>
 <hr>
 <h3 id="задача-3-здача-лр-з-тегом-і-архівом-20-30-хв">Задача 3. Здача ЛР з тегом і архівом (20-30 хв)</h3>
 <p><strong>Умова.</strong> ЛР3 готова в гілці <code>lr3</code> (продовжуємо тренажер із задачі 2). Завтра здача. Вимоги викладача: zip-архів,
@@ -671,6 +742,13 @@ lr3/nalashtuvannia.py
 <p><code>git archive --format=zip --prefix=ТЕКА/ -o ФАЙЛ.zip ТЕГ lr3</code> - останнє слово обмежує архів текою <code>lr3</code>.
 Переглянути архів без unzip: <code>python3 -m zipfile -l</code>, розпакувати: <code>python3 -m zipfile -e</code>.</p>
 </details>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git archive</code> - пакує в zip лише файли з git, без <code>.git</code> і сміття. <code>--format</code> - zip або tar; без нього - за розширенням файлу після <code>-o</code>, інакше tar (format - «формат»); <code>--prefix</code> - покласти все в архіві в цю теку: <code>--prefix=Prizvyshche_Imia/</code> (з / в кінці) (prefix - «приставка»); <code>-o</code> (<code>--output</code>) - куди записати архів; тека має вже існувати (output - «вихід»).</li>
+<li><code>python3 -m zipfile</code> - робить і розпаковує .zip засобами Python. Назва: zipfile - вбудований у Python інструмент для .zip; <code>-m</code> - запустити його як програму. <code>-l</code> (<code>--list</code>) - показати вміст: назви, дати, розміри (list - «список»); <code>-e</code> (<code>--extract</code>) - розпакувати в указану теку (extract - «витягти»).</li>
+</ul>
+</blockquote>
 <details>
 <summary>Повний розвʼязок</summary>
 <p><strong>Крок 1. Перевірити, що здаєш.</strong></p>
@@ -710,13 +788,13 @@ b4a0a7cf5c9f62057ec147c860fcf3b3ec932f2d    refs/tags/lr3-zdano
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git merge</code>: <code>lr3</code> - яку гілку злити В ПОТОЧНУ: спершу git switch main, потім git merge lr3.</li>
-<li><code>git tag</code> - ставить на коміт мітку з назвою (напр. lr1-zdano). Назва: tag - «мітка, ярлик». <code>-a</code> - анотований тег: з автором, датою і описом (для здачі - саме такий); <code>-m</code> - опис анотованого тегу; без -m git відкриє nano.</li>
-<li><code>git ls-remote</code> - показує, які гілки й теги є на GitHub. Назва: ls remote - «перелічити на віддаленому»: що лежить на GitHub. <code>--tags</code> - лише теги; <code>origin</code> - яке віддалене репо питати (зазвичай origin).
-<code>git ls-remote --tags origin</code> питає сам «GitHub», які там теги. Два рядки, бо тег анотований: перший хеш - сам тег
-(з автором і повідомленням), рядок з <code>^{}</code> - коміт, на який він показує. Він має збігатися з <code>main</code> (<code>0f74542...</code>).</li>
+<li><code>git merge</code>: <code>lr3</code> - яку гілку злити В ПОТОЧНУ: спершу <code>git switch main</code>, потім <code>git merge lr3</code>.</li>
+<li><code>git tag</code> - ставить мітку з назвою на збережений знімок (коміт), напр. <code>lr1-zdano</code>. <code>-a</code> (<code>--annotate</code>) - анотований тег: з автором, датою і описом (для здачі - саме такий) (annotate - «додати опис»); <code>-m</code> (<code>--message</code>) - опис анотованого тегу; без <code>-m</code> git відкриє nano.</li>
+<li><code>git ls-remote</code> - показує, які гілки й мітки (теги) зараз лежать на GitHub. Назва: ls remote - «перелічити на віддаленому»: що лежить на GitHub. <code>--tags</code> - лише теги (tags - «мітки»); <code>origin</code> - кого питати (зазвичай <code>origin</code> - твій GitHub).</li>
 </ul>
 </blockquote>
+<p><code>git ls-remote --tags origin</code> питає сам «GitHub», які там теги. Два рядки, бо тег анотований: перший хеш - сам тег
+(з автором і повідомленням), рядок з <code>^{}</code> - коміт, на який він показує. Він має збігатися з <code>main</code> (<code>0f74542...</code>).</p>
 <p><strong>Крок 3. Архів з тегу і перевірка вмісту.</strong></p>
 <pre><code class="language-bash">mkdir -p ~/trenazher/zdacha
 git archive --format=zip --prefix=Прізвище_Імʼя_Група_2026/ -o ~/trenazher/zdacha/lr3.zip lr3-zdano lr3
@@ -735,14 +813,12 @@ python3 -m zipfile -l ~/trenazher/zdacha/lr3.zip | grep -c -E '\.venv|__pycache_
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git archive</code> - пакує файли з коміту чи тегу в zip або tar. Назва: archive - «архів». <code>--format</code> - zip або tar; без нього - за розширенням файлу після -o, інакше tar; <code>--prefix</code> - покласти все в архіві в цю теку: --prefix=Prizvyshche_Imia/ (з / в кінці); <code>-o</code> - куди записати архів; тека має вже існувати.</li>
-<li><code>python3 -m zipfile</code> - робить і розпаковує .zip засобами Python. Назва: zipfile - модуль стандартної бібліотеки Python, запущений як програма (-m). <code>-l</code> - показати вміст: назви, дати, розміри.</li>
-<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-c</code> - лише порахувати рядки зі збігом у кожному файлі (count); <code>-E</code> - розширені регулярні вирази: |, +, {79,} без зворотних рисок.
-<code>grep -c</code> рахує рядки, що збіглися з будь-яким із трьох слів (<code>-E</code> - «або» через <code>|</code>, <code>\.</code> - справжня крапка). <code>0</code> -
-сміття нема, хоч на диску <code>.venv/</code>, <code>lr3/__pycache__/</code> і <code>lr3/vymiry.bin</code> лежать. Час у колонці Modified - час коміту,
-а не момент створення архіву.</li>
+<li><code>grep</code> - шукає рядки з текстом (у файлах або те, що прийшло через <code>|</code>). Назва: g/re/p з редактора ed: global regular expression print - «скрізь знайти шаблон, надрукувати». <code>-c</code> (<code>--count</code>) - не показувати рядки, а лише порахувати, скільки їх зі збігом (count - «порахувати»); <code>-E</code> (<code>--extended-regexp</code>) - розширені шаблони: <code>|</code> (або), <code>+</code>, <code>{79,}</code> без зворотних рисок (extended - «розширені»).</li>
 </ul>
 </blockquote>
+<p><code>grep -c</code> рахує рядки, що збіглися з будь-яким із трьох слів (<code>-E</code> - «або» через <code>|</code>, <code>\.</code> - справжня крапка). <code>0</code> -
+сміття нема, хоч на диску <code>.venv/</code>, <code>lr3/__pycache__/</code> і <code>lr3/vymiry.bin</code> лежать. Час у колонці Modified - час коміту,
+а не момент створення архіву.</p>
 <p><strong>Крок 4. Розпакувати як викладач і запустити.</strong></p>
 <pre><code class="language-bash">python3 -m zipfile -e ~/trenazher/zdacha/lr3.zip ~/trenazher/rozpakovano
 cd ~/trenazher/rozpakovano/Прізвище_Імʼя_Група_2026
@@ -752,12 +828,11 @@ grep -r ghp_ .
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3 -m zipfile</code>: <code>-e</code> - розпакувати в указану теку.</li>
-<li><code>grep</code>: <code>-r</code> - шукати в усіх файлах теки і підтек (recursive); <code>.</code> - з -r: шукати в поточній теці і всіх підтеках.
-doctest мовчить, <code>grep</code> нічого не знаходить: в архіві лише файли зі знімка під тегом, а не вся історія, тож старого
-токена там нема.</li>
+<li><code>grep</code>: <code>-r</code> (<code>--recursive</code>) - шукати в усіх файлах теки і підтек (recursive - «рекурсивно», углиб); <code>.</code> - з -r: шукати в поточній теці і всіх підтеках.</li>
 </ul>
 </blockquote>
+<p>doctest мовчить, <code>grep</code> нічого не знаходить: в архіві лише файли зі знімка під тегом, а не вся історія, тож старого
+токена там нема.</p>
 <p><strong>Крок 5. Посилання для викладача.</strong> На справжньому GitHub (у <code>~/univer/labs</code>) - тека ЛР3 саме в зданій версії:</p>
 <pre><code class="language-text">https://github.com/Evge14n/univer-labs/tree/lr3-zdano/lr3
 </code></pre>
@@ -769,6 +844,12 @@ doctest мовчить, <code>grep</code> нічого не знаходить: 
 - <code>git ls-remote --tags origin</code> показує <code>refs/tags/lr3-zdano</code> - тег на «GitHub», а не лише в тебе;
 - у <code>python3 -m zipfile -l</code> усі шляхи починаються з <code>Прізвище_Імʼя_Група_2026/lr3/</code>, <code>grep -c</code> дає <code>0</code>;
 - doctest у розпакованій теці мовчить.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git tag</code>: <code>-n</code> - у списку тегів показати й перший рядок опису (n - number, скільки рядків опису).</li>
+</ul>
+</blockquote>
 <p><strong>Типові пастки:</strong>
 - <strong>Забув скісну риску в <code>--prefix</code>.</strong> <code>--prefix=Прізвище_Імʼя_Група_2026</code> (без <code>/</code>) - тека зливається з назвою:
   <code>text
@@ -811,7 +892,7 @@ Issue закривається, коли коміт з <code>Closes #1</code> п
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gh repo create</code> - створює репозиторій на GitHub з терміналу. Назва: repository create - «створити репозиторій» на GitHub. <code>--public</code> - публічний: бачать усі (портфоліо, GitHub Pages); <code>--add-readme</code> - одразу створити файл README.md; <code>--clone</code> - одразу склонувати новий репо в поточну теку.</li>
+<li><code>gh repo create</code> - створює новий репозиторій (сховище коду) на GitHub з терміналу. Назва: repository create - «створити репозиторій» на GitHub. <code>--public</code> - публічний: бачать усі (портфоліо, GitHub Pages) (public - «відкритий»); <code>--add-readme</code> - одразу створити файл README.md - опис проєкту; <code>--clone</code> - одразу завантажити новий репо собі в поточну теку (clone - «копія»).</li>
 </ul>
 </blockquote>
 <p><strong>Крок 2. Перша версія сторінки.</strong></p>
@@ -828,10 +909,10 @@ git ls-files
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>xdg-open</code> - відкриває файл у його звичайній програмі. Назва: XDG (X Desktop Group, нині freedesktop.org) + open - «відкрити».
-(Якщо репо створив через gh з <code>--clone</code>, <code>git clone</code> пропусти.) Вміст <code>index.html</code> (12 рядків):</li>
+<li><code>xdg-open</code> - відкриває файл у його звичайній програмі. Назва: XDG (X Desktop Group, нині freedesktop.org) + open - «відкрити».</li>
 </ul>
 </blockquote>
+<p>(Якщо репо створив через gh з <code>--clone</code>, <code>git clone</code> пропусти.) Вміст <code>index.html</code> (12 рядків):</p>
 <pre><code class="language-text">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;uk&quot;&gt;
 &lt;head&gt;
@@ -867,10 +948,10 @@ index.html
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>curl</code> - звертається до сайту за адресою і показує відповідь. Назва: client URL - «клієнт для URL», тобто для адрес у мережі. <code>-s</code> - тихо: без смужки прогресу і без повідомлень curl; <code>-o</code> - записати відповідь у файл замість екрана; -o /dev/null - просто викинути її; <code>-w</code> - після завершення надрукувати те, що просиш, напр. '%{http_code}\n' - код відповіді сервера; <code>/dev/null</code> - «чорна діра»: усе, що туди записати, зникає.
-<code>404</code> - ще не готово або Pages не ввімкнено; <code>200</code> - сайт живий. Відкрий адресу в браузері.</li>
+<li><code>curl</code> - звертається до сайту за адресою і показує відповідь. Назва: client URL - «клієнт для URL» (URL - адреса в інтернеті). <code>-s</code> (<code>--silent</code>) - тихо: без смужки прогресу і без повідомлень curl (silent - «тихо»); <code>-o</code> (<code>--output</code>) - записати відповідь у файл замість екрана; <code>-o /dev/null</code> - просто викинути її (output - «вивід»); <code>-w</code> (<code>--write-out</code>) - після завершення надрукувати те, що просиш, напр. <code>'%{http_code}\n'</code> - код відповіді сервера (write-out); <code>/dev/null</code> - «чорна діра»: усе, що туди записати, зникає.</li>
 </ul>
 </blockquote>
+<p><code>404</code> - ще не готово або Pages не ввімкнено; <code>200</code> - сайт живий. Відкрий адресу в браузері.</p>
 <p><strong>Крок 4. Issue з планом.</strong> На сайті: вкладка <strong>Issues</strong> → <strong>New issue</strong> → Title «План сторінки», опис «Розділи:
 навчання, проєкти, контакти» → <strong>Create</strong>. Або:</p>
 <pre><code class="language-bash">gh issue create --title &quot;План сторінки&quot; --body &quot;Розділи: навчання, проєкти, контакти&quot;
@@ -878,10 +959,10 @@ index.html
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gh issue create</code> - створює Issue на GitHub. Назва: issue - «питання, справа»: завдання чи зауваження в репо; create - «створити». <code>--title</code> - назва Issue; без неї gh спитає сам; <code>--body</code> - опис Issue.
-У новому репо це буде issue <strong>#1</strong>.</li>
+<li><code>gh issue create</code> - створює на GitHub завдання чи зауваження (Issue) у репо. Назва: issue - «питання, справа». <code>--title</code> - назва Issue; без неї gh спитає сам; <code>--body</code> - опис Issue (body - «тіло», основний текст).</li>
 </ul>
 </blockquote>
+<p>У новому репо це буде issue <strong>#1</strong>.</p>
 <p><strong>Крок 5. Друга версія і закриття issue.</strong> У nano перед рядком <code>&lt;/body&gt;</code> додай 8 рядків:</p>
 <pre><code class="language-text">  &lt;h2&gt;Навчання&lt;/h2&gt;
   &lt;p&gt;Фізичний факультет ЛНУ, 1 курс.&lt;/p&gt;
@@ -913,23 +994,23 @@ To github.com:Evge14n/portfolio.git
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git diff</code>: <code>--stat</code> - замість рядків - підсумок: які файли і скільки рядків змінено.</li>
-<li><code>git log</code>: <code>--grep</code> - лише коміти, у повідомленні яких є це слово.
-Друге <code>-m</code> - тіло коміту, там і стоїть <code>Closes #1</code>. Коміт пішов прямо в <code>main</code>, тож GitHub закриє issue сам.
-Перевір:</li>
+<li><code>git diff</code>: <code>--stat</code> - замість рядків - підсумок: які файли і скільки рядків змінено (stat - від statistics, «статистика»).</li>
+<li><code>git log</code>: <code>--grep</code> - лише коміти, у повідомленні яких є це слово.</li>
 </ul>
 </blockquote>
+<p>Друге <code>-m</code> - тіло коміту, там і стоїть <code>Closes #1</code>. Коміт пішов прямо в <code>main</code>, тож GitHub закриє issue сам.
+Перевір:</p>
 <pre><code class="language-bash">gh issue view 1
 gh issue list --state closed
 </code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>gh issue view</code> - показує одне Issue за номером. Назва: issue - «справа, завдання»; view - «переглянути». <code>1</code> - номер Issue (видно в gh issue list і в адресі .../issues/1).</li>
-<li><code>gh issue list</code> - показує список Issues репо. Назва: issue - «справа, завдання»; list - «список». <code>--state</code> - які показати: open (за замовчуванням), closed - закриті, all - усі.
-За хвилину онови сторінку в браузері (Ctrl+Shift+R - без старої копії з кешу) - мають зʼявитись три розділи.</li>
+<li><code>gh issue view</code> - показує одне завдання (Issue) з GitHub за номером. Назва: issue - «справа, завдання»; view - «переглянути». <code>1</code> - номер Issue (видно в gh issue list і в адресі .../issues/1).</li>
+<li><code>gh issue list</code> - показує список завдань (Issues) проєкту на GitHub. Назва: issue - «справа, завдання»; list - «список». <code>--state</code> - які показати: open (типово), closed - закриті, all - усі (state - «стан»).</li>
 </ul>
 </blockquote>
+<p>За хвилину онови сторінку в браузері (Ctrl+Shift+R - без старої копії з кешу) - мають зʼявитись три розділи.</p>
 </details>
 <p><strong>Що перевірити в кінці:</strong>
 - <code>git ls-files</code> → <code>README.md</code> і <code>index.html</code> (у корені);
@@ -949,6 +1030,12 @@ gh issue list --state closed
 <hr>
 <p><strong>Що далі.</strong> Задачі 1 і 3 - це і є твій щотижневий цикл з лабами («Лаби в git»). Задачу 2 корисно повторити через тиждень з
 нуля, не підглядаючи: <code>rm -rf ~/trenazher</code> прибирає тренажер повністю (команда видаляє лише цю теку, лаби не чіпає).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>rm</code> - видаляє файли назавжди, без кошика. Назва: remove - «прибрати, видалити». <code>-r</code> (<code>--recursive</code>) - видаляти теки разом з усім, що всередині; <code>-f</code> (<code>--force</code>) - не питати і не лаятись, якщо файлу нема (force - «силоміць»).</li>
+</ul>
+</blockquote>
 <h3 id="джерела">Джерела</h3>
 <ul>
 <li>docs.github.com, «Removing sensitive data from a repository»:

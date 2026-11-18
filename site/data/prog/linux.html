@@ -55,6 +55,19 @@ WSL старий, повтори <code>wsl --update</code>.</p>
    <strong>«Install in WSL: Ubuntu»</strong> - натисни. Розширення з Windows саме в Ubuntu не працює, без цього не буде
    вибору інтерпретатора і підказок.</li>
 </ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>code</code> - відкриває файл або теку у VS Code. Назва: code - від Visual Studio Code («код»). <code>.</code> - крапка = поточна тека: відкрити її всю як проєкт.</li>
+</ul>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Слово з мінусом (як <code>-O</code> тут) - <strong>прапорець</strong>: уточнює, що саме зробити команді.</li>
+<li>Якщо поруч у дужках стоїть довга назва з двома мінусами - це той самий прапорець, пиши будь-яку одну.</li>
+<li>Символи <code>~</code> набирай в англійській розкладці (<code>~</code> - Shift і клавіша ліворуч від 1).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <h3 id="крок-4-усе-для-лаб-одним-скриптом-5-20-хв">Крок 4. Усе для лаб одним скриптом (5-20 хв)</h3>
 <p>У вікні Ubuntu по черзі (після кожного рядка Enter):</p>
 <pre><code class="language-bash">cd ~
@@ -65,13 +78,12 @@ bash ustanovka.sh
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку». <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
-<li><code>wget</code> - завантажує файл з інтернету за адресою. Назва: World Wide Web + get - «дістати з вебу». <code>-O</code> - під яким імʼям зберегти; -O - (мінус) означає «на екран», щоб передати далі в трубу |.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку». <code>~</code> - домашня тека /home/evgen; <code>~/univer</code> - шлях від неї.</li>
+<li><code>~</code> (tilde) - твоя домашня тека, /home/evgen.</li>
+<li><code>wget</code> - завантажує файл з інтернету за адресою. Назва: World Wide Web + get - «дістати з вебу». <code>-O</code> (<code>--output-document</code>) - під яким імʼям зберегти файл (output document - «файл для виводу»).</li>
 <li><code>less</code> - гортає довгий файл по сторінках, вихід q. Назва: less - «менше»: жарт, бо less is more - кращий за старий переглядач more.</li>
-<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
-<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>bash</code> - програма, що читає й виконує твої команди; <code>bash файл.sh</code> - з файлу. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
 </ul>
-<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
 </blockquote>
 <ul>
 <li><code>wget</code> скачує файл (<code>-O ustanovka.sh</code> - зберегти саме під цим імʼям, навіть якщо скачуєш удруге), <code>less</code> показує, що в ньому (гортати стрілками, вийти - <code>q</code>).
@@ -88,6 +100,14 @@ bash ustanovka.sh
 4. Робить теку <code>~/univer/labs</code> для лаб і <code>~/univer/praktyka</code> для вправ курсу.
 5. Додає дві команди: <code>univer</code> (перейти в ~/univer і увімкнути venv) і <code>perevir файл.py</code>
    (doctest + flake8 + mypy одним махом).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt update</code> - завантажує свіжий список програм і версій, нічого не ставить. Назва: <code>apt</code> - Advanced Package Tool - «розширений інструмент для пакетів (програм)».</li>
+<li><code>apt upgrade</code> - ставить новіші версії всіх встановлених програм. Назва: upgrade - «перейти на новішу версію».</li>
+<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи).</li>
+</ul>
+</blockquote>
 <p>Потім один раз скажи git, хто ти:</p>
 <pre><code class="language-bash">git config --global user.name &quot;Твоє Імʼя Прізвище&quot;
 git config --global user.email &quot;твоя@пошта&quot;
@@ -95,8 +115,8 @@ git config --global user.email &quot;твоя@пошта&quot;
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). Назва: config - від configuration, «налаштування». <code>--global</code> - для тебе на цьому ноутбуці: пише у файл ~/.gitconfig, діє в усіх репо.</li>
-<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). <code>--global</code> - для тебе на цьому ноутбуці: пише у файл <code>~/.gitconfig</code>, діє в усіх репо (global - «загальне»).</li>
+<li><code>"..."</code> (double quotes) - усе між лапками - одне слово, навіть з пробілами.</li>
 </ul>
 </blockquote>
 <h3 id="крок-5-перевір-що-все-працює-2-хв">Крок 5. Перевір, що все працює (2 хв)</h3>
@@ -109,24 +129,25 @@ code .
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>univer</code> - переходить у ~/univer і вмикає venv. Назва: наша назва: «універ» - тека ~/univer для навчання.</li>
-<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>--version</code> - надрукувати версію Python, напр. Python 3.12.3.</li>
-<li><code>type</code> - каже, що це за команда і де вона. Назва: type - «тип»: що це за команда.</li>
-<li><code>code</code> - відкриває файл або теку у VS Code. Назва: code - від Visual Studio Code («код»). <code>.</code> - крапка = поточна тека: відкрити її всю як проєкт.</li>
+<li><code>univer</code> - переходить у ~/univer і вмикає venv.</li>
+<li><code>type</code> - каже, що це за команда і де вона. Назва: type - «тип».</li>
+<li><code>python3</code> - запускає Python: твій файл <code>.py</code>, один рядок коду або вбудований інструмент. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>--version</code> - надрукувати версію Python, напр. Python 3.12.3.</li>
+</ul>
+</blockquote>
+<ul>
 <li><code>univer</code> - рядок почнеться з <code>(.venv)</code>. Це значить, що venv увімкнено.</li>
 <li><code>python --version</code> - Python 3.12.x.</li>
 <li><code>type perevir</code> - перший рядок «perevir is a function». Як нею користуватись - день 8.</li>
 <li><code>code .</code> - відкриється VS Code, внизу ліворуч зелене «WSL: Ubuntu». Перший раз довантажує
   сервер у Ubuntu, це хвилина.</li>
 </ul>
-</blockquote>
 <p>Перевірка turtle (вікно має з'явитися на 2 секунди):</p>
 <pre><code class="language-bash">python -c &quot;import turtle; turtle.forward(100); turtle.left(90); turtle.forward(50); import time; time.sleep(2)&quot;
 </code></pre>
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>python3</code>: <code>-c</code> - виконати рядок коду з командного рядка, без файлу: python3 -c 'print(2 ** 10)'.</li>
+<li><code>python3</code>: <code>-c</code> - виконати один рядок коду без файлу: <code>python3 -c 'print(2 ** 10)'</code> (command - «команда»).</li>
 </ul>
 </blockquote>
 <h3 id="крок-6-де-тримати-лаби-і-як-віддати-файл">Крок 6. Де тримати лаби і як віддати файл</h3>
@@ -141,17 +162,25 @@ code .
 <blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>explorer.exe</code> - відкриває теку в Провіднику Windows (лише у WSL). Назва: explorer - «оглядач»: Провідник Windows (.exe - програма Windows). <code>.</code> - крапка = поточна тека.
-  Крапка в кінці обов'язкова. Адреса в Провіднику буде <code>\\wsl.localhost\Ubuntu\home\evgen\...</code>.</li>
-<li>Забрати файл з Windows у Linux (напр. заготовку з «Завантажень»):
-  <code>bash
-  cp /mnt/c/Users/IMYA/Downloads/lab4.py ~/univer/labs/ЛР4/</code></li>
+<li><code>explorer.exe</code> - відкриває теку в Провіднику Windows (лише у WSL). Назва: explorer - «оглядач». <code>.</code> - крапка = поточна тека.</li>
 </ul>
+</blockquote>
+<p>Крапка в кінці обов'язкова. Адреса в Провіднику буде <code>\\wsl.localhost\Ubuntu\home\evgen\...</code>.
+- Забрати файл з Windows у Linux (напр. заготовку з «Завантажень»):
+  <code>bash
+  cp /mnt/c/Users/IMYA/Downloads/lab4.py ~/univer/labs/ЛР4/</code></p>
+<blockquote>
 <p><strong>Нове тут:</strong></p>
 <ul>
-<li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати».
-  Замість <code>IMYA</code> - імʼя Windows-користувача (подивись: <code>ls /mnt/c/Users</code>). Апостроф у команду не пиши:
-  bash сприйме його як лапку і чекатиме продовження (рядок <code>&gt;</code>; вийти - Ctrl+C).</li>
+<li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати».</li>
+</ul>
+</blockquote>
+<p>Замість <code>IMYA</code> - імʼя Windows-користувача (подивись: <code>ls /mnt/c/Users</code>). Апостроф у команду не пиши:
+  bash сприйме його як лапку і чекатиме продовження (рядок <code>&gt;</code>; вийти - Ctrl+C).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
 </ul>
 </blockquote>
 <p>Якщо лаби вже лежать у теці Windows і хочеш працювати прямо там - можна. Тоді один раз:</p>
@@ -209,4 +238,15 @@ Windows-теці) або в IDLE і натисни Run. Код однакови�
 </tr>
 </tbody>
 </table></div>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду як адміністратор; спитає твій пароль (видно зірочки). Назва: superuser do - «зроби як суперкористувач» (адміністратор).</li>
+<li><code>dpkg</code> - ставить один файл <code>.deb</code> і веде список встановлених програм. Назва: Debian package - «пакет Debian». <code>--configure</code> - доналаштовує розпаковані пакети; з <code>-a</code> - усі, які перервались (configure - «налаштувати»); <code>-a</code> (<code>--pending</code>) - з <code>--configure</code>: усі пакети, що чекають налаштування (pending - «ті, що чекають»).</li>
+<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор». <code>-i</code> (<code>--in-place</code>) - змінити САМ файл (без <code>-i</code> sed лише показує); <code>-i.bak</code> - ще й копія (in-place - «на місці»).</li>
+<li><code>'...'</code> (single quotes) - текст буквально: <code>$</code>, <code>*</code> і пробіли всередині - звичайні символи.</li>
+<li><code>pip install</code> - ставить бібліотеку Python (лише у venv). Назва: <code>pip</code> - pip installs packages - «pip ставить пакети» (назва, що посилається сама на себе); pip installs packages - «pip ставить пакети»; install - «встановити».</li>
+<li><code>source</code> - виконує команди з файлу просто в цьому вікні термінала. Назва: source - «джерело». <code>~/univer/.venv/bin/activate</code> - увімкнути venv (окремий Python для лаб); вимкнути - deactivate.</li>
+</ul>
+</blockquote>
 <p>Повністю перезапустити Ubuntu (якщо все зависло): у PowerShell <code>wsl --shutdown</code>, потім знову відкрити Ubuntu.</p>

@@ -63,6 +63,23 @@ git branch
 </code></pre>
 <pre><code class="language-text">* main
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>git branch</code> - показує, створює і видаляє гілки. Назва: branch - «гілка».</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
 <ol>
 <li>Створюємо гілку, комітимо в ній новий файл і повертаємось на <code>main</code>. Що покаже <code>ls</code>?</li>
@@ -74,6 +91,13 @@ git commit -m &quot;ЛР2: початок&quot;
 git switch main
 ls
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути». <code>-c</code> - створити нову гілку від поточного місця і перейти на неї.</li>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">lr1.py
@@ -101,7 +125,13 @@ ls
 <pre><code class="language-text">* 0879f44 (lr2) ЛР2: початок
 * c03fdc0 (HEAD -&gt; main) ЛР1 готова
 </code></pre>
-<p>У дужках - ярлики. <code>HEAD -&gt; main</code> значить «я на гілці main», а <code>lr2</code> на коміт попереду. Хеші в тебе будуть інші - дивись на будову.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>--graph</code> - малює гілки зліва зірочками і лініями; <code>--all</code> - коміти всіх гілок, а не лише поточної.
+У дужках - ярлики. <code>HEAD -&gt; main</code> значить «я на гілці main», а <code>lr2</code> на коміт попереду. Хеші в тебе будуть інші - дивись на будову.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 2. Fast-forward і прибирання.</strong></p>
 <pre><code class="language-bash">git merge lr2
 git branch -d lr2
@@ -112,6 +142,13 @@ Fast-forward
  1 file changed, 1 insertion(+)
  create mode 100644 lr2.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git merge</code> - зливає іншу гілку в поточну. Назва: merge - «злити, обʼєднати».</li>
+<li><code>git branch</code>: <code>-d</code> - видалити гілку, якщо її коміти вже злито; інакше відмовить.</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">Deleted branch lr2 (was 0879f44).
 </code></pre>
 <p>Коміти ЛР2 нікуди не ділись: вони тепер у <code>main</code>. Видалили лише ярлик.</p>
@@ -135,6 +172,12 @@ git log --oneline --graph --all
 <p>Гілки розійшлись від <code>0879f44</code>. Зливаємо:</p>
 <pre><code class="language-bash">git merge lr3
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git merge</code>: <code>lr3</code> - яку гілку злити В ПОТОЧНУ: спершу git switch main, потім git merge lr3.</li>
+</ul>
+</blockquote>
 <p>На Mint тут відкриється <strong>nano</strong> з готовим повідомленням <code>Merge branch 'lr3'</code>. Нічого не міняй: Ctrl+O, Enter, Ctrl+X.</p>
 <pre><code class="language-text">Merge made by the 'ort' strategy.
  lr3.py | 1 +
@@ -153,6 +196,12 @@ git log -n 1
 * 0879f44 ЛР2: початок
 * c03fdc0 ЛР1 готова
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code>: <code>-n</code> - лише N останніх комітів: -n 3 (або коротко -3).</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">commit be9740421acfc7c43e1bb2c9603d61f28df43354 (HEAD -&gt; main)
 Merge: c3d4a00 5fe4c9d
 Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
@@ -196,6 +245,11 @@ Date:   Wed Nov 18 16:12:00 2026 +0200
 <li><code>git switch -</code> - назад на попередню гілку (як <code>cd -</code>):
   <code>bash
   git switch -</code></li>
+</ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git switch</code>: <code>-</code> - назад на попередню гілку (як cd -).</li>
 <li>Швидкий огляд гілок і того, що вже злито (те, що в <code>--merged</code>, можна сміливо <code>-d</code>):
   <code>bash
   git branch -v
@@ -203,12 +257,18 @@ Date:   Wed Nov 18 16:12:00 2026 +0200
   ```text
     lr4  d7d4232 ЛР4: змінна x</li>
 <li>main be97404 Merge branch 'lr3'
-  <code></code>text</li>
+  ```</li>
+</ul>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git branch</code>: <code>-v</code> - біля кожної гілки - останній коміт; двічі (-vv) - ще й за якою гілкою GitHub стежить; <code>--merged</code> - лише гілки, вже злиті в поточну (їх можна сміливо -d).
+  ```text</li>
 <li>main
   <code>``</code>lr4<code>нема в</code>--merged` - її ще не злито.</li>
 <li>Деякі команди просять завжди merge-коміт, навіть коли можна перемотати, щоб в історії було видно «тут злили гілку»: <code>git merge --no-ff lr5</code>. Інші, навпаки, тримають історію прямою (rebase, squash - див. урок 11, види merge на GitHub).</li>
 <li>Назви гілок короткі, латиницею, без пробілів: <code>lr4</code>, <code>lr3-vypravlennia</code>, <code>fix-doctest</code>.</li>
 </ul>
+</blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>
 <ol>
 <li>Що таке гілка в git і чому вона створюється миттєво?</li>

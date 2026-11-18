@@ -11,6 +11,14 @@
 <pre><code class="language-bash">cat /etc/os-release
 python3 --version
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід. <code>/etc/os-release</code> - системний файл з назвою і версією системи (урок 02).</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>--version</code> - надрукувати версію Python, напр. Python 3.12.3.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Має бути <code>PRETTY_NAME="Linux Mint 22.3"</code> (або 22, 22.1, 22.2) і <code>UBUNTU_CODENAME=noble</code>, Python 3.12.3. Тоді курс
 підходить дослівно. Mint 22.x підтримується до квітня 2029. Наступна велика версія Mint (на базі Ubuntu 26.04)
 запланована на Різдво 2026 і ще не вийшла (blog.linuxmint.com, березень 2026); коли вийде - урок 02 каже, як
@@ -19,6 +27,13 @@ python3 --version
 <h3 id="мова-повідомлень-1-хвилина">Мова повідомлень (1 хвилина)</h3>
 <pre><code class="language-bash">echo $LANG
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
+</ul>
+</blockquote>
 <p>Якщо бачиш <code>uk_UA.UTF-8</code> - Mint українською, і багато повідомлень <strong>системи</strong> (bash, <code>cp</code>, <code>mkdir</code>, apt, nano,
 Timeshift) будуть українською, а не так, як у курсі. Наприклад, замість <code>bash: python: command not found</code> буде
 <code>bash: python: команду не знайдено</code>. У «Типових помилках» уроків для таких повідомлень дано обидва варіанти.
@@ -29,6 +44,12 @@ Timeshift) будуть українською, а не так, як у курс
 </code></pre>
 <pre><code class="language-text">ls: cannot access 'nema-takoyi-teky': No such file or directory
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+</ul>
+</blockquote>
 <h3 id="порядок-так-попросив-сам-спершу-лаби-налагодження-оновлення">Порядок (так попросив сам: спершу лаби, налагодження, оновлення)</h3>
 <div class="tw"><table>
 <thead>
@@ -105,6 +126,16 @@ wget -O ustanovka-mint.sh https://evge14n.github.io/uni-prep/files/ustanovka-min
 less ustanovka-mint.sh
 bash ustanovka-mint.sh
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку». <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
+<li><code>wget</code> - завантажує файл з інтернету за адресою. Назва: World Wide Web + get - «дістати з вебу». <code>-O</code> - під яким імʼям зберегти; -O - (мінус) означає «на екран», щоб передати далі в трубу |.</li>
+<li><code>less</code> - гортає довгий файл по сторінках, вихід q. Назва: less - «менше»: жарт, бо less is more - кращий за старий переглядач more. <code>ustanovka-mint.sh</code> - прочитати чужий скрипт перед запуском (урок 03).</li>
+<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+</blockquote>
 <p>Якщо <code>wget</code> пише помилку <code>404</code> (файл на сайті ще не опублікований) або інтернету нема - скопіюй
 <code>ustanovka-mint.sh</code> з теки цього курсу (лежить поруч з «00 - Почни тут.md») у домашню теку <code>~</code>.</p>
 <p><code>less</code> - щоб <strong>спершу прочитати</strong> скрипт (гортати пробілом, вийти <code>q</code>): чужі скрипти без читання не запускають

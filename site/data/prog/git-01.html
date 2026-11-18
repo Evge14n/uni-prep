@@ -130,6 +130,23 @@ git commit -m &quot;Додай lr1.py&quot;
 </code></pre>
 <pre><code class="language-text">Initialized empty Git repository in /home/.../git-urok01/.git/
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
+<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан». <code>--short</code> - коротко: по рядку на файл з двома буквами стану (M, A, ??).</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <pre><code class="language-text">On branch main
 
 No commits yet
@@ -156,6 +173,12 @@ git status
 </code></pre>
 <pre><code class="language-text"> M lr1.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">M  lr1.py
 </code></pre>
 <pre><code class="language-text">MM lr1.py
@@ -179,6 +202,12 @@ git log --oneline
 <pre><code class="language-text">[main 4528870] Завдання 1
  1 file changed, 1 insertion(+), 1 deletion(-)
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
+</ul>
+</blockquote>
 <pre><code class="language-text"> M lr1.py
 </code></pre>
 <pre><code class="language-text">4528870 (HEAD -&gt; main) Завдання 1
@@ -191,6 +220,13 @@ git cat-file -p HEAD
 </code></pre>
 <pre><code class="language-text">4528870a15aba5fc1ba92936c47546f163136254
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git rev-parse</code> - перекладає HEAD чи назву гілки в хеш коміту. Назва: rev parse - «розібрати ревізію»: перетворити назву (HEAD, main) на хеш. <code>HEAD</code> - коміт, на якому ти зараз.</li>
+<li><code>git cat-file</code> - показує тип або вміст обʼєкта git (коміт, тег). Назва: cat file - «вивести обʼєкт» (cat - від concatenate, «зчепити»). <code>-p</code> - вміст обʼєкта людським виглядом (p - pretty, «гарно»).</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">tree 35fa5b63979c4c22106bff356b4fa98889fdefd0
 parent 076d5fc68c220f4d10a4de0aa617daee0d6599ce
 author Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt; 1794996982 +0000
@@ -202,7 +238,13 @@ committer Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt; 1
 <p><strong>Крок 4. git без GitHub.</strong></p>
 <pre><code class="language-bash">git remote -v
 </code></pre>
-<p>Вивід порожній - цей репо ніде, крім ноутбука, не існує.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git remote</code> - показує і задає адресу репо на GitHub (origin). Назва: remote - «віддалений»: репо на іншому компʼютері (GitHub). <code>-v</code> - показати й адреси: окремо для fetch (забирати) і push (відправляти).
+Вивід порожній - цей репо ніде, крім ноутбука, не існує.</li>
+</ul>
+</blockquote>
 <p><strong>Для лаб:</strong> кожне готове завдання ЛР - окремий коміт. Завдяки індексу можна закомітити лише <code>lr2.py</code>, а чернетку <code>proba.py</code> поруч не чіпати. А GitHub (урок 03 і далі) - щоб лаби не зникли з ноутбуком і щоб дати викладачу посилання.</p>
 <h3 id="типові-помилки">Типові помилки</h3>
 <p><strong>1. Команда git не в репо.</strong></p>

@@ -587,8 +587,16 @@ turtle.done()
 </details>
 <h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
 <p>Заготовка: <code>zadachi/urok06.py</code>. Розв'язок: <code>_rozvyazky/urok06.py</code> (відкривай лише після 2 спроб).</p>
-<pre><code>python3 -m doctest zadachi/urok06.py -v
+<pre><code class="language-bash">python3 -m doctest zadachi/urok06.py -v
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції. <code>-v</code> - докладно: кожен приклад (Trying, Expecting, ok) і підсумок «N passed and M failed».</li>
+</ul>
+<p>Усе про кожну команду - у довіднику «05_Програмування/КОМАНДИ - довідник.md» (на сайті - вкладка «Команди»).</p>
+</blockquote>
 <p><strong>Задача 1. <code>ball_heights(start_height, frames)</code></strong> - кроки анімації без вікна. М'ячик падає з висоти
 <code>start_height</code> без швидкості. Кожен кадр: швидкість -= 1, висота += швидкість; якщо висота ≤ 0 - висота 0, а
 швидкість <code>-speed * 3 // 4</code> (відскок угору з утратою чверті швидкості). Повертає список висот після кожного

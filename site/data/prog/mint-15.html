@@ -154,6 +154,13 @@ ls -l /usr/bin/passwd
 <pre><code class="language-text">drwxrwxrwt 6 root root 4096 Nov 18 10:49 /tmp
 -rwsr-xr-x 1 root root 64152 May 30  2024 /usr/bin/passwd
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long); <code>-d</code> - показати саму теку, а не її вміст: ls -ld lr1 (directory).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <ul>
 <li><code>t</code> у кінці (sticky bit) на <code>/tmp</code>: писати можуть усі, але <strong>видалити</strong> файл може лише його власник.</li>
 <li><code>s</code> на місці <code>x</code> власника (SUID): програма працює з правами власника файлу (root). Так <code>passwd</code> може записати твій
@@ -169,6 +176,15 @@ ls -l /usr/bin/passwd
 chmod 640 zvit.txt
 stat -c '%A' zvit.txt
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>touch</code> - створює порожній файл або оновлює його час. Назва: touch - «торкнутися» файлу: оновити час зміни, а як нема - створити.</li>
+<li><code>chmod</code> - змінює права файлу: читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>640</code> - rw-r-----: ти змінюєш, група читає, інші нічого.</li>
+<li><code>stat</code> - показує права, власника, розмір і дати файлу. Назва: status - «стан»: усе, що система знає про файл. <code>-c</code> - друкувати лише поля з шаблону: %A права буквами, %a числом, %n назва.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">-rw-r-----
@@ -181,6 +197,13 @@ stat -c '%A' zvit.txt
 <pre><code class="language-bash">./pryvit.sh
 bash pryvit.sh
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>./скрипт</code> - запускає свій файл-скрипт з поточної теки. Назва: ./ - «звідси»: крапка = поточна тека, / відділяє теку від файлу. <code>./pryvit.sh</code> - файл pryvit.sh з поточної теки; перший рядок #!/bin/bash каже, чим його виконати.</li>
+<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">bash: ./pryvit.sh: Permission denied
@@ -194,6 +217,12 @@ bash pryvit.sh
 </ol>
 <pre><code class="language-bash">cat /etc/shadow
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">cat: /etc/shadow: Permission denied
@@ -207,6 +236,15 @@ bash pryvit.sh
 <pre><code class="language-bash">sudo touch korin.txt
 echo &quot;рядок&quot; &gt;&gt; korin.txt
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">bash: korin.txt: Permission denied
@@ -221,6 +259,15 @@ id
 groups
 umask
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>whoami</code> - друкує твій логін. Назва: who am I - «хто я».</li>
+<li><code>id</code> - показує твій номер (uid) і групи. Назва: identity - «особа»: друкує номери (ID) користувача і груп.</li>
+<li><code>groups</code> - друкує групи користувача. Назва: groups - «групи».</li>
+<li><code>umask</code> - показує, які права забирати в нових файлів. Назва: user mask - «маска користувача»: які права НЕ давати новим файлам.</li>
+</ul>
+</blockquote>
 <p>Справжній вивід з тестової Mint 22.3. На ноутбуці uid буде, найімовірніше, 1000, а груп більше: інсталятор Mint
 (пакет ubiquity 24.04.3+mint19 з ISO, шаблон <code>passwd/user-default-groups</code>) додає першого користувача ще в
 <code>adm cdrom dip lpadmin plugdev sambashare debian-tor libvirtd users</code> - у ті з них, що є в системі (останніх двох на
@@ -245,6 +292,17 @@ stat -c '%A %a %n' pryvit.sh
 -rwxrwxr-x 775 pryvit.sh
 Привіт з скрипта
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>chmod</code>: <code>+x</code> - дозволити запуск (x); у Mint - усім трьом: власнику, групі й іншим.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+</ul>
+</blockquote>
 <p><code>+x</code> додав x усім трьом. Спробуй числами і подивись <code>stat</code> після кожної:</p>
 <pre><code class="language-bash">touch zvit.txt
 chmod 755 pryvit.sh
@@ -256,21 +314,45 @@ stat -c '%A %a %n' pryvit.sh zvit.txt
 <pre><code class="language-text">-rwxr-xr-x 755 pryvit.sh
 -rw-r----- 640 zvit.txt
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code>: <code>755</code> - rwxr-xr-x: скрипт чи тека - усі читають і запускають, змінюєш лише ти; <code>600</code> - rw-------: лише ти (ключі ssh, паролі); <code>644</code> - rw-r--r--: звичайний файл - ти змінюєш, інші лише читають; <code>o-r</code> - забрати читання (r) в усіх інших (o = others, «інші»).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 3. Право x у теки.</strong></p>
 <pre><code class="language-bash">mkdir sekret
 chmod 600 sekret
 cd sekret
 chmod 700 sekret
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code>: <code>700</code> - rwx------: тека лише для тебе.</li>
+</ul>
+</blockquote>
 <p><code>cd</code> скаже <code>bash: cd: sekret: Permission denied</code>: без x у теку не зайти, навіть власнику. <code>chmod 700</code> повертає вхід.</p>
 <p><strong>Крок 4. sudo.</strong></p>
 <pre><code class="language-bash">sudo whoami
 sudo -k
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code>: <code>-k</code> - забути пароль одразу: наступний sudo знову спитає (інакше памʼятає 15 хвилин).</li>
+</ul>
+</blockquote>
 <p>Спершу спитає <code>[sudo] password for evgen:</code> - набери свій пароль (буде видно зірочки) і Enter. Відповідь - <code>root</code>.
 Ще раз <code>sudo whoami</code> протягом 15 хвилин - пароль не питає. Після <code>sudo -k</code> - питає знову. Подивись, що тобі можна:</p>
 <pre><code class="language-bash">sudo -l
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code>: <code>-l</code> - показати, що тобі дозволено робити через sudo.</li>
+</ul>
+</blockquote>
 <p>Серед рядків буде <code>(ALL : ALL) ALL</code> - усе, бо ти в групі <code>sudo</code>. Ще два рядки <code>(root) NOPASSWD: ...</code> - це Mint
 дозволяє Диспетчеру оновлень без пароля оновлювати кеш (<code>mint-refresh-cache</code>) і перевіряти блокування dpkg.</p>
 <p><strong>Крок 5. Як sudo псує файли в домашній теці і як це лікувати.</strong></p>
@@ -283,6 +365,13 @@ echo &quot;рядок&quot; &gt;&gt; korin.txt
 <pre><code class="language-text">-rw-r--r-- root root korin.txt
 -rw-r--r-- evgen evgen korin.txt
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chown</code> - змінює власника і групу файлу (через sudo). Назва: change owner - «змінити власника».</li>
+<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
+</ul>
+</blockquote>
 <p><code>$USER</code> - це твій логін, bash підставить його сам. Після <code>chown</code> файл знову твій і дописується без sudo. Цілу теку
 повертають з <code>-R</code> (рекурсивно): <code>sudo chown -R "$USER:$USER" ~/univer</code>.</p>
 <p><strong>Крок 6. Файли користувачів.</strong></p>
@@ -294,6 +383,14 @@ grep &quot;^$USER:&quot; /etc/passwd | cut -d: -f1,6,7
 -rw-r----- root shadow /etc/shadow
 evgen:/home/evgen:/bin/bash
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати».</li>
+<li><code>cut</code> - вирізає з рядків потрібні стовпці. Назва: cut - «вирізати»: взяти шматок кожного рядка.</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <p>У <code>/etc/passwd</code> поля розділені <code>:</code>, ми вирізали (<code>cut</code>) 1-ше (логін), 6-те (домашня тека) і 7-ме (оболонка). Пароля
 там нема - лише <code>x</code>, а сам хеш - у <code>/etc/shadow</code>.</p>
 <p><strong>Крок 7. Група для пристроїв (Arduino, осцилограф, будь-що через USB-COM).</strong> Порт <code>/dev/ttyUSB0</code> чи <code>/dev/ttyACM0</code>
@@ -301,6 +398,13 @@ evgen:/home/evgen:/bin/bash
 <pre><code class="language-bash">getent group dialout
 sudo usermod -aG dialout &quot;$USER&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>getent</code> - показує запис про групу або користувача. Назва: get entries - «отримати записи» з баз системи (користувачі, групи).</li>
+<li><code>usermod</code> - змінює користувача, напр. додає в групу (через sudo). Назва: user modify - «змінити (обліковий запис) користувача». <code>-a</code> - ДОДАТИ до наявних груп, а не замінити їх; працює лише разом з -G; <code>-G</code> - список додаткових груп через кому, без пробілів.</li>
+</ul>
+</blockquote>
 <p>Тепер <strong>вийди з сеансу і зайди знову</strong> (або перезавантаж) - групи оновлюються лише при вході. Перевір: <code>groups</code> - у
 списку зʼявився <code>dialout</code>.</p>
 <p><strong>Крок 8. Як Mint запускає свої адмін-вікна.</strong></p>
@@ -313,12 +417,25 @@ sudo usermod -aG dialout &quot;$USER&quot;
 <p><strong>Крок 9. Змінити системний файл правильно</strong> (на майбутнє, коли урок скаже «допиши в /etc/...»):</p>
 <pre><code class="language-bash">sudo -e /etc/hosts
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code>: <code>-e</code> - безпечно редагувати системний файл: копія відкривається в nano від тебе, а кладе її root.</li>
+</ul>
+</blockquote>
 <p><code>sudo -e</code> відкриває <strong>копію</strong> файлу в nano від твого імені, а після збереження сам кладе її на місце від root. Вийдеш
 без змін (Ctrl+X) - побачиш <code>sudo: /etc/hosts unchanged</code>. Так не треба запускати редактор від root.</p>
 <p><strong>Крок 10. Прибрати за собою.</strong></p>
 <pre><code class="language-bash">cd ~
 gio trash ~/univer/praktyka/u15
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code>: <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
+<li><code>gio</code> - робота з файлами як у Nemo; gio trash - у кошик. Назва: GIO - GLib Input/Output, «ввід-вивід бібліотеки GLib». <code>trash</code> - команда «кошик»: gio trash ФАЙЛ кладе файл у кошик, як Delete у Nemo.</li>
+</ul>
+</blockquote>
 <h2 id="типові-помилки">Типові помилки</h2>
 <p>Якщо Mint українською - у дужках той самий текст українською (з перекладу <code>language-pack-uk-base</code>). Англійський
 текст для пошуку в інтернеті: <code>LC_ALL=C команда</code>.</p>

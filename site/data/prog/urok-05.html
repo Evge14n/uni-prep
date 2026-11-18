@@ -665,8 +665,16 @@ turtle.done()
 </details>
 <h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
 <p>Заготовка: <code>zadachi/urok05.py</code>. Розв'язок: <code>_rozvyazky/urok05.py</code> (відкривай лише після 2 спроб).</p>
-<pre><code>python3 -m doctest zadachi/urok05.py -v
+<pre><code class="language-bash">python3 -m doctest zadachi/urok05.py -v
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції. <code>-v</code> - докладно: кожен приклад (Trying, Expecting, ok) і підсумок «N passed and M failed».</li>
+</ul>
+<p>Усе про кожну команду - у довіднику «05_Програмування/КОМАНДИ - довідник.md» (на сайті - вкладка «Команди»).</p>
+</blockquote>
 <p><strong>Задача 1. <code>count_grades(grades)</code></strong> - повертає словник «оцінка: скільки разів трапилась».
 Ключі - у порядку першої появи. <code>count_grades([5, 4, 5, 3, 5])</code> → <code>{5: 3, 4: 1, 3: 1}</code>.</p>
 <details>

@@ -119,6 +119,14 @@
 <pre><code class="language-bash">systemctl is-active nemaservisu
 systemctl is-enabled nemaservisu
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl is-active</code> - одним словом: чи працює служба зараз. Назва: is active? - «чи працює?».</li>
+<li><code>systemctl is-enabled</code> - одним словом: чи вмикається служба при старті. Назва: is enabled? - «чи ввімкнений автозапуск?».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">inactive
@@ -132,6 +140,12 @@ not-found
 </ol>
 <pre><code class="language-bash">systemctl stop cron
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl stop</code> - зупиняє службу зараз. Назва: stop - «зупинити».</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Справжній вивід з тестової системи:</p>
@@ -146,6 +160,12 @@ See system logs and 'systemctl status cron.service' for details.
 </ol>
 <pre><code class="language-bash">systemctl status ufw
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl status</code> - показує стан служби і останні рядки її журналу. Назва: status - «стан».</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Справжній вивід (час і PID у тебе інші):</p>
@@ -189,6 +209,14 @@ See system logs and 'systemctl status cron.service' for details.
 systemctl is-system-running
 systemctl list-units --type=service
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl</code> - керує службами systemd: стан, запуск, зупинка, автозапуск. Назва: system control - «керування системою» (systemd). <code>--failed</code> - лише юніти, що впали з помилкою.</li>
+<li><code>systemctl is-system-running</code> - одним словом: чи все гаразд з системою. Назва: is system running? - «чи система працює нормально?».</li>
+<li><code>systemctl list-units</code> - показує завантажені служби і чи вони працюють. Назва: list units - «список юнітів» (одиниць systemd). <code>--type</code> - лише такого типу: --type=service - служби, --type=timer - таймери.</li>
+</ul>
+</blockquote>
 <p>На здоровому ноутбуці <code>systemctl --failed</code> пише <code>0 loaded units listed.</code>, а <code>is-system-running</code> - <code>running</code>.
 Якщо <code>degraded</code> - щось упало, дивись <code>--failed</code> і журнал тієї служби (крок 4). У тестовій віртуальній системі
 справжній вивід - <code>degraded</code> і кілька впалих юнітів, серед них <code>tpm-udev</code> (там нема чіпа TPM, це нормально для
@@ -196,6 +224,12 @@ systemctl list-units --type=service
 <p><strong>Крок 3. Таймери - що Mint робить за розкладом.</strong></p>
 <pre><code class="language-bash">systemctl list-timers
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl list-timers</code> - показує таймери і коли вони спрацюють. Назва: list timers - «список таймерів».</li>
+</ul>
+</blockquote>
 <p>Справжній вивід з тестової системи (дати у тебе інші):</p>
 <pre><code class="language-text">NEXT                            LEFT LAST                        PASSED UNIT                         ACTIVATES
 Wed 2026-11-18 09:58:43 UTC 3min 10s -                                - systemd-tmpfiles-clean.timer systemd-tmpfiles-clean.service
@@ -223,6 +257,14 @@ sudo journalctl -u cron -b
 sudo journalctl --since &quot;1 hour ago&quot;
 sudo journalctl -f
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>journalctl</code> - показує журнал системи і служб. Назва: journal control - «керування журналом» systemd. <code>-p</code> - лише ця важливість і гірше: -p err - помилки, -p warning - ще й попередження; <code>-b</code> - лише поточне завантаження (b - boot); -b -1 - попереднє; <code>err</code> - після -p: рівень «помилка» і все гірше; <code>-u</code> - лише одна служба (u - unit, «одиниця»), напр. -u cron; <code>--since</code> - з якого часу, напр. --since "1 hour ago" - за останню годину; <code>-f</code> - показувати нові рядки наживо; не закінчується сам, вийти Ctrl+C.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+</blockquote>
 <p>Останню зупини Ctrl+C. Кожен рядок журналу: дата і час, ім'я комп'ютера, хто пише (служба[PID]), повідомлення.
 На ноутбуці корисні: <code>-u NetworkManager</code> (Wi-Fi), <code>-u bluetooth</code>, <code>-u lightdm</code> (екран входу).</p>
 <p><strong>Крок 5. Коли система впала або перезавантажилась сама.</strong></p>
@@ -230,6 +272,12 @@ sudo journalctl -f
 sudo journalctl -b -1 -p err
 sudo journalctl -b -1 -e
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>journalctl</code>: <code>--list-boots</code> - список завантажень: 0 - поточне, -1 - попереднє; <code>-1</code> - після -b: попереднє завантаження (-2 - ще раніше); <code>-e</code> - одразу в кінець журналу - найсвіжіші рядки.</li>
+</ul>
+</blockquote>
 <p><code>--list-boots</code> - номери завантажень: <code>0</code> - поточне, <code>-1</code> - попереднє. <code>-e</code> - одразу в кінець: останні рядки перед
 падінням. Щоб попередні завантаження зберігались, журнал має бути на диску (<code>/var/log/journal</code>) - у Mint так і є
 (у тестовій системі <code>--list-boots</code> показує кілька завантажень).</p>
@@ -241,6 +289,19 @@ systemd-analyze blame | head
 uptime -s
 last reboot | head -3
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>dmesg</code> - показує повідомлення ядра: пристрої, драйвери, помилки. Назва: display message - «показати повідомлення» (ядра); офіційної розшифровки нема.</li>
+<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу.</li>
+<li><code>journalctl</code>: <code>-k</code> - лише повідомлення ядра (k - kernel): диски, USB, драйвери.</li>
+<li><code>systemd-analyze</code> - показує, скільки тривав запуск системи. Назва: systemd analyze - «аналіз systemd»: розбір запуску системи. <code>blame</code> - «звинуватити»: служби за часом запуску, найдовші вгорі (дивись з | head).</li>
+<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
+<li><code>uptime</code> - показує, скільки працює система, і навантаження. Назва: up time - «час роботи» з увімкнення. <code>-s</code> - лише дата і час увімкнення: 2026-11-18 09:38:55.</li>
+<li><code>last</code> - показує останні входи і перезавантаження. Назва: last - «останні»: останні входи в систему і перезавантаження. <code>reboot</code> - лише перезавантаження (увімкнення) компʼютера.</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <ul>
 <li><code>dmesg</code> - флешку встромив, а вона не з'явилась? <code>sudo dmesg | tail -20</code> одразу після цього покаже, що побачило ядро.</li>
 <li><code>systemd-analyze</code> - скільки тривав старт; <code>blame</code> - хто з служб довше за всіх стартував. Справжній вивід з тестової
@@ -254,6 +315,16 @@ last reboot | head -3
 <pre><code class="language-bash">mkdir -p ~/proba/timer ~/.config/systemd/user
 printf 'import datetime\nfrom pathlib import Path\n\nfail = Path.home() / &quot;proba&quot; / &quot;timer&quot; / &quot;chas.txt&quot;\nwith open(fail, &quot;a&quot;) as f:\n    print(datetime.datetime.now().isoformat(timespec=&quot;seconds&quot;), file=f)\n' &gt; ~/proba/timer/zapys.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+</ul>
+</blockquote>
 <p>Тепер служба і таймер. <code>cat &gt; файл &lt;&lt;'EOF'</code> записує в файл усе до рядка <code>EOF</code> (можна і через <code>nano</code>). <code>%h</code> -
 systemd сам підставить домашню теку:</p>
 <pre><code class="language-bash">cat &gt; ~/.config/systemd/user/zapys.service &lt;&lt;'EOF'
@@ -275,6 +346,12 @@ OnCalendar=*:*:00
 WantedBy=timers.target
 EOF
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
+</ul>
+</blockquote>
 <p><code>Type=oneshot</code> - програма відпрацювала і завершилась (не висить постійно). <code>OnCalendar=*:*:00</code> - кожну хвилину на
 нульовій секунді. <code>WantedBy=timers.target</code> - куди «вчепити» таймер при <code>enable</code>. Запускаємо:</p>
 <pre><code class="language-bash">systemctl --user daemon-reload
@@ -283,6 +360,15 @@ cat ~/proba/timer/chas.txt
 systemctl --user enable --now zapys.timer
 systemctl --user list-timers
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl daemon-reload</code> - systemd перечитує файли служб після правки. Назва: daemon reload - «перечитати демона»: systemd заново читає файли юнітів. <code>--user</code> - перечитати твої власні юніти з ~/.config/systemd/user (без sudo).</li>
+<li><code>systemctl start</code> - запускає службу зараз. Назва: start - «запустити». <code>--user</code> - твій власний юніт (zapys.service з уроку 20), без sudo.</li>
+<li><code>systemctl enable</code> - вмикає автозапуск служби чи таймера. Назва: enable - «увімкнути» автозапуск. <code>--user</code> - твій власний юніт (з ~/.config/systemd/user), без sudo; <code>--now</code> - ще й запустити зараз, а не лише при наступному старті.</li>
+<li><code>systemctl list-timers</code>: <code>--user</code> - твої власні таймери (як zapys.timer з уроку 20).</li>
+</ul>
+</blockquote>
 <p><code>daemon-reload</code> - systemd перечитує файли юнітів (після кожної правки). <code>start</code> один раз запускає службу - у файлі
 з'явиться час, наприклад <code>2026-11-18T10:26:55</code>. <code>enable --now</code> - справжній вивід:</p>
 <pre><code class="language-text">Created symlink /home/evgen/.config/systemd/user/timers.target.wants/zapys.timer → /home/evgen/.config/systemd/user/zapys.timer.
@@ -294,6 +380,12 @@ systemctl --user list-timers
 <pre><code class="language-text">Nov 18 10:26:55 systemd[204]: Starting zapys.service - Запис часу у файл (проба)...
 Nov 18 10:26:55 systemd[204]: Finished zapys.service - Запис часу у файл (проба).
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>journalctl</code>: <code>--user</code> - журнал твоїх власних служб (systemctl --user), sudo не треба; <code>--no-hostname</code> - не друкувати імʼя компʼютера в кожному рядку; <code>-n</code> - лише останні N рядків, напр. -n 5.</li>
+</ul>
+</blockquote>
 <p>Користувацькі таймери працюють, поки ти увійшов у систему (без входу - лише після <code>loginctl enable-linger</code>).
 Прибери за собою:</p>
 <pre><code class="language-bash">systemctl --user disable --now zapys.timer
@@ -301,6 +393,13 @@ rm ~/.config/systemd/user/zapys.service ~/.config/systemd/user/zapys.timer
 systemctl --user daemon-reload
 rm -r ~/proba
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl disable</code> - прибирає службу чи таймер з автозапуску. Назва: disable - «вимкнути» автозапуск. <code>--user</code> - твій власний юніт (з ~/.config/systemd/user), без sudo; <code>--now</code> - ще й зупинити зараз, а не лише після перезавантаження.</li>
+<li><code>rm</code> - видаляє файли назавжди, без кошика. Назва: remove - «прибрати, видалити». <code>-r</code> - видаляти теки разом з усім, що всередині (recursive).</li>
+</ul>
+</blockquote>
 <h2 id="типові-помилки">Типові помилки</h2>
 <ul>
 <li><strong>Забув <code>daemon-reload</code> після правки юніта</strong> - systemd працює зі старою версією, а <code>status</code> пише попередження

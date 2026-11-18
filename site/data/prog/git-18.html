@@ -27,8 +27,17 @@
 <pre><code class="language-bash">cd ~/univer/labs
 git status
 </code></pre>
-<p>Якщо бачиш <code>fatal: not a git repository (or any of the parent directories): .git</code> - git нема, йди у <strong>варіант А</strong>.
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан».</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
+Якщо бачиш <code>fatal: not a git repository (or any of the parent directories): .git</code> - git нема, йди у <strong>варіант А</strong>.
 Якщо бачиш <code>On branch ...</code> - git є, йди у <strong>варіант Б</strong>.</p>
+</blockquote>
 <p><strong>Крок 2. Порожній приватний репо на GitHub.</strong> Два способи, обери один:
 - <strong>на сайті</strong> (зроби зараз): справа вгорі <strong>+</strong> → <strong>New repository</strong> → Repository name: <code>univer-labs</code> → <strong>Private</strong> →
   README, .gitignore, license <strong>не додавай</strong> (репо має бути порожнім, інакше перший push відхилять - див. «Що як» 5) →
@@ -50,29 +59,69 @@ git push -u origin main
  * [new branch]      main -&gt; main
 branch 'main' set up to track 'origin/main'.
 </code></pre>
-<p><code>.gitignore</code> (Урок 06): <code>.venv/</code> - віртуальне середовище, <code>__pycache__/</code> і <code>*.pyc</code> - скомпільований Python,
-<code>.pytest_cache/</code>, <code>.mypy_cache/</code>, <code>.ruff_cache/</code> - сміття від pytest, mypy і ruff.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>git remote</code> - показує і задає адресу репо на GitHub (origin). Назва: remote - «віддалений»: репо на іншому компʼютері (GitHub). <code>origin</code> - звичайна назва головного віддаленого репо; git clone ставить її сам.</li>
+<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub. <code>-u</code> - запамʼятати звʼязок гілки з GitHub; далі просто git push і git pull.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».
+<code>.gitignore</code> (Урок 06): <code>.venv/</code> - віртуальне середовище, <code>__pycache__/</code> і <code>*.pyc</code> - скомпільований Python,
+<code>.pytest_cache/</code>, <code>.mypy_cache/</code>, <code>.ruff_cache/</code> - сміття від pytest, mypy і ruff.</li>
+</ul>
+</blockquote>
 <p><strong>Якщо в Кроці 2 обрав gh</strong> (репо на сайті ще нема): замість двох останніх рядків (<code>git remote add ...</code> і
 <code>git push -u ...</code>) набери один - gh (Урок 16) створить приватний репо, додасть <code>origin</code> і запушить. Так само і в
 кінці варіанта Б. Якщо репо <code>univer-labs</code> на сайті вже створив, gh другого з тією самою назвою не створить - тоді
 просто <code>git remote add</code> і <code>git push -u</code>, як вище.</p>
 <pre><code class="language-bash">gh repo create univer-labs --private --source=. --remote=origin --push
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh repo create</code> - створює репозиторій на GitHub з терміналу. Назва: repository create - «створити репозиторій» на GitHub. <code>--private</code> - приватний репо: бачиш лише ти (і кого запросиш); для лаб - саме так; <code>--source</code> - взяти теку, що вже є на ноутбуці, напр. --source=. - поточну; <code>--remote</code> - як назвати віддалений репо в git, напр. --remote=origin; <code>--push</code> - одразу запушити коміти з --source на GitHub.</li>
+</ul>
+</blockquote>
 <p><strong>Варіант Б - git уже є (з курсу Linux Mint).</strong> Подивись, що там:</p>
 <pre><code class="language-bash">git log --oneline
 git branch --show-current
 </code></pre>
-<p>Якщо гілка називається <code>master</code> (git до налаштування з Уроку 02 так називав першу гілку) - перейменуй:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
+<li><code>git branch</code> - показує, створює і видаляє гілки. Назва: branch - «гілка». <code>--show-current</code> - надрукувати лише назву гілки, на якій ти зараз.
+Якщо гілка називається <code>master</code> (git до налаштування з Уроку 02 так називав першу гілку) - перейменуй:</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">git branch -m master main
 </code></pre>
-<p>У <code>.gitignore</code> з курсу Linux Mint нема <code>.venv/</code> і <code>*.pyc</code> - допиши (<code>&gt;&gt;</code> дописує в кінець, <code>&gt;</code> перезаписав би):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git branch</code>: <code>-m</code> - перейменувати гілку: git branch -m master main.
+У <code>.gitignore</code> з курсу Linux Mint нема <code>.venv/</code> і <code>*.pyc</code> - допиши (<code>&gt;&gt;</code> дописує в кінець, <code>&gt;</code> перезаписав би):</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">printf '.venv/\n*.pyc\n' &gt;&gt; .gitignore
 git add .gitignore
 git commit -m &quot;gitignore: .venv і *.pyc&quot;
 git remote add origin git@github.com:Evge14n/univer-labs.git
 git push -u origin main
 </code></pre>
-<p>Старі коміти ЛР1 так і лишаться на <code>main</code> - це нормально, гілки починай з наступної лаби.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.
+Старі коміти ЛР1 так і лишаться на <code>main</code> - це нормально, гілки починай з наступної лаби.</li>
+</ul>
+</blockquote>
 <h3 id="на-кожну-лабу-рецепт">На кожну лабу - рецепт</h3>
 <pre><code class="language-text">git switch main &amp;&amp; git pull                     # свіжий main
 git switch -c lrN                               # гілка лаби
@@ -94,15 +143,32 @@ git switch -c lr1
 git add lr1
 git commit -m &quot;ЛР1: заготовки викладача&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути». <code>-c</code> - створити нову гілку від поточного місця і перейти на неї.</li>
+<li><code>git pull</code> - забирає нові коміти з GitHub і зливає у твою гілку. Назва: pull - «потягнути»: забрати нові коміти з GitHub до себе.</li>
+</ul>
+</blockquote>
 <p><strong>Завдання 1.</strong> Пишеш код, перевіряєш doctest, комітиш.</p>
 <pre><code class="language-bash">nano lr1/lr1_1.py
 python3 -m doctest lr1/lr1_1.py
 git status --short
 git commit -am &quot;ЛР1: завдання 1&quot;
 </code></pre>
-<p><code>python3 -m doctest</code> нічого не друкує - отже всі тести пройшли (для лаб з <code>input()</code> бери команду з розділу
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції.</li>
+<li><code>git status</code>: <code>--short</code> - коротко: по рядку на файл з двома буквами стану (M, A, ??).</li>
+<li><code>git commit</code>: <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.
+<code>python3 -m doctest</code> нічого не друкує - отже всі тести пройшли (для лаб з <code>input()</code> бери команду з розділу
 «Перевір перед здачею» курсу Linux Mint). <code>git status --short</code> має показати лише <code>M lr1/lr1_1.py</code>: тека
-<code>lr1/__pycache__</code>, яку створив Python, не видна - її ховає <code>.gitignore</code>.</p>
+<code>lr1/__pycache__</code>, яку створив Python, не видна - її ховає <code>.gitignore</code>.</li>
+</ul>
+</blockquote>
 <p><strong>Завдання 2</strong> - так само:</p>
 <pre><code class="language-bash">nano lr1/lr1_2.py
 python3 -m doctest lr1/lr1_2.py
@@ -114,16 +180,29 @@ git log --oneline main..lr1
 ac98c9d ЛР1: завдання 1
 09e5e28 ЛР1: заготовки викладача
 </code></pre>
-<p><code>main..lr1</code> - коміти, які є в <code>lr1</code>, але ще нема в <code>main</code>. <code>git push -u origin lr1</code> - копія гілки на GitHub:
-ноутбук зламався - лаба ціла. Ярлик <code>origin/lr1</code> на верхньому коміті це й показує: на GitHub гілка <code>lr1</code> там само.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code>: <code>main..lr1</code> - коміти, що є в гілці lr1, але ще нема в main.
+<code>main..lr1</code> - коміти, які є в <code>lr1</code>, але ще нема в <code>main</code>. <code>git push -u origin lr1</code> - копія гілки на GitHub:
+ноутбук зламався - лаба ціла. Ярлик <code>origin/lr1</code> на верхньому коміті це й показує: на GitHub гілка <code>lr1</code> там само.</li>
+</ul>
+</blockquote>
 <p><strong>Лабу закінчено - у <code>main</code>.</strong> Найпростіше - злиття в себе (Урок 07):</p>
 <pre><code class="language-bash">git switch main
 git merge lr1
 git push
 git branch -d lr1
 </code></pre>
-<p><code>git merge</code> скаже <code>Fast-forward</code>: <code>main</code> просто наздогнав <code>lr1</code>. Гілку <code>lr1</code> можна видалити - її коміти тепер у <code>main</code>
-(на GitHub вона ще є, її видалиш кнопкою на сторінці гілок або <code>git push origin --delete lr1</code>).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git merge</code> - зливає іншу гілку в поточну. Назва: merge - «злити, обʼєднати».</li>
+<li><code>git branch</code>: <code>-d</code> - видалити гілку, якщо її коміти вже злито; інакше відмовить.
+<code>git merge</code> скаже <code>Fast-forward</code>: <code>main</code> просто наздогнав <code>lr1</code>. Гілку <code>lr1</code> можна видалити - її коміти тепер у <code>main</code>
+(на GitHub вона ще є, її видалиш кнопкою на сторінці гілок або <code>git push origin --delete lr1</code>).</li>
+</ul>
+</blockquote>
 <p><strong>Здав - тег</strong> (Урок 14):</p>
 <pre><code class="language-bash">git tag -a lr1-zdano -m &quot;ЛР1 здано&quot;
 git push origin lr1-zdano
@@ -131,6 +210,12 @@ git push origin lr1-zdano
 <pre><code class="language-text">To github.com:Evge14n/univer-labs.git
  * [new tag]         lr1-zdano -&gt; lr1-zdano
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git tag</code> - ставить на коміт мітку з назвою (напр. lr1-zdano). Назва: tag - «мітка, ярлик». <code>-a</code> - анотований тег: з автором, датою і описом (для здачі - саме такий); <code>-m</code> - опис анотованого тегу; без -m git відкриє nano.</li>
+</ul>
+</blockquote>
 <h3 id="лр2-через-pull-request">ЛР2 через Pull Request</h3>
 <p>Те саме, але злиття - через PR (Урок 11): видно всі зміни лаби на одній сторінці, можна попросити одногрупника глянути.</p>
 <pre><code class="language-bash">git switch main
@@ -144,10 +229,16 @@ git commit -m &quot;ЛР2: завдання 1&quot;
 git push -u origin lr2
 gh pr create --fill --base main
 </code></pre>
-<p>У <code>nano</code> - код завдання з doctest (тут для короткості одне завдання; у справжній ЛР2 спершу поклади заготовки
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh pr create</code> - створює Pull Request з поточної гілки. Назва: pr - pull request, «запит на злиття» гілки в main; create - «створити». <code>--fill</code> - назву й опис узяти з комітів гілки; <code>--base</code> - куди зливати: --base main.
+У <code>nano</code> - код завдання з doctest (тут для короткості одне завдання; у справжній ЛР2 спершу поклади заготовки
 викладача і закоміть їх, як у ЛР1). <code>gh pr create</code> працює лише після входу в gh (Урок 03, крок 6), інакше
 скаже <code>To get started with GitHub CLI, please run:  gh auth login</code>. Без gh: на сторінці репо зʼявиться жовта смуга
-з кнопкою <strong>Compare &amp; pull request</strong> (Урок 11). На сторінці PR → <strong>Merge pull request</strong> → <strong>Confirm merge</strong>. Потім у себе:</p>
+з кнопкою <strong>Compare &amp; pull request</strong> (Урок 11). На сторінці PR → <strong>Merge pull request</strong> → <strong>Confirm merge</strong>. Потім у себе:</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">git switch main
 git pull
 git log --oneline --graph -n 3
@@ -160,14 +251,26 @@ git push origin lr2-zdano
 |/
 * 676c781 (tag: lr1-zdano, origin/lr1) ЛР1: завдання 2
 </code></pre>
-<p>Після злиття PR сайт пропонує кнопку <strong>Delete branch</strong>. Навіть якщо натиснув її, <code>origin/lr2</code> у тебе ще видно:
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code>: <code>--graph</code> - малює гілки зліва зірочками і лініями; <code>-n</code> - лише N останніх комітів: -n 3 (або коротко -3).
+Після злиття PR сайт пропонує кнопку <strong>Delete branch</strong>. Навіть якщо натиснув її, <code>origin/lr2</code> у тебе ще видно:
 <code>git pull</code> не прибирає гілки, яких на GitHub уже нема (прибере <code>git fetch --prune</code>). <code>tag: lr1-zdano</code> - здача ЛР1. <code>main</code> у кінці рядка з тегом - тег саме на <code>main</code>,
-навіть якщо ти вже на іншій гілці. Список здач:</p>
+навіть якщо ти вже на іншій гілці. Список здач:</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">git tag -n
 </code></pre>
 <pre><code class="language-text">lr1-zdano       ЛР1 здано
 lr2-zdano       ЛР2 здано
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git tag</code>: <code>-n</code> - у списку тегів показати й перший рядок опису.</li>
+</ul>
+</blockquote>
 <h3 id="як-показати-викладачу">Як показати викладачу</h3>
 <p><strong>Спосіб 1. Посилання на репо.</strong> Приватний репо бачать лише запрошені. Запросити: у репо <strong>Settings</strong> → розділ
 «Access» → <strong>Collaborators</strong> → <strong>Add people</strong> → логін викладача → <strong>Add ... to univer-labs</strong>. Йому прийде лист,
@@ -190,11 +293,18 @@ python3 -m zipfile -l ~/univer/zdacha/lr1.zip
 Прізвище_Імʼя_Група_2026/lr1/lr1_1.py        2026-11-18 10:35:20          114
 Прізвище_Імʼя_Група_2026/lr1/lr1_2.py        2026-11-18 10:35:20          105
 </code></pre>
-<p>Що тут що: <code>--format=zip</code> - zip, а не tar; <code>--prefix=.../</code> - тека, в яку все покладуть усередині архіву (скісна
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git archive</code> - пакує файли з коміту чи тегу в zip або tar. Назва: archive - «архів». <code>--format</code> - zip або tar; без нього - за розширенням файлу після -o, інакше tar; <code>--prefix</code> - покласти все в архіві в цю теку: --prefix=Prizvyshche_Imia/ (з / в кінці); <code>-o</code> - куди записати архів; тека має вже існувати.</li>
+<li><code>python3 -m zipfile</code> - робить і розпаковує .zip засобами Python. Назва: zipfile - модуль стандартної бібліотеки Python, запущений як програма (-m). <code>-l</code> - показати вміст: назви, дати, розміри.
+Що тут що: <code>--format=zip</code> - zip, а не tar; <code>--prefix=.../</code> - тека, в яку все покладуть усередині архіву (скісна
 риска в кінці обовʼязкова); <code>-o</code> - куди писати архів; <code>lr1-zdano</code> - з якого тегу брати; <code>lr1</code> - лише ця тека, а не
 весь репо. Перевірено: у тій самій теці на диску лежали <code>.venv/</code>, <code>lr1/__pycache__/</code>, <code>lr1/.pytest_cache/</code> - в архів
 не потрапило нічого з цього, і <code>.gitignore</code> теж. Кирилиця в назвах збережена з UTF-8-позначкою zip.
-<code>python3 -m zipfile -l</code> показує вміст архіву (окремої програми <code>unzip</code> не треба). Для ЛР2:</p>
+<code>python3 -m zipfile -l</code> показує вміст архіву (окремої програми <code>unzip</code> не треба). Для ЛР2:</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">git archive --format=zip --prefix=Прізвище_Імʼя_Група_2026/ -o ~/univer/zdacha/lr2.zip lr2-zdano lr2
 </code></pre>
 <p><strong>Спосіб 3. «Download ZIP» на сайті.</strong> У репо → <strong>Releases</strong> → вгорі <strong>Tags</strong> → біля <code>lr1-zdano</code> посилання <strong>zip</strong>
@@ -211,11 +321,17 @@ git log --oneline main..lr3
 10107b7 (HEAD -&gt; lr3) ЛР3: завдання 2
 549cce4 ЛР3: завдання 1
 </code></pre>
-<p><code>git switch -c lr3</code> - нова гілка там, де ти стоїш, з усіма комітами. <code>git branch -f main origin/main</code> - «постав <code>main</code>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git branch</code>: <code>-f</code> - переставити гілку на інший коміт: git branch -f main origin/main.
+<code>git switch -c lr3</code> - нова гілка там, де ти стоїш, з усіма комітами. <code>git branch -f main origin/main</code> - «постав <code>main</code>
 туди, де він на GitHub»; файли не чіпає, бо ти вже на <code>lr3</code>. Перший рядок виводу - не помилка: git заодно нагадує,
 що <code>main</code> стежить за <code>origin/main</code>. Якщо ж забудеш перейти на <code>lr3</code>, git не дасть пересунути поточну гілку:
 <code>fatal: cannot force update the branch 'main' used by worktree at '...'</code> (далі - шлях до твоєї теки).
-Якщо коміти на <code>main</code> уже <strong>запушив</strong> - не виправляй історію силою; просто продовжуй, наступну лабу почни з гілки.</p>
+Якщо коміти на <code>main</code> уже <strong>запушив</strong> - не виправляй історію силою; просто продовжуй, наступну лабу почни з гілки.</li>
+</ul>
+</blockquote>
 <p><strong>2. Забув поставити тег</strong>, а вже робиш наступну лабу. Тег можна поставити заднім числом на будь-який коміт:</p>
 <pre><code class="language-bash">git tag -a lr2-zdano -m &quot;ЛР2 здано&quot; main
 git push origin lr2-zdano
@@ -231,12 +347,20 @@ git check-ignore -v .venv
 </code></pre>
 <pre><code class="language-text">.gitignore:1:.venv/ .venv
 </code></pre>
-<p><code>--cached</code> - лише з git, файли на диску лишаються. <code>-q</code> (тихо) - без нього git друкує рядок <code>rm '.venv/...'</code> на
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git rm</code> - прибирає файл з git (з --cached - файл лишається на диску). Назва: rm - від remove, «прибрати». <code>-r</code> - рекурсивно: щоб прибрати цілу теку з усім вмістом; <code>-q</code> - не друкувати рядок rm '...' на кожен файл; <code>--cached</code> - прибрати лише з git (з індексу), файл на диску лишається.</li>
+<li><code>git ls-files</code> - перелічує файли, які відстежує git. Назва: ls files - «перелічити файли» (ls - від list, «список»). <code>.venv</code> - лише файли в цій теці: порожньо - тека в git не потрапила (так і треба).</li>
+<li><code>git check-ignore</code> - перевіряє, чи файл ігнорується і яким правилом .gitignore. Назва: check ignore - «перевірити, чи ігнорується». <code>-v</code> - показати правило: файл .gitignore, номер рядка, шаблон і шлях.
+<code>--cached</code> - лише з git, файли на диску лишаються. <code>-q</code> (тихо) - без нього git друкує рядок <code>rm '.venv/...'</code> на
 кожен файл, а в справжньому <code>.venv</code> їх тисячі. <code>git ls-files .venv</code> після цього нічого не друкує.
 <code>git check-ignore -v</code> показує, яке правило <code>.gitignore</code> тепер ховає <code>.venv</code>: файл, номер рядка, правило. У варіанті А
 правило в рядку 1; у варіанті Б ти дописав його в кінець, тож номер буде інший (у перевірці - <code>.gitignore:5:</code>).
 Якщо в <code>.gitignore</code> правила нема - спершу допиши його (<code>printf '.venv/\n*.pyc\n' &gt;&gt; .gitignore</code>, варіант Б). Старі коміти з <code>.venv</code> в історії лишаться -
-для лаб це лише зайвий розмір, не біда.</p>
+для лаб це лише зайвий розмір, не біда.</li>
+</ul>
+</blockquote>
 <p><strong>4. Не знаєш, що ти змінив після здачі:</strong> <code>git diff lr1-zdano main -- lr1</code> (Уроки 05, 14).</p>
 <p><strong>5. Створив репо на сайті З README - перший push відхилено.</strong> Варіант А, але в Кроці 2 увімкнув «Add README».
 Тоді <code>git push -u origin main</code> каже:</p>
@@ -273,8 +397,14 @@ Auto-merging README.md
 CONFLICT (add/add): Merge conflict in README.md
 Automatic merge failed; fix conflicts and then commit the result.
 </code></pre>
-<p><code>add/add</code> - файл <code>README.md</code> додали з двох боків (ти у своєму коміті і сайт у своєму), і текст різний. Розвʼязуєш
-як в Уроці 08: відкрий файл, лиши потрібний текст і прибери три рядки-маркери:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git pull</code>: <code>--allow-unrelated-histories</code> - дозволити злити дві історії без спільного початку (репо на сайті створили з README).
+<code>add/add</code> - файл <code>README.md</code> додали з двох боків (ти у своєму коміті і сайт у своєму), і текст різний. Розвʼязуєш
+як в Уроці 08: відкрий файл, лиши потрібний текст і прибери три рядки-маркери:</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">nano README.md
 </code></pre>
 <pre><code class="language-text">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD

@@ -103,6 +103,15 @@ mintdrivers 1.8.8). Назви в програмі (з українського 
 </ol>
 <pre><code class="language-bash">lspci -k | grep -A3 -i vga
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>lspci</code> - перелічує внутрішні пристрої і, з -k, їхні драйвери. Назва: list PCI - «перелічити пристрої PCI» (внутрішня шина компʼютера). <code>-k</code> - для кожного пристрою - драйвер ядра (Kernel driver in use) і модулі.</li>
+<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-A</code> - показати ще стільки рядків ПІСЛЯ збігу: -A 3 (after); <code>-i</code> - без різниці між великими й малими літерами (ignore case).</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Що буде, якщо карта записана як «3D controller»?</p>
 <details>
 <summary>Відповідь</summary>
@@ -111,6 +120,13 @@ mintdrivers 1.8.8). Назви в програмі (з українського 
 після збігу):</p>
 <pre><code class="language-bash">lspci -k | grep -A3 -iE &quot;vga|3d&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>grep</code>: <code>-E</code> - розширені регулярні вирази: |, +, {79,} без зворотних рисок.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+</blockquote>
 <p>Приклад для ноутбука з Intel і NVIDIA (<strong>у тебе буде інше</strong>: адреси, моделі, драйвери):</p>
 <pre><code class="language-text">00:02.0 VGA compatible controller: Intel Corporation ...
     Subsystem: ...
@@ -130,6 +146,12 @@ mintdrivers 1.8.8). Назви в програмі (з українського 
 </ol>
 <pre><code class="language-bash">inxi -c0 -Fxz
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>inxi</code> - показує, що за залізо і які драйвери. Назва: назва не розшифровується (так назвав автор програми). <code>-c</code> - кольори; -c0 - без кольорів (для файлу чи форуму); <code>-F</code> - повний звіт: усі основні розділи (System, CPU, Graphics, Network...); <code>-x</code> - більше подробиць; -xx і -xxx - ще більше; <code>-z</code> - ховає MAC-адреси, серійні номери, IP - для форуму.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Слово <code>&lt;filter&gt;</code>. Справжній рядок з розділу Network (<code>-c0</code> - без кольорів):</p>
@@ -155,6 +177,12 @@ mintdrivers 1.8.8). Назви в програмі (з українського 
 lspci -k | grep -A3 -iE &quot;vga|3d&quot;
 inxi -Fxz
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>inxi</code>: <code>-G</code> - лише відеокарта, дисплей і драйвер.</li>
+</ul>
+</blockquote>
 <p>У тестовій системі курсу справжньої відеокарти нема, тому тут - <strong>приклад для ноутбука</strong> (у тебе будуть свої
 моделі, версії й числа):</p>
 <pre><code class="language-text">Graphics:
@@ -175,6 +203,14 @@ Mint одразу (є на ISO).</p>
 <pre><code class="language-bash">sudo timeshift --create --comments &quot;перед драйвером&quot;
 driver-manager
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>timeshift</code> - робить і відновлює знімки системи. Назва: time shift - «зсув у часі»: повернути систему в минуле. <code>--create</code> - зробити знімок зараз; <code>--comments</code> - підпис до знімка, напр. --comments "перед драйвером" (видно в стовпці Description).</li>
+<li><code>driver-manager</code> - відкриває «Керування драйверами» (напр. драйвер NVIDIA). Назва: driver manager - «керування драйверами».</li>
+</ul>
+</blockquote>
 <p>Далі мишкою: вибери драйвер з позначкою «рекомендовані» → «Застосувати зміни» → дочекайся кінця →
 «Перезавантажити...». Якщо Secure Boot увімкнено і з'явилось питання про пароль MOK - придумай пароль (8-16 символів,
 латиницею) і <strong>запиши на папірці</strong>: через хвилину його треба ввести на синьому екрані.</p>
@@ -184,6 +220,14 @@ inxi -G
 dkms status
 mokutil --sb-state
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nvidia-smi</code> - показує стан карти NVIDIA і версію драйвера. Назва: NVIDIA System Management Interface - «інтерфейс керування системою NVIDIA».</li>
+<li><code>dkms</code> - перезбирає драйвери під кожне ядро; status - що зібрано. Назва: Dynamic Kernel Module Support - «підтримка динамічних модулів ядра». <code>status</code> - «стан»: по рядку на кожен модуль і ядро, наприкінці installed - зібрано і встановлено.</li>
+<li><code>mokutil</code> - каже, чи увімкнено Secure Boot. Назва: MOK utility - «інструмент для MOK» (Machine Owner Key, «ключ власника»). <code>--sb-state</code> - стан Secure Boot: enabled - увімкнено, disabled - вимкнено.</li>
+</ul>
+</blockquote>
 <ul>
 <li><code>nvidia-smi</code> малює табличку. Дивись верхній рядок <code>Driver Version: 580...</code> і назву карти в середині. Таблиця
   є - драйвер працює.</li>
@@ -198,6 +242,13 @@ mokutil --sb-state
 lspci -k | grep -A3 -i net
 lsusb
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>rfkill list</code> - показує, чи не заблоковано Wi-Fi і Bluetooth. Назва: list - «список»: блокування кожного радіопристрою.</li>
+<li><code>lsusb</code> - перелічує USB-пристрої. Назва: list USB - «перелічити USB-пристрої».</li>
+</ul>
+</blockquote>
 <p><code>rfkill list</code> пише по блоку на кожен радіопристрій з рядками <code>Soft blocked</code> і <code>Hard blocked</code>:
 - <code>Soft blocked: yes</code> - вимкнено програмно (режим «у літаку» або аплет). Увімкнути: <code>rfkill unblock wifi</code>
   (або <code>rfkill unblock bluetooth</code>).
@@ -212,6 +263,12 @@ lsusb
 стартовий образ, з якого ядро бере драйвери і прошивки ще до того, як змонтує диск:</p>
 <pre><code class="language-bash">sudo update-initramfs -u -k all
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>update-initramfs</code> - перезбирає стартовий образ ядра (initramfs) у /boot. Назва: update initial RAM filesystem - «оновити початкову файлову систему в памʼяті». <code>-u</code> - оновити наявний образ (update); <code>-k</code> - для якого ядра: версія з uname -r або all - для всіх встановлених.</li>
+</ul>
+</blockquote>
 <p><code>-u</code> - оновити наявний образ, <code>-k all</code> - для всіх встановлених ядер (з довідки <code>update-initramfs</code>). Потім
 <code>sudo reboot</code>.</p>
 <p><strong>Крок 6. Чорний екран після драйвера</strong> - не панікуй, система ціла:

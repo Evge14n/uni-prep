@@ -328,9 +328,18 @@ Q = [
 ]
 
 
+NAMES_FILE = Path(r"D:\Універ\00_Загальне\_імена-не-на-сайт.txt")
+
+
 def clean(s: str) -> str:
     for a, b in SANITIZE:
         s = re.sub(a, b, s)
+    # UCMD1: імена з прикладів (printf "Імʼя\n" | python3 hi.py) - сайт публічний, як у gen_mint/gen_komandy
+    if NAMES_FILE.exists():
+        for w in re.split(r"[,\n]", NAMES_FILE.read_text(encoding="utf-8")):
+            w = w.strip()
+            if len(w) >= 4 and not w.startswith("#"):
+                s = re.sub(r"\b" + re.escape(w) + r"[а-яіїєґʼ']*", "Студент", s)
     s = s.replace("<details><summary>", '<details markdown="1"><summary>')
     return s
 

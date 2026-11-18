@@ -131,6 +131,24 @@ git push -u origin lr3
  * [new branch]      lr3 -&gt; lr3
 branch 'lr3' set up to track 'origin/lr3'.
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути». <code>-c</code> - створити нову гілку від поточного місця і перейти на неї.</li>
+<li><code>git pull</code> - забирає нові коміти з GitHub і зливає у твою гілку. Назва: pull - «потягнути»: забрати нові коміти з GitHub до себе.</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano; <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.</li>
+<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub. <code>-u</code> - запамʼятати звʼязок гілки з GitHub; далі просто git push і git pull.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Крок 2. Відкрити PR на сайті.</strong></p>
 <pre><code class="language-text">github.com/Evge14n/pisochnytsia → жовта плашка над списком файлів → Compare &amp; pull request
 base: main  ←  compare: lr3
@@ -142,6 +160,13 @@ Create pull request
 <pre><code class="language-bash">gh pr create --base main --head lr3 --title &quot;ЛР3&quot; --body &quot;Заготовка і завдання 2&quot;
 gh pr list
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh pr create</code> - створює Pull Request з поточної гілки. Назва: pr - pull request, «запит на злиття» гілки в main; create - «створити». <code>--base</code> - куди зливати: --base main; <code>--head</code> - яку гілку зливати; без нього - поточна; <code>--title</code> - назва PR; <code>--body</code> - опис PR; рядок Closes #1 закриє Issue №1 при злитті.</li>
+<li><code>gh pr list</code> - показує список Pull Requests репо. Назва: pr - pull request, «запит на злиття»; list - «список».</li>
+</ul>
+</blockquote>
 <p><strong>Крок 3. Рев'ю.</strong> Відкрий PR → вкладка <strong>Files changed</strong>. Наведи мишку на рядок <code>x = 3</code> → синя іконка коментаря → напиши «краще назвати змінну n?» → <strong>Start a review</strong>. Потім угорі <strong>Review changes</strong> → вибери Comment / Approve / Request changes → <strong>Submit review</strong>. Зі свого акаунта у своєму PR вибирай <strong>Comment</strong>: Approve власного PR GitHub не дає, а Approve і Request changes - кнопки одногрупника.</p>
 <p>Те, що рецензент бачить у Files changed, можна побачити і в терміналі. Другий клон (як в уроці 09; якщо його нема - <code>git clone git@github.com:Evge14n/pisochnytsia.git ~/druhyi-klon</code>):</p>
 <pre><code class="language-bash">cd ~/druhyi-klon
@@ -161,10 +186,23 @@ index 0000000..549455e
 +print(&quot;ЛР3:&quot;, x)
 +print(&quot;ЛР3: завдання 2&quot;)
 </code></pre>
-<p>Три крапки <code>main...lr3</code> = «що змінилось у <code>lr3</code> від місця, де вона відгалузилась від <code>main</code>». Рецензія з gh. Коментар можеш лишити і ти сам:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git fetch</code> - забирає новини з GitHub, нічого не зливаючи. Назва: fetch - «принести, забрати».</li>
+<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано). Назва: diff - від difference, «різниця». <code>--stat</code> - замість рядків - підсумок: які файли і скільки рядків змінено; <code>origin/main...origin/lr3</code> - три крапки: що змінилось у lr3 від місця, де вона відгалузилась від main (як Files changed у PR).
+Три крапки <code>main...lr3</code> = «що змінилось у <code>lr3</code> від місця, де вона відгалузилась від <code>main</code>». Рецензія з gh. Коментар можеш лишити і ти сам:</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">gh pr review 2 --comment -b &quot;Глянь назву змінної x&quot;
 </code></pre>
-<p>А ці дві команди - для <strong>одногрупника</strong> у його терміналі, з його акаунта (у тебе як автора <code>--approve</code> не пройде):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh pr review</code> - лишає рецензію на PR: коментар, схвалення чи «переробити». Назва: pr - pull request; review - «перевірка, рецензія». <code>--comment</code> - просто коментар (зі свого акаунта у своєму PR - лише так); <code>-b</code> - текст рецензії: -b "Глянь назву змінної x"; <code>2</code> - номер PR.
+А ці дві команди - для <strong>одногрупника</strong> у його терміналі, з його акаунта (у тебе як автора <code>--approve</code> не пройде):</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">gh pr review 2 --approve
 gh pr review 2 --request-changes -b &quot;Додай doctest&quot;
 </code></pre>
@@ -180,7 +218,15 @@ git log --oneline --graph -3
 git switch main
 git branch -D proba-merge proba-squash
 </code></pre>
-<p>Виводи <code>log</code> - у пунктах 1 і 2 «Передбач». <code>-D</code> (велике) видаляє гілку навіть незлиту - тут можна, це пробні гілки. Повідомлення як на GitHub: merge-коміт - «Merge pull request #2 from Evge14n/lr3» і назва PR другим абзацом; squash - «ЛР3 (#2)» (так виглядають коміти в репо cli/cli і facebook/react, глянув 18.11.2026).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git merge</code> - зливає іншу гілку в поточну. Назва: merge - «злити, обʼєднати». <code>--no-ff</code> - завжди робити окремий коміт злиття, навіть якщо можна просто «перемотати» (як кнопка Merge на GitHub); <code>-m</code> - повідомлення коміту злиття; без нього git відкриє nano; <code>lr3</code> - яку гілку злити В ПОТОЧНУ: спершу git switch main, потім git merge lr3; <code>--squash</code> - усі зміни гілки одним шматком в індекс, без коміту; далі git commit (як Squash and merge).</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>--graph</code> - малює гілки зліва зірочками і лініями.</li>
+<li><code>git branch</code> - показує, створює і видаляє гілки. Назва: branch - «гілка». <code>-D</code> - видалити гілку навіть незлиту (= --delete --force); її коміти зникнуть з видимості.
+Виводи <code>log</code> - у пунктах 1 і 2 «Передбач». <code>-D</code> (велике) видаляє гілку навіть незлиту - тут можна, це пробні гілки. Повідомлення як на GitHub: merge-коміт - «Merge pull request #2 from Evge14n/lr3» і назва PR другим абзацом; squash - «ЛР3 (#2)» (так виглядають коміти в репо cli/cli і facebook/react, глянув 18.11.2026).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 5. Злити на сайті і прибрати.</strong> У PR унизу <strong>Merge pull request</strong> → <strong>Confirm merge</strong> → зʼявиться кнопка <strong>Delete branch</strong> - натисни. Потім у терміналі:</p>
 <pre><code class="language-bash">git switch main
 git pull
@@ -189,7 +235,14 @@ git branch -d lr3
 git fetch --prune
 git branch -a
 </code></pre>
-<p><code>git log</code> покаже (пробіли в кінці рядків графа не важать):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git branch</code>: <code>-d</code> - видалити гілку, якщо її коміти вже злито; інакше відмовить; <code>-a</code> - і твої, і віддалені гілки (remotes/origin/...).</li>
+<li><code>git fetch</code>: <code>--prune</code> - прибрати в себе origin/ГІЛКА, яких на GitHub уже нема (видалили після PR).
+<code>git log</code> покаже (пробіли в кінці рядків графа не важать):</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">*   0b4e2f1 (HEAD -&gt; main, origin/main, origin/HEAD) Merge pull request #2 from Evge14n/lr3
 |\  
 | * c4894c4 (origin/lr3, lr3) ЛР3: завдання 2
@@ -211,6 +264,12 @@ From github.com:Evge14n/pisochnytsia
 <pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
  - [deleted]         lr3
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git push</code>: <code>--delete</code> - видалити гілку або тег на GitHub: git push origin --delete lr3.</li>
+</ul>
+</blockquote>
 <h3 id="типові-помилки">Типові помилки</h3>
 <p><strong>1. Після Squash and merge <code>git branch -d lr3</code> то відмовляє, то видаляє.</strong> У <code>main</code> на GitHub зʼявився новий squash-коміт, а самих комітів <code>lr3</code> там нема. <code>-d</code> видаляє лише злиту гілку, і «злита» він перевіряє так: якщо в тебе є <code>origin/lr3</code> - чи все з <code>lr3</code> є в <code>origin/lr3</code>; якщо <code>origin/lr3</code> нема - чи все є в поточній гілці (<code>main</code>). Тому буває два випадки (обидва перевірено, git 2.43):</p>
 <ul>

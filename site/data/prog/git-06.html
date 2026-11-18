@@ -78,6 +78,14 @@
 <p>На свіжій Mint 22.3 нема пакета <code>python3-venv</code>, і <code>python3 -m venv</code> падає з <code>The virtual environment was not created successfully because ensurepip is not available.</code> Якщо ти робив крок 0 уроку 03 курсу Linux Mint (<a href="../Linux-Mint/Урок 03 - Термінал для лаб - теки, файли, nano, запуск, venv.md">Урок 03 - Термінал для лаб</a>), пакет уже є. Якщо ні - один раз (попросить пароль):</p>
 <pre><code class="language-bash">sudo apt install python3-venv
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Тепер пісочниця:</p>
 <pre><code class="language-bash">mkdir ~/git-pisochnytsia-06
 cd ~/git-pisochnytsia-06
@@ -89,6 +97,22 @@ python3 main.py
 touch grafik.png
 git status
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m venv</code> - створює окреме середовище Python (venv) для бібліотек лаб. Назва: virtual environment - «віртуальне середовище».</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>touch</code> - створює порожній файл або оновлює його час. Назва: touch - «торкнутися» файлу: оновити час зміни, а як нема - створити.</li>
+<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан».</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+</ul>
+</blockquote>
 <p><code>python3 main.py</code> надрукує <code>8</code>, а заодно створить <code>__pycache__/lr1.cpython-312.pyc</code> (бо <code>main.py</code> імпортує <code>lr1</code>). <code>touch grafik.png</code> - уяви, що це графік, який зберіг matplotlib.</p>
 <pre><code class="language-text">On branch main
 
@@ -111,6 +135,12 @@ nothing added to commit but untracked files present (use &quot;git add&quot; to 
 # або те саме без nano, одним рядком:
 printf '.venv/\n__pycache__/\n*.pyc\n.pytest_cache/\n.mypy_cache/\n' &gt; .gitignore
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+</ul>
+</blockquote>
 <ol>
 <li><code>git status --short</code> - які файли лишаться в списку?</li>
 </ol>
@@ -151,6 +181,14 @@ git commit -m &quot;ЛР1 і gitignore&quot;
  create mode 100644 lr1.py
  create mode 100644 main.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт). <code>.</code> - усе в поточній теці і підтеках; спершу глянь git status, щоб не додати зайве.</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+</blockquote>
 <p>4 файли: <code>.venv/</code> і <code>__pycache__/</code> у коміт не пішли. (Хеш у тебе буде інший.)</p>
 <p><strong>Крок 2. Пізно додали правило.</strong> Дописуємо <code>*.png</code> і «перемальовуємо» графік:</p>
 <pre><code class="language-bash">printf '*.png\n' &gt;&gt; .gitignore
@@ -161,6 +199,14 @@ git check-ignore -v grafik.png
 <pre><code class="language-text"> M .gitignore
  M grafik.png
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git status</code>: <code>--short</code> - коротко: по рядку на файл з двома буквами стану (M, A, ??).</li>
+<li><code>git check-ignore</code> - перевіряє, чи файл ігнорується і яким правилом .gitignore. Назва: check ignore - «перевірити, чи ігнорується». <code>-v</code> - показати правило: файл .gitignore, номер рядка, шаблон і шлях.</li>
+<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+</ul>
+</blockquote>
 <p><code>grafik.png</code> досі в списку змінених, а <code>check-ignore</code> мовчить: файл уже в git, і правило на нього не діє.</p>
 <p><strong>Крок 3. Прибрати з git, лишити на диску.</strong></p>
 <pre><code class="language-bash">git rm --cached grafik.png
@@ -168,6 +214,12 @@ git status --short
 </code></pre>
 <pre><code class="language-text">rm 'grafik.png'
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git rm</code> - прибирає файл з git (з --cached - файл лишається на диску). Назва: rm - від remove, «прибрати». <code>--cached</code> - прибрати лише з git (з індексу), файл на диску лишається.</li>
+</ul>
+</blockquote>
 <pre><code class="language-text"> M .gitignore
 D  grafik.png
 </code></pre>
@@ -181,6 +233,12 @@ git status --short
  2 files changed, 1 insertion(+)
  delete mode 100644 grafik.png
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">grafik.png
 </code></pre>
 <p><code>ls grafik.png</code> показав файл - він на диску (якби його не було, <code>ls</code> написав би <code>No such file or directory</code>). <code>git status --short</code> порожній - тепер git його справді ігнорує. Перевір: <code>git check-ignore -v grafik.png</code> → <code>.gitignore:6:*.png   grafik.png</code>.</p>
@@ -199,11 +257,17 @@ git status --short
 <li>Закомітив цілу <code>.venv/</code> (у перевірці це 1014 файлів в одному коміті). Прибрати з git, не чіпаючи середовище (<code>-r</code> - рекурсивно, <code>-q</code> - тихо, без тисячі рядків <code>rm '...'</code>):
   <code>bash
   git rm -r -q --cached .venv
-  git commit -m "Прибери .venv з репо"</code>
+  git commit -m "Прибери .venv з репо"</code></li>
+</ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git rm</code>: <code>-r</code> - рекурсивно: щоб прибрати цілу теку з усім вмістом; <code>-q</code> - не друкувати рядок rm '...' на кожен файл.
   Не забудь <code>.venv/</code> у <code>.gitignore</code>, інакше наступний <code>git add .</code> поверне її.</li>
 <li>Коментар у тому ж рядку: <code>*.png # картинки</code> <strong>не працює</strong> - git шукає файл, що закінчується на <code>.png # картинки</code>. <code>git status --short</code> і далі показує <code>?? a.png</code>. Коментар - лише окремим рядком з <code>#</code> на початку.</li>
 <li>Файл назвали <code>gitignore</code> (без крапки) або <code>.gitignore.txt</code> - git його не читає. Перевір <code>ls -a</code>: має бути рівно <code>.gitignore</code>.</li>
 </ul>
+</blockquote>
 <h3 id="як-роблять-профі">Як роблять профі</h3>
 <ul>
 <li>Не пишуть з нуля, а беруть шаблон GitHub <code>Python.gitignore</code> (репо github/gitignore; 18.11.2026 у ньому 223 рядки, є <code>__pycache__/</code>, <code>*.py[codz]</code>, <code>.pytest_cache/</code>, <code>.venv</code>, <code>.mypy_cache/</code>). Його ж підставляє сайт при створенні репо (поле «Add .gitignore» → Python) і <code>gh</code>. Це для <strong>нового</strong> проєкту, не для пісочниці: <code>wget -O .gitignore</code> <strong>перезапише</strong> твій <code>.gitignore</code>, а <code>gh repo create</code> створить на GitHub ще один репо (і потребує входу в gh, урок 16). Тому тут лише зразок, <code>НАЗВА</code> - твоя назва нового репо:
@@ -218,12 +282,18 @@ git status --short
   touch .lr1.py.swp
   git check-ignore -v .lr1.py.swp</code>
   <code>text
-  /home/.../.config/git/ignore:1:*.swp  .lr1.py.swp</code>
+  /home/.../.config/git/ignore:1:*.swp  .lr1.py.swp</code></li>
+</ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code>: <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.
   (замість <code>...</code> - твоя домашня тека.)</li>
 <li><code>git check-ignore -v --no-index файл</code> - показує правило навіть для вже закоміченого файлу (без <code>--no-index</code> git про такі мовчить, як у кроці 2).</li>
 <li><code>git status --ignored</code> - глянути, що саме зараз ігнорується (чи не сховав ти щось потрібне).</li>
 <li>Python 3.13+ сам кладе в нову <code>.venv/</code> файл <code>.gitignore</code> з <code>*</code> (docs.python.org, venv: «Changed in version 3.13: venv now creates a .gitignore file for Git by default»). На Mint 22 Python 3.12 - тому <code>.venv/</code> у свій <code>.gitignore</code> пишемо самі.</li>
 </ul>
+</blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>
 <ol>
 <li>Що буде з <code>grafik.png</code>, якщо він уже закомічений, а ти дописав <code>*.png</code> у <code>.gitignore</code>?</li>

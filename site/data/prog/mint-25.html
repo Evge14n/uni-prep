@@ -104,6 +104,14 @@ Mint і Ubuntu) прямо радить антивірус не ставити: 
 </ol>
 <pre><code class="language-bash">sudo ufw status
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>ufw status</code> - показує, чи увімкнений брандмауер і які правила. Назва: status - «стан».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">Status: inactive
@@ -154,6 +162,13 @@ Mint і Ubuntu) прямо радить антивірус не ставити: 
 sudo ufw enable
 sudo ufw status verbose
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ufw status</code>: <code>verbose</code> - докладно: журнал і типові правила (Default: deny incoming...).</li>
+<li><code>ufw enable</code> - вмикає брандмауер (і при старті системи). Назва: enable - «увімкнути».</li>
+</ul>
+</blockquote>
 <p>Справжній вивід двох останніх команд у тестовій Mint 22.3:</p>
 <pre><code class="language-text">Firewall is active and enabled on system startup
 Status: active
@@ -167,6 +182,13 @@ New profiles: skip
 <pre><code class="language-bash">sudo journalctl _COMM=sudo -n 5 --no-pager
 last -n 5
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>journalctl</code> - показує журнал системи і служб. Назва: journal control - «керування журналом» systemd. <code>-n</code> - лише останні N рядків, напр. -n 5; <code>--no-pager</code> - вивести все одразу, без пейджера less (для труб і &gt; файл); <code>_COMM=sudo</code> - лише записи програми sudo (COMM - назва програми).</li>
+<li><code>last</code> - показує останні входи і перезавантаження. Назва: last - «останні»: останні входи в систему і перезавантаження. <code>-n</code> - показати лише стільки останніх рядків: last -n 5.</li>
+</ul>
+</blockquote>
 <p>Кожен виклик sudo - у журналі: хто, з якої теки і яку команду. Рядок з тестової Mint (імʼя компʼютера замінено на
 <code>evgen-laptop</code>; у тебе буде імʼя твого ноутбука, дата і номер процесу свої):</p>
 <pre><code class="language-text">Nov 18 10:30:34 evgen-laptop sudo[282]:    evgen : TTY=pts/0 ; PWD=/home/evgen ; USER=root ; COMMAND=/usr/sbin/ufw status verbose
@@ -177,16 +199,40 @@ last -n 5
 <p><strong>Крок 3. Відкриті порти.</strong> Як в уроці 21:</p>
 <pre><code class="language-bash">sudo ss -tulpn
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ss</code> - показує, які програми слухають мережеві порти. Назва: socket statistics - «статистика сокетів» (сокет - «гніздо» для мережевого звʼязку). <code>-t</code> - зʼєднання TCP (ssh, https); <code>-u</code> - зʼєднання UDP (DNS, мультимедіа); <code>-l</code> - лише ті, що слухають (чекають підключень); <code>-p</code> - яка програма тримає порт; чужі програми видно лише з sudo; <code>-n</code> - номери портів цифрами (22), а не назвами (ssh).</li>
+</ul>
+</blockquote>
 <p>Усе, що слухає на <code>127.0.0.1</code> / <code>127.0.0.53</code> / <code>[::1]</code>, доступне лише з самого ноутбука. Порти на <code>0.0.0.0</code> або
 <code>[::]</code> доступні з мережі - з увімкненим ufw вони все одно закриті, поки не зробиш <code>ufw allow</code>.</p>
 <p><strong>Крок 4. Чи не лишилось у домашній теці файлів root</strong> (наслідок запуску графічних програм з sudo):</p>
 <pre><code class="language-bash">find ~ -not -user &quot;$USER&quot; 2&gt;/dev/null | head
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>find</code> - шукає файли за назвою, часом чи власником. Назва: find - «знайти». <code>-not</code> - заперечення наступної умови: <code>-not -user "$USER"</code> - чужі файли; <code>-user</code> - лише файли, власник яких - цей користувач; <code>~</code> - шукати по всій домашній теці (знайти, куди Telegram зберіг лабу).</li>
+<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>2&gt;</code> - пише лише помилки у файл. Назва: redirect stderr - «перенаправити помилки»: 2 - номер потоку помилок.</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+</blockquote>
 <p>Порожньо - добре. Якщо щось є - поверни собі: <code>sudo chown -R "$USER:$USER" ~/назва_теки</code> (саме ту теку, що
 знайшлась).</p>
 <p><strong>Крок 5. Чи зашифрований диск.</strong></p>
 <pre><code class="language-bash">lsblk -f
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>lsblk</code> - показує диски, флешки і розділи деревом. Назва: list block devices - «список блокових пристроїв» (дисків і розділів). <code>-f</code> - файлова система, мітка, UUID і вільне місце кожного розділу (filesystems).</li>
+</ul>
+</blockquote>
 <p>У стовпці <code>FSTYPE</code> шукай <code>crypto_LUKS</code>. Нема - диск не зашифрований; для ноутбука, який носиш в університет, варто
 подумати про це при наступному перевстановленні (з резервною копією!).</p>
 <p><strong>Крок 6. Перевірка чужої команди - тренування.</strong> Скопіюй в explainshell.com рядок

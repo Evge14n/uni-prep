@@ -6,7 +6,7 @@
 # перший рядок (shebang): яким інтерпретатором запускати
 # усе після # - коментар
 
-name=&quot;Євген&quot;                 # змінна: БЕЗ пробілів навколо =
+name=&quot;Студент&quot;                 # змінна: БЕЗ пробілів навколо =
 echo &quot;Привіт, $name&quot;         # $name - взяти значення
 
 echo &quot;Перший аргумент: $1&quot;   # $1, $2 - те, що написали після назви скрипта
@@ -22,6 +22,19 @@ for f in *.py; do            # цикл по всіх .py у теці
     echo &quot;Знайшов: $f&quot;
 done
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>[</code> - перевіряє умову: код 0 - так, 1 - ні. Назва: [ - друга назва команди test («перевірити»); ] лише закриває умову. <code>-f</code> - правда, якщо є такий звичайний файл (file); <code>]</code> - закриває умову, обовʼязково останнім словом і через пробіл.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
+<li><code>;</code> - розділяє команди в рядку, виконує всі по черзі. Назва: крапка з комою - роздільник команд.</li>
+<li><code>*</code> - шаблон: будь-які символи в назві файлу. Назва: asterisk («зірочка») - шаблон «будь-які символи».</li>
+<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -58,10 +71,18 @@ done
 <p><strong>Alias</strong> - коротке імʼя для команди, у <code>~/.bashrc</code>: <code>alias ll='ls -la'</code>. Після правки <code>source ~/.bashrc</code>.
 Так зроблені наші <code>univer</code> і <code>perevir</code> (подивись: <code>tail -n 25 ~/.bashrc</code>).</p>
 <h3 id="руками-10-хв-скрипт-перевір-усі-лаби-в-теці">Руками (10 хв): скрипт «перевір усі лаби в теці»</h3>
-<pre><code>cd ~/univer/praktyka
+<pre><code class="language-bash">cd ~/univer/praktyka
 nano zdaty.sh
 </code></pre>
-<p>Надрукуй:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.
+Надрукуй:</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">#!/bin/bash
 # zdaty.sh - перевірити всі .py у теці перед здачею
 # запуск: ./zdaty.sh ~/univer/labs/ЛР4
@@ -87,17 +108,37 @@ for f in &quot;$folder&quot;/*.py; do
 done
 echo &quot;Готово: $ok, правити: $bad&quot;
 </code></pre>
-<p>Далі:</p>
-<pre><code>chmod +x zdaty.sh
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
+<li><code>[</code>: <code>-d</code> - правда, якщо є така тека (directory); <code>!</code> - заперечення: [ ! -d тека ] - правда, якщо теки НЕМА.</li>
+<li><code>exit</code> - виходить зі скрипта або термінала з кодом. Назва: exit - «вихід». <code>1</code> - «щось не так» - найчастіший код помилки.</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s»; <code>-p</code> - увімкнути або вимкнути додаток pytest; -p no:cacheprovider - не створювати теку .pytest_cache.</li>
+<li><code>flake8</code> - перевірка стилю і зайвого коду (команда з venv). Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78.</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>$( )</code> - підставляє вивід команди в рядок. Назва: command substitution - «підстановка команди».
+Далі:</li>
+</ul>
+</blockquote>
+<pre><code class="language-bash">chmod +x zdaty.sh
 ./zdaty.sh ~/univer/labs/ЛР4      # kvadrat.py з дня 8 - ГОТОВО
 ./zdaty.sh /nema                   # Нема теки /nema
 echo $?                            # 1 - скрипт повідомив про помилку
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>chmod</code> - змінює права файлу: читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>+x</code> - дозволити запуск (x); у Mint - усім трьом: власнику, групі й іншим.</li>
+<li><code>./скрипт</code> - запускає свій файл-скрипт з поточної теки. Назва: ./ - «звідси»: крапка = поточна тека, / відділяє теку від файлу.</li>
+</ul>
+</blockquote>
 <p>Хочеш запускати звідусіль словом <code>zdaty</code>: додай у кінець <code>~/.bashrc</code> рядок
 <code>alias zdaty='~/univer/praktyka/zdaty.sh'</code> і виконай <code>source ~/.bashrc</code>.</p>
 <h3 id="типові-помилки">Типові помилки</h3>
 <ul>
-<li><code>name = "Євген"</code> з пробілами - bash думає, що <code>name</code> це команда: <code>name: command not found</code>.</li>
+<li><code>name = "Студент"</code> з пробілами - bash думає, що <code>name</code> це команда: <code>name: command not found</code>.</li>
 <li><code>$1</code> без лапок: шлях з пробілом розвалиться на два аргументи. Пиши <code>"$1"</code>, <code>"$f"</code>.</li>
 <li><code>[</code> без пробілів: <code>if [-f "$1"]</code> - помилка. Потрібно <code>if [ -f "$1" ]</code>.</li>
 <li>Скрипт, збережений з CRLF (Блокнот Windows) → <code>$'\r': command not found</code>. День 3.</li>

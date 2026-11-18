@@ -581,8 +581,16 @@ print(&quot;сума додатних:&quot;, total)
 </details>
 <h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
 <p>Заготовка: <code>zadachi/urok04.py</code>. Розв'язок: <code>_rozvyazky/urok04.py</code> (відкривай лише після 2 спроб).</p>
-<pre><code>python3 -m doctest zadachi/urok04.py -v
+<pre><code class="language-bash">python3 -m doctest zadachi/urok04.py -v
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції. <code>-v</code> - докладно: кожен приклад (Trying, Expecting, ok) і підсумок «N passed and M failed».</li>
+</ul>
+<p>Усе про кожну команду - у довіднику «05_Програмування/КОМАНДИ - довідник.md» (на сайті - вкладка «Команди»).</p>
+</blockquote>
 <p>Спершу всі тести червоні (у функціях лише <code>pass</code>). Дописуєш тіло - стають зелені.</p>
 <p><strong>Задача 1. <code>alternating_sum(count)</code></strong> - знакозмінна сума <code>1 - 2 + 3 - 4 + ... ± count</code>.
 Наприклад, <code>alternating_sum(5)</code> = 1 - 2 + 3 - 4 + 5 = 3. Обмеження: без <code>**</code> і без <code>if</code>.</p>

@@ -195,6 +195,13 @@ print(f&quot;середня швидкість: {sum / total_time:.2f} м/с&quo
 </code></pre>
 <pre><code class="language-text">g = 7.852 м/с²
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Метод:</strong> print-налагодження <code>f"{x=}"</code> (урок 05) або <code>logging.debug</code> (урок 06, крок 10): надрукуй, <strong>які</strong> значення
 потрапляють у суму.</p>
 <details>
@@ -515,15 +522,38 @@ Daily і Boot по 2-3 знімки → Finish. Домашню теку <strong>
 <pre><code class="language-bash">sudo timeshift --create --comments &quot;свіжа система&quot;
 sudo timeshift --list
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>timeshift</code> - робить і відновлює знімки системи. Назва: time shift - «зсув у часі»: повернути систему в минуле. <code>--create</code> - зробити знімок зараз; <code>--comments</code> - підпис до знімка, напр. --comments "перед драйвером" (видно в стовпці Description); <code>--list</code> - список знімків: Num, Name (дата і час), Tags, Description.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Крок 2. Оновлення (урок 02).</strong> Мишкою - Диспетчер оновлень, або в терміналі (список перед <code>Y</code> - читати):</p>
 <pre><code class="language-bash">sudo apt update
 sudo apt upgrade
 flatpak update
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt update</code> - оновлює список пакетів, нічого не ставить. Назва: update - «оновити» (тут оновлюється лише список пакетів).</li>
+<li><code>apt upgrade</code> - ставить оновлення всіх пакетів. Назва: upgrade - «перейти на новішу версію».</li>
+<li><code>flatpak update</code> - оновлює всі Flatpak-програми. Назва: update - «оновити».</li>
+</ul>
+</blockquote>
 <p>Значок у треї попросить перезавантаження (якщо було нове ядро) - перезавантаж зараз, до лаб.</p>
 <p><strong>Крок 3. Пакети для лаб.</strong> На свіжій Mint 22.3 їх нема (git, python3-venv, python3-pip, python3-tk):</p>
 <pre><code class="language-bash">sudo apt install git python3-venv python3-pip python3-tk
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
+</ul>
+</blockquote>
 <p><strong>Крок 4. Тека і venv (урок 03).</strong></p>
 <pre><code class="language-bash">mkdir -p ~/univer/labs/lr1 ~/univer/praktyka
 python3 -m venv ~/univer/.venv
@@ -531,6 +561,17 @@ source ~/univer/.venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install pytest flake8 black mypy ruff
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m venv</code> - створює окреме середовище Python (venv) для бібліотек лаб. Назва: virtual environment - «віртуальне середовище». <code>~/univer/.venv</code> - наш venv на всі лаби; крапка на початку - тека прихована (ls -a її покаже).</li>
+<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
+<li><code>python3 -m pip install</code> - ставить бібліотеки Python (лише у venv!). Назва: pip installs packages - «pip ставить пакети»; install - «встановити». <code>--upgrade</code> - оновити пакет до найновішої версії, якщо він уже є.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+</blockquote>
 <p><code>python</code> (без 3) працює саме тому, що ввімкнено venv - у системі є лише <code>python3</code>.</p>
 <p><strong>Крок 5. git (урок 24).</strong> Імʼя і пошту - свої:</p>
 <pre><code class="language-bash">git config --global user.name &quot;Твоє Імʼя Прізвище&quot;
@@ -538,6 +579,12 @@ git config --global user.email &quot;tvoya.poshta@example.com&quot;
 git config --global init.defaultBranch main
 git config --global core.quotepath false
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). Назва: config - від configuration, «налаштування». <code>--global</code> - для тебе на цьому ноутбуці: пише у файл ~/.gitconfig, діє в усіх репо.</li>
+</ul>
+</blockquote>
 <p><code>core.quotepath false</code> - щоб git показував кириличні назви файлів як є, а не <code>\320\233...</code>.</p>
 <p><strong>Крок 6. perevir.</strong> Найпростіше - скрипт курсу <code>ustanovka-mint.sh</code> (він робить кроки 3-6 сам і додає в <code>~/.bashrc</code>
 команди <code>univer</code> і <code>perevir</code>), див. «00 - Почни тут». Після нього - нове вікно термінала. Тестовий файл
@@ -565,6 +612,13 @@ ruff: зауважень нема
 --- mypy
 Success: no issues found in 1 source file
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи). Назва: наша назва: «перевір» - перевірка лаби перед здачею.</li>
+</ul>
+</blockquote>
 <p>(Час <code>0.01s</code> у тебе інший.)</p>
 <p><strong>Таблиця готовності:</strong></p>
 <div class="tw"><table>
@@ -638,6 +692,12 @@ Success: no issues found in 1 source file
 cd ~/univer/praktyka/p2
 nano lab_zlamana.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+</ul>
+</blockquote>
 <p>Встав код (Ctrl+Shift+V) або скопіюй файл з теки <code>Практика - файли</code>:</p>
 <pre><code class="language-python">&quot;&quot;&quot;Практика 2: середня швидкість на ділянках (навмисно зламано).&quot;&quot;&quot;
 import math
@@ -687,6 +747,14 @@ if __name__ == &quot;__main__&quot;:
 0 passed and 4 failed.
 ***Test Failed*** 4 failures.
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції. <code>-v</code> - докладно: кожен приклад (Trying, Expecting, ok) і підсумок «N passed and M failed».</li>
+<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу. <code>-n</code> - скільки останніх рядків показати: -n 3 (lines).</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <p>Упали всі чотири приклади. <code>-m doctest</code> тут безпечний: <code>if __name__ == "__main__":</code> захищає від чужого провалу.</p>
 <p><strong>Крок 2. Повний звіт - читаємо Expected / Got.</strong></p>
 <pre><code class="language-bash">python3 -m doctest lab_zlamana.py
@@ -745,6 +813,12 @@ Got:
 <p><strong>Крок 3. Post-mortem: на яких даних падає справжня програма.</strong></p>
 <pre><code class="language-bash">python3 -m pdb -c continue lab_zlamana.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m pdb</code> - запускає програму покроково в налагоджувачі pdb. Назва: Python debugger - «налагоджувач Python» (debug - «виловити жуків», помилки). <code>-c</code> - виконати команду pdb одразу після старту; -c continue - їхати до падіння і зупинитись там.</li>
+</ul>
+</blockquote>
 <p>Кінець виводу (вище - traceback з рядками самого pdb, їх пропускай) і сеанс:</p>
 <pre><code class="language-text">ZeroDivisionError: division by zero
 Uncaught exception. Entering post mortem debugging
@@ -775,6 +849,13 @@ lab_zlamana.py:26:10: E225 missing whitespace around operator
 lab_zlamana.py:28: error: Incompatible types in assignment (expression has type &quot;float&quot;, variable has type &quot;int&quot;)  [assignment]
 Found 1 error in 1 file (checked 1 source file)
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m flake8</code> - шукає помилки стилю і зайвий код, нічого не змінює. Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша дозволена довжина рядка; викладач хоче 78 (типово 79).</li>
+<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми. Назва: назва не розшифровується (py - від Python).</li>
+</ul>
+</blockquote>
 <ul>
 <li><code>F401</code> - зайвий <code>import math</code> (<strong>помилка стилю 1</strong>), <code>E225</code> - <code>total=0</code> без пробілів (<strong>помилка стилю 2</strong>).</li>
 <li>mypy підказує ще й про логіку: <code>total = 0</code> - ціле, а додаємо дроби. У виправленому коді <code>total</code> взагалі не
@@ -791,6 +872,13 @@ All done! ✨ 🍰 ✨
 1 file reformatted.
 kopiya.py:3:1: F401 'math' imported but unused
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати».</li>
+<li><code>python3 -m black</code> - сам гарно оформлює код Python (пробіли, переноси). Назва: black - «чорний»: як у Форда, «будь-який колір, якщо він чорний». <code>-l</code> - найбільша довжина рядка; викладач хоче 78 (black сам ставить 88).</li>
+</ul>
+</blockquote>
 <p>black виправив пробіли (<code>total = 0</code>) і додав порожній рядок після docstring (тому <code>math</code> тепер у рядку 3), а зайвий
 імпорт лишився: black - форматер, він не прибирає код. Такі речі - руками (або <code>ruff check --fix</code>).</p>
 <p><strong>Крок 5. Виправлений файл</strong> (doctest не змінено ні на символ):</p>
@@ -847,6 +935,12 @@ All done! ✨ 🍰 ✨
 1 file would be left unchanged.
 Success: no issues found in 1 source file
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m black</code>: <code>--check</code> - лише перевірити: файл не змінюється, код виходу 1, якщо треба переформатувати.</li>
+</ul>
+</blockquote>
 <p>flake8 мовчить - зауважень нема. Підсумок: <strong>3 логічні помилки</strong> (множення замість ділення, середнє швидкостей
 замість шлях/час, ділення на нуль для порожніх даних) і <strong>2 стилю</strong> (зайвий імпорт, пробіли).</p>
 <p>Чесне питання на співбесіді: а якщо <code>times = [0.0]</code>? Тоді <code>sum(times)</code> = 0 і знову <code>ZeroDivisionError</code>. Doctest про
@@ -940,6 +1034,34 @@ echo &quot;Архів: $ZDACHA/$nazva.zip&quot;
 unzip -Z1 &quot;$ZDACHA/$nazva.zip&quot;
 exit &quot;$rezultat&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>set</code> - вмикає суворий режим bash у скриптах. Назва: set - «встановити» (налаштування самого bash). <code>-u</code> - помилка, якщо скрипт бере змінну, якої нема (а не тиха порожнеча); nounset; <code>-o</code> - увімкнути налаштування за назвою: -o pipefail; <code>pipefail</code> - з -o: труба вважається невдалою, якщо впала будь-яка її частина, а не лише остання.</li>
+<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>exit</code> - виходить зі скрипта або термінала з кодом. Назва: exit - «вихід». <code>2</code> - у zibraty.sh - помилка запуску (нема venv чи теки).</li>
+<li><code>[</code> - перевіряє умову: код 0 - так, 1 - ні. Назва: [ - друга назва команди test («перевірити»); ] лише закриває умову. <code>-x</code> - правда, якщо файл можна запускати (є дозвіл x); <code>]</code> - закриває умову, обовʼязково останнім словом і через пробіл; <code>-d</code> - правда, якщо є така тека (directory); <code>-e</code> - правда, якщо є файл або тека з такою назвою (exists - «існує»); <code>$#</code> - кількість аргументів скрипта: [ "$#" -eq 0 ] - скрипт запустили без аргументів.</li>
+<li><code>pomylka</code> - друкує ПОМИЛКА: ... і зупиняє скрипт. Назва: наша назва: «помилка» латиницею (функція в скриптах zibraty.sh і zdaty).</li>
+<li><code>shopt</code> - вмикає або вимикає налаштування bash. Назва: shell options - «налаштування оболонки» bash. <code>-s</code> - увімкнути (set) налаштування; <code>nullglob</code> - шаблон без збігів (<em>.py у порожній теці) зникає, а не лишається текстом «</em>.py».</li>
+<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> - лише кількість рядків (lines).</li>
+<li><code>basename</code> - дає назву файлу без шляху. Назва: base name - «основна назва»: остання частина шляху.</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>column</code> - вирівнює текст у таблицю. Назва: column - «стовпець»: вирівняти текст у стовпці. <code>-t</code> - зробити таблицю: поля кожного рядка - у свої стовпці; <code>-s</code> - з -t: який символ ділить поля (типово пробіли): -s '|'.</li>
+<li><code>mktemp</code> - створює тимчасовий файл чи теку і друкує шлях. Назва: make temporary - «зробити тимчасовий» файл чи теку. <code>-d</code> - створити теку, а не файл.</li>
+<li><code>rm</code> - видаляє файли назавжди, без кошика. Назва: remove - «прибрати, видалити». <code>-f</code> - не питати і не лаятись, якщо файлу нема (force - «силоміць»); <code>-r</code> - видаляти теки разом з усім, що всередині (recursive).</li>
+<li><code>zip</code> - пакує файли й теки в .zip. Назва: zip - «мчати, свистіти»: формат ZIP (1989), натяк на швидкість. <code>-q</code> - тихо: без рядків adding; <code>-r</code> - брати теки з усім, що в них (без -r - лише порожня тека).</li>
+<li><code>unzip</code> - розпаковує .zip або показує його вміст. Назва: un + zip - «розстібнути»: розпакувати .zip. <code>-Z</code> - режим zipinfo; -Z1 - лише назви файлів, по одній у рядку.</li>
+<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
+<li><code>;</code> - розділяє команди в рядку, виконує всі по черзі. Назва: крапка з комою - роздільник команд.</li>
+<li><code>*</code> - шаблон: будь-які символи в назві файлу. Назва: asterisk («зірочка») - шаблон «будь-які символи».</li>
+<li><code>2&gt;&amp;1</code> - помилки йдуть разом зі звичайним виводом. Назва: «потік 2 туди ж, куди потік 1»: помилки разом зі звичайним виводом.</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>&lt;</code> - подає файл програмі замість клавіатури. Назва: input redirect - «ввід з файлу».</li>
+<li><code>$( )</code> - підставляє вивід команди в рядок. Назва: command substitution - «підстановка команди».</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.</li>
+</ul>
+</blockquote>
 <p><strong>Чому саме так:</strong></p>
 <ul>
 <li><strong>pytest, а не <code>python3 файл.py</code></strong> - лише pytest дає чесний код виходу (іспит, питання А4). Код 5 = «тестів
@@ -972,6 +1094,12 @@ lr2   kvadrat.py  ВПАВ         1 зауваж.
 lr2   pryklad.py  нема тестів  ok
 код 1
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»). <code>zibraty.sh</code> - назва скрипта; bash виконає його рядки по черзі.</li>
+</ul>
+</blockquote>
 <p>У <code>kvadrat.py</code> два дефекти: <code>x * 2</code> замість <code>x ** 2</code> (doctest) і пробіл у кінці рядка (<code>W291</code>, flake8).
 <code>pryklad.py</code> без doctest - не провал. Тепер архів ЛР1:</p>
 <pre><code class="language-bash">LABS=~/proba/labs bash zibraty.sh 1; echo &quot;код $?&quot;
@@ -996,6 +1124,13 @@ lr2   pryklad.py  нема тестів  ok
 <pre><code class="language-bash">bash -n zibraty.sh
 shellcheck zibraty.sh
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>bash</code>: <code>-n</code> - лише перевірити скрипт на синтаксичні помилки, нічого не виконуючи (no execute).</li>
+<li><code>shellcheck</code> - шукає типові помилки в bash-скриптах. Назва: shell check - «перевірка (скрипта) оболонки».</li>
+</ul>
+</blockquote>
 <p>Обидві команди мовчать - зауважень нема.</p>
 <p><strong>Щоденна копія. Варіант 1: cron</strong> (урок 23). <code>crontab -e</code> і рядок (щодня о 21:30):</p>
 <pre><code class="language-text">30 21 * * * mkdir -p /home/evgen/backup &amp;&amp; /usr/bin/rsync -a --exclude=.venv --exclude=__pycache__ /home/evgen/univer/ /home/evgen/backup/univer/ &gt;&gt; /home/evgen/backup.log 2&gt;&amp;1
@@ -1032,6 +1167,17 @@ ls ~/backup/univer
 systemctl --user list-timers
 journalctl --user -u kopiya-univer.service -n 5
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl daemon-reload</code> - systemd перечитує файли служб після правки. Назва: daemon reload - «перечитати демона»: systemd заново читає файли юнітів. <code>--user</code> - перечитати твої власні юніти з ~/.config/systemd/user (без sudo).</li>
+<li><code>systemctl enable</code> - вмикає автозапуск служби чи таймера. Назва: enable - «увімкнути» автозапуск. <code>--user</code> - твій власний юніт (з ~/.config/systemd/user), без sudo; <code>--now</code> - ще й запустити зараз, а не лише при наступному старті.</li>
+<li><code>systemctl start</code> - запускає службу зараз. Назва: start - «запустити». <code>--user</code> - твій власний юніт (zapys.service з уроку 20), без sudo.</li>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+<li><code>systemctl list-timers</code> - показує таймери і коли вони спрацюють. Назва: list timers - «список таймерів». <code>--user</code> - твої власні таймери (як zapys.timer з уроку 20).</li>
+<li><code>journalctl</code> - показує журнал системи і служб. Назва: journal control - «керування журналом» systemd. <code>--user</code> - журнал твоїх власних служб (systemctl --user), sudo не треба; <code>-u</code> - лише одна служба (u - unit, «одиниця»), напр. -u cron; <code>-n</code> - лише останні N рядків, напр. -n 5.</li>
+</ul>
+</blockquote>
 <p><code>OnCalendar=daily</code> = щодня о 00:00 (<code>systemd-analyze calendar daily</code> покаже <code>Normalized form: *-*-* 00:00:00</code>).
 <code>start</code> служби - щоб не чекати півночі й одразу побачити копію.</p>
 <p><strong>Що вибрати на ноутбуці - таймер</strong>: о 00:00 чи 21:30 ноутбук часто закритий, а <code>Persistent=true</code> виконає пропущену
@@ -1070,6 +1216,13 @@ sudo journalctl --list-boots
 sudo journalctl -b -1 -p err
 sudo journalctl -b -1 -e
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>uname</code> - показує назву і версію ядра Linux. Назва: Unix name - «імʼя Unix-системи». <code>-r</code> - версія ядра, яке працює зараз.</li>
+<li><code>journalctl</code>: <code>--list-boots</code> - список завантажень: 0 - поточне, -1 - попереднє; <code>-b</code> - лише поточне завантаження (b - boot); -b -1 - попереднє; <code>-p</code> - лише ця важливість і гірше: -p err - помилки, -p warning - ще й попередження; <code>-1</code> - після -b: попереднє завантаження (-2 - ще раніше); <code>err</code> - після -p: рівень «помилка» і все гірше; <code>-e</code> - одразу в кінець журналу - найсвіжіші рядки.</li>
+</ul>
+</blockquote>
 <p><code>uname -r</code> - переконатись, що працює <strong>старе</strong> ядро. <code>-b -1</code> - попереднє (невдале) завантаження: помилки і останні
 рядки перед зависанням. (Якщо зависло раніше, ніж система встигла записати журнал на диск, такого завантаження в
 списку не буде - тоді лишається фото екрана; на ноутбуці не перевірено.)</p>
@@ -1089,6 +1242,12 @@ Mint у GRUB <code>e</code> → <code>quiet splash</code> замінити на 
 sudo journalctl -b -1 -p err &gt; ~/pomylky-b1.txt
 uname -r
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>inxi</code> - показує, що за залізо і які драйвери. Назва: назва не розшифровується (так назвав автор програми). <code>-c</code> - кольори; -c0 - без кольорів (для файлу чи форуму); <code>-F</code> - повний звіт: усі основні розділи (System, CPU, Graphics, Network...); <code>-x</code> - більше подробиць; -xx і -xxx - ще більше; <code>-z</code> - ховає MAC-адреси, серійні номери, IP - для форуму.</li>
+</ul>
+</blockquote>
 <p><code>-Fxxxz</code>: усе (F), максимум деталей (xxx), без MAC-адрес і серійних номерів (z). <code>-c0</code> - без кодів кольору: у
 тестовій Mint без нього у файл потрапляли службові символи кольору (<code>^C12System:</code>), а з ним файл чистий і його
 зручно вставити на форум. Шаблон допису:</p>

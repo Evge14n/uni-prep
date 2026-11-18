@@ -210,6 +210,14 @@
 </ol>
 <pre><code class="language-bash">echo rm * .py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>*</code> - шаблон: будь-які символи в назві файлу. Назва: asterisk («зірочка») - шаблон «будь-які символи».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">rm lab1.py lab2.py notes.txt Лаба 1 .py
@@ -223,6 +231,13 @@
 <pre><code class="language-bash">mkdir &quot;Лаба 1&quot;
 mkdir Лаба 2
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Перша - одну, <code>Лаба 1</code>. Друга - <strong>дві</strong>: <code>Лаба</code> і <code>2</code>, бо пробіл розділяє аргументи. <code>ls</code> у терміналі покаже:</p>
@@ -237,6 +252,14 @@ mkdir Лаба 2
 rm tymchasovyi.txt
 gio trash --list
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>rm</code> - видаляє файли назавжди, без кошика. Назва: remove - «прибрати, видалити».</li>
+<li><code>gio</code> - робота з файлами як у Nemo; gio trash - у кошик. Назва: GIO - GLib Input/Output, «ввід-вивід бібліотеки GLib». <code>--list</code> - показує, що лежить у кошику і звідки воно туди потрапило; <code>trash</code> - команда «кошик»: gio trash ФАЙЛ кладе файл у кошик, як Delete у Nemo.</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Ні, <code>gio trash --list</code> нічого не покаже (якщо смітник був порожній). <code>rm</code> не знає про смітник - файл зник назавжди.
@@ -249,6 +272,13 @@ gio trash --list
 <pre><code class="language-bash">rm ~/lr1
 ls ~/univer/labs/lr1
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Нічого: <code>rm</code> без <code>-r</code> прибрав лише посилання («ярлик»), тека і файли на місці, <code>ls</code> їх показує. А от <code>rm -r</code> з
@@ -260,6 +290,12 @@ ls ~/univer/labs/lr1
 ls -d /etc /home /media /tmp /usr/bin /var/log
 ls -a ~
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code>: <code>/</code> - корінь системи: bin, etc, home, usr ; <code>-d</code> - показати саму теку, а не її вміст: ls -ld lr1 (directory); <code>-a</code> - показати й приховані (назва з крапки), разом з . і .. (all).</li>
+</ul>
+</blockquote>
 <p>У <code>ls -a ~</code> побачиш приховані <code>.bashrc</code>, <code>.config</code>, <code>.local</code>. Те саме в Nemo: Super+E, потім Ctrl+H (і ще раз Ctrl+H -
 сховати). Спробуй Ctrl+L і впиши <code>/etc</code> - ти в системних налаштуваннях (дивитись можна, міняти - ні).</p>
 <p><strong>Крок 2. Практична тека.</strong></p>
@@ -272,6 +308,14 @@ ls -a
 <pre><code class="language-text">lab1.py  lab2.py  notes.txt
 .  ..  .chernetka.txt  lab1.py  lab2.py  notes.txt
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code>: <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>touch</code> - створює порожній файл або оновлює його час. Назва: touch - «торкнутися» файлу: оновити час зміни, а як нема - створити. <code>.chernetka.txt</code> - назва з крапки - прихований файл (ls без -a його не покаже).</li>
+</ul>
+</blockquote>
 <p><code>.chernetka.txt</code> видно лише з <code>-a</code>. Відкрий цю теку в Nemo: <code>xdg-open .</code> - і натисни Ctrl+H.</p>
 <p><strong>Крок 3. Пробіли в назвах.</strong></p>
 <pre><code class="language-bash">mkdir &quot;Лаба 1&quot;
@@ -279,12 +323,25 @@ mkdir Лаба 2
 ls
 rmdir Лаба 2
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>rmdir</code> - видаляє порожню теку. Назва: remove directory - «прибрати теку».</li>
+</ul>
+</blockquote>
 <p>Зайти в теку з пробілом можна двома способами: <code>cd "Лаба 1"</code> або <code>cd Лаба\ 1</code> (так пише Tab: набери <code>cd Лаба\</code>
 і натисни Tab - він сам поставить <code>\</code> перед пробілом). Повернись: <code>cd ..</code>.</p>
 <p><strong>Крок 4. Копіювати і переносити, не перезаписуючи.</strong></p>
 <pre><code class="language-bash">echo 'print(1)' &gt; lab1.py
 cp -i lab1.py lab2.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати». <code>-i</code> - спитати перед тим, як перезаписати файл, що вже є (interactive).</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+</ul>
+</blockquote>
 <p>Спитає (відповідай <code>n</code> і Enter - не перезаписувати):</p>
 <pre><code class="language-text">cp: overwrite 'lab2.py'?
 </code></pre>
@@ -298,6 +355,12 @@ rm -i notes.txt
 <pre><code class="language-text">rm lab1.py lab2.py
 rm: remove regular empty file 'notes.txt'?
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>rm</code>: <code>-i</code> - питати про кожен файл перед видаленням (interactive).</li>
+</ul>
+</blockquote>
 <p>Перший рядок - це лише друк (<code>echo</code>): так ти бачиш, що <code>rm *.py</code> зачепив би рівно два файли. Друге питає - <code>y</code>, Enter.</p>
 <p><strong>Крок 6. Смітник з терміналу.</strong></p>
 <pre><code class="language-bash">echo &quot;чернетка&quot; &gt; chernetka.txt
@@ -311,6 +374,12 @@ gio trash --list
 <pre><code class="language-bash">gio trash --restore trash:///chernetka.txt
 ls
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gio</code>: <code>--restore</code> - повертає файл з кошика на старе місце; адреса - trash:///НАЗВА; <code>trash:///chernetka.txt</code> - адреса файла в кошику - як її показує gio trash --list.</li>
+</ul>
+</blockquote>
 <p>Тепер видали інший файл і спорожни смітник:</p>
 <pre><code class="language-bash">echo &quot;стара версія&quot; &gt; stara.txt
 gio trash stara.txt
@@ -318,6 +387,12 @@ ls ~/.local/share/Trash/files
 gio trash --empty
 gio trash --list
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gio</code>: <code>--empty</code> - спорожнює кошик - файли зникають назовсім.</li>
+</ul>
+</blockquote>
 <p><code>ls</code> покаже <code>stara.txt</code> у прихованій теці смітника, а після <code>--empty</code> список порожній (смітник чиститься за секунду-дві).</p>
 <p><strong>Крок 7. Архіви.</strong></p>
 <pre><code class="language-bash">mkdir lr1
@@ -331,6 +406,13 @@ Archive:  lr1.zip
    creating: rozpak/lr1/
  extracting: rozpak/lr1/lab1.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>zip</code> - пакує файли й теки в .zip. Назва: zip - «мчати, свистіти»: формат ZIP (1989), натяк на швидкість. <code>-r</code> - брати теки з усім, що в них (без -r - лише порожня тека).</li>
+<li><code>unzip</code> - розпаковує .zip або показує його вміст. Назва: un + zip - «розстібнути»: розпакувати .zip. <code>-d</code> - у яку теку розпакувати; якщо нема - unzip створить її сам.</li>
+</ul>
+</blockquote>
 <p><code>stored 0%</code> - файл крихітний, стискати нема чого. Тепер <code>.tar.gz</code>, як часто викладають програми для Linux:</p>
 <pre><code class="language-bash">tar -czf lr1.tar.gz lr1
 tar -tzf lr1.tar.gz
@@ -340,6 +422,12 @@ tar -xzf lr1.tar.gz -C rozpak2
 <pre><code class="language-text">lr1/
 lr1/lab1.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>tar</code> - пакує і розпаковує архіви .tar.gz. Назва: tape archive - «архів для магнітної стрічки» (Unix, 1979). <code>-c</code> - створити (create) новий архів - старий з тією ж назвою перезапише; <code>-z</code> - стиснення gzip - для .tar.gz (без z - простий .tar); <code>-f</code> - далі - назва архіву; тому f завжди ОСТАННЯ буква в -czf; <code>-t</code> - лише показати список файлів в архіві; <code>-x</code> - розпакувати (extract) архів; <code>-C</code> - розпакувати в цю теку (вона має вже існувати).</li>
+</ul>
+</blockquote>
 <p>У Nemo те саме мишкою: права кнопка на <code>lr1.zip</code> → «Розпакувати сюди».</p>
 <p><strong>Крок 8. Знайти файл.</strong></p>
 <pre><code class="language-bash">find . -name &quot;*.py&quot; | sort
@@ -350,6 +438,14 @@ lr1/lab1.py
 ./rozpak/lr1/lab1.py
 ./rozpak2/lr1/lab1.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>find</code> - шукає файли за назвою, часом чи власником. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: -name "*.py"; великі й малі літери різні; <code>.</code> - шукати тут і в усіх підтеках.</li>
+<li><code>sort</code> - впорядковує рядки. Назва: sort - «сортувати, впорядкувати».</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <p><code>find ТЕКА -name "шаблон"</code> шукає в теці і всіх підтеках; лапки навколо шаблону обовʼязкові. Корисні варіанти:
 <code>find ~ -iname "*лаба*"</code> (<code>-iname</code> - без різниці великі чи малі літери), <code>find ~/Завантаження -name "*.pdf" -mmin -60</code>
 (PDF, змінені за останні 60 хвилин; <code>Завантаження</code> - якщо система українською, інакше <code>Downloads</code>).</p>
@@ -361,6 +457,13 @@ ls ~/lr1/
 </code></pre>
 <pre><code class="language-text">/home/evgen/univer/labs/lr1
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ln</code> - робить посилання (ярлик) на файл чи теку. Назва: link - «звʼязати»: зробити посилання (ще одне імʼя) на файл. <code>-s</code> - символьне посилання - ярлик зі шляхом; можна на теку і на інший диск.</li>
+<li><code>readlink</code> - друкує, куди веде посилання. Назва: read link - «прочитати посилання»: куди воно веде.</li>
+</ul>
+</blockquote>
 <p>Тепер <code>cd ~/lr1</code> веде прямо в лабу. <code>ls -l ~/lr1</code> покаже на початку рядка <code>l</code> і стрілку <code>~/lr1 -&gt; /home/evgen/...</code>.</p>
 <p><strong>Жорстке посилання</strong> (hard link, <code>ln</code> без <code>-s</code>) - друге імʼя того самого файлу, а не ярлик. Повернись у практичну
 теку і спробуй:</p>
@@ -375,6 +478,13 @@ cat kopiya-tverda.txt
 121445 -rw-rw-r-- 2 evgen evgen 18 Nov 18 11:26 original.txt
 дані лаби
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code>: <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long); <code>-i</code> - номер inode - «паспорт» файлу на диску (урок 14, тверді посилання).</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
+</ul>
+</blockquote>
 <p>Перше число (<code>-i</code> - номер inode, «паспорт» файлу на диску; у тебе інше, як і дата) у обох однакове: це один файл з двома
 іменами. Цифра <code>2</code> після прав - скільки в нього імен. Після <code>rm original.txt</code> дані лишились - файл зникає, лише
 коли видалено <strong>останнє</strong> імʼя. Обмеження: жорстке посилання не можна зробити на теку і на інший диск (флешку) - там
@@ -383,6 +493,12 @@ cat kopiya-tverda.txt
 Подивитись у терміналі, яка вона:</p>
 <pre><code class="language-bash">lsblk -o NAME,SIZE,RM,TYPE,MOUNTPOINTS
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>lsblk</code> - показує диски, флешки і розділи деревом. Назва: list block devices - «список блокових пристроїв» (дисків і розділів). <code>-o</code> - які колонки показати: -o NAME,SIZE,MOUNTPOINT (output).</li>
+</ul>
+</blockquote>
 <p>Флешка - це рядок з <code>RM</code> = <code>1</code> (removable - знімна), тип <code>disk</code> (наприклад <code>sda</code> на ноутбуці з NVMe або <code>sdb</code>) і під
 ним розділ <code>part</code> (<code>sda1</code> / <code>sdb1</code>) з <code>MOUNTPOINTS</code> = <code>/media/evgen/...</code>. Звір розмір і модель (урок 18) - букву не
 вгадуй. Скопіюй на неї архів: <code>cp lr1.zip /media/evgen/</code> і Tab - допише назву флешки.</p>
@@ -397,6 +513,12 @@ udisksctl power-off -b /dev/sdb       вимкнути флешку, тепер 
 <pre><code class="language-bash">cd ~
 gio trash ~/univer/praktyka/u14
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code>: <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
+</ul>
+</blockquote>
 <p>Практична тека пішла у смітник - звідти її ще можна повернути. Посилання <code>~/lr1</code> ти прибрав у передбач 4 (якщо ні -
 <code>rm ~/lr1</code>).</p>
 <h2 id="типові-помилки">Типові помилки</h2>

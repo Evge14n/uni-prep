@@ -49,7 +49,7 @@
 - <code>pip install</code> поза venv в Ubuntu 24.04 дає помилку <code>externally-managed-environment</code>. Це захист,
   щоб не зламати системний Python. Не обходь її прапорцем <code>--break-system-packages</code> - просто увімкни venv.</p>
 <h3 id="руками-10-хв">Руками (10 хв)</h3>
-<pre><code>sudo apt update
+<pre><code class="language-bash">sudo apt update
 apt list --upgradable           # що можна оновити
 which tree
 apt show tree | head -5
@@ -62,6 +62,31 @@ deactivate 2&gt;/dev/null         # вимкнути venv, якщо був ув�
 pip install requests            # error: externally-managed-environment - так і треба (буває, думає кілька секунд)
 python3 -m venv --help | head -3
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>apt update</code> - оновлює список пакетів, нічого не ставить. Назва: update - «оновити» (тут оновлюється лише список пакетів).</li>
+<li><code>apt list</code> - показує список пакетів: встановлених або з оновленнями. Назва: list - «список». <code>--upgradable</code> - лише пакети, для яких є новіша версія (список свіжий після sudo apt update).</li>
+<li><code>which</code> - показує шлях до програми з PATH. Назва: which - «котрий»: котрий файл запуститься.</li>
+<li><code>apt show</code> - показує опис пакета: версію, розмір, залежності. Назва: show - «показати».</li>
+<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
+<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
+<li><code>./скрипт</code> - запускає свій файл-скрипт з поточної теки. Назва: ./ - «звідси»: крапка = поточна тека, / відділяє теку від файлу.</li>
+<li><code>apt remove</code> - видаляє програму, налаштування в /etc лишаються. Назва: remove - «прибрати, вилучити». <code>cowsay</code> - пакет-іграшка з уроку 16: поставити, спробувати і прибрати.</li>
+<li><code>dpkg</code> - ставить один .deb і знає, що встановлено. Назва: Debian package - «пакет Debian». <code>-l</code> - рядок стану пакета: ii - встановлено, rc - видалено, лишились налаштування.</li>
+<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу.</li>
+<li><code>deactivate</code> - вимикає venv - python знову системний. Назва: deactivate - «вимкнути» (venv). <code>2</code> - у deactivate 2&gt;/dev/null це не аргумент: 2&gt; ховає помилку, якщо venv і так вимкнений.</li>
+<li><code>pip install</code> - ставить бібліотеку Python (лише у venv). Назва: pip installs packages; install - «встановити».</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m venv</code> - створює окреме середовище Python (venv) для бібліотек лаб. Назва: virtual environment - «віртуальне середовище». <code>--help</code> - довідка: усі прапорці venv.</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>2&gt;</code> - пише лише помилки у файл. Назва: redirect stderr - «перенаправити помилки»: 2 - номер потоку помилок.</li>
+<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <h3 id="типові-помилки">Типові помилки</h3>
 <ul>
 <li><code>apt install</code> без <code>sudo</code> → «Permission denied» / «are you root?».</li>

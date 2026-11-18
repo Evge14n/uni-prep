@@ -121,6 +121,19 @@ cd ~/proba/proc
 printf 'import time\n\nn = 0\nwhile True:\n    n += 1\n    print(n, flush=True)\n    time.sleep(1)\n' &gt; forever.py
 cat forever.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <pre><code class="language-python">import time
 
 n = 0
@@ -153,6 +166,12 @@ $ jobs
 <pre><code class="language-bash">kill -l 9
 kill -l 15
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>kill</code> - надсилає процесу сигнал зупинитись. Назва: kill - «вбити»: надіслати процесу сигнал, типово «завершись». <code>-l</code> - список сигналів; з числом - назва сигналу: kill -l 9 надрукує KILL.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">KILL
@@ -169,6 +188,16 @@ TERM
 bash -c &quot;pkill -f forever.py; echo я живий&quot;
 echo $?
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»). <code>-c</code> - виконати команди з рядка в новому bash: bash -c 'echo привіт'.</li>
+<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>&amp;</code> - запускає команду у фоні, термінал лишається вільним. Назва: ampersand («амперсанд») - «запустити у фоні».</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <p>Справжній сеанс (PID у тебе інший):</p>
@@ -222,6 +251,13 @@ python3 forever.py
 4
 ^CTraceback (most recent call last):
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>jobs</code> - показує фонові й призупинені задачі цього вікна. Назва: jobs - «задачі»: програми, запущені з цього вікна термінала.</li>
+<li><code>fg</code> - повертає задачу з фону у вікно. Назва: foreground - «передній план»: повернути задачу у вікно.</li>
+</ul>
+</blockquote>
 <p><code>fg</code> повертає програму, і вона рахує далі з того самого місця. Зупини Ctrl+C.</p>
 <p><strong>Крок 3. Фон: <code>&amp;</code>, <code>pgrep</code>, <code>kill</code>.</strong> <code>&gt; /dev/null</code> викидає вивід, щоб числа не сипались у термінал:</p>
 <pre><code class="language-bash">python3 forever.py &gt; /dev/null &amp;
@@ -230,6 +266,13 @@ pgrep -af forever
 kill %1
 jobs
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>pgrep</code> - знаходить PID процесів за назвою. Назва: process grep - «grep по процесах»: шукає процеси за назвою. <code>-a</code> - друкувати поруч з PID повну команду; <code>-f</code> - шукати слово в усьому командному рядку, а не лише в назві програми.</li>
+<li><code>kill</code>: <code>%1</code> - задача номер 1 з jobs у ЦЬОМУ вікні термінала (з іншого вікна - лише PID).</li>
+</ul>
+</blockquote>
 <p>Справжній сеанс (PID у тебе інший):</p>
 <pre><code class="language-text">$ python3 forever.py &gt; /dev/null &amp;
 [1] 287
@@ -258,12 +301,25 @@ killall -v sleep
 <pre><code class="language-text">Killed sleep(3692) with signal 15
 Killed sleep(3693) with signal 15
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sleep</code> - чекає вказану кількість секунд. Назва: sleep - «спати»: чекати вказаний час. <code>300</code> - 300 секунд = 5 хвилин; дробові теж можна: 0.5.</li>
+<li><code>killall</code> - зупиняє всі процеси з такою назвою. Назва: kill all - «вбити всіх» з такою назвою програми. <code>-v</code> - писати, кого саме вбив і яким сигналом; <code>sleep</code> - назва ПРОГРАМИ (як у стовпці COMMAND), а не файлу скрипта.</li>
+</ul>
+</blockquote>
 <p>(«Killed ... with signal 15» - тут це SIGTERM, просто так пише killall.)</p>
 <p><strong>Крок 5. <code>nohup</code> - щоб жило після закриття терміналу.</strong></p>
 <pre><code class="language-bash">nohup python3 forever.py &amp;
 </code></pre>
 <pre><code class="language-text">nohup: ignoring input and appending output to 'nohup.out'
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nohup</code> - запускає програму, що не помре з терміналом. Назва: no hang up - «не клади трубку»: не зважати на сигнал SIGHUP.</li>
+</ul>
+</blockquote>
 <p>Вивід програми тепер іде у файл <code>nohup.out</code> (подивись <code>cat nohup.out</code>). Закрий термінал, відкрий новий:
 <code>pgrep -af forever</code> її ще бачить. Зупини: <code>pkill -f forever.py</code> (тут це безпечно - ти запускаєш <code>pkill</code> прямо з
 терміналу, а не з <code>bash -c</code>) або <code>kill PID</code>.</p>
@@ -273,6 +329,14 @@ ps -o pid,ni,comm -p $!
 renice -n 15 -p $!
 kill %1
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nice</code> - запускає програму з нижчим пріоритетом. Назва: nice - «ввічливий»: програма поступається процесором іншим. <code>-n</code> - на скільки збільшити nice: 10 - помітно лагідніше; від'ємне - лише з sudo.</li>
+<li><code>ps</code> - показує запущені процеси і їхні номери PID. Назва: process status - «стан процесів». <code>-o</code> - які стовпці показати, через кому без пробілів: -o pid,ni,comm; <code>-p</code> - лише процес з цим PID: -p 5066 або -p $! (остання фонова програма); <code>pid,ni,comm</code> - стовпці: номер процесу, число nice (пріоритет), назва програми.</li>
+<li><code>renice</code> - змінює пріоритет запущеного процесу. Назва: re-nice - «знову nice»: змінити пріоритет уже запущеного процесу. <code>-n</code> - нове число nice (від -20 до 19; без sudo - не менше за поточне); <code>-p</code> - далі йдуть PID процесів.</li>
+</ul>
+</blockquote>
 <p><code>$!</code> - PID останньої фонової програми. Справжній сеанс (PID у тебе інший):</p>
 <pre><code class="language-text">$ nice -n 10 python3 forever.py &gt; /dev/null &amp;
 [1] 5066
@@ -290,6 +354,15 @@ $ renice -n 15 -p $!
 <pre><code class="language-bash">ps aux --sort=-%mem | head -4
 top
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ps</code>: <code>--sort</code> - впорядкувати: --sort=-%mem - за памʼяттю, найбільші зверху (мінус = навпаки); <code>aux</code> - без дефіса (старий стиль BSD): a - усіх користувачів, u - з власником і %CPU/%MEM, x - і без термінала.</li>
+<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
+<li><code>top</code> - живий список процесів (вийти - q). Назва: top - «верх»: процеси, що найбільше їдять процесор, - нагорі списку.</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <p><code>ps aux</code> - стовпці USER, PID, %CPU, %MEM (частка пам'яті), RSS (пам'ять у КБ), COMMAND. <code>--sort=-%mem</code> - за пам'яттю,
 найбільші зверху. У <code>top</code>: <code>q</code> - вийти, <code>k</code> - вбити (спитає PID), <code>r</code> - змінити nice (з вбудованої довідки <code>top</code>,
 клавіша <code>h</code>). У <code>htop</code> (<code>sudo apt install htop</code>) - внизу підказки: F6 SortBy (сортувати), F9 Kill, F10 Quit; стрілками
@@ -300,6 +373,15 @@ nproc
 free -h
 sensors
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>uptime</code> - показує, скільки працює система, і навантаження. Назва: up time - «час роботи» з увімкнення.</li>
+<li><code>nproc</code> - друкує кількість ядер процесора. Назва: number of processing units - «кількість обчислювальних одиниць» (ядер).</li>
+<li><code>free</code> - показує памʼять: скільки зайнято і доступно. Назва: free - «вільна» (скільки вільної памʼяті). <code>-h</code> - зручні одиниці Ki, Mi, Gi замість кілобайтів.</li>
+<li><code>sensors</code> - показує температури і вентилятори. Назва: sensors - «датчики».</li>
+</ul>
+</blockquote>
 <p>Справжній <code>uptime</code> з тестової системи:</p>
 <pre><code class="language-text"> 09:50:31 up 11 min,  1 user,  load average: 0.42, 0.68, 0.41
 </code></pre>

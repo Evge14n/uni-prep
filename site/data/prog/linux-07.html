@@ -76,13 +76,25 @@
 <p><strong>Інші корисні:</strong> <code>wc -l</code> (рядки), <code>sort</code>, <code>uniq -c</code> (порахувати однакові сусідні), <code>head</code>, <code>tail</code>,
 <code>find . -name "*.py"</code> (знайти файли за назвою).</p>
 <p><strong>Ввід для програми з input().</strong> Програма питає число - можна подати без клавіатури:</p>
-<pre><code>printf &quot;5\n&quot; | python3 lab.py
+<pre><code class="language-bash">printf &quot;5\n&quot; | python3 lab.py
 printf &quot;3\n4\n&quot; | python3 lab.py      # два input() - два рядки
 python3 lab.py &lt; vvid.txt
 </code></pre>
-<p>Зручно, коли ганяєш ту саму перевірку багато разів.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>&lt;</code> - подає файл програмі замість клавіатури. Назва: input redirect - «ввід з файлу».</li>
+<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
+Зручно, коли ганяєш ту саму перевірку багато разів.</p>
+</blockquote>
 <h3 id="руками-10-хв">Руками (10 хв)</h3>
-<pre><code>cd ~/univer/praktyka
+<pre><code class="language-bash">cd ~/univer/praktyka
 printf 'def area(r):\n    return 3.14 * r * r\n\n\ndef perimeter(r):\n    return 2 * 3.14 * r\n\nprint(area(2))\n' &gt; geom.py
 grep &quot;def &quot; geom.py
 grep -n &quot;def &quot; geom.py
@@ -97,13 +109,38 @@ cat err.txt                          # No such file or directory
 ls / | wc -l
 find ~/univer -name &quot;*.py&quot; -not -path &quot;*/.venv/*&quot; | head
 printf 'name = input()\nprint(&quot;Привіт,&quot;, name)\n' &gt; hi.py
-printf &quot;Євген\n&quot; | python3 hi.py
+printf &quot;Студент\n&quot; | python3 hi.py
 history | grep cd | tail -5
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-n</code> - показати номер рядка перед кожним збігом (line number); <code>-c</code> - лише порахувати рядки зі збігом у кожному файлі (count); <code>-v</code> - навпаки: рядки, де шаблону НЕМА (invert).</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>/</code> - корінь системи: bin, etc, home, usr .</li>
+<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> - лише кількість рядків (lines).</li>
+<li><code>find</code> - шукає файли за назвою, часом чи власником. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: -name "<em>.py"; великі й малі літери різні; <code>-not</code> - заперечення наступної умови: <code>-not -user "$USER"</code> - чужі файли; <code>-path</code> - шлях (а не лише назва) підходить під шаблон: -path '</em>/.venv/*'.</li>
+<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
+<li><code>history</code> - показує список уже набраних команд з номерами. Назва: history - «історія» набраних команд.</li>
+<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+<li><code>2&gt;</code> - пише лише помилки у файл. Назва: redirect stderr - «перенаправити помилки»: 2 - номер потоку помилок.</li>
+</ul>
+</blockquote>
 <p>Якщо на цьому ПК чи ноутбуці лаби лежать у <code>~/univer/prog</code> або <code>~/univer/labs</code>:</p>
-<pre><code>grep -rn &quot;import doctest&quot; ~/univer/labs
+<pre><code class="language-bash">grep -rn &quot;import doctest&quot; ~/univer/labs
 grep -rl &quot;turtle&quot; ~/univer/labs
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>grep</code>: <code>-r</code> - шукати в усіх файлах теки і підтек (recursive); <code>-l</code> - лише назви файлів, де є збіг (list).</li>
+</ul>
+</blockquote>
 <h3 id="типові-помилки">Типові помилки</h3>
 <ul>
 <li><code>python3 lab.py &gt; lab.py</code> - <strong>стирає твій код</strong>: <code>&gt;</code> спершу обнуляє файл. Вивід пиши в інший файл.</li>

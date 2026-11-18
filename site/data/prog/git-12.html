@@ -100,6 +100,22 @@ printf 'g = 9.8\nprint(&quot;g =&quot;, g)\n' &gt; rozrahunok.py
 git add rozrahunok.py
 git commit -m &quot;Додай розрахунок g&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути».</li>
+<li><code>git pull</code> - забирає нові коміти з GitHub і зливає у твою гілку. Назва: pull - «потягнути»: забрати нові коміти з GitHub до себе.</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Крок 2. <code>restore</code> - зіпсував файл, ще не add.</strong></p>
 <pre><code class="language-bash">printf 'g = 100\n' &gt; rozrahunok.py
 git status --short
@@ -110,7 +126,15 @@ cat rozrahunok.py
 g = 9.8
 print(&quot;g =&quot;, g)
 </code></pre>
-<p>Увага: <code>git restore</code> затирає незакомічені зміни <strong>назавжди</strong>. Перед ним глянь <code>git diff</code>.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан». <code>--short</code> - коротко: по рядку на файл з двома буквами стану (M, A, ??).</li>
+<li><code>git restore</code> - викидає зміни у файлі або забирає його з індексу. Назва: restore - «відновити».</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.
+Увага: <code>git restore</code> затирає незакомічені зміни <strong>назавжди</strong>. Перед ним глянь <code>git diff</code>.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 3. <code>restore --staged</code> - зайвий add.</strong></p>
 <pre><code class="language-bash">printf 'print(&quot;кінець&quot;)\n' &gt;&gt; rozrahunok.py
 git add rozrahunok.py
@@ -122,6 +146,13 @@ git restore rozrahunok.py
 <pre><code class="language-text">M  rozrahunok.py
  M rozrahunok.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git restore</code>: <code>--staged</code> - забрати файл з індексу (скасувати git add); сам файл і зміни в ньому лишаються.</li>
+<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 4. <code>--amend</code> - помилка в повідомленні (до push).</strong></p>
 <pre><code class="language-bash">printf 'g = 9.81\nprint(&quot;g =&quot;, g)\n' &gt; rozrahunok.py
 git commit -am &quot;Уточни g до 9.18&quot;
@@ -134,7 +165,14 @@ git log --oneline -2
 2058b78 (HEAD -&gt; main) Уточни g до 9.81
 539e4ed Додай розрахунок g
 </code></pre>
-<p><code>--amend</code> не править старий коміт, а робить новий замість нього (інший хеш). Рядок <code>Date:</code> - git показує, що дата автора лишилась від старого коміту. Забув файл у коміті? <code>git add файл</code>, потім <code>git commit --amend --no-edit</code> (повідомлення те саме).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git commit</code>: <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні; <code>--amend</code> - переробити останній коміт: додати в нього забуте або змінити повідомлення.</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.
+<code>--amend</code> не править старий коміт, а робить новий замість нього (інший хеш). Рядок <code>Date:</code> - git показує, що дата автора лишилась від старого коміту. Забув файл у коміті? <code>git add файл</code>, потім <code>git commit --amend --no-edit</code> (повідомлення те саме).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 5. <code>reset --soft</code> - переробити останній коміт (до push).</strong></p>
 <pre><code class="language-bash">printf 'h = 2\n' &gt; vysota.py
 git add vysota.py
@@ -151,6 +189,12 @@ git log --oneline -3
 2058b78 Уточни g до 9.81
 539e4ed Додай розрахунок g
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git reset</code> - пересуває гілку назад на інший коміт (--hard стирає зміни). Назва: reset - «скинути, повернути до». <code>--soft</code> - гілка назад, а зміни скасованих комітів лишаються в індексі - готові до нового коміту; <code>HEAD~1</code> - на один коміт назад (HEAD~3 - на три).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 6. <code>revert</code> - помилка вже на GitHub.</strong></p>
 <pre><code class="language-bash">git push
 printf 'g = 0\n' &gt; rozrahunok.py
@@ -170,7 +214,14 @@ print(&quot;g =&quot;, g)
 To github.com:Evge14n/pisochnytsia.git
    78dc358..31e6c9b  main -&gt; main
 </code></pre>
-<p><code>--no-edit</code> - взяти готове повідомлення <code>Revert "..."</code>. Без нього відкриється nano з цим повідомленням (Ctrl+O, Enter, Ctrl+X). Замість <code>HEAD</code> можна дати хеш будь-якого старішого коміту.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub.</li>
+<li><code>git revert</code> - новим комітом скасовує зміни старого коміту. Назва: revert - «повернути назад». <code>--no-edit</code> - взяти готове повідомлення «Revert ...», не відкриваючи nano; <code>HEAD</code> - скасувати останній коміт; можна будь-який хеш з git log.
+<code>--no-edit</code> - взяти готове повідомлення <code>Revert "..."</code>. Без нього відкриється nano з цим повідомленням (Ctrl+O, Enter, Ctrl+X). Замість <code>HEAD</code> можна дати хеш будь-якого старішого коміту.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 7. <code>reset --hard</code> і порятунок через reflog.</strong></p>
 <blockquote>
 <p><strong>Увага.</strong> <code>git reset --hard</code> пересуває гілку назад і <strong>затирає</strong> робочу теку. Коміти можна врятувати через reflog, а незакомічені зміни - ні. Тут ми робимо це навмисно, у пісочниці, з усім закоміченим.</p>
@@ -193,7 +244,15 @@ b319df5 HEAD@{1}: commit: Важливий файл
 HEAD is now at b319df5 Важливий файл
 важливо
 </code></pre>
-<p>Файл повернувся з тим самим вмістом. Можна і за хешем з reflog: <code>git reset --hard b319df5</code> (у тебе свій хеш).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git reset</code>: <code>--hard</code> - НЕБЕЗПЕЧНО: гілка назад і файли теж; незакомічені зміни зникають назавжди; <code>HEAD@{1}</code> - туди, де HEAD був крок тому за git reflog - так скасовують невдалий reset.</li>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+<li><code>git reflog</code> - журнал, куди ходив HEAD; рятує «загублені» коміти. Назва: reflog - від reference log, «журнал посилань»: куди ходив HEAD.
+Файл повернувся з тим самим вмістом. Можна і за хешем з reflog: <code>git reset --hard b319df5</code> (у тебе свій хеш).</li>
+</ul>
+</blockquote>
 <p><strong>Чому не <code>git push --force</code>.</strong> Якщо зробити <code>reset</code> вже запушеного коміту, звичайний push відмовить (див. «Типові помилки»). «Пробити» його можна силою:</p>
 <pre><code class="language-text">git push --force              # НЕ в спільну гілку: GitHub стане як у тебе, а чужі коміти, яких ти не бачив, зникнуть
 git push --force-with-lease   # «сила з перевіркою»: відмовить, якщо на GitHub зʼявилось щось, чого ти ще не забрав

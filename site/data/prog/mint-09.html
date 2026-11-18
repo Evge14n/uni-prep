@@ -77,7 +77,7 @@ Tk чекає. Якщо вікно зависло і не закриваєтьс
   turtle, повний шлях S малої кульки, кількість зіткнень N, графіки matplotlib S(m), S(M), S(L), S(v) по 20+ точок і
   N(M/m), відповіді на 8 питань з фізики (с. 21). Введені числа перевіряти.</li>
 </ul>
-<p>Теорію turtle - курс Python (тека <code>Курс/</code> на ПК), уроки 05 і 06.</p>
+<p>Теорію turtle - курс Python (на сайті - <a href="#/u/prog/uroky">Уроки Python</a>), уроки 05 і 06.</p>
 <h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
 <p><strong>1.</strong> Шестикутник «без вікна». Що надрукує останній рядок?</p>
 <pre><code class="language-python">import turtle
@@ -213,7 +213,7 @@ if __name__ == &quot;__main__&quot;:       ← усе, що малює, - тіл
   розбору падіння, тобі він не потрібен. Код виходу - 131 (<code>echo $?</code>).
 - Закрив вікно хрестиком <strong>посеред</strong> малювання - буде помилка <code>turtle.Terminator</code> (вікна вже нема, а черепашка ще
   малює). Теж не баг: просто дочекайся кінця. Текст цієї помилки тут не відтворено (потрібен екран), опис - у
-  «Курс/ДОВІДНИК-ФУНКЦІЙ.md», розділ turtle → <code>turtle.Terminator</code>.</p>
+  <a href="#/u/prog/dovidnyk">Довідник функцій</a>, розділ turtle → <code>turtle.Terminator</code>.</p>
 <p><strong>Крок 5. Математика - doctest без вікна.</strong> Не пиши doctest, який створює <code>turtle.Turtle()</code> чи <code>turtle.Screen()</code>: він
 відкриє вікно. Винось обчислення у функцію, що <strong>повертає</strong> число, а рух перевіряй через <code>TNavigator</code>.
 Приклад на <strong>іншій</strong> задачі (не з ЛР4): скільки сторін має правильний многокутник, якщо на кожній вершині черепашка
@@ -438,8 +438,8 @@ https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html</p>
 <li>Python, tkinter: https://docs.python.org/3/library/tkinter.html (відкрито 18.11.2026)</li>
 <li>matplotlib, savefig: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html (відкрито 18.11.2026)</li>
 <li>black, ключ <code>-l, --line-length</code> і типова довжина 88: вивід <code>python3 -m black --help</code> у Mint 22.3 (18.11.2026)</li>
-<li>Курс Python (тека <code>Курс/</code> на ПК): урок 05 (turtle, matplotlib), урок 06 (анімація turtle);
-  «Курс/ДОВІДНИК-ФУНКЦІЙ.md», розділи turtle і matplotlib.pyplot.</li>
+<li>Курс Python (на сайті - <a href="#/u/prog/uroky">Уроки Python</a>): урок 05 (turtle, matplotlib), урок 06 (анімація turtle);
+  <a href="#/u/prog/dovidnyk">Довідник функцій</a>, розділи turtle і matplotlib.pyplot.</li>
 <li><code>Ctrl+\</code> (SIGQUIT) і <code>Quit (core dumped)</code>, код 131 - перевірено в інтерактивному bash тестової Mint 22.3; українські
   тексти - з перекладів bash і coreutils (пакет <code>language-pack-uk-base</code>), 18.11.2026.</li>
 <li>Усі виводи в уроці - з тестової Linux Mint 22.3 (python3 3.12.3, matplotlib 3.11, black 26.10), 18.11.2026.</li>

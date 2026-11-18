@@ -10,10 +10,10 @@
 - Завдання 3: пружні зіткнення стіна - мала кулька - велика кулька, анімація turtle + графіки matplotlib.</p>
 <hr>
 <h2 id="0-перед-стартом-2-хвилини-зекономить-пів-години">0. Перед стартом (2 хвилини, зекономить пів години)</h2>
-<p><strong>Як запускати (оновлено 18.11, ULINUX2: на ноутбуці Linux Mint).</strong> У терміналі Mint: один раз
+<p><strong>Як запускати (на ноутбуці Linux Mint).</strong> У терміналі Mint: один раз
 <code>sudo apt install python3-tk</code> (на свіжій Mint tkinter нема - без нього <code>No module named 'tkinter'</code>), далі
 <code>mkdir -p ~/univer/labs/lr4 &amp;&amp; cd ~/univer/labs/lr4</code>, <code>nano lr4_1_1.py</code>, запуск <code>python3 lr4_1_1.py</code> -
-відкриється окреме вікно з черепашкою. Покроково - курс <code>Linux-Mint</code>, «Урок 09 - ЛР4 у терміналі (turtle)».
+відкриється окреме вікно з черепашкою. Покроково - <a href="#/u/prog/mint-09">урок Linux Mint 09 - ЛР4 у терміналі</a>.
 - <code>turtle.done()</code> - останнім рядком, інакше вікно блимне і закриється.
 - Файл НЕ називати <code>turtle.py</code>. Тоді <code>import turtle</code> імпортує твій же файл, і буде
   <code>AttributeError: module 'turtle' has no attribute 'forward'</code>. Назви <code>lab4_1_1.py</code> тощо.
@@ -22,8 +22,7 @@
   Тоді Kernel → Restart. Краще одразу <code>.py</code>.
 - <code>no display name and no $DISPLAY</code> буває лише без робочого столу (наприклад, через ssh або в TTY);
   у звичайному терміналі Mint на ноутбуці вікно відкривається.
-- Програма стоїть на <code>turtle.done()</code> і чекає - <strong>Ctrl+C у терміналі її не зупиняє</strong> (перевірено в уроці 09
-  курсу Linux-Mint). Закривай вікно хрестиком ✕; якщо зовсім зависло - Ctrl+\ у терміналі.</p>
+- Програма стоїть на <code>turtle.done()</code> і чекає - <strong>Ctrl+C у терміналі її не зупиняє</strong> (перевірено в <a href="#/u/prog/mint-09">уроці Mint 09</a>). Закривай вікно хрестиком ✕; якщо зовсім зависло - Ctrl+\ у терміналі.</p>
 <p><strong>Вимоги викладача, які стосуються і цієї лаби</strong>:
 - назви змінних змістовні англійською: <code>side_length</code>, <code>turn_angle</code>, <code>colors</code>, <code>circle_count</code>,
   а не <code>a</code>, <code>b</code>, <code>x1</code>. Лічильник циклу <code>i</code> у <code>for i in range(36)</code> зазвичай терплять,
@@ -35,7 +34,7 @@
 не перевіриш, але математику можна: винеси підрахунок у маленьку функцію, яка ПОВЕРТАЄ число,
 і дай їй 2-3 приклади. Наприклад <code>star_turn_angle(5, 2)</code> → <code>144.0</code>, <code>segment_pen_size(25)</code> → <code>3</code>.
 Це те, що викладач любить: «програма правильна, коли проходить доктести».</p>
-<p><strong>Каркас файлу у твоєму стилі</strong> (як ЛР3: <code># N Завдання</code>, <code>import doctest</code>, типи, докстрінги українською):</p>
+<p><strong>Каркас файлу</strong> (як у ЛР3: <code># N Завдання</code>, <code>import doctest</code>, типи, докстрінги українською):</p>
 <pre><code># 1.1 Завдання
 import doctest
 import turtle
@@ -138,13 +137,19 @@ gcd(8, 3) = 1   → одна зірка {8/3}
 <li>Поза функцією: вікно 600 × 600, виклик <code>draw_star(7, 150, 2)</code>, <code>turtle.done()</code>.</li>
 </ol>
 <h3 id="підказки">Підказки</h3>
-<p><strong>Рівень 1.</strong> Вікно потрібного розміру задає <code>turtle.setup(ширина, висота)</code>.
+<details>
+<summary>Рівень 1</summary>
+<p>Вікно потрібного розміру задає <code>turtle.setup(ширина, висота)</code>.
 Поворот у зірці - <code>right</code> чи <code>left</code>, не важливо (буде дзеркальна зірка). Важливо, щоб кут був з формули.</p>
-<p><strong>Рівень 2.</strong></p>
+</details>
+<details>
+<summary>Рівень 2</summary>
 <pre><code>turn_angle = 360 * k / n
 </code></pre>
 <p>і перевірка <code>if gcd(n, k) != 1:</code> → <code>print("Увага: ...")</code>.</p>
-<p><strong>Рівень 3.</strong></p>
+</details>
+<details>
+<summary>Рівень 3</summary>
 <pre><code>def draw_star(n: int, length: float, k: int = 2) -&gt; None:
     turn_angle = ...
     if gcd(n, k) != 1:
@@ -158,6 +163,7 @@ gcd(8, 3) = 1   → одна зірка {8/3}
 </code></pre>
 <p>Для doctest можна винести <code>star_turn_angle(n, k) -&gt; float</code> (рядок <code>360 * k / n</code>)
 і перевірити: <code>star_turn_angle(5, 2)</code> → <code>144.0</code>, <code>star_turn_angle(4, 1)</code> → <code>90.0</code>.</p>
+</details>
 <h3 id="типові-помилки">Типові помилки</h3>
 <ul>
 <li><code>360 / n * k</code> і <code>360 * k / n</code> - однаково. А от <code>360 // n * k</code> - ЦІЛОЧИСЕЛЬНЕ ділення,
@@ -186,11 +192,17 @@ gcd(8, 3) = 1   → одна зірка {8/3}
 <li><code>hideturtle()</code>, <code>done()</code>.</li>
 </ol>
 <h3 id="підказки_1">Підказки</h3>
-<p><strong>Рівень 1.</strong> Змінна циклу тут потрібна (для кольору), тому <code>for i in range(36)</code>, а не <code>for _</code>.</p>
-<p><strong>Рівень 2.</strong></p>
+<details>
+<summary>Рівень 1</summary>
+<p>Змінна циклу тут потрібна (для кольору), тому <code>for i in range(36)</code>, а не <code>for _</code>.</p>
+</details>
+<details>
+<summary>Рівень 2</summary>
 <pre><code>turtle.pencolor(colors[circle_index % len(colors)])
 </code></pre>
-<p><strong>Рівень 3.</strong></p>
+</details>
+<details>
+<summary>Рівень 3</summary>
 <pre><code>for circle_index in range(...):
     turtle.pencolor(...)
     turtle.circle(...)
@@ -198,6 +210,7 @@ gcd(8, 3) = 1   → одна зірка {8/3}
 </code></pre>
 <p>Для doctest: функція <code>pick_color(index, colors)</code> повертає <code>colors[index % len(colors)]</code>;
 <code>pick_color(7, ["a", "b", "c"])</code> → <code>'b'</code>.</p>
+</details>
 <h3 id="типові-помилки_1">Типові помилки</h3>
 <ul>
 <li><code>colors[i % 6]</code> замість <code>colors[i % len(colors)]</code> - працює, але умова прямо просить <code>len(colors)</code>.</li>
@@ -240,11 +253,17 @@ i = 40 ... 59 → pensize(4)
 <li><code>hideturtle()</code>, <code>done()</code>.</li>
 </ol>
 <h3 id="підказки_2">Підказки</h3>
-<p><strong>Рівень 1.</strong> Що змінюється від кроку до кроку: довжина, колір, товщина. Що не змінюється: кут.</p>
-<p><strong>Рівень 2.</strong></p>
+<details>
+<summary>Рівень 1</summary>
+<p>Що змінюється від кроку до кроку: довжина, колір, товщина. Що не змінюється: кут.</p>
+</details>
+<details>
+<summary>Рівень 2</summary>
 <pre><code>turtle.pensize(2 + segment_index // 20)
 </code></pre>
-<p><strong>Рівень 3.</strong></p>
+</details>
+<details>
+<summary>Рівень 3</summary>
 <pre><code>segment_length = 10
 for segment_index in range(60):
     turtle.pensize(...)
@@ -254,6 +273,7 @@ for segment_index in range(60):
     segment_length += ...
 </code></pre>
 <p>Для doctest: <code>segment_pen_size(0)</code> → <code>2</code>, <code>segment_pen_size(20)</code> → <code>3</code>, <code>segment_pen_size(59)</code> → <code>4</code>.</p>
+</details>
 <h3 id="типові-помилки_2">Типові помилки</h3>
 <ul>
 <li>Межі груп: <code>if i &lt; 20 ... elif i &lt; 40 ... else</code> - правильно. <code>if i &lt;= 20</code> - 21 відрізок у першій групі.</li>
@@ -288,16 +308,23 @@ for segment_index in range(60):
 <li><code>hideturtle()</code>, <code>done()</code>.</li>
 </ol>
 <h3 id="підказки_3">Підказки</h3>
-<p><strong>Рівень 1.</strong> Спершу намалюй ОДИН ромб і переконайся, що черепашка після нього там само і дивиться туди ж
+<details>
+<summary>Рівень 1</summary>
+<p>Спершу намалюй ОДИН ромб і переконайся, що черепашка після нього там само і дивиться туди ж
 (постав <code>turtle.showturtle()</code> і подивись на стрілку). Тоді вже цикл.</p>
-<p><strong>Рівень 2.</strong> Ромб - це двічі повторена пара «вперед, 60, вперед, 120»:</p>
+</details>
+<details>
+<summary>Рівень 2</summary>
+<p>Ромб - це двічі повторена пара «вперед, 60, вперед, 120»:</p>
 <pre><code>for _ in range(2):
     turtle.forward(side_length)
     turtle.left(60)
     turtle.forward(side_length)
     turtle.left(120)
 </code></pre>
-<p><strong>Рівень 3.</strong></p>
+</details>
+<details>
+<summary>Рівень 3</summary>
 <pre><code>for rhombus_index in range(24):
     if rhombus_index &lt; ...:
         turtle.pencolor(&quot;cyan&quot;)
@@ -306,6 +333,7 @@ for segment_index in range(60):
     draw_rhombus(100)
     turtle.left(...)
 </code></pre>
+</details>
 <h3 id="типові-помилки_3">Типові помилки</h3>
 <ul>
 <li>Повороти на 60 і 120 переплутані з внутрішніми кутами: «вперед, ліворуч 120» чотири рази - це не ромб, а трикутник, що обходиться двічі.</li>
@@ -338,14 +366,21 @@ for segment_index in range(60):
 <li><code>hideturtle()</code>, <code>done()</code>.</li>
 </ol>
 <h3 id="підказки_4">Підказки</h3>
-<p><strong>Рівень 1.</strong> Радіуси можна взяти списком <code>[20, 40, ...]</code> або <code>range(20, 141, 20)</code> - 141, бо кінець не входить.</p>
-<p><strong>Рівень 2.</strong> Перехід до старту кожного шестикутника:</p>
+<details>
+<summary>Рівень 1</summary>
+<p>Радіуси можна взяти списком <code>[20, 40, ...]</code> або <code>range(20, 141, 20)</code> - 141, бо кінець не входить.</p>
+</details>
+<details>
+<summary>Рівень 2</summary>
+<p>Перехід до старту кожного шестикутника:</p>
 <pre><code>turtle.penup()
 turtle.goto(0, -size)
 turtle.setheading(0)
 turtle.pendown()
 </code></pre>
-<p><strong>Рівень 3.</strong></p>
+</details>
+<details>
+<summary>Рівень 3</summary>
 <pre><code>for hexagon_index in range(7):
     size = 20 + 20 * hexagon_index
     if hexagon_index &lt; ...:
@@ -356,6 +391,7 @@ turtle.pendown()
     (перехід у (0, -size), як вище)
     turtle.circle(size, steps=6)
 </code></pre>
+</details>
 <h3 id="типові-помилки_4">Типові помилки</h3>
 <ul>
 <li>Без <code>penup</code> між шестикутниками - зайві вертикальні лінії від одного до іншого.</li>
@@ -392,8 +428,12 @@ r ≥ 110         → &quot;gold&quot;            (i = 16 ... 19, 4 кола)
 <li><code>hideturtle()</code>, <code>done()</code>.</li>
 </ol>
 <h3 id="підказки_5">Підказки</h3>
-<p><strong>Рівень 1.</strong> Колір вибирається за РАДІУСОМ, а не за номером. Тому спершу порахуй <code>radius</code>, потім колір.</p>
-<p><strong>Рівень 2.</strong></p>
+<details>
+<summary>Рівень 1</summary>
+<p>Колір вибирається за РАДІУСОМ, а не за номером. Тому спершу порахуй <code>radius</code>, потім колір.</p>
+</details>
+<details>
+<summary>Рівень 2</summary>
 <pre><code>if radius &lt; 70:
     ...
 elif radius &lt; 110:
@@ -402,7 +442,11 @@ else:
     ...
 </code></pre>
 <p>(у <code>elif</code> не треба писати <code>70 &lt;= radius</code> - якщо дійшли сюди, radius уже ≥ 70).</p>
-<p><strong>Рівень 3.</strong> Для doctest: <code>crystal_color(70)</code> → <code>'royal blue'</code>, <code>crystal_color(110)</code> → <code>'gold'</code> - межі найважливіші.</p>
+</details>
+<details>
+<summary>Рівень 3</summary>
+<p>Для doctest: <code>crystal_color(70)</code> → <code>'royal blue'</code>, <code>crystal_color(110)</code> → <code>'gold'</code> - межі найважливіші.</p>
+</details>
 <h3 id="типові-помилки_5">Типові помилки</h3>
 <ul>
 <li><code>r &lt;= 70</code> замість <code>r &lt; 70</code> - коло з r = 70 стане блакитним, а має бути royal blue.</li>
@@ -433,17 +477,24 @@ x = 359 → 4,59
 <li><code>done()</code> (тут умова НЕ просить ховати черепашку - можна і сховати, не помилка).</li>
 </ol>
 <h3 id="підказки_6">Підказки</h3>
-<p><strong>Рівень 1.</strong> Номер ітерації і є довжина відрізка - окремої змінної довжини не треба.</p>
-<p><strong>Рівень 2.</strong></p>
+<details>
+<summary>Рівень 1</summary>
+<p>Номер ітерації і є довжина відрізка - окремої змінної довжини не треба.</p>
+</details>
+<details>
+<summary>Рівень 2</summary>
 <pre><code>turtle.pensize(x / 100 + 1)
 </code></pre>
-<p><strong>Рівень 3.</strong></p>
+</details>
+<details>
+<summary>Рівень 3</summary>
 <pre><code>for step in range(360):
     turtle.pencolor(colors[step % len(colors)])
     turtle.pensize(...)
     turtle.forward(...)
     turtle.left(...)
 </code></pre>
+</details>
 <h3 id="типові-помилки_6">Типові помилки</h3>
 <ul>
 <li><code>x // 100 + 1</code> - товщина стрибатиме 1, 2, 3, 4 сходинками замість плавного росту.</li>
@@ -482,12 +533,18 @@ y = r · sin θ
 <li><code>hideturtle()</code>, <code>done()</code>.</li>
 </ol>
 <h3 id="підказки_7">Підказки</h3>
-<p><strong>Рівень 1.</strong> Крок 1° достатній: на пелюстку припадає 12 точок, виходить гладко.</p>
-<p><strong>Рівень 2.</strong></p>
+<details>
+<summary>Рівень 1</summary>
+<p>Крок 1° достатній: на пелюстку припадає 12 точок, виходить гладко.</p>
+</details>
+<details>
+<summary>Рівень 2</summary>
 <pre><code>theta = math.radians(angle)
 radius = 180 * math.cos(15 * theta)
 </code></pre>
-<p><strong>Рівень 3.</strong></p>
+</details>
+<details>
+<summary>Рівень 3</summary>
 <pre><code>for angle in range(...):
     theta = ...
     radius = ...
@@ -499,6 +556,7 @@ radius = 180 * math.cos(15 * theta)
         ...
     turtle.goto(point_x, point_y)
 </code></pre>
+</details>
 <h3 id="типові-помилки_7">Типові помилки</h3>
 <ul>
 <li><code>math.cos(angle)</code> без <code>radians</code> - вийде хаотична «зірка» з ламаних ліній, бо 1, 2, 3 ... сприймаються як радіани (1 рад ≈ 57°).</li>
@@ -527,9 +585,16 @@ i = 48 ... 71  → turquoise (240° ... 355°)
 <li><code>hideturtle()</code>, <code>done()</code>.</li>
 </ol>
 <h3 id="підказки_8">Підказки</h3>
-<p><strong>Рівень 1.</strong> Порядок 4 кроків у циклі - як у самій умові, нічого вигадувати не треба.</p>
-<p><strong>Рівень 2.</strong> Колір без <code>if</code>: список з 3 кольорів і <code>group_colors[i // 24]</code>. З <code>if / elif / else</code> - теж правильно.</p>
-<p><strong>Рівень 3.</strong></p>
+<details>
+<summary>Рівень 1</summary>
+<p>Порядок 4 кроків у циклі - як у самій умові, нічого вигадувати не треба.</p>
+</details>
+<details>
+<summary>Рівень 2</summary>
+<p>Колір без <code>if</code>: список з 3 кольорів і <code>group_colors[i // 24]</code>. З <code>if / elif / else</code> - теж правильно.</p>
+</details>
+<details>
+<summary>Рівень 3</summary>
 <pre><code>for ray_index in range(72):
     turtle.pencolor(...)
     turtle.forward(120)
@@ -537,6 +602,7 @@ i = 48 ... 71  → turquoise (240° ... 355°)
     turtle.backward(...)
     turtle.left(...)
 </code></pre>
+</details>
 <h3 id="типові-помилки_8">Типові помилки</h3>
 <ul>
 <li><code>i % 3</code> замість <code>i // 24</code> - кольори чергуватимуться через промінь, а не третинами.</li>
@@ -562,18 +628,26 @@ i = 48 ... 71  → turquoise (240° ... 355°)
 <li><code>hideturtle()</code>, <code>done()</code>.</li>
 </ol>
 <h3 id="підказки_9">Підказки</h3>
-<p><strong>Рівень 1.</strong> Те саме, що 1.4, тільки фігура квадрат і кольори по колу, а не половинами.</p>
-<p><strong>Рівень 2.</strong> Квадрат:</p>
+<details>
+<summary>Рівень 1</summary>
+<p>Те саме, що 1.4, тільки фігура квадрат і кольори по колу, а не половинами.</p>
+</details>
+<details>
+<summary>Рівень 2</summary>
+<p>Квадрат:</p>
 <pre><code>for _ in range(4):
     turtle.forward(side_length)
     turtle.left(90)
 </code></pre>
-<p><strong>Рівень 3.</strong></p>
+</details>
+<details>
+<summary>Рівень 3</summary>
 <pre><code>for square_index in range(72):
     turtle.pencolor(colors[...])
     draw_square(150)
     turtle.left(...)
 </code></pre>
+</details>
 <h3 id="типові-помилки_9">Типові помилки</h3>
 <ul>
 <li>Вкладені цикли з однаковою змінною <code>i</code> (<code>for i in range(72):</code> і всередині <code>for i in range(4):</code>) - внутрішній зіпсує номер для кольору. Внутрішній - <code>for _ in range(4)</code>.</li>
@@ -621,9 +695,13 @@ y_turtle = 263 - y_paint
 <li>Список птахів <code>[(x, y, size), ...]</code> і цикл з <code>draw_bird</code>.</li>
 </ol>
 <h3 id="підказки_10">Підказки</h3>
-<p><strong>Рівень 1.</strong> Кольори в turtle можна задавати і назвою, і кодом <code>"#fb9a35"</code>. Коди можна взяти
+<details>
+<summary>Рівень 1</summary>
+<p>Кольори в turtle можна задавати і назвою, і кодом <code>"#fb9a35"</code>. Коди можна взяти
 піпеткою з картинки (Paint → піпетка → «Змінити кольори» показує RGB; переведи в hex або пиши <code>t.color((251, 154, 53))</code> після <code>screen.colormode(255)</code>).</p>
-<p><strong>Рівень 2.</strong></p>
+</details>
+<details>
+<summary>Рівень 2</summary>
 <pre><code>def draw_polygon(t, points, color):
     t.penup()
     t.goto(points[0])
@@ -636,9 +714,13 @@ y_turtle = 263 - y_paint
     t.end_fill()
 </code></pre>
 <p>(це майже вся функція - її дала сама теорія на стор. 5-6, тут лише зібрано докупи).</p>
-<p><strong>Рівень 3.</strong> Небо зверху вниз, наприклад:</p>
+</details>
+<details>
+<summary>Рівень 3</summary>
+<p>Небо зверху вниз, наприклад:</p>
 <pre><code>draw_polygon(t, [(-392, 263), (392, 263), (392, 148), (-392, 148)], &quot;#fdd59e&quot;)
 </code></pre>
+</details>
 <h3 id="типові-помилки_10">Типові помилки</h3>
 <ul>
 <li>Порядок шарів: вода після переднього плану - вода перекриє скелі.</li>
@@ -698,14 +780,22 @@ x = R · cos φ,   y = R · sin φ      (φ - у радіани!)
 <li>Виклик <code>main_loop()</code> один раз і <code>screen.mainloop()</code>.</li>
 </ol>
 <h3 id="підказки_11">Підказки</h3>
-<p><strong>Рівень 1.</strong> Тема - зручно словником: <code>{"background": "white", "face": "black", "hour_hand": ..., "second_hand": "red", "text": ..., "flash": ...}</code>, а теми - список таких словників. Тоді <code>theme = THEMES[theme_index]</code> і всюди <code>theme["face"]</code>.</p>
-<p><strong>Рівень 2.</strong> Перемикання тем по колу - як у теорії:</p>
+<details>
+<summary>Рівень 1</summary>
+<p>Тема - зручно словником: <code>{"background": "white", "face": "black", "hour_hand": ..., "second_hand": "red", "text": ..., "flash": ...}</code>, а теми - список таких словників. Тоді <code>theme = THEMES[theme_index]</code> і всюди <code>theme["face"]</code>.</p>
+</details>
+<details>
+<summary>Рівень 2</summary>
+<p>Перемикання тем по колу - як у теорії:</p>
 <pre><code>theme_index = (theme_index + 1) % len(THEMES)
 theme_index = (theme_index - 1) % len(THEMES)    # з 0 дасть останню
 </code></pre>
 <p>Час: <code>now = datetime.now()</code>, далі <code>now.hour</code>, <code>now.minute</code>, <code>now.second</code>.
 Цифровий текст: <code>now.strftime("%H:%M:%S")</code>.</p>
-<p><strong>Рівень 3.</strong> Стрілка:</p>
+</details>
+<details>
+<summary>Рівень 3</summary>
+<p>Стрілка:</p>
 <pre><code>def draw_hand(t, clock_angle, length, width, color):
     t.penup()
     t.goto(0, 0)
@@ -718,6 +808,7 @@ theme_index = (theme_index - 1) % len(THEMES)    # з 0 дасть останн�
 <p>День тижня українською: <code>strftime("%A")</code> дасть англійською ("Tuesday"), тому список
 <code>["Понеділок", "Вівторок", ...]</code> і <code>DAY_NAMES[now.weekday()]</code> (weekday: понеділок = 0).
 Спалах: <code>screen.bgcolor(theme["flash"] if now.second == 0 else theme["background"])</code>.</p>
+</details>
 <h3 id="типові-помилки_11">Типові помилки</h3>
 <ul>
 <li>Немає <code>global theme_index</code> в обробнику - <code>UnboundLocalError</code>.</li>
@@ -775,7 +866,9 @@ u_m = ──────────────────────      u_
 <li><code>main()</code>.</li>
 </ol>
 <h3 id="підказки_12">Підказки</h3>
-<p><strong>Рівень 1.</strong> Спершу без анімації і графіків: тільки <code>simulate</code> і <code>print(N, S)</code>. Перевір на
+<details>
+<summary>Рівень 1</summary>
+<p>Спершу без анімації і графіків: тільки <code>simulate</code> і <code>print(N, S)</code>. Перевір на
 простих випадках (нижче), потім анімація, потім графіки.</p>
 <p>Контрольні числа (L = 10, v = 1):</p>
 <pre><code>m = 1, M = 1     → N = 2,  S = 5   (L/2: долетіла до стіни і все)
@@ -783,7 +876,10 @@ m = 1, M = 4     → N = 4,  S = 25
 m = 1, M = 100   → N = 16, S ≈ 243,17
 m = 2, M = 1     → N = 2,  S = 5   (важча мала просто штовхає велику і їде за нею)
 </code></pre>
-<p><strong>Рівень 2.</strong> Цикл моделювання:</p>
+</details>
+<details>
+<summary>Рівень 2</summary>
+<p>Цикл моделювання:</p>
 <pre><code>while True:
     if 0 &lt;= v_small &lt;= v_big:
         break
@@ -793,11 +889,15 @@ m = 2, M = 1     → N = 2,  S = 5   (важча мала просто штов�
     else: ...
 </code></pre>
 <p>Запобіжник: обмеж кількість ітерацій (наприклад 100 000), щоб при помилці не зависнути.</p>
-<p><strong>Рівень 3.</strong> Анімація: щоб кадр знав позиції в будь-який момент, бери останню подію, що вже
+</details>
+<details>
+<summary>Рівень 3</summary>
+<p>Анімація: щоб кадр знав позиції в будь-який момент, бери останню подію, що вже
 відбулася до моменту <code>t</code>, і <code>x = x_події + v_події · (t - t_події)</code>. Масштаб екрана підбери під
 НАЙДАЛЬШУ точку великої кульки в кінці, бо вона весь час їде вправо і інакше втече за екран.
 Для графіків <code>S(m)</code> і <code>S(M)</code> бери значення в геометричній прогресії (від M/10⁴ до 2M) і логарифмічні осі
 <code>plt.xscale("log")</code> - інакше все цікаве стиснеться в купку біля нуля.</p>
+</details>
 <h3 id="що-вийде-на-графіках-і-чому-для-фізичного-аналізу">Що вийде на графіках і чому (для фізичного аналізу)</h3>
 <ol>
 <li><strong>S(v) - горизонтальна пряма.</strong> Найважливіше пояснення. Усі моменти зіткнень пропорційні 1/v,

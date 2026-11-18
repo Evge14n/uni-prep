@@ -498,7 +498,7 @@ function tabOf(u, cur) {
   if (!cur || u.pages.some((p) => p.key === cur)) return cur;
   if (cur.startsWith("urok-")) return "uroky"; // уроки prog - сторінки всередині вкладки «Уроки»
   if (u.id !== "prog") return cur;
-  if (/^m\d$/.test(cur) || cur.startsWith("lab-") || /^(mint|git|sec|linux)-\d\d$/.test(cur)) return "shlyakh"; // UPROGONE: модулі, їхні уроки, розбори лаб
+  if (/^m\d+$/.test(cur) || cur.startsWith("lab-") || /^(mint|git|sec|linux)-\d\d$/.test(cur)) return "shlyakh"; // UPROGONE: модулі, їхні уроки, розбори лаб
   if (/shpargalka$/.test(cur)) return "shpargalky";
   return "vse"; // уроки Mint, Git, безпеки, Linux, теорія, задачі
 }
@@ -520,30 +520,43 @@ async function unitPage(id, page, anchor) {
   if (!u) return notFound();
   if (u.parent) { // старий окремий розділ (mint, git, linux, prog-sec) - тепер частина «Програмування»
     const to = (u.moved && (u.moved[page || ""] || u.moved[""])) || "";
-    location.replace(`#/u/${u.parent}/${to}`);
+    location.replace(`#/u/${u.parent}/${to}${anchor ? "/" + anchor : ""}`);
     return "redirect";
   }
   if (!page) page = u.pages[0] ? u.pages[0].key : "test";
   setTitle(u.title);
   app.dataset.s = sk(u.id);
   const p = mastery(u);
+  const compact = u.parts && u.pages[0] && page !== u.pages[0].key; // UPROGONE: опис - лише на першій вкладці
   const head = `<a class="back" href="#/subjects">${icon("left")}Усі предмети</a>
     <div class="uhead"><div>${kindBadge(u)}<h1>${esc(u.title)}</h1>
-    <p class="muted">Дата: ${esc(u.date)}. ${esc(u.points)}. ${esc(u.format || "")}</p>${memLine(u.id) ? `<p class="muted">${memLine(u.id)}</p>` : ""}</div>
+    ${compact ? "" : `<p class="muted">Дата: ${esc(u.date)}. ${esc(u.points)}. ${esc(u.format || "")}</p>`}${memLine(u.id) ? `<p class="muted">${memLine(u.id)}</p>` : ""}</div>
     ${ring(p, 64, 7, `<b>${Math.round(p * 100)}%</b>`)}</div>
     ${unitTabs(u, page)}`;
   if (page === "test") { await testStart(u, head); return animateRings(); }
   if (page === "video") { await videoPage(u, head); return animateRings(); }
   try {
     const html = await getText(`data/${u.id}/${page}.html`);
-    let crumb = "";
+    let crumb = "", foot = "";
     const md = u.id === "prog" ? await moduli() : null;
-    if (md && md.pageModule[page] && !/^m\d$/.test(page)) { // сторінка частини: з якого вона модуля
-      const m = md.modules.find((x) => x.n === md.pageModule[page]);
+    const isMod = /^m\d+$/.test(page);
+    if (md && isMod) { try { sessionStorage.setItem("uniprep:mod", page.slice(1)); } catch (e) { /* */ } }
+    if (md && !isMod) { // сторінка частини: з якого вона модуля
+      let last = null;
+      try { last = md.modules.find((x) => String(x.n) === sessionStorage.getItem("uniprep:mod")); } catch (e) { /* */ }
+      const inSeq = (m) => m && m.seq.findIndex((s) => s[0].split("/")[0] === page);
+      const m = (last && inSeq(last) >= 0) ? last : md.modules.find((x) => x.n === md.pageModule[page]) || (last && inSeq(last) >= 0 ? last : null);
       const part = PART_NAME[page.split("-")[0]] || "";
-      if (m) crumb = `<p class="crumb"><a class="chiplink" href="#/u/prog/m${m.n}">${icon("left")}Модуль ${m.n}: ${esc(m.lab)}</a>${part ? ` <span class="muted">${esc(part)}</span>` : ""}</p>`;
+      if (m) {
+        crumb = `<p class="crumb"><a class="chiplink" href="#/u/prog/m${m.n}">${icon("left")}Модуль ${m.n}: ${esc(m.lab)}</a>${part ? ` <span class="muted">${esc(part)}</span>` : ""}</p>`;
+        const i = inSeq(m);
+        const nx = i >= 0 ? m.seq.slice(i + 1).find((s) => s[0].split("/")[0] !== page) : null;
+        foot = `<nav class="modnav card" aria-label="Шлях"><a class="chiplink" href="#/u/prog/m${m.n}">${icon("left")}До модуля ${m.n}</a>` +
+          (nx ? `<span class="muted">Далі в модулі:</span> <a href="#/u/prog/${esc(nx[0])}">${esc(nx[1])}</a>`
+            : i >= 0 ? `<span class="muted">Далі:</span> <a href="#/q/prog/m${m.n}">тест модуля</a>` : "") + "</nav>";
+      }
     }
-    app.innerHTML = head + crumb + `<article class="doc">${html}</article>`;
+    app.innerHTML = head + crumb + `<article class="doc">${html}</article>` + foot;
     // UNIPROG1: «Запустити» під кодом Python (офлайн); у Mint/Git/Linux код - для термінала, без кнопок
     if ((u.id === "prog" || u.id === "prog-sec") && window.PyRun && !/^(mint|git|linux)(-|$)/.test(page)) {
       PyRun.enhance(app.querySelector("article.doc"));
@@ -554,6 +567,11 @@ async function unitPage(id, page, anchor) {
         const m = md.modules.find((x) => x.n === +a.dataset.mod);
         if (m && m.keys.length) a.insertAdjacentHTML("beforeend", ring(modMastery(m), 56, 6, `<b>${Math.round(modMastery(m) * 100)}%</b>`));
       });
+    }
+    if (isMod && !anchor) {
+      let y = 0;
+      try { y = +sessionStorage.getItem("uniprep:sc:" + location.hash) || 0; } catch (e) { /* */ }
+      if (y > 0) { requestAnimationFrame(() => window.scrollTo(0, y)); return "anchor"; }
     }
     if (anchor) { // #/u/<розділ>/<сторінка>/<якір>: розділ сторінки (зламана програма, задача, іспит)
       const el = document.getElementById(anchor);
@@ -638,9 +656,10 @@ async function modTests(u) {
   if (!md) return "";
   const rows = md.modules.filter((m) => m.keys.length).map((m) => `<li><a href="#/q/prog/m${m.n}"><span>Модуль ${m.n}: ${esc(m.lab)}</span><span class="chip">${m.keys.length} пит. · ${Math.round(modMastery(m) * 100)} %</span></a></li>`).join("");
   const parts = (u.parts || []).map((id) => UNITS.find((x) => x.id === id)).filter(Boolean)
-    .map((p) => `<a class="chiplink" href="#/q/${p.id}/train">${esc(p.ptitle || p.title)} · ${p.nq}</a>`).join(" ");
+    .map((p) => `<li><span><b>${esc(p.ptitle || p.title)}</b> <span class="muted">${p.nq} пит.</span></span><span class="pmodes">` +
+      `<a href="#/q/${p.id}/train">тренування</a> · <a href="#/q/${p.id}/real">як на справжньому</a> · <a href="#/q/${p.id}/recall">картки</a> · <a href="#/q/${p.id}/wrong">помилки</a></span></li>`).join("");
   return `<div class="card"><h3 style="margin-top:2px">Тест модуля (по лабах)</h3><ul class="topics mods">${rows}</ul></div>
-    <div class="card"><h3 style="margin-top:2px">Тест однієї частини</h3><p class="muted">Python - кнопки вище «Як на справжньому» (25 питань, лише Python, як залік).</p><p class="links">${parts}</p></div>`;
+    <div class="card"><h3 style="margin-top:2px">Тест однієї частини</h3><p class="muted">Python - кнопки вгорі («Як на справжньому» - 25 питань лише з Python, як залік).</p><ul class="topics parts">${parts}</ul></div>`;
 }
 
 async function loadPool(u, withGen = false) {
@@ -769,7 +788,7 @@ async function quiz(id, mode, fresh) {
   if (!u) return notFound();
   setTitle("Тест: " + u.title);
   app.dataset.s = sk(u.id);
-  const mm = /^([mk])(\d+)$/.exec(mode || ""); // UPROGONE: m3 - тест модуля 3, k3 - картки модуля 3
+  const mm = /^([mke])(\d+)$/.exec(mode || ""); // UPROGONE: m3 - тест модуля 3, k3 - картки, e3 - лише помилки модуля 3
   const recallMode = mode === "recall" || (mm && mm[1] === "k");
   let pool = await loadPool(u, recallMode);
   let back = "";
@@ -780,7 +799,7 @@ async function quiz(id, mode, fresh) {
     const keys = new Set(m.keys);
     pool = pool.filter((q) => keys.has(q._unit + "/" + q.id));
     back = `#/u/${u.id}/m${m.n}`;
-    setTitle(`${recallMode ? "Картки" : "Тест"}: модуль ${m.n}`);
+    setTitle(`${recallMode ? "Картки" : mm[1] === "e" ? "Помилки" : "Тест"}: модуль ${m.n}`);
   }
   const t = u.test || {};
   clearInterval(timerId);
@@ -795,7 +814,7 @@ async function quiz(id, mode, fresh) {
     }
   }
   if (!S) {
-    if (mode === "wrong") pool = pool.filter((q) => (STORE.q[q._unit + "/" + q.id] || {}).last === 0);
+    if (mode === "wrong" || (mm && mm[1] === "e")) pool = pool.filter((q) => (STORE.q[q._unit + "/" + q.id] || {}).last === 0);
     if (mode === "topics") {
       let sel = [];
       try { sel = JSON.parse(sessionStorage.getItem("uniprep:topics")) || []; } catch (e) { /* */ }
@@ -1018,13 +1037,14 @@ function recallResult(S) {
     <div class="card result">${ring(p, 150, 12, `<b class="score"><span id="cnt">${S.known}</span><small>знав з ${n}</small></b>`, "big")}
     <div class="pts">${Math.round(p * 100)} % згадав сам</div>${streakLine()}
     ${memLine(S.u.id) ? `<p>${memLine(S.u.id)}</p>` : ""}
-    <div class="btn-row" style="width:100%"><a class="btn primary" href="#/q/${S.u.id}/${S.mode}" id="again">${icon("redo")}Ще ${RECALL_N}</a><a class="btn" href="#/q/${S.u.id}/wrong">Лише помилки</a></div></div>`;
+    <div class="btn-row" style="width:100%"><a class="btn primary" href="#/q/${S.u.id}/${S.mode}" id="again">${icon("redo")}Ще ${RECALL_N}</a><a class="btn" href="#/q/${S.u.id}/${wrongOf(S)}">Лише помилки</a></div></div>`;
   $("#again").addEventListener("click", (e) => { e.preventDefault(); quiz(S.u.id, S.mode, true); });
   countUp($("#cnt"), S.known);
   animateRings();
   if (n) setTimeout(celebrate, 200);
   focusMain();
 }
+function wrongOf(S) { const m = /^[mke](\d+)$/.exec(S.mode || ""); return m ? "e" + m[1] : "wrong"; }
 function streakLine() {
   const st = streak();
   return st ? `<div class="streak on lit">${icon("flame")}<span class="num">${st}</span> ${daysWord(st)} поспіль</div>` : "";
@@ -1207,7 +1227,7 @@ function finish(S, timeUp) {
     <h1>${timeUp ? "Час вийшов. " : ""}Результат</h1>
     <div class="card result">${ring(right / n, 150, 12, `<b class="score"><span id="cnt">${right}</span> / ${n}<small>${pct} %</small></b>`, "big")}
     ${pts ? `<div class="pts">${pts}</div>` : ""}${streakLine()}
-    <div class="btn-row" style="width:100%"><a class="btn subject" href="#/q/${S.u.id}/${S.mode}" id="again">${icon("redo")}Ще раз</a><a class="btn" href="#/q/${S.u.id}/wrong">Лише помилки</a></div></div>
+    <div class="btn-row" style="width:100%"><a class="btn subject" href="#/q/${S.u.id}/${S.mode}" id="again">${icon("redo")}Ще раз</a><a class="btn" href="#/q/${S.u.id}/${wrongOf(S)}">Лише помилки</a></div></div>
     <div class="stagger">${items}</div>`;
   $("#again").addEventListener("click", (e) => { e.preventDefault(); quiz(S.u.id, S.mode, true); });
   countUp($("#cnt"), right);
@@ -1371,7 +1391,14 @@ async function gVideoPage(id) {
     setTitle(u.short);
     const gl = v && v.glossary && v.glossary.length ? `<details><summary>Словничок (відео англійською)</summary><ul>${v.glossary.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></details>` : "";
     const from = v ? (v.start ? `з ${mmss(v.start)}` : "з початку") + (v.end && !v.watch_cut ? ` до ${mmss(v.end)}` : "") + (v.watch_cut ? `, перші ≈${vMin(v)} хв` : "") : "";
-    app.innerHTML = `<a class="back" href="#/video">${icon("left")}Усі відео-уроки</a>
+    let modBack = "";
+    const md = await moduli();
+    if (md) { // UPROGONE: пункт графіка -> сторінка розділу -> модуль
+      const key = id === "glabs" ? "git-18" : /^lab\d$/.test(id) ? "m" + id.slice(3) : /^lm\d\d/.test(id) ? "mint-" + id.slice(2, 4) : /^g\d\d$/.test(id) ? "git-" + id.slice(1) : "";
+      const n = key.startsWith("m") && /^m\d$/.test(key) ? +key.slice(1) : md.pageModule[key];
+      if (n) modBack = ` <a class="chiplink" href="#/u/prog/m${n}">${icon("left")}Модуль ${n}</a>`;
+    }
+    app.innerHTML = `<p class="crumb"><a class="back" href="#/video">${icon("left")}Усі відео-уроки</a>${modBack}</p>
       <h1>${esc(u.title)}</h1>
       <p class="muted">${esc(GTRACK[u.track] || u.track)} · у графіку: ${WDL[GRAFIK.pyWd(u.day)]} ${dm(u.day)}, ${esc(u.time)} · ${u.min} хв${u.hard ? ` · <b class="gred">дедлайн ${dm(u.hard)}</b>` : ""}</p>
       <ol class="vsteps">
@@ -1427,6 +1454,8 @@ async function route() {
 }
 // переходи між екранами: View Transitions (плавна зміна), без них - просто рендер
 function navigate() {
+  const prev = app.dataset.route || ""; // UPROGONE: позиція в модулі - щоб «назад» з уроку повертав на той самий крок
+  if (/^#\/u\/prog\/m\d+$/.test(prev)) { try { sessionStorage.setItem("uniprep:sc:" + prev, String(Math.round(window.scrollY))); } catch (e) { /* */ } }
   if (document.startViewTransition && motion() && document.visibilityState === "visible") {
     document.startViewTransition(() => route());
   } else route();

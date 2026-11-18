@@ -140,6 +140,46 @@ def lnk(title, page):
     return f"[{title}](#/u/prog/{page})"
 
 
+def q_word(n):
+    a, b = n % 10, n % 100
+    return "питання" if 2 <= a <= 4 and not 12 <= b <= 14 else ("питання" if a == 1 and b != 11 else "питань")
+
+
+# урок Python, без якого питання не розвʼязати: «Лекція N» = урок N; теми конспекту UNI2 - теж уроки
+UNI2_LESSON = {1: 1, 2: 2, 3: 3, 4: 4, 5: 4, 6: 6, 7: 7, 8: 8, 9: 9}
+
+
+def need_lesson(src):
+    m = re.search(r"Лекці[яї] (\d+)", src or "")
+    if m:
+        return int(m.group(1))
+    m = re.search(r"UNI2 тема (\d+)", src or "")
+    return UNI2_LESSON.get(int(m.group(1))) if m else None
+
+
+def fold_levels(text):
+    """Розбір ЛР4: «**Рівень N.**» до наступного рівня чи заголовка - у згорнутий блок (відкривати по черзі)."""
+    out, cur, fence = [], None, False
+    for ln in text.split("\n"):
+        if re.match(r"^\s*(```|~~~)", ln):
+            fence = not fence
+        m = None if fence else re.match(r"^\*\*Рівень (\d)\.\*\*\s*(.*)$", ln)
+        end = not fence and (m or ln.startswith("#") or ln.strip() == "---")
+        if end and cur is not None:
+            out += ["", "</details>", ""]
+            cur = None
+        if m:
+            cur = m.group(1)
+            out += [f'<details markdown="1"><summary>Рівень {cur}</summary>', ""]
+            if m.group(2).strip():
+                out.append(m.group(2))
+            continue
+        out.append(ln)
+    if cur is not None:
+        out += ["", "</details>"]
+    return "\n".join(out)
+
+
 def fmt_h(m):
     h, mm = divmod(int(m), 60)
     return (f"{h} год " if h else "") + (f"{mm} хв" if mm else "").strip()
@@ -195,6 +235,9 @@ def main(quiet=False):
             n = None
             if uid == "prog":
                 n = next((m["n"] for m in mods if t in m["quiz_prog"]), None)
+                need = need_lesson(q.get("src"))
+                if n is not None and need in mod_py and mod_py[need] > n:
+                    n = mod_py[need]  # напр. «Лекція 8» у темі модуля 2 - лише після уроку 8
             elif uid == "prog-sec":
                 n = next((m["n"] for m in mods if t in m["quiz_sec"]), None)
             else:
@@ -230,12 +273,13 @@ def main(quiet=False):
         steps = []
 
         # крок 1 - відео
-        vs = []
+        vs, seen_v = [], set()
         for gid in m["videos"]:
             u = G[gid]
             v = u.get("video")
-            if not v:
+            if not v or (v["id"], v.get("start")) in seen_v:
                 continue
+            seen_v.add((v["id"], v.get("start")))
             frm = (f"з {mmss(v['start'])}" if v.get("start") else "з початку") + (f" до {mmss(v['end'])}" if v.get("end") and not v.get("watch_cut") else "")
             lang = " · англійською" if v.get("lang") == "en" else ""
             vs.append(f"- [{v['title']}](#/video/{gid}) - до пункту «{u['short']}», {v.get('channel', '')}, {frm}, ≈ {vmin(v)} хв{lang}")
@@ -253,7 +297,7 @@ def main(quiet=False):
             body.append("- Повтори: " + ", ".join(lnk(f"урок {k}", PY[k]["page"]) for k in m["python_repeat"]))
         if m["python_note"]:
             body.append("")
-            body.append(m["python_note"][0].upper() + m["python_note"][1:] + ". Незнайома функція - у " + lnk("Довіднику", "dovidnyk") + ".")
+            body.append(m["python_note"] + ". Незнайома функція - у " + lnk("Довіднику", "dovidnyk") + ".")
         steps.append(("Урок Python (лекція викладача)", body or ["У цьому модулі нового уроку Python нема."]))
 
         # крок 3 - Mint і Git
@@ -278,11 +322,13 @@ def main(quiet=False):
                 page_mod[p["page"]] = n
             if m["git_note"]:
                 body.append("")
-                body.append(m["git_note"][0].upper() + m["git_note"][1:] + ".")
+                body.append(m["git_note"] + ".")
             body.append("")
         if m.get("linux_alt"):
             body.append("Нема під рукою ноутбука з Mint? Те саме на ПК з Windows (Ubuntu у WSL): " +
                         ", ".join(lnk(LI[k]["title"].split(":")[0], LI[k]["page"]) for k in m["linux_alt"]) + ".")
+            for k in m["linux_alt"]:
+                page_mod.setdefault(LI[k]["page"], n)
         if not body:
             body = ["Нового з Mint і Git для цієї лаби нема - вистачає вже вивченого."]
         steps.append(("Linux Mint і Git - саме те, що треба для цієї лаби", body))
@@ -303,7 +349,7 @@ def main(quiet=False):
                 tot += G[gid].get("min", 50)
             if m["lab_note"]:
                 body.append("")
-                body.append(m["lab_note"][0].upper() + m["lab_note"][1:] + ".")
+                body.append(m["lab_note"] + ".")
             steps.append(("Лаба в терміналі (розбір з підказками)", body))
 
         # крок 5 - налагодження
@@ -315,7 +361,7 @@ def main(quiet=False):
             page_mod[p["page"]] = n
         if m["bug"]:
             b = BU[m["bug"]]
-            body.append(f"- Зламана програма: {lnk(b['title'], b['page'])} - {re.sub(r'^bug_\d\.py - ', '', m['debug_note'])}. Знайди помилку способом з уроків 05-06 (traceback, print, assert, pdb), потім звір з розбором під програмою.")
+            body.append(f"- Зламана програма: {lnk(b['title'], b['page'])} - {re.sub(r'^bug_\d\.py - ', '', m['debug_note'])}. Знайди помилку {'способом з уроку 05 (traceback, print, assert, breakpoint)' if n == 1 else 'способом з уроків 05-06 (traceback, print, assert, pdb)'}, потім звір з розбором під програмою.")
             tot += 15
         if body and n > 2:
             body.append("")
@@ -324,7 +370,7 @@ def main(quiet=False):
             steps.append(("Налагодження (pdb)", body))
 
         # крок 6 - безпечний код
-        body = []
+        body = [m["sec_intro"], ""] if m.get("sec_intro") else []
         for k in m["sec"]:
             body.append(f"- {lnk(f'Тема {k}. {SE[k]["title"]}', SE[k]['page'])}")
             tot += 20
@@ -334,7 +380,8 @@ def main(quiet=False):
             tot += 15
         if m["sec_note"]:
             body.append("")
-            body.append("Чому саме тут: " + m["sec_note"] + ".")
+            body.append(("Чому саме тут: " + m["sec_note"][0].lower() + m["sec_note"][1:]) if m["sec"] else m["sec_note"])
+            body[-1] += "."
         if body:
             steps.append(("Безпечне програмування", body))
 
@@ -348,7 +395,7 @@ def main(quiet=False):
             body += ["", "**Linux у WSL - запасний шлях на ПК з Windows** (той самий термінал, але Ubuntu; по 15 хв на день):", ""]
             for k in m["linux"]:
                 body.append(f"- {lnk(LI[k]['title'], LI[k]['page'])}")
-                page_mod[LI[k]["page"]] = n
+                page_mod.setdefault(LI[k]["page"], n)
             steps[2] = ("Коли знадобиться", body)
             prak = [
                 lnk("Linux Mint: 4 практичні завдання", "mint-zadachi/" + anchor(mz_ids, r"^Практика: 4 завдання")),
@@ -369,7 +416,7 @@ def main(quiet=False):
         nq = len(keys[n])
         if nq:
             steps.append(("Картки й тест модуля", [
-                f"<div class=\"links\"><a class=\"btn primary\" href=\"#/q/prog/m{n}\">Тест модуля: {nq} питань</a> "
+                f"<div class=\"links\"><a class=\"btn primary\" href=\"#/q/prog/m{n}\">Тест модуля: {nq} {q_word(nq)}</a> "
                 f"<a class=\"btn\" href=\"#/q/prog/k{n}\">Картки модуля (пригадай сам)</a></div>", "",
                 "Питання з усіх частин модуля впереміш: Python, Mint, Git, безпека; після кожної відповіді - пояснення і з якого уроку питання. "
                 "Бот у Telegram сам повторює картки колоди «програмування» з перервами, що ростуть; колоди Linux Mint, Git і Linux вимкнені - "
@@ -379,8 +426,9 @@ def main(quiet=False):
         # збирання сторінки
         days = max(1, round(tot / 40))
         L.append(f"Кроки по порядку - кожен наступний спирається на попередній. Разом ≈ {fmt_h(tot)} роботи, це ≈ {days} "
-                 f"{'день' if days == 1 else 'дні' if days in (2, 3, 4) else 'днів'} по 30-40 хв (орієнтовно, з графіка). "
-                 "Точні дні - у [Графіку](#/grafik) і в боті.")
+                 f"{'день' if days == 1 else 'дні' if days in (2, 3, 4) else 'днів'} по 30-40 хв (орієнтовно). "
+                 "[Графік](#/grafik) і бот розкладають це по днях у межах 30-40 хв: першими лаби і Linux Mint, частина уроків Git - "
+                 "після ЛР7, уроків Python і безпеки в графіку нема. Встигаєш більше - іди по модулю.")
         L.append("")
         for j, (title, body) in enumerate(steps, 1):
             L.append(f"## Крок {j}. {title}")
@@ -388,7 +436,7 @@ def main(quiet=False):
             L += body
             L.append("")
         if m["mint_extra"]:
-            L.append("## Ще з Linux Mint цього тижня (за бажанням)")
+            L.append("## Ще з Linux Mint (за бажанням)")
             L.append("")
             L.append("Для лаби не обовʼязково, але це твій ноутбук - по уроку, коли є 30 хв:")
             L.append("")
@@ -405,6 +453,12 @@ def main(quiet=False):
             nav.append(lnk(f"Модуль {mods[i + 1]['n']} →", f"m{mods[i + 1]['n']}"))
         L.append(" · ".join(nav))
         out[f"pages/m{n}.md"] = "\n".join(L) + "\n"
+        sq = []
+        for title, key in re.findall(r"\[([^\]]+)\]\(#/u/prog/([^)]+)\)", "\n".join(L)):
+            if key in ("dovidnyk", "shlyakh") or re.fullmatch(r"m\d+", key) or any(k == key for _, k in sq):
+                continue
+            sq.append((title, key))
+        m["_seq"] = sq
         m["_min"] = tot
         page_mod[f"m{n}"] = n
 
@@ -441,7 +495,7 @@ def main(quiet=False):
             parts.append("безпека " + ", ".join(str(k) for k in m["sec"]))
         S.append(f'<a class="card unit mod" data-mod="{n}" href="#/u/prog/m{n}"><div><span class="badge z">Модуль {n}</span>'
                  f'<h3>{m["title"]}</h3><div class="row"><span>{" · ".join(parts) or "практика, іспити, залік"}</span></div>'
-                 f'<div class="row"><span>{len(keys[n])} питань</span><span>≈ {fmt_h(m["_min"])}</span></div></div></a>')
+                 f'<div class="row"><span>{len(keys[n])} {q_word(len(keys[n]))}</span><span>≈ {fmt_h(m["_min"])}</span></div></div></a>')
     S += ["</div>", "",
           "## Де що лежить", "",
           "- **Уроки Python** - 9 уроків за лекціями, код запускається просто тут, і без інтернету.",
@@ -506,9 +560,16 @@ def main(quiet=False):
             bad.append("прізвище")
         if bad:
             raise GenError(f"lab-4: лишилось {bad}")
-        out["pages/lab-4.md"] = t.rstrip() + "\n"
+        t = t.replace("(оновлено 18.11, ULINUX2: на ноутбуці Linux Mint)", "(на ноутбуці Linux Mint)")
+        t = t.replace("курс `Linux-Mint`, «Урок 09 - ЛР4 у терміналі (turtle)»", "[урок Linux Mint 09 - ЛР4 у терміналі](#/u/prog/mint-09)")
+        t = t.replace("(перевірено в уроці 09\n  курсу Linux-Mint)", "(перевірено в [уроці Mint 09](#/u/prog/mint-09))")
+        t = t.replace("**Каркас файлу у твоєму стилі** (як ЛР3:", "**Каркас файлу** (як у ЛР3:")
+        if "ULINUX2" in t:
+            raise GenError("lab-4: лишилась службова мітка ULINUX2")
+        out["pages/lab-4.md"] = fold_levels(t).rstrip() + "\n"
 
-    data = {"modules": [{"n": m["n"], "lab": m["lab"], "title": m["title"], "keys": keys[m["n"]], "min": m["_min"]} for m in mods],
+    data = {"modules": [{"n": m["n"], "lab": m["lab"], "title": m["title"], "keys": keys[m["n"]], "min": m["_min"],
+                         "seq": [[k, tt] for tt, k in m["_seq"]]} for m in mods],
             "pageModule": page_mod}
     out["moduli-data.json"] = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
 

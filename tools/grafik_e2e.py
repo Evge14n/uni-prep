@@ -127,6 +127,12 @@ def main():
                     v = PLAN["units"][uid]["video"]
                     if not href or v["id"] not in href or (v.get("start") and f"t={v['start']}s" not in href):
                         errs.append(f"#/video/{uid}: посилання на відео {href}")
+            # вкладка «Відео» розділу не має підмінятись сторінкою графіка (рецензент UPLAN1 №1)
+            page.goto(base + "#/u/an-k1/video")
+            page.wait_for_function("document.querySelector('#app').dataset.route === '#/u/an-k1/video'")
+            checks += 1
+            if "Відео-уроки" in page.inner_text("#app h1") or not page.locator(".tabs a[aria-current]").count():
+                errs.append(f"{w}: #/u/an-k1/video показує не вкладку розділу")
             # офлайн після SW
             page.goto(base + "#/grafik")
             page.wait_for_function("navigator.serviceWorker && navigator.serviceWorker.controller !== null || true")

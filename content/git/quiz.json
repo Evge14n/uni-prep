@@ -624,6 +624,21 @@
    "topic": "06. gitignore для Python"
   },
   {
+   "id": "g06-07",
+   "type": "single",
+   "q": "У .gitignore в корені репо рядок /dani/. Що з теками dani/ (у корені) і lr1/dani/?",
+   "options": [
+    "Ігноруються обидві: / на початку нічого не міняє",
+    "Ігнорується лише dani/ у корені, lr1/dani/ - ні",
+    "Ігнорується лише lr1/dani/",
+    "Жодна: шаблон з / на початку git не читає"
+   ],
+   "answer": 1,
+   "explain": "/ на початку або в середині шаблону - шлях від теки, де лежить .gitignore. Без / (крім кінця, як у __pycache__/) шаблон діє на будь-якій глибині.",
+   "src": "Урок 06",
+   "topic": "06. gitignore для Python"
+  },
+  {
    "id": "g07-01",
    "type": "single",
    "q": "Що робить git switch -c lr2?",
@@ -1049,7 +1064,7 @@
     "git branch --delete --force lr3",
     "git branch -D"
    ],
-   "explain": "Після squash коміти гілки не потрапили в main, тому -d відмовляє. Якщо PR справді злитий на сайті, -D видаляє силою.",
+   "explain": "Після squash коміти гілки не потрапили в main, а origin/lr3 нема, тож -d порівнює з HEAD і відмовляє. Якщо PR справді злитий на сайті, -D видаляє силою. (Поки origin/lr3 є, -d лише попередив би і видалив.)",
    "src": "Урок 11",
    "topic": "11. Pull Request - гілка, рев'ю, merge"
   },
@@ -1196,12 +1211,12 @@
    "q": "Чим `git push --force-with-lease` безпечніший за `git push --force`?",
    "options": [
     "Він пушить лише теги",
-    "Він відмовить, якщо на GitHub зʼявились коміти, яких ти ще не бачив",
+    "Він відмовить, якщо на GitHub зʼявились коміти, яких ти ще не забрав (fetch)",
     "Він спершу робить revert",
     "Нічим, це синоніми"
    ],
    "answer": 1,
-   "explain": "--force перезаписує гілку на GitHub наосліп і може затерти чужі коміти. --force-with-lease оновлює її, лише якщо там те, що ти бачив востаннє.",
+   "explain": "--force перезаписує гілку на GitHub наосліп і може затерти чужі коміти. --force-with-lease оновлює її, лише якщо там те, що ти востаннє забрав (origin/main). Після git fetch він уже не захищає - тому спершу git log --oneline main..origin/main.",
    "src": "Урок 12",
    "topic": "12. Скасувати безпечно - restore, revert, reset, reflog"
   },
@@ -1541,7 +1556,7 @@
   {
    "id": "g16-04",
    "type": "single",
-   "q": "Після Squash and merge на сайті і git fetch --prune ти пишеш git branch -d lr2-zavd1. Що буде?",
+   "q": "Після Squash and merge на сайті ти натиснув там Delete branch, потім git switch main, git pull, git fetch --prune і git branch -d lr2-zavd1. Що буде?",
    "options": [
     "гілку видалено мовчки",
     "git видалить і main",
@@ -1549,7 +1564,7 @@
     "git сам зробить merge"
    ],
    "answer": 2,
-   "explain": "Squash створює на main новий коміт, тому коміти гілки git у main не бачить. Якщо PR справді злито - git branch -D lr2-zavd1.",
+   "explain": "Squash створює на main новий коміт, тому коміти гілки git у main не бачить. Якщо PR справді злито - git branch -D lr2-zavd1. (Якщо origin/lr2-zavd1 ще є - гілку на сайті не видаляли або не було fetch --prune, - тоді branch -d видалить з попередженням, код 0.)",
    "src": "Урок 16",
    "topic": "16. gh - GitHub з терміналу"
   },

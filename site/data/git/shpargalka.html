@@ -6,8 +6,10 @@ git config --global user.email &quot;128326252+Evge14n@users.noreply.github.com&
 git config --global init.defaultBranch main
 git config --global core.editor nano
 git config --global pull.rebase false
+git config --global core.quotepath false
 ssh-keygen -t ed25519 -C &quot;128326252+Evge14n@users.noreply.github.com&quot;
-ssh -T git@github.com            → «Hi Evge14n! You've successfully authenticated...»
+ssh -T git@github.com            (відповідь: Hi Evge14n! You've successfully authenticated...)
+gh auth login -p ssh -w
 </code></pre>
 <h2 id="три-зони">Три зони</h2>
 <pre><code>робоча тека  --git add--&gt;  індекс (staging)  --git commit--&gt;  репозиторій  --git push--&gt;  GitHub
@@ -91,6 +93,9 @@ ssh -T git@github.com            → «Hi Evge14n! You've successfully authentic
 =======
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; lr3           ← версія з гілки
 </code></pre>
+<ul>
+<li>Конфлікт: відкрив у nano, лишив правильне, прибрав маркери, <code>git add файл</code>, <code>git commit</code>.</li>
+</ul>
 <h2 id="github-уроки-09-11-16">GitHub (уроки 09-11, 16)</h2>
 <div class="tw"><table>
 <thead>
@@ -123,6 +128,14 @@ ssh -T git@github.com            → «Hi Evge14n! You've successfully authentic
 <tr>
 <td><code>gh pr merge --squash --delete-branch</code></td>
 <td>злити PR</td>
+</tr>
+<tr>
+<td>- «rejected (fetch first)» = на GitHub є нове: <code>git pull</code>, потім <code>git push</code>.</td>
+<td></td>
+</tr>
+<tr>
+<td>- «Closes #3» у коміті закриває issue 3, коли коміт потрапить у main.</td>
+<td></td>
 </tr>
 </tbody>
 </table></div>
@@ -157,14 +170,22 @@ ssh -T git@github.com            → «Hi Evge14n! You've successfully authentic
 </tr>
 <tr>
 <td>треба терміново на іншу гілку</td>
-<td><code>git stash</code> → ... → <code>git stash pop</code></td>
+<td><code>git stash</code>, потім повернувся - <code>git stash pop</code></td>
+</tr>
+<tr>
+<td>- <code>git push --force</code> у спільну гілку - НІКОЛИ. Якщо дуже треба у своїй: <code>--force-with-lease</code>.</td>
+<td></td>
 </tr>
 </tbody>
 </table></div>
 <h2 id="здача-лр-урок-14-лаби-в-git">Здача ЛР (урок 14, «Лаби в git»)</h2>
 <pre><code>git switch -c lr3            (на початку лаби)
-git add . &amp;&amp; git commit -m &quot;Завд. 1: ...&quot;   (після кожного завдання з зеленим doctest)
+git status                   (подивись, що змінено)
+git add lr3 &amp;&amp; git commit -m &quot;Завд. 1: ...&quot;   (після кожного завдання з зеленим doctest)
 git switch main &amp;&amp; git merge lr3
 git tag -a lr3-zdano -m &quot;ЛР3 здано&quot;
 git push origin main lr3-zdano
 </code></pre>
+<ul>
+<li><code>--follow-tags</code> везе лише анотовані теги (<code>-a</code>). GitHub Pages на безкоштовному плані - лише з публічного репо.</li>
+</ul>

@@ -219,6 +219,7 @@ def wsl_check() -> list:
                   "git config --global user.email '128326252+Evge14n@users.noreply.github.com'; "
                   "git config --global init.defaultBranch main; git config --global pull.rebase false; "
                   "git config --global core.quotepath false; "
+                  "git config --global log.decorate short; "  # як у терміналі: ярлики (HEAD -> main)
                   f"( {cmd} ) 2>/dev/null )"]
     lines += ["cd ~ && rm -rf \"$B\""]
     with tempfile.NamedTemporaryFile("w", suffix=".sh", delete=False, encoding="utf-8", newline="\n") as f:

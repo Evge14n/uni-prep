@@ -906,7 +906,7 @@
   {
    "id": "g10-01",
    "type": "single",
-   "q": "Що покаже `git log -1 --format=%B` після `git commit -m \"Опиши README\" -m \"Closes #1\"`?",
+   "q": "Що покаже git log -1 --format=%B після git commit -m \"Опиши README\" -m \"Closes #1\"?",
    "options": [
     "Лише рядок «Опиши README»",
     "Один рядок «Опиши README Closes #1»",
@@ -936,7 +936,7 @@
   {
    "id": "g10-03",
    "type": "short",
-   "q": "Репо створено на сайті з README, а локально вже є свої коміти. `git pull origin main` пише «refusing to merge unrelated histories». Яку команду виконати?",
+   "q": "Репо створено на сайті з README, а локально вже є свої коміти. git pull origin main пише «refusing to merge unrelated histories». Яку команду виконати?",
    "answer": "git pull --allow-unrelated-histories origin main",
    "accept": [
     "git pull --allow-unrelated-histories origin main",
@@ -996,7 +996,7 @@
   {
    "id": "g10-07",
    "type": "single",
-   "q": "Є коміти «Перший» і «Другий» (у тілі другого - «Closes #1»). Що покаже `git log --format=%s --grep=\"Closes #1\"`?",
+   "q": "Є коміти «Перший» і «Другий» (у тілі другого - «Closes #1»). Що покаже git log --format=%s --grep=\"Closes #1\"?",
    "options": [
     "Перший",
     "Другий",
@@ -1011,7 +1011,7 @@
   {
    "id": "g11-01",
    "type": "single",
-   "q": "main не рухалась після відгалуження lr3. Скільки батьків матиме останній коміт main після `git merge --no-ff lr3`?",
+   "q": "main не рухалась після відгалуження lr3. Скільки батьків матиме останній коміт main після git merge --no-ff lr3?",
    "options": [
     "0",
     "1",
@@ -1026,7 +1026,7 @@
   {
    "id": "g11-02",
    "type": "single",
-   "q": "Що покаже `git status --short` одразу після `git merge --squash lr3` (у lr3 змінено файл f)?",
+   "q": "Що покаже git status --short одразу після git merge --squash lr3 (у lr3 змінено файл f)?",
    "options": [
     "Нічого: squash одразу робить коміт",
     "M  f - зміни в індексі, коміт ще треба зробити",
@@ -1056,7 +1056,7 @@
   {
    "id": "g11-04",
    "type": "short",
-   "q": "PR злито через Squash and merge, origin/lr3 уже прибрано, а `git branch -d lr3` пише «not fully merged». Якою командою видалити локальну гілку?",
+   "q": "PR злито через Squash and merge, origin/lr3 уже прибрано, а git branch -d lr3 пише «not fully merged». Якою командою видалити локальну гілку?",
    "answer": "git branch -D lr3",
    "accept": [
     "git branch -D lr3",
@@ -1086,7 +1086,7 @@
   {
    "id": "g11-06",
    "type": "single",
-   "q": "Гілку lr3 видалили на GitHub. Що покаже `git branch -r` у другому клоні, де ще не робили fetch --prune?",
+   "q": "Гілку lr3 видалили на GitHub. Що покаже git branch -r у другому клоні, де ще не робили fetch --prune?",
    "options": [
     "Лише origin/HEAD і origin/main",
     "Помилку: гілки нема",
@@ -1117,7 +1117,7 @@
   {
    "id": "g12-01",
    "type": "single",
-   "q": "Файл f змінено і додано (`git add f`). Що покаже `git status --short` після `git restore --staged f`?",
+   "q": "Файл f змінено і додано (git add f). Що покаже git status --short після git restore --staged f?",
    "options": [
     "M  f",
     " M f",
@@ -1132,7 +1132,7 @@
   {
    "id": "g12-02",
    "type": "single",
-   "q": "У гілці 2 коміти. Скільки їх стане після `git revert --no-edit HEAD`?",
+   "q": "У гілці 2 коміти. Скільки їх стане після git revert --no-edit HEAD?",
    "options": [
     "1",
     "2",
@@ -1147,7 +1147,7 @@
   {
    "id": "g12-03",
    "type": "single",
-   "q": "Останній коміт додав файл v.py і ще не запушений. Що покаже `git status --short` після `git reset --soft HEAD~1`?",
+   "q": "Останній коміт додав файл v.py і ще не запушений. Що покаже git status --short після git reset --soft HEAD~1?",
    "options": [
     "A  v.py",
     "?? v.py",
@@ -1178,7 +1178,7 @@
   {
    "id": "g12-05",
    "type": "single",
-   "q": "Після `git reset --hard HEAD~1` загубився коміт, що створив v.txt з текстом «важливо». Що виведе `cat v.txt` після `git reset --hard HEAD@{1}`?",
+   "q": "Після git reset --hard HEAD~1 загубився коміт, що створив v.txt з текстом «важливо». Що виведе cat v.txt після git reset --hard HEAD@{1}?",
    "options": [
     "cat: v.txt: No such file or directory",
     "Порожній рядок",
@@ -1208,7 +1208,7 @@
   {
    "id": "g12-07",
    "type": "single",
-   "q": "Чим `git push --force-with-lease` безпечніший за `git push --force`?",
+   "q": "Чим git push --force-with-lease безпечніший за git push --force?",
    "options": [
     "Він пушить лише теги",
     "Він відмовить, якщо на GitHub зʼявились коміти, яких ти ще не забрав (fetch)",
@@ -1223,7 +1223,7 @@
   {
    "id": "g13-01",
    "type": "single",
-   "q": "Змінено відстежуваний файл f і створено новий new.txt. Що покаже `git status --short` після простого `git stash`?",
+   "q": "Змінено відстежуваний файл f і створено новий new.txt. Що покаже git status --short після простого git stash?",
    "options": [
     "Нічого: тека чиста",
     " M f",
@@ -1238,7 +1238,7 @@
   {
    "id": "g13-02",
    "type": "single",
-   "q": "Скільки рядків покаже `git stash list` після `git stash` і `git stash apply`?",
+   "q": "Скільки рядків покаже git stash list після git stash і git stash apply?",
    "options": [
     "0",
     "1",
@@ -1268,7 +1268,7 @@
   {
    "id": "g13-04",
    "type": "single",
-   "q": "Змін у відстежуваних файлах нема, є лише новий tmp.txt. Що виведе `git stash`?",
+   "q": "Змін у відстежуваних файлах нема, є лише новий tmp.txt. Що виведе git stash?",
    "options": [
     "Saved working directory and index state ...",
     "error: tmp.txt is untracked",
@@ -1283,7 +1283,7 @@
   {
    "id": "g13-05",
    "type": "single",
-   "q": "`git stash pop` дав конфлікт. Що зі схованкою?",
+   "q": "git stash pop дав конфлікт. Що зі схованкою?",
    "options": [
     "Видалена, як після звичайного pop",
     "Лишилась: після розвʼязання треба git add і git stash drop",
@@ -1298,7 +1298,7 @@
   {
    "id": "g13-06",
    "type": "single",
-   "q": "`git switch main` пише «Your local changes to the following files would be overwritten by checkout». Що найпростіше зробити, щоб не комітити недописане?",
+   "q": "git switch main пише «Your local changes to the following files would be overwritten by checkout». Що найпростіше зробити, щоб не комітити недописане?",
    "options": [
     "git stash, потім git switch main",
     "git switch --force main",
@@ -1616,7 +1616,7 @@
   {
    "id": "g17-01",
    "type": "single",
-   "q": "Гілка lr має коміт B. Після `git rebase main` на lr - який хеш у коміту з тими самими змінами?",
+   "q": "Гілка lr має коміт B. Після git rebase main на lr - який хеш у коміту з тими самими змінами?",
    "options": [
     "Той самий, rebase нічого не переписує",
     "Інший: rebase робить новий коміт поверх main",
@@ -1631,7 +1631,7 @@
   {
    "id": "g17-02",
    "type": "single",
-   "q": "У main один коміт A (у файлі f - «a»). На гілці e два коміти: B (f → «b»), потім C (новий файл g). На main: `git cherry-pick e`. Скільки комітів у main і що у f?",
+   "q": "У main один коміт A (у файлі f - «a»). На гілці e два коміти: B (f → «b»), потім C (новий файл g). На main: git cherry-pick e. Скільки комітів у main і що у f?",
    "options": [
     "3 коміти, у f - b",
     "2 коміти, у f - b",
@@ -1646,7 +1646,7 @@
   {
    "id": "g17-03",
    "type": "single",
-   "q": "Коміти від старого: A, B, C, D. Тест - «у файлі f рядок 1» (`grep -qx 1 f`). У C хтось записав у f 2. Що виведе `git log -1 --format=%s refs/bisect/bad` після `git bisect start HEAD HEAD~3` і `git bisect run grep -qx 1 f`?",
+   "q": "Коміти від старого: A, B, C, D. Тест - «у файлі f рядок 1» (grep -qx 1 f). У C хтось записав у f 2. Що виведе git log -1 --format=%s refs/bisect/bad після git bisect start HEAD HEAD~3 і git bisect run grep -qx 1 f?",
    "options": [
     "A",
     "B",
@@ -1661,7 +1661,7 @@
   {
    "id": "g17-04",
    "type": "single",
-   "q": "Після `git worktree add ../w -b lr7` команда `git branch` у першій теці показує `+ lr7`. Що означає `+`?",
+   "q": "Після git worktree add ../w -b lr7 команда git branch у першій теці показує + lr7. Що означає +?",
    "options": [
     "Гілка має незапушені коміти",
     "Гілку створено щойно",
@@ -1669,14 +1669,14 @@
     "Гілка відкрита в іншому worktree (іншій теці)"
    ],
    "answer": 3,
-   "explain": "Одна гілка може бути відкрита лише в одній теці. `+` - вона зараз в іншому worktree; `git switch lr7` тут дасть fatal: 'lr7' is already used by worktree.",
+   "explain": "Одна гілка може бути відкрита лише в одній теці. + - вона зараз в іншому worktree; git switch lr7 тут дасть fatal: 'lr7' is already used by worktree.",
    "src": "Урок 17",
    "topic": "17. Для профі - rebase, cherry-pick, bisect, worktree, Actions"
   },
   {
    "id": "g17-05",
    "type": "short",
-   "q": "Яка команда покаже (одним рядком на коміт) коміти, у яких текст `x * 2` зʼявився або зник?",
+   "q": "Яка команда покаже (одним рядком на коміт) коміти, у яких текст x * 2 зʼявився або зник?",
    "answer": "git log -S \"x * 2\" --oneline",
    "accept": [
     "git log -S \"x * 2\" --oneline",

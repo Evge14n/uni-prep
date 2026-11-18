@@ -9,8 +9,10 @@ git config --global user.email "128326252+Evge14n@users.noreply.github.com"
 git config --global init.defaultBranch main
 git config --global core.editor nano
 git config --global pull.rebase false
+git config --global core.quotepath false
 ssh-keygen -t ed25519 -C "128326252+Evge14n@users.noreply.github.com"
-ssh -T git@github.com            → «Hi Evge14n! You've successfully authenticated...»
+ssh -T git@github.com            (відповідь: Hi Evge14n! You've successfully authenticated...)
+gh auth login -p ssh -w
 ```
 
 ## Три зони
@@ -44,6 +46,7 @@ ssh -T git@github.com            → «Hi Evge14n! You've successfully authentic
 =======
 >>>>>>> lr3           ← версія з гілки
 ```
+- Конфлікт: відкрив у nano, лишив правильне, прибрав маркери, `git add файл`, `git commit`.
 
 ## GitHub (уроки 09-11, 16)
 | Команда | Що робить |
@@ -54,6 +57,8 @@ ssh -T git@github.com            → «Hi Evge14n! You've successfully authentic
 | `git fetch` | лише забрати, не зливати |
 | `gh pr create --fill` | Pull Request з гілки |
 | `gh pr merge --squash --delete-branch` | злити PR |
+- «rejected (fetch first)» = на GitHub є нове: `git pull`, потім `git push`.
+- «Closes #3» у коміті закриває issue 3, коли коміт потрапить у main.
 
 ## Скасувати (уроки 12-13)
 | Сталося | Лікування |
@@ -63,13 +68,16 @@ ssh -T git@github.com            → «Hi Evge14n! You've successfully authentic
 | помилка в останньому коміті, ще не push | `git commit --amend` або `git reset --soft HEAD~1` |
 | поганий коміт уже на GitHub | `git revert хеш` (новий коміт) |
 | «загубив» коміт після reset --hard | `git reflog`, потім `git reset --hard HEAD@{1}` |
-| треба терміново на іншу гілку | `git stash` → ... → `git stash pop` |
+| треба терміново на іншу гілку | `git stash`, потім повернувся - `git stash pop` |
+- `git push --force` у спільну гілку - НІКОЛИ. Якщо дуже треба у своїй: `--force-with-lease`.
 
 ## Здача ЛР (урок 14, «Лаби в git»)
 ```
 git switch -c lr3            (на початку лаби)
-git add . && git commit -m "Завд. 1: ..."   (після кожного завдання з зеленим doctest)
+git status                   (подивись, що змінено)
+git add lr3 && git commit -m "Завд. 1: ..."   (після кожного завдання з зеленим doctest)
 git switch main && git merge lr3
 git tag -a lr3-zdano -m "ЛР3 здано"
 git push origin main lr3-zdano
 ```
+- `--follow-tags` везе лише анотовані теги (`-a`). GitHub Pages на безкоштовному плані - лише з публічного репо.

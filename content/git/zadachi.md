@@ -20,7 +20,8 @@
 
 **Про вивід.** Увесь вивід нижче - справжній, з перевірки (git 2.43.0, як на Mint 22.3). У перевірці час кожного коміту
 зафіксовано (тому дати на кшталт `Wed Nov 18 10:10:00 2026 +0000`), а **хеші й дати в тебе будуть інші** - дивись на будову.
-Де в перевірці стоїть шлях `/home/.../github/...`, у тебе буде `To github.com:Evge14n/РЕПО.git`.
+Рядок пушу на GitHub - `To github.com:Evge14n/РЕПО.git`. Виняток - тренажер у задачах 2-3: там «GitHub» - справжня тека
+на диску, і рядок буде `To /home/ТВІЙ-ЛОГІН/trenazher/github/univer-labs.git` (у виводі нижче - `/home/...`).
 
 ---
 
@@ -355,7 +356,8 @@ git commit -m "ЛР3: завдання 2"
 ```
 
 **Що треба отримати після аварії 1:** коміт «ЛР3: завдання 2» містить лише `lr3/lr3_2.py` і `.gitignore`; у **жодному**
-коміті нема `vymiry.bin`; файли на диску лишились; `git status --short` порожній.
+коміті гілки `lr3` нема `vymiry.bin` (старий коміт з ним лишиться лише в reflog, аварія 2 це покаже); файли на диску
+лишились; `git status --short` порожній.
 
 <details markdown="1"><summary>Підказка А1</summary>
 
@@ -445,17 +447,15 @@ git reflog -5
 495ec62 (HEAD -> lr3) ЛР3: завдання 2
 9e9e199 ЛР3: завдання 1
 bd2ae9b (origin/main, main) Початок
-__pycache__
-lr3_1.py
-lr3_2.py
-vymiry.bin
+lr3_1.py  lr3_2.py  __pycache__  vymiry.bin
 495ec62 (HEAD -> lr3) HEAD@{0}: reset: moving to HEAD~1
 8ca7b84 HEAD@{1}: commit: ЛР3: завдання 3
 495ec62 (HEAD -> lr3) HEAD@{2}: commit (amend): ЛР3: завдання 2
 8695fa7 HEAD@{3}: commit: ЛР3: завдання 2
 9e9e199 HEAD@{4}: commit: ЛР3: завдання 1
 ```
-Зверни увагу: `lr3_3.py` зник, а `__pycache__` і `vymiry.bin` - ні. `reset --hard` не чіпає файли, яких нема в git
+(`ls` у терміналі друкує назви в рядок і сортує за правилами мови системи: так в англійській і українській; порядок
+і колонки в тебе можуть трохи відрізнятись.) Зверни увагу: `lr3_3.py` зник, а `__pycache__` і `vymiry.bin` - ні. `reset --hard` не чіпає файли, яких нема в git
 (ігноровані й нові). У reflog видно всю історію аварій, навіть `commit (amend)` і старий коміт `8695fa7` з 200 МБ.
 Потрібний рядок - `HEAD@{1}: commit: ЛР3: завдання 3`:
 ```bash
@@ -962,9 +962,9 @@ git push -q
 git revert --no-edit HEAD~1
 ```
 
-6. (Що виведе) У тебе клон `~/q06`, все синхронно. Одногрупник зі свого клону пушить у `main` новий коміт з файлом `druh.txt`. Ти в `~/q06` пишеш `git status`, потім `git fetch`, потім знову `git status`. Що скажуть обидва `git status` (другий рядок) і чи зʼявиться `druh.txt` у твоїй теці після `fetch`?
+6. (Що виведе) У тебе клон `~/q06`, все синхронно. Одногрупник зі свого клону пушить у `main` новий коміт «Від одногрупника» з файлом `druh.txt`. Ти в `~/q06` пишеш `git status`, потім `git fetch`, потім знову `git status`. Що скажуть обидва `git status` (другий рядок) і чи зʼявиться `druh.txt` у твоїй теці після `fetch`?
 
-7. (Що зробиш) У ЛР5 три коміти: «завдання 1», «завдання 2», «завдання 3». Ти хотів скасувати лише незакомічену правку, а набрав `git reset --hard HEAD~2`. `git log` показує лише «завдання 1». Коміти ще не пушив. Як повернути все? Що побачиш у `git reflog -3`? Яке є друге, ще безпечніше рішення?
+7. (Що зробиш) У `main` три коміти: «ЛР5: завдання 1», «ЛР5: завдання 2», «ЛР5: завдання 3». Ти хотів скасувати лише незакомічену правку, а набрав `git reset --hard HEAD~2`. `git log` показує лише «ЛР5: завдання 1». Коміти ще не пушив. Як повернути все? Що побачиш у `git reflog -3`? Яке є друге, ще безпечніше рішення?
 
 8. (Що зробиш) Твій PR `lr3 → main` на GitHub пише «This branch has conflicts that must be resolved»: поки ти робив `lr3`, одногрупник змінив у `main` той самий рядок `g = 9.8` (у тебе `g = 9.81`, у нього `g = 9.80665`). Які команди в терміналі, щоб PR став без конфлікту? Чи треба закривати PR і відкривати новий?
 
@@ -978,7 +978,7 @@ git revert --no-edit HEAD~1
 
 13. (Поясни, чому) Коли `git merge` робить fast-forward, а коли merge-коміт? Чому кнопка GitHub «Create a merge commit» робить merge-коміт **навіть** коли можна було перемотати, і що зробить `git merge --ff-only`, якщо гілки розійшлися?
 
-14. (Поясни, чому) Чому після push помилку скасовують `git revert`, а не `git reset`? Що саме станеться, якщо зробити `reset` і спробувати `push`, а потім `push --force-with-lease`, коли одногрупник тим часом теж запушив?
+14. (Поясни, чому) Чому після push помилку скасовують `git revert`, а не `git reset`? Ти запушив у спільний `main` поганий коміт, зробив `git reset --hard HEAD~1` і `git push`. Що напише цей push? Потім - **між** цим push і наступною командою - одногрупник запушив у `main` свій коміт, а ти пишеш `git push --force-with-lease`. Що буде? І що зміниться, якщо перед `--force-with-lease` зробити `git fetch`?
 
 15. (Поясни, чому) Чому вхід у GitHub через SSH-ключ безпечніший, ніж через пароль? Що буде, якщо хтось побачить твій `id_ed25519.pub`, а що - якщо `id_ed25519`?
 
@@ -1069,17 +1069,18 @@ git revert --no-edit HEAD~1
 
    **Перевірено запуском:** ispyt.sh, питання 4.
 
-5. **Відповідь:** `ls` → `README.md`, `a.txt`, `c.txt` (зник лише `b.txt`). Комітів **5**:
+5. **Відповідь:** `ls` → `README.md`, `a.txt`, `c.txt` (зник лише `b.txt`). Комітів **5**, `git log --oneline`:
 
    ```text
-   Revert "b"
-   c
-   b
-   a
-   Initial commit
+   ХЕШ (HEAD -> main) Revert "b"
+   ХЕШ (origin/main, origin/HEAD) c
+   ХЕШ b
+   ХЕШ a
+   ХЕШ Initial commit
    ```
 
-   Другий рядок `git status`: `Your branch is ahead of 'origin/main' by 1 commit.`
+   Другий рядок `git status`: `Your branch is ahead of 'origin/main' by 1 commit.` (видно і з ярликів: `main` на
+   `Revert "b"`, а `origin/main` - ще на `c`).
 
    **Чому:** `revert` скасовує **зміни одного коміту** (тут - «додав b.txt»), а не «все після нього», і робить для цього
    новий коміт. Коміти `b` і `c` лишаються в історії. Новий коміт ще не на GitHub, тому `ahead 1` - його треба `git push`.
@@ -1098,7 +1099,8 @@ git revert --no-edit HEAD~1
      (use "git pull" to update your local branch)
    ```
 
-   `druh.txt` у теці **не** зʼявиться (`fetch` файли не чіпає). Що нового: `git log --oneline main..origin/main`.
+   `druh.txt` у теці **не** зʼявиться (`fetch` файли не чіпає). Що нового: `git log --oneline main..origin/main` →
+   `ХЕШ (origin/main, origin/HEAD) Від одногрупника`.
 
    **Чому:** `origin/main` - **памʼять** твого git про GitHub на момент останнього `fetch`/`pull`/`push`. `git status`
    у мережу не ходить, він порівнює з цією памʼяттю. `fetch` оновлює лише `origin/main`; у твій `main` і в теку зміни
@@ -1116,13 +1118,16 @@ git revert --no-edit HEAD~1
    git reset --hard HEAD@{1}
    ```
 
-   `git reflog -3` покаже (хеші в тебе свої):
+   `git reflog -3` покаже (замість `ХЕШ` - короткі хеші, у тебе свої):
 
    ```text
-   HEAD@{0}: reset: moving to HEAD~2
-   HEAD@{1}: commit: ЛР5: завдання 3
-   HEAD@{2}: commit: ЛР5: завдання 2
+   ХЕШ (HEAD -> main) HEAD@{0}: reset: moving to HEAD~2
+   ХЕШ HEAD@{1}: commit: ЛР5: завдання 3
+   ХЕШ HEAD@{2}: commit: ЛР5: завдання 2
    ```
+
+   Перший хеш - це «ЛР5: завдання 1» (туди тебе відкинув `reset`), тому біля нього ярлик `(HEAD -> main)`. На
+   «завдання 3» і «завдання 2» вже не показує жодна гілка - ярликів нема.
 
    Безпечніше - спершу закріпити загублений коміт гілкою, нічого не затираючи: `git branch vriatovano HEAD@{1}`
    (або хеш з reflog), подивитись `git log --oneline vriatovano`, і лише потім пересувати `main`.
@@ -1186,11 +1191,13 @@ git revert --no-edit HEAD~1
 10. **Відповідь:** `! [rejected]        main -> main (fetch first)`. Далі:
 
     ```text
-    git pull        ← Merge made by the 'ort' strategy.
+    git pull        ← відкриє nano з готовим повідомленням злиття
     git push
     ```
 
-    (Якщо `pull` дасть конфлікт - розвʼязати, як у питанні 8.) На GitHub стане **4** коміти: `Initial commit`,
+    `git pull` забирає коміт одногрупника і робить коміт злиття, тож **відкриває nano** з готовим повідомленням
+    `Merge branch 'main' of github.com:Evge14n/РЕПО`. Нічого не міняй: Ctrl+O, Enter (зберегти), Ctrl+X (вийти). Після
+    цього `pull` допише `Merge made by the 'ort' strategy.` (Якщо `pull` дасть конфлікт - розвʼязати, як у питанні 8.) На GitHub стане **4** коміти: `Initial commit`,
     коміт одногрупника, твій `lr2.py` і коміт злиття з двома батьками.
 
     **Чому:** push приймається, лише якщо твій коміт **продовжує** те, що на GitHub. Там є коміт, якого нема в тебе -
@@ -1200,7 +1207,7 @@ git revert --no-edit HEAD~1
     **Звідки:** Урок 09 («rejected - fetch first»). git push: https://git-scm.com/docs/git-push; git pull:
     https://git-scm.com/docs/git-pull
 
-    **Перевірено запуском:** ispyt.sh, питання 10.
+    **Перевірено запуском:** ispyt.sh, питання 10 (і що `pull` відкриває редактор саме з цим повідомленням).
 
 11. **Відповідь:** це **detached HEAD** («HEAD відчеплений»): `git status` пише `HEAD detached at lr1-zdano`, ти
     стоїш на коміті, а не на гілці. Коміт «Правка на тезі» не належить жодній гілці, тож при `git switch main` git
@@ -1264,24 +1271,34 @@ git revert --no-edit HEAD~1
      ! [rejected]        main -> main (non-fast-forward)
     ```
 
-    `git push --force-with-lease`, коли одногрупник тим часом запушив, теж відмовить:
+    (`non-fast-forward`, а не `fetch first`: на GitHub лише твій поганий коміт, і він у тебе є.)
+    `git push --force-with-lease` після того, як одногрупник запушив, теж відмовить:
 
     ```text
      ! [rejected]        main -> main (stale info)
     ```
 
     бо твій `origin/main` застарів - git бачить, що на GitHub не те, що ти востаннє бачив. Простий `--force` затер би
-    коміт одногрупника. Правильний шлях: `git pull` (поверне все), `git revert --no-edit ХЕШ`, `git push` - поганий коміт
-    лишається в історії, а його дія скасована.
+    коміт одногрупника. **Пастка:** якщо перед `--force-with-lease` зробити `git fetch`, `origin/main` оновиться до коміту
+    одногрупника, перевірка пройде - і `--force-with-lease` **затре** його коміт так само, як `--force`:
+
+    ```text
+     + ХЕШ...ХЕШ main -> main (forced update)
+    ```
+
+    Правильний шлях: `git pull` (поверне все), `git revert --no-edit ХЕШ`, `git push` - поганий коміт лишається в
+    історії, а його дія скасована.
 
     **Чому:** у спільній історії не можна «вирвати сторінку», яку вже скопіювали інші: їхні клони розійдуться з
-    GitHub, а сила знищить чужу роботу. `--force-with-lease` - сила з перевіркою «чи не змінилось щось без мене»,
-    і лише для своєї гілки.
+    GitHub, а сила знищить чужу роботу. `--force-with-lease` - сила з перевіркою «на GitHub досі те, що я востаннє
+    бачив?». Вона захищає лише від того, чого ти ще **не** бачив: після `git fetch` git вважає, що чужий коміт ти бачив і
+    затираєш свідомо. Тому lease - лише для своєї гілки, і без `fetch` перед ним.
 
     **Звідки:** Урок 12. git push (`--force`, `--force-with-lease`): https://git-scm.com/docs/git-push; Pro Git 2.4
     «Undoing Things»: https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things
 
-    **Перевірено запуском:** ispyt.sh, питання 14 (обидві відмови, коміт одногрупника цілий, revert пушиться).
+    **Перевірено запуском:** ispyt.sh, питання 14 (обидві відмови, коміт одногрупника цілий, revert пушиться; після
+    `git fetch` lease проходить і коміт одногрупника зникає з `main` на «GitHub»).
 
 15. **Відповідь:** пароль ти щоразу **передаєш** (його можна підгледіти, вкрасти фішингом, підібрати, він часто
     однаковий на кількох сайтах). При SSH приватний ключ **ніколи не покидає** ноутбук: ssh лише доводить, що ключ у тебе.
@@ -1323,12 +1340,16 @@ git revert --no-edit HEAD~1
     Source: **Deploy from a branch** → `main`, `/ (root)` → Save. Адреса: `https://evge14n.github.io/fizyka-storinka/`
     (логін малими літерами). Оновлюється після кожного push у вибрану гілку (docs: до 10 хв).
 
-    **Чому:** сайт Pages бачать усі, тож на безкоштовному плані GitHub не публікує його з приватного репо. Розділення
-    «приватне - лаби, публічне - сайт» ще й захищає від випадкового витоку.
+    **Чому:** це **обмеження тарифу** Free: Pages з приватного репо - платна можливість. На GitHub Pro (і вище) Pages
+    можна і з приватного репо (docs, «GitHub's plans»). Чи дає Pro студентський GitHub Student Developer Pack - (не
+    перевірено: на сторінках docs GitHub Education про Pro не сказано). Але навіть на Pro **сайт однаково публічний**: «GitHub Pages
+    sites are publicly available on the internet, even if the repository for the site is private». Тож розвʼязки лаб
+    на Pages потрапили б в інтернет за будь-якого тарифу - розділення «приватне - лаби, публічне - сайт» правильне завжди.
 
     **Звідки:** Урок 15. GitHub, «Creating a GitHub Pages site»:
     https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site; «Configuring a
-    publishing source»: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+    publishing source»: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site;
+    «GitHub's plans»: https://docs.github.com/en/get-started/learning-about-github/githubs-plans (відкрито 18.11.2026)
 
     **Не запускається:** потрібен справжній GitHub.
 

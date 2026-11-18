@@ -168,7 +168,12 @@
 <tr>
 <td><code>~/git-pisochnytsia</code></td>
 <td>локальне репо, без GitHub</td>
-<td>04-08</td>
+<td>04</td>
+</tr>
+<tr>
+<td><code>~/git-pisochnytsia-05</code> ... <code>~/git-pisochnytsia-09</code></td>
+<td>локальні репо, без GitHub: кожен урок робить свою теку з номером уроку (<code>-05</code>, <code>-06</code>, <code>-07</code>, <code>-08</code>, <code>-09</code>), щоб почати з чистого місця (так само <code>~/git-pisochnytsia-17</code> в уроці 17)</td>
+<td>05-09</td>
 </tr>
 <tr>
 <td><code>~/pisochnytsia</code></td>
@@ -369,9 +374,10 @@ git log --oneline
 </code></pre>
 <pre><code class="language-text"> M lr1.py
 </code></pre>
-<pre><code class="language-text">4528870 Завдання 1
+<pre><code class="language-text">4528870 (HEAD -&gt; main) Завдання 1
 076d5fc Додай lr1.py
 </code></pre>
+<p><code>(HEAD -&gt; main)</code> - ярлик: ти стоїш на гілці <code>main</code>, і вона зараз на цьому коміті (гілки - урок 07). Такі ярлики git друкує лише в терміналі; якщо вивід іде в трубу (<code>git log --oneline | cat</code>), їх нема.</p>
 <p><strong>Крок 3. Що всередині коміту.</strong></p>
 <pre><code class="language-bash">git rev-parse HEAD
 git cat-file -p HEAD
@@ -385,7 +391,7 @@ committer Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt; 1
 
 Завдання 1
 </code></pre>
-<p><code>HEAD</code> - «коміт, на якому ти зараз». <code>rev-parse</code> показує його повний хеш (40 символів). <code>cat-file -p</code> показує сам коміт: <code>tree</code> - знімок файлів, <code>parent</code> - батько (попередній коміт), далі автор, час і повідомлення. Час записано числом секунд від 1 січня 1970 року, <code>+0000</code> - часовий пояс (на ноутбуці в Україні буде <code>+0200</code>).</p>
+<p><code>HEAD</code> - «коміт, на якому ти зараз». <code>rev-parse</code> показує його повний хеш (40 символів). <code>cat-file -p</code> показує сам коміт: <code>tree</code> - знімок файлів, <code>parent</code> - батько (попередній коміт), далі автор, час і повідомлення. Час записано числом секунд від 1 січня 1970 року, <code>+0000</code> - часовий пояс (на ноутбуці в Україні буде <code>+0200</code> взимку і <code>+0300</code> влітку).</p>
 <p><strong>Крок 4. git без GitHub.</strong></p>
 <pre><code class="language-bash">git remote -v
 </code></pre>
@@ -638,9 +644,9 @@ Run
 to set your account's default identity.
 Omit --global to set the identity only in this repository.
 
-fatal: empty ident name (for &lt;evgen@DESKTOP-HM5PR7N.localdomain&gt;) not allowed
+fatal: empty ident name (for &lt;evgen@...&gt;) not allowed
 </code></pre>
-<p>Останній рядок <code>fatal: ...</code> залежить від компʼютера: на Mint там може бути <code>unable to auto-detect email address</code> (не перевірено на ноутбуці). Лікування одне - крок 3.</p>
+<p>Замість <code>...</code> git підставить імʼя твого компʼютера. Останній рядок <code>fatal: ...</code> залежить від компʼютера: на Mint там може бути <code>unable to auto-detect email address</code> (не перевірено на ноутбуці). Лікування одне - крок 3.</p>
 <p><strong>2. Помилка в назві ключа.</strong> <code>user.nmae</code> збереглося мовчки (див. «Передбач» 3). Видно в списку:</p>
 <pre><code class="language-text">user.name=Твоє Імʼя
 user.email=128326252+Evge14n@users.noreply.github.com
@@ -756,7 +762,7 @@ init.defaultbranch=main
 </tr>
 </tbody>
 </table></div>
-<p>Два шляхи: <strong>А</strong> - руками (ключ + сайт), <strong>Б</strong> - через gh. Результат однаковий, обери один.</p>
+<p>Два шляхи: <strong>А</strong> - руками (ключ + сайт, і наприкінці вхід у gh), <strong>Б</strong> - через gh (вхід і ключ разом). Результат однаковий, обери один.</p>
 <h3 id="передбач-потім-запусти_2">Передбач, потім запусти</h3>
 <ol>
 <li>Ключ створено. Які права покаже <code>ls -l ~/.ssh</code> у приватного і публічного ключа?</li>
@@ -866,6 +872,15 @@ Hi Evge14n! You've successfully authenticated, but GitHub does not provide shell
 <pre><code class="language-text">1
 </code></pre>
 <p>Відбиток github.com записано у <code>~/.ssh/known_hosts</code>, більше ssh не питатиме.</p>
+<p><strong>Крок 6. Увійди в gh.</strong> Ключ дає доступ git (clone, push, pull). А програма gh (урок 16, і далі в уроках трапляються команди <code>gh ...</code>) ходить у GitHub окремо і без входу на кожну команду, якій потрібен GitHub (<code>gh repo create</code>, <code>gh pr create</code>, ...), скаже:</p>
+<pre><code class="language-text">To get started with GitHub CLI, please run:  gh auth login
+Alternatively, populate the GH_TOKEN environment variable with a GitHub API authentication token.
+</code></pre>
+<p>Тому увійди один раз:</p>
+<pre><code class="language-bash">gh auth login -p ssh -w
+gh auth status
+</code></pre>
+<p><code>-p ssh</code> - git працюватиме через SSH, <code>-w</code> - вхід через браузер: gh покаже одноразовий код, відкриє github.com, ти вставиш код і натиснеш Authorize. gh знайде твій <code>~/.ssh/id_ed25519.pub</code> і спитає, чи завантажити його на GitHub. Ключ ти вже додав у кроці 3, тож обери <strong>Skip</strong> (пропустити). Дослівний текст питань не перевірено: курс не входить у справжній акаунт. Щоб gh про ключ узагалі не питав, є прапорець <code>--skip-ssh-key</code> (<code>gh auth login --help</code>, gh 2.105.0). <code>gh auth status</code> має показати, що ти увійшов як <code>Evge14n</code>.</p>
 <h4 id="шлях-б-через-gh">Шлях Б. Через gh</h4>
 <p>gh (встановлений в уроці 02) сам знайде <code>~/.ssh/id_ed25519.pub</code> і запропонує завантажити його на GitHub; якщо ключа нема - запропонує створити (cli.github.com/manual/gh_auth_login).</p>
 <pre><code class="language-bash">gh auth login -p ssh -w
@@ -881,7 +896,7 @@ gh auth status
   README:           увімкни «Add README» (галочка або перемикач, назва може трохи відрізнятись)
 → Create repository
 </code></pre>
-<p>Або одним рядком через gh:</p>
+<p>Або одним рядком через gh (лише після входу: крок 6 Шляху А або Шлях Б; інакше gh попросить <code>gh auth login</code>):</p>
 <pre><code class="language-bash">gh repo create pisochnytsia --private --add-readme
 </code></pre>
 <p>Клонуй собі в домашню теку. Адресу SSH видно на сайті: зелена кнопка <strong>Code</strong> → вкладка <strong>SSH</strong>.</p>
@@ -896,12 +911,12 @@ git remote -v
 <p>Далі git покаже кілька рядків про завантаження (<code>remote: ...</code>, <code>Receiving objects: 100% ...</code>).</p>
 <pre><code class="language-text">README.md
 </code></pre>
-<pre><code class="language-text">0ee5c1c Initial commit
+<pre><code class="language-text">0ee5c1c (HEAD -&gt; main, origin/main, origin/HEAD) Initial commit
 </code></pre>
 <pre><code class="language-text">origin  git@github.com:Evge14n/pisochnytsia.git (fetch)
 origin  git@github.com:Evge14n/pisochnytsia.git (push)
 </code></pre>
-<p><code>origin</code> - стандартне імʼя для «репо, звідки клонували» (урок 09).</p>
+<p><code>origin</code> - стандартне імʼя для «репо, звідки клонували» (урок 09). Ярлики в дужках git друкує в терміналі: <code>HEAD -&gt; main</code> - ти на своїй гілці <code>main</code>; <code>origin/main</code> - де <code>main</code> на GitHub (на тому ж коміті - клон свіжий); <code>origin/HEAD</code> - головна гілка репо на GitHub.</p>
 <p><strong>Для лаб:</strong> у Лабах в git ти створиш так само приватний репо <code>univer-labs</code> і клонуватимеш його цією ж SSH-адресою. Ключ робиться один раз на ноутбук. Новий ноутбук або перевстановив Mint - новий ключ, а старий видали на сайті.</p>
 <h3 id="типові-помилки_2">Типові помилки</h3>
 <p><strong>1. <code>Permission denied (publickey)</code></strong> (перевірено 18.11.2026 справжнім підключенням з ключем, якого нема на GitHub):</p>
@@ -922,7 +937,7 @@ Load key &quot;/home/.../.ssh/id_ed25519&quot;: bad permissions
 </code></pre>
 <p><strong>3. <code>Overwrite (y/n)?</code></strong> - ключ уже є (див. «Передбач» 3). Відповідай <code>n</code>.</p>
 <p><strong>4. Відбиток github.com не збігається</strong> з <code>SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU</code>. <strong>Не пиши yes.</strong> Можливо, мережа підмінює сервер (наприклад, чужий Wi-Fi). Спробуй з іншої мережі.</p>
-<p><strong>5. Клонував за HTTPS-адресою</strong> (<code>https://github.com/...</code>). Тоді git питає логін і пароль, а пароль від акаунта не підходить. Переключи репо на SSH:</p>
+<p><strong>5. Клонуєш за HTTPS-адресою</strong> (<code>https://github.com/...</code>, вкладка HTTPS під кнопкою Code). Для приватного репо git спитає логін і пароль, пароль від акаунта не підійде (з 13.08.2021), і клону не буде зовсім. Дослівний текст відмови не перевірено. Лікування - клонуй за SSH-адресою (<code>git@github.com:...</code>, вкладка SSH). Якщо ж HTTPS-клон у тебе вже є і працює (публічний репо або gh, що увійшов з <code>-p https</code> і сам дає git токен), переключи його на SSH:</p>
 <pre><code class="language-bash">git remote set-url origin git@github.com:Evge14n/pisochnytsia.git
 </code></pre>
 <p><strong>6. Показав приватний ключ</strong> (вставив <code>id_ed25519</code> у чат, на сайт, у скриншот). Вважай його вкраденим: видали ключ на сайті (Settings → SSH and GPG keys → Delete), створи новий і додай знову.</p>
@@ -1142,13 +1157,13 @@ Changes to be committed:
 <pre><code class="language-text">On branch main
 nothing to commit, working tree clean
 </code></pre>
-<pre><code class="language-text">commit 3347fd379f6d43f5d82154561a80118b691cfeed
+<pre><code class="language-text">commit 3347fd379f6d43f5d82154561a80118b691cfeed (HEAD -&gt; main)
 Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
 Date:   Wed Nov 18 10:29:45 2026 +0000
 
     Додай заготовку ЛР1
 </code></pre>
-<p>«working tree clean» - усе, що є в теці, вже в коміті. Хеші і час у тебе будуть інші.</p>
+<p>«working tree clean» - усе, що є в теці, вже в коміті. <code>(HEAD -&gt; main)</code> - ярлик «ти на гілці <code>main</code>, і вона на цьому коміті» (урок 07). Хеші і час у тебе будуть інші.</p>
 <p><strong>Крок 2. Забув add і <code>commit -am</code></strong> («Передбач» 1-3):</p>
 <pre><code class="language-bash">git commit -m &quot;ще&quot;
 printf 'x = int(input())\n' &gt;&gt; lr1.py
@@ -1191,7 +1206,7 @@ git commit
 <pre><code class="language-bash">git log -n 1
 git log --oneline
 </code></pre>
-<pre><code class="language-text">commit 3b15e019a929b8b85c66f342bd15b811160bc90b
+<pre><code class="language-text">commit 3b15e019a929b8b85c66f342bd15b811160bc90b (HEAD -&gt; main)
 Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
 Date:   Wed Nov 18 10:29:45 2026 +0000
 
@@ -1200,7 +1215,7 @@ Date:   Wed Nov 18 10:29:45 2026 +0000
     Поки що лише друк назви. Далі завдання 1 з методички:
     ввід двох чисел і їхня сума.
 </code></pre>
-<pre><code class="language-text">3b15e01 Почни ЛР2: заготовка програми
+<pre><code class="language-text">3b15e01 (HEAD -&gt; main) Почни ЛР2: заготовка програми
 f30faf1 Додай ввід x у ЛР1
 3347fd3 Додай заготовку ЛР1
 </code></pre>
@@ -1634,7 +1649,12 @@ c31063a0 (Твоє Імʼя 2026-11-18 14:12:00 +0200 6)     return x * 4
 </tr>
 </tbody>
 </table></div>
-<p>Шаблон з <code>/</code> у кінці - лише тека. Шаблон без <code>/</code> спереду діє в усіх підтеках (<code>__pycache__/</code> спрацює і в <code>lr1/</code>, і в <code>lr7/</code>).</p>
+<p>Де стоїть <code>/</code> - вирішує, що і де ловить шаблон (git-scm.com/docs/gitignore):</p>
+<ul>
+<li><code>/</code> <strong>у кінці</strong> - лише тека (і все в ній): <code>__pycache__/</code>, <code>.venv/</code>.</li>
+<li><code>/</code> <strong>нема ніде, крім кінця</strong> - шаблон діє на будь-якій глибині: <code>__pycache__/</code> спрацює і в <code>lr1/</code>, і в <code>lr7/</code>, <code>*.pyc</code> - теж.</li>
+<li><code>/</code> <strong>на початку або в середині</strong> - шлях рахується від теки, де лежить <code>.gitignore</code>: <code>/dani/</code> - лише тека <code>dani/</code> у корені (а <code>lr1/dani/</code> - ні), <code>lr3/skhema.png</code> - лише цей файл (а <code>lr5/lr3/skhema.png</code> - ні).</li>
+</ul>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -1660,6 +1680,10 @@ c31063a0 (Твоє Імʼя 2026-11-18 14:12:00 +0200 6)     return x * 4
 <p>Головне правило: <strong><code>.gitignore</code> діє лише на файли, яких ще нема в git.</strong> Що вже закомічене - git і далі стежить, поки не скажеш <code>git rm --cached</code>.</p>
 <p>Аналогія: <code>.gitignore</code> - список «не пакувати у валізу». Якщо светр уже у валізі, список його не викине - треба вийняти руками.</p>
 <h3 id="пісочниця_2">Пісочниця</h3>
+<p>На свіжій Mint 22.3 нема пакета <code>python3-venv</code>, і <code>python3 -m venv</code> падає з <code>The virtual environment was not created successfully because ensurepip is not available.</code> Якщо ти робив крок 0 уроку 03 курсу Linux Mint (<a href="../Linux-Mint/Урок 03 - Термінал для лаб - теки, файли, nano, запуск, venv.md">Урок 03 - Термінал для лаб</a>), пакет уже є. Якщо ні - один раз (попросить пароль):</p>
+<pre><code class="language-bash">sudo apt install python3-venv
+</code></pre>
+<p>Тепер пісочниця:</p>
 <pre><code class="language-bash">mkdir ~/git-pisochnytsia-06
 cd ~/git-pisochnytsia-06
 git init
@@ -1755,19 +1779,16 @@ D  grafik.png
 <p><code>D</code> у першій колонці - «видалення з репо підготовлене до коміту». Файл на диску не чіпали.</p>
 <pre><code class="language-bash">git add .gitignore
 git commit -m &quot;Не зберігай картинки-результати&quot;
-ls
+ls grafik.png
 git status --short
 </code></pre>
 <pre><code class="language-text">[main d84d1e0] Не зберігай картинки-результати
  2 files changed, 1 insertion(+)
  delete mode 100644 grafik.png
 </code></pre>
-<pre><code class="language-text">__pycache__
-grafik.png
-lr1.py
-main.py
+<pre><code class="language-text">grafik.png
 </code></pre>
-<p><code>grafik.png</code> на місці, <code>git status --short</code> порожній - тепер git його справді ігнорує. Перевір: <code>git check-ignore -v grafik.png</code> → <code>.gitignore:6:*.png  grafik.png</code>.</p>
+<p><code>ls grafik.png</code> показав файл - він на диску (якби його не було, <code>ls</code> написав би <code>No such file or directory</code>). <code>git status --short</code> порожній - тепер git його справді ігнорує. Перевір: <code>git check-ignore -v grafik.png</code> → <code>.gitignore:6:*.png   grafik.png</code>.</p>
 <p><strong>Для лаб:</strong> один <code>.gitignore</code> у корені <code>~/univer/labs</code> діє на всі теки <code>lr1</code> ... <code>lr7</code>. Візьми ті самі 6 рядків (<code>.venv/</code>, <code>__pycache__/</code>, <code>*.pyc</code>, <code>.pytest_cache/</code>, <code>.mypy_cache/</code>, <code>*.png</code>). Якщо до звіту ЛР3 треба саме цю схему - допиши виняток <code>!lr3/skhema.png</code>. Зроби <code>.gitignore</code> <strong>до</strong> першого <code>git add .</code>, тоді <code>git rm --cached</code> не знадобиться.</p>
 <h3 id="типові-помилки_5">Типові помилки</h3>
 <ul>
@@ -1790,10 +1811,10 @@ main.py
 </ul>
 <h3 id="як-роблять-профі_5">Як роблять профі</h3>
 <ul>
-<li>Не пишуть з нуля, а беруть шаблон GitHub <code>Python.gitignore</code> (репо github/gitignore; 18.11.2026 у ньому 223 рядки, є <code>__pycache__/</code>, <code>*.py[codz]</code>, <code>.pytest_cache/</code>, <code>.venv</code>, <code>.mypy_cache/</code>). Його ж підставляє сайт при створенні репо (поле «Add .gitignore» → Python) і <code>gh</code>:
-  <code>bash
+<li>Не пишуть з нуля, а беруть шаблон GitHub <code>Python.gitignore</code> (репо github/gitignore; 18.11.2026 у ньому 223 рядки, є <code>__pycache__/</code>, <code>*.py[codz]</code>, <code>.pytest_cache/</code>, <code>.venv</code>, <code>.mypy_cache/</code>). Його ж підставляє сайт при створенні репо (поле «Add .gitignore» → Python) і <code>gh</code>. Це для <strong>нового</strong> проєкту, не для пісочниці: <code>wget -O .gitignore</code> <strong>перезапише</strong> твій <code>.gitignore</code>, а <code>gh repo create</code> створить на GitHub ще один репо (і потребує входу в gh, урок 16). Тому тут лише зразок, <code>НАЗВА</code> - твоя назва нового репо:
+  <code>text
   wget -O .gitignore https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore
-  gh repo create pisochnytsia-py --private --gitignore Python</code>
+  gh repo create НАЗВА --private --gitignore Python</code>
   Прочитай шаблон перед комітом: там є, наприклад, <code>lib/</code> і <code>build/</code> - тека <code>lib/</code> з твоїм кодом теж стане ігнорованою.</li>
 <li>Особисте сміття твого редактора (<code>*.swp</code>, <code>*~</code>) пишуть не в <code>.gitignore</code> проєкту, а в <strong>глобальний</strong> файл <code>~/.config/git/ignore</code> - він діє в усіх репо на твоєму компʼютері (git-scm.com/docs/gitignore: якщо <code>core.excludesFile</code> не задано, береться <code>$HOME/.config/git/ignore</code>):
   <code>bash
@@ -2024,8 +2045,8 @@ Date:   Wed Nov 18 16:12:00 2026 +0200
   git нічого не зробив і лишив тебе на місці. Закоміть зміни (або відклади - урок 13, stash), потім перемикайся.</li>
 <li>Незакомічені зміни <strong>їдуть з тобою</strong> в іншу гілку, якщо не заважають: <code>git switch lr4</code> пише
   <code>text
-  Switched to branch 'lr4'
-  M README.md</code>
+  M README.md
+  Switched to branch 'lr4'</code>
   <code>M README.md</code> - твоя правка з <code>main</code> тепер у теці на <code>lr4</code>. Зміна належить гілці лише після коміту. Правило: перед <code>git switch</code> - <code>git status</code> чистий.</li>
 </ul>
 <h3 id="як-роблять-профі_6">Як роблять профі</h3>
@@ -2334,11 +2355,11 @@ git log --format=&quot;%h %an: %s&quot; -n 3
 <ul>
 <li>Закомітив файл з маркерами (git дозволяє: <code>git add</code> не перевіряє вміст). Python падає:
   <code>text
-    File "/home/.../lr1.py", line 1
+    File "/home/.../lr1.py", line 2
       &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
       ^^
   SyntaxError: invalid syntax</code>
-  Відкрий файл у nano, прибери маркери, новий коміт. Перед <code>git add</code> став собі звичку: <code>git diff --check</code> (див. «Як роблять профі»).</li>
+  <code>line 2</code> - номер рядка з першим маркером (рядок 1 - коментар <code># ЛР1: маятник</code>). Відкрий файл у nano, прибери маркери, новий коміт. Перед <code>git add</code> став собі звичку: <code>git diff --check</code> (див. «Як роблять профі»).</li>
 <li>Перемикаєшся на іншу гілку посеред злиття (<code>git switch tochnist</code>):
   <code>text
   fatal: cannot switch branch while merging
@@ -2358,10 +2379,13 @@ git log --format=&quot;%h %an: %s&quot; -n 3
   lr1.py:2: leftover conflict marker
   lr1.py:4: leftover conflict marker
   lr1.py:6: leftover conflict marker</code></li>
-<li>Стиль <code>zdiff3</code> (у git 2.43 на Mint працює, перевірено запуском): між маркерами видно ще й <strong>як було до обох змін</strong> - легше зрозуміти, хто що міняв (git-scm.com/docs/git-config, <code>merge.conflictStyle</code>):
+<li>Стиль <code>zdiff3</code> (у git 2.43 на Mint працює, перевірено запуском): між маркерами видно ще й <strong>як було до обох змін</strong> - легше зрозуміти, хто що міняв (git-scm.com/docs/git-config, <code>merge.conflictStyle</code>). Спробуй <strong>один раз</strong>, без зміни налаштувань (<code>-c</code> діє лише на цю команду), на гілці <code>dovzhyna</code> з кроку 4:
   <code>bash
-  git config --global merge.conflictStyle zdiff3</code>
-  Той самий конфлікт з кроку 4 тоді виглядає так (<code>|||||||</code> - спільний предок):
+  cd ~/git-pisochnytsia-08
+  git -c merge.conflictStyle=zdiff3 merge dovzhyna
+  cat lr1.py
+  git merge --abort</code>
+  <code>cat</code> покаже (<code>|||||||</code> - спільний предок, коміт <code>8d45cb3</code>):
   ```text
   # ЛР1: маятник
   g = 9.81
@@ -2378,6 +2402,8 @@ git log --format=&quot;%h %an: %s&quot; -n 3
 <blockquote>
 <blockquote>
 <p>dovzhyna
+  <code>Сподобалось і хочеш так завжди - **необовʼязково**, налаштування для всіх репо (ввімкнеш - конфлікти в наступних уроках виглядатимуть з рядком `|||||||`, не так, як у прикладах курсу; тому краще після курсу):</code>text
+  git config --global merge.conflictStyle zdiff3
   ```</p>
 </blockquote>
 </blockquote>
@@ -2692,9 +2718,9 @@ nothing to commit, working tree clean
 <li>[new branch]      lr2 -&gt; lr2
   branch 'lr2' set up to track 'origin/lr2'.
   ```</li>
-<li>Створити репо на GitHub і одразу запушити поточну теку - одна команда gh (урок 16):
-  <code>bash
-  gh repo create pisochnytsia-push --private --source=. --push</code></li>
+<li>Створити репо на GitHub і одразу запушити поточну теку - одна команда gh (урок 16). Вона робить усе з кроку 5 разом: створює репо, додає <code>origin</code>, пушить. Тут лише зразок, <strong>не запускай</strong> у <code>~/git-pisochnytsia-09</code>: <code>pisochnytsia-push</code> на GitHub уже є, і <code>origin</code> уже додано. Знадобиться для нового проєкту (свіжа тека з <code>git init</code> і комітом, без <code>origin</code>), <code>НАЗВА</code> - назва нового репо:
+  <code>text
+  gh repo create НАЗВА --private --source=. --push</code></li>
 <li>Багато команд ставлять <code>pull.rebase true</code>, щоб історія була прямою, без merge-комітів від <code>pull</code>. Для початку <code>false</code> (злиття) зрозуміліше - його й лишаємо.</li>
 <li><code>--force</code> у спільну гілку не пушать ніколи; якщо справді треба переписати свою гілку - <code>git push --force-with-lease</code> (урок 12).</li>
 </ul>
@@ -2791,9 +2817,9 @@ Closes #1
 <details>
 <summary>Відповідь</summary>
 <p>Один - його зробив сам GitHub, коли створював README:</p>
-<pre><code class="language-text">9bfd519 Initial commit
+<pre><code class="language-text">9bfd519 (HEAD -&gt; main, origin/main, origin/HEAD) Initial commit
 </code></pre>
-<p>(Хеш у тебе буде інший - так з усіма хешами в курсі.)</p>
+<p>(Хеш у тебе буде інший - так з усіма хешами в курсі.) У дужках - ярлики: <code>HEAD -&gt; main</code> - ти зараз на <code>main</code>, <code>origin/main</code> - де <code>main</code> на GitHub, <code>origin/HEAD</code> - гілка за замовчуванням на GitHub. Усі три вказують на цей коміт.</p>
 </details>
 <ol start="3">
 <li>Як потім знайти, яким комітом закрито issue #1? Що покаже <code>git log --oneline --grep="Closes #1"</code>?</li>
@@ -2801,7 +2827,7 @@ Closes #1
 <details>
 <summary>Відповідь</summary>
 <p><code>--grep</code> шукає текст у повідомленнях комітів, зокрема в тілі. Покаже лише наш коміт:</p>
-<pre><code class="language-text">b91ce95 Опиши пісочницю в README
+<pre><code class="language-text">b91ce95 (HEAD -&gt; main, origin/main, origin/HEAD) Опиши пісочницю в README
 </code></pre>
 </details>
 <h3 id="руками_9">Руками</h3>
@@ -2906,7 +2932,10 @@ gh repo create proba-gh --private --add-readme --clone
 cd ~/proba-gh
 git log --oneline
 </code></pre>
-<p><code>--private</code> - приватний, <code>--add-readme</code> - одразу з README, <code>--clone</code> - одразу склонувати в поточну теку. Без <code>--public</code> / <code>--private</code> gh почне питати в діалозі. Потім репо <code>proba-gh</code> можна видалити на сайті: Settings → унизу Danger Zone → Delete this repository (не перевірено).</p>
+<p><code>--private</code> - приватний, <code>--add-readme</code> - одразу з README, <code>--clone</code> - одразу склонувати в поточну теку. Один з <code>--public</code> / <code>--private</code> обовʼязковий, коли пишеш назву: без нього gh не питає, а одразу падає (перевірено, gh 2.105.0):</p>
+<pre><code class="language-text">`--public`, `--private`, or `--internal` required when not running interactively
+</code></pre>
+<p>Діалог з питаннями буде лише від голого <code>gh repo create</code> без жодних аргументів (так каже <code>gh repo create --help</code>). Потім репо <code>proba-gh</code> можна видалити на сайті: Settings → унизу Danger Zone → Delete this repository (не перевірено).</p>
 <h3 id="типові-помилки_9">Типові помилки</h3>
 <p><strong>1. Створив репо на сайті з README, а код уже є на ноутбуці.</strong> Ти зробив <code>git init</code> і коміти в <code>~/univer/labs</code>, а на сайті поставив галочку README. Тепер на GitHub свій коміт «Initial commit», а в тебе свої. Пуш:</p>
 <pre><code class="language-text">$ git push -u origin main
@@ -2941,7 +2970,7 @@ git push -u origin main
 <p><strong>Для лаб:</strong> один <strong>приватний</strong> репо <code>univer-labs</code>. Якщо тека <code>~/univer/labs</code> уже з комітами - створи на сайті порожній репо <code>univer-labs</code> (Private, без README) і запуш, як в уроці 09. Або одним рядком gh з самої теки:</p>
 <pre><code class="language-bash">gh repo create univer-labs --private --source . --remote origin --push
 </code></pre>
-<p>Потім README зі списком: <code>lr1/</code> - ЛР1, ... <code>lr7/</code> - ЛР7, і як запускати (<code>python3 lr1/main.py</code>). На кожне «доробити» (наприклад, «ЛР3: завдання 2 не проходить doctest») - issue з міткою <code>bug</code>, і коміт з <code>Closes #N</code>, коли виправиш. Викладача можна додати в приватний репо: Settings → Collaborators → Add people (не перевірено).</p>
+<p>Потім README зі списком: <code>lr1/</code> - ЛР1, ... <code>lr7/</code> - ЛР7, і як запускати (<code>python3 lr1/lr1_1.py</code>). На кожне «доробити» (наприклад, «ЛР3: завдання 2 не проходить doctest») - issue з міткою <code>bug</code>, і коміт з <code>Closes #N</code>, коли виправиш. Викладача можна додати в приватний репо: Settings → Collaborators → Add people (не перевірено).</p>
 <h3 id="самоперевірка_9">Самоперевірка</h3>
 <ol>
 <li>Чим приватний репо відрізняється від публічного і який обрати для лаб?</li>
@@ -2979,7 +3008,7 @@ git push -u origin main
 - <strong>Comment</strong> - просто коментар;
 - <strong>Approve</strong> - «можна зливати»;
 - <strong>Request changes</strong> - «спершу виправ».</p>
-<p>Автор PR <strong>не може</strong> схвалити (Approve) свій власний PR. Тож Approve дає лише інша людина, наприклад одногрупник з доступом до репо.</p>
+<p>Автор PR <strong>не може</strong> схвалити (Approve) свій власний PR - так прямо пише документація GitHub. Тож зі свого акаунта у своєму PR лишається <strong>Comment</strong>. Approve дає лише інша людина, наприклад одногрупник з доступом до репо. Request changes - теж його кнопка (чи дає GitHub її автору, документація не каже - не перевірено).</p>
 <pre><code class="language-text">main:  A ─────────────── M        ← після злиття
         \               /
 lr3:     B ── C ── (PR #2, рев'ю) 
@@ -3057,13 +3086,14 @@ lr3:     B ── C ── (PR #2, рев'ю)
 <details>
 <summary>Відповідь</summary>
 <p>Створить коміт злиття навіть там, де можна було просто пересунути вказівник. Саме так зливає кнопка «Create a merge commit»:</p>
-<pre><code class="language-text">*   2f51e50 Merge pull request #2 from Evge14n/lr3
+<pre><code class="language-text">*   2f51e50 (HEAD -&gt; proba-merge) Merge pull request #2 from Evge14n/lr3
 |\  
-| * c4894c4 ЛР3: завдання 2
+| * c4894c4 (origin/lr3, lr3) ЛР3: завдання 2
 | * 3204bab ЛР3: заготовка
 |/  
-* d850e97 Initial commit
+* d850e97 (origin/main, origin/HEAD, main) Initial commit
 </code></pre>
+<p>У дужках - ярлики гілок: ти на <code>proba-merge</code> (<code>HEAD -&gt;</code>), <code>lr3</code> і її копія на GitHub <code>origin/lr3</code> стоять на «завдання 2», а <code>main</code> - ще на «Initial commit».</p>
 </details>
 <ol start="2">
 <li><code>git merge --squash lr3</code> - чи буде одразу новий коміт?</li>
@@ -3071,8 +3101,8 @@ lr3:     B ── C ── (PR #2, рев'ю)
 <details>
 <summary>Відповідь</summary>
 <p>Ні. Git лише складе всі зміни гілки в індекс і скаже <code>Squash commit -- not updating HEAD</code>. <code>git status --short</code> покаже <code>A  lr3.py</code>. Коміт робиш сам: <code>git commit -m "ЛР3 (#2)"</code>. В історії - один коміт замість двох:</p>
-<pre><code class="language-text">* 623fcfe ЛР3 (#2)
-* d850e97 Initial commit
+<pre><code class="language-text">* 623fcfe (HEAD -&gt; proba-squash) ЛР3 (#2)
+* d850e97 (origin/main, origin/HEAD, main) Initial commit
 </code></pre>
 </details>
 <ol start="3">
@@ -3114,7 +3144,7 @@ Create pull request
 <pre><code class="language-bash">gh pr create --base main --head lr3 --title &quot;ЛР3&quot; --body &quot;Заготовка і завдання 2&quot;
 gh pr list
 </code></pre>
-<p><strong>Крок 3. Рев'ю.</strong> Відкрий PR → вкладка <strong>Files changed</strong>. Наведи мишку на рядок <code>x = 3</code> → синя іконка коментаря → напиши «краще назвати змінну n?» → <strong>Start a review</strong>. Потім угорі <strong>Review changes</strong> → вибери Comment / Approve / Request changes → <strong>Submit review</strong>. Зі свого акаунта Approve не вийде - це для одногрупника.</p>
+<p><strong>Крок 3. Рев'ю.</strong> Відкрий PR → вкладка <strong>Files changed</strong>. Наведи мишку на рядок <code>x = 3</code> → синя іконка коментаря → напиши «краще назвати змінну n?» → <strong>Start a review</strong>. Потім угорі <strong>Review changes</strong> → вибери Comment / Approve / Request changes → <strong>Submit review</strong>. Зі свого акаунта у своєму PR вибирай <strong>Comment</strong>: Approve власного PR GitHub не дає, а Approve і Request changes - кнопки одногрупника.</p>
 <p>Те, що рецензент бачить у Files changed, можна побачити і в терміналі. Другий клон (як в уроці 09; якщо його нема - <code>git clone git@github.com:Evge14n/pisochnytsia.git ~/druhyi-klon</code>):</p>
 <pre><code class="language-bash">cd ~/druhyi-klon
 git fetch
@@ -3133,9 +3163,11 @@ index 0000000..549455e
 +print(&quot;ЛР3:&quot;, x)
 +print(&quot;ЛР3: завдання 2&quot;)
 </code></pre>
-<p>Три крапки <code>main...lr3</code> = «що змінилось у <code>lr3</code> від місця, де вона відгалузилась від <code>main</code>». Рецензія з gh (від одногрупника):</p>
+<p>Три крапки <code>main...lr3</code> = «що змінилось у <code>lr3</code> від місця, де вона відгалузилась від <code>main</code>». Рецензія з gh. Коментар можеш лишити і ти сам:</p>
 <pre><code class="language-bash">gh pr review 2 --comment -b &quot;Глянь назву змінної x&quot;
-gh pr review 2 --approve
+</code></pre>
+<p>А ці дві команди - для <strong>одногрупника</strong> у його терміналі, з його акаунта (у тебе як автора <code>--approve</code> не пройде):</p>
+<pre><code class="language-text">gh pr review 2 --approve
 gh pr review 2 --request-changes -b &quot;Додай doctest&quot;
 </code></pre>
 <p><strong>Крок 4. Як виглядатиме історія - модель у git.</strong> Кнопку на сайті в перевірці не натиснеш, тож змоделюємо два види злиття локально, у пробних гілках:</p>
@@ -3159,6 +3191,15 @@ git branch -d lr3
 git fetch --prune
 git branch -a
 </code></pre>
+<p><code>git log</code> покаже (пробіли в кінці рядків графа не важать):</p>
+<pre><code class="language-text">*   0b4e2f1 (HEAD -&gt; main, origin/main, origin/HEAD) Merge pull request #2 from Evge14n/lr3
+|\  
+| * c4894c4 (origin/lr3, lr3) ЛР3: завдання 2
+| * 3204bab ЛР3: заготовка
+|/  
+* d850e97 Initial commit
+</code></pre>
+<p>Зверни увагу: <code>origin/lr3</code> ще є, хоч на сайті гілку видалено. <code>git pull</code> віддалені гілки не прибирає - це робить <code>git fetch --prune</code>. Далі:</p>
 <pre><code class="language-text">Deleted branch lr3 (was c4894c4).
 From github.com:Evge14n/pisochnytsia
  - [deleted]         (none)     -&gt; origin/lr3
@@ -3173,23 +3214,29 @@ From github.com:Evge14n/pisochnytsia
  - [deleted]         lr3
 </code></pre>
 <h3 id="типові-помилки_10">Типові помилки</h3>
-<p><strong>1. Після Squash and merge <code>git branch -d</code> не видаляє гілку.</strong> Коміти <code>lr3</code> у <code>main</code> не потрапили (там лише новий squash-коміт), тож git думає, що гілка не злита:</p>
+<p><strong>1. Після Squash and merge <code>git branch -d lr3</code> то відмовляє, то видаляє.</strong> У <code>main</code> на GitHub зʼявився новий squash-коміт, а самих комітів <code>lr3</code> там нема. <code>-d</code> видаляє лише злиту гілку, і «злита» він перевіряє так: якщо в тебе є <code>origin/lr3</code> - чи все з <code>lr3</code> є в <code>origin/lr3</code>; якщо <code>origin/lr3</code> нема - чи все є в поточній гілці (<code>main</code>). Тому буває два випадки (обидва перевірено, git 2.43):</p>
+<ul>
+<li><strong><code>origin/lr3</code> уже нема</strong>: на сайті натиснув <strong>Delete branch</strong> і потім зробив <code>git fetch --prune</code> (або сам видалив гілку <code>git push origin --delete lr3</code>). Тоді <code>-d</code> відмовляє, код виходу 1:</li>
+</ul>
 <pre><code class="language-text">error: the branch 'lr3' is not fully merged.
 If you are sure you want to delete it, run 'git branch -D lr3'
 </code></pre>
-<p>Якщо PR на сайті справді злитий (на сторінці PR позначка Merged, не перевірено) - видаляй силою:</p>
-<pre><code class="language-bash">git branch -D lr3
-</code></pre>
-<p>Дивина git 2.43: поки <code>origin/lr3</code> ще є локально (ти не робив <code>fetch --prune</code>), <code>-d</code> не падає, а пише попередження і видаляє:</p>
+<ul>
+<li><strong><code>origin/lr3</code> ще є</strong>: гілку на сайті не видаляв, або видалив, але ще не робив <code>git fetch --prune</code> (звичайний <code>git pull</code> віддалені гілки не прибирає). Тоді <code>-d</code> бачить, що все з <code>lr3</code> лежить в <code>origin/lr3</code>, пише попередження і <strong>видаляє</strong>, код 0:</li>
+</ul>
 <pre><code class="language-text">warning: deleting branch 'lr3' that has been merged to
          'refs/remotes/origin/lr3', but not yet merged to HEAD
 Deleted branch lr3 (was 6214452).
+</code></pre>
+<p>Попередження чесне: «злита в <code>origin/lr3</code>, але не в HEAD». Тобто git перевірив лише, що лаба запушена, а не що вона в <code>main</code>.</p>
+<p>Якщо <code>-d</code> відмовив, а PR на сайті справді злитий (на сторінці PR позначка Merged, не перевірено) - видаляй силою:</p>
+<pre><code class="language-bash">git branch -D lr3
 </code></pre>
 <p><strong>2. «Your branch is up to date», а на GitHub уже злитий PR.</strong> Після злиття на сайті <code>git switch main</code> пише:</p>
 <pre><code class="language-text">Your branch is up to date with 'origin/main'.
 </code></pre>
 <p>Це неправда лише тому, що git порівнює з останнім, що знав про GitHub. Спершу <code>git pull</code>, і лише потім нова гілка <code>lr4</code> - інакше вона почнеться без ЛР3.</p>
-<p><strong>3. Approve власного PR.</strong> Документація GitHub: «Pull request authors cannot approve their own pull requests». Для схвалення потрібна друга людина з доступом до репо (Settings → Collaborators, не перевірено). Для своїх лаб досить Comment собі ж.</p>
+<p><strong>3. Approve власного PR.</strong> Документація GitHub: «Pull request authors cannot approve their own pull requests». Для схвалення потрібна друга людина з доступом до репо (Settings → Collaborators, не перевірено). <code>gh pr review 2 --approve</code> зі свого акаунта теж не пройде. Для своїх лаб досить Comment собі ж.</p>
 <p><strong>4. Дописав коміт у <code>lr3</code> після злиття PR.</strong> Ці коміти в <code>main</code> не підуть - PR уже закритий. Онови <code>main</code> (<code>git pull</code>) і зроби нову гілку і новий PR.</p>
 <h3 id="як-роблять-профі_10">Як роблять профі</h3>
 <ul>
@@ -3201,7 +3248,8 @@ Deleted branch lr3 (was 6214452).
 <li>Злиття з терміналу: <code>gh pr merge 2 --squash --delete-branch</code> (<a href="https://cli.github.com/manual/gh_pr_merge">gh pr merge</a>).</li>
 </ul>
 <h3 id="для-лаб_1">Для лаб</h3>
-<p><strong>Для лаб:</strong> у <code>univer-labs</code> кожна лаба - своя гілка <code>lr1</code> ... <code>lr7</code>. Коли лаба готова - PR <code>lr3 → main</code> з описом «що зроблено, які завдання проходять doctest» і <code>Closes #N</code>, якщо закриваєш issue. Перед здачею кинь викладачу посилання на PR: там видно всі зміни лаби одним списком у Files changed. Після злиття - <code>git switch main</code>, <code>git pull</code>, <code>git branch -d lr3</code>. Для лаб зручно Squash and merge: одна лаба = один коміт у <code>main</code>.</p>
+<p><strong>Для лаб:</strong> у <code>univer-labs</code> кожна лаба - своя гілка <code>lr1</code> ... <code>lr7</code>. Коли лаба готова - PR <code>lr3 → main</code> з описом «що зроблено, які завдання проходять doctest» і <code>Closes #N</code>, якщо закриваєш issue. Перед здачею кинь викладачу посилання на PR: там видно всі зміни лаби одним списком у Files changed. Зливай звичайною кнопкою <strong>Merge pull request</strong> (Create a merge commit): у <code>main</code> лишаються всі коміти лаби - коміт на крок, як у «Лаби в git», - плюс коміт злиття, по якому видно, де була гілка <code>lr3</code>. Після злиття - <code>git switch main</code>, <code>git pull</code>, <code>git branch -d lr3</code>.</p>
+<p>Squash and merge - теж можна, якщо хочеш коротку історію: одна лаба = один коміт у <code>main</code>. Але окремих кроків «завдання 1», «завдання 2» в <code>main</code> тоді не буде, а <code>git branch -d lr3</code> після squash може відмовити (Типова помилка 1) - видаляй <code>git branch -D lr3</code>, коли PR злитий.</p>
 <h3 id="самоперевірка_10">Самоперевірка</h3>
 <ol>
 <li>Що таке Pull Request і чим він кращий за <code>git merge</code> у себе на ноутбуці?</li>
@@ -3214,9 +3262,9 @@ Deleted branch lr3 (was 6214452).
 <summary>Відповіді</summary>
 <ol>
 <li>Прохання на GitHub злити гілку в <code>main</code>. Видно всі зміни (Files changed), можна обговорити кожен рядок і дати схвалення до злиття.</li>
-<li>Comment, Approve, Request changes. Автор PR не може схвалити свій PR.</li>
+<li>Comment, Approve, Request changes. Автор PR не може схвалити свій PR - зі свого акаунта в нього лише Comment.</li>
 <li>Merge commit: усі коміти гілки + коміт злиття з двома батьками. Squash: лише один новий коміт «Назва (#2)».</li>
-<li>Коміти <code>lr3</code> не потрапили в <code>main</code>, там новий squash-коміт. Якщо PR злитий на сайті - <code>git branch -D lr3</code>.</li>
+<li>Коміти <code>lr3</code> не потрапили в <code>main</code>, там новий squash-коміт. А <code>origin/lr3</code> уже прибрано (Delete branch на сайті + <code>git fetch --prune</code>), тож <code>-d</code> порівнює з <code>main</code> і не знаходить там комітів <code>lr3</code>. Якщо PR злитий на сайті - <code>git branch -D lr3</code>. (Поки <code>origin/lr3</code> ще є, <code>-d</code> лише попередив би і видалив, код 0.)</li>
 <li><code>git switch main</code>, <code>git pull</code>, <code>git branch -d lr3</code>, і <code>git fetch --prune</code> (або <code>git push origin --delete lr3</code>, якщо на сайті гілку не видалив).</li>
 </ol>
 </details>
@@ -3304,10 +3352,11 @@ Deleted branch lr3 (was 6214452).
 <details>
 <summary>Відповідь</summary>
 <p>На один <strong>більше</strong>: старий коміт лишається, а поверх - новий, що його скасовує.</p>
-<pre><code class="language-text">31e6c9b Revert &quot;Спроба: g = 0&quot;
-78dc358 Спроба: g = 0
+<pre><code class="language-text">31e6c9b (HEAD -&gt; main) Revert &quot;Спроба: g = 0&quot;
+78dc358 (origin/main, origin/HEAD) Спроба: g = 0
 07ae21c Додай висоту h = 2.5
 </code></pre>
+<p>Ярлик <code>origin/main</code> показує: на GitHub поки лише «Спроба», revert ще треба запушити.</p>
 </details>
 <ol start="4">
 <li>Після <code>git reset --hard HEAD~1</code> коміт «Важливий файл» зник з <code>git log</code>. Чи покаже його <code>git reflog -3</code>?</li>
@@ -3315,10 +3364,11 @@ Deleted branch lr3 (was 6214452).
 <details>
 <summary>Відповідь</summary>
 <p>Так, другим рядком, як <code>HEAD@{1}</code>:</p>
-<pre><code class="language-text">31e6c9b HEAD@{0}: reset: moving to HEAD~1
+<pre><code class="language-text">31e6c9b (HEAD -&gt; main, origin/main, origin/HEAD) HEAD@{0}: reset: moving to HEAD~1
 b319df5 HEAD@{1}: commit: Важливий файл
-31e6c9b HEAD@{2}: revert: Revert &quot;Спроба: g = 0&quot;
+31e6c9b (HEAD -&gt; main, origin/main, origin/HEAD) HEAD@{2}: revert: Revert &quot;Спроба: g = 0&quot;
 </code></pre>
+<p>Ярлики стоять там, де коміт зараз має гілку: <code>HEAD@{0}</code> і <code>HEAD@{2}</code> - той самий коміт <code>31e6c9b</code>, на ньому зараз <code>main</code>. У <code>b319df5</code> ярликів нема - на нього вже не вказує жодна гілка, його памʼятає лише reflog.</p>
 </details>
 <h3 id="руками_11">Руками</h3>
 <p>Пісочниця <code>~/pisochnytsia</code>, гілка <code>main</code>. Хеші в тебе будуть інші.</p>
@@ -3361,7 +3411,7 @@ git log --oneline -2
 <pre><code class="language-text">[main 2058b78] Уточни g до 9.81
  Date: Wed Nov 18 10:18:55 2026 +0000
  1 file changed, 1 insertion(+), 1 deletion(-)
-2058b78 Уточни g до 9.81
+2058b78 (HEAD -&gt; main) Уточни g до 9.81
 539e4ed Додай розрахунок g
 </code></pre>
 <p><code>--amend</code> не править старий коміт, а робить новий замість нього (інший хеш). Рядок <code>Date:</code> - git показує, що дата автора лишилась від старого коміту. Забув файл у коміті? <code>git add файл</code>, потім <code>git commit --amend --no-edit</code> (повідомлення те саме).</p>
@@ -3377,7 +3427,7 @@ git commit -m &quot;Додай висоту h = 2.5&quot;
 git log --oneline -3
 </code></pre>
 <pre><code class="language-text">A  vysota.py
-07ae21c Додай висоту h = 2.5
+07ae21c (HEAD -&gt; main) Додай висоту h = 2.5
 2058b78 Уточни g до 9.81
 539e4ed Додай розрахунок g
 </code></pre>
@@ -3417,9 +3467,9 @@ git push
 </code></pre>
 <pre><code class="language-text">HEAD is now at 31e6c9b Revert &quot;Спроба: g = 0&quot;
 ls: cannot access 'vazhlyve.txt': No such file or directory
-31e6c9b HEAD@{0}: reset: moving to HEAD~1
+31e6c9b (HEAD -&gt; main, origin/main, origin/HEAD) HEAD@{0}: reset: moving to HEAD~1
 b319df5 HEAD@{1}: commit: Важливий файл
-31e6c9b HEAD@{2}: revert: Revert &quot;Спроба: g = 0&quot;
+31e6c9b (HEAD -&gt; main, origin/main, origin/HEAD) HEAD@{2}: revert: Revert &quot;Спроба: g = 0&quot;
 HEAD is now at b319df5 Важливий файл
 важливо
 </code></pre>
@@ -3429,6 +3479,14 @@ HEAD is now at b319df5 Важливий файл
 git push --force-with-lease   # «сила з перевіркою»: відмовить, якщо на GitHub зʼявилось щось, чого ти ще не забрав
 </code></pre>
 <p>Документація git про <code>--force</code>: «It can cause the remote repository to lose commits». Тому в <code>main</code> і будь-яку гілку, з якою працює ще хтось, силою не пушать взагалі - лише <code>revert</code>. <code>--force-with-lease</code> - для своєї гілки, якщо дуже треба переписати історію.</p>
+<p><strong>Пастка <code>--force-with-lease</code>.</strong> Він порівнює GitHub з тим, що ти востаннє <strong>забрав</strong> (<code>origin/main</code>), а не з тим, що ти бачив очима. Тож після <code>git fetch</code> він уже не захищає (перевірено, git 2.43): одногрупник запушив коміт, ти зробив <code>reset</code> свого поганого коміту і пушиш:</p>
+<pre><code class="language-text">$ git push --force-with-lease          # ще не робив fetch - захист спрацював
+ ! [rejected]        main -&gt; main (stale info)
+$ git fetch                            # забрав новини: тепер origin/main = коміт одногрупника
+$ git push --force-with-lease          # перевірка пройшла - і коміт одногрупника на GitHub зник
+ + 4a74266...ff6aa7d main -&gt; main (forced update)
+</code></pre>
+<p>Тому перед будь-яким push силою спершу глянь, що є на GitHub і нема в тебе: <code>git fetch</code>, потім <code>git log --oneline main..origin/main</code>. Якщо там є чужі коміти - силою не пуш, а <code>git pull</code> і <code>git revert</code>.</p>
 <p><strong>Що сталося → чим лікувати:</strong></p>
 <div class="tw"><table>
 <thead>
@@ -3500,7 +3558,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 <li>Скасувати злитий PR на GitHub - кнопка Revert на сторінці PR, вона робить revert-PR (<a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/reverting-a-pull-request">Reverting a pull request</a>).</li>
 </ul>
 <h3 id="для-лаб_2">Для лаб</h3>
-<p><strong>Для лаб:</strong> перед ризикованою правкою ЛР5 (переписати функцію, запустити <code>black</code>) - коміт. Зламав і не комітив - <code>git restore lr5/main.py</code>. Закомітив з помилкою в повідомленні - <code>--amend</code>, поки не запушив. Уже на GitHub (викладач міг бачити) - тільки <code>git revert</code>. Загубив коміт після експериментів з <code>reset</code> - <code>git reflog</code> у <code>~/univer/labs</code>.</p>
+<p><strong>Для лаб:</strong> перед ризикованою правкою ЛР5 (переписати функцію, запустити <code>black</code>) - коміт. Зламав і не комітив - <code>git restore lr5/lr5_1.py</code>. Закомітив з помилкою в повідомленні - <code>--amend</code>, поки не запушив. Уже на GitHub (викладач міг бачити) - тільки <code>git revert</code>. Загубив коміт після експериментів з <code>reset</code> - <code>git reflog</code> у <code>~/univer/labs</code>.</p>
 <h3 id="самоперевірка_11">Самоперевірка</h3>
 <ol>
 <li>Чим <code>git restore файл</code> відрізняється від <code>git restore --staged файл</code>?</li>
@@ -3516,7 +3574,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 <li><code>revert</code> додає новий коміт і не переписує історію, яку вже бачать інші. Після <code>reset</code> push відмовить, а сила затре чужі коміти.</li>
 <li>Прибирає останній коміт, а його зміни лишає в індексі. Лише до push.</li>
 <li><code>git reflog</code> - знайти рядок <code>commit: ...</code> (тут <code>HEAD@{1}</code>), потім <code>git reset --hard HEAD@{1}</code>.</li>
-<li>Він відмовить, якщо на GitHub зʼявились коміти, яких ти ще не бачив, тож чужу роботу не затре.</li>
+<li>Він відмовить, якщо на GitHub зʼявились коміти, яких ти ще не забрав (<code>git fetch</code>), тож чужу роботу не затре. Але після <code>git fetch</code> він про них уже «знає» і затре - тому спершу <code>git log --oneline main..origin/main</code>: якщо там чужі коміти, силою не пуш.</li>
 </ol>
 </details>
 <h3 id="джерела_11">Джерела</h3>
@@ -3905,8 +3963,7 @@ No stash entries found.
 </li>
 </ol>
 <h3 id="руками_13">Руками</h3>
-<p>Пісочниця - клон <code>~/pisochnytsia</code> з Уроку 03. Хеші комітів у тебе будуть інші - це нормально.
-Рядок <code>To /home/...</code> у виводі нижче = у тебе буде <code>To github.com:Evge14n/pisochnytsia.git</code>.</p>
+<p>Пісочниця - клон <code>~/pisochnytsia</code> з Уроку 03. Хеші комітів у тебе будуть інші - це нормально.</p>
 <p><strong>Крок 1. Два коміти «лаби» і push.</strong></p>
 <pre><code class="language-bash">cd ~/pisochnytsia
 printf 'print(&quot;ЛР1, завдання 1&quot;)\n' &gt; lr1.py
@@ -3937,7 +3994,7 @@ Date:   Wed Nov 18 10:20:11 2026 +0000
 
 ЛР1 здано викладачу
 
-commit baa1934646dbbd7c5cf498cb02332e01ec470396
+commit baa1934646dbbd7c5cf498cb02332e01ec470396 (HEAD -&gt; main, tag: lr1-zdano, tag: lr1-chernetka, origin/main, origin/HEAD)
 Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
 Date:   Wed Nov 18 10:20:11 2026 +0000
 
@@ -3946,7 +4003,7 @@ Date:   Wed Nov 18 10:20:11 2026 +0000
  lr1.py | 1 +
  1 file changed, 1 insertion(+)
 </code></pre>
-<p>(У терміналі після хешу коміту ще будуть дужки з гілками й тегами, як у <code>git log --decorate</code> нижче.)
+<p>У дужках після хешу коміту - які гілки й теги на ньому стоять (як у <code>git log --decorate</code> нижче).
 Спершу йде сам тег (хто поставив, коли, навіщо), потім коміт. <code>git show lr1-chernetka --stat</code> одразу починається з
 <code>commit</code> - у легкого тегу нема ні автора, ні дати.</p>
 <p>Ще одна перевірка - якого типу обʼєкт стоїть за назвою:</p>
@@ -3965,7 +4022,7 @@ baa1934 (HEAD -&gt; main, tag: lr1-zdano, tag: lr1-chernetka, origin/main, origi
 <pre><code class="language-bash">git push --follow-tags
 git ls-remote --tags origin
 </code></pre>
-<pre><code class="language-text">To /home/evgen/.cache/ugit.qVE6ej/u14/github/Evge14n/pisochnytsia.git
+<pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
  * [new tag]         lr1-zdano -&gt; lr1-zdano
 d0e7a5c2ff6b6ed977afd50e6136c51b1a49219c    refs/tags/lr1-zdano
 baa1934646dbbd7c5cf498cb02332e01ec470396    refs/tags/lr1-zdano^{}
@@ -3974,7 +4031,7 @@ baa1934646dbbd7c5cf498cb02332e01ec470396    refs/tags/lr1-zdano^{}
 Рядок з <code>^{}</code> - коміт, на який вказує анотований тег. Легкий відправляємо окремо:</p>
 <pre><code class="language-bash">git push origin lr1-chernetka
 </code></pre>
-<pre><code class="language-text">To /home/evgen/.cache/ugit.qVE6ej/u14/github/Evge14n/pisochnytsia.git
+<pre><code class="language-text">To github.com:Evge14n/pisochnytsia.git
  * [new tag]         lr1-chernetka -&gt; lr1-chernetka
 </code></pre>
 <p><strong>Крок 5. Подивитися на здану версію.</strong></p>
@@ -4018,7 +4075,7 @@ git tag -l &quot;lr1-z*&quot;
 git push origin --delete lr1-chernetka
 </code></pre>
 <pre><code class="language-text">Deleted tag 'lr1-chernetka' (was baa1934)
-To /home/evgen/.cache/ugit.qVE6ej/u14/github/Evge14n/pisochnytsia.git
+To github.com:Evge14n/pisochnytsia.git
  - [deleted]         lr1-chernetka
 </code></pre>
 <p>Видаляй лише свої чернеткові теги. Тег здачі, який уже бачив викладач, не чіпай (чому - у «Типових помилках»).</p>
@@ -4140,7 +4197,7 @@ To /home/evgen/.cache/ugit.qVE6ej/u14/github/Evge14n/pisochnytsia.git
 <tbody>
 <tr>
 <td>хто може</td>
-<td>на GitHub Free - <strong>лише публічний репо</strong> (docs: «If the account that owns the repository uses GitHub Free ..., the repository must be public»)</td>
+<td>на GitHub Free - <strong>лише публічний репо</strong> (docs: «If the account that owns the repository uses GitHub Free ..., the repository must be public»). Це обмеження тарифу: на платному Pro можна і з приватного, але <strong>сам сайт однаково публічний</strong> (docs: «GitHub Pages sites are publicly available on the internet, even if the repository for the site is private»)</td>
 </tr>
 <tr>
 <td>що показується</td>
@@ -4205,7 +4262,7 @@ To /home/evgen/.cache/ugit.qVE6ej/u14/github/Evge14n/pisochnytsia.git
 </li>
 </ol>
 <h3 id="руками_14">Руками</h3>
-<p>Хеші комітів у тебе будуть інші. Рядок <code>To /home/...</code> у виводі = у тебе <code>To github.com:Evge14n/fizyka-storinka.git</code>.</p>
+<p>Хеші комітів у тебе будуть інші.</p>
 <p><strong>Крок 1. Публічний репо на сайті.</strong> Справа вгорі <strong>+</strong> → <strong>New repository</strong> → Repository name: <code>fizyka-storinka</code> →
 <strong>Public</strong> → <strong>Add README</strong>: On → <strong>Create repository</strong>. (Через gh, Урок 16: <code>gh repo create fizyka-storinka --public --add-readme</code>.)</p>
 <p>Клонуй і створи сторінку:</p>
@@ -4241,7 +4298,7 @@ git ls-files
 <pre><code class="language-text">[main 3db7e8b] Перша сторінка
  1 file changed, 12 insertions(+)
  create mode 100644 index.html
-To /home/evgen/.cache/ugit.dCx5XY/u15/github/Evge14n/fizyka-storinka.git
+To github.com:Evge14n/fizyka-storinka.git
    f8c0af1..3db7e8b  main -&gt; main
 README.md
 index.html
@@ -4505,8 +4562,8 @@ version is broken». Встановлення - Урок 02, вхід - Урок
    </details></p>
 </li>
 <li>
-<p>Ти злив PR кнопкою <strong>Squash and merge</strong> на сайті, потім <code>git switch main</code>, <code>git pull</code>, <code>git fetch --prune</code>.
-   Що скаже <code>git branch -d lr2-zavd1</code>?
+<p>Ти злив PR кнопкою <strong>Squash and merge</strong> на сайті і там же натиснув <strong>Delete branch</strong> (гілки на GitHub більше нема).
+   Потім у терміналі <code>git switch main</code>, <code>git pull</code>, <code>git fetch --prune</code>. Що скаже <code>git branch -d lr2-zavd1</code>?
    <details markdown="block">
 
 <summary>Відповідь</summary>
@@ -4516,8 +4573,10 @@ version is broken». Встановлення - Урок 02, вхід - Урок
    error: the branch 'lr2-zavd1' is not fully merged.
    If you are sure you want to delete it, run 'git branch -D lr2-zavd1'
    ```
-   Squash робить на `main` **новий** коміт з усіх змін гілки, тож git не бачить у `main` самих комітів гілки.
-   Зміни там є - можна сміливо `git branch -D lr2-zavd1`. (`gh pr merge --delete-branch` прибирає гілку сам.)
+   Код виходу 1, гілка лишилась. Squash робить на `main` **новий** коміт з усіх змін гілки, тож git не бачить у `main`
+   самих комітів гілки. Зміни там є - можна сміливо `git branch -D lr2-zavd1`. (`gh pr merge --delete-branch` прибирає
+   гілку сам.) Якщо ж на сайті **не** натискав Delete branch (або ще не робив `git fetch --prune`), `git branch -d`
+   видалить гілку з попередженням і кодом 0 - див. «Типові помилки», 4.
    </details></p>
 </li>
 </ol>
@@ -4582,13 +4641,17 @@ python3 -m doctest lr2_1.py
 git switch main
 cd ~/pisochnytsia
 </code></pre>
-<p>Що <code>gh pr checkout 1</code> робить усередині: якби gh не було, <strong>замість</strong> нього (не після) можна руками:</p>
-<pre><code class="language-bash">git fetch origin
+<p>Що <code>gh pr checkout 1</code> робить усередині: якби gh не було, <strong>замість</strong> нього (не після) у <code>~/druhyi-klon</code> можна руками
+(тут не набирай - це лише для розуміння):</p>
+<pre><code class="language-text">git fetch origin
 git switch lr2-zavd1
 </code></pre>
 <pre><code class="language-text">Switched to a new branch 'lr2-zavd1'
 branch 'lr2-zavd1' set up to track 'origin/lr2-zavd1'.
 </code></pre>
+<p>Це вивід у клоні, де гілки <code>lr2-zavd1</code> ще нема: <code>git switch</code> сам створює її з <code>origin/lr2-zavd1</code>. Ти вже зробив
+<code>gh pr checkout 1</code>, тож у <code>~/druhyi-klon</code> гілка є, і там <code>git switch lr2-zavd1</code> напише інше:
+<code>Switched to branch 'lr2-zavd1'</code> і <code>Your branch is up to date with 'origin/lr2-zavd1'.</code></p>
 <p><strong>Крок 5. Злити PR</strong> (ти в <code>~/pisochnytsia</code>, на гілці <code>lr2-zavd1</code>):</p>
 <pre><code class="language-bash">gh pr merge 1 --squash --delete-branch
 git log --oneline -n 3
@@ -4628,16 +4691,21 @@ merge, якщо хочеш бачити кожен коміт-завдання �
    <code>gh --version</code> показує 2.45.0. Видали його і постав з офіційного репо (Урок 02).</p>
 </li>
 <li>
-<p><strong>Злив на сайті кнопкою Squash and merge - <code>git branch -d</code> не видаляє.</strong> Після <code>git fetch --prune</code>:
+<p><strong>Злив на сайті кнопкою Squash and merge і видалив там гілку (Delete branch) - <code>git branch -d</code> не видаляє.</strong>
+   Після <code>git switch main</code>, <code>git pull</code> і <code>git fetch --prune</code>:
    <code>text
    error: the branch 'lr2-zavd1' is not fully merged.
    If you are sure you want to delete it, run 'git branch -D lr2-zavd1'</code>
    Переконайся, що PR справді злито (на сторінці PR фіолетова позначка Merged, або <code>gh pr view 1</code>), і видали з <code>-D</code>:
    <code>bash
    git branch -D lr2-zavd1</code>
-   Незвичне (git 2.43): якщо <code>git fetch --prune</code> ще <strong>не</strong> робив і <code>origin/lr2-zavd1</code> у тебе лишився, <code>git branch -d</code>
-   видаляє гілку з попередженням <code>warning: deleting branch 'lr2-zavd1' that has been merged to 'refs/remotes/origin/lr2-zavd1',
-   but not yet merged to HEAD</code> - бо порівнює з тією віддаленою гілкою, а не з <code>main</code>.</p>
+   Незвичне (git 2.43): якщо гілка <code>origin/lr2-zavd1</code> у тебе ще є - на сайті <strong>не</strong> натискав Delete branch, або
+   натискав, але <code>git fetch --prune</code> ще не робив, - то <code>git branch -d</code> гілку <strong>видаляє</strong> (код 0), лише з попередженням:
+   <code>text
+   warning: deleting branch 'lr2-zavd1' that has been merged to
+            'refs/remotes/origin/lr2-zavd1', but not yet merged to HEAD
+   Deleted branch lr2-zavd1 (was 3c4bd53).</code>
+   Бо <code>-d</code> порівнює з гілкою, за якою твоя стежить (<code>origin/lr2-zavd1</code>), а не лише з <code>main</code>.</p>
 </li>
 </ol>
 <h3 id="як-роблять-профі_15">Як роблять профі</h3>
@@ -5212,6 +5280,13 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 <p>У <code>main</code> і будь-яку спільну гілку - ніколи. Там лише merge.</p>
 <p><strong>4. Cherry-pick того самого коміту вдруге.</strong></p>
 <pre><code class="language-text">$ git cherry-pick eksperyment
+On branch main
+You are currently cherry-picking commit 61c1e31.
+  (all conflicts fixed: run &quot;git cherry-pick --continue&quot;)
+  (use &quot;git cherry-pick --skip&quot; to skip this patch)
+  (use &quot;git cherry-pick --abort&quot; to cancel the cherry-pick operation)
+
+nothing to commit, working tree clean
 The previous cherry-pick is now empty, possibly due to conflict resolution.
 If you wish to commit it anyway, use:
 
@@ -5244,7 +5319,7 @@ fatal: 'main' is already used by worktree at '/home/.../git-pisochnytsia-17'
 <li>Коміти підписують (Verified), особливо у відкритих проєктах (<a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification">About commit signature verification</a>).</li>
 </ul>
 <h3 id="для-лаб_4">Для лаб</h3>
-<p><strong>Для лаб:</strong> у <code>~/univer/labs</code> додай <code>.github/workflows/test.yml</code> з кроком <code>python -m doctest -v lr6/*.py</code> - кожен push сам перевіряє лаби, і викладачу можна показати зелену галочку. ЛР6 робиш у гілці <code>lr6</code>, а <code>main</code> пішов уперед (виправлення ЛР5) - <code>git rebase main</code> на <code>lr6</code>, поки не пушив. Накомітив «wip» - <code>git rebase -i</code> або <code>reset --soft</code> перед push. Doctest ЛР6 зламався і незрозуміло коли - <code>git bisect run python3 -m doctest lr6/main.py</code>. Викладач просить терміново поправити ЛР5, а ЛР6 у розпалі - <code>git worktree add ~/univer/labs-lr5 -b lr5-fix</code> замість stash.</p>
+<p><strong>Для лаб:</strong> у <code>~/univer/labs</code> додай <code>.github/workflows/test.yml</code> з кроком <code>python -m doctest -v lr6/*.py</code> - кожен push сам перевіряє лаби, і викладачу можна показати зелену галочку. ЛР6 робиш у гілці <code>lr6</code>, а <code>main</code> пішов уперед (виправлення ЛР5) - <code>git rebase main</code> на <code>lr6</code>, поки не пушив. Накомітив «wip» - <code>git rebase -i</code> або <code>reset --soft</code> перед push. Doctest ЛР6 зламався і незрозуміло коли - <code>git bisect run python3 -m doctest lr6/lr6_1.py</code>. Викладач просить терміново поправити ЛР5, а ЛР6 у розпалі - <code>git worktree add ~/univer/labs-lr5 -b lr5-fix</code> замість stash.</p>
 <h3 id="самоперевірка_16">Самоперевірка</h3>
 <ol>
 <li>Що таке золоте правило rebase і що станеться, якщо його порушити?</li>
@@ -5299,8 +5374,8 @@ fatal: 'main' is already used by worktree at '/home/.../git-pisochnytsia-17'
 <li><strong>Коміт</strong> - після кожного завдання, що пройшло doctest (і перед великою правкою, наприклад <code>black</code>).</li>
 <li><strong>Тег <code>lr1-zdano</code></strong> - на коміті, який показав викладачу (Урок 14).</li>
 </ul>
-<p>Хеші комітів і шлях <code>/home/.../github/...</code> у виводах нижче - з перевірки. У тебе хеші інші, а замість шляху буде
-<code>To github.com:Evge14n/univer-labs.git</code>.</p>
+<p>Виводи нижче - справжні, з перевірки (git 2.43.0). Хеші комітів у тебе будуть інші. Ярлики в дужках, як-от
+<code>(HEAD -&gt; lr1, origin/lr1)</code>, git друкує в терміналі: де стоїш ти (<code>HEAD</code>), де твої гілки і де гілки на GitHub (<code>origin/...</code>).</p>
 <h3 id="один-раз-репо-univer-labs">Один раз: репо univer-labs</h3>
 <p><strong>Крок 1. Чи є вже git у теці лаб?</strong> Якщо ти робив Крок 8 Уроку 04 курсу Linux Mint, git там уже є.</p>
 <pre><code class="language-bash">cd ~/univer/labs
@@ -5308,9 +5383,12 @@ git status
 </code></pre>
 <p>Якщо бачиш <code>fatal: not a git repository (or any of the parent directories): .git</code> - git нема, йди у <strong>варіант А</strong>.
 Якщо бачиш <code>On branch ...</code> - git є, йди у <strong>варіант Б</strong>.</p>
-<p><strong>Крок 2. Порожній приватний репо на GitHub - створюєш сам.</strong> Справа вгорі <strong>+</strong> → <strong>New repository</strong> →
-Repository name: <code>univer-labs</code> → <strong>Private</strong> → README, .gitignore, license <strong>не додавай</strong> (репо має бути порожнім,
-інакше перший push відхилять - див. «Що як» 5) → <strong>Create repository</strong>.</p>
+<p><strong>Крок 2. Порожній приватний репо на GitHub.</strong> Два способи, обери один:
+- <strong>на сайті</strong> (зроби зараз): справа вгорі <strong>+</strong> → <strong>New repository</strong> → Repository name: <code>univer-labs</code> → <strong>Private</strong> →
+  README, .gitignore, license <strong>не додавай</strong> (репо має бути порожнім, інакше перший push відхилять - див. «Що як» 5) →
+  <strong>Create repository</strong>;
+- <strong>через gh</strong> - тоді на сайті нічого не створюй і цей крок пропусти: репо створить <code>gh repo create</code> у кінці варіанта
+  (див. нижче, після варіанта А). Потрібен вхід у gh (Урок 03, крок 6 Шляху А або Шлях Б).</p>
 <p><strong>Варіант А - git ще нема.</strong></p>
 <pre><code class="language-bash">mkdir -p ~/univer/labs/lr1
 cd ~/univer/labs
@@ -5322,14 +5400,16 @@ git commit -m &quot;Початок: .gitignore і README&quot;
 git remote add origin git@github.com:Evge14n/univer-labs.git
 git push -u origin main
 </code></pre>
-<pre><code class="language-text">To /home/evgen/.cache/ugit.1lm8vp/laby/github/Evge14n/univer-labs.git
+<pre><code class="language-text">To github.com:Evge14n/univer-labs.git
  * [new branch]      main -&gt; main
 branch 'main' set up to track 'origin/main'.
 </code></pre>
 <p><code>.gitignore</code> (Урок 06): <code>.venv/</code> - віртуальне середовище, <code>__pycache__/</code> і <code>*.pyc</code> - скомпільований Python,
 <code>.pytest_cache/</code>, <code>.mypy_cache/</code>, <code>.ruff_cache/</code> - сміття від pytest, mypy і ruff.</p>
-<p>Замість Кроку 2 на сайті і двох останніх рядків можна одним рядком через gh (Урок 16) - він створить приватний репо,
-додасть <code>origin</code> і запушить:</p>
+<p><strong>Якщо в Кроці 2 обрав gh</strong> (репо на сайті ще нема): замість двох останніх рядків (<code>git remote add ...</code> і
+<code>git push -u ...</code>) набери один - gh (Урок 16) створить приватний репо, додасть <code>origin</code> і запушить. Так само і в
+кінці варіанта Б. Якщо репо <code>univer-labs</code> на сайті вже створив, gh другого з тією самою назвою не створить - тоді
+просто <code>git remote add</code> і <code>git push -u</code>, як вище.</p>
 <pre><code class="language-bash">gh repo create univer-labs --private --source=. --remote=origin --push
 </code></pre>
 <p><strong>Варіант Б - git уже є (з курсу Linux Mint).</strong> Подивись, що там:</p>
@@ -5384,12 +5464,12 @@ git commit -am &quot;ЛР1: завдання 2&quot;
 git push -u origin lr1
 git log --oneline main..lr1
 </code></pre>
-<pre><code class="language-text">676c781 ЛР1: завдання 2
+<pre><code class="language-text">676c781 (HEAD -&gt; lr1, origin/lr1) ЛР1: завдання 2
 ac98c9d ЛР1: завдання 1
 09e5e28 ЛР1: заготовки викладача
 </code></pre>
 <p><code>main..lr1</code> - коміти, які є в <code>lr1</code>, але ще нема в <code>main</code>. <code>git push -u origin lr1</code> - копія гілки на GitHub:
-ноутбук зламався - лаба ціла.</p>
+ноутбук зламався - лаба ціла. Ярлик <code>origin/lr1</code> на верхньому коміті це й показує: на GitHub гілка <code>lr1</code> там само.</p>
 <p><strong>Лабу закінчено - у <code>main</code>.</strong> Найпростіше - злиття в себе (Урок 07):</p>
 <pre><code class="language-bash">git switch main
 git merge lr1
@@ -5402,7 +5482,7 @@ git branch -d lr1
 <pre><code class="language-bash">git tag -a lr1-zdano -m &quot;ЛР1 здано&quot;
 git push origin lr1-zdano
 </code></pre>
-<pre><code class="language-text">To /home/evgen/.cache/ugit.1lm8vp/laby/github/Evge14n/univer-labs.git
+<pre><code class="language-text">To github.com:Evge14n/univer-labs.git
  * [new tag]         lr1-zdano -&gt; lr1-zdano
 </code></pre>
 <h3 id="лр2-через-pull-request">ЛР2 через Pull Request</h3>
@@ -5411,13 +5491,16 @@ git push origin lr1-zdano
 git pull
 git switch -c lr2
 mkdir -p lr2
+nano lr2/lr2_1.py
 python3 -m doctest lr2/lr2_1.py
 git add lr2/lr2_1.py
 git commit -m &quot;ЛР2: завдання 1&quot;
 git push -u origin lr2
 gh pr create --fill --base main
 </code></pre>
-<p>(Між <code>mkdir</code> і <code>doctest</code> - заготовка й <code>nano</code>, як у ЛР1.) Без gh: на сторінці репо зʼявиться жовта смуга
+<p>У <code>nano</code> - код завдання з doctest (тут для короткості одне завдання; у справжній ЛР2 спершу поклади заготовки
+викладача і закоміть їх, як у ЛР1). <code>gh pr create</code> працює лише після входу в gh (Урок 03, крок 6), інакше
+скаже <code>To get started with GitHub CLI, please run:  gh auth login</code>. Без gh: на сторінці репо зʼявиться жовта смуга
 з кнопкою <strong>Compare &amp; pull request</strong> (Урок 11). На сторінці PR → <strong>Merge pull request</strong> → <strong>Confirm merge</strong>. Потім у себе:</p>
 <pre><code class="language-bash">git switch main
 git pull
@@ -5425,13 +5508,15 @@ git log --oneline --graph -n 3
 git tag -a lr2-zdano -m &quot;ЛР2 здано&quot; main
 git push origin lr2-zdano
 </code></pre>
-<pre><code class="language-text">*   0e746e0 Merge pull request #1 from Evge14n/lr2
+<pre><code class="language-text">*   0e746e0 (HEAD -&gt; main, origin/main) Merge pull request #1 from Evge14n/lr2
 |\
-| * 90a7770 ЛР2: завдання 1
+| * 90a7770 (origin/lr2, lr2) ЛР2: завдання 1
 |/
-* 676c781 ЛР1: завдання 2
+* 676c781 (tag: lr1-zdano, origin/lr1) ЛР1: завдання 2
 </code></pre>
-<p><code>main</code> у кінці рядка з тегом - тег саме на <code>main</code>, навіть якщо ти вже на іншій гілці. Список здач:</p>
+<p>Після злиття PR сайт пропонує кнопку <strong>Delete branch</strong>. Навіть якщо натиснув її, <code>origin/lr2</code> у тебе ще видно:
+<code>git pull</code> не прибирає гілки, яких на GitHub уже нема (прибере <code>git fetch --prune</code>). <code>tag: lr1-zdano</code> - здача ЛР1. <code>main</code> у кінці рядка з тегом - тег саме на <code>main</code>,
+навіть якщо ти вже на іншій гілці. Список здач:</p>
 <pre><code class="language-bash">git tag -n
 </code></pre>
 <pre><code class="language-text">lr1-zdano       ЛР1 здано
@@ -5477,7 +5562,7 @@ git branch -f main origin/main
 git log --oneline main..lr3
 </code></pre>
 <pre><code class="language-text">branch 'main' set up to track 'origin/main'.
-10107b7 ЛР3: завдання 2
+10107b7 (HEAD -&gt; lr3) ЛР3: завдання 2
 549cce4 ЛР3: завдання 1
 </code></pre>
 <p><code>git switch -c lr3</code> - нова гілка там, де ти стоїш, з усіма комітами. <code>git branch -f main origin/main</code> - «постав <code>main</code>
@@ -5493,31 +5578,83 @@ git push origin lr2-zdano
 <pre><code class="language-text">git tag -a lr2-zdano -m &quot;ЛР2 здано&quot; ХЕШ
 </code></pre>
 <p><strong>3. Закомітив <code>.venv</code></strong> (або <code>__pycache__</code>). Прибери з git, лишивши на диску:</p>
-<pre><code class="language-bash">git rm -r --cached .venv
-git commit -m &quot;Прибрав .venv з git&quot;
+<pre><code class="language-bash">git rm -r -q --cached .venv
+git commit -m &quot;Прибери .venv з git&quot;
 git ls-files .venv
 git check-ignore -v .venv
 </code></pre>
-<pre><code class="language-text">rm '.venv/pyvenv.cfg'
-.gitignore:1:.venv/ .venv
+<pre><code class="language-text">.gitignore:1:.venv/ .venv
 </code></pre>
-<p><code>--cached</code> - лише з git, файли на диску лишаються. <code>git ls-files .venv</code> після цього нічого не друкує.
-<code>git check-ignore -v</code> показує, яке правило <code>.gitignore</code> тепер ховає <code>.venv</code> (рядок 1). Якщо в <code>.gitignore</code> правила нема -
-спершу допиши його (<code>printf '.venv/\n*.pyc\n' &gt;&gt; .gitignore</code>, варіант Б). Старі коміти з <code>.venv</code> в історії лишаться -
+<p><code>--cached</code> - лише з git, файли на диску лишаються. <code>-q</code> (тихо) - без нього git друкує рядок <code>rm '.venv/...'</code> на
+кожен файл, а в справжньому <code>.venv</code> їх тисячі. <code>git ls-files .venv</code> після цього нічого не друкує.
+<code>git check-ignore -v</code> показує, яке правило <code>.gitignore</code> тепер ховає <code>.venv</code>: файл, номер рядка, правило. У варіанті А
+правило в рядку 1; у варіанті Б ти дописав його в кінець, тож номер буде інший (у перевірці - <code>.gitignore:5:</code>).
+Якщо в <code>.gitignore</code> правила нема - спершу допиши його (<code>printf '.venv/\n*.pyc\n' &gt;&gt; .gitignore</code>, варіант Б). Старі коміти з <code>.venv</code> в історії лишаться -
 для лаб це лише зайвий розмір, не біда.</p>
 <p><strong>4. Не знаєш, що ти змінив після здачі:</strong> <code>git diff lr1-zdano main -- lr1</code> (Уроки 05, 14).</p>
-<p><strong>5. Створив репо на сайті З README - перший push відхилено.</strong></p>
-<pre><code class="language-text"> ! [rejected]        main -&gt; main (fetch first)
-error: failed to push some refs to '...'
+<p><strong>5. Створив репо на сайті З README - перший push відхилено.</strong> Варіант А, але в Кроці 2 увімкнув «Add README».
+Тоді <code>git push -u origin main</code> каже:</p>
+<pre><code class="language-text">To github.com:Evge14n/univer-labs.git
+ ! [rejected]        main -&gt; main (fetch first)
+error: failed to push some refs to 'github.com:Evge14n/univer-labs.git'
 hint: Updates were rejected because the remote contains work that you do not
-hint: have locally.
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 </code></pre>
-<p>На GitHub є коміт з README, якого нема в тебе, а історії зовсім різні, тому звичайний <code>git pull</code> скаже
-<code>fatal: refusing to merge unrelated histories</code>. Обʼєднай явно і запуш:</p>
+<p>На GitHub є коміт з README, якого нема в тебе. Підказка радить <code>git pull</code>, але простий <code>git pull</code> тут не зіллє:</p>
+<pre><code class="language-text">From github.com:Evge14n/univer-labs
+ * [new branch]      main       -&gt; origin/main
+There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details.
+
+    git pull &lt;remote&gt; &lt;branch&gt;
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/&lt;branch&gt; main
+</code></pre>
+<p>Чому: push відхилено, тож і <code>-u</code> не спрацював - <code>main</code> ще не знає, що стежить за <code>origin/main</code>. Тому треба сказати
+явно, звідки тягнути: <code>git pull origin main</code>. Але й так git відмовить: <code>fatal: refusing to merge unrelated histories</code> -
+у твоєї історії і в історії на сайті нема жодного спільного коміту. Дозволь злиття явно:</p>
 <pre><code class="language-bash">git pull --allow-unrelated-histories origin main
+</code></pre>
+<pre><code class="language-text">From github.com:Evge14n/univer-labs
+ * branch            main       -&gt; FETCH_HEAD
+Auto-merging README.md
+CONFLICT (add/add): Merge conflict in README.md
+Automatic merge failed; fix conflicts and then commit the result.
+</code></pre>
+<p><code>add/add</code> - файл <code>README.md</code> додали з двох боків (ти у своєму коміті і сайт у своєму), і текст різний. Розвʼязуєш
+як в Уроці 08: відкрий файл, лиши потрібний текст і прибери три рядки-маркери:</p>
+<pre><code class="language-bash">nano README.md
+</code></pre>
+<pre><code class="language-text">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+# Лабораторні з програмування
+
+ЛР1-ЛР7, 1 курс. Кожна лаба - тека lrN і тег lrN-zdano.
+=======
+# univer-labs
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; acb504200d89530b7a396bf8da830c49922532b6
+</code></pre>
+<p>Згори (<code>HEAD</code>) - твій README, знизу - README з сайту (там може бути ще рядок з описом репо), після <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> - хеш
+коміту з сайту. Лиши свої три рядки, видали <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>, <code>=======</code>, <code># univer-labs</code> і <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; ...</code>, збережи
+(Ctrl+O, Enter, Ctrl+X). Далі:</p>
+<pre><code class="language-bash">git add README.md
+git commit
 git push -u origin main
 </code></pre>
-<p><code>git pull</code> відкриє nano з повідомленням злиття - просто Ctrl+X.</p>
+<p><code>git commit</code> без <code>-m</code> відкриє nano з готовим повідомленням <code>Merge branch 'main' of github.com:Evge14n/univer-labs</code> -
+лиши як є, Ctrl+X. Тепер push проходить і заодно ставить стеження:</p>
+<pre><code class="language-text">To github.com:Evge14n/univer-labs.git
+   c292ff6..a91a74b  main -&gt; main
+branch 'main' set up to track 'origin/main'.
+</code></pre>
+<p>Відтепер працює і простий <code>git pull</code>. У <strong>варіанті Б</strong> README зазвичай лише на сайті - тоді конфлікту нема:
+<code>git pull --allow-unrelated-histories origin main</code> одразу зливає (<code>Merge made by the 'ort' strategy.</code>), nano
+пропонує повідомлення злиття - Ctrl+X, потім <code>git push -u origin main</code>.</p>
 <p><strong>Для лаб</strong> - цей файл і є «для лаб»: ЛР1-ЛР7 за одним рецептом, викладачу - посилання або архів з тегу.</p>
 <h3 id="самоперевірка_17">Самоперевірка</h3>
 <ol>

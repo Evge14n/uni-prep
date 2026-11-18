@@ -98,6 +98,13 @@
 </ol>
 <pre><code class="language-bash">timeshift --list
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>timeshift</code> - робить і відновлює знімки системи. Назва: time shift - «зсув у часі»: повернути систему в минуле. <code>--list</code> - список знімків: Num, Name (дата і час), Tags, Description.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Що буде?</p>
 <details>
 <summary>Відповідь</summary>
@@ -116,6 +123,15 @@ rsync -a dzherelo kopiya2/
 ls kopiya1
 ls kopiya2
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
+<li><code>touch</code> - створює порожній файл або оновлює його час. Назва: touch - «торкнутися» файлу: оновити час зміни, а як нема - створити.</li>
+<li><code>rsync</code> - копіює теки, а повторно - лише змінене. Назва: remote sync - «віддалена синхронізація»: копіює і між компʼютерами. <code>-a</code> - архівний режим: усе з підтеками, права і час зміни (archive); <code>dzherelo/</code> - з / в кінці - копіювати ВМІСТ теки; <code>dzherelo</code> - без / - саму теку, всередину КУДИ.</li>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+</ul>
+</blockquote>
 <p>Що покаже кожен <code>ls</code>?</p>
 <details>
 <summary>Відповідь</summary>
@@ -135,6 +151,12 @@ dzherelo
 rsync -a dzherelo/ kopiya1/
 ls kopiya1
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>rm</code> - видаляє файли назавжди, без кошика. Назва: remove - «прибрати, видалити».</li>
+</ul>
+</blockquote>
 <p>Чи зникне <code>b.py</code> з копії?</p>
 <details>
 <summary>Відповідь</summary>
@@ -149,6 +171,13 @@ b.py
 <p><strong>Крок 1. Подивись, куди Timeshift може класти знімки.</strong></p>
 <pre><code class="language-bash">sudo timeshift --list-devices
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>timeshift</code>: <code>--list-devices</code> - на які диски можна класти знімки (лише з файловою системою Linux).</li>
+</ul>
+</blockquote>
 <p>Побачиш таблицю <code>Devices with Linux file systems</code> - диски з файловою системою Linux. На ноутбуці з одним диском
 там буде один розділ (типу <code>/dev/nvme0n1p2</code> або <code>/dev/sda2</code>).</p>
 <p><strong>Крок 2. Налаштуй розклад мишкою</strong> (як у «Коротко»): RSYNC → диск → Daily і Boot → Finish.</p>
@@ -157,6 +186,13 @@ b.py
 <pre><code class="language-bash">sudo timeshift --create --comments &quot;перший знімок, чиста система&quot;
 sudo timeshift --list
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>timeshift</code>: <code>--create</code> - зробити знімок зараз; <code>--comments</code> - підпис до знімка, напр. --comments "перед драйвером" (видно в стовпці Description).</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+</blockquote>
 <p>Поки знімків нема, <code>--list</code> пише так (справжній вивід зі свіжої Mint 22.3, де диск ще не вибрано):</p>
 <pre><code class="language-text">First run mode (config file not found)
 Selected default snapshot type: RSYNC
@@ -185,6 +221,19 @@ rsync -av ~/proba/ ~/proba-kopiya/
 ls ~/proba-kopiya/labs
 diff -r ~/proba ~/proba-kopiya &amp;&amp; echo &quot;однакові&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code>: <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>rsync</code>: <code>-v</code> - писати, що копіюється (verbose).</li>
+<li><code>diff</code> - показує, чим відрізняються два файли. Назва: difference - «різниця». <code>-r</code> - порівняти дві теки з усіма підтеками (recursive).</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>&amp;&amp;</code> - друга команда - лише якщо перша вдалась. Назва: «і»: друга команда - лише якщо перша вдалась.</li>
+</ul>
+</blockquote>
 <p>Вивід <code>rsync -av</code> (тека у тебе буде <code>/home/evgen/proba-kopiya</code>):</p>
 <pre><code class="language-text">sending incremental file list
 created directory /home/evgen/proba-kopiya
@@ -200,6 +249,12 @@ total size is 20  speedup is 0.07
 <p>Тепер справжня копія на флешку. Встав флешку і знайди, куди вона підключилась:</p>
 <pre><code class="language-bash">lsblk -o NAME,SIZE,MOUNTPOINT
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>lsblk</code> - показує диски, флешки і розділи деревом. Назва: list block devices - «список блокових пристроїв» (дисків і розділів). <code>-o</code> - які колонки показати: -o NAME,SIZE,MOUNTPOINT (output); <code>NAME,SIZE,MOUNTPOINT</code> - назва, розмір, куди змонтовано.</li>
+</ul>
+</blockquote>
 <p>У стовпці <code>MOUNTPOINT</code> біля флешки (дивись за розміром) буде її шлях. Підстав його замість шаблону:</p>
 <pre><code class="language-text">rsync -rtv --modify-window=1 ~/univer/ ШЛЯХ_ДО_ФЛЕШКИ/univer/
 </code></pre>

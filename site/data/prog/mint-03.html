@@ -169,6 +169,15 @@ cd univer/labs
 cd ..
 pwd
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку». <code>..</code> - тека на рівень вище (з lr1 у labs); ../.. - на два рівні вище.</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>pwd</code> - показує, в якій теці ти зараз. Назва: print working directory - «надрукувати робочу (поточну) теку».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">/home/evgen/univer
@@ -180,6 +189,15 @@ pwd
 </ol>
 <pre><code class="language-bash">printf &quot;2\n&quot; | python3 kolo.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">Радіус: Площа: 12.57
@@ -213,6 +231,14 @@ pwd
 <pre><code class="language-bash">sudo apt update
 sudo apt install python3-venv python3-pip python3-tk git
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>apt update</code> - оновлює список пакетів, нічого не ставить. Назва: update - «оновити» (тут оновлюється лише список пакетів).</li>
+<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
+</ul>
+</blockquote>
 <p><strong>Крок 1. Тека для ЛР1.</strong></p>
 <pre><code class="language-bash">mkdir -p ~/univer/labs/lr1
 cd ~/univer/labs/lr1
@@ -226,6 +252,14 @@ drwxrwxr-x 2 evgen evgen 4096 Nov 18 08:53 .
 drwxrwxr-x 3 evgen evgen 4096 Nov 18 08:53 ..
 -rw-rw-r-- 1 evgen evgen    0 Nov 18 08:53 hello.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>touch</code> - створює порожній файл або оновлює його час. Назва: touch - «торкнутися» файлу: оновити час зміни, а як нема - створити.</li>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки). <code>-l</code> - докладний список: права, власник, розмір у байтах, дата зміни (long); <code>-a</code> - показати й приховані (назва з крапки), разом з . і .. (all).</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+</blockquote>
 <p><code>0</code> - розмір файлу в байтах (поки порожній). <code>.</code> - ця тека, <code>..</code> - тека вище. Дата у тебе своя (можливо, українською).</p>
 <p>Спробуй Tab: набери <code>cd ~/uni</code> і натисни Tab - допишеться <code>univer/</code>.</p>
 <p><strong>Крок 2. Налаштуй nano під Python, потім перша програма.</strong></p>
@@ -240,10 +274,24 @@ set tabsize 4
 set linenumbers
 set autoindent
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід. <code>~/.nanorc</code> - твої налаштування nano (урок 03).</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+</ul>
+</blockquote>
 <p>Тепер Tab = 4 пробіли, зліва номери рядків, а Enter зберігає відступ попереднього рядка. Команду виконай <strong>один</strong>
 раз (<code>&gt;&gt;</code> дописує в кінець файлу; вдруге рядки просто повторяться - це не шкодить).</p>
 <pre><code class="language-bash">nano hello.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+</ul>
+</blockquote>
 <p>Набери:</p>
 <pre><code class="language-python">name = input(&quot;Як тебе звати? &quot;)
 print(f&quot;Привіт, {name}!&quot;)
@@ -310,6 +358,12 @@ print(kub(2))
 </code></pre>
 <pre><code class="language-bash">python3 -i kub.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code>: <code>-i</code> - спершу виконати файл, а потім лишитись у Python з &gt;&gt;&gt; і всіма його функціями.</li>
+</ul>
+</blockquote>
 <p>Спершу файл виконається (надрукує <code>8</code>), потім зʼявиться <code>&gt;&gt;&gt;</code>. Набери <code>kub(3)</code>, Enter, потім <code>kub(1.5)</code>:</p>
 <pre><code class="language-text">8
 &gt;&gt;&gt; kub(3)
@@ -325,6 +379,16 @@ source ~/univer/.venv/bin/activate
 which python
 python3 -m pip install pytest flake8 black mypy ruff pycodestyle
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code>: <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m venv</code> - створює окреме середовище Python (venv) для бібліотек лаб. Назва: virtual environment - «віртуальне середовище». <code>~/univer/.venv</code> - наш venv на всі лаби; крапка на початку - тека прихована (ls -a її покаже).</li>
+<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
+<li><code>which</code> - показує шлях до програми з PATH. Назва: which - «котрий»: котрий файл запуститься. <code>python</code> - у venv покаже ~/univer/.venv/bin/python; поза venv - тиша.</li>
+<li><code>python3 -m pip install</code> - ставить бібліотеки Python (лише у venv!). Назва: pip installs packages - «pip ставить пакети»; install - «встановити».</li>
+</ul>
+</blockquote>
 <p><code>which python</code> у venv покаже <code>/home/evgen/univer/.venv/bin/python</code>. Кінець справжнього виводу pip (версії у тебе можуть
 бути новіші):</p>
 <pre><code class="language-text">Successfully installed ast-serialize-0.13.1 black-26.10.1 click-8.5.1 flake8-7.5.0 iniconfig-2.3.1 librt-0.16.0 mccabe-0.7.0 mypy-2.4.1 mypy-extensions-1.2.0 packaging-26.3 pathspec-1.1.1 platformdirs-4.14.7 pluggy-1.7.0 pycodestyle-2.15.0 pyflakes-4.1.0 pygments-2.21.0 pytest-9.2.0 pytokens-0.4.1 ruff-0.17.5 typing_extensions-4.16.0
@@ -334,6 +398,14 @@ python3 -m pip install pytest flake8 black mypy ruff pycodestyle
 python3 -m flake8 --max-line-length=78 kub.py
 python3 -m mypy kub.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s».</li>
+<li><code>python3 -m flake8</code> - шукає помилки стилю і зайвий код, нічого не змінює. Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша дозволена довжина рядка; викладач хоче 78 (типово 79).</li>
+<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми. Назва: назва не розшифровується (py - від Python).</li>
+</ul>
+</blockquote>
 <p>pytest напише <code>1 passed</code>, flake8 - нічого (тиша = зауважень нема), mypy - <code>Success: no issues found in 1 source file</code>.
 Вимкнути venv - <code>deactivate</code> (зникне <code>(.venv)</code>). Кожне нове вікно термінала стартує без venv - вмикай знову.</p>
 <p><strong>Крок 7. Інші редактори (за бажанням).</strong></p>
@@ -341,6 +413,14 @@ python3 -m mypy kub.py
 micro hello.py
 xed hello.py &amp;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>micro</code> - простий редактор у терміналі з Ctrl+S і Ctrl+Q. Назва: micro - «мікро»: маленький простий редактор. <code>hello.py</code> - файл, який відкрити; якщо його нема - створиться при збереженні.</li>
+<li><code>xed</code> - віконний редактор Mint, як Блокнот. Назва: x (набір програм X-Apps від Mint) + ed від editor - «редактор».</li>
+<li><code>&amp;</code> - запускає команду у фоні, термінал лишається вільним. Назва: ampersand («амперсанд») - «запустити у фоні».</li>
+</ul>
+</blockquote>
 <p>У micro: допиши щось, Ctrl+S, Ctrl+Q. xed відкриється вікном - знайомий вигляд, як Блокнот.</p>
 <p><strong>Крок 8. Скорочення - скрипт ustanovka-mint.sh.</strong> Він робить кроки 0 і 6 сам (ще ставить matplotlib, numpy, htop,
 tree) і додає дві команди: <code>univer</code> (перейти в <code>~/univer</code> і увімкнути venv) і <code>perevir файл.py</code> (doctest через pytest,
@@ -350,6 +430,15 @@ wget -O ustanovka-mint.sh https://evge14n.github.io/uni-prep/files/ustanovka-min
 less ustanovka-mint.sh
 bash ustanovka-mint.sh
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code>: <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
+<li><code>wget</code> - завантажує файл з інтернету за адресою. Назва: World Wide Web + get - «дістати з вебу». <code>-O</code> - під яким імʼям зберегти; -O - (мінус) означає «на екран», щоб передати далі в трубу |.</li>
+<li><code>less</code> - гортає довгий файл по сторінках, вихід q. Назва: less - «менше»: жарт, бо less is more - кращий за старий переглядач more. <code>ustanovka-mint.sh</code> - прочитати чужий скрипт перед запуском (урок 03).</li>
+<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
+</ul>
+</blockquote>
 <p>Якщо <code>wget</code> пише помилку <code>404</code> (файл на сайті ще не опублікований) або інтернету нема - скопіюй <code>ustanovka-mint.sh</code>
 з теки курсу (лежить поруч з уроками) у домашню теку, а далі так само: <code>less</code>, потім <code>bash</code>.</p>
 <p><code>less</code> - щоб спершу прочитати, що скрипт робить (гортати пробілом, вийти <code>q</code>). Чужі скрипти без читання не запускають.
@@ -357,6 +446,12 @@ bash ustanovka-mint.sh
 <pre><code class="language-bash">univer
 cd labs/lr1
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>univer</code> - переходить у ~/univer і вмикає venv. Назва: наша назва: «універ» - тека ~/univer для навчання.</li>
+</ul>
+</blockquote>
 <p>Тепер набери <code>perevir kub.py</code>:</p>
 <pre><code class="language-text">--- doctest (через pytest; зупиню, якщо довше 120 с)
 doctest: усе пройшло (1 passed in 0.01s)

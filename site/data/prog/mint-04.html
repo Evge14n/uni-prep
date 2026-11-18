@@ -82,20 +82,50 @@ doctest, перевірка стилю - без VS Code. Код пишеш ти 
 <p>Відкрий термінал (Ctrl+Alt+T) і увімкни venv (так - на початку кожної роботи над лабою):</p>
 <pre><code class="language-bash">source ~/univer/.venv/bin/activate
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><code>nano</code> ти вже налаштував в Уроці 03 (крок 2). Перевір:</p>
 <pre><code class="language-bash">cat ~/.nanorc
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід. <code>~/.nanorc</code> - твої налаштування nano (урок 03).</li>
+</ul>
+</blockquote>
 <p>Мають бути 4 рядки <code>set ...</code>. Якщо файлу нема (<code>cat: /home/evgen/.nanorc: No such file or directory</code>, укр.
 <code>... Немає такого файла або каталогу</code>) - урок 03 пропущено, зроби це зараз один раз. Без цього клавіша Tab у <code>nano</code>
 ставить символ табуляції, і Python падає з <code>TabError</code> (див. «Типові помилки»):</p>
 <pre><code class="language-bash">printf 'set tabstospaces\nset tabsize 4\nset linenumbers\nset autoindent\n' &gt;&gt; ~/.nanorc
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+</ul>
+</blockquote>
 <p>Тепер Tab = 4 пробіли, зліва видно номери рядків, а Enter зберігає відступ попереднього рядка.</p>
 <h3 id="крок-1-тека-лаби">Крок 1. Тека лаби</h3>
 <pre><code class="language-bash">mkdir -p ~/univer/labs/lr1
 cd ~/univer/labs/lr1
 pwd
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>pwd</code> - показує, в якій теці ти зараз. Назва: print working directory - «надрукувати робочу (поточну) теку».</li>
+</ul>
+</blockquote>
 <p><code>mkdir -p</code> створює і всі проміжні теки, і не лається, якщо тека вже є. <code>pwd</code> має показати
 <code>/home/твій_логін/univer/labs/lr1</code>.</p>
 <h3 id="крок-2-файли-викладача-з-telegram">Крок 2. Файли викладача з Telegram</h3>
@@ -104,6 +134,13 @@ pwd
 лапки - інакше bash вважатиме <code>Telegram</code> і <code>Desktop</code> двома різними словами. Подивись, що там:</p>
 <pre><code class="language-bash">ls ~/Завантаження/&quot;Telegram Desktop&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>ls</code> - показує, що лежить у теці. Назва: list - «список» (вмісту теки).</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+</blockquote>
 <p>(Якщо Mint англійською, тека називається <code>~/Downloads</code> - тоді в усіх командах уроку пиши її.)</p>
 <p>Не набирай довгу назву руками: набери <code>cp ~/Завантаження/"Telegram Desktop"/Лаб</code> і натисни <strong>Tab</strong> - bash допише
 назву сам (якщо варіантів кілька, натисни Tab двічі - покаже список). Скопіюй ноутбук викладача в теку лаби
@@ -111,10 +148,22 @@ pwd
 <pre><code class="language-bash">cp ~/Завантаження/&quot;Telegram Desktop&quot;/Лабораторна_робота_1_Пайтон,_2026_2027.ipynb .
 ls
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати». <code>.</code> - «сюди», у поточну теку: cp ~/Завантаження/lab1.py .</li>
+</ul>
+</blockquote>
 <p>Якщо <code>cp</code> пише <code>cannot stat</code> (файлу там нема - Telegram міг покласти його деінде), знайди його по всій домашній
 теці і скопіюй з того шляху, який покаже <code>find</code>:</p>
 <pre><code class="language-bash">find ~ -name &quot;Лабораторна_робота_1*&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>find</code> - шукає файли за назвою, часом чи власником. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: -name "*.py"; великі й малі літери різні; <code>~</code> - шукати по всій домашній теці (знайти, куди Telegram зберіг лабу).</li>
+</ul>
+</blockquote>
 <h3 id="крок-3-дістати-заготовки-з-ipynb">Крок 3. Дістати заготовки з <code>.ipynb</code></h3>
 <p><code>.ipynb</code> - це JSON (текстовий формат запису даних: списки <code>[...]</code> і пари «назва: значення» у <code>{...}</code>; Python читає
 його модулем <code>json</code>): текст і код лежать у «клітинках». Дві короткі функції bash: <code>klityny</code> показує список
@@ -122,6 +171,12 @@ ls
 <pre><code class="language-bash">klityny() { python3 -c 'import json, sys; [print(i, c[&quot;cell_type&quot;], &quot;&quot;.join(c[&quot;source&quot;])[:45].split(&quot;\n&quot;)[0]) for i, c in enumerate(json.load(open(sys.argv[1]))[&quot;cells&quot;])]' &quot;$1&quot;; }
 klitynka() { python3 -c 'import json, sys; print(&quot;&quot;.join(json.load(open(sys.argv[1]))[&quot;cells&quot;][int(sys.argv[2])][&quot;source&quot;]))' &quot;$1&quot; &quot;$2&quot;; }
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>;</code> - розділяє команди в рядку, виконує всі по черзі. Назва: крапка з комою - роздільник команд.</li>
+</ul>
+</blockquote>
 <p>Подивись, які клітинки є:</p>
 <pre><code class="language-bash">klityny Лабораторна_робота_1_Пайтон,_2026_2027.ipynb
 </code></pre>
@@ -135,21 +190,46 @@ klitynka() { python3 -c 'import json, sys; print(&quot;&quot;.join(json.load(ope
 7 markdown ### **Завдання 3. Формування суми покупки дос
 8 code import doctest
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>klityny</code> - показує список клітинок .ipynb з номерами. Назва: наша назва: «клітини» - список усіх клітинок .ipynb.</li>
+</ul>
+</blockquote>
 <p>Клітинки <code>code</code> 4, 6, 8 - це заготовки трьох завдань. Знак <code>&gt;</code> пише вивід команди у файл:</p>
 <pre><code class="language-bash">klitynka Лабораторна_робота_1_Пайтон,_2026_2027.ipynb 4 &gt; lr1_1.py
 klitynka Лабораторна_робота_1_Пайтон,_2026_2027.ipynb 6 &gt; lr1_2.py
 klitynka Лабораторна_робота_1_Пайтон,_2026_2027.ipynb 8 &gt; lr1_3.py
 ls
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>klitynka</code> - друкує одну клітинку з .ipynb за номером. Назва: наша назва: «клітинка» блокнота .ipynb (англ. cell).</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+</ul>
+</blockquote>
 <p>Функції живуть, поки відкрите вікно термінала. Щоб були завжди (знадобляться в ЛР2), допиши їх у <code>~/.bashrc</code>:</p>
 <pre><code class="language-bash">declare -f klityny klitynka &gt;&gt; ~/.bashrc
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>declare</code> - оголошує змінні; declare -f показує код функцій. Назва: declare - «оголосити» (змінну чи функцію bash). <code>-f</code> - надрукувати повний код функцій (function) з цими назвами.</li>
+</ul>
+</blockquote>
 <p>Чому не файл <code>lab1_doctests.py</code> з чату? У ньому завдання 1 зламане: рядок з <code>return</code> не компілюється, а два
 doctest розірвані на два рядки (розбір - у розділі «Коли помиляється doctest викладача»). Завдання 2 і 3 там
 такі самі, як у <code>.ipynb</code>, але простіше брати все з одного місця.</p>
 <h3 id="крок-4-відкрий-файл-у-nano-і-подивись-на-будову">Крок 4. Відкрий файл у nano і подивись на будову</h3>
 <pre><code class="language-bash">nano lr1_1.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+</ul>
+</blockquote>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -216,6 +296,12 @@ doctest.testmod()                                ← як у заготовці
 </code></pre>
 <pre><code class="language-text">NameError: name 'number' is not defined
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+</ul>
+</blockquote>
 <p>Python дійшов до рядка <code>number_operations(number)</code>, а змінної <code>number</code> ще нема - бо ще нема введення.
 Допиши рядок з <code>input</code> і <code>print(...)</code> навколо виклику (як у схемі вище). Функцію поки не чіпай. Запусти знову.
 Програма чекає числа - набери <code>127</code> і Enter. Або подай число одразу, без набору, через <code>printf</code>:</p>
@@ -230,6 +316,12 @@ Expected:
     'The sum of digits of the number 124 is 7;\nthe absolute value of the difference of the number and reversed number is 297;\nthe fraction of the number 124 and the sum of its digits is 17.714.'
 Got nothing
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <p>і в кінці:</p>
 <pre><code class="language-text">1 items had failures:
    5 of   5 in __main__.number_operations
@@ -264,6 +356,12 @@ the fraction of the number 127 and the sum of its digits is 12.700.
 5 passed and 0 failed.
 Test passed.
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу. <code>-n</code> - скільки останніх рядків показати: -n 3 (lines).</li>
+</ul>
+</blockquote>
 <p><code>-v</code> показує кожен приклад (<code>Trying ... Expecting ... ok</code>), <code>tail -n 3</code> залишає три останні рядки.</p>
 <h3 id="крок-7-завдання-2-і-3-так-само">Крок 7. Завдання 2 і 3 - так само</h3>
 <pre><code class="language-bash">nano lr1_2.py
@@ -287,12 +385,26 @@ git config --global user.email &quot;твоя@пошта&quot;
 git init
 printf '.mypy_cache/\n.ruff_cache/\n.pytest_cache/\n__pycache__/\n' &gt; .gitignore
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
+</ul>
+</blockquote>
 <p>Після кожного готового завдання:</p>
 <pre><code class="language-bash">cd ~/univer/labs
 git add .gitignore lr1/lr1_1.py
 git commit -m &quot;ЛР1: завдання 1&quot;
 git log --oneline
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
+</ul>
+</blockquote>
 <h2 id="підказки-до-завдань-без-розвʼязку">Підказки до завдань (без розвʼязку)</h2>
 <p>Список функцій і операторів з поясненнями - <code>Курс/ДОВІДНИК-ФУНКЦІЙ.md</code> (тека курсу Python на ПК): розділи
 <code>// (ціле ділення)</code>, <code>% (остача від ділення)</code>, <code>abs()</code>, <code>min()</code>, <code>max()</code>, <code>round()</code>, <code>f-рядок</code>,
@@ -348,6 +460,12 @@ print(used_12, eggs)  # 2 16
 </ol>
 <pre><code class="language-bash">python3 -c 'print(-124 % 10, -124 // 100)'
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code>: <code>-c</code> - виконати рядок коду з командного рядка, без файлу: python3 -c 'print(2 ** 10)'.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">6 -2
@@ -534,6 +652,18 @@ python3 -m pycodestyle --max-line-length=78 lr1_1.py
 python3 -m ruff check lr1_1.py
 python3 -m mypy lr1_1.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code>: <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s»; <code>-s</code> - не перехоплювати ввід і вивід: потрібен, коли файл питає input().</li>
+<li><code>python3 -m black</code> - сам гарно оформлює код Python (пробіли, переноси). Назва: black - «чорний»: як у Форда, «будь-який колір, якщо він чорний». <code>-l</code> - найбільша довжина рядка; викладач хоче 78 (black сам ставить 88).</li>
+<li><code>python3 -m flake8</code> - шукає помилки стилю і зайвий код, нічого не змінює. Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша дозволена довжина рядка; викладач хоче 78 (типово 79).</li>
+<li><code>python3 -m pycodestyle</code> - перевіряє лише оформлення коду за PEP 8. Назва: Python code style - «стиль коду Python» (раніше програма звалась pep8). <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78 (типово 79).</li>
+<li><code>python3 -m ruff check</code> - швидко шукає помилки в коді, з --fix сам виправляє. Назва: ruff - назва не розшифровується; check - «перевірити».</li>
+<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми. Назва: назва не розшифровується (py - від Python).</li>
+</ul>
+</blockquote>
 <p>Що має бути (вивід з тестової Mint 22.3, на правильному коді):</p>
 <pre><code class="language-text">5 passed and 0 failed.
 Test passed.
@@ -566,6 +696,12 @@ Success: no issues found in 1 source file
 Порожній вивід = добре:</p>
 <pre><code class="language-bash">grep -nE '^\s*(if|elif|else|for|while)\b' lr1_1.py lr1_2.py lr1_3.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-n</code> - показати номер рядка перед кожним збігом (line number); <code>-E</code> - розширені регулярні вирази: |, +, {79,} без зворотних рисок.</li>
+</ul>
+</blockquote>
 <p>Або все одразу: <code>perevir lr1_1.py 127</code> (скорочення з <code>ustanovka-mint.sh</code>, урок 03): відповіді на <code>input()</code> пишеш
 після назви через пробіл, кожна - окремий рядок вводу (для <code>lr1_3.py</code> - <code>perevir lr1_3.py 534 1 3 2 3 5 2 10</code>).
 Він проганяє doctest (через pytest), black, flake8, pycodestyle, ruff і mypy. black він лише перевіряє

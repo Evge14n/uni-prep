@@ -305,6 +305,10 @@
     "Довідник"
    ],
    [
+    "komandy",
+    "Команди"
+   ],
+   [
     "shpargalky",
     "Шпаргалки"
    ],
@@ -340,6 +344,10 @@
    {
     "key": "dovidnyk",
     "title": "Довідник"
+   },
+   {
+    "key": "komandy",
+    "title": "Команди"
    },
    {
     "key": "shpargalky",

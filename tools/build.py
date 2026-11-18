@@ -118,7 +118,7 @@ def part_pages(pid, cfg, udir):
             pages[key] = site_fixes(src.read_text(encoding="utf-8"))
             moved[fname] = key
     if cfg.get("split"):
-        for key, md in split_themes((udir / f"{cfg['split']}.md").read_text(encoding="utf-8"), pre).items():
+        for key, md in split_themes(site_fixes((udir / f"{cfg['split']}.md").read_text(encoding="utf-8")), pre).items():
             if cfg.get("pybox") and key != pre:
                 first, _, rest = md.partition("\n")
                 md = first + '\n\n<div class="pybox" id="pybox"></div>\n' + rest
@@ -138,6 +138,9 @@ SITE_FIXES = [
     (re.compile(r"\(тека `Курс/` на ПК\)"), "(на сайті - [Уроки Python](#/u/prog/uroky))"),
     (re.compile(r", тека `Курс/` на ПК,"), ", на сайті - [Уроки Python](#/u/prog/uroky),"),
     (re.compile(r"готовий розбір `\.\./Лабораторні/ЛР4/ЛР4 - розбір по завданнях\.md`"), "[розбір ЛР4](#/u/prog/lab-4)"),
+    # UCMD1: пояснення команд в уроках посилаються на довідник
+    (re.compile(r"у довіднику «05_Програмування/КОМАНДИ - довідник\.md» \(на сайті - вкладка «Команди»\)"),
+     "у вкладці [«Команди»](#/u/prog/komandy), а тут торкнись команди в коді - вискочить підказка"),
 ]
 
 
@@ -258,6 +261,12 @@ def main():
         if (udir / "moduli-data.json").exists():
             (out / "moduli.json").write_text((udir / "moduli-data.json").read_text(encoding="utf-8"), encoding="utf-8")
             files.append(f"data/{uid}/moduli.json")
+        # UCMD1: підказки до команд у коді (tools/gen_komandy.py) - офлайн теж
+        if (udir / "komandy-data.json").exists():
+            ktext = (udir / "komandy-data.json").read_text(encoding="utf-8")
+            check_text(ktext, f"{uid}/komandy-data.json", errors)
+            (out / "komandy.json").write_text(ktext, encoding="utf-8")
+            files.append(f"data/{uid}/komandy.json")
         # файли для скачування (заготовки задач prog) - теж у офлайн-кеш
         for f in sorted((out / "zadachi").glob("*.py")) if (out / "zadachi").exists() else []:
             files.append(f"data/{uid}/zadachi/{f.name}")
@@ -345,7 +354,7 @@ def main():
     (DATA / "units.json").write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
     files.append("data/units.json")
 
-    shell = ["./", "index.html", "grafik.js", "app.js", "pyrun.js", "py-worker.js", "style.css", "manifest.webmanifest",
+    shell = ["./", "index.html", "grafik.js", "app.js", "komandy.js", "pyrun.js", "py-worker.js", "style.css", "manifest.webmanifest",
              "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/favicon.svg"]
     # шрифти (self-hosted, tools/make_fonts.py) - теж у кеш, щоб офлайн був той самий вигляд
     shell += sorted("fonts/" + f.name for f in (SITE / "fonts").glob("*.woff2"))
@@ -353,7 +362,7 @@ def main():
         p = SITE / (s if s != "./" else "index.html")
         if not p.exists():
             errors.append(f"нема файлу {s}")
-    for s in ["index.html", "grafik.js", "app.js", "pyrun.js", "py-worker.js", "style.css"]:
+    for s in ["index.html", "grafik.js", "app.js", "komandy.js", "pyrun.js", "py-worker.js", "style.css"]:
         t = (SITE / s).read_text(encoding="utf-8")
         for ch, name in (("—", "довге тире"), ("–", "середнє тире")):
             if ch in t:

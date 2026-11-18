@@ -562,6 +562,11 @@ async function unitPage(id, page, anchor) {
       PyRun.enhance(app.querySelector("article.doc"));
       PyRun.box(app.querySelector("#pybox"));
     }
+    // UCMD1: команди в коді - торкнись, і вискочить підказка; вкладка «Команди» - пошук
+    if (typeof Cmd !== "undefined") {
+      Cmd.enhance(app.querySelector("article.doc"));
+      if (page === "komandy") Cmd.searchPage(app);
+    }
     if (md && page === "shlyakh") { // кільце «скільки питань модуля знаю зараз» на кожному модулі
       app.querySelectorAll("[data-mod]").forEach((a) => {
         const m = md.modules.find((x) => x.n === +a.dataset.mod);

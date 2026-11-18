@@ -4,3 +4,4 @@ CONTENT-SPEC.md
 UNIMOL1-КООРДИНАЦІЯ.md
 *.pyc
 tools/unimol1_mol_tasks.json
+/tools/_shots_komandy/

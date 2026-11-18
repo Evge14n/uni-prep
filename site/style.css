@@ -546,3 +546,26 @@ article.doc :is(h1, h2, h3, h4) { scroll-margin-top: 76px; }
 .vlist a > .muted { grid-column: 2; font-size: .85rem; display: flex; gap: 4px; align-items: center; }
 .vlist a > .muted svg.i { width: 14px; height: 14px; }
 .vday { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+/* UCMD1: команди в коді - торкнись для підказки; вкладка «Команди» */
+.ck { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: help; border-radius: 3px;
+  text-decoration: underline dotted var(--ink-2); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.ck:hover { background: var(--pen-soft); }
+.ck:focus-visible { outline: 2px solid var(--pen); outline-offset: 1px; }
+.cktip { position: absolute; z-index: 60; width: max-content; max-width: min(440px, calc(100vw - 16px)); padding: 6px 14px 10px;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line-2); border-radius: var(--r-sm);
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .45); font-size: 15px; line-height: 1.45; }
+.cktip.sheet { position: fixed; left: 8px; right: 8px; width: auto; max-width: none;
+  bottom: calc(var(--nav-h, 64px) + env(safe-area-inset-bottom) + 8px); max-height: 60vh; overflow-y: auto; }
+.cktip p { margin: 6px 0; }
+.cktip .cks { margin-right: 48px; padding-top: 6px; }
+.cktip .ckx { float: right; margin: 0 -8px 0 8px; border: 0; background: none; }
+.cktip .ckl { margin-top: 10px; }
+.cktip .ckl a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+.cmdsearch { margin: 16px 0 8px; }
+.cmdsearch label { display: block; font-weight: 600; margin-bottom: 6px; }
+.cmdsearch input { width: 100%; box-sizing: border-box; min-height: 48px; font-size: 16px; padding: 10px 14px; color: var(--ink);
+  background: var(--surface); border: 1.5px solid var(--line-2); border-radius: var(--r-sm); font-family: var(--mono); }
+.cmdsearch input:focus-visible { outline: 2px solid var(--pen); outline-offset: 1px; }
+.doc details.cmd summary code { font-weight: 700; }
+.doc details.cmd[hidden], .doc h2.cmdg[hidden] { display: none; }

@@ -1189,7 +1189,8 @@ function gItem(p, id, S, kind) {
   const u = p.units[id];
   const isDone = S.done.has(id);
   const wait = isDone && !S.botDone.has(id);
-  const meta = [kind === "debt" ? `<b class="gdebt">борг з ${dm(u.day)}</b>` : "", esc(u.time), `${u.min} хв`, `пріоритет ${u.prio}`,
+  const pre = kind === "held" ? (u.after || []).filter((a) => p.units[a] && !S.done.has(a)).map((a) => esc(p.units[a].short)).join(", ") : "";
+  const meta = [kind === "debt" ? `<b class="gdebt">борг з ${dm(u.day)}</b>` : "", pre ? `<span class="muted">спершу: ${pre}</span>` : "", esc(u.time), `${u.min} хв`, `пріоритет ${u.prio}`,
     u.hard ? `<b class="gred">дедлайн ${dm(u.hard)}</b>` : ""].filter(Boolean).join(" · ");
   return `<li class="gi${u.hard ? " hard" : ""}${isDone ? " done" : ""}">
     <button class="gchk" type="button" data-g="${id}" aria-pressed="${isDone}" aria-label="${isDone ? "Зроблено" : "Позначити зроблене"}: ${esc(u.short)}">${isDone ? icon("check") : ""}</button>
@@ -1231,7 +1232,7 @@ async function grafikPage(codeArg) {
     const dayCard = (d, i) => {
       const wd = WDL[GRAFIK.pyWd(d.day)];
       const ev = d.events.map((e) => `<li class="gev${e.hard ? " hard" : ""}">${e.hard ? '<b class="gred">дедлайн</b> · ' : ""}${esc(e.time || "")} ${esc(e.title)}</li>`).join("");
-      const rows = d.debts.map((id) => gItem(p, id, S, "debt")).join("") + d.items.map((id) => gItem(p, id, S, "item")).join("") +
+      const rows = d.debts.map((id) => gItem(p, id, S, "debt")).join("") + d.items.map((id) => gItem(p, id, S, "item")).join("") + (d.held || []).map((id) => gItem(p, id, S, "held")).join("") +
         d.done.map((id) => gItem(p, id, S, "done")).join("");
       const empty = !rows ? `<li class="muted">${GRAFIK.pyWd(d.day) === 0 ? "Лише картки (4 пари + ЛР - день легкий)." : "Лише картки в боті (10-15 хв)."}</li>` : "";
       return `<section class="card gday${i === 0 ? " today" : ""}"><h2>${i === 0 ? "Сьогодні, " : ""}${wd} ${dm(d.day)} <span class="muted">≈ ${d.min} хв</span></h2>
@@ -1279,7 +1280,7 @@ async function grafikPage(codeArg) {
   };
   draw();
 }
-async function videoPage(id) {
+async function gVideoPage(id) {
   const p = await getJSON("data/grafik.json");
   delete app.dataset.s;
   const S = gState(p);
@@ -1300,7 +1301,7 @@ async function videoPage(id) {
         <li><h2>${icon("target")}Перевір себе</h2><p>${esc(u.check)}</p></li>
       </ol>
       <ul class="glist">${gItem(p, id, S, "item")}</ul>`;
-    gBind(p, () => videoPage(id));
+    gBind(p, () => gVideoPage(id));
     return;
   }
   setTitle("Відео-уроки");
@@ -1331,7 +1332,7 @@ async function route() {
     else if (h[0] === "about") await staticPage("about", "Як користуватись");
     else if (h[0] === "stats") await statsPage();
     else if (h[0] === "grafik") await grafikPage(h[1]);
-    else if (h[0] === "video") await videoPage(h[1]);
+    else if (h[0] === "video") await gVideoPage(h[1]);
     else if (h[0] === "w") await cumulTest(h[1]);
     else notFound();
   } catch (e) {

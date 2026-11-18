@@ -31,17 +31,28 @@
     const hard = od.filter((i) => plan.units[i].hard);
     let soft = od.filter((i) => !plan.units[i].hard);
     const late = hard.filter((i) => plan.units[i].hard < today);
+    const shown = new Set();
+    const blocked = (i) => (plan.units[i].after || []).filter((a) => plan.units[a] && !has(done, a) && !has(res, a) && !shown.has(a));
     const days = [];
     for (let k = 0; k < ndays; k++) {
       const key = addDays(today, k);
       const n = room(plan, key);
-      const debts = (k === 0 ? hard : []).concat(soft.slice(0, n));
-      soft = soft.slice(n);
+      const debts = k === 0 ? hard.slice() : [];
+      debts.forEach((i) => shown.add(i));
+      const base = k === 0 ? hard.length : 0;
+      const rest = [];
+      for (const i of soft) {
+        if (debts.length - base < n && !blocked(i).length) { debts.push(i); shown.add(i); } else rest.push(i);
+      }
+      soft = rest;
       const dd = plan.days[key] || {};
-      const items = (dd.items || []).filter((i) => !has(res, i));
-      const undone = items.filter((i) => !has(done, i));
-      days.push({ day: key, debts, items: undone, done: items.filter((i) => has(done, i)), events: dd.events || [],
-        min: debts.concat(undone).reduce((s, i) => s + plan.units[i].min, 0) });
+      const items = [], held = [];
+      for (const i of dd.items || []) {
+        if (has(res, i) || has(done, i)) continue;
+        if (blocked(i).length) held.push(i); else { items.push(i); shown.add(i); }
+      }
+      days.push({ day: key, debts, items, held, done: (dd.items || []).filter((i) => !has(res, i) && has(done, i)), events: dd.events || [],
+        min: debts.concat(items).reduce((s, i) => s + plan.units[i].min, 0) });
     }
     return { days, waiting: soft, late };
   }

@@ -135,7 +135,7 @@ h3 { font-size: 1.07rem; line-height: 1.35; margin: 20px 0 8px; }
 
 .bnav {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); /* UPLAN1: + Графік */
   padding-bottom: env(safe-area-inset-bottom);
   background: color-mix(in srgb, var(--surface) 94%, transparent);
   -webkit-backdrop-filter: saturate(1.4) blur(10px); backdrop-filter: saturate(1.4) blur(10px);
@@ -144,7 +144,7 @@ h3 { font-size: 1.07rem; line-height: 1.35; margin: 20px 0 8px; }
 }
 .bnav a {
   position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  min-height: var(--nav-h); font-size: 12px; font-weight: 600;
+  min-height: var(--nav-h); font-size: 12px; font-weight: 600; text-align: center; line-height: 1.15;
 }
 .bnav a svg.i { width: 22px; height: 22px; transition: transform .2s var(--spring); }
 .bnav a[aria-current="page"] { color: var(--pen); }
@@ -500,3 +500,39 @@ main { position: relative; overflow-x: clip; max-width: 880px; margin: 0 auto; p
 .pybox { margin: 14px 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface); line-height: 1.5; }
 .pybox .btn { margin-top: 8px; min-height: 44px; }
 .doc details[id] > summary code { font-weight: 600; }
+
+/* UPLAN1: графік навчання і відео-уроки */
+.gday h2 { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; margin: 0 0 8px; font-size: 1.05rem; }
+.gday.today { border-color: var(--pen); }
+.glist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.gi { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--line, var(--surface-2)); }
+.glist > .gi:first-child { border-top: 0; }
+.gi.hard .gtitle { color: var(--bad); }
+.gi.done .gtitle { text-decoration: line-through; opacity: .7; }
+.gchk { flex: 0 0 44px; width: 44px; height: 44px; border-radius: 12px; border: 2px solid var(--ink-2); background: var(--surface);
+  color: var(--ok-ink); display: grid; place-items: center; cursor: pointer; }
+.gchk[aria-pressed="true"] { background: var(--ok); border-color: var(--ok); }
+.gi.hard .gchk { border-color: var(--bad); }
+.gbody { min-width: 0; flex: 1; }
+.gmeta { font-size: .85rem; color: var(--ink-2); }
+.gtitle { display: block; font-weight: 600; margin: 2px 0; overflow-wrap: anywhere; }
+.gsteps { font-size: .85rem; }
+.gsteps svg.i { width: 15px; height: 15px; vertical-align: -2px; margin-right: 3px; }
+.gred, .gev.hard { color: var(--bad); }
+.gdebt { color: var(--warn, var(--bad)); }
+.gev { font-size: .92rem; }
+.gwday { font-weight: 700; margin-top: 8px; }
+.gwarn { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: var(--bad-soft); color: var(--ink); }
+.gcal { padding-left: 1.2em; }
+.gcal li { margin: 6px 0; }
+.gurl { display: block; overflow-wrap: anywhere; font-size: .85rem; }
+.vsteps { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; counter-reset: vs; }
+.vsteps > li { counter-increment: vs; padding: 12px 14px; border-radius: 14px; background: var(--surface-2); }
+.vsteps > li h2 { display: flex; gap: 8px; align-items: center; margin: 0 0 6px; font-size: 1.05rem; }
+.vsteps > li h2::before { content: counter(vs) "."; color: var(--pen); }
+.vsteps .btn { max-width: 100%; white-space: normal; text-align: left; }
+.vlist { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 4px; }
+.vlist a { display: grid; grid-template-columns: 3.2em 1fr; gap: 2px 10px; padding: 10px 6px; border-radius: 10px; min-height: 44px; }
+.vlist a > .muted { grid-column: 2; font-size: .85rem; display: flex; gap: 4px; align-items: center; }
+.vlist a > .muted svg.i { width: 14px; height: 14px; }
+.vday { color: var(--ink-2); font-variant-numeric: tabular-nums; }

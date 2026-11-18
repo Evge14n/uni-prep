@@ -261,14 +261,14 @@ document.addEventListener("pointerdown", (e) => {
 }, { passive: true });
 
 // ---------- навігація ----------
-const NAV = [["#/", "today", "Сьогодні"], ["#/subjects", "book", "Предмети"], ["#/plan", "plan", "План"], ["#/stats", "chart", "Слабкі теми"]];
+const NAV = [["#/", "today", "Сьогодні"], ["#/grafik", "cal", "Графік"], ["#/subjects", "book", "Предмети"], ["#/plan", "plan", "План"], ["#/stats", "chart", "Слабкі теми"]];
 function drawNav() {
   const items = NAV.map(([h, ic, t]) => `<a href="${h}" data-nav="${h}">${icon(ic)}<span>${t}</span></a>`).join("");
   $(".bnav").innerHTML = items;
   $(".dnav").innerHTML = items;
 }
 function markNav(h0) {
-  const cur = !h0 || h0 === "w" ? "#/" : (h0 === "u" || h0 === "q" || h0 === "subjects" || h0 === "glossary" || h0 === "about") ? "#/subjects" : "#/" + h0;
+  const cur = !h0 || h0 === "w" ? "#/" : h0 === "video" ? "#/grafik" : (h0 === "u" || h0 === "q" || h0 === "subjects" || h0 === "glossary" || h0 === "about") ? "#/subjects" : "#/" + h0;
   document.querySelectorAll("[data-nav]").forEach((a) => {
     if (a.dataset.nav === cur) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
@@ -463,7 +463,7 @@ async function subjects() {
     <details class="later"><summary>Після колоквіумів: 4 іспити</summary><div class="units">${ex}</div></details>
     <details class="later"><summary>Заліки</summary><div class="units">${zl}</div></details>
     ${skl ? `<details class="later"><summary>Навички: Linux, Python + безпека</summary><div class="units">${skl}</div></details>` : ""}
-    <p><a class="chiplink" href="kalendar.ics" download>${icon("cal")}Календар .ics (лише відомі дати колоквіумів і іспитів)</a></p>
+    <p><a class="chiplink" href="#/grafik">${icon("cal")}Графік навчання і календар для телефона</a></p>
     <p class="footer">Власні конспекти, задачі й тести. Числові відповіді тестів перевірені скриптом. Дати, яких нема в джерелах, позначені «спитати в групі».</p>`;
   stagger(); animateRings();
   app.querySelectorAll("details.later").forEach((d) => d.addEventListener("toggle", () => { if (d.open) animateRings(d); }));
@@ -1163,6 +1163,155 @@ async function statsPage() {
   });
 }
 
+// ---------- UPLAN1: графік навчання і відео-уроки ----------
+// Стан «зроблено» веде бот UniNagad (один стан). Сайт бере його з посилання бота #/grafik/<код>,
+// а галочка тут відкриває бота (t.me/<бот>?start=g_<id>), щоб записав він; до відповіді - позначка «чекає бота».
+const GKEY = "uniprep:grafik";
+const GTRACK = { lab: "Лаби в терміналі Mint", mint: "Linux Mint", git: "Git і GitHub", "an-k1": "Колоквіум 1, аналітична",
+  "ma-k2": "Колоквіум 2, матан", zfp: "ЗФП молекулярна", hist: "Історія", eng: "Англійська" };
+const GORDER = ["an-k1", "ma-k2", "zfp", "hist", "eng", "lab", "mint", "git"];
+const WDL = ["пн", "вт", "ср", "чт", "пт", "сб", "нд"];
+function gLoad() { try { return JSON.parse(localStorage.getItem(GKEY)) || {}; } catch (e) { return {}; } }
+function gSave(g) { try { localStorage.setItem(GKEY, JSON.stringify(g)); } catch (e) { /* приватне вікно */ } }
+function todayIso() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+const dm = (iso) => `${iso.slice(8, 10)}.${iso.slice(5, 7)}`;
+function gState(p) {
+  const g = gLoad();
+  const dec = g.code ? GRAFIK.decode(p, g.code) : { done: new Set(), res: new Set(), version: "" };
+  const local = g.local || {};
+  for (const id of Object.keys(local)) if (dec.done.has(id)) delete local[id]; // бот уже записав
+  const done = new Set([...dec.done, ...Object.keys(local)]);
+  return { g, done, res: dec.res, botDone: dec.done, local, stale: !!(g.code && dec.version && dec.version !== p.version) };
+}
+function ytUrl(v) { return `https://www.youtube.com/watch?v=${v.id}${v.start ? "&t=" + v.start + "s" : ""}`; }
+function vMin(v) { return Math.max(1, Math.ceil((v.watch_s || 60) / 60)); }
+function gItem(p, id, S, kind) {
+  const u = p.units[id];
+  const isDone = S.done.has(id);
+  const wait = isDone && !S.botDone.has(id);
+  const meta = [kind === "debt" ? `<b class="gdebt">борг з ${dm(u.day)}</b>` : "", esc(u.time), `${u.min} хв`, `пріоритет ${u.prio}`,
+    u.hard ? `<b class="gred">дедлайн ${dm(u.hard)}</b>` : ""].filter(Boolean).join(" · ");
+  return `<li class="gi${u.hard ? " hard" : ""}${isDone ? " done" : ""}">
+    <button class="gchk" type="button" data-g="${id}" aria-pressed="${isDone}" aria-label="${isDone ? "Зроблено" : "Позначити зроблене"}: ${esc(u.short)}">${isDone ? icon("check") : ""}</button>
+    <div class="gbody"><div class="gmeta">${meta}${wait ? ' · <span class="muted">чекає бота</span>' : ""}</div>
+    <a class="gtitle" href="#/video/${id}">${esc(u.title)}</a>
+    <div class="gsteps muted">${u.video ? `${icon("play")}відео ≈${vMin(u.video)} хв` : "без відео"} → повтори → зроби сам → перевір себе</div></div></li>`;
+}
+function gBind(p, rerender) {
+  app.querySelectorAll(".gchk").forEach((b) => b.addEventListener("click", () => {
+    const id = b.dataset.g;
+    const S = gState(p);
+    if (S.botDone.has(id)) { alert("Записано в боті. Зняти позначку - напиши боту: «не зроблено " + id + "»."); return; }
+    const g = S.g;
+    g.local = g.local || {};
+    if (g.local[id]) { delete g.local[id]; gSave(g); rerender(); return; }
+    g.local[id] = Date.now();
+    gSave(g);
+    rerender();
+    window.open(`https://t.me/${p.bot}?start=g_${encodeURIComponent(id)}`, "_blank", "noopener"); // бот запише сам
+  }));
+}
+async function grafikPage(codeArg) {
+  setTitle("Графік");
+  delete app.dataset.s;
+  const p = await getJSON("data/grafik.json");
+  if (codeArg) { // посилання з бота: зберегти стан і прибрати код з адреси
+    const g = gLoad();
+    g.code = codeArg; g.at = Date.now();
+    gSave(g);
+    history.replaceState(null, "", "#/grafik");
+  }
+  const draw = () => {
+    const S = gState(p);
+    const today = todayIso();
+    const v = GRAFIK.view(p, S.done, S.res, today, 7);
+    const day0 = v.days[0];
+    // позначене сьогодні (борг чи пункт іншого дня) не зникає зі «Сьогодні», а стоїть зробленим - «чекає бота»
+    for (const id of Object.keys(S.local)) if (p.units[id] && !day0.items.includes(id) && !day0.done.includes(id)) day0.done.push(id);
+    const dayCard = (d, i) => {
+      const wd = WDL[GRAFIK.pyWd(d.day)];
+      const ev = d.events.map((e) => `<li class="gev${e.hard ? " hard" : ""}">${e.hard ? '<b class="gred">дедлайн</b> · ' : ""}${esc(e.time || "")} ${esc(e.title)}</li>`).join("");
+      const rows = d.debts.map((id) => gItem(p, id, S, "debt")).join("") + d.items.map((id) => gItem(p, id, S, "item")).join("") +
+        d.done.map((id) => gItem(p, id, S, "done")).join("");
+      const empty = !rows ? `<li class="muted">${GRAFIK.pyWd(d.day) === 0 ? "Лише картки (4 пари + ЛР - день легкий)." : "Лише картки в боті (10-15 хв)."}</li>` : "";
+      return `<section class="card gday${i === 0 ? " today" : ""}"><h2>${i === 0 ? "Сьогодні, " : ""}${wd} ${dm(d.day)} <span class="muted">≈ ${d.min} хв</span></h2>
+        <ul class="glist">${ev}${rows}${empty}</ul></section>`;
+    };
+    const lateMsg = v.late.length ? `<p class="gwarn">${icon("clock")}Дедлайн минув: ${v.late.map((i) => esc(p.units[i].short)).join(", ")}. Якщо здав - познач; якщо ні - спитай викладача, чи можна дописати.</p>` : "";
+    const waitMsg = v.waiting.length ? `<p class="muted">Ще ${v.waiting.length} боргів чекають своєї черги (по одному на день, у нд - два). Відкласти в резерв - кнопкою в боті.</p>` : "";
+    // увесь графік по тижнях
+    const weeks = {};
+    for (const [k, dd] of Object.entries(p.days)) {
+      if (!dd.items.length) continue;
+      const wk = GRAFIK.addDays(k, -GRAFIK.pyWd(k));
+      (weeks[wk] = weeks[wk] || []).push([k, dd]);
+    }
+    const all = Object.entries(weeks).map(([wk, ds]) => {
+      const n = ds.reduce((s, [, dd]) => s + dd.items.length, 0);
+      const nd = ds.reduce((s, [, dd]) => s + dd.items.filter((i) => S.done.has(i)).length, 0);
+      return `<details class="later"><summary>${dm(wk)} - ${dm(GRAFIK.addDays(wk, 6))}${wk > p.sem_end ? " · після семестру" : ""} <span class="muted">(${nd} з ${n})</span></summary><ul class="glist">${
+        ds.map(([k, dd]) => `<li class="gwday">${WDL[GRAFIK.pyWd(k)]} ${dm(k)}</li>` + dd.items.map((id) => gItem(p, id, S, S.done.has(id) ? "done" : (k < today ? "debt" : "item"))).join("")).join("")}</ul></details>`;
+    }).join("");
+    const res = [...S.res].filter((i) => p.units[i]);
+    const syncInfo = S.g.code ? `Стан з бота: ${new Date(S.g.at).toLocaleString("uk-UA", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}.` :
+      "Стан ще не підтягнуто: відкрий посилання «Графік і відео-уроки» з ранкового повідомлення бота.";
+    const cal = new URL("grafik.ics", location.href).href;
+    app.innerHTML = `<h1>Графік навчання</h1>
+      <p class="muted">${syncInfo} Галочка відкриває бота - він записує (стан один, у боті). Незроблене саме переходить боргом угорі наступного дня.</p>
+      ${S.stale ? `<p class="gwarn">${icon("redo")}У боті новіша версія графіка (змінилась дата чи дедлайн). Точний список дня - у боті («графік»); сайт оновиться з наступним оновленням.</p>` : ""}
+      ${lateMsg}
+      <div class="links"><a class="btn primary" href="#/video">${icon("video")}Відео-уроки: дивись, повтори, зроби сам</a></div>
+      ${v.days.map(dayCard).join("")}
+      ${waitMsg}
+      ${res.length ? `<details class="later"><summary>Резерв (${res.length}) - відкладене, не загублене</summary><ul class="glist">${res.map((id) => gItem(p, id, S, "item")).join("")}</ul><p class="muted">Повернути - у боті: «резерв».</p></details>` : ""}
+      <h2>Увесь графік</h2>${all}
+      <section class="card"><h2>${icon("cal")}Графік у календар телефона</h2>
+        <p class="muted">Календар оновлюється сам (підписка за посиланням), борги бачить лише бот.</p>
+        <ol class="gcal"><li>На телефоні відкрий у браузері calendar.google.com, меню браузера - «Версія для ПК» (у застосунку Календар підписатися за посиланням не можна).</li>
+        <li>Ліворуч «Інші календарі» - «+» - «З URL-адреси» - встав посилання нижче - «Додати календар».</li>
+        <li>У застосунку Google Календар: Налаштування - «Графік навчання» - увімкни «Синхронізація».</li></ol>
+        <p><code class="gurl">${esc(cal)}</code></p>
+        <div class="btn-row"><button class="btn" type="button" id="gcopy">${icon("dl")}Скопіювати посилання</button><a class="btn" href="${esc(cal.replace(/^https?:/, "webcal:"))}">${icon("cal")}Інший календар (webcal)</a></div>
+      </section>`;
+    gBind(p, draw);
+    const cp = $("#gcopy");
+    if (cp) cp.addEventListener("click", async () => { try { await navigator.clipboard.writeText(cal); cp.textContent = "Скопійовано"; } catch (e) { prompt("Скопіюй:", cal); } });
+  };
+  draw();
+}
+async function videoPage(id) {
+  const p = await getJSON("data/grafik.json");
+  delete app.dataset.s;
+  const S = gState(p);
+  if (id && p.units[id]) {
+    const u = p.units[id];
+    const v = u.video;
+    setTitle(u.short);
+    const gl = v && v.glossary && v.glossary.length ? `<details><summary>Словничок (відео англійською)</summary><ul>${v.glossary.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></details>` : "";
+    const from = v ? (v.start ? `з ${mmss(v.start)}` : "з початку") + (v.end && !v.watch_cut ? ` до ${mmss(v.end)}` : "") + (v.watch_cut ? `, перші ≈${vMin(v)} хв` : "") : "";
+    app.innerHTML = `<a class="back" href="#/video">${icon("left")}Усі відео-уроки</a>
+      <h1>${esc(u.title)}</h1>
+      <p class="muted">${esc(GTRACK[u.track] || u.track)} · у графіку: ${WDL[GRAFIK.pyWd(u.day)]} ${dm(u.day)}, ${esc(u.time)} · ${u.min} хв${u.hard ? ` · <b class="gred">дедлайн ${dm(u.hard)}</b>` : ""}</p>
+      <ol class="vsteps">
+        <li><h2>${icon("play")}Дивись</h2>${v ? `<p><a class="btn primary" href="${ytUrl(v)}" target="_blank" rel="noopener">${icon("video")}${esc(v.title)}</a></p>
+          <p class="muted">${esc(v.channel || "")} · ${esc(v.duration || "")} · ${from}${v.lang === "en" ? " · англійською" : ""}</p><p>${esc(v.why || "")}</p>${gl}` : "<p>Відео до цього пункту нема.</p>"}</li>
+        <li><h2>${icon("redo")}Повтори</h2><p>${esc(u.repeat)}</p></li>
+        <li><h2>${icon("pen")}Зроби сам</h2><p>${esc(u.do)}</p>${u.site ? `<p><a class="chiplink" href="${esc(u.site)}">${icon("book")}Відкрити на сайті</a></p>` : ""}</li>
+        <li><h2>${icon("target")}Перевір себе</h2><p>${esc(u.check)}</p></li>
+      </ol>
+      <ul class="glist">${gItem(p, id, S, "item")}</ul>`;
+    gBind(p, () => videoPage(id));
+    return;
+  }
+  setTitle("Відео-уроки");
+  const by = {};
+  for (const [uid, u] of Object.entries(p.units)) (by[u.track] = by[u.track] || []).push([uid, u]);
+  app.innerHTML = `<a class="back" href="#/grafik">${icon("left")}Графік</a><h1>Відео-уроки</h1>
+    <p class="muted">Для кожного уроку, лаби і типу задачі - одне відео (українською, якщо є; англійською - з таймкодом і словничком). Порядок: <b>дивись → повтори → зроби сам → перевір себе</b>. Відео відкриваються з інтернетом.</p>
+    ${GORDER.filter((t) => by[t]).map((t) => `<details class="later"${t === "an-k1" ? " open" : ""}><summary>${esc(GTRACK[t])} <span class="muted">(${by[t].length})</span></summary><ul class="vlist">${
+      by[t].sort((a, b) => (a[1].day < b[1].day ? -1 : a[1].day > b[1].day ? 1 : a[1].idx - b[1].idx)).map(([uid, u]) => `<li><a href="#/video/${uid}"><span class="vday">${dm(u.day)}</span><span>${esc(u.title)}</span><span class="muted">${u.video ? `${icon("play")}${vMin(u.video)} хв${u.video.lang === "en" ? " · англ." : ""}` : ""}${S.done.has(uid) ? " · ✓" : ""}</span></a></li>`).join("")}</ul></details>`).join("")}`;
+}
+
 function notFound() { delete app.dataset.s; app.innerHTML = `<p>Сторінки нема. <a href="#/">На головну</a></p>`; }
 
 const SKEL = `<div class="sk" aria-hidden="true"><i class="h"></i><i></i><i style="width:80%"></i><i class="b"></i><i class="b"></i></div>`;
@@ -1181,6 +1330,8 @@ async function route() {
     else if (h[0] === "glossary") await staticPage("glossary", "Словник EN-UA");
     else if (h[0] === "about") await staticPage("about", "Як користуватись");
     else if (h[0] === "stats") await statsPage();
+    else if (h[0] === "grafik") await grafikPage(h[1]);
+    else if (h[0] === "video") await videoPage(h[1]);
     else if (h[0] === "w") await cumulTest(h[1]);
     else notFound();
   } catch (e) {

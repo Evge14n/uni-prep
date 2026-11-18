@@ -1,8 +1,9 @@
 {
-"version": "220ecc149482",
+"version": "bae245849682",
 "files": [
 "./",
 "index.html",
+"grafik.js",
 "app.js",
 "pyrun.js",
 "py-worker.js",
@@ -112,6 +113,8 @@
 "data/plan.html",
 "data/glossary.html",
 "data/about.html",
+"data/grafik.json",
+"grafik.ics",
 "kalendar.ics",
 "data/units.json"
 ]

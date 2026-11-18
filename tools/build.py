@@ -165,7 +165,22 @@ def main():
             (DATA / f"{key}.html").write_text(md_to_html(text), encoding="utf-8")
             files.append(f"data/{key}.html")
 
-    # календар: лише відомі дати колоквіумів і іспитів
+    # UPLAN1: графік навчання (генерує uni-nagad/plan_gen.py у content/grafik) - дані і календар.
+    # kalendar.ics (старе посилання) = той самий календар графіка: порожній VCALENDAR без VEVENT Google Календар
+    # на Android не відкриває («Не вдається запустити подію», 18.11), а в графіку події є завжди.
+    gdir = CONTENT / "grafik"
+    if (gdir / "grafik.json").exists():
+        gj = (gdir / "grafik.json").read_text(encoding="utf-8")
+        check_text(gj, "grafik/grafik.json", errors)
+        (DATA / "grafik.json").write_text(gj, encoding="utf-8")
+        files.append("data/grafik.json")
+        cal = (gdir / "grafik.ics").read_bytes()
+        if b"BEGIN:VEVENT" not in cal:
+            errors.append("grafik.ics без жодної події")
+        (SITE / "grafik.ics").write_bytes(cal)
+        (SITE / "kalendar.ics").write_bytes(cal)
+        files += ["grafik.ics", "kalendar.ics"]
+    # календар: лише відомі дати колоквіумів і іспитів (якщо графіка нема)
     dj = json.loads((CONTENT / "dates.json").read_text(encoding="utf-8"))
     ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//uni-prep//UK", "CALSCALE:GREGORIAN", "X-WR-CALNAME:Колоквіуми і іспити"]
     for ev in dj["events"]:
@@ -175,13 +190,14 @@ def main():
         ics += ["BEGIN:VEVENT", f"UID:{ev['id']}-{d}@uni-prep", f"DTSTAMP:{d}T000000Z", f"DTSTART;VALUE=DATE:{d}",
                 f"SUMMARY:{ev['title']}", "BEGIN:VALARM", "TRIGGER:-P1D", "ACTION:DISPLAY", f"DESCRIPTION:{ev['title']}", "END:VALARM", "END:VEVENT"]
     ics.append("END:VCALENDAR")
-    (SITE / "kalendar.ics").write_bytes(("\r\n".join(ics) + "\r\n").encode("utf-8"))
-    files.append("kalendar.ics")
+    if "kalendar.ics" not in files and "BEGIN:VEVENT" in ics:  # порожній календар не віддаємо (UPLAN1)
+        (SITE / "kalendar.ics").write_bytes(("\r\n".join(ics) + "\r\n").encode("utf-8"))
+        files.append("kalendar.ics")
 
     (DATA / "units.json").write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
     files.append("data/units.json")
 
-    shell = ["./", "index.html", "app.js", "pyrun.js", "py-worker.js", "style.css", "manifest.webmanifest",
+    shell = ["./", "index.html", "grafik.js", "app.js", "pyrun.js", "py-worker.js", "style.css", "manifest.webmanifest",
              "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/favicon.svg"]
     # шрифти (self-hosted, tools/make_fonts.py) - теж у кеш, щоб офлайн був той самий вигляд
     shell += sorted("fonts/" + f.name for f in (SITE / "fonts").glob("*.woff2"))
@@ -189,7 +205,7 @@ def main():
         p = SITE / (s if s != "./" else "index.html")
         if not p.exists():
             errors.append(f"нема файлу {s}")
-    for s in ["index.html", "app.js", "pyrun.js", "py-worker.js", "style.css"]:
+    for s in ["index.html", "grafik.js", "app.js", "pyrun.js", "py-worker.js", "style.css"]:
         t = (SITE / s).read_text(encoding="utf-8")
         for ch, name in (("—", "довге тире"), ("–", "середнє тире")):
             if ch in t:

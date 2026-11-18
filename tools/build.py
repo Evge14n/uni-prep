@@ -91,11 +91,14 @@ def split_themes(text, prefix):
     """Великий teoriya.md частини -> покажчик (вступ, Тема 0, інші ##) + сторінка на кожну «## Тема N.»."""
     chunks = {prefix: []}
     cur = prefix
-    fence = False
+    fence = None  # маркер відкритого блоку коду (``` чи ~~~ потрібної довжини) - всередині ## не заголовок
     for ln in text.split("\n"):
-        if re.match(r"^\s*(```|~~~)", ln):
-            fence = not fence
-        elif not fence and ln.startswith("## "):
+        fm = re.match(r"^\s*(`{3,}|~{3,})", ln)
+        if fm and fence is None:
+            fence = fm.group(1)
+        elif fm and fm.group(1)[0] == fence[0] and len(fm.group(1)) >= len(fence) and not ln.strip()[len(fm.group(1)):].strip():
+            fence = None
+        elif fence is None and ln.startswith("## "):
             m = re.match(r"^## Тема (\d+)\. ", ln)
             cur = prefix if (not m or int(m.group(1)) == 0) else f"{prefix}-{int(m.group(1)):02d}"
             chunks.setdefault(cur, [])
@@ -112,7 +115,7 @@ def part_pages(pid, cfg, udir):
     for fname, key in cfg.get("files", {}).items():
         src = udir / f"{fname}.md"
         if src.exists():
-            pages[key] = src.read_text(encoding="utf-8")
+            pages[key] = site_fixes(src.read_text(encoding="utf-8"))
             moved[fname] = key
     if cfg.get("split"):
         for key, md in split_themes((udir / f"{cfg['split']}.md").read_text(encoding="utf-8"), pre).items():
@@ -124,9 +127,24 @@ def part_pages(pid, cfg, udir):
     if (udir / "pages").exists():
         for src in sorted((udir / "pages").glob("urok-*.md")):
             key = f"{pre}-{src.stem.split('-')[1]}"
-            pages[key] = src.read_text(encoding="utf-8")
+            pages[key] = site_fixes(src.read_text(encoding="utf-8"))
             moved[src.stem] = key
     return pages, moved
+
+
+# UPROGONE: у текстах курсів для ноутбука - шляхи до файлів на ПК; на сайті - посилання на ті самі сторінки
+SITE_FIXES = [
+    (re.compile(r"«Курс/ДОВІДНИК-ФУНКЦІЙ\.md»"), "[Довідник функцій](#/u/prog/dovidnyk)"),
+    (re.compile(r"\(тека `Курс/` на ПК\)"), "(на сайті - [Уроки Python](#/u/prog/uroky))"),
+    (re.compile(r", тека `Курс/` на ПК,"), ", на сайті - [Уроки Python](#/u/prog/uroky),"),
+    (re.compile(r"готовий розбір `\.\./Лабораторні/ЛР4/ЛР4 - розбір по завданнях\.md`"), "[розбір ЛР4](#/u/prog/lab-4)"),
+]
+
+
+def site_fixes(text):
+    for rx, new in SITE_FIXES:
+        text = rx.sub(new, text)
+    return text
 
 
 MOVED = {}  # стара частина -> {старий ключ: новий ключ у prog}
@@ -158,9 +176,20 @@ def main():
         errors.append(f"gen_prog_path: {e}")
     parts_cfg = json.loads((CONTENT / "prog" / "meta.json").read_text(encoding="utf-8")).get("parts", {})
     part_out = {}
+    owner = {p.stem: "prog" for p in (CONTENT / "prog").glob("*.md")}
+    owner.update({p.stem: "prog/pages" for p in (CONTENT / "prog" / "pages").glob("*.md")})
     for pid, cfg in parts_cfg.items():
         part_out[pid] = part_pages(pid, cfg, CONTENT / pid)
         MOVED[pid] = part_out[pid][1]
+        for key in part_out[pid][0]:
+            if key in owner:
+                errors.append(f"сторінка prog/{key}: і з {owner[key]}, і з частини {pid}")
+            owner[key] = pid
+    # старі сторінки prog, яких більше не збирають (перейменований урок), не лишаються в data/ і кеші
+    if parts_cfg:
+        for old in (DATA / "prog").glob("*.html"):
+            if old.stem not in owner:
+                old.unlink()
     for uid in units:
         udir = CONTENT / uid
         if uid in parts_cfg:
@@ -207,7 +236,7 @@ def main():
             src = udir / f"{key}.md"
             if not src.exists():
                 continue
-            text = src.read_text(encoding="utf-8")
+            text = site_fixes(src.read_text(encoding="utf-8"))
             check_text(text, f"{uid}/{key}.md", errors)
             html = rewrite_links(md_to_html(text))
             (out / f"{key}.html").write_text(html, encoding="utf-8")

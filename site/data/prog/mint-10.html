@@ -44,7 +44,7 @@
 або pytest, а <code>python3 -m doctest</code> не бери. Деталі - у «Типових помилках».</p>
 <p>Обмеження з умови (с. 5): у функціях завдання 1 <strong>не можна</strong> вкладених циклів (і явних, і прихованих, як <code>sum(...)</code>
 у тілі циклу), піднесення до степеня <code>**</code> і функції факторіала. Усе - через <strong>коефіцієнт переходу</strong>: наступний доданок
-= попередній × q (теорія, с. 1-2; див. курс Python, тека <code>Курс/</code> на ПК, уроки 06 і 07).</p>
+= попередній × q (теорія, с. 1-2; див. курс Python, на сайті - <a href="#/u/prog/uroky">Уроки Python</a>, уроки 06 і 07).</p>
 <h2 id="умова-коротко">Умова коротко</h2>
 <p>Файли: <code>Лабораторна 5 (Пайтон).ipynb</code> (працюєш з ним) і <code>Лабораторна 5 (Пайтон).pdf</code> (те саме для читання, 14 с.).
 Теорія - с. 1-5: рекурентні формули, переповнення float (~1,8·10³⁰⁸) і втрата значущості (~5·10⁻³²⁴), ряд Тейлора
@@ -199,7 +199,7 @@ Test passed.
 <code>Expected</code> і <code>Got</code>, або <code>Exception raised</code>, коли функція впала, як на порожній заготовці). Коротко по функціях: <code>python3 -m pytest --doctest-modules -q lr5_1.py</code> → наприкінці
 <code>4 failed</code> або <code>4 passed</code> (і час, у тебе інший). Якщо зробив крок 3 - ще й <code>python3 -m doctest lr5_1.py</code> (мовчить,
 коли все пройшло).</p>
-<p><strong>Крок 5. Підказки до завдання 1</strong> (розвʼязок твій; функції - див. «Курс/ДОВІДНИК-ФУНКЦІЙ.md»: <code>range()</code>, <code>abs()</code>,
+<p><strong>Крок 5. Підказки до завдання 1</strong> (розвʼязок твій; функції - див. <a href="#/u/prog/dovidnyk">Довідник функцій</a>: <code>range()</code>, <code>abs()</code>,
 f-рядок, <code>math.factorial()</code> - лише для наївних версій).</p>
 <ul>
 <li>Знайди q_k = a_k / a_(k-1) на папері, як у прикладі теорії (с. 2). Степінь з показником, що росте (k², 2k - 1),
@@ -500,7 +500,7 @@ grep -n &quot;\*\*\|factorial&quot; lr5_1.py lr5_2.py
 <li>GNU coreutils, <code>timeout</code> (код 124): <code>man timeout</code> у Mint 22.3 (18.11.2026)</li>
 <li><code>perevir</code> і його зупинка через 120 с - функція з <code>ustanovka-mint.sh</code> (поруч з уроками), 18.11.2026.</li>
 <li>Український текст помилки <code>cp</code> - з перекладу coreutils (пакет <code>language-pack-uk-base</code>), 18.11.2026.</li>
-<li>Курс Python (тека <code>Курс/</code> на ПК): уроки 06 і 07 (рекурентні співвідношення); «Курс/ДОВІДНИК-ФУНКЦІЙ.md» (<code>range()</code>, <code>abs()</code>, f-рядок,
+<li>Курс Python (на сайті - <a href="#/u/prog/uroky">Уроки Python</a>): уроки 06 і 07 (рекурентні співвідношення); <a href="#/u/prog/dovidnyk">Довідник функцій</a> (<code>range()</code>, <code>abs()</code>, f-рядок,
   <code>math.factorial()</code>, <code>time.perf_counter()</code>, matplotlib.pyplot).</li>
 <li>Усі виводи - з тестової Linux Mint 22.3 (python3 3.12.3, pytest 9.2, mypy 2.4), 18.11.2026.</li>
 </ul>

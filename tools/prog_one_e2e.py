@@ -140,12 +140,36 @@ def main():
                 for href in re.findall(r'href="#/u/prog/([\w-]+/[^"]+)"', html)[:3]:
                     goto(page, base, f"/u/prog/{href}")
                     pg, anc = href.split("/", 1)
+                    page.wait_for_timeout(200)
                     r = page.evaluate("""a => { const el = document.getElementById(a); if (!el) return null;
                        const rc = el.getBoundingClientRect(); const d = el.closest('details');
-                       return {top: rc.top, open: d ? d.open : true, y: scrollY}; }""", anc)
+                       const hd = document.querySelector('header'); const hb = hd ? hd.getBoundingClientRect().bottom : 0;
+                       return {top: rc.top, hb, open: d ? d.open : true, y: scrollY}; }""", anc)
                     st["anchors"] += 1
-                    if not r or not (-5 <= r["top"] <= h * 0.6) or not r["open"]:
+                    # заголовок видно під липкою шапкою, а не під нею (рецензія UPROGONE)
+                    if not r or not (r["hb"] - 2 <= r["top"] <= h * 0.6) or not r["open"]:
                         fail(f"{w}px якір {href}: {r}")
+
+            # 4б. з модуля в урок: «Модуль N» угорі, «Далі в модулі» внизу; назад - на те саме місце модуля
+            goto(page, base, "/u/prog/m1")
+            page.evaluate("window.scrollTo(0, 1500)")
+            page.wait_for_timeout(200)
+            y0 = page.evaluate("scrollY")
+            goto(page, base, "/u/prog/mint-04")
+            nav = page.evaluate("""() => { const n = document.querySelector('.modnav'); const c = document.querySelector('.crumb a');
+                return {next: n ? [...n.querySelectorAll('a')].map(a => a.getAttribute('href')) : [], crumb: c ? c.textContent : ''}; }""")
+            if "#/u/prog/m1" not in nav["next"] or len(nav["next"]) < 2 or not nav["crumb"].startswith("Модуль 1"):
+                fail(f"{w}px mint-04 з модуля 1: низ {nav['next']}, верх {nav['crumb']!r}")
+            page.go_back()
+            wait_route(page, "#/u/prog/m1")
+            page.wait_for_timeout(300)
+            y1 = page.evaluate("scrollY")
+            if abs(y1 - y0) > 40:
+                fail(f"{w}px назад у модуль 1: прокрутка {y1}, а була {y0}")
+            goto(page, base, "/u/prog/mint-zadachi")
+            if not page.evaluate("(document.querySelector('.crumb a') || {}).textContent || ''").startswith("Модуль 1"):
+                fail(f"{w}px mint-zadachi після модуля 1: нема «Модуль 1» угорі")
+            page.evaluate("sessionStorage.removeItem('uniprep:mod')")
 
             # 5. тест і картки модуля
             for m in moduli["modules"][:3]:

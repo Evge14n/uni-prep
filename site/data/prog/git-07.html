@@ -1,0 +1,238 @@
+<h1 id="тема-7-гілки-branch-switch-merge">Тема 7. Гілки - branch, switch, merge</h1>
+<p><strong>Навіщо:</strong> ЛР1 здана і працює, а ЛР2 ти лише почав і вона поки ламається. Гілка дає робити ЛР2 окремо: <code>main</code> лишається робочою, а коли ЛР2 готова - зливаєш її в <code>main</code> однією командою.</p>
+<h3 id="коротко">Коротко</h3>
+<p><strong>Гілка</strong> - це просто назва-ярлик, приклеєний до одного коміту. Новий коміт пересуває ярлик поточної гілки вперед. <strong>HEAD</strong> - «де я зараз»: на якій гілці стою. Копій файлів гілка не робить, тому вона створюється миттєво.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git branch</code></td>
+<td>список гілок, <code>*</code> - поточна</td>
+</tr>
+<tr>
+<td><code>git switch -c lr2</code></td>
+<td>створити гілку <code>lr2</code> і перейти на неї</td>
+</tr>
+<tr>
+<td><code>git switch main</code></td>
+<td>перейти на <code>main</code> (файли в теці стануть як у <code>main</code>)</td>
+</tr>
+<tr>
+<td><code>git merge lr2</code></td>
+<td>злити <code>lr2</code> у поточну гілку</td>
+</tr>
+<tr>
+<td><code>git branch -d lr2</code></td>
+<td>видалити гілку (лише якщо вже злита)</td>
+</tr>
+<tr>
+<td><code>git log --oneline --graph --all</code></td>
+<td>малюнок усіх гілок</td>
+</tr>
+</tbody>
+</table></div>
+<p>Два види злиття:</p>
+<pre><code class="language-text">1) Fast-forward (перемотування): main не рухався, поки ти робив lr2
+   до:     A ← B          після:  A ← B
+           ↑   ↑                      ↑
+         main  lr2                main, lr2
+   Нового коміту нема: ярлик main просто пересунули вперед.
+
+2) Merge-коміт: обидві гілки пішли вперед
+   до:                          після:
+   A ← B ← D     (main)         A ← B ← D ← M   (main)
+        \                            \     /
+         C       (lr3)                C ──      (lr3)
+   git робить новий коміт M з ДВОМА батьками (D і C).
+</code></pre>
+<p>Аналогія: <code>main</code> - чистовик, гілка - чернетка. Fast-forward - коли чистовик не чіпали і чернетку просто оголосили чистовиком. Merge-коміт - коли в чистовику теж щось дописали, і треба звести обидва в одне.</p>
+<p>Старі підручники пишуть <code>git checkout -b lr2</code> і <code>git checkout main</code> - це те саме, що <code>git switch -c lr2</code> і <code>git switch main</code> (<code>switch</code> є з git 2.23, він простіший і робить лише одне).</p>
+<h3 id="пісочниця">Пісочниця</h3>
+<pre><code class="language-bash">mkdir ~/git-pisochnytsia-07
+cd ~/git-pisochnytsia-07
+git init
+printf 'def double(x):\n    return x * 2\n' &gt; lr1.py
+git add lr1.py
+git commit -m &quot;ЛР1 готова&quot;
+git branch
+</code></pre>
+<pre><code class="language-text">* main
+</code></pre>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li>Створюємо гілку, комітимо в ній новий файл і повертаємось на <code>main</code>. Що покаже <code>ls</code>?</li>
+</ol>
+<pre><code class="language-bash">git switch -c lr2
+printf 'print(&quot;ЛР2&quot;)\n' &gt; lr2.py
+git add lr2.py
+git commit -m &quot;ЛР2: початок&quot;
+git switch main
+ls
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">lr1.py
+</code></pre>
+<p><code>lr2.py</code> зник з теки - але не з git: він у коміті гілки <code>lr2</code>. <code>git switch</code> переписує файли в теці під вибрану гілку. Повернешся на <code>lr2</code> - файл зʼявиться.</p>
+</details>
+<ol start="2">
+<li><code>git merge lr2</code> (зараз ти на <code>main</code>) - буде новий коміт чи ні? Запустиш у кроці 2.</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Ні, це fast-forward: <code>main</code> не мінявся, поки ти робив <code>lr2</code>, тож git просто пересуває ярлик <code>main</code> вперед. Слово <code>Fast-forward</code> буде прямо у виводі.</p>
+</details>
+<ol start="3">
+<li>Тепер гілка <code>lr3</code> з одним комітом, а в <code>main</code> тим часом коміт з README. Що буде при <code>git merge lr3</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Merge-коміт: обидві гілки пішли вперед, перемотати не вийде. Деталі - у кроці 3 нижче.</p>
+</details>
+<h3 id="руками">Руками</h3>
+<p><strong>Крок 1. Подивись на гілки до злиття.</strong> Ти на <code>main</code>:</p>
+<pre><code class="language-bash">git log --oneline --graph --all
+</code></pre>
+<pre><code class="language-text">* 0879f44 (lr2) ЛР2: початок
+* c03fdc0 (HEAD -&gt; main) ЛР1 готова
+</code></pre>
+<p>У дужках - ярлики. <code>HEAD -&gt; main</code> значить «я на гілці main», а <code>lr2</code> на коміт попереду. Хеші в тебе будуть інші - дивись на будову.</p>
+<p><strong>Крок 2. Fast-forward і прибирання.</strong></p>
+<pre><code class="language-bash">git merge lr2
+git branch -d lr2
+</code></pre>
+<pre><code class="language-text">Updating c03fdc0..0879f44
+Fast-forward
+ lr2.py | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 lr2.py
+</code></pre>
+<pre><code class="language-text">Deleted branch lr2 (was 0879f44).
+</code></pre>
+<p>Коміти ЛР2 нікуди не ділись: вони тепер у <code>main</code>. Видалили лише ярлик.</p>
+<p><strong>Крок 3. Merge-коміт.</strong></p>
+<pre><code class="language-bash">git switch -c lr3
+printf 'print(&quot;ЛР3&quot;)\n' &gt; lr3.py
+git add lr3.py
+git commit -m &quot;ЛР3: початок&quot;
+git switch main
+printf '# Лаби\n' &gt; README.md
+git add README.md
+git commit -m &quot;Додай README&quot;
+git log --oneline --graph --all
+</code></pre>
+<pre><code class="language-text">* c3d4a00 (HEAD -&gt; main) Додай README
+| * 5fe4c9d (lr3) ЛР3: початок
+|/
+* 0879f44 ЛР2: початок
+* c03fdc0 ЛР1 готова
+</code></pre>
+<p>Гілки розійшлись від <code>0879f44</code>. Зливаємо:</p>
+<pre><code class="language-bash">git merge lr3
+</code></pre>
+<p>На Mint тут відкриється <strong>nano</strong> з готовим повідомленням <code>Merge branch 'lr3'</code>. Нічого не міняй: Ctrl+O, Enter, Ctrl+X.</p>
+<pre><code class="language-text">Merge made by the 'ort' strategy.
+ lr3.py | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 lr3.py
+</code></pre>
+<p><code>ort</code> - назва алгоритму злиття за замовчуванням, на нього можна не зважати.</p>
+<pre><code class="language-bash">git log --oneline --graph --all
+git log -n 1
+</code></pre>
+<pre><code class="language-text">*   be97404 (HEAD -&gt; main) Merge branch 'lr3'
+|\
+| * 5fe4c9d (lr3) ЛР3: початок
+* | c3d4a00 Додай README
+|/
+* 0879f44 ЛР2: початок
+* c03fdc0 ЛР1 готова
+</code></pre>
+<pre><code class="language-text">commit be9740421acfc7c43e1bb2c9603d61f28df43354 (HEAD -&gt; main)
+Merge: c3d4a00 5fe4c9d
+Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
+Date:   Wed Nov 18 16:12:00 2026 +0200
+
+    Merge branch 'lr3'
+</code></pre>
+<p>Рядок <code>Merge: c3d4a00 5fe4c9d</code> - два батьки. На малюнку дві лінії сходяться в одну. Тепер <code>git branch -d lr3</code> → <code>Deleted branch lr3 (was 5fe4c9d).</code></p>
+<p><strong>Для лаб:</strong> у <code>~/univer/labs</code> тримай <code>main</code> таким, щоб усі здані лаби працювали. Нову лабу починай гілкою: <code>git switch -c lr4</code>, комітиш крок за кроком, а коли doctest проходить - <code>git switch main</code>, <code>git merge lr4</code>, <code>git branch -d lr4</code>. Якщо посеред ЛР4 викладач просить виправити ЛР3 - <code>git switch main</code>, правиш, комітиш, і назад <code>git switch lr4</code>.</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li>Гілки з такою назвою нема (<code>git switch lr9</code>), код виходу 128:
+  <code>text
+  fatal: invalid reference: lr9</code>
+  Глянь <code>git branch</code>. Створити нову - <code>git switch -c lr9</code>.</li>
+<li>Гілка вже є (<code>git switch -c main</code>):
+  <code>text
+  fatal: a branch named 'main' already exists</code>
+  Перейти на неї - без <code>-c</code>: <code>git switch main</code>.</li>
+<li>Видаляєш гілку, яку ще не злив (<code>git branch -d lr4</code>):
+  <code>text
+  error: the branch 'lr4' is not fully merged.
+  If you are sure you want to delete it, run 'git branch -D lr4'</code>
+  Це запобіжник: її коміти ніде більше нема. Спершу <code>git merge lr4</code>. Велика <code>-D</code> видаляє силою - коміти гілки загубляться (рятувати їх - урок 12, reflog).</li>
+<li>Перемикаєшся, а в теці незакомічені зміни файлу, який у тій гілці інший:
+  <code>text
+  error: Your local changes to the following files would be overwritten by checkout:
+    lr1.py
+  Please commit your changes or stash them before you switch branches.
+  Aborting</code>
+  git нічого не зробив і лишив тебе на місці. Закоміть зміни (або відклади - урок 13, stash), потім перемикайся.</li>
+<li>Незакомічені зміни <strong>їдуть з тобою</strong> в іншу гілку, якщо не заважають: <code>git switch lr4</code> пише
+  <code>text
+  M README.md
+  Switched to branch 'lr4'</code>
+  <code>M README.md</code> - твоя правка з <code>main</code> тепер у теці на <code>lr4</code>. Зміна належить гілці лише після коміту. Правило: перед <code>git switch</code> - <code>git status</code> чистий.</li>
+</ul>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li>Гілка живе недовго: одна задача (одна лаба, одна правка) - одна гілка, злили - видалили. Так працює GitHub flow (docs.github.com, «GitHub flow»): <code>main</code> завжди робочий, зміни - через гілки і Pull Request (урок 11).</li>
+<li><code>git switch -</code> - назад на попередню гілку (як <code>cd -</code>):
+  <code>bash
+  git switch -</code></li>
+<li>Швидкий огляд гілок і того, що вже злито (те, що в <code>--merged</code>, можна сміливо <code>-d</code>):
+  <code>bash
+  git branch -v
+  git branch --merged</code>
+  ```text
+    lr4  d7d4232 ЛР4: змінна x</li>
+<li>main be97404 Merge branch 'lr3'
+  <code></code>text</li>
+<li>main
+  <code>``</code>lr4<code>нема в</code>--merged` - її ще не злито.</li>
+<li>Деякі команди просять завжди merge-коміт, навіть коли можна перемотати, щоб в історії було видно «тут злили гілку»: <code>git merge --no-ff lr5</code>. Інші, навпаки, тримають історію прямою (rebase, squash - див. урок 11, види merge на GitHub).</li>
+<li>Назви гілок короткі, латиницею, без пробілів: <code>lr4</code>, <code>lr3-vypravlennia</code>, <code>fix-doctest</code>.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Що таке гілка в git і чому вона створюється миттєво?</li>
+<li>Коли <code>git merge</code> робить fast-forward, а коли - merge-коміт?</li>
+<li>Ти на <code>main</code>, а <code>lr2.py</code> є лише в гілці <code>lr2</code>. Чому <code>ls</code> його не показує і як його побачити?</li>
+<li><code>git branch -d lr4</code> пише <code>not fully merged</code>. Що це значить і що зробиш?</li>
+<li>Яка команда малює всі гілки з ярликами <code>HEAD -&gt; main</code>?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Ярлик (назва), що вказує на один коміт. Файли не копіюються - тому миттєво.</li>
+<li>Fast-forward - коли поточна гілка не мінялась після відгалуження (просто пересунути ярлик). Merge-коміт - коли обидві гілки мають нові коміти.</li>
+<li><code>git switch</code> ставить у теку файли поточної гілки. <code>git switch lr2</code> - і <code>lr2.py</code> зʼявиться.</li>
+<li>У <code>lr4</code> є коміти, яких нема в <code>main</code>. Спершу <code>git merge lr4</code> (з <code>main</code>), потім <code>-d</code>. <code>-D</code> - лише якщо ці коміти справді не потрібні.</li>
+<li><code>git log --oneline --graph --all</code>.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Pro Git, розд. 3.1 «Branches in a Nutshell»: https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell - відкрито 18.11.2026</li>
+<li>Pro Git, розд. 3.2 «Basic Branching and Merging»: https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging - відкрито 18.11.2026</li>
+<li>git switch: https://git-scm.com/docs/git-switch - відкрито 18.11.2026</li>
+<li>git merge (fast-forward, <code>--no-ff</code>): https://git-scm.com/docs/git-merge - відкрито 18.11.2026</li>
+<li>git branch (<code>-d</code>, <code>-D</code>, <code>--merged</code>): https://git-scm.com/docs/git-branch - відкрито 18.11.2026</li>
+<li>GitHub flow: https://docs.github.com/en/get-started/using-github/github-flow - відкрито 18.11.2026</li>
+</ul>

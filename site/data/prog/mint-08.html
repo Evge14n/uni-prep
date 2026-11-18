@@ -1,0 +1,421 @@
+<h1 id="урок-08-лр3-у-терміналі">Урок 08. ЛР3 у терміналі</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> зробити ЛР3 (цикли, списки, графіки matplotlib) у терміналі: розрізати файл викладача на завдання
+командами <code>grep</code> і <code>sed</code>, запускати з графіками і без них, ловити безкінечні цикли. Основа - Уроки 04 і 07.</p>
+<h2 id="коротко">Коротко</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що нового в ЛР3</th>
+<th>Як із цим у терміналі</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>усі 4 завдання в одному файлі <code>laba_3.py</code></td>
+<td><code>grep -n "Завдання"</code> знаходить межі, <code>sed -n 'від,доp'</code> вирізає шматок</td>
+</tr>
+<tr>
+<td>цикли <code>for</code>, <code>while</code></td>
+<td>безкінечний цикл зупиняє <strong>Ctrl+C</strong></td>
+</tr>
+<tr>
+<td>списки, кортеж зі списків</td>
+<td>doctest порівнює <code>([1, 2, 3], [1, 4, 9])</code> символ у символ</td>
+</tr>
+<tr>
+<td>графіки <code>matplotlib</code></td>
+<td>вікно графіка; програма чекає, доки його закриєш</td>
+</tr>
+<tr>
+<td>перевірки без вікон</td>
+<td><code>MPLBACKEND=Agg</code> перед командою - графік не показується</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-text">lr3_1.py   is_palindrome, find_palindrom_squares, plot_palindrom_squares
+lr3_2.py   is_prime, digit_sum, find_double_primes, plot_double_primes
+lr3_3.py   is_armstrong, get_armstrong_numbers, nsd_search, nsk_search, common_divisors, plot_armstrong_analysis
+lr3_4.py   (на додаткові бали) get_sequence_length, find_kth_digit_info, get_digits_statistics, 2 графіки
+</code></pre>
+<h2 id="умова-коротко">Умова коротко</h2>
+<p>Оригінал: <code>Лабораторна_робота_3_Пайтон,_1_курс_2026.pdf</code> (с. - сторінка PDF), той самий <code>.ipynb</code> (клітинки з 0) і
+<code>laba_3.py</code> з чату. Теорія - с. 1-6: цикли, цифри числа, предикати, НСД/НСК, списки, matplotlib.</p>
+<p><strong>Завдання 1. Квадрати-паліндроми</strong> (с. 6-9, клітинки 2-3). Ввести N, знайти всі числа від 1 до N, квадрат яких
+читається однаково зліва направо і справа наліво (1² = 1, 11² = 121, 22² = 484). Перевіряти паліндром <strong>лише
+арифметикою</strong>, без рядків і списків. Вивести <code>число^2 = квадрат</code> або <code>Таких чисел немає.</code> і побудувати графік
+«кількість таких чисел - від N». Три функції: <code>is_palindrome</code>, <code>find_palindrom_squares</code> (повертає два списки),
+<code>plot_palindrom_squares</code>.</p>
+<p><strong>Завдання 2. Прості числа з простою сумою цифр</strong> (с. 9-11, клітинки 4-5). Ввести N, знайти прості числа до N,
+у яких сума цифр теж проста (2, 3, 5, 7, 11, ...), вивести <code>число: сума цифр = ...</code> і гістограму сум цифр.
+Готові функції перевірки простоти - заборонені.</p>
+<p><strong>Завдання 3. Пари сусідніх чисел Армстронга</strong> (с. 11-15, клітинки 6-7). Ввести кількість (не менше 2), знайти
+перші числа Армстронга (число = сума своїх цифр у степені «кількість цифр», 153 = 1³ + 5³ + 3³), для кожної пари
+сусідніх - НСД (алгоритм Евкліда), НСК, спільні дільники та їх кількість, і три графіки від номера пари.
+<code>math.gcd()</code> і <code>math.lcm()</code> - заборонені.</p>
+<p><strong>Завдання 4* (на додаткові бали)</strong> (с. 15-19, клітинки 8-9). Послідовність 14916253649... - квадрати підряд.
+Користувач вводить k; знайти k-ту цифру і число, чий квадрат її містить, <strong>без рядків і списків</strong> і без
+зберігання всієї послідовності, і надрукувати результат у форматі з с. 15 (для k = 7: <code>Цифра на позиції 7: 5</code> і
+<code>Цифра належить квадрату числа: 5 (5² = 25)</code>); плюс довжина послідовності, частоти цифр і два графіки (с. 15-16).</p>
+<p>Тут є і <code>if</code>, і цикли, і списки - заборони ЛР1 більше не діють (крім тих, що в умові кожного завдання).</p>
+<h2 id="крок-за-кроком-у-терміналі">Крок за кроком у терміналі</h2>
+<h3 id="крок-1-тека-і-файл-викладача">Крок 1. Тека і файл викладача</h3>
+<p>Файли з Telegram Desktop зазвичай лягають у <code>~/Завантаження/Telegram Desktop/</code> (не перевірено на ноутбуці; урок 04,
+крок 2). У назві теки пробіл - тому лапки:</p>
+<pre><code class="language-bash">source ~/univer/.venv/bin/activate
+mkdir -p ~/univer/labs/lr3
+cd ~/univer/labs/lr3
+cp ~/Завантаження/&quot;Telegram Desktop&quot;/laba_3.py .
+</code></pre>
+<p>Якщо <code>cp</code> пише <code>cannot stat</code> - файл деінде, знайди і скопіюй з того шляху, який покаже <code>find</code>:</p>
+<pre><code class="language-bash">find ~ -name &quot;laba_3*&quot;
+</code></pre>
+<p>Чому <code>laba_3.py</code>, а не <code>.ipynb</code>: у <code>.ipynb</code> у кінці клітинки 3 (заготовка завдання 1) лишився зайвий рядок з
+трьома зворотними лапками (так у Markdown закривають блок коду). Python на ньому падає:</p>
+<pre><code class="language-text">SyntaxError: invalid syntax
+</code></pre>
+<p>У <code>laba_3.py</code> такого рядка нема, а код заготовок той самий, що в <code>.ipynb</code>.</p>
+<h3 id="крок-2-розрізати-файл-на-чотири-завдання">Крок 2. Розрізати файл на чотири завдання</h3>
+<p>Знайди, на яких рядках починається кожне завдання:</p>
+<pre><code class="language-bash">grep -n &quot;Завдання&quot; laba_3.py
+</code></pre>
+<pre><code class="language-text">2:# 1 Завдання
+69:# 2 Завдання
+150:# 3 Завдання
+263:#4* Завдання
+</code></pre>
+<p>Завдання 1 - з рядка 1 до 68 (перед «2 Завдання»), 2 - з 69 до 149, і так далі; останнє - до кінця файлу.
+<code>sed -n '1,68p'</code> друкує лише рядки 1-68, а <code>&gt;</code> пише їх у новий файл:</p>
+<pre><code class="language-bash">sed -n '1,68p' laba_3.py &gt; lr3_1.py
+sed -n '69,149p' laba_3.py &gt; lr3_2.py
+sed -n '150,262p' laba_3.py &gt; lr3_3.py
+sed -n '263,394p' laba_3.py &gt; lr3_4.py
+wc -l laba_3.py lr3_*.py
+</code></pre>
+<pre><code class="language-text">  394 laba_3.py
+   68 lr3_1.py
+   81 lr3_2.py
+  113 lr3_3.py
+  132 lr3_4.py
+  788 total
+</code></pre>
+<p>68 + 81 + 113 + 132 = 394 - жоден рядок не загубився і не повторився. <code>wc -l</code> рахує рядки, а <code>lr3_*.py</code> -
+«усі файли, що починаються з lr3_ і закінчуються на .py».</p>
+<h3 id="крок-3-будова-файлу-і-перший-запуск">Крок 3. Будова файлу і перший запуск</h3>
+<p>Тепер заготовки інші, ніж у ЛР1-2: у завданнях 1-3 викладач <strong>уже написав</strong> введення, виклики, цикл виводу і
+<code>doctest.testmod()</code> - ти пишеш тіла функцій замість <code># Ваш код</code>. <strong>Завдання 4 інакше:</strong> заготовка - лише функції
+з <code>pass</code> і <code>doctest.testmod(verbose=True)</code> в кінці. Тіла функцій пишеш замість <code>pass</code>, а ще <strong>сам дописуєш</strong>
+основну частину програми (с. 15-16): введення k, друк результату у форматі з с. 15 і виклик обох функцій графіків.
+Назви, параметри і doctest не міняй.</p>
+<p>Перший запуск заготовки - функції ще повертають <code>None</code>:</p>
+<pre><code class="language-bash">printf &quot;12\n&quot; | python3 lr3_1.py
+</code></pre>
+<pre><code class="language-text">TypeError: cannot unpack non-iterable NoneType object
+</code></pre>
+<p>Рядок <code>numbers, squares = find_palindrom_squares(N)</code> хоче розпакувати два списки, а функція повернула <code>None</code>.
+Це старт, як <code>Got nothing</code> у ЛР1. Заготовка завдання 4 поки що нічого не питає (введення k ти допишеш сам), тож
+перший запуск - без <code>printf</code>. Вона сама друкує всі приклади, бо в ній <code>doctest.testmod(verbose=True)</code>:</p>
+<pre><code class="language-bash">python3 lr3_4.py | tail -n 3
+</code></pre>
+<pre><code class="language-text">31 tests in 6 items.
+0 passed and 31 failed.
+***Test Failed*** 31 failures.
+</code></pre>
+<p>Через <code>verbose=True</code> правило «тиша = усе добре» тут не працює: дивись на рядок <code>... passed and 0 failed.</code>
+Коли допишеш введення k, запускай як інші: <code>printf "7\n" | python3 lr3_4.py</code>.</p>
+<h3 id="крок-4-графіки">Крок 4. Графіки</h3>
+<p>Перевір, що matplotlib бачить віконну бібліотеку (її ставить <code>ustanovka-mint.sh</code> - пакет <code>python3-tk</code>):</p>
+<pre><code class="language-bash">python3 -c 'import matplotlib; print(matplotlib.get_backend())'
+</code></pre>
+<p>У тестовій Mint 22.3 з <code>python3-tk</code> це <code>tkagg</code> - графіки відкриваються у вікні. Що буде без нього - «Типові
+помилки», п. 5.</p>
+<p>Коли програма дійде до <code>plt.show()</code>, відкриється вікно графіка, і програма <strong>чекатиме, доки ти його закриєш</strong>
+(так <code>plt.show()</code> працює за замовчуванням - документація matplotlib). Лише після цього виконається
+<code>doctest.testmod()</code>. Здається, що «зависло» - глянь, чи нема вікна за терміналом.</p>
+<p>Щоб графік ще й лишився файлом, додай у функцію графіка <code>plt.savefig("lr3_1.png")</code> перед <code>plt.show()</code> і
+відкрий картинку:</p>
+<pre><code class="language-bash">xdg-open lr3_1.png
+</code></pre>
+<p>Для перевірок, коли вікна не потрібні, став <code>MPLBACKEND=Agg</code> перед командою: графік не показується, програма не
+чекає. Наприклад, усі doctest з введенням 12:</p>
+<pre><code class="language-bash">printf &quot;12\n&quot; | MPLBACKEND=Agg python3 lr3_1.py
+</code></pre>
+<h3 id="крок-5-git-за-бажанням">Крок 5. git (за бажанням)</h3>
+<pre><code class="language-bash">cd ~/univer/labs
+git add lr3/lr3_1.py
+git commit -m &quot;ЛР3: завдання 1&quot;
+</code></pre>
+<h2 id="підказки-до-завдань-без-розвʼязку">Підказки до завдань (без розвʼязку)</h2>
+<p>Довідник - <code>Курс/ДОВІДНИК-ФУНКЦІЙ.md</code> (тека курсу Python на ПК: <code>list()</code>, <code>tuple()</code>, <code>% (остача від ділення)</code>,
+<code>// (ціле ділення)</code>, <code>** (піднесення до степеня)</code>, <code>math.log10()</code>). У курсі Python (тека <code>Курс/</code>): цикли - урок 04,
+списки - урок 08, кортежі - урок 09, matplotlib - урок 05.</p>
+<p><strong>Завдання 1.</strong></p>
+<ul>
+<li>Паліндром арифметикою: розверни число цифра за цифрою (с. 2 методички: схема <code>while number &gt; 0</code>, <code>digit =
+  number % 10</code>, <code>number //= 10</code> і «формування нового числа» <code>result = result * 10 + digit</code>) і порівняй з
+  початковим. Початкове збережи заздалегідь (с. 2: <code>original = number</code>).</li>
+<li>Числа від 1 до N <strong>включно</strong> - <code>range(1, N + 1)</code> (с. 1; «Передбач», пункт 1).</li>
+<li>Функція повертає <strong>кортеж з двох списків</strong>: <code>return список1, список2</code> (doctest: <code>([1, 2, 3], [1, 4, 9])</code>).</li>
+<li>Порожні списки - графік не будувати (умова: «не повинна виводити порожній графік»).</li>
+</ul>
+<p>Інший приклад циклу і списку (не з лаби):</p>
+<pre><code class="language-python">sevens = []
+for number in range(1, 30):
+    if number % 7 == 0:
+        sevens.append(number)
+print(sevens)  # [7, 14, 21, 28]
+</code></pre>
+<p><strong>Завдання 2.</strong></p>
+<ul>
+<li>Перевірка простоти - схема на с. 4 (перебір дільників до кореня). Готові функції заборонені, свою - можна.</li>
+<li>Сума цифр - та сама схема перебору цифр, що в завданні 1.</li>
+<li>Гістограма - <code>plt.hist</code> (с. 6).</li>
+</ul>
+<p><strong>Завдання 3.</strong></p>
+<ul>
+<li>Кількість цифр - циклом або через <code>math.log10</code> (с. 3); далі сума цифр у цьому степені.</li>
+<li>Перших <code>count</code> чисел шукай <code>while</code>-циклом, доки список не набере потрібну довжину. Почни з малого <code>count</code>
+  (3-5): чисел Армстронга мало, і з великим <code>count</code> програма рахуватиме дуже довго.</li>
+<li>НСД і НСК - с. 4 (алгоритм Евкліда і звʼязок НСД · НСК = a · b).</li>
+<li>Спільні дільники двох чисел - це дільники їхнього НСД.</li>
+<li>Три графіки в одному вікні - <code>plt.subplots(3, 1)</code> (с. 6).</li>
+</ul>
+<p><strong>Завдання 4*.</strong></p>
+<ul>
+<li>Скільки цифр у числі, без <code>str</code> - прийом з с. 3 методички.</li>
+<li>Подумай на папері для k = 7: <code>1 4 9 16 25 ...</code> - як дізнатись, у якому квадраті стоїть 7-ма цифра, не записуючи
+  всю послідовність? Що для цього треба знати про кожен квадрат?</li>
+<li>Як дістати цифру на заданій позиції числа - с. 3 («Математичне отримання цифри за позицією»).</li>
+<li>Друк результату і два графіки дописуєш сам (с. 15-16), зразок виводу - с. 15.</li>
+</ul>
+<p>Графік на будь-яких числах (не з лаби) - перевір, що matplotlib працює:</p>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+plt.plot([1, 2, 3, 4], [1, 4, 9, 16], marker=&quot;o&quot;)
+plt.xlabel(&quot;x&quot;)
+plt.ylabel(&quot;y&quot;)
+plt.grid(True)
+plt.savefig(&quot;test.png&quot;)
+plt.show()
+</code></pre>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<ol>
+<li>Які числа дає <code>range</code>?</li>
+</ol>
+<pre><code class="language-bash">python3 -c 'print(list(range(1, 6)), list(range(5)))'
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">[1, 2, 3, 4, 5] [0, 1, 2, 3, 4]
+</code></pre>
+<p>Верхня межа не входить. «Від 1 до N включно» - <code>range(1, N + 1)</code>.</p>
+</details>
+<ol start="2">
+<li>Приклад з с. 1 методички - що надрукує?</li>
+</ol>
+<pre><code class="language-bash">printf 'number = 100\nwhile number &gt; 0:\n    print(number)\n    number //= 10\n' | python3
+</code></pre>
+<p>(<code>printf</code> склеює програму з рядків, <code>\n</code> - новий рядок, а <code>python3</code> без імені файлу читає програму з <code>|</code>.)</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">100
+10
+1
+</code></pre>
+<p>Кожен крок відкидає останню цифру, і коли <code>number</code> стає 0, умова <code>number &gt; 0</code> хибна - цикл зупиняється. Якщо
+забути <code>number //= 10</code>, цикл ніколи не скінчиться (Ctrl+C).</p>
+</details>
+<ol start="3">
+<li>Степінь нуль і цифра за позицією:</li>
+</ol>
+<pre><code class="language-bash">python3 -c 'print(10 ** 0, 153 // 10 ** 2 % 10)'
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">1 1
+</code></pre>
+<p><code>10 ** 2 = 100</code>, <code>153 // 100 = 1</code>, <code>1 % 10 = 1</code> - перша цифра числа 153.</p>
+</details>
+<ol start="4">
+<li>Як doctest побачить кортеж з двох списків?</li>
+</ol>
+<pre><code class="language-bash">python3 -c 'pairs = ([1, 2, 3], [1, 4, 9]); print(pairs)'
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">([1, 2, 3], [1, 4, 9])
+</code></pre>
+<p>Круглі дужки - кортеж, квадратні - списки, пробіл після кожної коми. Саме так записано doctest
+<code>find_palindrom_squares</code>.</p>
+</details>
+<ol start="5">
+<li><code>append</code> і <code>len</code>:</li>
+</ol>
+<pre><code class="language-bash">python3 -c 'data = []; data.append(5); data.append(7); print(data, len(data))'
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">[5, 7] 2
+</code></pre>
+<p><code>append</code> дописує в кінець і нічого не повертає; <code>len</code> - кількість елементів (с. 5).</p>
+</details>
+<h2 id="типові-помилки">Типові помилки</h2>
+<p>Тексти - справжній вивід у тестовій Mint 22.3.</p>
+<p><strong>1. Функція ще повертає <code>None</code>.</strong> <code>TypeError: cannot unpack non-iterable NoneType object</code> (Крок 3).</p>
+<p><strong>2. Безкінечний цикл.</strong> Програма «висить», процесор гуде. Натисни Ctrl+C:</p>
+<pre><code class="language-text">KeyboardInterrupt
+</code></pre>
+<p>Над цим рядком Python покаже, у якому рядку файлу був цикл. Перевір, чи змінюється змінна з умови <code>while</code>.</p>
+<p><strong>3. Зсув на один у <code>range</code>.</strong> <code>range(1, N)</code> замість <code>range(1, N + 1)</code> - втрачається саме N:</p>
+<pre><code class="language-text">Failed example:
+    find_palindrom_squares(1)
+Expected:
+    ([1], [1])
+Got:
+    ([], [])
+</code></pre>
+<p><strong>4. mypy і порожній список.</strong> Якщо список створено як <code>[]</code>, а використано раніше, ніж щось у нього
+дописано (приклад <code>first_evens</code>: <code>while len(found) &lt; count</code>):</p>
+<pre><code class="language-text">va.py:2: error: Need type annotation for &quot;found&quot; (hint: &quot;found: list[&lt;type&gt;] = ...&quot;)  [var-annotated]
+</code></pre>
+<p>Підкажи тип: <code>found: list[int] = []</code>.</p>
+<p><strong>5. Графік не відкривається, а в терміналі:</strong></p>
+<pre><code class="language-text">UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+</code></pre>
+<p>matplotlib працює без вікон: або ти сам поставив <code>MPLBACKEND=Agg</code>, або нема пакета <code>python3-tk</code> (на свіжій Mint
+22.3 його нема, ставить <code>ustanovka-mint.sh</code> або <code>sudo apt install python3-tk</code>). Під час перевірок з <code>Agg</code> це
+попередження нормальне.</p>
+<p><strong>6. ruff: імпорти.</strong> У заготовках <code>import doctest</code> і <code>import matplotlib.pyplot as plt</code> стоять підряд, а ruff
+хоче порожній рядок між стандартною бібліотекою і сторонньою:</p>
+<pre><code class="language-text">I001 [*] Import block is un-sorted or un-formatted
+</code></pre>
+<p><code>[*]</code> означає «вмію виправити сам»: <code>python3 -m ruff check --fix lr3_1.py</code> (викладач теж це радить, ЛР1 с. 9) -
+відповідь <code>Found 1 error (1 fixed, 0 remaining).</code></p>
+<p><strong>7. ruff у завданні 4:</strong></p>
+<pre><code class="language-text">PIE790 [*] Unnecessary `pass` statement
+</code></pre>
+<p>Після docstring <code>pass</code> зайвий - прибери його, коли напишеш код (у функціях графіків теж).</p>
+<p><strong>8. «Зависло» після графіка</strong> - програма чекає, поки закриєш вікно (Крок 4).</p>
+<p><strong>9. Заборонене.</strong> У завданнях 1 і 4 - без рядків (<code>str</code>), у 3 - без <code>math.gcd</code>, <code>math.lcm</code>. Груба перевірка:</p>
+<pre><code class="language-bash">grep -nE 'str\(|math\.gcd|math\.lcm' lr3_1.py lr3_3.py lr3_4.py
+</code></pre>
+<p>Один рядок знайдеться точно - <code>lr3_3.py</code>, <code>", ".join(str(d) for d in divs)</code>: це <strong>код викладача</strong> у виводі
+результатів, його не чіпай. Що ще знайде <code>grep</code> - перевір очима. Це лише підказка, не доказ: <code>grep</code> не бачить,
+наприклад, <code>from math import gcd</code> чи f-рядок, який теж робить рядок із числа, а знаходить <code>str(</code> у коментарях і в
+графіках завдання 4, де рядки дозволені (с. 15).</p>
+<p><strong>10. Файлу нема там, звідки копіюєш</strong> (Крок 1):</p>
+<pre><code class="language-text">cp: cannot stat '/home/evgen/Завантаження/Telegram Desktop/laba_3.py': No such file or directory
+</code></pre>
+<p>укр.: <code>cp: не вдалося виконати stat для '...': Немає такого файла або каталогу</code>. Знайди файл: <code>find ~ -name "laba_3*"</code>.
+Без лапок навколо <code>Telegram Desktop</code> - дві такі помилки (для <code>Telegram</code> і для <code>Desktop/laba_3.py</code>).</p>
+<p>Пастки ЛР1-2 (<code>python -m doctest</code> і <code>DebugRunner</code>, pytest без <code>-s</code>, <code>printf</code> з відʼємними) - Уроки 04 і 07.</p>
+<h2 id="коли-помиляється-doctest-викладача">Коли помиляється doctest викладача</h2>
+<p>Самі doctest ЛР3 арифметично правильні: розвʼязок, що проходить усі 8 + 10 + 8 + 31 прикладів чотирьох завдань, у нас є (у
+перевірці курсу). Але <strong>текст умови подекуди суперечить doctest і заготовці</strong>:</p>
+<p><strong>Завдання 3, «Пара 1: (153, 370)».</strong> Приклад виводу на с. 12 починається з пари (153, 370), а doctest
+<code>get_armstrong_numbers(3)[:3]</code> чекає <code>[1, 2, 3]</code> - однозначні числа теж числа Армстронга (5¹ = 5). З кодом, що
+проходить doctest, програма з введенням 3 друкує:</p>
+<pre><code class="language-text">Пара 1: (1, 2)
+  НСД(1, 2) = 1
+  НСК(1, 2) = 2
+  Спільні дільники: 1
+  Кількість спільних дільників = 1
+</code></pre>
+<p>Слухайся doctest (вони - критерій), а про приклад на с. 12 напиши викладачу.</p>
+<p><strong>Завдання 3, назви параметрів.</strong> У тексті (с. 13) функція графіків має <code>pair_labels: list[str]</code>, а в заготовці -
+<code>pair_indices: list[int]</code>. Пиши як у заготовці.</p>
+<p><strong>Завдання 1 і 2, «до N» чи «менших за N».</strong> Шукати треба на відрізку [1; N] (с. 6 і 9), а графік/гістограма
+описані для чисел «менших за N» (с. 8 і 9). doctest (N = 1, 5, 12, 0 і 10, 20) цю різницю не перевіряють. Зроби
+однаково для пошуку і графіка (за [1; N], як у функціях) і будь готовий пояснити.</p>
+<p><strong>Завдання 4.</strong> Заголовки на с. 16 не збігаються з кодом: <code>get_sequence_length(k: int) -&gt; list[int]</code> проти
+справжнього <code>get_sequence_length(N: int) -&gt; int</code>, «<code>plot_sequence_length()</code>» проти <code>plot_sequence_analysis</code>.
+Пиши як у заготовці. Рядки docstring викладача довші за 78 символів - flake8 <code>E501</code>, як у ЛР1.</p>
+<p><strong><code>.ipynb</code>, клітинка 3</strong> - зайвий рядок з трьома зворотними лапками (Крок 1).</p>
+<h2 id="перевір-перед-здачею">Перевір перед здачею</h2>
+<pre><code class="language-bash">cd ~/univer/labs/lr3
+source ~/univer/.venv/bin/activate
+printf &quot;12\n&quot; | MPLBACKEND=Agg python3 -m pytest --doctest-modules -q -s lr3_1.py
+printf &quot;20\n&quot; | MPLBACKEND=Agg python3 -m pytest --doctest-modules -q -s lr3_2.py
+printf &quot;3\n&quot; | MPLBACKEND=Agg python3 -m pytest --doctest-modules -q -s lr3_3.py
+printf &quot;7\n&quot; | MPLBACKEND=Agg python3 -m pytest --doctest-modules -q -s lr3_4.py
+printf &quot;7\n&quot; | MPLBACKEND=Agg python3 lr3_4.py | tail -n 3
+python3 -m black -l 78 lr3_1.py lr3_2.py lr3_3.py lr3_4.py
+python3 -m ruff check --fix lr3_1.py lr3_2.py lr3_3.py lr3_4.py
+python3 -m flake8 --max-line-length=78 lr3_1.py lr3_2.py lr3_3.py lr3_4.py
+python3 -m pycodestyle --max-line-length=78 lr3_1.py lr3_2.py lr3_3.py lr3_4.py
+python3 -m mypy lr3_1.py lr3_2.py lr3_3.py lr3_4.py
+</code></pre>
+<p>Що має бути на правильному коді (тестова Mint 22.3):</p>
+<ul>
+<li>pytest: <code>2 passed</code> (<code>lr3_1.py</code>), <code>3 passed</code> (<code>lr3_2.py</code>), <code>5 passed</code> (<code>lr3_3.py</code>), <code>3 passed</code> (<code>lr3_4.py</code>) -
+  стільки функцій з doctest. Приписка <code>1 warning</code> (у <code>lr3_4.py</code> - <code>2 warnings</code>, два графіки) - це попередження
+  <code>Agg</code> з п. 5, нормально;</li>
+<li><code>lr3_4.py | tail -n 3</code>:</li>
+</ul>
+<pre><code class="language-text">31 tests in 6 items.
+31 passed and 0 failed.
+Test passed.
+</code></pre>
+<ul>
+<li>ruff після <code>--fix</code>: <code>All checks passed!</code>; flake8 і pycodestyle - лише <code>E501</code> у довгих рядках docstring
+  викладача в <code>lr3_4.py</code>; у <code>lr3_1.py</code> - <code>lr3_3.py</code> нічого;</li>
+<li>mypy: <code>Success: no issues found in 4 source files</code>.</li>
+</ul>
+<p><code>MPLBACKEND=Agg</code> тут, щоб pytest не відкривав вікна графіків. Справжній вигляд графіків подивись звичайним
+запуском (Крок 4) - викладач дивитиметься саме на них.</p>
+<p>Або все одразу для кожного файлу (скорочення з <code>ustanovka-mint.sh</code>, урок 03): <code>MPLBACKEND=Agg perevir lr3_1.py 12</code>,
+<code>... lr3_2.py 20</code>, <code>... lr3_3.py 3</code>, <code>... lr3_4.py 7</code> - відповіді на <code>input()</code> після назви через пробіл.
+<code>MPLBACKEND=Agg</code> перед <code>perevir</code> - щоб і він не відкривав вікон графіків. black він лише перевіряє
+(<code>black: оформлення ок</code>), а виправляє <code>python3 -m black -l 78 файл.py</code>.</p>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Розділяють обчислення і графіки</strong> (с. 5, Separation of Concerns): функції рахують і повертають, окрема
+  функція малює. Тоді обчислення тестуються doctest без вікон, а графік - очима.</li>
+<li><strong>Зберігають графіки у файл</strong> (<code>plt.savefig</code>, с. 6) і додають картинку у звіт або README, а не лише показують
+  вікно. https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html</li>
+<li><strong>Backend без вікон для автоматичних перевірок</strong> - змінна <code>MPLBACKEND=Agg</code> (так роблять на серверах і в
+  GitHub Actions). https://matplotlib.org/stable/users/explain/figure/backends.html</li>
+<li><strong>Типи для списків</strong> (<code>list[int]</code>, <code>tuple[list[int], list[int]]</code>) - викладач уже пише їх у заготовках; mypy
+  перевіряє, що ти повертаєш саме це. https://mypy.readthedocs.io/en/stable/</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Як командами <code>grep</code> і <code>sed</code> вирізати з <code>laba_3.py</code> завдання 2 в окремий файл?</li>
+<li>Чому програма з графіком «зависає» після виводу і як перевірити doctest без вікон?</li>
+<li>Що робити, якщо цикл не закінчується?</li>
+<li>Чому в завданні 4 «тиша = усе добре» не працює?</li>
+<li>Що не так з прикладом «Пара 1: (153, 370)» і кого слухати?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>grep -n "Завдання" laba_3.py</code> показує, що завдання 2 починається з рядка 69, а 3 - з 150; тоді
+   <code>sed -n '69,149p' laba_3.py &gt; lr3_2.py</code>.</li>
+<li><code>plt.show()</code> чекає, доки закриєш вікно графіка, і лише потім іде <code>doctest.testmod()</code>. Без вікон - поставити
+   <code>MPLBACKEND=Agg</code> перед командою (<code>printf "12\n" | MPLBACKEND=Agg python3 lr3_1.py</code>).</li>
+<li>Ctrl+C (буде <code>KeyboardInterrupt</code> і номер рядка), потім перевірити, чи змінюється в циклі змінна з умови <code>while</code>.</li>
+<li>Там <code>doctest.testmod(verbose=True)</code> - друкує кожен приклад завжди; дивитися на <code>... passed and 0 failed.</code></li>
+<li>doctest <code>get_armstrong_numbers(3)[:3] == [1, 2, 3]</code> каже, що перші числа Армстронга - 1, 2, 3, тож перша пара
+   (1, 2), а не (153, 370). Слухати doctest (критерій викладача) і написати викладачу про приклад.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Методичка ЛР3 викладача: <code>Лабораторна_робота_3_Пайтон,_1_курс_2026.pdf</code> (с. 1-2 - цикли і цифри числа; с. 3 -
+  кількість цифр, цифра за позицією, числа Армстронга; с. 4 - простота, НСД, НСК; с. 5 - списки, Separation of
+  Concerns; с. 6 - matplotlib; с. 6-19 - завдання і заготовки), той самий <code>.ipynb</code> (клітинки 2-9), <code>laba_3.py</code> з
+  чату 17.11.2026.</li>
+<li>Вимоги викладача: <code>05_Програмування/Вимоги викладача (...).md</code>.</li>
+<li>Цикли і <code>range</code>: https://docs.python.org/3/tutorial/controlflow.html ; списки:
+  https://docs.python.org/3/tutorial/datastructures.html (відкрито 18.11.2026)</li>
+<li>matplotlib: backends і <code>MPLBACKEND</code> - https://matplotlib.org/stable/users/explain/figure/backends.html ;
+  <code>savefig</code> - https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html ; <code>show</code> -
+  https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html (відкрито 18.11.2026)</li>
+<li>doctest: https://docs.python.org/3/library/doctest.html ; pytest і doctest:
+  https://docs.pytest.org/en/stable/how-to/doctest.html (відкрито 18.11.2026)</li>
+<li>ruff (правила I001, PIE790): https://docs.astral.sh/ruff/ ; mypy: https://mypy.readthedocs.io/en/stable/
+  (відкрито 18.11.2026)</li>
+<li>Усі виводи - з тестової Mint 22.3 (python3 3.12.3, matplotlib 3.11), перевірка <code>_перевірка/u08.sh</code>.
+  Вікно графіка в тестовій системі не відкривали (вона без робочого столу) - поведінка <code>plt.show()</code> описана за
+  документацією matplotlib.</li>
+</ul>

@@ -1,0 +1,375 @@
+<h1 id="урок-26-коли-щось-зламалось-grub-старе-ядро-tty-live-usb">Урок 26. Коли щось зламалось - GRUB, старе ядро, TTY, live USB</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> рано чи пізно ноутбук не завантажиться: після оновлення ядра, драйвера, правки <code>/etc/fstab</code> чи
+переповненого диска. Майже завжди систему можна врятувати без перевстановлення і без втрати лаб - якщо знаєш драбину
+порятунку і <strong>заздалегідь</strong> зробив знімок (урок 01) і live USB. Цей урок - та драбина, від простого до складного.</p>
+<h2 id="коротко">Коротко</h2>
+<p>Нові слова:
+- <strong>GRUB</strong> - завантажувач: перша програма з диска, показує меню (Mint, старіше ядро, Windows) і запускає ядро.
+- <strong>Ядро</strong> (kernel) - серце Linux. Mint тримає кілька версій; якщо нове не стартує, можна вибрати попереднє.
+- <strong>TTY</strong> - текстовий вхід без графіки (Ctrl+Alt+F2). Працює, навіть коли робочий стіл зламався.
+- <strong>Recovery mode</strong> - режим відновлення: меню з готовими діями і командний рядок root.
+- <strong>Live USB</strong> - флешка з Mint, з якої ставив систему. З неї можна запустити Mint, не чіпаючи диск.</p>
+<p><strong>Драбина порятунку:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що сталось</th>
+<th>Перший крок</th>
+<th>Урок</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Після оновлення чи драйвера все дивно, але система вантажиться</td>
+<td>Timeshift → відновити знімок</td>
+<td>01</td>
+</tr>
+<tr>
+<td>Завис робочий стіл, мишка рухається</td>
+<td>Ctrl+Alt+Esc (перезапуск Cinnamon)</td>
+<td>19</td>
+</tr>
+<tr>
+<td>Чорний екран або завис робочий стіл</td>
+<td>Ctrl+Alt+F2 → TTY → лагодити або відновити знімок</td>
+<td>тут</td>
+</tr>
+<tr>
+<td>Нове ядро не стартує</td>
+<td>GRUB → Advanced options → попереднє ядро</td>
+<td>тут</td>
+</tr>
+<tr>
+<td>Чорний екран одразу після логотипа</td>
+<td>GRUB → <code>e</code> → <code>nomodeset</code></td>
+<td>тут, 17</td>
+</tr>
+<tr>
+<td>Диск 100 %</td>
+<td>TTY → звільнити місце</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Забув пароль</td>
+<td>recovery mode → root → <code>passwd evgen</code></td>
+<td>тут</td>
+</tr>
+<tr>
+<td>«emergency mode» після від'єднання диска</td>
+<td>fstab + <code>nofail</code></td>
+<td>18, тут</td>
+</tr>
+<tr>
+<td>Зламався apt («dpkg was interrupted»)</td>
+<td><code>sudo dpkg --configure -a</code>, <code>sudo apt-get install -f</code></td>
+<td>тут</td>
+</tr>
+<tr>
+<td>Нема меню GRUB, <code>grub rescue&gt;</code></td>
+<td>live USB → Boot Repair</td>
+<td>тут</td>
+</tr>
+<tr>
+<td>Нічого не допомагає</td>
+<td>live USB → Timeshift або скопіювати файли</td>
+<td>тут, 01</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<ol>
+<li>У тебе ще й Windows, і після кожного запуску Windows годинник у Mint (або навпаки) неправильний на 2-3 години.
+Подивись налаштування часу:</li>
+</ol>
+<pre><code class="language-bash">timedatectl
+</code></pre>
+<p>Який рядок про це?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Справжній вивід з тестової системи (у тебе буде <code>Europe/Kyiv</code> і свій час):</p>
+<pre><code class="language-text">               Local time: Wed 2026-11-18 09:57:10 UTC
+           Universal time: Wed 2026-11-18 09:57:10 UTC
+                 RTC time: Wed 2026-11-18 09:57:10
+                Time zone: Etc/UTC (UTC, +0000)
+System clock synchronized: yes
+              NTP service: inactive
+          RTC in local TZ: no
+</code></pre>
+<p><code>RTC</code> - годинник у самому ноутбуці (на материнській платі). <code>RTC in local TZ: no</code> - Linux вважає, що там час UTC
+(за Гринвічем). Windows за замовчуванням пише туди <strong>місцевий</strong> час - звідси різниця на 2-3 години (Київ = UTC+2,
+влітку +3). Рішення - нижче, «Подвійне завантаження».</p>
+<p>Ще два рядки - про <strong>NTP</strong> (Network Time Protocol - звірка годинника з серверами точного часу в інтернеті).
+<code>System clock synchronized: yes</code> - час уже звірено. <code>NTP service: active</code> - служба звірки (<code>systemd-timesyncd</code>,
+є на ISO 22.3) працює і стежить за годинником сама. У тестовій системі там <code>inactive</code>, бо служба там не стартує
+(у <code>systemctl status systemd-timesyncd</code> видно <code>ConditionVirtualization=!container was not met</code>), а на ноутбуці має
+бути <code>active</code> (не перевірено). Якщо <code>inactive</code> на ноутбуці - <code>sudo timedatectl set-ntp true</code> або «Системні
+налаштування» → «Дата та час» → «Мережевий час».</p>
+</details>
+<ol start="2">
+<li>Відкрито Диспетчер оновлень, а ти в терміналі ставиш пакет. Що скажуть <code>apt</code> і <code>apt-get</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Справжній вивід з тестової системи, коли базу пакетів тримав інший процес (з PID 1430):</p>
+<pre><code class="language-text">Waiting for cache lock: Could not get lock /var/lib/dpkg/lock-frontend. It is held by process 1430 (python3)...
+</code></pre>
+<p><code>apt</code> чекає, поки інший менеджер пакетів закінчить. У дужках - назва програми, що тримає базу (у тесті lock тримав
+Python-скрипт, тому <code>python3</code>; на ноутбуці буде назва того, що відкрите). <code>apt-get</code> не чекає і одразу падає:</p>
+<pre><code class="language-text">E: Could not get lock /var/lib/dpkg/lock-frontend. It is held by process 1430 (python3)
+E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?
+</code></pre>
+<p>Що робити: дочекатись або закрити іншу програму (Диспетчер оновлень, «Керування програмами»). <strong>Не видаляй</strong> lock-файли і не
+вбивай процес посеред встановлення - так і ламають базу пакетів.</p>
+</details>
+<ol start="3">
+<li>Ти в меню GRUB натиснув <code>e</code>, замінив <code>quiet splash</code> на <code>nomodeset</code> і завантажився. Чи буде <code>nomodeset</code> і при
+наступному старті?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Ні. Правка через <code>e</code> діє лише на один запуск. Це і добре: <code>nomodeset</code> - тимчасова «милиця» (вимикає нормальні
+відеодрайвери, картинка буде повільна і в низькій роздільності). Завантажився - став правильний драйвер (урок 17),
+перезавантажся без <code>nomodeset</code>. Постійно параметр додають у «Керування системою» → «Меню завантаження» →
+«Параметри завантаження» (нижче), але для <code>nomodeset</code> так роблять лише як крайній захід.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p>Тут вправи, які безпечно зробити <strong>зараз</strong>, поки все працює: потренуватись і підготуватись. Самі рятувальні кроки -
+у «Сценаріях» нижче.</p>
+<p><strong>Крок 1. Потренуйся в TTY.</strong>
+1. Ctrl+Alt+F2 - чорний екран з <code>login:</code>. Введи свій логін (<code>evgen</code>) і пароль (символи не видно - це нормально).
+2. Тут працюють усі команди з курсу:</p>
+<pre><code class="language-bash">uname -r
+df -h /
+systemctl --failed
+</code></pre>
+<ol start="3">
+<li>Вийти: <code>exit</code>. Назад до графіки - <strong>Ctrl+Alt+F7</strong> (так пишуть на r/linuxmint, 24.12.2025; якщо F7 не
+   повернув - спробуй Ctrl+Alt+F1, на твоєму ноутбуці не перевірено).</li>
+</ol>
+<p><strong>Крок 2. Зроби меню GRUB видимим.</strong> Якщо на ноутбуці лише Mint, меню при старті сховане і проскакує. Щоб не
+ловити момент клавішею (Shift на старих BIOS, Esc на UEFI), у Mint 22.3 є програма <strong>«Керування системою»</strong>
+(System Administration, <code>mintsysadm</code>):</p>
+<pre><code class="language-text">Меню → «Керування системою» (попросить пароль) → «Меню завантаження»
+  [x] Показати меню
+  Затримка перед завантаженням усталеного вибору (секунд): 3
+  [ ] Запам'ятовувати останній вибір як усталений
+  Параметри завантаження: (тут можна додати параметр ядра)
+  [Зберегти] → «Оновлення меню завантаження» → «Успіх»
+</code></pre>
+<p>Програма записує файл <code>/etc/default/grub.d/98_mintsysadm.cfg</code> і сама запускає <code>update-grub</code> (з коду mintsysadm 1.0.4).
+Для показаного вище вибору файл буде такий:</p>
+<pre><code class="language-text"># Do not edit this file. It is generated by mintsysadm.
+GRUB_TIMEOUT_STYLE=menu
+GRUB_TIMEOUT=3
+GRUB_CMDLINE_LINUX_DEFAULT=&quot;$GRUB_CMDLINE_LINUX_DEFAULT &quot;
+</code></pre>
+<p>Перевір: <code>cat /etc/default/grub.d/98_mintsysadm.cfg</code>. Меню на кожному старті з таймаутом 1-3 с - нормально, а
+«Grub Customizer» ставити не треба (r/linuxmint, 15.10.2026, 64 бали). Перезавантажся і просто <strong>подивись</strong> на
+меню: перший рядок - Linux Mint, далі «Advanced options for Linux Mint ...». Нічого не вибирай.</p>
+<p><strong>Крок 3. Зроби live USB заздалегідь.</strong> Образ Mint 22.3 Cinnamon важить 3,1 ГБ (3 091 660 800 байт на
+дзеркалі mirrors.kernel.org), тож флешка потрібна 4 ГБ або більше. <strong>Усе на ній зітреться.</strong>
+1. Завантаж ISO Mint 22.3 Cinnamon і файл <code>sha256sum.txt</code> з linuxmint.com (сторінка Download) у теку «Завантаження».
+2. Перевір, що образ не пошкоджений:</p>
+<pre><code class="language-bash">cd &quot;$(xdg-user-dir DOWNLOAD)&quot;
+sha256sum -c sha256sum.txt --ignore-missing
+</code></pre>
+<p><code>xdg-user-dir DOWNLOAD</code> друкує шлях до теки завантажень (назва залежить від мови). Має бути рядок
+   <code>linuxmint-22.3-cinnamon-64bit.iso: OK</code> (з образом не перевірено; ключ <code>--ignore-missing</code> - не сваритись на інші
+   образи зі списку).
+3. Встав флешку, <code>lsblk -o NAME,SIZE,MODEL,MOUNTPOINT</code> - запам'ятай її розмір і модель (урок 18).
+4. Меню → «Запис образу на USB-нагромаджувач» → вибери ISO → вибери флешку (<strong>звір розмір і модель!</strong>) →
+   «Записати» → дочекайся «Образ було успішно записано».
+5. Підпиши флешку і поклади поруч з ноутбуком.</p>
+<p>Завантажитись з неї: увімкнути ноутбук і натиснути клавішу меню завантаження - у різних виробників різна (часто F12,
+F11, F10 або Esc; для твого ноутбука не перевірено - глянь на сайті виробника).</p>
+<p><strong>Крок 4. Збери «паспорт» системи для форуму</strong> (поки все працює - щоб було з чим порівняти):</p>
+<pre><code class="language-bash">inxi -Fxxxz &gt; ~/inxi.txt
+sudo journalctl -b -p err &gt; ~/pomylky.txt
+head -4 ~/inxi.txt
+</code></pre>
+<p><code>-Fxxxz</code> - усе (F), максимум деталей (xxx), без MAC і серійних номерів (z). Файл складається з розділів
+<code>System:</code>, <code>Machine:</code>, <code>CPU:</code>, <code>Graphics:</code>, <code>Audio:</code>, <code>Network:</code>, <code>Drives:</code>, <code>Partition:</code>, <code>Swap:</code>, <code>Sensors:</code>,
+<code>Info:</code> (так у тестовій системі). У рядку <code>System:</code> є <code>Distro: Linux Mint 22.3 Zena base: Ubuntu 24.04 LTS Noble</code>;
+на ноутбуці там ще буде <code>Desktop: Cinnamon</code> і ядро на кшталт <code>6.14.0-37-generic</code> (тестова система віртуальна, у неї
+ядро своє і <code>Desktop: N/A</code>, тому її вивід тут не показую).</p>
+<p><strong>Крок 5. Перевір, що apt здоровий.</strong></p>
+<pre><code class="language-bash">dpkg --audit
+sudo dpkg --configure -a
+sudo apt-get install -f
+</code></pre>
+<p>Коли все гаразд, <code>dpkg --audit</code> і <code>dpkg --configure -a</code> нічого не друкують, а <code>apt-get install -f</code> закінчується
+рядком <code>0 upgraded, 0 newly installed, 0 to remove and ... not upgraded.</code></p>
+<h2 id="сценарії-порятунку">Сценарії порятунку</h2>
+<p><strong>А. Чорний екран, завис робочий стіл, диск 100 %.</strong> Ctrl+Alt+F2 → вхід. Далі за ситуацією:
+- щойно ставив драйвер чи оновлення - <code>sudo timeshift --list</code>, потім <code>sudo timeshift --restore</code> (урок 01);
+- диск повний - урок 18 (<code>df -h /</code>, <code>sudo journalctl --vacuum-time=2d</code>, <code>sudo apt autoremove --purge</code>);
+- зависла програма - <code>top</code>, <code>kill PID</code> (урок 19);
+- потім <code>sudo reboot</code>.</p>
+<p>Свіжий приклад (05.11.2026, 255 балів): пакет <code>linux-firmware-amd-graphics</code> зламав екран входу на AMD RX 9060/9070,
+лагодили з TTY: <code>sudo apt update</code>, <code>sudo apt install linux-firmware-amd-graphics</code>, <code>sudo update-initramfs -u -k all</code>,
+<code>sudo reboot</code>.</p>
+<p><strong>Б. Нове ядро не стартує</strong> (r/linuxmint, 28.07.2026, 126 балів: оновлення до ядра 7.0).
+1. При старті меню GRUB (крок 2, або Esc/Shift) → «Advanced options for Linux Mint ...» → вибери рядок з
+   <strong>попереднім</strong> ядром (без <code>(recovery mode)</code>).
+2. Завантажився - <code>uname -r</code> покаже старе ядро.
+3. Диспетчер оновлень → Вигляд → Ядра Linux → вибери погане (нове) ядро → Видалити. Поточне видалити не можна, і це
+   правильно.</p>
+<p><strong>В. Чорний екран одразу після логотипа (відео).</strong> За посібником Mint: у меню GRUB виділи рядок Linux Mint,
+натисни <code>e</code>, заміни <code>quiet splash</code> на <code>nomodeset</code>, натисни F10 - завантажиться з простим відеорежимом. Потім
+«Керування драйверами» (урок 17) і перезавантаження без <code>nomodeset</code> (передбач 3).</p>
+<p><strong>Г. Забув пароль.</strong> GRUB → «Advanced options» → рядок з <code>(recovery mode)</code>. З'явиться «Меню Відновлення» (Recovery
+Menu, українською або англійською - залежить від мови системи):</p>
+<pre><code class="language-text">Меню Відновлення (стан файлової системи: лише читання)
+   resume   Повторити звичайне завантаження
+   clean    Спробувати звільнити більше місця
+   dpkg     Полагодити пошкоджені пакунки
+   fsck     Перевірити всі файлові системи
+   grub     Оновити початковий завантажувач grub
+   network  Увімкнути мережеве з'єднання
+   root     Перейти до командного рядку root
+   system-summary  Інформація про систему
+</code></pre>
+<p>(Пункти, порядок і переклад - з пакета <code>friendly-recovery</code> 0.2.42, він є на ISO 22.3; вигляд вікна приблизний.
+Пункти <code>failsafeX</code> і <code>apt-snapshots</code> з'являються, лише якщо стоять пакети <code>xdiagnose</code> і <code>apt-btrfs-snapshot</code>, а
+на ISO 22.3 їх нема.) Вибери <code>root</code>. Буде:</p>
+<pre><code class="language-text">Press Enter for maintenance
+(or press Control-D to continue):
+</code></pre>
+<p>Enter - і ти root без пароля (перевірено в тестовій Mint 22.3: <code>sulogin</code>, коли пароль root заблокований, як у Mint
+за замовчуванням, пускає по Enter). Диск змонтований <strong>лише для читання</strong>, тому:</p>
+<pre><code class="language-text">mount -o remount,rw /
+passwd evgen
+reboot
+</code></pre>
+<p>Перший рядок дозволяє запис, другий питає новий пароль двічі (символи не видно), третій перезавантажує. Тут нема
+<code>sudo</code> - ти вже root. (Цей сценарій з GRUB на ноутбуці не перевірено, лише його частини: меню і <code>sulogin</code>.)
+Те саме вміють пункти <code>dpkg</code> (полагодити пакети) і <code>clean</code> (звільнити місце) - без ручних команд.</p>
+<p>Висновок про безпеку: хто має фізичний доступ до ноутбука, той може так само стати root. Від цього захищає
+шифрування диска (його вмикають під час встановлення Mint).</p>
+<p><strong>Ґ. «You are in emergency mode».</strong> Так виглядає екран (текст зібрано з програм systemd 255 і sulogin у тестовій
+Mint 22.3; сам аварійний режим на ноутбуці не перевірено):</p>
+<pre><code class="language-text">You are in emergency mode. After logging in, type &quot;journalctl -xb&quot; to view
+system logs, &quot;systemctl reboot&quot; to reboot, or &quot;exit&quot;
+to continue bootup.
+Press Enter for maintenance
+(or press Control-D to continue):
+</code></pre>
+<p>Найчастіше - у <code>/etc/fstab</code> диск, якого нема (від'єднали зовнішній, r/linuxmint, 04.10.2026). Що робити: Enter
+(у Mint пароля root нема, тому одразу відкриється консоль root), <code>journalctl -xb</code> - знайти червоний рядок про
+<code>mount</code> або <code>.mount</code>; <code>nano /etc/fstab</code> - дописати <code>nofail</code> або закоментувати рядок <code>#</code>; <code>findmnt --verify</code>;
+<code>systemctl reboot</code> (урок 18). Якщо nano при збереженні пише <code>Error writing /etc/fstab: Read-only file system</code>
+(українською <code>Помилка під час спроби записати /etc/fstab: Файлова система тільки для зчитування</code>) - диск ще лише
+для читання: вийди з nano (Ctrl+X, <code>N</code>), спершу <code>mount -o remount,rw /</code>, потім знову <code>nano /etc/fstab</code>.</p>
+<p><strong>Д. Зламався apt.</strong> Після обриву світла чи закритого посеред оновлення вікна <code>apt</code> (і <code>sudo apt-get</code>) пише
+(справжній текст apt 2.8 з тестової системи, де перерване встановлення змодельовано на копії бази пакетів):</p>
+<pre><code class="language-text">E: dpkg was interrupted, you must manually run 'sudo dpkg --configure -a' to correct the problem.
+</code></pre>
+<p>По черзі: <code>sudo dpkg --configure -a</code> (доробити перервану установку), <code>sudo apt-get install -f</code> (довставити
+залежності), <code>sudo apt update</code>, <code>sudo apt upgrade</code>. Якщо винна стороння програма (PPA, <code>.deb</code> з сайту) - прибери її
+(урок 16). Те саме вміє пункт <code>dpkg</code> у recovery mode.</p>
+<p><strong>Е. Нема меню GRUB, чорний екран з <code>grub rescue&gt;</code></strong> (часто після видалення розділу чи Windows-оновлення,
+r/linuxmint, 12.05.2026). Завантажся з live USB. <strong>Boot Repair</strong> у live-сесії Mint 22.3 уже стоїть (пакет
+<code>boot-repair</code> є в списку пакетів ISO і видаляється лише після встановлення), тому PPA, про який пишуть старі статті,
+не треба. Запусти <code>boot-repair</code> з меню (пошук «Boot Repair») і вибери «Recommended repair». Програма покаже
+посилання на звіт - його і дають на форумі. (Сам ремонт на ноутбуці не перевірено.)</p>
+<p><strong>Є. Нічого не допомагає.</strong> Live USB → Timeshift (є на образі) → вибери свій диск і знімок → Restore (урок 01).
+Або просто скопіюй <code>~/univer</code> з внутрішнього диска на іншу флешку через Nemo і перевстанови Mint - лаби вціліють.</p>
+<p><strong>Подвійне завантаження з Windows.</strong>
+- <strong>Годинник</strong> (r/linuxmint, 02.10.2026): спершу часовий пояс <code>sudo timedatectl set-timezone Europe/Kyiv</code>. Різницю в
+  2-3 години радять лікувати в Windows параметром <code>RealTimeIsUniversal=1</code> (точна команда - ArchWiki «System time»,
+  розділ про Windows; не перевірено). Варіант з боку Linux - <code>timedatectl set-local-rtc 1</code>, але тоді <code>timedatectl</code>
+  попереджає: «The system is configured to read the RTC time in the local time zone» - systemd цей режим не радить.
+- <strong>BitLocker</strong> (r/linuxmint, 22.02.2026 і 01.06.2026): <strong>до</strong> встановлення Mint чи зміни налаштувань BIOS збережи
+  ключ відновлення BitLocker (у Windows або в акаунті Microsoft). Secure Boot не вимикай: після змін завантаження і
+  вимірювань TPM Windows може попросити ключ відновлення (стаття Microsoft «BitLocker recovery overview»; на
+  ноутбуці не перевірено).
+- <strong>Secure Boot</strong> лиши ввімкненим; драйвери - через MOK (урок 17).</p>
+<h2 id="як-просити-допомоги">Як просити допомоги</h2>
+<ul>
+<li>Форум <strong>forums.linuxmint.com</strong> (англійською), r/linuxmint. Напиши: що робив перед поломкою, що бачиш (точний текст
+  помилки, фото екрана телефоном, якщо в TTY), вивід <code>inxi -Fxxxz</code> (крок 4) і, якщо система вантажиться,
+  <code>sudo journalctl -b -p err</code>.</li>
+<li><strong>Не вставляй команди, яких не розумієш</strong> - з YouTube, форумів чи від ШІ (r/linux4noobs: пост 18.08.2026,
+  283 бали - «поради» з YouTube на кшталт <code>chmod 777</code> і все від root; пост 29.06.2026 - людина виконала пораду ШІ з
+  <code>apt purge</code> і стерла сервер). Розбери команду на explainshell.com - він пояснює кожне
+  слово. Особливо небезпечні: <code>rm -rf</code> з <code>/</code> або <code>*</code>, <code>dd</code>, <code>mkfs</code>, <code>chmod -R 777</code>, <code>sudo</code> перед тим, що з інтернету
+  «треба просто вставити».</li>
+</ul>
+<h2 id="типові-помилки">Типові помилки</h2>
+<ul>
+<li><strong>Перевстановлювати Mint при першій проблемі.</strong> Спершу драбина: TTY → знімок → старе ядро → recovery → live USB.</li>
+<li>
+<p><strong>Нема ні знімка, ні live USB, коли вже зламалось.</strong> Обидва роблять заздалегідь (урок 01, крок 3 тут).
+Якщо Mint українською - у дужках текст з файлів перекладу <code>language-pack-uk-base</code> (у recovery mode мова може бути
+й англійська). Англійський текст для пошуку: <code>LC_ALL=C команда</code>.</p>
+</li>
+<li>
+<p><strong><code>Could not get lock /var/lib/dpkg/lock-frontend</code></strong> (<code>Не вдалося заблокувати /var/lib/dpkg/lock-frontend</code>) -
+  відкритий інший менеджер пакетів. Чекай, не видаляй lock.</p>
+</li>
+<li><strong><code>passwd: Authentication token manipulation error</code></strong> (<code>passwd: Помилка маніпуляції лексемою розпізнавання</code>) у
+  recovery mode - забув <code>mount -o remount,rw /</code>, диск ще лише для читання (текст помилки з досвіду користувачів, не
+  перевірено).</li>
+<li><strong>Залишив <code>nomodeset</code> назавжди</strong> - відео повільне, яскравість і зовнішній монітор не працюють. Прибери після
+  встановлення драйвера.</li>
+<li><strong>Вимкнув Secure Boot на ноутбуці з BitLocker</strong> - Windows може попросити ключ відновлення (48 цифр; він у
+  Windows або в акаунті Microsoft). Введи його і увімкни Secure Boot назад у BIOS.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Готуються, поки все працює:</strong> знімки за розкладом, live USB у шухляді, лаби в GitHub (урок 24) - тоді будь-яка
+  поломка - це 10-20 хвилин.</li>
+<li><strong>Не ламають наосліп:</strong> перед драйвером чи PPA - знімок (урок 01); після поломки спершу читають журнал
+  (<code>journalctl -xb</code>, урок 20), а не вставляють першу пораду з пошуку.</li>
+<li><strong>Старе ядро як страховка:</strong> не видаляють попереднє ядро, поки нове не відпрацювало кілька днів (r/linuxmint,
+  28.07.2026).</li>
+<li><strong>Питають з <code>inxi -Fxxxz</code> і точним текстом помилки</strong> - так відповідь приходить за години, а не за дні.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Після оновлення ядра Mint не стартує. Як завантажитись і як прибрати погане ядро?</li>
+<li>Як перейти в текстовий вхід і як повернутись до графіки?</li>
+<li>Забув пароль. Перелічи кроки.</li>
+<li>Що робити з повідомленням <code>E: dpkg was interrupted ...</code>?</li>
+<li>Годинник у Windows і Mint розходиться на 2 години. Чому і як виправити?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>У меню GRUB → «Advanced options for Linux Mint» → рядок з попереднім ядром. Потім Диспетчер оновлень → Вигляд →
+   Ядра Linux → видалити нове.</li>
+<li>Ctrl+Alt+F2 - TTY; назад Ctrl+Alt+F7.</li>
+<li>GRUB → Advanced options → <code>(recovery mode)</code> → <code>root</code> → Enter → <code>mount -o remount,rw /</code> → <code>passwd evgen</code> → <code>reboot</code>.</li>
+<li><code>sudo dpkg --configure -a</code>, потім <code>sudo apt-get install -f</code>, потім <code>sudo apt update</code> і <code>sudo apt upgrade</code>.</li>
+<li>Linux вважає, що годинник ноутбука в UTC (<code>RTC in local TZ: no</code>), а Windows пише туди місцевий час. Краще
+   ввімкнути в Windows <code>RealTimeIsUniversal=1</code>; перевір також <code>sudo timedatectl set-timezone Europe/Kyiv</code>.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Посібник установки Mint, «Boot options» (nomodeset, <code>e</code>, F10) - https://linuxmint-installation-guide.readthedocs.io/en/latest/boot_options.html -
+  відкрито 18.11.2026</li>
+<li>Посібник установки Mint, «Verify your ISO image» і «Create the bootable media» -
+  https://linuxmint-installation-guide.readthedocs.io/en/latest/verify.html ,
+  https://linuxmint-installation-guide.readthedocs.io/en/latest/burn.html - відкрито 18.11.2026</li>
+<li>Код mintsysadm 1.0.4 (меню завантаження, <code>98_mintsysadm.cfg</code>) і переклад - пакет <code>mintsysadm</code> з репозиторію Mint,
+  прочитано 18.11.2026</li>
+<li>friendly-recovery 0.2.42 (меню відновлення і переклад) - пакет з репозиторію Ubuntu 24.04, прочитано 18.11.2026</li>
+<li>util-linux, sulogin - https://github.com/util-linux/util-linux/blob/v2.39.3/login-utils/sulogin.c - відкрито
+  18.11.2026; поведінка перевірена запуском у тестовій Mint 22.3</li>
+<li>Boot Repair - https://launchpad.net/boot-repair - відкрито 18.11.2026; пакет <code>boot-repair</code> 4ppa2075 є в репозиторії
+  Mint (zena/import) і в списку пакетів ISO 22.3</li>
+<li>ArchWiki, «System time» (Windows і UTC) - https://wiki.archlinux.org/title/System_time - відкрито 18.11.2026</li>
+<li>explainshell - https://explainshell.com/ - відкрито 18.11.2026</li>
+<li>r/linuxmint: старе ядро https://www.reddit.com/r/linuxmint/comments/1v8vj62/ ; прошивка AMD і TTY
+  https://www.reddit.com/r/linuxmint/comments/1xo6jg2/ ; диск 100 % і Ctrl+Alt+F7 https://www.reddit.com/r/linuxmint/comments/1pu9p8v/ ;
+  emergency mode і nofail https://www.reddit.com/r/linuxmint/comments/1wx45gx/ ; grub rescue і boot-repair
+  https://www.reddit.com/r/linuxmint/comments/1taqd1h/ ; меню GRUB і таймаут https://www.reddit.com/r/linuxmint/comments/1x6ncxf/ ;
+  годинник https://www.reddit.com/r/linuxmint/comments/1wvv81b/ ; BitLocker https://www.reddit.com/r/linuxmint/comments/1rbtttr/ ,
+  https://www.reddit.com/r/linuxmint/comments/1tu696g/ - відкрито 18.11.2026</li>
+<li>r/linux4noobs, не вставляти незрозумілі команди - https://www.reddit.com/r/linux4noobs/comments/1vrmeqc/ ,
+  порада ШІ з <code>apt purge</code> - https://www.reddit.com/r/linux4noobs/comments/1uitco4/ - відкрито 18.11.2026</li>
+<li><code>timedatectl</code>, <code>apt</code>/<code>apt-get</code> при зайнятому lock, <code>dpkg --audit</code>, <code>sulogin</code>, <code>inxi -Fxxxz</code>, тексти apt і systemd -
+  перевірено запуском у тестовій Mint 22.3, 18.11.2026</li>
+</ul>

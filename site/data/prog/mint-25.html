@@ -1,0 +1,259 @@
+<h1 id="урок-25-безпека-ufw-оновлення-що-не-запускати-з-sudo">Урок 25. Безпека - ufw, оновлення, що не запускати з sudo</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> у Linux майже все погане стається не «саме», а тому що ти щось запустив від root. Тут - короткий список
+звичок, які закривають 95 % ризиків, і брандмауер, який у Mint вимкнений з коробки.</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>Головне правило: sudo - це «зроби від імені адміністратора все, що написано далі».</strong> Пароль, який питає sudo, -
+це твоя згода. (У Mint при наборі цього пароля видно зірочки - так налаштовано файлом <code>/etc/sudoers.d/0pwfeedback</code>
+з пакета mintsystem.)</p>
+<p><strong>Що НЕ запускати з sudo:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Не роби</th>
+<th>Чому</th>
+<th>Як правильно</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>«sudo pip install ...»</td>
+<td>ламає системний Python, від якого залежить сама Mint</td>
+<td>venv або pipx (урок 02, 03)</td>
+</tr>
+<tr>
+<td>графічні програми з sudo (xed, Nemo, браузер)</td>
+<td>лишають у твоїй домашній теці файли, що належать root, потім «Permission denied»</td>
+<td>звичайний запуск; системний файл - <code>sudoedit /etc/файл</code> (відкриє твій редактор, а збереже від root)</td>
+</tr>
+<tr>
+<td>чужий скрипт з інтернету, який «треба запустити з sudo»</td>
+<td>він може зробити з системою що завгодно</td>
+<td>спершу прочитати (<code>less</code>), перевірити (<code>shellcheck</code>), зрозуміти кожен рядок</td>
+</tr>
+<tr>
+<td>завантажити скрипт curl-ом і одразу передати його «sudo bash» з невідомого сайту</td>
+<td>ти навіть не бачиш, що виконується</td>
+<td>завантажити у файл, прочитати, тоді вирішувати</td>
+</tr>
+<tr>
+<td>права 777 «щоб працювало»</td>
+<td>будь-хто і будь-яка програма може змінити файл</td>
+<td>розібратись, кому треба доступ (урок 15)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Незнайому команду перевір на <strong>explainshell.com</strong>: сайт розбирає рядок по шматках. Пост r/linux4noobs
+«Most YouTube docker tutorials are actively trying to ruin your system» (18.08.2026, 283 бали) - про «поради» з
+YouTube на кшталт <code>chmod 777</code> і роботи від root; в іншому пості (29.06.2026) людина виконала пораду ШІ з
+<code>apt purge</code> і стерла сервер.</p>
+<p><strong>Брандмауер ufw</strong> (Uncomplicated Firewall) - фільтр вхідних підключень. На Mint 22.3 встановлений, але <strong>вимкнений</strong>
+(<code>Status: inactive</code>), Welcome радить його увімкнути. Після <code>sudo ufw enable</code> типові правила: <strong>вхідні - заборонено,
+вихідні - дозволено</strong>. Тобто інтернет, оновлення, GitHub працюють як раніше, а до ноутбука ззовні не підключитись.
+Мишкою - <strong>gufw</strong> («Налаштування брандмауера» в меню).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sudo ufw status verbose</code></td>
+<td>стан і типові правила</td>
+</tr>
+<tr>
+<td><code>sudo ufw enable</code> / <code>sudo ufw disable</code></td>
+<td>увімкнути (і при старті системи) / вимкнути</td>
+</tr>
+<tr>
+<td><code>sudo ufw allow ssh</code></td>
+<td>дозволити вхідний ssh (лише якщо поставив ssh-сервер, урок 21)</td>
+</tr>
+<tr>
+<td><code>sudo ufw status numbered</code> і <code>sudo ufw delete 1</code></td>
+<td>правила з номерами / видалити правило 1</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Решта звичок:</strong>
+- <strong>Оновлення</strong> - «Диспетчер оновлень», урок 02. Вразливості закривають саме оновлення.
+- <strong>Програми</strong> - з «Керування програмами» / apt. PPA і неперевірені Flatpak - лише коли розумієш навіщо (урок 16).
+  Ключ PPA доводить лише «звідки» пакет, а не «безпечно».
+- <strong>Пароль входу</strong> - довгий. Відійшов від ноутбука - <strong>Ctrl+Alt+L</strong> (блокування; Super+L у Cinnamon - це
+  налагоджувач Looking Glass, не блокування).
+- <strong>Шифрування диска</strong> (LUKS) вибирається <strong>лише під час встановлення</strong> Mint («Encrypt the new Linux Mint
+  installation»). Потім увімкнути можна тільки перевстановленням. Посібник Mint попереджає про проблеми цієї опції з
+  деякими драйверами NVIDIA. Перевірити, чи диск зашифрований: <code>lsblk -f</code> (шукай <code>crypto_LUKS</code>).
+- <strong>Резервні копії 3-2-1:</strong> 3 копії, на 2 різних носіях, 1 - поза домом (хмара, GitHub для коду). Timeshift -
+  не резервна копія лаб (домашню теку не зберігає, урок 01). Для лаб: git + GitHub (урок 24), cron + rsync (урок 23).
+- <strong>Secure Boot не вимикай</strong> (урок 17).
+- <strong>Розширення браузера</strong> - мінімум і лише з офіційного каталогу. Розширення бачить усі сторінки, які ти відкриваєш.
+- <strong>Фішинг</strong> - найчастіша атака і на Linux: лист «підтвердіть пароль» з посиланням. Пароль вводь лише на сайті,
+  який відкрив сам (закладка), дивись на адресу. На GitHub і пошті - двофакторний вхід.</p>
+<p><strong>Антивірус.</strong> Чесно: віруси для Linux існують (переважно для серверів), але для домашньої Mint головний ризик -
+не «вірус сам заліз», а <strong>ти сам запустив</strong> щось погане з sudo. Посібник Easy Linux Tips (оновлено 30.05.2026, для
+Mint і Ubuntu) прямо радить антивірус не ставити: вірус не встановиться без твого пароля або без того, що ти сам
+зробиш скрипт виконуваним, а сам антивірус має високі права в системі і тому стає зручною ціллю для атак. Це думка
+одного досвідченого автора, а не правило Mint. Якщо треба перевірити файл для
+когось на Windows - у репозиторії є <code>clamav</code>.</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<ol>
+<li>Свіжа Mint 22.3. Що покаже команда?</li>
+</ol>
+<pre><code class="language-bash">sudo ufw status
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">Status: inactive
+</code></pre>
+<p>Брандмауер є, але вимкнений (у <code>/etc/ufw/ufw.conf</code> стоїть <code>ENABLED=no</code>).</p>
+</details>
+<ol start="2">
+<li>Ти ввімкнув ufw. Чи відкриються сайти і чи буде працювати <code>git push</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Так. Типове правило: <code>deny (incoming), allow (outgoing)</code> - забороняються лише <strong>вхідні</strong> підключення (хтось ззовні
+стукає до тебе), а все, що починаєш ти сам (браузер, apt, ssh до GitHub), - дозволено.</p>
+</details>
+<ol start="3">
+<li>Поза venv: <code>pip install requests</code>. Що буде? І чи допоможе sudo?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Справжній початок виводу:</p>
+<pre><code class="language-text">error: externally-managed-environment
+
+× This environment is externally managed
+╰─&gt; To install Python packages system-wide, try apt install
+    python3-xyz, where xyz is the package you are trying to
+    install.
+</code></pre>
+<p>Mint захищає системний Python (PEP 668). sudo тут <strong>не</strong> вихід: так ти ставиш пакети просто в систему і можеш
+зламати програми Mint. Правильно - venv (урок 03) або pipx.</p>
+</details>
+<ol start="4">
+<li><code>journalctl _COMM=sudo</code> без sudo. Чи побачиш записи про sudo? Залежить від груп - спершу <code>groups</code>.</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>У тестовій Mint користувач лише в групі <code>sudo</code>, і там спершу така підказка (справжній вивід):</p>
+<pre><code class="language-text">Hint: You are currently not seeing messages from other users and the system.
+      Users in groups 'adm', 'systemd-journal' can see all messages.
+      Pass -q to turn off this notice.
+</code></pre>
+<p>Журнал sudo пише система, тому без групи <code>adm</code> видно не все. <strong>На ноутбуці інакше:</strong> першого користувача
+інсталятор Mint додає в <code>adm</code> (урок 15, крок 1), тож підказки не буде, і записи про sudo видно і без sudo (на
+ноутбуці не перевірено). Немає <code>adm</code> у <code>groups</code> - пиши <code>sudo journalctl ...</code> (крок 2).</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p><strong>Крок 1. Увімкнути брандмауер.</strong></p>
+<pre><code class="language-bash">sudo ufw status verbose
+sudo ufw enable
+sudo ufw status verbose
+</code></pre>
+<p>Справжній вивід двох останніх команд у тестовій Mint 22.3:</p>
+<pre><code class="language-text">Firewall is active and enabled on system startup
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), disabled (routed)
+New profiles: skip
+</code></pre>
+<p>Перевір, що інтернет працює: <code>curl -I https://linuxmint.com</code> (урок 21). Те саме мишкою: меню → «Налаштування
+брандмауера» (gufw) → перемикач «Стан».</p>
+<p><strong>Крок 2. Хто і що робив з sudo.</strong></p>
+<pre><code class="language-bash">sudo journalctl _COMM=sudo -n 5 --no-pager
+last -n 5
+</code></pre>
+<p>Кожен виклик sudo - у журналі: хто, з якої теки і яку команду. Рядок з тестової Mint (імʼя компʼютера замінено на
+<code>evgen-laptop</code>; у тебе буде імʼя твого ноутбука, дата і номер процесу свої):</p>
+<pre><code class="language-text">Nov 18 10:30:34 evgen-laptop sudo[282]:    evgen : TTY=pts/0 ; PWD=/home/evgen ; USER=root ; COMMAND=/usr/sbin/ufw status verbose
+</code></pre>
+<p>Після дати - імʼя компʼютера, далі <code>sudo[номер процесу]</code>, хто запускав і що. <code>last</code> показує входи в систему і
+перезавантаження. У тестовій машині там лише рядки <code>reboot   system boot ...</code>; на ноутбуці будуть і твої входи.
+Побачив команду, якої не запускав, - привід розібратись.</p>
+<p><strong>Крок 3. Відкриті порти.</strong> Як в уроці 21:</p>
+<pre><code class="language-bash">sudo ss -tulpn
+</code></pre>
+<p>Усе, що слухає на <code>127.0.0.1</code> / <code>127.0.0.53</code> / <code>[::1]</code>, доступне лише з самого ноутбука. Порти на <code>0.0.0.0</code> або
+<code>[::]</code> доступні з мережі - з увімкненим ufw вони все одно закриті, поки не зробиш <code>ufw allow</code>.</p>
+<p><strong>Крок 4. Чи не лишилось у домашній теці файлів root</strong> (наслідок запуску графічних програм з sudo):</p>
+<pre><code class="language-bash">find ~ -not -user &quot;$USER&quot; 2&gt;/dev/null | head
+</code></pre>
+<p>Порожньо - добре. Якщо щось є - поверни собі: <code>sudo chown -R "$USER:$USER" ~/назва_теки</code> (саме ту теку, що
+знайшлась).</p>
+<p><strong>Крок 5. Чи зашифрований диск.</strong></p>
+<pre><code class="language-bash">lsblk -f
+</code></pre>
+<p>У стовпці <code>FSTYPE</code> шукай <code>crypto_LUKS</code>. Нема - диск не зашифрований; для ноутбука, який носиш в університет, варто
+подумати про це при наступному перевстановленні (з резервною копією!).</p>
+<p><strong>Крок 6. Перевірка чужої команди - тренування.</strong> Скопіюй в explainshell.com рядок
+<code>find ~ -not -user "$USER" 2&gt;/dev/null | head</code> і подивись, як сайт пояснює кожен шматок. Так роби з будь-якою
+«порадою», перш ніж вставити її в термінал.</p>
+<p><strong>Крок 7. Звичка.</strong> Ctrl+Alt+L щоразу, коли встаєш з-за ноутбука в аудиторії.</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<ul>
+<li><strong>«Увімкнув ufw - зламався інтернет».</strong> Не має: вихідні дозволені. Якщо справді щось перестало працювати -
+  <code>sudo ufw status verbose</code> і перевір, чи ти не додавав <code>deny</code> вручну. Вимкнути для перевірки - <code>sudo ufw disable</code>.</li>
+<li><strong><code>ERROR: You need to be root to run this script</code></strong> (українською <code>ERROR: Ви маєте бути супер-користувачем, щоб
+  запустити цей скрипт</code> - справжній запуск з перекладом <code>language-pack-uk-base</code>; англійською - <code>LC_ALL=C ufw status</code>)</li>
+<li>ufw без sudo.</li>
+<li><strong>Після запуску GUI-програми з sudo</strong> - не відкриваються налаштування, «Permission denied» у домашній теці. Крок 4.</li>
+<li><strong><code>--break-system-packages</code></strong> «щоб pip запрацював» - ти сам вимикаєш захист системного Python. venv.</li>
+<li><strong>«Порада» з форуму або від ШІ з <code>sudo</code> і <code>rm</code> / <code>chmod</code> / <code>dd</code></strong> - не вставляй, поки не розумієш кожне слово
+  (explainshell, урок 22). Особливо, якщо там будь-що з <code>/</code> або <code>~</code> після <code>rm</code>.</li>
+<li><strong>Один пароль скрізь</strong> - якщо витече з одного сайту, зламають усі. Менеджер паролів (напр. вбудований у
+  Firefox) і різні паролі.</li>
+<li><strong>Резервна копія на тому самому диску</strong> (як тренувальна <code>~/backup</code> з уроків 21 і 23) - помре разом з диском.
+  3-2-1: флешка або зовнішній диск і GitHub.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Найменші права.</strong> Працюють звичайним користувачем, sudo - лише на конкретну команду, яку розуміють.</li>
+<li><strong>Брандмауер увімкнений завжди</strong>, назовні відкрито лише те, що свідомо дозволено (<code>ufw allow ...</code>).</li>
+<li><strong>Оновлення - регулярно</strong>, бо більшість атак використовують уже виправлені вразливості. Easy Linux Tips:
+  «Vulnerabilities: No Big Problem if Fixed Quickly».</li>
+<li><strong>Секрети - не в коді і не в git</strong> (урок 24), двофакторний вхід на GitHub.</li>
+<li><strong>Перед будь-якою зміною - знімок Timeshift</strong> (урок 01), для даних - окремі копії.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Що змінюється для тебе і для інших компʼютерів після <code>sudo ufw enable</code>?</li>
+<li>Назви три речі, які не варто запускати з sudo, і чому.</li>
+<li>Чому Timeshift - не резервна копія лаб, і що тоді резервна копія?</li>
+<li>Як дізнатися, які команди запускали з sudo на цьому ноутбуці?</li>
+<li>Тобі в чаті скинули рядок з <code>sudo</code> і просять «просто встав». Що робиш?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Ти - нічого не помітиш: вихідні підключення дозволені. Інші компʼютери більше не зможуть підключитися до
+   твого ноутбука (вхідні заборонено), поки ти явно щось не дозволиш.</li>
+<li>pip (ламає системний Python - є venv), графічні програми (лишають файли root у домашній теці), чужі скрипти й
+   команди з інтернету (виконають що завгодно від root). Ще - права 777.</li>
+<li>Timeshift зберігає систему, а домашню теку типово не зберігає. Резервна копія лаб - git + приватний GitHub,
+   копія на інший диск або флешку (rsync, cron), правило 3-2-1.</li>
+<li><code>sudo journalctl _COMM=sudo</code> (рядки <code>COMMAND=...</code>).</li>
+<li>Не вставляю. Розбираю кожне слово (explainshell.com), питаю, навіщо це; якщо там скрипт - спершу читаю його.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>ФАКТИ Mint 22.3: ufw і gufw встановлені й вимкнені, Welcome радить брандмауер, Ctrl+Alt+L, Super+L = Looking
+  Glass, Timeshift не зберігає домашню теку, PEP 668 (<code>_джерело/ФАКТИ-MINT-22.3.md</code>)</li>
+<li>Шифрування диска при встановленні - https://linuxmint-installation-guide.readthedocs.io/en/latest/install.html -
+  відкрито 18.11.2026</li>
+<li>Easy Linux Tips, «Security in Linux Mint and Ubuntu» (оновлено 30.05.2026; антивірус, брандмауер, вразливості) -
+  https://easylinuxtipsproject.blogspot.com/p/security.html - відкрито 18.11.2026; «фатальні помилки» (GUI з sudo,
+  chown) - https://easylinuxtipsproject.blogspot.com/p/fatal-mistakes.html - відкрито 18.11.2026</li>
+<li>ufw - https://help.ubuntu.com/community/UFW і
+  https://documentation.ubuntu.com/server/how-to/security/firewalls/ - відкрито 18.11.2026</li>
+<li>r/linux4noobs, не вставляй команди, яких не розумієш (18.08.2026, 283 бали) -
+  https://www.reddit.com/r/linux4noobs/comments/1vrmeqc/ - відкрито 18.11.2026</li>
+<li>Правило 3-2-1 (r/linuxmint, 12.09.2026) - https://www.reddit.com/r/linuxmint/comments/1weg0jg/ - відкрито 18.11.2026</li>
+<li>explainshell - https://explainshell.com/ - відкрито 18.11.2026</li>
+<li><code>/etc/sudoers.d/0pwfeedback</code> (пакет mintsystem, зірочки при паролі sudo), clamav у репозиторії, усі показані
+  виводи ufw, pip, journalctl - запуском у тестовій Mint 22.3 (ufw 0.36.2), 18.11.2026</li>
+</ul>

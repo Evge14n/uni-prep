@@ -1,0 +1,390 @@
+<h1 id="урок-24-git-і-github-з-ssh-ключем">Урок 24. git і GitHub з ssh-ключем</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> git - «збереження гри» для коду: зламав лабу - за секунду назад до робочої версії. GitHub - копія
+твоїх лаб у хмарі (приватна), з якої їх можна дістати на будь-якому компʼютері.</p>
+<h2 id="коротко">Коротко</h2>
+<p>git запамʼятовує <strong>коміти</strong> - знімки теки з підписом «що змінив». Шлях файлу до коміту:</p>
+<pre><code class="language-text">правиш файл  ──git add──►  вибрано в коміт  ──git commit──►  історія (git log)
+(робоча тека)              (staging)                         │
+                                                             └──git push──► GitHub (origin)
+                                                  git pull ◄──────────────┘
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git init</code></td>
+<td>зробити теку репозиторієм (один раз)</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>що змінено, що вибрано в коміт (<code>--short</code> - коротко)</td>
+</tr>
+<tr>
+<td><code>git add файл</code></td>
+<td>вибрати файл у наступний коміт (<code>git add .</code> - усе в теці)</td>
+</tr>
+<tr>
+<td><code>git commit -m "опис"</code></td>
+<td>зробити коміт</td>
+</tr>
+<tr>
+<td><code>git log --oneline</code></td>
+<td>історія, по рядку на коміт</td>
+</tr>
+<tr>
+<td><code>git diff</code></td>
+<td>що змінено і ще не вибрано (вийти - <code>q</code>)</td>
+</tr>
+<tr>
+<td><code>git restore файл</code></td>
+<td><strong>викинути</strong> незакомічені зміни файлу (назавжди!)</td>
+</tr>
+<tr>
+<td><code>git switch -c назва</code> / <code>git switch main</code></td>
+<td>нова гілка / повернутись на main</td>
+</tr>
+<tr>
+<td><code>git merge назва</code></td>
+<td>влити гілку в поточну</td>
+</tr>
+<tr>
+<td><code>git remote add origin адреса</code></td>
+<td>запамʼятати адресу GitHub під імʼям <code>origin</code></td>
+</tr>
+<tr>
+<td><code>git push</code> / <code>git pull</code></td>
+<td>відправити коміти / забрати чужі (свої з іншого компʼютера)</td>
+</tr>
+<tr>
+<td><code>git clone адреса</code></td>
+<td>скопіювати весь репозиторій (на новому компʼютері)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong><code>.gitignore</code></strong> - список того, що git не бачить. Для лаб:</p>
+<pre><code class="language-text">.venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+</code></pre>
+<p><strong>Гілка</strong> (branch) - окрема лінія комітів. <code>main</code> - основна. Хочеш спробувати інший розвʼязок, не ламаючи
+робочий, - <code>git switch -c sproba</code>, комітиш там, а якщо вдалось - <code>git merge</code> у main.</p>
+<p><strong>GitHub і ключ.</strong> GitHub приймає <code>git push</code> по ssh-ключу з уроку 21: ти один раз даєш GitHub свій <strong>публічний</strong>
+ключ (<code>~/.ssh/id_ed25519.pub</code>), і далі паролі не потрібні. Адреса репозиторію для ssh має вигляд
+<code>git@github.com:Evge14n/labs.git</code>.</p>
+<p><strong>Чесність.</strong> Репозиторій з розвʼязками лаб - <strong>приватний</strong> (Private). Публічний репозиторій з розвʼязками до
+дедлайну - це те саме, що дати списати всій групі. Після здачі можна, але спершу спитай викладача.</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<ol>
+<li>На новому компʼютері git ще не знає, хто ти. Що буде на першому коміті?</li>
+</ol>
+<pre><code class="language-bash">git commit -m &quot;Функція double&quot;
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<p>Відмова. Вивід з <strong>тестової</strong> Mint 22.3 (імʼя компʼютера в ньому замінено на <code>evgen-laptop</code>):</p>
+<pre><code class="language-text">Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email &quot;you@example.com&quot;
+  git config --global user.name &quot;Твоє Імʼя Прізвище&quot;
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: empty ident name (for &lt;evgen@evgen-laptop.localdomain&gt;) not allowed
+</code></pre>
+<p>На ноутбуці <strong>останній рядок буде інший</strong>. У тестовій системі в користувача порожнє повне імʼя, тому git скаржиться
+на імʼя. А на ноутбуці повне імʼя ти ввів, коли ставив Mint, - git його візьме, але не зможе вгадати пошту:</p>
+<pre><code class="language-text">fatal: unable to auto-detect email address (got 'evgen@evgen-laptop.(none)')
+</code></pre>
+<p>(на ноутбуці не перевірено; так git пише, коли в імені компʼютера нема домену). Українською перші рядки -
+<code>Особистість автора невідома</code> і <code>*** Будь ласка, скажіть мені, хто ви.</code>, а останній - <code>fatal: не вдалося
+автоматично визначити адресу електронної пошти (отримано "evgen@evgen-laptop.(none)")</code>. Лікується кроком 1
+(<code>git config --global user.name</code> і <code>user.email</code>).</p>
+</details>
+<ol start="2">
+<li>Ти змінив <code>lab.py</code> (<code>x * 2</code> → <code>x * 3</code>) і створив новий файл <code>чернетка.py</code>. Що скаже <code>git status</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">On branch main
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+    modified:   lab.py
+
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+    чернетка.py
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+</code></pre>
+<p><code>modified</code> - файл, який git уже знає, змінено. <code>Untracked</code> - git цей файл ще ніколи не бачив. Українська назва
+показана нормально, бо <code>core.quotepath false</code> (крок 1).</p>
+</details>
+<ol start="3">
+<li>Після <code>python3 -m venv .venv</code> у теці репозиторію <code>git status --short</code> показує <code>?? .venv/</code>. Що зміниться, коли
+   створиш <code>.gitignore</code> з рядком <code>.venv/</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p><code>.venv/</code> зникне зі списку - git його більше не бачить. Замість нього зʼявиться сам <code>.gitignore</code> (його треба
+закомітити):</p>
+<pre><code class="language-text">?? .gitignore
+?? чернетка.py
+</code></pre>
+</details>
+<ol start="4">
+<li>Ти на гілці <code>sproba</code> дописав функцію і закомітив. Потім <code>git switch main</code>. Чи є ця функція в <code>lab.py</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Нема: <code>grep -c triple lab.py</code> дасть <code>0</code>. Файли в теці завжди показують ту гілку, на якій ти стоїш. Після
+<code>git merge sproba</code> функція зʼявиться і в main.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p><strong>Крок 1. Налаштувати git (один раз на компʼютер).</strong> git є не на свіжій Mint, а після уроку 03
+(<code>sudo apt install git</code>). Імʼя - як на GitHub:</p>
+<pre><code class="language-bash">git config --global user.name &quot;Твоє Імʼя Прізвище&quot;
+git config --global init.defaultBranch main
+git config --global core.quotepath false
+</code></pre>
+<p>Пошта: на GitHub відкрий Settings → Emails, увімкни «Keep my email addresses private» і скопіюй адресу виду
+<code>...@users.noreply.github.com</code> - тоді справжня пошта не потрапить у коміти. Команда (встав свою адресу):</p>
+<pre><code class="language-text">git config --global user.email &quot;скопійована_адреса@users.noreply.github.com&quot;
+</code></pre>
+<p>Перевір: <code>git config --global --list</code>. <code>init.defaultBranch main</code> - щоб основна гілка звалась <code>main</code>, а не <code>master</code>
+(без цього <code>git init</code> друкує довгу підказку <code>hint: Using 'master' as the name for the initial branch</code>).
+<code>ustanovka-mint.sh</code> з уроку 03 два останні рядки вже зробив.</p>
+<p><strong>Крок 2. Тренувальний репозиторій.</strong></p>
+<pre><code class="language-bash">mkdir -p ~/univer/praktyka/git24 &amp;&amp; cd ~/univer/praktyka/git24
+git init
+printf 'def double(x: int) -&gt; int:\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; double(4)\n    8\n    &quot;&quot;&quot;\n    return x * 2\n' &gt; lab.py
+git status
+git add lab.py
+git commit -m &quot;Функція double&quot;
+git log --oneline
+</code></pre>
+<p>Кінець виводу:</p>
+<pre><code class="language-text">[main (root-commit) a4fbd19] Функція double
+ 1 file changed, 6 insertions(+)
+ create mode 100644 lab.py
+a4fbd19 Функція double
+</code></pre>
+<p><code>a4fbd19</code> - початок «імені» коміту (хеша). У тебе він буде інший: хеш залежить від автора і часу.</p>
+<p><strong>Крок 3. Зламати і повернути.</strong></p>
+<pre><code class="language-bash">sed -i 's/x \* 2/x * 3/' lab.py
+printf 'print(&quot;чернетка&quot;)\n' &gt; чернетка.py
+git status
+git diff
+git restore lab.py
+git status --short
+</code></pre>
+<p><code>git diff</code> показує, що саме змінено (<code>-</code> було, <code>+</code> стало):</p>
+<pre><code class="language-text">diff --git a/lab.py b/lab.py
+index add341c..1d9cbaf 100644
+--- a/lab.py
++++ b/lab.py
+@@ -3,4 +3,4 @@ def double(x: int) -&gt; int:
+     &gt;&gt;&gt; double(4)
+     8
+     &quot;&quot;&quot;
+-    return x * 2
++    return x * 3
+</code></pre>
+<p>Після <code>git restore lab.py</code> у <code>git status --short</code> лишиться тільки <code>?? чернетка.py</code> - зміна в <code>lab.py</code> зникла.</p>
+<p><strong>Крок 4. .gitignore.</strong></p>
+<pre><code class="language-bash">python3 -m venv .venv
+git status --short
+printf '.venv/\n__pycache__/\n.mypy_cache/\n.pytest_cache/\n.ruff_cache/\n' &gt; .gitignore
+git status --short
+git add .gitignore чернетка.py
+git commit -m &quot;gitignore і чернетка&quot;
+</code></pre>
+<p><strong>Крок 5. Гілка.</strong></p>
+<pre><code class="language-bash">git switch -c sproba
+printf '\n\ndef triple(x: int) -&gt; int:\n    return x * 3\n' &gt;&gt; lab.py
+git commit -am &quot;Спроба: triple&quot;
+git switch main
+grep -c triple lab.py
+git merge sproba
+git log --oneline
+git branch -d sproba
+</code></pre>
+<p><code>-am</code> = <code>git add</code> для вже відомих файлів + <code>-m</code>. Справжній вивід злиття і історії:</p>
+<pre><code class="language-text">Updating 8806241..632cd09
+Fast-forward
+ lab.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+632cd09 Спроба: triple
+8806241 gitignore і чернетка
+a4fbd19 Функція double
+</code></pre>
+<p><code>Fast-forward</code> - main просто «пересунули вперед» на коміти з гілки, бо в main за цей час нічого нового не було.</p>
+<p><strong>Крок 6. Репозиторій на GitHub (у браузері).</strong> github.com → зайди → <code>+</code> угорі праворуч → <strong>New repository</strong>:
+назва <code>labs</code>, <strong>Private</strong>, README / .gitignore / license <strong>не</strong> додавай (у тебе вже є локальний репозиторій) →
+<strong>Create repository</strong>. (Кроки - з документації GitHub; назви кнопок можуть трохи змінитись.)</p>
+<p><strong>Крок 7. Дати GitHub свій ssh-ключ.</strong> Ключ з уроку 21:</p>
+<pre><code class="language-bash">cat ~/.ssh/id_ed25519.pub
+</code></pre>
+<p>Скопіюй рядок (виділи і Ctrl+Shift+C). GitHub → аватар → <strong>Settings</strong> → <strong>SSH and GPG keys</strong> → <strong>New SSH key</strong> →
+Title: <code>Mint laptop</code>, Key type: Authentication Key, вставити → <strong>Add SSH key</strong>. Перевір:</p>
+<pre><code class="language-bash">ssh -T git@github.com
+</code></pre>
+<p>За документацією GitHub має бути (замість USERNAME - твій логін):</p>
+<pre><code class="language-text">Hi USERNAME! You've successfully authenticated, but GitHub does not
+provide shell access.
+</code></pre>
+<p>(Цей вивід не перевірено в тестовій Mint: її ключа на GitHub нема, там справжня відповідь -
+<code>git@github.com: Permission denied (publickey).</code>, як в уроці 21. Код виходу навіть при успіху - 1, так пише
+GitHub.)</p>
+<p><strong>Крок 8. Відправити лаби.</strong> Репозиторій лаб - <code>~/univer/labs</code> з уроку 04. Якщо ти робив необовʼязковий крок 8
+уроку 04, там уже є <code>git init</code> і коміти. Не робив (<code>git status</code> пише <code>fatal: not a git repository</code>) - спершу:</p>
+<pre><code class="language-bash">cd ~/univer/labs
+git init
+printf '.mypy_cache/\n.ruff_cache/\n.pytest_cache/\n__pycache__/\n' &gt; .gitignore
+git add .
+git commit -m &quot;Лаби на початок&quot;
+</code></pre>
+<p>Далі - відправити:</p>
+<pre><code class="language-bash">cd ~/univer/labs
+git status
+git remote add origin git@github.com:Evge14n/labs.git
+git push -u origin main
+</code></pre>
+<p><code>-u</code> запамʼятовує, що <code>main</code> іде в <code>origin/main</code>, і далі досить <code>git push</code> і <code>git pull</code>. У тестовій Mint замість
+GitHub був локальний «сервер» (<code>git init --bare</code>), і <code>git push -u</code> надрукував:</p>
+<pre><code class="language-text">To /home/evgen/labs.git
+ * [new branch]      main -&gt; main
+branch 'main' set up to track 'origin/main'.
+</code></pre>
+<p>З GitHub буде <code>To github.com:Evge14n/labs.git</code> і ще кілька рядків прогресу (<code>Enumerating objects...</code>) - не
+перевірено. Онови сторінку репозиторію в браузері - файли там.</p>
+<p><strong>Крок 9. Щодня.</strong></p>
+<pre><code class="language-bash">cd ~/univer/labs
+git add .
+git commit -m &quot;ЛР2: завдання 1&quot;
+git push
+</code></pre>
+<p>На іншому компʼютері: <code>git clone git@github.com:Evge14n/labs.git</code> (раз), далі <code>git pull</code> перед роботою і
+<code>git push</code> після. Справжній <code>git pull</code> у тестовій Mint, коли на «сервері» був новий коміт:</p>
+<pre><code class="language-text">Updating 632cd09..adc7f34
+Fast-forward
+ nove.py | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 nove.py
+</code></pre>
+<h2 id="далі-за-бажанням">Далі - за бажанням</h2>
+<p>Крок 10 - інший шлях до того самого (програма <code>gh</code>). Якщо кроки 6-9 вийшли, він не потрібен.</p>
+<p><strong>Крок 10 (інший шлях). <code>gh</code> - офіційна програма GitHub.</strong> Вміє сама зробити ключ, залогінитись і створити
+репозиторій.</p>
+<p><strong>Увага: <code>sudo apt install gh</code> з репозиторію Mint дає стару версію 2.45, і вона зламана</strong> - <code>gh pr view</code> і
+<code>gh issue view</code> падають з «GraphQL: Projects (classic) is being deprecated». Розробники gh пишуть прямо: «the
+community-distributed 2.45.x / 2.46.x version is broken» (cli/cli, docs/install_linux.md, 18.11.2026). Тому став gh
+з <strong>офіційного репозиторію GitHub</strong> - це довгий рядок, копіюй його цілим (він додає ключ і репозиторій GitHub, потім
+gh оновлюватиметься разом з системою через Диспетчер оновлень):</p>
+<pre><code class="language-bash">(type -p wget &gt;/dev/null || (sudo apt update &amp;&amp; sudo apt install wget -y)) \
+    &amp;&amp; sudo mkdir -p -m 755 /etc/apt/keyrings \
+    &amp;&amp; out=$(mktemp) &amp;&amp; wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    &amp;&amp; cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg &gt; /dev/null \
+    &amp;&amp; sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    &amp;&amp; sudo mkdir -p -m 755 /etc/apt/sources.list.d \
+    &amp;&amp; echo &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main&quot; | sudo tee /etc/apt/sources.list.d/github-cli.list &gt; /dev/null \
+    &amp;&amp; sudo apt update \
+    &amp;&amp; sudo apt install gh -y
+</code></pre>
+<p>Перевір: <code>gh --version</code> має показати 2.100 чи новішу, а не 2.45. Потім вхід:</p>
+<pre><code class="language-bash">gh auth login -p ssh -w
+</code></pre>
+<p><code>-p ssh</code> - працювати через ssh, <code>-w</code> - увійти через браузер (gh покаже одноразовий код, його вставляєш на сайті).
+Створити приватний репозиторій з поточної теки і одразу відправити:</p>
+<pre><code class="language-bash">cd ~/univer/labs
+gh repo create labs --private --source=. --push
+</code></pre>
+<p>(Опції перевірено в <code>gh --help</code> у тестовій Mint; сам вхід - ні, там нема браузера й акаунта. Сніпет офіційного
+репозиторію перевірила сесія курсу git: встановився gh 2.105.0, <code>gh pr view</code> працює.)</p>
+<p><strong>Хочеш git глибше</strong> (гілки, конфлікти, Pull Request, теги для здачі, GitHub Pages, повний розбір gh) - окремий
+курс <code>05_Програмування\Git-GitHub\</code> (уроки 01-16 і «Лаби в git - univer-labs покроково»), робоче місце там те саме:
+<code>~/univer/labs/lr1</code>...<code>lr7</code>.</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<p>git перекладено: якщо Mint українською, повідомлення git теж українською (у дужках - справжній запуск з перекладом
+<code>language-pack-uk-base</code>); відповіді GitHub (<code>remote: ...</code>) і ssh - англійською. Англійський текст для пошуку:
+<code>LC_ALL=C git ...</code>.</p>
+<ul>
+<li><strong><code>Author identity unknown</code></strong> (<code>Особистість автора невідома</code>) - передбачення 1, крок 1.</li>
+<li><strong><code>hint: Using 'master' as the name for the initial branch</code></strong> (<code>Використання "master" як назви початкової
+  гілки</code>) - не задано <code>init.defaultBranch main</code> до <code>git init</code>. Для вже створеного: <code>git branch -m main</code>.</li>
+<li><strong><code>error: src refspec main does not match any</code></strong> (<code>error: визначник посилання джерела main не збігається з
+  жодним</code>) при push - у репозиторії ще нема жодного коміту (або гілка зветься <code>master</code>). <code>git log --oneline</code>,
+  <code>git branch</code>.</li>
+<li><strong><code>git@github.com: Permission denied (publickey).</code></strong> - GitHub не знає твій ключ (крок 7) або ssh бере інший.</li>
+<li><strong><code>remote: Support for password authentication was removed</code></strong> - адреса <code>https://...</code>, а не <code>git@github.com:...</code>
+  (не перевірено в тестовій Mint). Виправити: <code>git remote set-url origin git@github.com:Evge14n/labs.git</code>.</li>
+<li><strong><code>! [rejected] main -&gt; main (fetch first)</code></strong> (українською <code>[відхилено]</code>) - на GitHub є коміти, яких нема в тебе (пушив з іншого компʼютера).
+  Спершу <code>git pull</code>, потім <code>git push</code> (текст не перевірено в тестовій Mint).</li>
+<li><strong>Закомітив <code>.venv</code></strong> - тисячі файлів. Спершу <code>.gitignore</code>, потім <code>git rm -r --cached .venv</code> і коміт.</li>
+<li><strong>Закомітив пароль чи токен</strong> - вважай, що він уже витік: <strong>зміни пароль / відклич токен</strong>. <code>git rm --cached
+  файл</code> прибирає файл лише з наступних комітів, у старих він лишається. Секрети тримай поза репозиторієм і
+  додавай їхні файли в <code>.gitignore</code>.</li>
+<li><strong><code>git restore</code> стер потрібне</strong> - він не питає і не має «назад». Перед ним глянь <code>git diff</code>.</li>
+<li><strong><code>git commit</code> без <code>-m</code></strong> відкриє редактор (у Mint - nano): напиши опис, Ctrl+S, Ctrl+X.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Маленькі коміти з людським описом.</strong> Одне завдання або одна правка - один коміт. Книга Pro Git і курс
+  MIT «Missing Semester» (лекція Version Control) вчать саме так.</li>
+<li><strong>Гілка на кожну спробу</strong>, main завжди робочий.</li>
+<li><strong>ssh-ключ з паролем або gh</strong>, а не паролі: GitHub не приймає пароль акаунта для git з 13.08.2021 (блог GitHub;
+  для https - лише токени).</li>
+<li><strong>Приватний noreply-email</strong> у комітах - щоб пошта не потрапила в публічну історію.</li>
+<li><strong>Секрети - ніколи в git.</strong> Навіть у приватному репозиторії: його можуть зробити публічним, а історія лишиться.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Назви по порядку команди, якими новий файл потрапляє на GitHub.</li>
+<li>Чим <code>git restore lab.py</code> небезпечний і що зробити перед ним?</li>
+<li>Навіщо <code>.gitignore</code> і що в ньому має бути для лаб на Python?</li>
+<li>Ти пушиш з ноутбука, а git пише <code>Permission denied (publickey)</code>. Що перевірити?</li>
+<li>Чому репозиторій з лабами має бути приватним?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>git add файл</code>, <code>git commit -m "опис"</code>, <code>git push</code> (перший раз - <code>git push -u origin main</code> після
+   <code>git remote add origin ...</code>).</li>
+<li>Він назавжди викидає незакомічені зміни файлу, без питань. Спершу <code>git diff</code> (або коміт).</li>
+<li>Щоб git не зберігав те, що можна перестворити або що секретне: <code>.venv/</code>, <code>__pycache__/</code>, кеші
+   <code>.mypy_cache/</code>, <code>.pytest_cache/</code>, <code>.ruff_cache/</code>.</li>
+<li>Чи доданий <code>~/.ssh/id_ed25519.pub</code> на GitHub (Settings → SSH and GPG keys), чи <code>ssh -T git@github.com</code> вітає
+   тебе, чи адреса <code>origin</code> має вигляд <code>git@github.com:...</code> (<code>git remote -v</code>).</li>
+<li>Академічна чесність: публічні розвʼязки до дедлайну можуть списати інші, а відповідати будеш і ти. Викладач
+   перевіряє розуміння.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Pro Git - https://git-scm.com/book/en/v2 , українською - https://git-scm.com/book/uk/v2 - відкрито 18.11.2026</li>
+<li>GitHub, вимога токенів замість паролів з 13.08.2021 -
+  https://github.blog/security/application-security/token-authentication-requirements-for-git-operations/ -
+  відкрито 18.11.2026</li>
+<li>GitHub: створення репозиторію - https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository ;
+  додати ssh-ключ - https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account ;
+  перевірка (<code>Hi USERNAME!</code>, код виходу 1) - https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection -
+  відкрито 18.11.2026</li>
+<li>GitHub CLI <code>gh auth login</code> - https://cli.github.com/manual/gh_auth_login - відкрито 18.11.2026</li>
+<li>MIT Missing Semester, Version Control (Git) - https://missing.csail.mit.edu/ - відкрито 18.11.2026</li>
+<li>Версії в Mint 22.3: git 2.43.0 (ФАКТИ), gh 2.45.0-1ubuntu0.3 (<code>apt-cache policy gh</code> у тестовій Mint), 18.11.2026</li>
+<li>Усі показані виводи git - запуском у тестовій Mint 22.3 (git 2.43.0), 18.11.2026; виводи GitHub - лише з
+  документації, позначено</li>
+</ul>

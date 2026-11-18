@@ -1,0 +1,219 @@
+<h1 id="урок-27-vs-code-або-vscodium-пізніше-за-бажанням">Урок 27. VS Code або VSCodium (пізніше, за бажанням)</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> коли лаби в терміналі вже йдуть упевнено, зручний редактор пришвидшить роботу: підказки, підсвітка
+помилок, налагоджувач мишкою. Але лаби і далі перевіряєш у терміналі, а розуміти кожен рядок мусиш сам.</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>Спершу - чому «пізніше».</strong> Викладач перевіряє розуміння коду, а лаби ти вчишся робити без VS Code (уроки 03-12).
+Редактор - зручність, не заміна вмінню. І ще: у VS Code вбудовані ШІ-функції (чат, «inline suggestions» -
+редактор сам дописує код). Під час лаб їх <strong>вимикай</strong> (налаштування <code>chat.disableAIFeatures</code>, крок 4): дописаний
+ШІ код ти не поясниш викладачу.</p>
+<p><strong>Що вибрати:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>VS Code</th>
+<th>VSCodium</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Хто робить</td>
+<td>Microsoft</td>
+<td>спільнота, з того самого коду</td>
+</tr>
+<tr>
+<td>Телеметрія Microsoft</td>
+<td>є (можна вимкнути)</td>
+<td>вирізана</td>
+</tr>
+<tr>
+<td>Магазин розширень</td>
+<td>Microsoft Marketplace</td>
+<td>Open VSX (<code>ms-python.python</code> там є)</td>
+</tr>
+<tr>
+<td>Як ставити на Mint</td>
+<td>офіційний .deb з code.visualstudio.com</td>
+<td>apt-репозиторій VSCodium</td>
+</tr>
+<tr>
+<td>Команда в терміналі</td>
+<td><code>code</code></td>
+<td><code>codium</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Чому не з «Керування програмами».</strong> VS Code там - <strong>неофіційний</strong> Flatpak <code>com.visualstudio.code</code> з позначкою «Not
+verified», тому Mint його ховає (урок 16). Його README на Flathub сам попереджає: Flatpak працює в ізольованому
+середовищі (sandbox), і вбудований термінал за замовчуванням працює всередині пісочниці - щоб дістатись до
+системних програм, треба <code>flatpak-spawn --host</code> або <code>host-spawn</code>. Для лаб з venv у <code>~/univer/.venv</code> це зайвий клопіт.
+Тому - .deb (VS Code) або apt-репозиторій (VSCodium): тоді оновлення приходять через «Диспетчер оновлень».</p>
+<p><strong>Що налаштувати (крок 3-4):</strong> розширення Python, інтерпретатор <code>~/univer/.venv/bin/python</code>, лінійка на 78
+символів, black при збереженні, ШІ вимкнути.</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<ol>
+<li>Ти поставив VS Code з .deb. Звідки він оновлюватиметься?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>З «Диспетчера оновлень», разом з усією системою. Документація VS Code: «The .deb package prompts to install the apt
+repository and signing key, which enables auto-update through the system package manager» - під час установки
+.deb спитає, чи додати репозиторій Microsoft; відповідай «Yes». Без репозиторію завантажений .deb сам не
+оновлюється.</p>
+</details>
+<ol start="2">
+<li>У VS Code вибрано інтерпретатор <code>/usr/bin/python3</code>, а не venv. Що буде, коли натиснеш «Run» для лаби з
+   <code>import matplotlib</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p><code>ModuleNotFoundError: No module named 'matplotlib'</code> - системний Python не бачить бібліотек з venv (урок 03, той
+самий випадок, що «venv вимкнено» в терміналі). Вибери інтерпретатор <code>~/univer/.venv/bin/python</code> (крок 3).</p>
+</details>
+<ol start="3">
+<li>Ти поставив точку зупинки (червона крапка) і натиснув F5. Що це за програма зупиняє код - pdb?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Ні, <strong>debugpy</strong> - налагоджувач з розширення Python Debugger (ставиться разом з розширенням Python). Ідея та сама,
+що в pdb з уроків 05-06: зупинка, змінні, крок за кроком. Але на іспиті і на парі в терміналі буде лише pdb -
+тому pdb не забувай.</p>
+</details>
+<ol start="4">
+<li>VS Code підкреслює рядок на 85 символів. Чи означає це, що flake8 у терміналі теж скаржитиметься?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Лише якщо VS Code налаштовано так само (78). Остаточна перевірка - завжди в терміналі: <code>perevir файл.py</code> або
+<code>python3 -m flake8 --max-line-length=78 файл.py</code> (уроки 03-04). Редактор може мати інші налаштування.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p><strong>Крок 1 (варіант А). VS Code з офіційного .deb.</strong> Завантаж .deb (кнопка «.deb» на code.visualstudio.com) або
+одразу в терміналі:</p>
+<pre><code class="language-bash">cd &quot;$(xdg-user-dir DOWNLOAD)&quot;
+wget -O code_latest_amd64.deb &quot;https://code.visualstudio.com/sha/download?build=stable&amp;os=linux-deb-x64&quot;
+sudo apt install ./code_latest_amd64.deb
+</code></pre>
+<p>Файл близько 300 МБ. Під час установки зʼявиться питання про репозиторій Microsoft - <strong>Yes</strong> (автооновлення).
+Подвійний клік по .deb у Nemo теж працює - відкриється Captain (урок 16).</p>
+<p><strong>Крок 1 (варіант Б). VSCodium з його apt-репозиторію.</strong> Команди - з vscodium.com, варіант «Ubuntu 24.04 or newer»
+(Mint 22.3 = Ubuntu 24.04). Єдина зміна: на сайті ключ записують командою <code>dd</code>, тут - <code>tee</code>, результат той самий.</p>
+<pre><code class="language-bash">wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/vscodium-archive-keyring.gpg &gt; /dev/null
+echo -e 'Types: deb\nURIs: https://download.vscodium.com/debs\nSuites: vscodium\nComponents: main\nArchitectures: amd64 arm64\nSigned-by: /usr/share/keyrings/vscodium-archive-keyring.gpg' | sudo tee /etc/apt/sources.list.d/vscodium.sources
+sudo apt update &amp;&amp; sudo apt install codium
+</code></pre>
+<p>Що тут відбувається: 1) завантажити ключ, яким підписано репозиторій, перетворити (<code>--dearmor</code>) і покласти в
+<code>/usr/share/keyrings/</code>; 2) записати файл репозиторію <code>vscodium.sources</code>; 3) оновити список пакетів і поставити
+<code>codium</code>. Перший рядок довгий - копіюй цілим. (Альтернатива - перевірений Flatpak <code>com.vscodium.codium</code>, але з тією
+самою пісочницею.)</p>
+<p><strong>Крок 2. Розширення Python.</strong> Відкрий редактор (меню або <code>code</code> / <code>codium</code> у терміналі), Ctrl+Shift+X, знайди
+<strong>Python</strong> від Microsoft (<code>ms-python.python</code>) → Install. Або в терміналі:</p>
+<pre><code class="language-text">code --install-extension ms-python.python
+codium --install-extension ms-python.python
+</code></pre>
+<p>(перше - для VS Code, друге - для VSCodium). Разом з ним стане Python Debugger (debugpy). Для форматування
+поставиться окреме розширення <code>ms-python.black-formatter</code> - його ж пошукай і встанови.</p>
+<p><strong>Крок 3. Відкрити теку лаб і вибрати venv.</strong></p>
+<pre><code class="language-text">code ~/univer/labs          (або codium ~/univer/labs)
+</code></pre>
+<p>Ctrl+Shift+P → набери <code>Python: Select Interpreter</code> → вибери <code>~/univer/.venv/bin/python</code> (якщо нема в списку -
+«Enter interpreter path» і впиши <code>/home/evgen/univer/.venv/bin/python</code>). Вибраний Python видно в рядку стану внизу.</p>
+<p><strong>Крок 4. Налаштування.</strong> Ctrl+Shift+P → <code>Preferences: Open User Settings (JSON)</code>. Файл лежить у
+<code>~/.config/Code/User/settings.json</code> (у VSCodium - <code>~/.config/VSCodium/User/settings.json</code>). Між фігурними дужками
+допиши:</p>
+<pre><code class="language-text">{
+    &quot;editor.rulers&quot;: [78],
+    &quot;[python]&quot;: {
+        &quot;editor.defaultFormatter&quot;: &quot;ms-python.black-formatter&quot;,
+        &quot;editor.formatOnSave&quot;: true
+    },
+    &quot;black-formatter.args&quot;: [&quot;--line-length&quot;, &quot;78&quot;],
+    &quot;chat.disableAIFeatures&quot;: true
+}
+</code></pre>
+<ul>
+<li><code>editor.rulers</code> - вертикальна лінія на 78-му символі (як вимагає викладач);</li>
+<li><code>formatOnSave</code> + black - код форматується при кожному Ctrl+S (з тими самими 78);</li>
+<li><code>chat.disableAIFeatures</code> - вимикає і ховає чат та ШІ-підказки (за документацією VS Code).</li>
+</ul>
+<p><strong>Крок 5. Вбудований термінал - і перевірка лаби там.</strong> View → Terminal або <code>Ctrl+`</code> (Ctrl і клавіша з тильдою під Esc).
+Він відкривається в теці лаб. Увімкни venv і перевір, як завжди:</p>
+<pre><code class="language-bash">source ~/univer/.venv/bin/activate
+cd ~/univer/labs/lr1
+python3 -m pytest --doctest-modules -q lr1_1.py
+python3 -m flake8 --max-line-length=78 lr1_1.py
+</code></pre>
+<p>(або <code>perevir lr1_1.py</code>, урок 03). Зелена галочка в редакторі - не перевірка. Перевірка - ці команди.</p>
+<p><strong>Крок 6. Налагоджувач мишкою.</strong> Відкрий будь-який файл з уроку 05 (напр. <code>period.py</code>), клацни ліворуч від номера
+рядка - зʼявиться червона крапка (точка зупинки). F5 → «Python Debugger» → «Python File». Код зупиниться на
+крапці; ліворуч - змінні, угорі - кнопки «крок» (F10), «у функцію» (F11), «продовжити» (F5). Порівняй з pdb:
+<code>n</code> = F10, <code>s</code> = F11, <code>c</code> = F5, <code>p змінна</code> = панель змінних.</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<ul>
+<li><strong><code>ModuleNotFoundError</code> у VS Code, а в терміналі все працює</strong> - вибрано не той інтерпретатор (крок 3).</li>
+<li><strong>Поставив VS Code з «Керування програмами» (Flatpak)</strong>, і термінал у ньому «не бачить» venv чи системних програм -
+  це пісочниця Flatpak. Видали Flatpak-версію і постав .deb (варіант А).</li>
+<li><strong>Два VS Code одночасно</strong> (Flatpak і .deb) - плутанина з налаштуваннями й розширеннями. Лиши один.</li>
+<li><strong><code>E: Unsupported file ./code_*.deb given on commandline</code></strong> (українською <code>E: У командному рядку задано
+  непідтримуваний файл ./code_*.deb</code>; англійською - <code>sudo LC_ALL=C apt install ...</code>) - у поточній теці нема
+  такого файлу (ти не в «Завантаженнях»). <code>cd</code> у теку з файлом, <code>ls *.deb</code>.</li>
+<li><strong><code>E: Unable to locate package code_latest_amd64.deb</code></strong> (<code>E: Не можу знайти пакунок code_latest_amd64.deb</code>) -
+  забув <code>./</code> перед іменем, і apt шукає пакет з такою назвою в репозиторії, а не файл.</li>
+<li><strong>Розширення не знаходиться у VSCodium</strong> - там Open VSX, не Microsoft Marketplace. <code>ms-python.python</code>,
+  <code>ms-python.debugpy</code> і <code>ms-python.black-formatter</code> на Open VSX є (перевірено 18.11.2026); Pylance - не перевірено.</li>
+<li><strong>ШІ дописав код у лабу</strong> - видали і напиши сам. Перевір налаштування <code>chat.disableAIFeatures</code>.</li>
+<li><strong>black «зіпсував» doctest викладача?</strong> Ні: у docstring black лише прибирає пробіли в кінці рядків, а приклади
+  doctest не міняє. Довгі рядки doctest лишаться довгими (урок 04, п. 12) - це нормально.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Редактор + термінал, а не редактор замість термінала.</strong> Тести, лінтери і git запускають командами, щоб так само
+  працювало в CI (GitHub Actions) і на будь-якому компʼютері.</li>
+<li><strong>Налаштування в settings.json</strong>, а не «наклацані» мишкою - їх легко перенести і зберегти.</li>
+<li><strong>Офіційне джерело пакета.</strong> .deb від Microsoft з його apt-репозиторієм або репозиторій VSCodium, не
+  неперевірений Flatpak.</li>
+<li><strong>Курс MIT «Missing Semester» 2026</strong> має окрему лекцію про середовище розробки (Development Environment and
+  Tools) і окрему - про ШІ-агентів (Agentic Coding): інструменти міняються, а навички термінала лишаються.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Чому VS Code краще ставити з .deb, а не з «Керування програмами»?</li>
+<li>Що зробити, щоб VS Code запускав лаби з бібліотеками з <code>~/univer/.venv</code>?</li>
+<li>Які три налаштування з кроку 4 пов'язані з вимогами викладача?</li>
+<li>Чим debugpy у VS Code схожий на pdb і чому pdb все одно треба знати?</li>
+<li>Як остаточно перевірити лабу перед здачею, навіть якщо в редакторі все «зелене»?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>У «Керування програмами» - неофіційний Flatpak («Not verified»), з пісочницею, через яку вбудований термінал не бачить
+   системних програм і venv. .deb - від Microsoft і з репозиторієм для автооновлень.</li>
+<li>Ctrl+Shift+P → <code>Python: Select Interpreter</code> → <code>~/univer/.venv/bin/python</code>.</li>
+<li><code>editor.rulers: [78]</code> і black з <code>--line-length 78</code> (довжина рядка до 78) і <code>chat.disableAIFeatures</code> (свій код
+   без ШІ).</li>
+<li>Обидва зупиняють програму, показують змінні і ведуть крок за кроком (F10 = <code>n</code>, F11 = <code>s</code>, F5 = <code>c</code>). pdb
+   працює в будь-якому терміналі, і на парі чи іспиті буде саме він.</li>
+<li>У терміналі: <code>python3 -m pytest --doctest-modules</code>, <code>python3 -m flake8 --max-line-length=78</code>, mypy (або
+   <code>perevir файл.py</code>), як в уроках 03-04.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>VS Code на Linux (.deb, репозиторій, автооновлення) - https://code.visualstudio.com/docs/setup/linux -
+  відкрито 18.11.2026; посилання на завантаження .deb (стабільна 1.147.0 на 18.11.2026) -
+  https://code.visualstudio.com/sha/download?build=stable&amp;os=linux-deb-x64</li>
+<li>VS Code: інтерпретатор - https://code.visualstudio.com/docs/python/environments ; налагодження (debugpy) -
+  https://code.visualstudio.com/docs/python/debugging ; форматування (black, formatOnSave) -
+  https://code.visualstudio.com/docs/python/formatting ; шлях settings.json - https://code.visualstudio.com/docs/configure/settings ;
+  термінал (<code>Ctrl+`</code>) - https://code.visualstudio.com/docs/terminal/getting-started ; вимкнути ШІ
+  (<code>chat.disableAIFeatures</code>) - https://code.visualstudio.com/docs/copilot/setup - відкрито 18.11.2026</li>
+<li>VSCodium, встановлення на Debian/Ubuntu - https://vscodium.com/ - відкрито 18.11.2026</li>
+<li>Неофіційний Flatpak VS Code, README про пісочницю - https://github.com/flathub/com.visualstudio.code -
+  відкрито 18.11.2026</li>
+<li>Розширення Python на Open VSX - https://open-vsx.org/extension/ms-python/python - відкрито 18.11.2026</li>
+<li>ФАКТИ Mint 22.3: Flatpak VS Code «Not verified», Captain для .deb, VSCodium (<code>_джерело/ФАКТИ-MINT-22.3.md</code>)</li>
+<li>Не перевірено в тестовій Mint (нема графічного робочого столу): сам запуск VS Code / VSCodium, розширення,
+  налаштування, налагоджувач. Перевірено: синтаксис команд, що команди існують, адреси відповідають, ключ VSCodium
+  справжній і підписує репозиторій, JSON налаштувань коректний.</li>
+</ul>

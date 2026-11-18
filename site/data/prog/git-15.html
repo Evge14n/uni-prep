@@ -1,0 +1,280 @@
+<h1 id="тема-15-github-pages">Тема 15. GitHub Pages</h1>
+<p><strong>Навіщо:</strong> GitHub може сам показати твій файл <code>index.html</code> як сайт за адресою <code>https://evge14n.github.io/...</code>.
+Так зроблено твій сайт підготовки uni-prep. Сьогодні зробиш свою першу сторінку з фізики - без сервера і без грошей.</p>
+<h3 id="коротко">Коротко</h3>
+<p><strong>GitHub Pages</strong> - безкоштовний хостинг <strong>статичних</strong> сторінок: GitHub бере HTML, CSS і JavaScript з репозиторію і
+показує їх як сайт. «Статичний» - сторінка лежить готовим файлом; Python, PHP на сервері Pages не запускає
+(docs: «GitHub Pages does not support server-side languages such as PHP, Ruby, or Python»).</p>
+<pre><code class="language-text"> ноутбук                       GitHub                                   інтернет
+ index.html ── git push ──→  репо fizyka-storinka (main)  ── Pages ──→  https://evge14n.github.io/fizyka-storinka/
+                              Settings → Pages:                         (бачать УСІ)
+                              Deploy from a branch, main, / (root)
+</code></pre>
+<p>Аналогія: репо - твій зошит, Pages - стенд у коридорі, куди автоматично вивішується копія сторінки з зошита.
+Стенд бачать усі, хто проходить повз.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що</th>
+<th>Як</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>хто може</td>
+<td>на GitHub Free - <strong>лише публічний репо</strong> (docs: «If the account that owns the repository uses GitHub Free ..., the repository must be public»). Це обмеження тарифу: на платному Pro можна і з приватного, але <strong>сам сайт однаково публічний</strong> (docs: «GitHub Pages sites are publicly available on the internet, even if the repository for the site is private»)</td>
+</tr>
+<tr>
+<td>що показується</td>
+<td><code>index.html</code> (або <code>index.md</code>, <code>README.md</code>) у корені вибраної гілки й теки</td>
+</tr>
+<tr>
+<td>адреса сайту проєкту</td>
+<td><code>https://evge14n.github.io/НАЗВА-РЕПО/</code> (логін малими літерами)</td>
+</tr>
+<tr>
+<td>сайт користувача</td>
+<td>окремий репо з назвою <code>evge14n.github.io</code> → адреса <code>https://evge14n.github.io/</code></td>
+</tr>
+<tr>
+<td>скільки чекати</td>
+<td>«up to 10 minutes» після push (docs); на практиці частіше близько хвилини</td>
+</tr>
+<tr>
+<td>де статус</td>
+<td>вкладка <strong>Actions</strong> репо → запуск <strong>pages build and deployment</strong> (зелена галочка = готово)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Тому сайт - <strong>окремий</strong> публічний репо (наприклад <code>fizyka-storinka</code>), а лаби лишаються в приватному <code>univer-labs</code>.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li>
+<p>Ти створив <code>index.html</code> у клоні і нічого більше не робив. Що покаже <code>git status --short</code>?
+   <details markdown="block">
+
+<summary>Відповідь</summary>
+
+
+   ```text
+   ?? index.html
+   ```
+   `??` - файл новий, git за ним ще не стежить. Pages бачить лише те, що **запушено** на GitHub.
+   </details></p>
+</li>
+<li>
+<p>Репо створено з README (1 коміт). Ти закомітив <code>index.html</code>, запушив, потім закомітив зміну привітання і знову
+   запушив. Скільки комітів у <code>origin/main</code> і яку версію покаже сайт через кілька хвилин?
+   <details markdown="block">
+
+<summary>Відповідь</summary>
+
+
+   Комітів 3 (перевірка: `git rev-list --count origin/main`). Сайт покаже останню запушену версію - з новим привітанням:
+   Pages завжди бере те, що зараз лежить у вибраній гілці на GitHub.
+   </details></p>
+</li>
+<li>
+<p>Ти випадково закомітив файл з паролем, а потім зробив <code>git rm</code> і ще один коміт. Пароля в репо вже нема?
+   <details markdown="block">
+
+<summary>Відповідь</summary>
+
+
+   Є. Його нема в **останньому** коміті, але в історії він лишився: `git show HEAD~1:parol.txt` його покаже.
+   У публічному репо історію бачать усі. Тому секрети в репо не кладуть **взагалі** (див. «Типові помилки»).
+   </details></p>
+</li>
+</ol>
+<h3 id="руками">Руками</h3>
+<p>Хеші комітів у тебе будуть інші.</p>
+<p><strong>Крок 1. Публічний репо на сайті.</strong> Справа вгорі <strong>+</strong> → <strong>New repository</strong> → Repository name: <code>fizyka-storinka</code> →
+<strong>Public</strong> → <strong>Add README</strong>: On → <strong>Create repository</strong>. (Через gh, Урок 16: <code>gh repo create fizyka-storinka --public --add-readme</code>.)</p>
+<p>Клонуй і створи сторінку:</p>
+<pre><code class="language-bash">git clone git@github.com:Evge14n/fizyka-storinka.git ~/fizyka-storinka
+cd ~/fizyka-storinka
+nano index.html
+</code></pre>
+<p>Набери в nano (Ctrl+O, Enter - зберегти; Ctrl+X - вийти):</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang=&quot;uk&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;Фізика - Імʼя&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Привіт! Це моя сторінка з фізики&lt;/h1&gt;
+  &lt;p&gt;1 курс, фізичний факультет ЛНУ.&lt;/p&gt;
+  &lt;p&gt;Тут будуть конспекти й корисні посилання.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Що тут що: <code>&lt;h1&gt;</code> - великий заголовок, <code>&lt;p&gt;</code> - абзац, <code>&lt;title&gt;</code> - назва вкладки браузера.
+<code>&lt;meta charset="utf-8"&gt;</code> каже браузеру, що текст у UTF-8 - без нього кирилиця може стати «кракозябрами».
+Подивитися локально, до GitHub:</p>
+<pre><code class="language-bash">xdg-open index.html
+</code></pre>
+<p><strong>Крок 2. Коміт і push.</strong></p>
+<pre><code class="language-bash">git add index.html
+git commit -m &quot;Перша сторінка&quot;
+git push
+git ls-files
+</code></pre>
+<pre><code class="language-text">[main 3db7e8b] Перша сторінка
+ 1 file changed, 12 insertions(+)
+ create mode 100644 index.html
+To github.com:Evge14n/fizyka-storinka.git
+   f8c0af1..3db7e8b  main -&gt; main
+README.md
+index.html
+</code></pre>
+<p><code>git ls-files</code> - які файли в репо. <code>index.html</code> має бути <strong>в корені</strong> (без теки перед назвою).</p>
+<p><strong>Крок 3. Увімкнути Pages на сайті.</strong> У репо <code>fizyka-storinka</code>:</p>
+<pre><code class="language-text">Settings → (ліве меню, розділ «Code, planning, and automation») Pages
+  → Build and deployment → Source: Deploy from a branch
+  → Branch: main    тека: / (root)    → Save
+</code></pre>
+<p>(Назви пунктів - з docs.github.com, «Configuring a publishing source for your GitHub Pages site», відкрито 18.11.2026.)</p>
+<p><strong>Крок 4. Дочекатися і відкрити.</strong> Вкладка <strong>Actions</strong> у репо → там зʼявиться запуск <strong>pages build and deployment</strong>.
+Жовтий кружечок - ще йде, зелена галочка - готово, червоний хрестик - помилка (клікни, щоб побачити яку).
+Документація: «It can take up to 10 minutes for changes to your site to publish after you push the changes to GitHub».
+Для прикладу: у публічного репо mmistakes/minimal-mistakes такі запуски 2026 року тривали близько 50 секунд
+(GitHub API, перевірено 18.11.2026). Коли готово - <strong>Settings → Pages → Visit site</strong>, або відкрий адресу:</p>
+<pre><code class="language-text">https://evge14n.github.io/fizyka-storinka/
+</code></pre>
+<p>Перевірити з терміналу, чи сайт уже живий (200 - є, 404 - ще нема):</p>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\n' https://evge14n.github.io/fizyka-storinka/
+</code></pre>
+<p>Для твого uni-prep 18.11.2026 це дало <code>200</code>, а для ще не створеної <code>fizyka-storinka</code> - <code>404</code>:</p>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\n' https://evge14n.github.io/uni-prep/
+</code></pre>
+<p><strong>Крок 5. Оновити сторінку.</strong> Кожен push у <code>main</code> = новий запуск і нова версія сайту.</p>
+<pre><code class="language-bash">sed -i 's/Привіт!/Вітаю!/' index.html
+git diff
+git commit -am &quot;Змінив привітання&quot;
+git push
+</code></pre>
+<p><code>git diff</code> покаже:</p>
+<pre><code class="language-text">-  &lt;h1&gt;Привіт! Це моя сторінка з фізики&lt;/h1&gt;
++  &lt;h1&gt;Вітаю! Це моя сторінка з фізики&lt;/h1&gt;
+</code></pre>
+<p>За хвилину онови сторінку в браузері (Ctrl+Shift+R - без старої копії з кешу).</p>
+<p><strong>Крок 6. <code>.nojekyll</code> (коротко).</strong> Коли Pages публікує з гілки, він пропускає файли через <strong>Jekyll</strong> - програму,
+що збирає сайти. Jekyll <strong>не публікує</strong> файли й теки, назва яких починається з <code>_</code>, <code>.</code> або <code>#</code> (docs, «About GitHub Pages
+and Jekyll»). Якщо в тебе тека <code>_images</code> чи файл <code>_dani.json</code> і на сайті вони «зникли» - поклади в корінь порожній
+файл <code>.nojekyll</code>, і Jekyll вимкнеться (docs: «disable the Jekyll build process by creating an empty file called <code>.nojekyll</code>
+in the root of your publishing source»).</p>
+<pre><code class="language-bash">touch .nojekyll
+git add .nojekyll
+git commit -m &quot;Без Jekyll&quot;
+git push
+</code></pre>
+<p><code>touch</code> створює порожній файл. Крапка на початку = прихований файл: звичайний <code>ls</code> його не покаже, <code>ls -a</code> - покаже.</p>
+<p><strong>Приклад - твій uni-prep.</strong> https://evge14n.github.io/uni-prep/ - це репо <code>Evge14n/uni-prep</code>, публічне. Він публікується
+не «з гілки», а другим пунктом того ж меню - <strong>Source: GitHub Actions</strong>, своїм файлом <code>.github/workflows/pages.yml</code>
+(видно через GitHub API, 18.11.2026). Для простої сторінки «з гілки» досить, Actions потрібні, коли сайт треба спершу
+зібрати програмою.</p>
+<p><strong>Що НЕ класти в репо сайту</strong> (його бачить увесь інтернет, і вся історія комітів теж):
+- паролі, токени, ключі (<code>~/.ssh/id_ed25519</code> - ніколи), файли <code>.env</code>;
+- оцінки, бали, списки групи, телефони й пошти одногрупників - це чужі особисті дані;
+- розвʼязки лаб, поки їх не здали (одногрупник скопіює - питання будуть до обох).
+Docs: «GitHub Pages sites are publicly available on the internet» і «shouldn't be used for sensitive transactions like
+sending passwords or credit card numbers».</p>
+<p><strong>Для лаб:</strong> самі лаби - у приватному <code>univer-labs</code>, бо Pages на Free працює лише з публічних репо, а розвʼязки
+до здачі показувати всім не можна. Pages знадобиться для іншого: сторінка-портфоліо, конспект з графіками, сайт команди
+на хакатоні. Навичка та сама - <code>git add</code>, <code>git commit</code>, <code>git push</code>, і через хвилину сайт оновився.</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ol>
+<li>
+<p><strong>Пункту Pages нема або він просить змінити план</strong> - репо приватний. На GitHub Free Pages лише для публічних.
+   Зроби окремий публічний репо для сайту (не робити публічним <code>univer-labs</code>!).
+   Точний текст на сторінці Settings → Pages для приватного репо - (не перевірено).</p>
+</li>
+<li>
+<p><strong>404 «Site not found · GitHub Pages»</strong> (так називається сторінка-заглушка, перевірено <code>curl</code> 18.11.2026). Причини:
+   - сайт ще будується - глянь Actions, почекай;
+   - Pages не ввімкнено (крок 3) або вибрано не ту гілку чи теку;
+   - <code>index.html</code> не в корені (<code>git ls-files</code> показує <code>site/index.html</code>) або названий <code>Index.html</code> - на сервері
+     великі й малі літери різні;
+   - помилка в адресі: потрібна <code>https://evge14n.github.io/fizyka-storinka/</code>, а не <code>github.com/Evge14n/...</code>.</p>
+</li>
+<li>
+<p><strong>Сайт не змінився - забув push.</strong> Коміт є лише в тебе. <code>git status</code> скаже:
+   <code>text
+   Your branch is ahead of 'origin/main' by 1 commit.
+     (use "git push" to publish your local commits)</code>
+   Виправлення: <code>git push</code>, потім Actions і оновити сторінку з Ctrl+Shift+R.</p>
+</li>
+<li>
+<p><strong>Видалив секрет новим комітом - а він лишився.</strong> Перевір на локальній пісочниці (нічого не пушимо):
+   <code>bash
+   git init ~/sekret-demo
+   cd ~/sekret-demo
+   printf 'пароль=qwerty123\n' &gt; parol.txt
+   git add parol.txt
+   git commit -m "Додав пароль"
+   git rm parol.txt
+   git commit -m "Прибрав пароль"
+   git show HEAD~1:parol.txt</code>
+   <code>text
+   пароль=qwerty123</code>
+   Файлу нема в теці, але старий коміт його памʼятає. Якщо справжній пароль чи токен потрапив на GitHub -
+   <strong>спершу зміни сам пароль/токен</strong> (вважай його вкраденим), а вже потім думай про чистку історії.</p>
+</li>
+</ol>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li><strong>Pages через GitHub Actions</strong> замість «з гілки»: сайт збирається програмою (Vite, Hugo, MkDocs) і публікується
+  окремим кроком - як твій uni-prep. Docs, «Configuring a publishing source for your GitHub Pages site».</li>
+<li><strong>Генератори статичних сайтів:</strong> Markdown → гарний сайт. Для документації Python-проєктів часто беруть MkDocs
+  (https://www.mkdocs.org), для блогів - Jekyll або Hugo.</li>
+<li><strong>Свій домен</strong> замість <code>github.io</code> (наприклад <code>evgen.dev</code>) - Settings → Pages → Custom domain
+  (docs, «Configuring a custom domain for your GitHub Pages site»).</li>
+<li><strong>Секрети ніколи не в коді:</strong> у публічних репо GitHub безкоштовно сам шукає токени й ключі (secret scanning:
+  «Public repositories: Secret scanning runs automatically for free»), а push protection «blocks pushes that contain
+  secrets» - docs, «About secret scanning» і «About push protection». Але це страховка, а не дозвіл.</li>
+<li><strong>Ліміти Pages:</strong> сайт до 1 ГБ, мʼякий ліміт 100 ГБ трафіку на місяць і 10 збірок на годину (docs, «GitHub Pages limits»).
+  Для сторінки з фізики це дуже багато.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чому сайт на Pages не можна зробити з приватного <code>univer-labs</code> на GitHub Free?</li>
+<li>Де лежить файл, який Pages показує як головну сторінку, якщо вибрано <code>main</code> і <code>/ (root)</code>?</li>
+<li>Яка буде адреса сайту з репо <code>Evge14n/fizyka-storinka</code>?</li>
+<li>Ти запушив зміну, а сайт старий. Що перевіриш і в якому порядку?</li>
+<li>Навіщо порожній файл <code>.nojekyll</code>?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>На Free Pages працює лише з публічних репо, а лаби до здачі не мають бути публічними. Сайт - окремий публічний репо.</li>
+<li><code>index.html</code> у корені гілки <code>main</code> (<code>git ls-files</code> показує просто <code>index.html</code>).</li>
+<li><code>https://evge14n.github.io/fizyka-storinka/</code>.</li>
+<li><code>git status</code> (чи нема «ahead» - чи справді запушено) → вкладка Actions, запуск «pages build and deployment»
+   (жовтий - чекати, червоний - помилка) → оновити сторінку з Ctrl+Shift+R.</li>
+<li>Вимикає Jekyll: тоді на сайт потрапляють і файли/теки, що починаються з <code>_</code> (наприклад <code>_images</code>).</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>docs.github.com, «Creating a GitHub Pages site»:
+  https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site (відкрито 18.11.2026)</li>
+<li>docs.github.com, «Configuring a publishing source for your GitHub Pages site»:
+  https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+  (відкрито 18.11.2026)</li>
+<li>docs.github.com, «What is GitHub Pages?»:
+  https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages (відкрито 18.11.2026)</li>
+<li>docs.github.com, «GitHub Pages limits»:
+  https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits (відкрито 18.11.2026)</li>
+<li>docs.github.com, «About GitHub Pages and Jekyll»:
+  https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll (відкрито 18.11.2026)</li>
+<li>docs.github.com, «About Jekyll build errors for GitHub Pages sites»:
+  https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-jekyll-build-errors-for-github-pages-sites
+  (відкрито 18.11.2026)</li>
+<li>docs.github.com, «Viewing workflow run history»:
+  https://docs.github.com/en/actions/how-tos/monitor-workflows/view-workflow-run-history (відкрито 18.11.2026)</li>
+<li>docs.github.com, «About secret scanning»:
+  https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning (відкрито 18.11.2026)</li>
+<li>GitHub REST API, запуски «pages build and deployment» (назва і тривалість):
+  https://api.github.com/repos/mmistakes/minimal-mistakes/actions/runs?event=dynamic (відкрито 18.11.2026)</li>
+</ul>

@@ -1,0 +1,1482 @@
+<h1 id="урок-06-налагодження-2-pdb-повністю-post-mortem-logging">Урок 06. Налагодження 2 - pdb повністю, post-mortem, logging</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> в уроці 05 був <code>breakpoint()</code> і п'ять команд pdb. Тут - усі налагоджувачі, які є в терміналі: pdb
+повністю, налагодження <strong>після</strong> падіння (post-mortem), як налагоджувати doctest (ним викладач перевіряє лаби),
+<code>logging</code> замість <code>print</code>, корисні прапорці <code>python3 -X ...</code> і два сторонні налагоджувачі (ipdb, pudb).
+Наприкінці - 7 зламаних програм для тренування.</p>
+<p><strong>Як ділити.</strong> Захід 1: «Коротко», кроки 1-4. Захід 2: кроки 5-8 (post-mortem і doctest - найважливіше для лаб) і
+тренування (крок 9). Кроки 10-12 (logging, прапорці <code>-X</code>, faulthandler, trace, importtime, cProfile, ipdb, pudb)
+винесено в розділ «Далі - за бажанням» - для ЛР1-ЛР3 вони не потрібні, повернешся, коли захочеш.</p>
+<h2 id="коротко">Коротко</h2>
+<h3 id="чотири-способи-запустити-pdb">Чотири способи запустити pdb</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Як</th>
+<th>Коли</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>python3 -m pdb файл.py</code></td>
+<td>з першого рядка, коли не знаєш, де шукати</td>
+</tr>
+<tr>
+<td><code>breakpoint()</code> у коді</td>
+<td>знаєш місце - зупинка саме там (урок 05)</td>
+</tr>
+<tr>
+<td><code>python3 -m pdb -c continue файл.py</code></td>
+<td>працює повним ходом, а при падінні зупиняється <strong>в місці падіння</strong></td>
+</tr>
+<tr>
+<td><code>python3 -i файл.py</code>, далі <code>import pdb; pdb.pm()</code></td>
+<td>програма вже впала - зайти в місце падіння</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Post-mortem</strong> («після смерті») - налагодження вже впалої програми: змінні в момент падіння ще живі, їх можна
+дивитись, але йти далі вже нікуди.</p>
+<h3 id="усі-команди-pdb-які-знадобляться">Усі команди pdb, які знадобляться</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Група</th>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Рух</td>
+<td><code>n</code> (next)</td>
+<td>наступний рядок, у функції не заходить</td>
+</tr>
+<tr>
+<td></td>
+<td><code>s</code> (step)</td>
+<td>крок усередину функції</td>
+</tr>
+<tr>
+<td></td>
+<td><code>c</code> (continue)</td>
+<td>до наступної точки зупинки</td>
+</tr>
+<tr>
+<td></td>
+<td><code>r</code> (return)</td>
+<td>до кінця поточної функції (<code>--Return--</code>)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>unt</code> / <code>until</code></td>
+<td>до рядка з <strong>більшим</strong> номером (вийти з циклу); <code>until 16</code> - до рядка 16</td>
+</tr>
+<tr>
+<td></td>
+<td><code>j 13</code> (jump)</td>
+<td><strong>перестрибнути</strong> на рядок 13 без виконання того, що між ними (лише в поточній функції)</td>
+</tr>
+<tr>
+<td></td>
+<td>Enter (порожній рядок)</td>
+<td>повторити попередню команду</td>
+</tr>
+<tr>
+<td>Де я</td>
+<td><code>l</code> / <code>ll</code></td>
+<td>код навколо / уся поточна функція</td>
+</tr>
+<tr>
+<td></td>
+<td><code>w</code> (where)</td>
+<td>стек: хто кого викликав (як traceback)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>u</code> / <code>d</code> (up / down)</td>
+<td>піднятись до функції, що викликала, і назад</td>
+</tr>
+<tr>
+<td></td>
+<td><code>a</code> (args)</td>
+<td>аргументи поточної функції</td>
+</tr>
+<tr>
+<td>Дивитись</td>
+<td><code>p вираз</code> / <code>pp вираз</code></td>
+<td>показати / показати гарно (довгі списки, словники)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>display вираз</code></td>
+<td>показувати щоразу при зупинці, якщо змінилось; <code>undisplay</code> - прибрати</td>
+</tr>
+<tr>
+<td></td>
+<td><code>retval</code></td>
+<td>що функція щойно повернула (після <code>--Return--</code>)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>whatis вираз</code></td>
+<td>тип</td>
+</tr>
+<tr>
+<td>Точки зупинки</td>
+<td><code>b 14</code> / <code>b kydok.py:14</code> / <code>b height</code></td>
+<td>на рядку / рядку в файлі / на початку функції</td>
+</tr>
+<tr>
+<td></td>
+<td><code>b 14, k == 3</code></td>
+<td>з умовою: зупинитись, лише коли умова істинна</td>
+</tr>
+<tr>
+<td></td>
+<td><code>b</code></td>
+<td>список усіх точок</td>
+</tr>
+<tr>
+<td></td>
+<td><code>tbreak 22</code></td>
+<td>тимчасова: спрацює один раз і зникне</td>
+</tr>
+<tr>
+<td></td>
+<td><code>cl 1</code> / <code>cl</code></td>
+<td>прибрати точку 1 / всі (питає <code>Clear all breaks?</code>)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>disable 1</code> / <code>enable 1</code></td>
+<td>вимкнути / ввімкнути, не прибираючи</td>
+</tr>
+<tr>
+<td></td>
+<td><code>condition 1 k &gt; 2</code></td>
+<td>змінити умову; <code>condition 1</code> без умови - прибрати умову</td>
+</tr>
+<tr>
+<td></td>
+<td><code>ignore 1 2</code></td>
+<td>пропустити наступні 2 проходи через точку 1</td>
+</tr>
+<tr>
+<td></td>
+<td><code>commands 1</code></td>
+<td>команди, які виконаються самі на точці 1 (до <code>end</code> або до <code>c</code>)</td>
+</tr>
+<tr>
+<td>Змінити</td>
+<td><code>!вираз</code></td>
+<td>виконати рядок Python (<code>!h = 0</code>); для глобальної: <code>!global G; G = 1.62</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>interact</code></td>
+<td>повний Python <code>&gt;&gt;&gt;</code> з усіма змінними; назад у pdb - Ctrl+D</td>
+</tr>
+<tr>
+<td>Інше</td>
+<td><code>restart</code> / <code>run</code></td>
+<td>запустити програму заново (точки зупинки лишаються)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>h</code> / <code>h команда</code></td>
+<td>список команд / довідка про команду</td>
+</tr>
+<tr>
+<td></td>
+<td><code>q</code></td>
+<td>вийти</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="doctest-logging-прапорці-сторонні-налагоджувачі">doctest, logging, прапорці, сторонні налагоджувачі</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Задача</th>
+<th>Інструмент</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Побачити кожен приклад doctest</td>
+<td>лаба викладача: <code>python3 лаба.py -v</code> або <code>perevir лаба.py ...</code> (урок 03)</td>
+</tr>
+<tr>
+<td>Зупинитись на першій помилці doctest</td>
+<td><code>doctest.testmod(optionflags=doctest.FAIL_FAST)</code> у своєму файлі</td>
+</tr>
+<tr>
+<td>Подивитись змінні всередині функції під час doctest</td>
+<td><code>breakpoint()</code> у функції + <code>python3 лаба.py</code> (ввід - руками)</td>
+</tr>
+<tr>
+<td>doctest впав з винятком (Traceback)</td>
+<td><code>python3 -m pytest --doctest-modules --pdb лаба.py</code></td>
+</tr>
+<tr>
+<td>Програма зависла</td>
+<td>Ctrl+C (traceback показує рядок)</td>
+</tr>
+<tr>
+<td><em>За бажанням (кроки 10-12):</em> слідкувати за довгою програмою</td>
+<td><code>logging</code> (рівні DEBUG, INFO, WARNING, ERROR)</td>
+</tr>
+<tr>
+<td><em>За бажанням:</em> знайти приховані проблеми</td>
+<td><code>python3 -X dev</code>, <code>python3 -W error</code></td>
+</tr>
+<tr>
+<td><em>За бажанням:</em> зависла, а Ctrl+C не допомагає</td>
+<td><code>faulthandler.dump_traceback_later</code></td>
+</tr>
+<tr>
+<td><em>За бажанням:</em> «впала» без traceback (Segmentation fault)</td>
+<td><code>python3 -X faulthandler</code></td>
+</tr>
+<tr>
+<td><em>За бажанням:</em> що повільне</td>
+<td><code>python3 -m cProfile -s cumtime</code>, <code>python3 -m timeit</code>, <code>python3 -X importtime</code></td>
+</tr>
+<tr>
+<td><em>За бажанням:</em> кожен виконаний рядок</td>
+<td><code>python3 -m trace --trace</code></td>
+</tr>
+<tr>
+<td><em>За бажанням:</em> зручніший pdb</td>
+<td><code>ipdb</code> (кольори, Tab), <code>pudb</code> (на весь екран) - ставляться у venv</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>python3 -m doctest -v файл.py</code> і <code>python3 -m doctest -o FAIL_FAST файл.py</code> - <strong>лише для файлів, де <code>testmod()</code>
+стоїть під <code>if __name__ == "__main__":</code></strong> (або його нема зовсім), як у прикладах цього уроку. На лабах викладача,
+де <code>doctest.testmod()</code> просто внизу файлу і є <code>input()</code>, ця команда дає чужий провал <code>DebugRunner</code> і питає ввід
+(урок 04, «Типові помилки» п. 10) - там <code>python3 лаба.py -v</code> або <code>perevir</code>.</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p>Відповіді - справжній вивід з кроків «Руками» нижче (номер кроку в дужках).</p>
+<ol>
+<li>У функції є змінна <code>h</code> (висота). Ти зупинився в pdb і набрав просто <code>h</code>, Enter. Що покаже pdb?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p><strong>Довідку</strong>, а не висоту: <code>h</code> - це команда help (крок 6). Змінну з іменем команди треба писати через <code>p h</code>, а
+змінювати через <code>!h = 0</code>. Те саме з <code>c</code>, <code>n</code>, <code>s</code>, <code>l</code>, <code>a</code>, <code>b</code>, <code>j</code>, <code>r</code>, <code>w</code>, <code>u</code>, <code>d</code>, <code>q</code>. Ще одна причина
+давати змінним довгі імена, як вимагає викладач (<code>height_m</code>, а не <code>h</code>).</p>
+</details>
+<ol start="2">
+<li>Програма зупинена в <code>table()</code>. Набираєш <code>!G = 1.62</code> (як на Місяці), потім <code>p G</code>. Далі <code>u</code> (вгору, у <code>main</code>) і
+   знову <code>p G</code>. Що буде?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>У <code>table()</code> - <code>1.62</code>, у <code>main</code> - <code>9.81</code> (крок 5). <code>!G = 1.62</code> створив <strong>нову локальну</strong> змінну <code>G</code> всередині
+<code>table</code>, а глобальна <code>G</code>, якою користується <code>height()</code>, не змінилась. Щоб змінити глобальну:
+<code>!global G; G = 1.62</code>.</p>
+</details>
+<ol start="3">
+<li><code>python3 -m pdb -c continue vymiry.py</code>, програма падає, ти дивишся змінні і набираєш <code>q</code>. Ти вийшов з pdb?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Ні. pdb пише <code>Post mortem debugger finished. ... will be restarted</code> і запускає програму <strong>знову</strong> з першого рядка
+(крок 7). Треба ще раз <code>q</code>.</p>
+</details>
+<ol start="4">
+<li>У <code>logging.basicConfig</code> рівень <code>DEBUG</code> змінили на <code>WARNING</code>. Які рядки логу лишаться?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Лише <code>WARNING</code> і серйозніші (<code>ERROR</code>, <code>CRITICAL</code>). Рядки <code>DEBUG</code> і <code>INFO</code> зникнуть, а сам код міняти не треба
+(крок 10, за бажанням).</p>
+</details>
+<h2 id="руками">Руками</h2>
+<h3 id="крок-1-python3-m-pdb-з-першого-рядка">Крок 1. <code>python3 -m pdb</code> з першого рядка</h3>
+<pre><code class="language-bash">mkdir -p ~/univer/praktyka/nalag2
+cd ~/univer/praktyka/nalag2
+nano kydok.py
+</code></pre>
+<p>Тіло кинули вгору зі швидкістю 10 м/с, рахуємо висоту <code>h = v0·t - g·t²/2</code> кожні 0.5 с. Набери (номери рядків
+важливі для точок зупинки, тому порожні рядки теж):</p>
+<pre><code class="language-python">&quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+G = 9.81
+
+
+def height(v0, t):
+    h = v0 * t - G * t ** 2 / 2
+    return round(h, 3)
+
+
+def table(v0, dt, steps):
+    rows = []
+    for k in range(steps):
+        t = k * dt
+        h = height(v0, t)
+        rows.append((t, h))
+    return rows
+
+
+def main():
+    rows = table(10, 0.5, 5)
+    for t, h in rows:
+        print(f&quot;t = {t:.1f} с   h = {h:6.3f} м&quot;)
+    print(&quot;готово&quot;)
+
+
+main()
+</code></pre>
+<p>(Короткі імена <code>v0</code>, <code>t</code>, <code>h</code> тут як у формулі; у лабі викладач хоче довші.) Спершу просто запусти:</p>
+<pre><code class="language-bash">python3 kydok.py
+</code></pre>
+<pre><code class="language-text">t = 0.0 с   h =  0.000 м
+t = 0.5 с   h =  3.774 м
+t = 1.0 с   h =  5.095 м
+t = 1.5 с   h =  3.964 м
+t = 2.0 с   h =  0.380 м
+готово
+</code></pre>
+<p>Тепер під pdb:</p>
+<pre><code class="language-bash">python3 -m pdb kydok.py
+</code></pre>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) l
+  1  -&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+  2     G = 9.81
+  3
+  4
+  5     def height(v0, t):
+  6         h = v0 * t - G * t ** 2 / 2
+  7         return round(h, 3)
+  8
+  9
+ 10     def table(v0, dt, steps):
+ 11         rows = []
+(Pdb) b 14
+Breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:14
+(Pdb) c
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(14)table()
+-&gt; h = height(v0, t)
+(Pdb) p k, t
+(0, 0.0)
+(Pdb) s
+--Call--
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(5)height()
+-&gt; def height(v0, t):
+(Pdb) a
+v0 = 10
+t = 0.0
+(Pdb) w
+  /usr/lib/python3.12/bdb.py(600)run()
+-&gt; exec(cmd, globals, locals)
+  &lt;string&gt;(1)&lt;module&gt;()
+  /home/evgen/univer/praktyka/nalag2/kydok.py(26)&lt;module&gt;()
+-&gt; main()
+  /home/evgen/univer/praktyka/nalag2/kydok.py(20)main()
+-&gt; rows = table(10, 0.5, 5)
+  /home/evgen/univer/praktyka/nalag2/kydok.py(14)table()
+-&gt; h = height(v0, t)
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(5)height()
+-&gt; def height(v0, t):
+(Pdb) u
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(14)table()
+-&gt; h = height(v0, t)
+(Pdb) p k, rows
+(0, [])
+(Pdb) d
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(5)height()
+-&gt; def height(v0, t):
+(Pdb) r
+--Return--
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(7)height()-&gt;0.0
+-&gt; return round(h, 3)
+(Pdb) n
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(15)table()
+-&gt; rows.append((t, h))
+(Pdb) c
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(14)table()
+-&gt; h = height(v0, t)
+(Pdb) p k
+1
+(Pdb) ll
+ 10     def table(v0, dt, steps):
+ 11         rows = []
+ 12         for k in range(steps):
+ 13             t = k * dt
+ 14 B-&gt;         h = height(v0, t)
+ 15             rows.append((t, h))
+ 16         return rows
+(Pdb) cl
+Clear all breaks? y
+Deleted breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:14
+(Pdb) c
+t = 0.0 с   h =  0.000 м
+t = 0.5 с   h =  3.774 м
+t = 1.0 с   h =  5.095 м
+t = 1.5 с   h =  3.964 м
+t = 2.0 с   h =  0.380 м
+готово
+The program finished and will be restarted
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) q
+</code></pre>
+<p>Розбір:
+- <code>w</code> показує стек знизу вгору як traceback, тільки «живий»: <code>&gt;</code> - де ми зараз. Два верхні рядки (<code>bdb.py</code>,
+  <code>&lt;string&gt;</code>) - це сам pdb, їх пропускай.
+- <code>u</code> піднявся в <code>table()</code>: там видно <code>k</code> і <code>rows</code>, яких нема в <code>height()</code>. <code>d</code> повернув назад.
+- <code>r</code> доїхав до кінця <code>height()</code>: <code>-&gt;0.0</code> - що вона повертає.
+- У <code>ll</code> буква <code>B</code> - точка зупинки, <code>-&gt;</code> - поточний рядок.
+- Коли програма закінчилась, pdb пише <code>The program finished and will be restarted</code> і починає знову.
+  Вийти - <code>q</code>.</p>
+<p>Порожній рядок (просто Enter) повторює попередню команду, зручно для багатьох <code>n</code> підряд:</p>
+<pre><code class="language-bash">python3 -m pdb kydok.py
+</code></pre>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) b 13
+Breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:13
+(Pdb) c
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(13)table()
+-&gt; t = k * dt
+(Pdb) n
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(14)table()
+-&gt; h = height(v0, t)
+(Pdb)
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(15)table()
+-&gt; rows.append((t, h))
+(Pdb) p t
+0.0
+(Pdb) q
+</code></pre>
+<h3 id="крок-2-точки-зупинки-на-функції-з-умовою-тимчасові">Крок 2. Точки зупинки: на функції, з умовою, тимчасові</h3>
+<pre><code class="language-bash">python3 -m pdb kydok.py
+</code></pre>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) b height
+Breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:5
+(Pdb) b 14, k == 3
+Breakpoint 2 at /home/evgen/univer/praktyka/nalag2/kydok.py:14
+(Pdb) tbreak 22
+Breakpoint 3 at /home/evgen/univer/praktyka/nalag2/kydok.py:22
+(Pdb) b
+Num Type         Disp Enb   Where
+1   breakpoint   keep yes   at /home/evgen/univer/praktyka/nalag2/kydok.py:5
+2   breakpoint   keep yes   at /home/evgen/univer/praktyka/nalag2/kydok.py:14
+        stop only if k == 3
+3   breakpoint   del  yes   at /home/evgen/univer/praktyka/nalag2/kydok.py:22
+(Pdb) disable 1
+Disabled breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:5
+(Pdb) c
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(14)table()
+-&gt; h = height(v0, t)
+(Pdb) p k, t
+(3, 1.5)
+(Pdb) enable 1
+Enabled breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:5
+(Pdb) c
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(6)height()
+-&gt; h = v0 * t - G * t ** 2 / 2
+(Pdb) a
+v0 = 10
+t = 1.5
+(Pdb) cl 1
+Deleted breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:5
+(Pdb) c
+Deleted breakpoint 3 at /home/evgen/univer/praktyka/nalag2/kydok.py:22
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(22)main()
+-&gt; print(f&quot;t = {t:.1f} с   h = {h:6.3f} м&quot;)
+(Pdb) p t, h
+(0.0, 0.0)
+(Pdb) c
+t = 0.0 с   h =  0.000 м
+t = 0.5 с   h =  3.774 м
+t = 1.0 с   h =  5.095 м
+t = 1.5 с   h =  3.964 м
+t = 2.0 с   h =  0.380 м
+готово
+The program finished and will be restarted
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) q
+</code></pre>
+<ul>
+<li><code>b 14, k == 3</code> пропустила <code>k = 0, 1, 2</code> і зупинилась одразу на <code>k = 3</code>. Це головний інструмент для циклів:
+  не тиснути <code>c</code> 100 разів, а одразу зупинитись на потрібному оберті.</li>
+<li>У списку <code>b</code>: <code>Disp del</code> - тимчасова (зникне), <code>Enb yes</code> - увімкнена.</li>
+<li><code>cl 1</code> (з номером) прибирає без питань, <code>cl</code> (усі) питає <code>Clear all breaks?</code>.</li>
+<li><code>tbreak 22</code> спрацювала один раз: <code>Deleted breakpoint 3</code> - і зникла.</li>
+</ul>
+<p>Умову можна поміняти потім, а <code>whatis</code> каже тип:</p>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) b kydok.py:14
+Breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:14
+(Pdb) condition 1 k &gt; 2
+New condition set for breakpoint 1.
+(Pdb) c
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(14)table()
+-&gt; h = height(v0, t)
+(Pdb) p k
+3
+(Pdb) condition 1
+Breakpoint 1 is now unconditional.
+(Pdb) c
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(14)table()
+-&gt; h = height(v0, t)
+(Pdb) p k
+4
+(Pdb) whatis k
+&lt;class 'int'&gt;
+(Pdb) h until
+      Usage: unt(il) [lineno]
+
+      Without argument, continue execution until the line with a
+      number greater than the current one is reached.  With a line
+      number, continue execution until a line with a number greater
+      or equal to that is reached.  In both cases, also stop when
+      the current frame returns.
+(Pdb) q
+</code></pre>
+<h3 id="крок-3-commands-точка-зупинки-яка-сама-друкує-і-їде-далі">Крок 3. <code>commands</code> - точка зупинки, яка сама друкує і їде далі</h3>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) b 15
+Breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:15
+(Pdb) commands 1
+(com) silent
+(com) p k, t, h
+(com) c
+(Pdb) c
+(0, 0.0, 0.0)
+(1, 0.5, 3.774)
+(2, 1.0, 5.095)
+(3, 1.5, 3.964)
+(4, 2.0, 0.38)
+t = 0.0 с   h =  0.000 м
+t = 0.5 с   h =  3.774 м
+t = 1.0 с   h =  5.095 м
+t = 1.5 с   h =  3.964 м
+t = 2.0 с   h =  0.380 м
+готово
+The program finished and will be restarted
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) q
+</code></pre>
+<p>Це «print без правки файлу». <code>silent</code> - не друкувати рядок <code>&gt; ...kydok.py(15)</code> при кожній зупинці. Запрошення
+<code>(com)</code> - ти вводиш список команд. <strong><code>c</code> у списку одразу закінчує список</strong> (pdb 3.12 так і робить, у
+документації: будь-яка команда, що продовжує виконання, завершує список). Якщо після <code>c</code> набрати ще й <code>end</code>,
+отримаєш <code>*** NameError: name 'end' is not defined</code>. Список без <code>c</code> закінчуй словом <code>end</code>.</p>
+<h3 id="крок-4-ignore-display-until-retval">Крок 4. <code>ignore</code>, <code>display</code>, <code>until</code>, <code>retval</code></h3>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) b 14
+Breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:14
+(Pdb) ignore 1 2
+Will ignore next 2 crossings of breakpoint 1.
+(Pdb) c
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(14)table()
+-&gt; h = height(v0, t)
+(Pdb) p k
+2
+(Pdb) display t
+display t: 1.0
+(Pdb) display h
+display h: 3.774
+(Pdb) n
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(15)table()
+-&gt; rows.append((t, h))
+display h: 5.095  [old: 3.774]
+(Pdb) cl 1
+Deleted breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:14
+(Pdb) until
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(16)table()
+-&gt; return rows
+display t: 2.0  [old: 1.0]
+display h: 0.38  [old: 5.095]
+(Pdb) undisplay
+(Pdb) n
+--Return--
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(16)table()-&gt;[(0.0, 0.0), (0.5, 3.774), (1.0, 5.095), (1.5, 3.964), (2.0, 0.38)]
+-&gt; return rows
+(Pdb) retval
+[(0.0, 0.0), (0.5, 3.774), (1.0, 5.095), (1.5, 3.964), (2.0, 0.38)]
+(Pdb) n
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(21)main()
+-&gt; for t, h in rows:
+(Pdb) q
+</code></pre>
+<ul>
+<li><code>ignore 1 2</code> - перші два проходи пропущено, зупинка при <code>k = 2</code>.</li>
+<li><code>display</code> друкує вираз лише тоді, коли він <strong>змінився</strong>, і показує старе значення <code>[old: ...]</code>. Значення <code>h</code>
+  тут - з попереднього оберту, бо рядок 14 ще не виконався.</li>
+<li><code>until</code> на останньому рядку циклу (15) прокрутив <strong>увесь цикл</strong> і зупинився на рядку 16. Важливо: спершу прибрали
+  точку на рядку 14 (<code>cl 1</code>), інакше <code>until</code> зупинився б на ній на наступному оберті.</li>
+<li><code>retval</code> - значення, яке функція повертає (тут уся таблиця).</li>
+</ul>
+<h3 id="крок-5-змінити-значення-і-перестрибнути-global-j-pp">Крок 5. Змінити значення і перестрибнути: <code>!</code>, <code>global</code>, <code>j</code>, <code>pp</code></h3>
+<p>Спершу пастка з «Передбач» 2:</p>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) b 15, k == 2
+Breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:15
+(Pdb) c
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(15)table()
+-&gt; rows.append((t, h))
+(Pdb) !G = 1.62
+(Pdb) p G
+1.62
+(Pdb) u
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(20)main()
+-&gt; rows = table(10, 0.5, 5)
+(Pdb) p G
+9.81
+(Pdb) q
+</code></pre>
+<p>Правильно - з <code>global</code>, а потім <code>j 14</code> (стрибок назад на рядок 14), щоб перерахувати висоту вже «на Місяці»:</p>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) b 15, k == 2
+Breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:15
+(Pdb) c
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(15)table()
+-&gt; rows.append((t, h))
+(Pdb) pp rows
+[(0.0, 0.0), (0.5, 3.774)]
+(Pdb) p t, h
+(1.0, 5.095)
+(Pdb) !global G; G = 1.62
+(Pdb) j 14
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(14)table()
+-&gt; h = height(v0, t)
+(Pdb) n
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(15)table()
+-&gt; rows.append((t, h))
+(Pdb) p h
+9.19
+(Pdb) cl 1
+Deleted breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:15
+(Pdb) b 23
+Breakpoint 2 at /home/evgen/univer/praktyka/nalag2/kydok.py:23
+(Pdb) c
+t = 0.0 с   h =  0.000 м
+t = 0.5 с   h =  3.774 м
+t = 1.0 с   h =  9.190 м
+t = 1.5 с   h = 13.178 м
+t = 2.0 с   h = 16.760 м
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(23)main()
+-&gt; print(&quot;готово&quot;)
+(Pdb) j 22
+*** Jump failed: can't jump into the body of a for loop
+(Pdb) q
+</code></pre>
+<p>Перевір числа: <code>10·1 - 1.62·1²/2 = 9.19</code>. З <code>t = 1.0 с</code> усі висоти пораховано вже з <code>G = 1.62</code>. Це спосіб
+перевірити гіпотезу «а що, якби тут було інше значення» без правки файлу. <code>j</code> не вміє стрибати всередину циклу
+<code>for</code> - pdb пише <code>Jump failed</code>.</p>
+<h3 id="крок-6-h-пастка-interact-restart">Крок 6. <code>h</code>-пастка, <code>interact</code>, <code>restart</code></h3>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) b 15
+Breakpoint 1 at /home/evgen/univer/praktyka/nalag2/kydok.py:15
+(Pdb) c
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(15)table()
+-&gt; rows.append((t, h))
+(Pdb) h
+
+Documented commands (type help &lt;topic&gt;):
+========================================
+EOF    c          d        h         list      q        rv       undisplay
+a      cl         debug    help      ll        quit     s        unt
+alias  clear      disable  ignore    longlist  r        source   until
+args   commands   display  interact  n         restart  step     up
+b      condition  down     j         next      return   tbreak   w
+break  cont       enable   jump      p         retval   u        whatis
+bt     continue   exit     l         pp        run      unalias  where
+
+Miscellaneous help topics:
+==========================
+exec  pdb
+
+(Pdb) p h
+0.0
+(Pdb) !h = 0
+(Pdb) n
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(12)table()
+-&gt; for k in range(steps):
+(Pdb) p rows
+[(0.0, 0)]
+(Pdb) interact
+*interactive*
+&gt;&gt;&gt; len(rows)
+1
+&gt;&gt;&gt; rows[-1]
+(0.0, 0)
+&gt;&gt;&gt;
+now exiting InteractiveConsole...
+(Pdb) restart
+Restarting /home/evgen/univer/praktyka/nalag2/kydok.py with arguments:
+
+&gt; /home/evgen/univer/praktyka/nalag2/kydok.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+(Pdb) q
+</code></pre>
+<ul>
+<li><code>h</code> показав довідку, а не змінну. <code>p h</code> - значення, <code>!h = 0</code> - змінити (в <code>rows</code> потрапило ціле <code>0</code>).</li>
+<li><code>interact</code> відкрив <code>&gt;&gt;&gt;</code>, де можна писати багаторядковий код. Порожній <code>&gt;&gt;&gt;</code> у виводі - це натиснуто Ctrl+D,
+  повернення в <code>(Pdb)</code>.</li>
+<li><code>restart</code> запустив програму заново з першого рядка (<code>run</code> - те саме).</li>
+</ul>
+<h3 id="крок-7-post-mortem-три-способи">Крок 7. Post-mortem: три способи</h3>
+<p>Файл <code>vymiry.py</code> - середні значення серій вимірювань, одна серія порожня:</p>
+<pre><code class="language-python">def mean(values):
+    return sum(values) / len(values)
+
+
+def analyze(series):
+    result = {}
+    for name, values in series.items():
+        result[name] = mean(values)
+    return result
+
+
+data = {&quot;t1&quot;: [2.01, 1.99, 2.02], &quot;t2&quot;: [1.42, 1.40], &quot;t3&quot;: []}
+print(analyze(data))
+</code></pre>
+<p><strong>Спосіб 1:</strong> <code>-c continue</code> - pdb не зупиняється на початку, а лише в місці падіння:</p>
+<pre><code class="language-bash">python3 -m pdb -c continue vymiry.py
+</code></pre>
+<pre><code class="language-text">Traceback (most recent call last):
+  File &quot;/usr/lib/python3.12/pdb.py&quot;, line 1944, in main
+    pdb._run(target)
+  File &quot;/usr/lib/python3.12/pdb.py&quot;, line 1738, in _run
+    self.run(target.code)
+  File &quot;/usr/lib/python3.12/bdb.py&quot;, line 600, in run
+    exec(cmd, globals, locals)
+  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;/home/evgen/univer/praktyka/nalag2/vymiry.py&quot;, line 13, in &lt;module&gt;
+    print(analyze(data))
+          ^^^^^^^^^^^^^
+  File &quot;/home/evgen/univer/praktyka/nalag2/vymiry.py&quot;, line 8, in analyze
+    result[name] = mean(values)
+                   ^^^^^^^^^^^^
+  File &quot;/home/evgen/univer/praktyka/nalag2/vymiry.py&quot;, line 2, in mean
+    return sum(values) / len(values)
+           ~~~~~~~~~~~~^~~~~~~~~~~~~
+ZeroDivisionError: division by zero
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+&gt; /home/evgen/univer/praktyka/nalag2/vymiry.py(2)mean()
+-&gt; return sum(values) / len(values)
+(Pdb) p values
+[]
+(Pdb) u
+&gt; /home/evgen/univer/praktyka/nalag2/vymiry.py(8)analyze()
+-&gt; result[name] = mean(values)
+(Pdb) p name, result
+('t3', {'t1': 2.0066666666666664, 't2': 1.41})
+(Pdb) q
+Post mortem debugger finished. The /home/evgen/univer/praktyka/nalag2/vymiry.py will be restarted
+&gt; /home/evgen/univer/praktyka/nalag2/vymiry.py(1)&lt;module&gt;()
+-&gt; def mean(values):
+(Pdb) q
+</code></pre>
+<p><code>values</code> порожній, <code>u</code> показав, яка серія винна: <code>'t3'</code>. Зверху в traceback - рядки самого pdb (<code>pdb.py</code>,
+<code>bdb.py</code>), пропускай їх. Після першого <code>q</code> програма <strong>перезапускається</strong>, тому <code>q</code> двічі.</p>
+<p><strong>Спосіб 2:</strong> програма вже впала в <code>python3 -i</code> - <code>pdb.pm()</code> (post mortem):</p>
+<pre><code class="language-bash">python3 -i vymiry.py
+</code></pre>
+<pre><code class="language-text">Traceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/nalag2/vymiry.py&quot;, line 13, in &lt;module&gt;
+    print(analyze(data))
+          ^^^^^^^^^^^^^
+  File &quot;/home/evgen/univer/praktyka/nalag2/vymiry.py&quot;, line 8, in analyze
+    result[name] = mean(values)
+                   ^^^^^^^^^^^^
+  File &quot;/home/evgen/univer/praktyka/nalag2/vymiry.py&quot;, line 2, in mean
+    return sum(values) / len(values)
+           ~~~~~~~~~~~~^~~~~~~~~~~~~
+ZeroDivisionError: division by zero
+&gt;&gt;&gt; import pdb; pdb.pm()
+&gt; /home/evgen/univer/praktyka/nalag2/vymiry.py(2)mean()
+-&gt; return sum(values) / len(values)
+(Pdb) p values
+[]
+(Pdb) u
+&gt; /home/evgen/univer/praktyka/nalag2/vymiry.py(8)analyze()
+-&gt; result[name] = mean(values)
+(Pdb) p name
+'t3'
+(Pdb) q
+&gt;&gt;&gt;
+</code></pre>
+<p>Тут <code>q</code> повертає в <code>&gt;&gt;&gt;</code> (останній порожній <code>&gt;&gt;&gt;</code> - вихід Ctrl+D).</p>
+<p><strong>Спосіб 3:</strong> <code>pdb.post_mortem()</code> у самому коді - коли падіння ловить <code>try/except</code>. Заміни останній рядок
+<code>vymiry.py</code> на:</p>
+<pre><code class="language-python">try:
+    print(analyze(data))
+except ZeroDivisionError:
+    import pdb
+
+    pdb.post_mortem()
+</code></pre>
+<p>Збережи як <code>vymiry_pm.py</code> (у nano: Ctrl+O, нове ім'я, Enter, на питання про інше ім'я - Y):</p>
+<pre><code class="language-bash">python3 vymiry_pm.py
+</code></pre>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/vymiry_pm.py(2)mean()
+-&gt; return sum(values) / len(values)
+(Pdb) p values
+[]
+(Pdb) w
+  /home/evgen/univer/praktyka/nalag2/vymiry_pm.py(14)&lt;module&gt;()
+-&gt; print(analyze(data))
+  /home/evgen/univer/praktyka/nalag2/vymiry_pm.py(8)analyze()
+-&gt; result[name] = mean(values)
+&gt; /home/evgen/univer/praktyka/nalag2/vymiry_pm.py(2)mean()
+-&gt; return sum(values) / len(values)
+(Pdb) q
+</code></pre>
+<h3 id="крок-8-налагодження-doctest">Крок 8. Налагодження doctest</h3>
+<p>Викладач перевіряє лаби doctest-ами, і <strong>їх не можна міняти</strong>. Налагоджуємо функцію, а не тест. Приклад - не лаба,
+схожа задача (<code>lab_demo.py</code>):</p>
+<pre><code class="language-python">&quot;&quot;&quot;Приклад для налагодження doctest (це не лаба).&quot;&quot;&quot;
+import math
+
+
+def period(length: float) -&gt; str:
+    &quot;&quot;&quot;Період математичного маятника.
+
+    &gt;&gt;&gt; period(1.0)
+    'T = 2.006 с'
+    &gt;&gt;&gt; period(0.25)
+    'T = 1.003 с'
+    &quot;&quot;&quot;
+    g = 9.81
+    t = 2 * math.pi * math.sqrt(length / g)
+    return f&quot;T = {t:.2f} с&quot;
+
+
+if __name__ == &quot;__main__&quot;:
+    import doctest
+
+    doctest.testmod()
+</code></pre>
+<pre><code class="language-bash">python3 lab_demo.py
+</code></pre>
+<pre><code class="language-text">**********************************************************************
+File &quot;/home/evgen/univer/praktyka/nalag2/lab_demo.py&quot;, line 8, in __main__.period
+Failed example:
+    period(1.0)
+Expected:
+    'T = 2.006 с'
+Got:
+    'T = 2.01 с'
+**********************************************************************
+File &quot;/home/evgen/univer/praktyka/nalag2/lab_demo.py&quot;, line 10, in __main__.period
+Failed example:
+    period(0.25)
+Expected:
+    'T = 1.003 с'
+Got:
+    'T = 1.00 с'
+**********************************************************************
+1 items had failures:
+   2 of   2 in __main__.period
+***Test Failed*** 2 failures.
+</code></pre>
+<p><code>Expected</code> - що чекав тест, <code>Got</code> - що повернула функція. Порівнюй посимвольно: тут різниця в кількості знаків
+після коми. Якщо все пройшло, <code>python3 lab_demo.py</code> <strong>нічого не друкує</strong>. Щоб бачити кожен приклад - <code>-v</code>
+(<code>testmod()</code> сам бачить <code>-v</code> у команді):</p>
+<pre><code class="language-bash">python3 lab_demo.py -v
+</code></pre>
+<pre><code class="language-text">Trying:
+    period(1.0)
+Expecting:
+    'T = 2.006 с'
+**********************************************************************
+File &quot;/home/evgen/univer/praktyka/nalag2/lab_demo.py&quot;, line 8, in __main__.period
+Failed example:
+    period(1.0)
+Expected:
+    'T = 2.006 с'
+Got:
+    'T = 2.01 с'
+Trying:
+    period(0.25)
+Expecting:
+    'T = 1.003 с'
+**********************************************************************
+File &quot;/home/evgen/univer/praktyka/nalag2/lab_demo.py&quot;, line 10, in __main__.period
+Failed example:
+    period(0.25)
+Expected:
+    'T = 1.003 с'
+Got:
+    'T = 1.00 с'
+1 items had no tests:
+    __main__
+**********************************************************************
+1 items had failures:
+   2 of   2 in __main__.period
+2 tests in 2 items.
+0 passed and 2 failed.
+***Test Failed*** 2 failures.
+</code></pre>
+<p>Багато прикладів падають - почни з першого: прапорець <code>FAIL_FAST</code> (зупинитись на першій помилці). Через
+<code>python3 -m doctest</code> (тоді рядок <code>doctest.testmod()</code> у файлі не потрібен). Тут так можна, бо в <code>lab_demo.py</code>
+<code>testmod()</code> стоїть під <code>if __name__ == "__main__":</code>; на лабі викладача з <code>testmod()</code> унизу і <code>input()</code> - ні
+(див. «Коротко»):</p>
+<pre><code class="language-bash">python3 -m doctest -o FAIL_FAST lab_demo.py
+</code></pre>
+<pre><code class="language-text">**********************************************************************
+File &quot;/home/evgen/univer/praktyka/nalag2/lab_demo.py&quot;, line 8, in lab_demo.period
+Failed example:
+    period(1.0)
+Expected:
+    'T = 2.006 с'
+Got:
+    'T = 2.01 с'
+**********************************************************************
+1 items had failures:
+   1 of   1 in lab_demo.period
+***Test Failed*** 1 failures.
+</code></pre>
+<p>У коді це <code>doctest.testmod(optionflags=doctest.FAIL_FAST)</code>. Інші прапорці: <code>doctest.ELLIPSIS</code> (<code>...</code> в очікуваному
+означає «будь-що»), <code>doctest.NORMALIZE_WHITESPACE</code> (не зважати на кількість пробілів). Прапорці - лише для <strong>свого</strong>
+налагодження: doctest викладача не змінюй.</p>
+<p><strong>Подивитись змінні всередині функції під час doctest:</strong> додай <code>breakpoint()</code> перед <code>return</code> (збережи як
+<code>lab_bp.py</code>). doctest уміє працювати з pdb:</p>
+<pre><code class="language-bash">python3 lab_bp.py
+</code></pre>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag2/lab_bp.py(16)period()
+-&gt; return f&quot;T = {t:.2f} с&quot;
+(Pdb) p t
+2.0060666807106475
+(Pdb) c
+**********************************************************************
+File &quot;/home/evgen/univer/praktyka/nalag2/lab_bp.py&quot;, line 8, in __main__.period
+Failed example:
+    period(1.0)
+Expected:
+    'T = 2.006 с'
+Got:
+    'T = 2.01 с'
+&gt; /home/evgen/univer/praktyka/nalag2/lab_bp.py(16)period()
+-&gt; return f&quot;T = {t:.2f} с&quot;
+(Pdb) p t
+1.0030333403553238
+(Pdb) c
+**********************************************************************
+File &quot;/home/evgen/univer/praktyka/nalag2/lab_bp.py&quot;, line 10, in __main__.period
+Failed example:
+    period(0.25)
+Expected:
+    'T = 1.003 с'
+Got:
+    'T = 1.00 с'
+**********************************************************************
+1 items had failures:
+   2 of   2 in __main__.period
+***Test Failed*** 2 failures.
+</code></pre>
+<p><code>t = 2.0060666...</code> - число правильне, неправильний лише формат <code>:.2f</code> (треба <code>:.3f</code>). Під <code>pytest</code> (і в
+<code>perevir</code>) <code>breakpoint()</code> у doctest не працює без ключа <code>-s</code>, pytest пише:</p>
+<pre><code class="language-text">OSError: pytest: reading from stdin while output is captured!  Consider using `-s`.
+</code></pre>
+<p><strong><code>doctest.debug</code></strong> - пройти приклади з docstring кроками pdb. Він перетворює приклади на маленький скрипт
+(<code>&lt;string&gt;</code>), тому перші кроки - всередині цього скрипту:</p>
+<pre><code class="language-bash">python3 -c 'import doctest, lab_demo; doctest.debug(lab_demo, &quot;lab_demo.period&quot;)'
+</code></pre>
+<pre><code class="language-text">&gt; &lt;string&gt;(1)&lt;module&gt;()
+(Pdb) s
+--Call--
+&gt; &lt;string&gt;(0)&lt;module&gt;()
+(Pdb) s
+&gt; &lt;string&gt;(3)&lt;module&gt;()
+(Pdb) s
+--Call--
+&gt; /home/evgen/univer/praktyka/nalag2/lab_demo.py(5)period()
+-&gt; def period(length: float) -&gt; str:
+(Pdb) s
+&gt; /home/evgen/univer/praktyka/nalag2/lab_demo.py(13)period()
+-&gt; g = 9.81
+(Pdb) s
+&gt; /home/evgen/univer/praktyka/nalag2/lab_demo.py(14)period()
+-&gt; t = 2 * math.pi * math.sqrt(length / g)
+(Pdb) l
+  9         'T = 2.006 с'
+ 10         &gt;&gt;&gt; period(0.25)
+ 11         'T = 1.003 с'
+ 12         &quot;&quot;&quot;
+ 13         g = 9.81
+ 14  -&gt;     t = 2 * math.pi * math.sqrt(length / g)
+ 15         return f&quot;T = {t:.2f} с&quot;
+ 16
+ 17
+ 18     if __name__ == &quot;__main__&quot;:
+ 19         import doctest
+(Pdb) q
+</code></pre>
+<p><strong>pytest з <code>--pdb</code></strong> зупиняється в місці падіння, але корисний, лише коли doctest впав з <strong>винятком</strong> (Traceback).
+Зроби копію <code>lab_exc.py</code>, де формат уже <code>:.3f</code>, а в другому прикладі навмисно рядок: <code>&gt;&gt;&gt; period("0.25")</code>.
+pytest стоїть у venv (урок 03), тож спершу <code>source ~/univer/.venv/bin/activate</code>:</p>
+<pre><code class="language-bash">python3 -m pytest --doctest-modules --pdb -q lab_exc.py
+</code></pre>
+<pre><code class="language-text">F
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; traceback &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+006 Період математичного маятника.
+007
+008     &gt;&gt;&gt; period(1.0)
+009     'T = 2.006 с'
+010     &gt;&gt;&gt; period(&quot;0.25&quot;)
+UNEXPECTED EXCEPTION: TypeError(&quot;unsupported operand type(s) for /: 'str' and 'float'&quot;)
+Traceback (most recent call last):
+  File &quot;/usr/lib/python3.12/doctest.py&quot;, line 1361, in __run
+    exec(compile(example.source, filename, &quot;single&quot;,
+  File &quot;&lt;doctest lab_exc.period[1]&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;/home/evgen/univer/praktyka/nalag2/lab_exc.py&quot;, line 14, in period
+    t = 2 * math.pi * math.sqrt(length / g)
+                                ~~~~~~~^~~
+TypeError: unsupported operand type(s) for /: 'str' and 'float'
+/home/evgen/univer/praktyka/nalag2/lab_exc.py:10: UnexpectedException
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; entering PDB &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; PDB post_mortem (IO-capturing turned off) &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&gt; /home/evgen/univer/praktyka/nalag2/lab_exc.py(14)period()
+-&gt; t = 2 * math.pi * math.sqrt(length / g)
+(Pdb) p length
+'0.25'
+(Pdb) w
+  /usr/lib/python3.12/doctest.py(1361)__run()
+-&gt; exec(compile(example.source, filename, &quot;single&quot;,
+  &lt;doctest lab_exc.period[1]&gt;(1)&lt;module&gt;()
+&gt; /home/evgen/univer/praktyka/nalag2/lab_exc.py(14)period()
+-&gt; t = 2 * math.pi * math.sqrt(length / g)
+(Pdb) q
+
+===================================== short test summary info ======================================
+FAILED lab_exc.py::lab_exc.period
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!! _pytest.outcomes.Exit: Quitting debugger !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 1.38s
+</code></pre>
+<p>А коли doctest просто дав інше число (<code>Expected</code>/<code>Got</code>), <code>--pdb</code> зупиняється всередині коду самого pytest
+(<code>_pytest/doctest.py ... raise failure</code>), де твоїх змінних нема: <code>p t</code> дає <code>*** NameError: name 't' is not defined</code>.
+<code>--trace</code> (зупинка на початку кожного тесту) на doctest у pytest 9.2 не діє - тест просто проходить до кінця:</p>
+<pre><code class="language-bash">python3 -m pytest --doctest-modules --trace -q lab_demo.py
+</code></pre>
+<pre><code class="language-text">F                                                                                            [100%]
+============================================= FAILURES =============================================
+____________________________________ [doctest] lab_demo.period _____________________________________
+006 Період математичного маятника.
+007
+008     &gt;&gt;&gt; period(1.0)
+Expected:
+    'T = 2.006 с'
+Got:
+    'T = 2.01 с'
+
+/home/evgen/univer/praktyka/nalag2/lab_demo.py:8: DocTestFailure
+===================================== short test summary info ======================================
+FAILED lab_demo.py::lab_demo.period
+1 failed in 0.01s
+</code></pre>
+<p>Підсумок для лаб: інше число → <code>python3 лаба.py -v</code> і <code>breakpoint()</code> у функції; виняток → <code>--pdb</code> або <code>-c continue</code>.</p>
+<p><strong>З <code>breakpoint()</code> ввід набирай руками</strong>, не через <code>printf ... |</code>. pdb читає команди з того самого входу, що й
+<code>input()</code>: після <code>printf</code> там уже кінець вводу, pdb отримує його замість команди і зупиняє програму - в кінці
+traceback буде <code>bdb.BdbQuit</code>. Тому <code>python3 лаба.py -v</code>, на <code>input()</code> набери число, а на <code>(Pdb)</code> - команди.</p>
+<h3 id="крок-9-тренування">Крок 9. Тренування</h3>
+<p>Тека <strong>«Налагодження - зламані програми»</strong> поруч з уроками курсу: <code>bug_1.py</code> ... <code>bug_7.py</code> і <code>ЗАВДАННЯ.md</code>. Тека
+курсу лежить на ПК; на ноутбук її переносиш флешкою, через GitHub або пересилаєш собі в Telegram архівом (zip;
+розпакувати в Nemo - подвійний клік). Коли тека на ноутбуці (наприклад, у <code>~/Завантаження</code>), скопіюй її в робоче
+місце (лапки - бо в назві пробіли):</p>
+<pre><code class="language-bash">mkdir -p ~/univer/praktyka
+cp -r ~/Завантаження/&quot;Налагодження - зламані програми&quot; ~/univer/praktyka/zlamani
+ls ~/univer/praktyka/zlamani
+</code></pre>
+<p>Не знаходиш теку - <code>find ~ -name "bug_1.py"</code>. Далі по черзі: прочитай симптом, вибери метод, знайди баг сам, і
+лише потім відкривай підказки. Методи з logging і faulthandler там - лише другий варіант (є і print).</p>
+<h2 id="далі-за-бажанням-для-лр1-лр3-не-потрібно">Далі - за бажанням (для ЛР1-ЛР3 не потрібно)</h2>
+<p>Кроки 10-12 - інструменти, які знадобляться пізніше, на довгих програмах. Можна пропустити й повернутись згодом.</p>
+<h3 id="крок-10-logging-замість-print">Крок 10. logging замість print</h3>
+<p><strong>logging</strong> (журналювання) - друк налагоджувальних повідомлень з <strong>рівнем</strong> важливості. Рівні від найменшого:
+<code>DEBUG</code> (подробиці), <code>INFO</code> (що відбувається), <code>WARNING</code> (щось підозріле), <code>ERROR</code>, <code>CRITICAL</code>. <code>kydok_log.py</code>:</p>
+<pre><code class="language-python">&quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот (з logging).&quot;&quot;&quot;
+import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format=&quot;%(levelname)s %(funcName)s:%(lineno)d %(message)s&quot;,
+)
+G = 9.81
+
+
+def height(v0, t):
+    h = v0 * t - G * t ** 2 / 2
+    logging.debug(f&quot;{t=} {h=:.3f}&quot;)
+    if h &lt; 0:
+        logging.warning(f&quot;тіло вже впало, {h=:.3f}&quot;)
+    return round(h, 3)
+
+
+def table(v0, dt, steps):
+    logging.info(f&quot;рахую {steps} рядків, крок {dt} с&quot;)
+    rows = []
+    for k in range(steps):
+        t = k * dt
+        rows.append((t, height(v0, t)))
+    return rows
+
+
+def main():
+    for t, h in table(10, 0.5, 6):
+        print(f&quot;t = {t:.1f} с   h = {h:6.3f} м&quot;)
+
+
+main()
+</code></pre>
+<pre><code class="language-bash">python3 kydok_log.py
+</code></pre>
+<pre><code class="language-text">INFO table:20 рахую 6 рядків, крок 0.5 с
+DEBUG height:13 t=0.0 h=0.000
+DEBUG height:13 t=0.5 h=3.774
+DEBUG height:13 t=1.0 h=5.095
+DEBUG height:13 t=1.5 h=3.964
+DEBUG height:13 t=2.0 h=0.380
+DEBUG height:13 t=2.5 h=-5.656
+WARNING height:15 тіло вже впало, h=-5.656
+t = 0.0 с   h =  0.000 м
+t = 0.5 с   h =  3.774 м
+t = 1.0 с   h =  5.095 м
+t = 1.5 с   h =  3.964 м
+t = 2.0 с   h =  0.380 м
+t = 2.5 с   h = -5.656 м
+</code></pre>
+<p><code>format</code> додав рівень, функцію і номер рядка - видно, звідки кожне повідомлення. logging пише в stderr, тому лог
+не змішується з результатом у файлі (<code>2&gt;</code>). Тепер заміни <code>level=logging.DEBUG</code> на <code>level=logging.WARNING</code>:</p>
+<pre><code class="language-text">WARNING height:15 тіло вже впало, h=-5.656
+t = 0.0 с   h =  0.000 м
+t = 0.5 с   h =  3.774 м
+t = 1.0 с   h =  5.095 м
+t = 1.5 с   h =  3.964 м
+t = 2.0 с   h =  0.380 м
+t = 2.5 с   h = -5.656 м
+</code></pre>
+<p>Лог у файл: у <code>basicConfig</code> напиши <code>level=logging.DEBUG, filename="kydok.log", filemode="w",</code> (<code>"w"</code> - щоразу
+новий файл, без нього дописує в кінець):</p>
+<pre><code class="language-bash">python3 kydok_log.py
+cat kydok.log
+</code></pre>
+<pre><code class="language-text">t = 0.0 с   h =  0.000 м
+t = 0.5 с   h =  3.774 м
+t = 1.0 с   h =  5.095 м
+t = 1.5 с   h =  3.964 м
+t = 2.0 с   h =  0.380 м
+t = 2.5 с   h = -5.656 м
+INFO table:20 рахую 6 рядків, крок 0.5 с
+DEBUG height:13 t=0.0 h=0.000
+DEBUG height:13 t=0.5 h=3.774
+DEBUG height:13 t=1.0 h=5.095
+DEBUG height:13 t=1.5 h=3.964
+DEBUG height:13 t=2.0 h=0.380
+DEBUG height:13 t=2.5 h=-5.656
+WARNING height:15 тіло вже впало, h=-5.656
+</code></pre>
+<p>Чим краще за <code>print</code>: рядки налагодження не треба видаляти (лише змінити рівень), видно функцію й рядок, можна
+писати у файл і читати потім. Для лаби з doctest - теж зручно: logging іде в stderr і doctest його не бачить.</p>
+<h3 id="крок-11-прапорці-python-для-пошуку-прихованих-проблем">Крок 11. Прапорці Python для пошуку прихованих проблем</h3>
+<p><strong><code>-X dev</code></strong> - режим розробника: показує попередження, які зазвичай мовчать. <code>dani.py</code> відкриває файл і не
+закриває:</p>
+<pre><code class="language-python">values = [float(line) for line in open(&quot;dani.txt&quot;)]
+print(f&quot;середнє: {sum(values) / len(values):.3f}&quot;)
+</code></pre>
+<pre><code class="language-bash">printf '2.01\n1.99\n2.02\n' &gt; dani.txt
+python3 -X dev dani.py
+</code></pre>
+<pre><code class="language-text">/home/evgen/univer/praktyka/nalag2/dani.py:1: ResourceWarning: unclosed file &lt;_io.TextIOWrapper name='dani.txt' mode='r' encoding='UTF-8'&gt;
+  values = [float(line) for line in open(&quot;dani.txt&quot;)]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+середнє: 2.007
+</code></pre>
+<p>Без <code>-X dev</code> - лише <code>середнє: 2.007</code>. Правильно: <code>with open("dani.txt") as file:</code>.</p>
+<p><strong><code>-W error</code></strong> - кожне попередження (warning) стає помилкою. <code>chysla.py</code> шукає числа в рядку:</p>
+<pre><code class="language-python">import re
+
+text = &quot;t=0.5 h=3.774&quot;
+numbers = re.findall(&quot;\d+\.\d+&quot;, text)
+print(numbers)
+</code></pre>
+<pre><code class="language-bash">python3 chysla.py
+python3 -W error chysla.py
+</code></pre>
+<pre><code class="language-text">/home/evgen/univer/praktyka/nalag2/chysla.py:4: SyntaxWarning: invalid escape sequence '\d'
+  numbers = re.findall(&quot;\d+\.\d+&quot;, text)
+['0.5', '3.774']
+  File &quot;/home/evgen/univer/praktyka/nalag2/chysla.py&quot;, line 4
+    numbers = re.findall(&quot;\d+\.\d+&quot;, text)
+                         ^^^^^^^^^^
+SyntaxError: invalid escape sequence '\d'
+</code></pre>
+<p>Попередження легко не помітити, а з <code>-W error</code> програма не запуститься, поки не виправиш. Виправлення:
+<code>r"\d+\.\d+"</code> (буква <code>r</code> - «сирий» рядок, <code>\</code> у ньому - просто символ).</p>
+<p><strong>Програма зависла.</strong> <code>zavis.py</code> гальмує швидкість по 0.4, поки вона не стане рівно 0 (а через похибку float вона
+ніколи не буде рівно 0):</p>
+<pre><code class="language-python">speed = 10.0
+while speed != 0:
+    speed -= 0.4
+print(&quot;зупинилось&quot;)
+</code></pre>
+<pre><code class="language-bash">python3 zavis.py
+</code></pre>
+<p>Через кілька секунд натисни Ctrl+C. Traceback покаже, <strong>де</strong> програма крутилась:</p>
+<pre><code class="language-text">^CTraceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/nalag2/zavis.py&quot;, line 2, in &lt;module&gt;
+    while speed != 0:
+          ^^^^^^^^^^
+KeyboardInterrupt
+</code></pre>
+<p>Якщо програма висить у місці, де Ctrl+C не допомагає, або хочеш автоматично, - <code>faulthandler</code>
+(обробник аварій). Додай на початок <code>zavis.py</code>:</p>
+<pre><code class="language-python">import faulthandler
+
+faulthandler.dump_traceback_later(3, exit=True)
+speed = 10.0
+while speed != 0:
+    speed -= 0.4
+print(&quot;зупинилось&quot;)
+</code></pre>
+<pre><code class="language-text">Timeout (0:00:03)!
+Thread 0x000075e683cf2080 (most recent call first):
+  File &quot;/home/evgen/univer/praktyka/nalag2/zavis.py&quot;, line 6 in &lt;module&gt;
+</code></pre>
+<p>Через 3 с він сам надрукував, у якому рядку програма, і завершив її (<code>exit=True</code>). Число <code>0x...</code> у тебе буде інше,
+а рядок може бути 5 або 6 (з чотирьох запусків тричі був 6): програма крутиться в обох рядках циклу, і <code>faulthandler</code>
+показує той, де вона була в момент знімка.</p>
+<p><strong><code>-X faulthandler</code></strong> - для справжніх аварій інтерпретатора (Segmentation fault), коли Python не встигає надрукувати
+traceback. Буває з бібліотеками на C (numpy, tkinter/turtle). Штучна аварія для прикладу:</p>
+<pre><code class="language-bash">python3 -X faulthandler -c &quot;import ctypes; ctypes.string_at(0)&quot;
+</code></pre>
+<pre><code class="language-text">Fatal Python error: Segmentation fault
+
+Current thread 0x0000781de291d080 (most recent call first):
+  File &quot;/usr/lib/python3.12/ctypes/__init__.py&quot;, line 525 in string_at
+  File &quot;&lt;string&gt;&quot;, line 1 in &lt;module&gt;
+</code></pre>
+<p>Без <code>-X faulthandler</code> bash напише лише <code>Segmentation fault (core dumped)</code> - без жодного рядка коду (так англійською;
+у системі українською текст може бути перекладений, не перевірено).</p>
+<p><strong>Коротко про швидкість і трасування:</strong></p>
+<pre><code class="language-bash">python3 -X importtime -c &quot;import fractions&quot; |&amp; tail -3
+python3 -m trace --trace kydok.py | head -12
+python3 -m timeit &quot;sum(range(1000))&quot;
+python3 -m cProfile -s cumtime kydok.py | head -14
+</code></pre>
+<pre><code class="language-text">import time:       130 |        130 |     copyreg
+import time:       444 |       2641 |   re
+import time:      1604 |       7823 | fractions
+ --- modulename: kydok, funcname: &lt;module&gt;
+kydok.py(1): &quot;&quot;&quot;Тіло кинули вертикально вгору: таблиця висот.&quot;&quot;&quot;
+kydok.py(2): G = 9.81
+kydok.py(5): def height(v0, t):
+kydok.py(10): def table(v0, dt, steps):
+kydok.py(19): def main():
+kydok.py(26): main()
+ --- modulename: kydok, funcname: main
+kydok.py(20):     rows = table(10, 0.5, 5)
+ --- modulename: kydok, funcname: table
+kydok.py(11):     rows = []
+kydok.py(12):     for k in range(steps):
+20000 loops, best of 5: 9.99 usec per loop
+t = 0.0 с   h =  0.000 м
+t = 0.5 с   h =  3.774 м
+t = 1.0 с   h =  5.095 м
+t = 1.5 с   h =  3.964 м
+t = 2.0 с   h =  0.380 м
+готово
+         26 function calls in 0.000 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 kydok.py:1(&lt;module&gt;)
+        1    0.000    0.000    0.000    0.000 kydok.py:19(main)
+</code></pre>
+<ul>
+<li><code>-X importtime</code> - скільки мікросекунд імпортується кожен модуль (числа в тебе будуть інші). Він пише в stderr,
+  тому <code>|&amp;</code> замість <code>|</code>: так у <code>tail</code> іде і звичайний вивід, і stderr.</li>
+<li><code>trace --trace</code> друкує <strong>кожен</strong> виконаний рядок - видно шлях програми без жодного <code>print</code>.</li>
+<li><code>timeit</code> міряє дрібний вираз багато разів; <code>cProfile</code> - скільки разів викликана кожна функція і скільки часу
+  забрала (<code>ncalls</code>, <code>cumtime</code>). Для лаб рідко треба, але коли програма «думає» хвилину - саме те.</li>
+</ul>
+<h3 id="крок-12-ipdb-і-pudb-сторонні-налагоджувачі-у-venv">Крок 12. ipdb і pudb - сторонні налагоджувачі (у venv)</h3>
+<p>Ставимо <strong>у venv</strong>, не в систему (PEP 668, урок 03):</p>
+<pre><code class="language-bash">~/univer/.venv/bin/pip install ipdb pudb
+source ~/univer/.venv/bin/activate
+</code></pre>
+<p><strong>ipdb</strong> - той самий pdb, але в стилі IPython: кольори, Tab доповнює імена, код навколо видно одразу. Вмикається
+без правки файлу - через <code>PYTHONBREAKPOINT</code> (тоді кожен <code>breakpoint()</code> відкриває ipdb). На <code>period.py</code> з уроку 05:</p>
+<pre><code class="language-bash">cd ~/univer/praktyka/nalag1
+PYTHONBREAKPOINT=ipdb.set_trace python3 period.py
+</code></pre>
+<p>Справжній екран (ipdb 0.13.13, IPython 9.18):</p>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag1/period.py(15)main()
+     14         breakpoint()
+---&gt; 15         print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+     16
+
+ipdb&gt; p length
+0.5
+ipdb&gt; c
+l = 0.5 м, T = 1.419 с
+&gt; /home/evgen/univer/praktyka/nalag1/period.py(15)main()
+     14         breakpoint()
+---&gt; 15         print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+     16
+
+ipdb&gt; q
+Error in sys.excepthook:
+Traceback (most recent call last):
+  File &quot;/home/evgen/univer/.venv/lib/python3.12/site-packages/IPython/core/debugger.py&quot;, line 183, i
+n BdbQuit_excepthook
+    raise ValueError(
+ValueError: `BdbQuit_excepthook` is deprecated since version 5.1. It is still around only because it
+ is still imported by ipdb.
+
+Original exception was:
+Traceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 18, in &lt;module&gt;
+    main()
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 15, in main
+    print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+    ^^^^^
+  File &quot;/usr/lib/python3.12/bdb.py&quot;, line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/usr/lib/python3.12/bdb.py&quot;, line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+                      ^^^^^^^^^^^^^
+bdb.BdbQuit
+</code></pre>
+<p>Команди ті самі, що в pdb. Неприємність ipdb 0.13.13 з новим IPython 9: після виходу (і після будь-якого
+необробленого винятку) зверху друкується <code>Error in sys.excepthook ... deprecated</code>. Справжня помилка - нижче, після
+<code>Original exception was:</code>. Запуск з першого рядка: <code>python3 -m ipdb kydok.py</code>.</p>
+<p><strong>pudb</strong> - налагоджувач <strong>на весь екран</strong> термінала, схожий на графічний: код, змінні, стек і точки зупинки видно
+одночасно:</p>
+<pre><code class="language-bash">cd ~/univer/praktyka/nalag2
+python3 -m pudb kydok.py
+</code></pre>
+<p>Перший запуск показує вікно «Welcome to PudB 2026.1!», потім «Edit Preferences» (налаштування; закрий кнопкою
+<code>&lt; OK &gt;</code>). Екран після кількох <code>n</code> і <code>s</code> (справжній, термінал 100×30):</p>
+<pre><code class="language-text">PuDB 2026.1 - ?:help  n:next  s:step into  b:breakpoint  !:python command line
+                                                                   Variables:
+                                                                   dt: 0.5
+  def height(v0, t):                                               h: 0.0
+      h = v0 * t - G * t ** 2 / 2                                  k: 0
+      return round(h, 3)                                           rows: list (0)
+                                                                   steps: 5
+                                                                   t: 0.0
+  def table(v0, dt, steps):                                        v0: 10
+      rows = []
+      for k in range(steps):
+          t = k * dt                                               Stack:
+          h = height(v0, t)                                        &gt;&gt; table kydok.py:15
+&gt;         rows.append((t, h))                                         main kydok.py:20
+      return rows                                                     &lt;module&gt; kydok.py:26
+
+
+  def main():
+      rows = table(10, 0.5, 5)
+      for t, h in rows:
+          print(f&quot;t = {t:.1f} с   h = {h:6.3f} м&quot;)
+      print(&quot;готово&quot;)                                              Breakpoints:
+
+
+  main()
+Command line: [ctrl x]
+
+
+
+&gt;&gt;&gt;                                                     &lt; Clear  &gt;
+</code></pre>
+<p>Клавіші pudb (одна літера, без Enter): <code>n</code>, <code>s</code>, <code>c</code>, <code>b</code> (точка на рядку під курсором), <code>!</code> (Python), <code>?</code> (довідка),
+<code>q</code> (вийти: з'явиться вікно Finished з <code>&lt; Restart &gt;</code> / <code>&lt; Quit &gt;</code>, там ще раз <code>q</code>).</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<ul>
+<li><strong>Змінна з іменем команди</strong> (<code>h</code>, <code>c</code>, <code>n</code>, <code>s</code>, <code>l</code>, <code>a</code>, <code>b</code>...): pdb виконує команду. Пиши <code>p h</code>, <code>!h = 0</code>.</li>
+<li><strong><code>!G = 1.62</code> не змінює глобальну <code>G</code></strong> - створює локальну. Треба <code>!global G; G = 1.62</code>.</li>
+<li><strong><code>commands</code> з <code>c</code> і потім <code>end</code></strong> → <code>*** NameError: name 'end' is not defined</code>: <code>c</code> уже закінчив список.</li>
+<li><strong><code>until</code> «не вийшов» з циклу</strong> - на шляху стоїть точка зупинки. Прибери її (<code>cl номер</code>).</li>
+<li><strong><code>j</code> у цикл</strong> → <code>*** Jump failed: can't jump into the body of a for loop</code>. Стрибати можна лише в межах поточної
+  функції і не всередину циклу.</li>
+<li><strong>post-mortem <code>q</code> → програма знову з першого рядка.</strong> Так задумано (<code>will be restarted</code>), <code>q</code> ще раз.</li>
+<li><strong><code>p змінна</code> → <code>NameError</code> у post-mortem</strong> - ти не в тій функції. <code>w</code> покаже стек, <code>u</code>/<code>d</code> - перейти.</li>
+<li><strong><code>breakpoint()</code> у функції + pytest</strong> → <code>OSError: pytest: reading from stdin while output is captured!</code>, а
+  <code>perevir</code> (урок 03) у цьому випадку пише «файл питає input()». Налагоджуй через <code>python3 лаба.py</code>, а перед
+  здачею прибери <code>breakpoint()</code>.</li>
+<li><strong>Номери рядків з'їхали</strong> - ти змінив файл, а pdb показує старі номери. Після правки - <code>restart</code> або вийти і
+  запустити знову.</li>
+<li><strong><code>logging.basicConfig</code> нічого не змінює</strong> - його треба викликати <strong>до</strong> першого <code>logging.warning(...)</code> /
+  <code>logging.debug(...)</code>. Перший такий виклик сам налаштовує logging (рівень WARNING), і пізніший
+  <code>basicConfig(level=logging.DEBUG)</code> уже ігнорується: <code>logging.debug("друге")</code> після нього не друкується.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li>У 2025-2026 у великих проєктах налагоджують у редакторі (VS Code / PyCharm: точки зупинки мишкою, debugpy) -
+  це урок 27, пізніше. Але pdb знає кожен, бо він є всюди: на сервері по ssh, у Docker, на чужому комп'ютері.</li>
+<li>Python 3.14 додав <code>python -m pdb -p PID</code> - підключитись до програми, <strong>що вже працює</strong> (PEP 768), і підсвітку
+  коду в pdb. У Mint 22 стоїть 3.12, там цього нема.</li>
+<li><code>logging</code> у бібліотеках пишуть «ліниво»: <code>logging.debug("h=%s", h)</code> замість f-рядка - рядок не збирається,
+  коли рівень DEBUG вимкнено. Для лаб f-рядок теж нормально.</li>
+<li>Профілювання: cProfile для початку, для довгих програм - <code>py-spy</code> (стороння програма, не перевірено в Mint 22).</li>
+<li><code>pytest --pdb</code> у великих проєктах - звичайний спосіб: тест упав → одразу в pdb у місці падіння.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Як зупинитись у циклі <code>for k in range(1000)</code> лише на <code>k == 500</code>, не натискаючи <code>c</code> 500 разів?</li>
+<li>Програма впала з <code>ZeroDivisionError</code> у функції <code>mean</code>. Опиши два способи подивитись значення змінних у момент
+   падіння, не додаючи нічого в код.</li>
+<li>У функції є змінна <code>c</code>. Що станеться, якщо в pdb набрати <code>c</code>? Як подивитись значення змінної?</li>
+<li>У лабі два doctest впали по-різному: один - <code>Expected: 'T = 2.006 с'</code>, <code>Got: 'T = 2.01 с'</code>, другий -
+   <code>UNEXPECTED EXCEPTION: TypeError(...)</code>. Яким інструментом дивитись змінні в кожному випадку і чому не одним?</li>
+<li>Навіщо <code>logging</code> замість <code>print</code>, якщо обидва просто друкують текст? Назви дві переваги.</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Точка зупинки з умовою: <code>b номер_рядка, k == 500</code> (або <code>condition 1 k == 500</code> для вже поставленої точки).
+   Ще варіант - <code>ignore 1 500</code>.</li>
+<li><code>python3 -m pdb -c continue файл.py</code> - pdb сам зупиниться в місці падіння; або <code>python3 -i файл.py</code>, а після
+   падіння <code>import pdb; pdb.pm()</code>. Далі <code>p змінна</code>, <code>u</code>, <code>w</code>.</li>
+<li>pdb виконає команду continue (поїде далі). Значення - <code>p c</code>, змінити - <code>!c = ...</code>.</li>
+<li>Інше число (<code>Expected</code>/<code>Got</code>): <code>breakpoint()</code> перед <code>return</code> + <code>python3 файл.py -v</code>, на <code>(Pdb)</code> - <code>p t</code>
+   (ввід для <code>input()</code> - руками). Виняток: <code>python3 -m pytest --doctest-modules --pdb файл.py</code> - зупиниться в
+   місці падіння, там <code>p length</code>. <code>--pdb</code> при простому <code>Expected</code>/<code>Got</code> зупиняється всередині pytest, де твоїх
+   змінних нема (крок 8).</li>
+<li>Можна вимкнути/увімкнути всі повідомлення одним рівнем (<code>DEBUG</code> → <code>WARNING</code>) без видалення рядків; у кожному
+   рядку видно рівень, функцію і номер рядка; легко писати у файл; іде в stderr і не ламає doctest.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li><code>pdb</code> (усі команди, <code>commands</code>, <code>!</code> з <code>global</code>, post-mortem і перезапуск) - https://docs.python.org/3.12/library/pdb.html
+  (відкрито 18.11.2026)</li>
+<li><code>doctest</code> (<code>-v</code>, <code>optionflags</code>, <code>FAIL_FAST</code>, <code>debug</code>) - https://docs.python.org/3.12/library/doctest.html
+  (відкрито 18.11.2026)</li>
+<li><code>logging</code> HOWTO і <code>basicConfig</code> - https://docs.python.org/3.12/howto/logging.html ,
+  https://docs.python.org/3.12/library/logging.html#logging.basicConfig (відкрито 18.11.2026)</li>
+<li>Прапорці <code>-X dev</code>, <code>-X faulthandler</code>, <code>-X importtime</code>, <code>-W</code> - https://docs.python.org/3.12/using/cmdline.html ,
+  <code>faulthandler</code> - https://docs.python.org/3.12/library/faulthandler.html (відкрито 18.11.2026)</li>
+<li><code>trace</code>, <code>timeit</code>, <code>cProfile</code> - https://docs.python.org/3.12/library/trace.html ,
+  https://docs.python.org/3.12/library/timeit.html , https://docs.python.org/3.12/library/profile.html
+  (відкрито 18.11.2026)</li>
+<li>pytest: <code>--pdb</code>, <code>--trace</code>, doctest - https://docs.pytest.org/en/stable/how-to/failures.html ,
+  https://docs.pytest.org/en/stable/how-to/doctest.html (відкрито 18.11.2026)</li>
+<li>ipdb - https://pypi.org/project/ipdb/ ; pudb - https://documen.tician.de/pudb/ (відкрито 18.11.2026)</li>
+<li>Python 3.14: <code>pdb -p PID</code>, PEP 768 - https://docs.python.org/3/whatsnew/3.14.html (відкрито 18.11.2026)</li>
+<li>Увесь вивід у цьому уроці - справжній, з тестової Linux Mint 22.3, Python 3.12.3, pytest 9.2.0, ipdb 0.13.13,
+  pudb 2026.1 (18.11.2026). Екрани ipdb і pudb зняті емулятором термінала 100×30.</li>
+</ul>

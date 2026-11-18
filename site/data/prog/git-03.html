@@ -1,0 +1,286 @@
+<h1 id="тема-3-ssh-ключ-і-вхід-у-github">Тема 3. SSH-ключ і вхід у GitHub</h1>
+<p><strong>Навіщо:</strong> щоб відправляти лаби на GitHub і забирати їх звідти без пароля щоразу. Паролем від акаунта git на GitHub не пускає з 13.08.2021, тому потрібен SSH-ключ (або токен, який gh тримає сам).</p>
+<h3 id="коротко">Коротко</h3>
+<p><strong>SSH-ключ</strong> - це пара файлів у теці <code>~/.ssh</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Файл</th>
+<th>Що це</th>
+<th>Кому показувати</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_ed25519</code></td>
+<td><strong>приватний</strong> ключ, права <code>600</code> (читати може лише твій користувач)</td>
+<td><strong>нікому і ніколи</strong>: ні викладачу, ні в чат, ні на GitHub</td>
+</tr>
+<tr>
+<td><code>id_ed25519.pub</code></td>
+<td><strong>публічний</strong> ключ (<code>.pub</code> = public)</td>
+<td>GitHub, будь-кому - він не дає доступу сам по собі</td>
+</tr>
+</tbody>
+</table></div>
+<p>Аналогія: публічний ключ - це навісний замок, приватний - єдиний ключ від нього. Замок (<code>.pub</code>) ти вішаєш на свій акаунт GitHub. Відкрити його може лише той, у кого в кишені ключ (<code>id_ed25519</code>), тобто твій ноутбук. Копій замка можна роздати скільки завгодно - без ключа вони марні. А от хто отримав копію приватного ключа, той заходить на GitHub як ти.</p>
+<p><strong>Відбиток (fingerprint)</strong> - короткий «підпис» ключа на кшталт <code>SHA256:1EvICMx4...</code>. Довгі ключі незручно порівнювати очима, а відбитки - зручно.</p>
+<p>Перевірка йде в обидва боки:</p>
+<pre><code class="language-text"> ноутбук                                     GitHub
+ ~/.ssh/id_ed25519      ── доводить ──►      «це Evge14n» (знає твій .pub)
+ ~/.ssh/known_hosts     ◄── доводить ──      «це справжній github.com»
+                                             (відбиток SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU)
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ssh-keygen -t ed25519 -C "пошта"</code></td>
+<td>створити пару ключів</td>
+</tr>
+<tr>
+<td><code>ssh-keygen -lf ~/.ssh/id_ed25519.pub</code></td>
+<td>показати відбиток ключа</td>
+</tr>
+<tr>
+<td><code>cat ~/.ssh/id_ed25519.pub</code></td>
+<td>показати публічний ключ (щоб скопіювати на сайт)</td>
+</tr>
+<tr>
+<td><code>ssh -T git@github.com</code></td>
+<td>перевірити, чи пускає GitHub</td>
+</tr>
+<tr>
+<td><code>gh auth login -p ssh -w</code></td>
+<td>усе через gh: вхід у браузері + завантаження ключа</td>
+</tr>
+</tbody>
+</table></div>
+<p>Два шляхи: <strong>А</strong> - руками (ключ + сайт, і наприкінці вхід у gh), <strong>Б</strong> - через gh (вхід і ключ разом). Результат однаковий, обери один.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li>Ключ створено. Які права покаже <code>ls -l ~/.ssh</code> у приватного і публічного ключа?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">-rw------- 1 ... id_ed25519
+-rw-r--r-- 1 ... id_ed25519.pub
+</code></pre>
+<p>Приватний читає і пише лише власник (<code>600</code>), публічний можуть читати всі (<code>644</code>).</p>
+</details>
+<ol start="2">
+<li>Що покаже <code>ssh-keygen -lf ~/.ssh/id_ed25519.pub</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Один рядок: розмір, відбиток, коментар (твоя пошта) і тип:</p>
+<pre><code class="language-text">256 SHA256:1EvICMx4RFQiriSXCeU4r5KAe5gIDOPxXnihEQYW0Ng 128326252+Evge14n@users.noreply.github.com (ED25519)
+</code></pre>
+<p>Відбиток у тебе буде інший - ключ щоразу генерується випадково.</p>
+</details>
+<ol start="3">
+<li>Ти вдруге запустив ту саму <code>ssh-keygen -t ed25519 ...</code>. Що буде?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">/home/.../.ssh/id_ed25519 already exists.
+Overwrite (y/n)?
+</code></pre>
+<p>Відповідай <code>n</code>. Якщо <code>y</code> - старий ключ зникне, і GitHub перестане тебе пускати, поки не додаси новий.</p>
+</details>
+<ol start="4">
+<li><code>ssh -T git@github.com</code> написав «You've successfully authenticated». Який буде код виходу (<code>echo $?</code>)?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p><code>1</code>. Це нормально: GitHub пустив, але не дає командного рядка (shell), тому сеанс одразу закривається з кодом 1 (docs.github.com, «Testing your SSH connection»).</p>
+</details>
+<h3 id="руками">Руками</h3>
+<h4 id="шлях-а-ключ-руками-і-сайт">Шлях А. Ключ руками і сайт</h4>
+<p><strong>Крок 1. Створи ключ.</strong> На всі питання тисни Enter (місце за замовчуванням і порожня пароль-фраза; про пароль-фразу - в «Як роблять профі»).</p>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -C &quot;128326252+Evge14n@users.noreply.github.com&quot;
+</code></pre>
+<pre><code class="language-text">Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/.../.ssh/id_ed25519):
+Created directory '/home/.../.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/.../.ssh/id_ed25519
+Your public key has been saved in /home/.../.ssh/id_ed25519.pub
+The key fingerprint is:
+SHA256:1EvICMx4RFQiriSXCeU4r5KAe5gIDOPxXnihEQYW0Ng 128326252+Evge14n@users.noreply.github.com
+The key's randomart image is:
++--[ED25519 256]--+
+|+O=X*..          |
+|o=E+=o o o       |
+|*o*o .. + o      |
+|B*o + .. . .     |
+|=o.+ o  S .      |
+|+*. o            |
+|O ..             |
+|..               |
+|                 |
++----[SHA256]-----+
+</code></pre>
+<p><code>-t ed25519</code> - тип ключа (сучасний, короткий), <code>-C</code> - коментар, щоб на сайті було видно, чий ключ. <code>Created directory</code> буде, лише якщо теки <code>~/.ssh</code> ще не було. Пароль-фраза при наборі не видно - це нормально.</p>
+<p><strong>Крок 2. Подивись, що вийшло.</strong></p>
+<pre><code class="language-bash">ls -l ~/.ssh
+ssh-keygen -lf ~/.ssh/id_ed25519.pub
+cat ~/.ssh/id_ed25519.pub
+</code></pre>
+<pre><code class="language-text">total 8
+-rw------- 1 evgen evgen 444 Nov 18 10:15 id_ed25519
+-rw-r--r-- 1 evgen evgen 124 Nov 18 10:15 id_ed25519.pub
+</code></pre>
+<pre><code class="language-text">256 SHA256:1EvICMx4RFQiriSXCeU4r5KAe5gIDOPxXnihEQYW0Ng 128326252+Evge14n@users.noreply.github.com (ED25519)
+</code></pre>
+<pre><code class="language-text">ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGlkZTr+dT3xLmCXdI04a813+vXMlodgm4heFoijeM3i 128326252+Evge14n@users.noreply.github.com
+</code></pre>
+<p>Останній рядок - це і є публічний ключ. Виділи його мишкою від <code>ssh-ed25519</code> до кінця пошти і скопіюй: у терміналі Mint це <strong>Ctrl+Shift+C</strong>. Файл <code>id_ed25519</code> (без <code>.pub</code>) <strong>не відкривай і не копіюй нікуди</strong>.</p>
+<p><strong>Крок 3. Додай ключ на GitHub.</strong></p>
+<pre><code class="language-text">github.com → аватарка (вгорі праворуч) → Settings → розділ «Access» → SSH and GPG keys → New SSH key
+  Title:     ноутбук Mint
+  Key type:  Authentication Key
+  Key:       встав рядок ssh-ed25519 ... (Ctrl+V у браузері)
+→ Add SSH key
+</code></pre>
+<p>У списку ключів GitHub покаже відбиток <code>SHA256:...</code> - він має збігатися з тим, що дав <code>ssh-keygen -lf</code>.</p>
+<p><strong>Крок 4. ssh-agent</strong> - програма, яка тримає розблокований ключ у памʼяті, щоб не вводити пароль-фразу щоразу. Якщо пароль-фрази нема, цей крок можна пропустити. На Mint Cinnamon агент зазвичай уже запущений сесією (не перевірено на ноутбуці); зайвим не буде:</p>
+<pre><code class="language-bash">eval &quot;$(ssh-agent -s)&quot;
+ssh-add ~/.ssh/id_ed25519
+</code></pre>
+<p><strong>Крок 5. Перевір вхід.</strong></p>
+<pre><code class="language-bash">ssh -T git@github.com
+echo $?
+</code></pre>
+<p>Першого разу ssh не знає github.com і питає (вивід справжній, 18.11.2026):</p>
+<pre><code class="language-text">The authenticity of host 'github.com (140.82.121.4)' can't be established.
+ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])?
+</code></pre>
+<p>IP-адреса може бути інша. <strong>Звір відбиток</strong> з офіційним <code>SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU</code> (docs «GitHub's SSH key fingerprints»). Збігається - набери <code>yes</code> і Enter. Далі:</p>
+<pre><code class="language-text">Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
+Hi Evge14n! You've successfully authenticated, but GitHub does not provide shell access.
+</code></pre>
+<pre><code class="language-text">1
+</code></pre>
+<p>Відбиток github.com записано у <code>~/.ssh/known_hosts</code>, більше ssh не питатиме.</p>
+<p><strong>Крок 6. Увійди в gh.</strong> Ключ дає доступ git (clone, push, pull). А програма gh (урок 16, і далі в уроках трапляються команди <code>gh ...</code>) ходить у GitHub окремо і без входу на кожну команду, якій потрібен GitHub (<code>gh repo create</code>, <code>gh pr create</code>, ...), скаже:</p>
+<pre><code class="language-text">To get started with GitHub CLI, please run:  gh auth login
+Alternatively, populate the GH_TOKEN environment variable with a GitHub API authentication token.
+</code></pre>
+<p>Тому увійди один раз:</p>
+<pre><code class="language-bash">gh auth login -p ssh -w
+gh auth status
+</code></pre>
+<p><code>-p ssh</code> - git працюватиме через SSH, <code>-w</code> - вхід через браузер: gh покаже одноразовий код, відкриє github.com, ти вставиш код і натиснеш Authorize. gh знайде твій <code>~/.ssh/id_ed25519.pub</code> і спитає, чи завантажити його на GitHub. Ключ ти вже додав у кроці 3, тож обери <strong>Skip</strong> (пропустити). Дослівний текст питань не перевірено: курс не входить у справжній акаунт. Щоб gh про ключ узагалі не питав, є прапорець <code>--skip-ssh-key</code> (<code>gh auth login --help</code>, gh 2.105.0). <code>gh auth status</code> має показати, що ти увійшов як <code>Evge14n</code>.</p>
+<h4 id="шлях-б-через-gh">Шлях Б. Через gh</h4>
+<p>gh (встановлений в уроці 02) сам знайде <code>~/.ssh/id_ed25519.pub</code> і запропонує завантажити його на GitHub; якщо ключа нема - запропонує створити (cli.github.com/manual/gh_auth_login).</p>
+<pre><code class="language-bash">gh auth login -p ssh -w
+gh auth status
+</code></pre>
+<p><code>-p ssh</code> - git працюватиме через SSH, <code>-w</code> - вхід через браузер. gh покаже одноразовий код, відкриє github.com, ти вставиш код і натиснеш Authorize. Точні питання gh можуть трохи відрізнятись (не перевірено: курс не входить у справжній акаунт). Після цього - той самий крок 5 (<code>ssh -T git@github.com</code>).</p>
+<h4 id="пісочниця-приватний-репо-pisochnytsia">Пісочниця: приватний репо pisochnytsia</h4>
+<p>Тут можна ламати що завгодно - це для вправ уроків 04-16.</p>
+<p>На сайті:</p>
+<pre><code class="language-text">github.com → «+» вгорі праворуч (Create something new) → New repository
+  Repository name:  pisochnytsia
+  Visibility:       Private
+  README:           увімкни «Add README» (галочка або перемикач, назва може трохи відрізнятись)
+→ Create repository
+</code></pre>
+<p>Або одним рядком через gh (лише після входу: крок 6 Шляху А або Шлях Б; інакше gh попросить <code>gh auth login</code>):</p>
+<pre><code class="language-bash">gh repo create pisochnytsia --private --add-readme
+</code></pre>
+<p>Клонуй собі в домашню теку. Адресу SSH видно на сайті: зелена кнопка <strong>Code</strong> → вкладка <strong>SSH</strong>.</p>
+<pre><code class="language-bash">git clone git@github.com:Evge14n/pisochnytsia.git ~/pisochnytsia
+cd ~/pisochnytsia
+ls
+git log --oneline
+git remote -v
+</code></pre>
+<pre><code class="language-text">Cloning into '/home/.../pisochnytsia'...
+</code></pre>
+<p>Далі git покаже кілька рядків про завантаження (<code>remote: ...</code>, <code>Receiving objects: 100% ...</code>).</p>
+<pre><code class="language-text">README.md
+</code></pre>
+<pre><code class="language-text">0ee5c1c (HEAD -&gt; main, origin/main, origin/HEAD) Initial commit
+</code></pre>
+<pre><code class="language-text">origin  git@github.com:Evge14n/pisochnytsia.git (fetch)
+origin  git@github.com:Evge14n/pisochnytsia.git (push)
+</code></pre>
+<p><code>origin</code> - стандартне імʼя для «репо, звідки клонували» (урок 09). Ярлики в дужках git друкує в терміналі: <code>HEAD -&gt; main</code> - ти на своїй гілці <code>main</code>; <code>origin/main</code> - де <code>main</code> на GitHub (на тому ж коміті - клон свіжий); <code>origin/HEAD</code> - головна гілка репо на GitHub.</p>
+<p><strong>Для лаб:</strong> у Лабах в git ти створиш так само приватний репо <code>univer-labs</code> і клонуватимеш його цією ж SSH-адресою. Ключ робиться один раз на ноутбук. Новий ноутбук або перевстановив Mint - новий ключ, а старий видали на сайті.</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<p><strong>1. <code>Permission denied (publickey)</code></strong> (перевірено 18.11.2026 справжнім підключенням з ключем, якого нема на GitHub):</p>
+<pre><code class="language-text">git@github.com: Permission denied (publickey).
+</code></pre>
+<p>GitHub не знайшов твій публічний ключ. Причини: не додав <code>.pub</code> на сайт (крок 3), додав інший ключ, або ssh бере не той файл. Порівняй <code>ssh-keygen -lf ~/.ssh/id_ed25519.pub</code> з відбитком у Settings → SSH and GPG keys.</p>
+<p><strong>2. Права на приватний ключ.</strong> Якщо файл <code>id_ed25519</code> можуть читати інші (наприклад, після копіювання з флешки), ssh його ігнорує:</p>
+<pre><code class="language-text">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions 0644 for '/home/.../.ssh/id_ed25519' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+Load key &quot;/home/.../.ssh/id_ed25519&quot;: bad permissions
+</code></pre>
+<p>Лікування:</p>
+<pre><code class="language-bash">chmod 600 ~/.ssh/id_ed25519
+</code></pre>
+<p><strong>3. <code>Overwrite (y/n)?</code></strong> - ключ уже є (див. «Передбач» 3). Відповідай <code>n</code>.</p>
+<p><strong>4. Відбиток github.com не збігається</strong> з <code>SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU</code>. <strong>Не пиши yes.</strong> Можливо, мережа підмінює сервер (наприклад, чужий Wi-Fi). Спробуй з іншої мережі.</p>
+<p><strong>5. Клонуєш за HTTPS-адресою</strong> (<code>https://github.com/...</code>, вкладка HTTPS під кнопкою Code). Для приватного репо git спитає логін і пароль, пароль від акаунта не підійде (з 13.08.2021), і клону не буде зовсім. Дослівний текст відмови не перевірено. Лікування - клонуй за SSH-адресою (<code>git@github.com:...</code>, вкладка SSH). Якщо ж HTTPS-клон у тебе вже є і працює (публічний репо або gh, що увійшов з <code>-p https</code> і сам дає git токен), переключи його на SSH:</p>
+<pre><code class="language-bash">git remote set-url origin git@github.com:Evge14n/pisochnytsia.git
+</code></pre>
+<p><strong>6. Показав приватний ключ</strong> (вставив <code>id_ed25519</code> у чат, на сайт, у скриншот). Вважай його вкраденим: видали ключ на сайті (Settings → SSH and GPG keys → Delete), створи новий і додай знову.</p>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li><strong>Ed25519</strong> - тип, який першим пропонує документація GitHub; RSA 4096 лише для старих систем, що не знають Ed25519 (docs «Generating a new SSH key»).</li>
+<li><strong>Пароль-фраза + ssh-agent.</strong> Тоді вкрадений файл ключа без пароль-фрази марний, а вводиш її раз за сеанс (docs).</li>
+<li><strong>Один ключ на пристрій</strong> з назвою в Title («ноутбук Mint»). Загубив пристрій - видалив один ключ, інші працюють.</li>
+<li><strong>Двофакторний вхід (2FA).</strong> З березня 2023 GitHub вимагає 2FA від усіх, хто робить внесок кодом на github.com; основний спосіб - застосунок з одноразовими кодами (TOTP), ключ безпеки чи passkey - як запасний (docs «About mandatory two-factor authentication»).</li>
+<li><strong>Підпис комітів тим самим SSH-ключем</strong> (git 2.34+): GitHub ставить біля таких комітів позначку «Verified» (docs «About commit signature verification»). Для лаб не обовʼязково.</li>
+<li><strong>Відбиток github.com можна перевірити заздалегідь</strong>, ще до першого підключення:</li>
+</ul>
+<pre><code class="language-bash">ssh-keyscan -t ed25519 github.com | ssh-keygen -lf -
+</code></pre>
+<pre><code class="language-text">256 SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU github.com (ED25519)
+</code></pre>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чим приватний ключ відрізняється від публічного і який з них іде на GitHub?</li>
+<li>Які права мають бути в <code>~/.ssh/id_ed25519</code> і як їх виставити?</li>
+<li>Що робити, якщо при першому <code>ssh -T git@github.com</code> відбиток не <code>SHA256:+DiY3...</code>?</li>
+<li><code>ssh -T git@github.com</code> вивів «Hi Evge14n!...» і код 1. Це помилка?</li>
+<li>Ти вставив вміст <code>id_ed25519</code> в чат з одногрупником. Що робиш?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Приватний (<code>id_ed25519</code>) лишається лише на ноутбуці і доводить, що це ти. Публічний (<code>id_ed25519.pub</code>) кладеш на GitHub, він сам доступу не дає.</li>
+<li><code>600</code> (читати і писати лише власнику): <code>chmod 600 ~/.ssh/id_ed25519</code>.</li>
+<li>Не писати yes, перервати (Ctrl+C), спробувати з іншої мережі і звірити з docs «GitHub's SSH key fingerprints».</li>
+<li>Ні. GitHub пустив, а код 1 - бо він не дає командного рядка.</li>
+<li>Видаляю цей ключ на сайті (Settings → SSH and GPG keys), створюю новий, додаю його на сайт і перевіряю <code>ssh -T git@github.com</code>.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Generating a new SSH key and adding it to the ssh-agent - https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent (відкрито 18.11.2026)</li>
+<li>Adding a new SSH key to your GitHub account - https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account (відкрито 18.11.2026, за ФАКТИ-GIT)</li>
+<li>Testing your SSH connection - https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection (відкрито 18.11.2026, за ФАКТИ-GIT)</li>
+<li>GitHub's SSH key fingerprints - https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints (відкрито 18.11.2026, за ФАКТИ-GIT)</li>
+<li>gh auth login - https://cli.github.com/manual/gh_auth_login (відкрито 18.11.2026)</li>
+<li>Creating a new repository - https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository (відкрито 18.11.2026)</li>
+<li>About mandatory two-factor authentication - https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/about-mandatory-two-factor-authentication (відкрито 18.11.2026)</li>
+<li>About commit signature verification - https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification (відкрито 18.11.2026)</li>
+<li>github.blog, «Token authentication requirements for Git operations» - пароль для git не приймається з 13.08.2021 (за ФАКТИ-GIT; саму сторінку не відкривав)</li>
+<li>Вивід команд - запуск у перевірці <code>_перевірка/u03.sh</code> (OpenSSH 9.6p1, git 2.43.0, Ubuntu 24.04, 18.11.2026)</li>
+</ul>

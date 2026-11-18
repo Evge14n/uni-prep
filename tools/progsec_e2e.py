@@ -25,7 +25,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from prog_e2e import BAD, ERR, PAIRS_JS, SHOTS, goto, norm, run_block, serve  # noqa: E402
 
 U = "prog-sec"
-TABS = ["teoriya", "zadachi", "shpargalka", "test"]
+# UPROGONE: теорія розрізана на теми всередині prog (sec = вступ, sec-01 ... sec-10)
+TABS = ["sec"] + [f"sec-{n:02d}" for n in range(1, 11)] + ["sec-zadachi", "sec-shpargalka", "test"]
+CODE = ["sec"] + [f"sec-{n:02d}" for n in range(1, 11)] + ["sec-zadachi"]
 
 
 def main():
@@ -50,12 +52,13 @@ def main():
             page.on("pageerror", lambda e: errs.append(str(e)))
             page.on("response", lambda r: errs.append(f"{r.status} {r.url}") if r.status >= 400 else None)
             goto(page, base, "/subjects")
-            info = page.evaluate("""() => { const a = document.querySelector('a[href="#/u/prog-sec"]');
-                if (!a) return null; const d = a.closest('details'); return {sum: d ? d.querySelector('summary').textContent : '', text: a.textContent}; }""")
-            if not info or "Python + безпека" not in info["sum"] or "Python + безпека" not in info["text"]:
-                fail(f"{w}px: картки prog-sec у «Навичках» нема: {info}")
+            # UPROGONE: окремого розділу нема - лише «Програмування», де ця частина всередині
+            info = page.evaluate("""() => ({old: document.querySelectorAll('a[href="#/u/prog-sec"]').length,
+                prog: document.querySelectorAll('a.unit[href="#/u/prog"]').length})""")
+            if info["old"] or info["prog"] != 1:
+                fail(f"{w}px: у «Предметах» старий розділ або нема «Програмування»: {info}")
             for tab in TABS:
-                goto(page, base, f"/u/{U}/{tab}")
+                goto(page, base, f"/u/prog/{tab}")
                 st["states"] += 1
                 if tab == "test":
                     page.wait_for_timeout(300)
@@ -70,7 +73,7 @@ def main():
                     .filter(a => { const r = a.getBoundingClientRect(); return r.right > innerWidth + 1 || r.left < -1; }).map(a => a.textContent)""")
                 if hidden_tabs:
                     fail(f"{w}px {tab}: вкладки за краєм екрана: {hidden_tabs}")
-                if tab == "teoriya":
+                if tab == "sec-02":
                     page.screenshot(path=str(SHOTS / f"progsec-teoriya-{w}.png"))
             if errs:
                 fail(f"{w}px: помилки консолі/мережі: {errs[:5]}")
@@ -82,8 +85,8 @@ def main():
         perrs = []
         page.on("pageerror", lambda e: perrs.append(str(e)))
         t0 = time.time()
-        for tab in ("teoriya", "zadachi"):
-            goto(page, base, f"/u/{U}/{tab}")
+        for tab in CODE:
+            goto(page, base, f"/u/prog/{tab}")
             for b in page.evaluate(PAIRS_JS):
                 code = b["text"]
                 head = "\n".join(code.split("\n")[:3])
@@ -125,8 +128,8 @@ def main():
         bank = {}
         for q in quiz["questions"]:
             bank.setdefault(q["q"], []).append(q)
-        goto(page, base, f"/u/{U}/test")
-        page.click(f'a[href="#/q/{U}/real"]')
+        goto(page, base, "/u/prog/test")
+        goto(page, base, f"/q/{U}/real")
         page.wait_for_selector(".card.q", timeout=10000)
         right_planned = 0
         for i in range(15):
@@ -167,7 +170,7 @@ def main():
         # ---- 6. офлайн ----
         ctx = br.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, service_workers="allow")
         page = ctx.new_page()
-        goto(page, base, f"/u/{U}/teoriya")
+        goto(page, base, "/u/prog/sec")
         page.wait_for_function("navigator.serviceWorker.controller !== null", timeout=30000)
         page.wait_for_function("""async () => { const k = await caches.keys(); const n = k.find(x => x.startsWith('uniprep-'));
             if (!n) return false; const c = await caches.open(n); return (await c.keys()).length > 90; }""", timeout=60000)
@@ -175,15 +178,15 @@ def main():
         page.wait_for_function("document.querySelector('#pybox').textContent.includes('працює без інтернету')", timeout=120000)
         ctx.set_offline(True)
         page.reload()
-        goto(page, base, f"/u/{U}/teoriya")
+        goto(page, base, "/u/prog/sec-02")
         sql_idx = page.evaluate("""() => [...document.querySelectorAll('article.doc pre:not(.pyout)')]
             .findIndex(p => p.textContent.includes("OR '1'='1") && p.textContent.includes('f"SELECT'))""")
         out = run_block(page, sql_idx, "Запустити", timeout=90000)
         ok_sql = "('anna', 's-111'), ('bob', 's-222')" in out
-        goto(page, base, f"/u/{U}/zadachi")
+        goto(page, base, "/u/prog/sec-zadachi")
         n_det = page.evaluate("document.querySelectorAll('article.doc details').length")
-        goto(page, base, f"/u/{U}/test")
-        has_test = page.locator(f'a[href="#/q/{U}/real"]').count() > 0
+        goto(page, base, "/u/prog/test")
+        has_test = page.locator(f'a[href="#/q/{U}/train"]').count() > 0
         page.screenshot(path=str(SHOTS / "progsec-offline-test.png"))
         print(f"офлайн: sqlite3-інʼєкція -> {ok_sql}; розвʼязків задач {n_det}; тест відкрився {has_test}")
         if not ok_sql or n_det < 10 or not has_test:

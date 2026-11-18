@@ -1,0 +1,50 @@
+<h1 id="тема-8-веб-запити-й-ssrf">Тема 8. Веб-запити й SSRF</h1>
+<div class="pybox" id="pybox"></div>
+
+<p><strong>Що треба з Python:</strong> <code>urllib.parse.urlparse(url)</code> розбирає адресу на схему, хост, порт; модуль <code>ipaddress</code>
+каже, чи адреса приватна.</p>
+<p><strong>Правила для запитів:</strong>
+- лише <code>https://</code> (TLS шифрує і перевіряє, що сервер справжній); не вимикати перевірку сертифіката
+  (<code>verify=False</code> у бібліотеці requests);
+- секрети не в URL (URL пишеться в логи і історію браузера) - у заголовку;
+- завжди ставити <code>timeout</code> (інакше один повільний сервер підвішує твою програму).</p>
+<p><strong>Де діра: SSRF</strong> (Server-Side Request Forgery). Сервер вміє «завантажити картинку за посиланням». Користувач
+дає не картинку, а внутрішню адресу: <code>http://127.0.0.1:...</code> (сам сервер), <code>http://169.254.169.254/</code> (службові
+дані хмари, там бувають ключі доступу), <code>http://192.168.0.1/</code> (роутер у мережі).</p>
+<p><strong>Як правильно:</strong> дозволяти лише потрібне (краще список дозволених доменів); не ходити на приватні адреси.</p>
+<pre><code class="language-python">import ipaddress
+from urllib.parse import urlparse
+
+
+def is_safe_url(url):
+    try:
+        u = urlparse(url)
+    except ValueError:
+        return False             # urlparse теж падає на смітті
+    if u.scheme != &quot;https&quot; or not u.hostname:
+        return False
+    try:
+        ip = ipaddress.ip_address(u.hostname)
+    except ValueError:
+        return True              # не IP у звичайному записі - текстом не перевірити
+    return ip.is_global
+
+
+for url in [&quot;https://example.com/cat.png&quot;, &quot;http://example.com/&quot;,
+            &quot;https://127.0.0.1/admin&quot;, &quot;https://169.254.169.254/&quot;,
+            &quot;https://192.168.0.1/&quot;, &quot;file:///etc/passwd&quot;]:
+    print(url, &quot;-&gt;&quot;, is_safe_url(url))
+</code></pre>
+<pre><code class="language-text">https://example.com/cat.png -&gt; True
+http://example.com/ -&gt; False
+https://127.0.0.1/admin -&gt; False
+https://169.254.169.254/ -&gt; False
+https://192.168.0.1/ -&gt; False
+file:///etc/passwd -&gt; False
+</code></pre>
+<p><strong>Пастка:</strong> ця перевірка дивиться лише на текст адреси. Вона пропустить <code>https://localhost/</code>, <code>https://127.1/</code>
+і <code>https://2130706433/</code> - а система все одно перетворить їх на <code>127.0.0.1</code>. Імʼя домену теж може вести на
+<code>127.0.0.1</code>, а сервер може відповісти перенаправленням на внутрішню адресу. Тому в справжньому сервісі перевіряють IP <strong>після</strong> того,
+як імʼя перетворили на адресу, вимикають автоматичні перенаправлення або пускають такі запити через
+окремий проксі. Найнадійніше - список дозволених доменів.</p>
+<p>OWASP: A01 Broken Access Control (у 2025 SSRF входить сюди, CWE-918), A04 Cryptographic Failures (без TLS).</p>

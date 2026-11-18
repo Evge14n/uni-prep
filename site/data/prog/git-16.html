@@ -1,0 +1,298 @@
+<h1 id="тема-16-gh-github-з-терміналу">Тема 16. gh - GitHub з терміналу</h1>
+<p><strong>Навіщо:</strong> щоб створити Issue, відкрити Pull Request чи злити його, не треба йти в браузер. Пишеш лабу в терміналі -
+там же й <code>gh pr create</code>. Для ЛР2 це «закінчив завдання → PR → злив» за три команди.</p>
+<h3 id="коротко">Коротко</h3>
+<p><code>git</code> працює з <strong>репозиторієм</strong> (коміти, гілки, push). <code>gh</code> (GitHub CLI) працює з <strong>сайтом GitHub</strong>: Issues, Pull Requests,
+налаштування репо, Actions. gh сам дивиться в <code>git remote</code> поточної теки і розуміє, з яким репо ти працюєш.</p>
+<pre><code class="language-text"> термінал ── git push / pull ─────→  репозиторій на GitHub (коміти, гілки)
+          └─ gh issue / pr / repo ─→  сайт GitHub (Issues, PR, налаштування) - через API
+</code></pre>
+<p>Аналогія: git - як носити зошит у деканат і назад; gh - як телефонувати в деканат: «створіть заявку», «закрийте заявку».</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh auth status</code></td>
+<td>чи ти увійшов і яким акаунтом</td>
+</tr>
+<tr>
+<td><code>gh repo view</code> / <code>gh repo view --web</code></td>
+<td>опис і README поточного репо / те саме в браузері</td>
+</tr>
+<tr>
+<td><code>gh repo clone Evge14n/НАЗВА</code></td>
+<td>клонувати (коротше за <code>git clone git@github.com:...</code>)</td>
+</tr>
+<tr>
+<td><code>gh repo create НАЗВА --private</code></td>
+<td>створити репо (<code>--public</code>, <code>--add-readme</code>, <code>--clone</code>, <code>--source=. --push</code>)</td>
+</tr>
+<tr>
+<td><code>gh issue create</code> / <code>list</code> / <code>view 1</code> / <code>close 1</code></td>
+<td>Issues: створити, список, подивитися №1, закрити №1</td>
+</tr>
+<tr>
+<td><code>gh pr create --fill</code></td>
+<td>PR з поточної гілки, назва й опис - з комітів</td>
+</tr>
+<tr>
+<td><code>gh pr list</code> / <code>view 1</code> / <code>diff 1</code></td>
+<td>список PR, PR №1, його зміни</td>
+</tr>
+<tr>
+<td><code>gh pr checkout 1</code></td>
+<td>забрати гілку PR №1 до себе (щоб перевірити)</td>
+</tr>
+<tr>
+<td><code>gh pr merge 1 --squash --delete-branch</code></td>
+<td>злити PR №1 одним комітом і видалити гілку тут і на GitHub</td>
+</tr>
+<tr>
+<td><code>gh browse</code></td>
+<td>відкрити репо в браузері (<code>gh browse lr2_1.py</code> - конкретний файл)</td>
+</tr>
+<tr>
+<td><code>gh help</code>, <code>gh pr merge --help</code></td>
+<td>довідка (англійською, з прикладами)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Чому gh з офіційного репо GitHub, а не з Менеджера програм Mint.</strong> У репозиторії Mint/Ubuntu лежить gh 2.45.0, і він
+зламаний: GitHub прибрав старий API, і <code>gh pr view</code> падає з помилкою «GraphQL: Projects (classic) is being deprecated ...»
+(перевірено 18.11.2026). Документація cli/cli прямо радить офіційні пакети, бо «the community-distributed 2.45.x / 2.46.x
+version is broken». Встановлення - Урок 02, вхід - Урок 03 (<code>gh auth login</code>).</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li>
+<p>На свіжому ноутбуці, де ще не було <code>gh auth login</code>, запускаєш <code>gh auth status</code>. Що буде?
+   <details markdown="block">
+
+<summary>Відповідь</summary>
+
+
+   ```text
+   You are not logged into any GitHub hosts. To log in, run: gh auth login
+   ```
+   Код виходу 1. gh без входу не має доступу до твоїх репо (вхід - Урок 03).
+   </details></p>
+</li>
+<li>
+<p>Ти в домашній теці <code>~</code> (не в репо) і пишеш <code>gh issue list</code>. Звідки gh дізнається, чиї Issues показати?
+   <details markdown="block">
+
+<summary>Відповідь</summary>
+
+
+   Нізвідки - він бере репо з `git remote` поточної теки, а тут репо нема:
+   ```text
+   failed to run git: fatal: not a git repository (or any of the parent directories): .git
+   ```
+   Або зайди в теку репо, або вкажи репо явно: `gh issue list -R Evge14n/pisochnytsia`.
+   </details></p>
+</li>
+<li>
+<p>Друг запускає <code>gh pr checkout 1</code>. Що саме зміниться в його git-репо?
+   <details markdown="block">
+
+<summary>Відповідь</summary>
+
+
+   gh скачає гілку PR (`lr2-zavd1`) і перемкне на неї - так само, як `git fetch origin` і `git switch lr2-zavd1`.
+   У `git branch` зʼявиться нова гілка `lr2-zavd1`, яка стежить за `origin/lr2-zavd1`.
+   </details></p>
+</li>
+<li>
+<p>Ти злив PR кнопкою <strong>Squash and merge</strong> на сайті і там же натиснув <strong>Delete branch</strong> (гілки на GitHub більше нема).
+   Потім у терміналі <code>git switch main</code>, <code>git pull</code>, <code>git fetch --prune</code>. Що скаже <code>git branch -d lr2-zavd1</code>?
+   <details markdown="block">
+
+<summary>Відповідь</summary>
+
+
+   ```text
+   error: the branch 'lr2-zavd1' is not fully merged.
+   If you are sure you want to delete it, run 'git branch -D lr2-zavd1'
+   ```
+   Код виходу 1, гілка лишилась. Squash робить на `main` **новий** коміт з усіх змін гілки, тож git не бачить у `main`
+   самих комітів гілки. Зміни там є - можна сміливо `git branch -D lr2-zavd1`. (`gh pr merge --delete-branch` прибирає
+   гілку сам.) Якщо ж на сайті **не** натискав Delete branch (або ще не робив `git fetch --prune`), `git branch -d`
+   видалить гілку з попередженням і кодом 0 - див. «Типові помилки», 4.
+   </details></p>
+</li>
+</ol>
+<h3 id="руками">Руками</h3>
+<p>Працюємо в пісочниці <code>~/pisochnytsia</code> на <strong>справжньому</strong> GitHub (gh не можна «підмінити» локально), тож тут - твій
+репо <code>Evge14n/pisochnytsia</code> з Уроку 03. Номери Issue і PR у тебе можуть бути інші (якщо вже робив їх в Уроках 10-11) -
+тоді пиши свої номери замість <code>1</code>.</p>
+<p><strong>Крок 0. Версія і вхід.</strong></p>
+<pre><code class="language-bash">gh version
+gh auth status
+</code></pre>
+<pre><code class="language-text">gh version 2.105.0 (2026-11-17)
+https://github.com/cli/cli/releases/tag/v2.105.0
+</code></pre>
+<p><code>gh version</code> - те саме, що <code>gh --version</code>. Версія має бути новіша за 2.46 (у тебе може бути ще новіша). <code>gh auth status</code> після входу виводить блок <code>github.com</code>
+з рядком <code>✓ Logged in to github.com account Evge14n (...)</code> і далі <code>- Active account: true</code>,
+<code>- Git operations protocol: ssh</code> - це формат з коду gh (<code>pkg/cmd/auth/status/status.go</code>), сам вивід на твоєму
+ноутбуці не перевірено.</p>
+<p><strong>Крок 1. Репо.</strong></p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+gh repo view
+gh repo view --web
+gh browse
+</code></pre>
+<p><code>gh repo view</code> друкує назву, опис і README. <code>--web</code> і <code>gh browse</code> відкривають сторінку репо в браузері.
+Ще корисне: <code>gh repo list --limit 5</code> - пʼять твоїх останніх репо.</p>
+<pre><code class="language-bash">gh repo list --limit 5
+</code></pre>
+<p><strong>Крок 2. Issue - «завдання собі».</strong></p>
+<pre><code class="language-bash">gh issue create --title &quot;ЛР2: перевірити завдання 3&quot; --body &quot;doctest падає на відʼємних числах&quot;
+gh issue list
+gh issue view 1
+gh issue close 1 --comment &quot;Виправлено&quot;
+gh issue list --state closed
+</code></pre>
+<p><code>issue create</code> друкує посилання на нову Issue. <code>--state closed</code> - показати закриті (без нього - лише відкриті).</p>
+<p><strong>Крок 3. Pull Request з терміналу.</strong> Гілка і коміт - звичайним git (Уроки 07, 09):</p>
+<pre><code class="language-bash">git switch -c lr2-zavd1
+printf 'def square(number: int) -&gt; int:\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; square(3)\n    9\n    &quot;&quot;&quot;\n    return number * number\n' &gt; lr2_1.py
+python3 -m doctest lr2_1.py
+git add lr2_1.py
+git commit -m &quot;ЛР2: завдання 1&quot;
+git push -u origin lr2-zavd1
+</code></pre>
+<p><code>python3 -m doctest</code> нічого не друкує - отже всі тести пройшли. Кінець виводу <code>git push -u</code>:</p>
+<pre><code class="language-text"> * [new branch]      lr2-zavd1 -&gt; lr2-zavd1
+branch 'lr2-zavd1' set up to track 'origin/lr2-zavd1'.
+</code></pre>
+<p>Тепер PR:</p>
+<pre><code class="language-bash">gh pr create --fill --base main
+gh pr list
+gh pr view 1
+gh pr diff 1
+</code></pre>
+<p><code>--fill</code> бере назву й опис з комітів (тут - «ЛР2: завдання 1»), <code>--base main</code> - куди зливати. Без <code>--fill</code> gh спитає
+назву й опис сам. Якщо в описі написати <code>Closes #1</code>, Issue №1 закриється, коли PR зіллють (так пише <code>gh pr create --help</code>).</p>
+<p><strong>Крок 4. «Друг» перевіряє PR</strong> у своєму клоні <code>~/druhyi-klon</code> (Урок 09; якщо його нема -
+<code>gh repo clone Evge14n/pisochnytsia ~/druhyi-klon</code>):</p>
+<pre><code class="language-bash">cd ~/druhyi-klon
+gh pr checkout 1
+python3 -m doctest lr2_1.py
+git switch main
+cd ~/pisochnytsia
+</code></pre>
+<p>Що <code>gh pr checkout 1</code> робить усередині: якби gh не було, <strong>замість</strong> нього (не після) у <code>~/druhyi-klon</code> можна руками
+(тут не набирай - це лише для розуміння):</p>
+<pre><code class="language-text">git fetch origin
+git switch lr2-zavd1
+</code></pre>
+<pre><code class="language-text">Switched to a new branch 'lr2-zavd1'
+branch 'lr2-zavd1' set up to track 'origin/lr2-zavd1'.
+</code></pre>
+<p>Це вивід у клоні, де гілки <code>lr2-zavd1</code> ще нема: <code>git switch</code> сам створює її з <code>origin/lr2-zavd1</code>. Ти вже зробив
+<code>gh pr checkout 1</code>, тож у <code>~/druhyi-klon</code> гілка є, і там <code>git switch lr2-zavd1</code> напише інше:
+<code>Switched to branch 'lr2-zavd1'</code> і <code>Your branch is up to date with 'origin/lr2-zavd1'.</code></p>
+<p><strong>Крок 5. Злити PR</strong> (ти в <code>~/pisochnytsia</code>, на гілці <code>lr2-zavd1</code>):</p>
+<pre><code class="language-bash">gh pr merge 1 --squash --delete-branch
+git log --oneline -n 3
+</code></pre>
+<p><code>--squash</code> - усі коміти PR стають <strong>одним</strong> комітом на <code>main</code> (Урок 11, види merge). <code>--delete-branch</code> - видалити гілку
+і на GitHub, і в тебе. Якщо ти стояв на цій гілці, gh перемкне тебе на <code>main</code> і зробить <code>git pull</code>
+(так написано в коді gh 2.105, <code>pkg/cmd/pr/merge/merge.go</code>). У виводі будуть рядки за шаблоном
+<code>✓ Squashed and merged pull request Evge14n/pisochnytsia#1 (...)</code>, <code>✓ Deleted local branch lr2-zavd1 and switched to branch main</code>,
+<code>✓ Deleted remote branch lr2-zavd1</code> (шаблон з коду, на справжньому GitHub у цьому курсі не запускали).
+<code>git log --oneline -n 3</code> покаже на <code>main</code> новий коміт з назвою PR.</p>
+<p><strong>Довідка, коли забув прапорець:</strong></p>
+<pre><code class="language-bash">gh help
+gh pr merge --help
+</code></pre>
+<p>Повна довідка онлайн: https://cli.github.com/manual</p>
+<p><strong>Для лаб:</strong> у <code>univer-labs</code> кожна лаба - гілка <code>lr2</code>, і коли завдання пройшли doctest:
+<code>git push -u origin lr2</code> → <code>gh pr create --fill --base main</code> → <code>gh pr merge --squash --delete-branch</code> (або звичайний
+merge, якщо хочеш бачити кожен коміт-завдання в історії <code>main</code>). Покроково - «Лаби в git - univer-labs покроково».</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ol>
+<li>
+<p><strong>Не увійшов.</strong> <code>gh auth status</code> → <code>You are not logged into any GitHub hosts. To log in, run: gh auth login</code> (код 1),
+   а будь-яка робоча команда, наприклад <code>gh issue list</code>:
+   <code>text
+   To get started with GitHub CLI, please run:  gh auth login
+   Alternatively, populate the GH_TOKEN environment variable with a GitHub API authentication token.</code>
+   Код виходу 4. Виправлення: <code>gh auth login</code> (Урок 03).</p>
+</li>
+<li>
+<p><strong>Не в теці репо.</strong> <code>failed to run git: fatal: not a git repository (or any of the parent directories): .git</code>.
+   Зайди в репо (<code>cd ~/pisochnytsia</code>) або вкажи репо прапорцем:
+   <code>bash
+   gh issue list -R Evge14n/pisochnytsia</code></p>
+</li>
+<li>
+<p><strong>Старий gh з репо Mint.</strong> <code>gh pr view</code> падає з <code>GraphQL: Projects (classic) is being deprecated ...</code>, а
+   <code>gh --version</code> показує 2.45.0. Видали його і постав з офіційного репо (Урок 02).</p>
+</li>
+<li>
+<p><strong>Злив на сайті кнопкою Squash and merge і видалив там гілку (Delete branch) - <code>git branch -d</code> не видаляє.</strong>
+   Після <code>git switch main</code>, <code>git pull</code> і <code>git fetch --prune</code>:
+   <code>text
+   error: the branch 'lr2-zavd1' is not fully merged.
+   If you are sure you want to delete it, run 'git branch -D lr2-zavd1'</code>
+   Переконайся, що PR справді злито (на сторінці PR фіолетова позначка Merged, або <code>gh pr view 1</code>), і видали з <code>-D</code>:
+   <code>bash
+   git branch -D lr2-zavd1</code>
+   Незвичне (git 2.43): якщо гілка <code>origin/lr2-zavd1</code> у тебе ще є - на сайті <strong>не</strong> натискав Delete branch, або
+   натискав, але <code>git fetch --prune</code> ще не робив, - то <code>git branch -d</code> гілку <strong>видаляє</strong> (код 0), лише з попередженням:
+   <code>text
+   warning: deleting branch 'lr2-zavd1' that has been merged to
+            'refs/remotes/origin/lr2-zavd1', but not yet merged to HEAD
+   Deleted branch lr2-zavd1 (was 3c4bd53).</code>
+   Бо <code>-d</code> порівнює з гілкою, за якою твоя стежить (<code>origin/lr2-zavd1</code>), а не лише з <code>main</code>.</p>
+</li>
+</ol>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li><strong>PR з Issue одним рухом:</strong> <code>gh pr create --fill</code> + у тексті <code>Closes #12</code> - після злиття Issue закриється сама.</li>
+<li><strong>Рев'ю з терміналу:</strong> <code>gh pr checkout 7</code> → запустити тести → <code>gh pr review 7 --approve</code> або
+  <code>gh pr review 7 --request-changes --body "..."</code> (cli.github.com/manual/gh_pr_review).</li>
+<li><strong>Стежити за Actions</strong> (той самий «pages build and deployment» з Уроку 15) без браузера:
+  <code>bash
+  gh run list --limit 3</code></li>
+<li><strong>Опублікувати локальний репо одним рядком:</strong> <code>gh repo create univer-labs --private --source=. --remote=origin --push</code>
+  (створює репо на GitHub, додає <code>origin</code> і пушить; файл «Лаби в git»).</li>
+<li><strong><code>gh api</code></strong> - будь-який запит до GitHub API для скриптів, напр. <code>gh api repos/Evge14n/uni-prep</code> (cli.github.com/manual/gh_api).</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чим відрізняється робота <code>git</code> і <code>gh</code>?</li>
+<li>Звідки <code>gh pr list</code> знає, з яким репо працювати, і як вказати інше?</li>
+<li>Якою командою створити PR з поточної гілки в <code>main</code>, взявши назву з комітів?</li>
+<li>Що роблять прапорці <code>--squash</code> і <code>--delete-branch</code> у <code>gh pr merge</code>?</li>
+<li>Чому gh ставлять з офіційного репо GitHub, а не з Менеджера програм Mint?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>git</code> - коміти, гілки, push/pull з репозиторієм. <code>gh</code> - сайт GitHub: Issues, PR, налаштування, Actions (через API).</li>
+<li>З <code>git remote</code> поточної теки. Інше репо - <code>-R Evge14n/НАЗВА</code>.</li>
+<li><code>gh pr create --fill --base main</code>.</li>
+<li><code>--squash</code> - усі коміти PR одним комітом на <code>main</code>; <code>--delete-branch</code> - видалити гілку на GitHub і локально
+   (і перемкнути тебе на <code>main</code>).</li>
+<li>У репо Mint gh 2.45.0, він зламаний (GitHub прибрав старий API). Офіційний пакет новий і оновлюється разом із системою.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>GitHub CLI manual: https://cli.github.com/manual (відкрито 18.11.2026); сторінки gh_pr_create, gh_pr_merge,
+  gh_pr_checkout, gh_pr_review, gh_issue_create, gh_repo_create, gh_browse, gh_api</li>
+<li>Встановлення gh на Linux, cli/cli <code>docs/install_linux.md</code>: https://github.com/cli/cli/blob/trunk/docs/install_linux.md
+  (відкрито 18.11.2026)</li>
+<li>Код gh: формат <code>gh auth status</code> - https://github.com/cli/cli/blob/trunk/pkg/cmd/auth/status/status.go,
+  повідомлення <code>gh pr merge</code> - https://github.com/cli/cli/blob/trunk/pkg/cmd/pr/merge/merge.go (відкрито 18.11.2026)</li>
+<li>docs.github.com, «About GitHub CLI»: https://docs.github.com/en/github-cli/github-cli/about-github-cli (відкрито 18.11.2026)</li>
+<li>Pro Git, 6.2 «Contributing to a Project» (про PR на GitHub): https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project
+  (відкрито 18.11.2026)</li>
+</ul>

@@ -1,0 +1,59 @@
+<h1 id="тема-2-рядки-й-інʼєкції">Тема 2. Рядки й інʼєкції</h1>
+<div class="pybox" id="pybox"></div>
+
+<p><strong>Що треба з Python:</strong> f-рядок <code>f"... {x} ..."</code> просто вставляє текст. Python не знає, що цей рядок потім
+стане командою для бази даних чи терміналу.</p>
+<p><strong>Де діра:</strong> ввід ліпиться в команду, і користувач міняє сенс команди. Приклад - SQL-запит до бази
+(SQLite є в Python, <code>import sqlite3</code>). Створюємо свою іграшкову базу в памʼяті:</p>
+<pre><code class="language-python">import sqlite3
+
+con = sqlite3.connect(&quot;:memory:&quot;)
+con.execute(&quot;CREATE TABLE users (name TEXT, secret TEXT)&quot;)
+con.executemany(&quot;INSERT INTO users VALUES (?, ?)&quot;,
+                [(&quot;anna&quot;, &quot;s-111&quot;), (&quot;bob&quot;, &quot;s-222&quot;)])
+
+name = &quot;nobody' OR '1'='1&quot;      # ввід користувача
+sql = f&quot;SELECT name, secret FROM users WHERE name = '{name}'&quot;
+print(sql)
+print(con.execute(sql).fetchall())
+</code></pre>
+<pre><code class="language-text">SELECT name, secret FROM users WHERE name = 'nobody' OR '1'='1'
+[('anna', 's-111'), ('bob', 's-222')]
+</code></pre>
+<p>Лапка у вводі закрила рядок, і <code>OR '1'='1'</code> (завжди правда) стало частиною запиту. Запит віддав
+секрети всіх. Це <strong>SQL-інʼєкція</strong>.</p>
+<p><strong>Як правильно: дані окремо від команди.</strong> У запиті ставиш <code>?</code>, а значення передаєш другим аргументом.
+База отримує їх як дані і ніколи не виконує як код.</p>
+<pre><code class="language-python">import sqlite3
+
+con = sqlite3.connect(&quot;:memory:&quot;)
+con.execute(&quot;CREATE TABLE users (name TEXT, secret TEXT)&quot;)
+con.executemany(&quot;INSERT INTO users VALUES (?, ?)&quot;,
+                [(&quot;anna&quot;, &quot;s-111&quot;), (&quot;bob&quot;, &quot;s-222&quot;)])
+
+name = &quot;nobody' OR '1'='1&quot;
+rows = con.execute(&quot;SELECT name, secret FROM users WHERE name = ?&quot;,
+                   (name,)).fetchall()
+print(rows)
+print(con.execute(&quot;SELECT secret FROM users WHERE name = ?&quot;,
+                  (&quot;anna&quot;,)).fetchall())
+</code></pre>
+<pre><code class="language-text">[]
+[('s-111',)]
+</code></pre>
+<p>Користувача з іменем <code>nobody' OR '1'='1</code> нема - і запит чесно повертає порожній список.
+Зверни увагу на кому в <code>(name,)</code>: це кортеж з одного елемента.</p>
+<p><strong>Command-інʼєкція - те саме з командою терміналу.</strong> Склеїв команду рядком і віддав у shell:</p>
+<pre><code class="language-python">host = &quot;example.com; echo ЗЛАМАНО&quot;     # ввід користувача
+cmd = &quot;ping -c 1 &quot; + host
+print(cmd)
+</code></pre>
+<pre><code class="language-text">ping -c 1 example.com; echo ЗЛАМАНО
+</code></pre>
+<p>Shell бачить <code>;</code> і виконує ДВІ команди. Правильно: <code>subprocess.run(["ping", "-c", "1", host])</code> - список
+аргументів без <code>shell=True</code>, тоді <code>host</code> лишається одним аргументом, а не командою. Але аргумент усе ще
+може бути опцією: <code>host = "--help"</code> ping прочитає як ключ (це argument injection). Тому ще й перевірити,
+що <code>host</code> схожий на імʼя хоста: лише літери, цифри, крапки, дефіс, і НЕ починається з дефісу.</p>
+<p><strong>Типова помилка:</strong> «екранувати лапки самому» (<code>name.replace("'", "")</code>). Завжди знайдеться обхід;
+параметри (<code>?</code>) - єдиний надійний спосіб.</p>
+<p>OWASP: A05 Injection (SQL - CWE-89, команди ОС - CWE-78).</p>

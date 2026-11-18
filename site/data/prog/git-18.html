@@ -1,0 +1,349 @@
+<h1 id="тема-18-лаби-в-git-univer-labs-покроково">Тема 18. Лаби в git - univer-labs покроково</h1>
+<p><strong>Навіщо:</strong> усі сім лаб - в одному приватному репо на GitHub. Кожне завдання, що пройшло doctest, - окремий коміт
+(зіпсуєш - повернешся). Кожна лаба - своя гілка. Кожна здача - тег. Викладачу - посилання або архів одною командою.</p>
+<p>Перед цим файлом: Уроки 04-09 (коміти, гілки, push), 11 (PR), 14 (теги). Робоче місце - як у курсі Linux Mint:
+теки <code>~/univer/labs/lr1</code> ... <code>~/univer/labs/lr7</code>, venv <code>~/univer/.venv</code> (він <strong>поза</strong> репо - так і має бути).
+На GitHub і в повідомленнях комітів лаби звемо «ЛР1» ... «ЛР7», а теки й гілки - латиницею <code>lr1</code> ... <code>lr7</code>
+(латиницю простіше набирати в терміналі).</p>
+<h3 id="як-усе-влаштовано">Як усе влаштовано</h3>
+<pre><code class="language-text">GitHub: Evge14n/univer-labs (ПРИВАТНИЙ)                ноутбук: ~/univer/labs
+  main ──●──────●───────────●──── ...                    .gitignore   README.md
+         │      │ lr1-zdano │ lr2-zdano                  lr1/  lr1_1.py  lr1_2.py  lr1_3.py
+         │      │           │                            lr2/  ...
+  lr1    └─●─●─●┘           │                            ...
+  lr2           └──●──●─────┘   (гілка на лабу,          lr7/
+                                 коміт на завдання)
+</code></pre>
+<ul>
+<li><strong>Один репо на всі лаби</strong>, бо так простіше: один <code>git push</code>, одна історія, один <code>.gitignore</code>.</li>
+<li><strong>Гілка <code>lr1</code></strong> живе, поки робиш ЛР1. <code>main</code> - лише завершені лаби.</li>
+<li><strong>Коміт</strong> - після кожного завдання, що пройшло doctest (і перед великою правкою, наприклад <code>black</code>).</li>
+<li><strong>Тег <code>lr1-zdano</code></strong> - на коміті, який показав викладачу (Урок 14).</li>
+</ul>
+<p>Виводи нижче - справжні, з перевірки (git 2.43.0). Хеші комітів у тебе будуть інші. Ярлики в дужках, як-от
+<code>(HEAD -&gt; lr1, origin/lr1)</code>, git друкує в терміналі: де стоїш ти (<code>HEAD</code>), де твої гілки і де гілки на GitHub (<code>origin/...</code>).</p>
+<h3 id="один-раз-репо-univer-labs">Один раз: репо univer-labs</h3>
+<p><strong>Крок 1. Чи є вже git у теці лаб?</strong> Якщо ти робив Крок 8 Уроку 04 курсу Linux Mint, git там уже є.</p>
+<pre><code class="language-bash">cd ~/univer/labs
+git status
+</code></pre>
+<p>Якщо бачиш <code>fatal: not a git repository (or any of the parent directories): .git</code> - git нема, йди у <strong>варіант А</strong>.
+Якщо бачиш <code>On branch ...</code> - git є, йди у <strong>варіант Б</strong>.</p>
+<p><strong>Крок 2. Порожній приватний репо на GitHub.</strong> Два способи, обери один:
+- <strong>на сайті</strong> (зроби зараз): справа вгорі <strong>+</strong> → <strong>New repository</strong> → Repository name: <code>univer-labs</code> → <strong>Private</strong> →
+  README, .gitignore, license <strong>не додавай</strong> (репо має бути порожнім, інакше перший push відхилять - див. «Що як» 5) →
+  <strong>Create repository</strong>;
+- <strong>через gh</strong> - тоді на сайті нічого не створюй і цей крок пропусти: репо створить <code>gh repo create</code> у кінці варіанта
+  (див. нижче, після варіанта А). Потрібен вхід у gh (Урок 03, крок 6 Шляху А або Шлях Б).</p>
+<p><strong>Варіант А - git ще нема.</strong></p>
+<pre><code class="language-bash">mkdir -p ~/univer/labs/lr1
+cd ~/univer/labs
+git init
+printf '.venv/\n__pycache__/\n*.pyc\n.pytest_cache/\n.mypy_cache/\n.ruff_cache/\n' &gt; .gitignore
+printf '# Лабораторні з програмування\n\nЛР1-ЛР7, 1 курс. Кожна лаба - тека lrN і тег lrN-zdano.\n' &gt; README.md
+git add .gitignore README.md
+git commit -m &quot;Початок: .gitignore і README&quot;
+git remote add origin git@github.com:Evge14n/univer-labs.git
+git push -u origin main
+</code></pre>
+<pre><code class="language-text">To github.com:Evge14n/univer-labs.git
+ * [new branch]      main -&gt; main
+branch 'main' set up to track 'origin/main'.
+</code></pre>
+<p><code>.gitignore</code> (Урок 06): <code>.venv/</code> - віртуальне середовище, <code>__pycache__/</code> і <code>*.pyc</code> - скомпільований Python,
+<code>.pytest_cache/</code>, <code>.mypy_cache/</code>, <code>.ruff_cache/</code> - сміття від pytest, mypy і ruff.</p>
+<p><strong>Якщо в Кроці 2 обрав gh</strong> (репо на сайті ще нема): замість двох останніх рядків (<code>git remote add ...</code> і
+<code>git push -u ...</code>) набери один - gh (Урок 16) створить приватний репо, додасть <code>origin</code> і запушить. Так само і в
+кінці варіанта Б. Якщо репо <code>univer-labs</code> на сайті вже створив, gh другого з тією самою назвою не створить - тоді
+просто <code>git remote add</code> і <code>git push -u</code>, як вище.</p>
+<pre><code class="language-bash">gh repo create univer-labs --private --source=. --remote=origin --push
+</code></pre>
+<p><strong>Варіант Б - git уже є (з курсу Linux Mint).</strong> Подивись, що там:</p>
+<pre><code class="language-bash">git log --oneline
+git branch --show-current
+</code></pre>
+<p>Якщо гілка називається <code>master</code> (git до налаштування з Уроку 02 так називав першу гілку) - перейменуй:</p>
+<pre><code class="language-bash">git branch -m master main
+</code></pre>
+<p>У <code>.gitignore</code> з курсу Linux Mint нема <code>.venv/</code> і <code>*.pyc</code> - допиши (<code>&gt;&gt;</code> дописує в кінець, <code>&gt;</code> перезаписав би):</p>
+<pre><code class="language-bash">printf '.venv/\n*.pyc\n' &gt;&gt; .gitignore
+git add .gitignore
+git commit -m &quot;gitignore: .venv і *.pyc&quot;
+git remote add origin git@github.com:Evge14n/univer-labs.git
+git push -u origin main
+</code></pre>
+<p>Старі коміти ЛР1 так і лишаться на <code>main</code> - це нормально, гілки починай з наступної лаби.</p>
+<h3 id="на-кожну-лабу-рецепт">На кожну лабу - рецепт</h3>
+<pre><code class="language-text">git switch main &amp;&amp; git pull                     # свіжий main
+git switch -c lrN                               # гілка лаби
+  (заготовка в lrN/)  git add lrN  git commit -m &quot;ЛРN: заготовки викладача&quot;
+  повтор на кожне завдання:
+    nano lrN/lrN_K.py  →  doctest пройшов  →  git commit -am &quot;ЛРN: завдання K&quot;
+git push -u origin lrN                          # копія на GitHub (і для PR)
+злиття в main: або git switch main + git merge lrN + git push,
+               або PR на GitHub (gh pr create --fill --base main) і Merge
+git tag -a lrN-zdano -m &quot;ЛРN здано&quot; main  +  git push origin lrN-zdano     # коли здав
+</code></pre>
+<p>Чому спершу коміт <strong>заготовки</strong>: тоді <code>git diff</code> завжди покаже, що саме ти змінив у файлі викладача, а викладач
+забороняє міняти назви функцій, параметри і doctest заготовки (див. «Вимоги викладача»).</p>
+<h3 id="лр1-від-гілки-до-архіву">ЛР1 від гілки до архіву</h3>
+<p><strong>Гілка і заготовки.</strong> Заготовки поклади в <code>~/univer/labs/lr1/</code> так, як у курсі Linux Mint (Урок 04 - з <code>.ipynb</code>).</p>
+<pre><code class="language-bash">git switch main
+git pull
+git switch -c lr1
+git add lr1
+git commit -m &quot;ЛР1: заготовки викладача&quot;
+</code></pre>
+<p><strong>Завдання 1.</strong> Пишеш код, перевіряєш doctest, комітиш.</p>
+<pre><code class="language-bash">nano lr1/lr1_1.py
+python3 -m doctest lr1/lr1_1.py
+git status --short
+git commit -am &quot;ЛР1: завдання 1&quot;
+</code></pre>
+<p><code>python3 -m doctest</code> нічого не друкує - отже всі тести пройшли (для лаб з <code>input()</code> бери команду з розділу
+«Перевір перед здачею» курсу Linux Mint). <code>git status --short</code> має показати лише <code>M lr1/lr1_1.py</code>: тека
+<code>lr1/__pycache__</code>, яку створив Python, не видна - її ховає <code>.gitignore</code>.</p>
+<p><strong>Завдання 2</strong> - так само:</p>
+<pre><code class="language-bash">nano lr1/lr1_2.py
+python3 -m doctest lr1/lr1_2.py
+git commit -am &quot;ЛР1: завдання 2&quot;
+git push -u origin lr1
+git log --oneline main..lr1
+</code></pre>
+<pre><code class="language-text">676c781 (HEAD -&gt; lr1, origin/lr1) ЛР1: завдання 2
+ac98c9d ЛР1: завдання 1
+09e5e28 ЛР1: заготовки викладача
+</code></pre>
+<p><code>main..lr1</code> - коміти, які є в <code>lr1</code>, але ще нема в <code>main</code>. <code>git push -u origin lr1</code> - копія гілки на GitHub:
+ноутбук зламався - лаба ціла. Ярлик <code>origin/lr1</code> на верхньому коміті це й показує: на GitHub гілка <code>lr1</code> там само.</p>
+<p><strong>Лабу закінчено - у <code>main</code>.</strong> Найпростіше - злиття в себе (Урок 07):</p>
+<pre><code class="language-bash">git switch main
+git merge lr1
+git push
+git branch -d lr1
+</code></pre>
+<p><code>git merge</code> скаже <code>Fast-forward</code>: <code>main</code> просто наздогнав <code>lr1</code>. Гілку <code>lr1</code> можна видалити - її коміти тепер у <code>main</code>
+(на GitHub вона ще є, її видалиш кнопкою на сторінці гілок або <code>git push origin --delete lr1</code>).</p>
+<p><strong>Здав - тег</strong> (Урок 14):</p>
+<pre><code class="language-bash">git tag -a lr1-zdano -m &quot;ЛР1 здано&quot;
+git push origin lr1-zdano
+</code></pre>
+<pre><code class="language-text">To github.com:Evge14n/univer-labs.git
+ * [new tag]         lr1-zdano -&gt; lr1-zdano
+</code></pre>
+<h3 id="лр2-через-pull-request">ЛР2 через Pull Request</h3>
+<p>Те саме, але злиття - через PR (Урок 11): видно всі зміни лаби на одній сторінці, можна попросити одногрупника глянути.</p>
+<pre><code class="language-bash">git switch main
+git pull
+git switch -c lr2
+mkdir -p lr2
+nano lr2/lr2_1.py
+python3 -m doctest lr2/lr2_1.py
+git add lr2/lr2_1.py
+git commit -m &quot;ЛР2: завдання 1&quot;
+git push -u origin lr2
+gh pr create --fill --base main
+</code></pre>
+<p>У <code>nano</code> - код завдання з doctest (тут для короткості одне завдання; у справжній ЛР2 спершу поклади заготовки
+викладача і закоміть їх, як у ЛР1). <code>gh pr create</code> працює лише після входу в gh (Урок 03, крок 6), інакше
+скаже <code>To get started with GitHub CLI, please run:  gh auth login</code>. Без gh: на сторінці репо зʼявиться жовта смуга
+з кнопкою <strong>Compare &amp; pull request</strong> (Урок 11). На сторінці PR → <strong>Merge pull request</strong> → <strong>Confirm merge</strong>. Потім у себе:</p>
+<pre><code class="language-bash">git switch main
+git pull
+git log --oneline --graph -n 3
+git tag -a lr2-zdano -m &quot;ЛР2 здано&quot; main
+git push origin lr2-zdano
+</code></pre>
+<pre><code class="language-text">*   0e746e0 (HEAD -&gt; main, origin/main) Merge pull request #1 from Evge14n/lr2
+|\
+| * 90a7770 (origin/lr2, lr2) ЛР2: завдання 1
+|/
+* 676c781 (tag: lr1-zdano, origin/lr1) ЛР1: завдання 2
+</code></pre>
+<p>Після злиття PR сайт пропонує кнопку <strong>Delete branch</strong>. Навіть якщо натиснув її, <code>origin/lr2</code> у тебе ще видно:
+<code>git pull</code> не прибирає гілки, яких на GitHub уже нема (прибере <code>git fetch --prune</code>). <code>tag: lr1-zdano</code> - здача ЛР1. <code>main</code> у кінці рядка з тегом - тег саме на <code>main</code>,
+навіть якщо ти вже на іншій гілці. Список здач:</p>
+<pre><code class="language-bash">git tag -n
+</code></pre>
+<pre><code class="language-text">lr1-zdano       ЛР1 здано
+lr2-zdano       ЛР2 здано
+</code></pre>
+<h3 id="як-показати-викладачу">Як показати викладачу</h3>
+<p><strong>Спосіб 1. Посилання на репо.</strong> Приватний репо бачать лише запрошені. Запросити: у репо <strong>Settings</strong> → розділ
+«Access» → <strong>Collaborators</strong> → <strong>Add people</strong> → логін викладача → <strong>Add ... to univer-labs</strong>. Йому прийде лист,
+доступ буде після того, як він прийме запрошення (docs.github.com, «Inviting collaborators to a personal repository»,
+відкрито 18.11.2026). <strong>Увага:</strong> у приватному репо особистого акаунта співавтор отримує доступ <strong>на запис</strong>:
+«repository owners can only grant write access to collaborators. Collaborators can't have read-only access»
+(docs, «Permission levels for a personal account repository»). Тобто викладач зможе і пушити. Після семестру
+прибери доступ там само (Collaborators → Remove). Посилання на конкретну здачу:
+<code>https://github.com/Evge14n/univer-labs/tree/lr1-zdano/lr1</code>.</p>
+<p><strong>Спосіб 2. Архів zip</strong> - коли викладач хоче файли (вимога з консультації: тека з назвою «прізвище, ім'я, група,
+рік»; точний формат архіву уточни на парі). <code>git archive</code> бере файли <strong>з тегу</strong>, а не з теки на диску, тому в архів
+потрапляє рівно здана версія і лише те, що в git: без <code>.venv</code>, <code>__pycache__</code>, <code>.pytest_cache</code>.</p>
+<pre><code class="language-bash">mkdir -p ~/univer/zdacha
+git archive --format=zip --prefix=Прізвище_Імʼя_Група_2026/ -o ~/univer/zdacha/lr1.zip lr1-zdano lr1
+python3 -m zipfile -l ~/univer/zdacha/lr1.zip
+</code></pre>
+<pre><code class="language-text">File Name                                             Modified             Size
+Прізвище_Імʼя_Група_2026/                    2026-11-18 10:35:20            0
+Прізвище_Імʼя_Група_2026/lr1/                2026-11-18 10:35:20            0
+Прізвище_Імʼя_Група_2026/lr1/lr1_1.py        2026-11-18 10:35:20          114
+Прізвище_Імʼя_Група_2026/lr1/lr1_2.py        2026-11-18 10:35:20          105
+</code></pre>
+<p>Що тут що: <code>--format=zip</code> - zip, а не tar; <code>--prefix=.../</code> - тека, в яку все покладуть усередині архіву (скісна
+риска в кінці обовʼязкова); <code>-o</code> - куди писати архів; <code>lr1-zdano</code> - з якого тегу брати; <code>lr1</code> - лише ця тека, а не
+весь репо. Перевірено: у тій самій теці на диску лежали <code>.venv/</code>, <code>lr1/__pycache__/</code>, <code>lr1/.pytest_cache/</code> - в архів
+не потрапило нічого з цього, і <code>.gitignore</code> теж. Кирилиця в назвах збережена з UTF-8-позначкою zip.
+<code>python3 -m zipfile -l</code> показує вміст архіву (окремої програми <code>unzip</code> не треба). Для ЛР2:</p>
+<pre><code class="language-bash">git archive --format=zip --prefix=Прізвище_Імʼя_Група_2026/ -o ~/univer/zdacha/lr2.zip lr2-zdano lr2
+</code></pre>
+<p><strong>Спосіб 3. «Download ZIP» на сайті.</strong> У репо → <strong>Releases</strong> → вгорі <strong>Tags</strong> → біля <code>lr1-zdano</code> посилання <strong>zip</strong>
+(docs, «Downloading source code archives»). Це архів <strong>усього</strong> репо на момент тегу (усі лаби до тієї, і README),
+а тека всередині названа за назвою репо - тож для здачі однієї лаби зручніший <code>git archive</code>.</p>
+<h3 id="що-як">Що як ...</h3>
+<p><strong>1. Почав лабу на <code>main</code> без гілки</strong> (кілька комітів, ще не пушив). <code>git status</code> каже
+<code>Your branch is ahead of 'origin/main' by 2 commits.</code> Перенеси коміти в гілку і поверни <code>main</code> назад:</p>
+<pre><code class="language-bash">git switch -c lr3
+git branch -f main origin/main
+git log --oneline main..lr3
+</code></pre>
+<pre><code class="language-text">branch 'main' set up to track 'origin/main'.
+10107b7 (HEAD -&gt; lr3) ЛР3: завдання 2
+549cce4 ЛР3: завдання 1
+</code></pre>
+<p><code>git switch -c lr3</code> - нова гілка там, де ти стоїш, з усіма комітами. <code>git branch -f main origin/main</code> - «постав <code>main</code>
+туди, де він на GitHub»; файли не чіпає, бо ти вже на <code>lr3</code>. Перший рядок виводу - не помилка: git заодно нагадує,
+що <code>main</code> стежить за <code>origin/main</code>. Якщо ж забудеш перейти на <code>lr3</code>, git не дасть пересунути поточну гілку:
+<code>fatal: cannot force update the branch 'main' used by worktree at '...'</code> (далі - шлях до твоєї теки).
+Якщо коміти на <code>main</code> уже <strong>запушив</strong> - не виправляй історію силою; просто продовжуй, наступну лабу почни з гілки.</p>
+<p><strong>2. Забув поставити тег</strong>, а вже робиш наступну лабу. Тег можна поставити заднім числом на будь-який коміт:</p>
+<pre><code class="language-bash">git tag -a lr2-zdano -m &quot;ЛР2 здано&quot; main
+git push origin lr2-zdano
+</code></pre>
+<p>Якщо <code>main</code> уже пішов далі, знайди потрібний коміт у <code>git log --oneline</code> і постав тег на його хеш:</p>
+<pre><code class="language-text">git tag -a lr2-zdano -m &quot;ЛР2 здано&quot; ХЕШ
+</code></pre>
+<p><strong>3. Закомітив <code>.venv</code></strong> (або <code>__pycache__</code>). Прибери з git, лишивши на диску:</p>
+<pre><code class="language-bash">git rm -r -q --cached .venv
+git commit -m &quot;Прибери .venv з git&quot;
+git ls-files .venv
+git check-ignore -v .venv
+</code></pre>
+<pre><code class="language-text">.gitignore:1:.venv/ .venv
+</code></pre>
+<p><code>--cached</code> - лише з git, файли на диску лишаються. <code>-q</code> (тихо) - без нього git друкує рядок <code>rm '.venv/...'</code> на
+кожен файл, а в справжньому <code>.venv</code> їх тисячі. <code>git ls-files .venv</code> після цього нічого не друкує.
+<code>git check-ignore -v</code> показує, яке правило <code>.gitignore</code> тепер ховає <code>.venv</code>: файл, номер рядка, правило. У варіанті А
+правило в рядку 1; у варіанті Б ти дописав його в кінець, тож номер буде інший (у перевірці - <code>.gitignore:5:</code>).
+Якщо в <code>.gitignore</code> правила нема - спершу допиши його (<code>printf '.venv/\n*.pyc\n' &gt;&gt; .gitignore</code>, варіант Б). Старі коміти з <code>.venv</code> в історії лишаться -
+для лаб це лише зайвий розмір, не біда.</p>
+<p><strong>4. Не знаєш, що ти змінив після здачі:</strong> <code>git diff lr1-zdano main -- lr1</code> (Уроки 05, 14).</p>
+<p><strong>5. Створив репо на сайті З README - перший push відхилено.</strong> Варіант А, але в Кроці 2 увімкнув «Add README».
+Тоді <code>git push -u origin main</code> каже:</p>
+<pre><code class="language-text">To github.com:Evge14n/univer-labs.git
+ ! [rejected]        main -&gt; main (fetch first)
+error: failed to push some refs to 'github.com:Evge14n/univer-labs.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+</code></pre>
+<p>На GitHub є коміт з README, якого нема в тебе. Підказка радить <code>git pull</code>, але простий <code>git pull</code> тут не зіллє:</p>
+<pre><code class="language-text">From github.com:Evge14n/univer-labs
+ * [new branch]      main       -&gt; origin/main
+There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details.
+
+    git pull &lt;remote&gt; &lt;branch&gt;
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/&lt;branch&gt; main
+</code></pre>
+<p>Чому: push відхилено, тож і <code>-u</code> не спрацював - <code>main</code> ще не знає, що стежить за <code>origin/main</code>. Тому треба сказати
+явно, звідки тягнути: <code>git pull origin main</code>. Але й так git відмовить: <code>fatal: refusing to merge unrelated histories</code> -
+у твоєї історії і в історії на сайті нема жодного спільного коміту. Дозволь злиття явно:</p>
+<pre><code class="language-bash">git pull --allow-unrelated-histories origin main
+</code></pre>
+<pre><code class="language-text">From github.com:Evge14n/univer-labs
+ * branch            main       -&gt; FETCH_HEAD
+Auto-merging README.md
+CONFLICT (add/add): Merge conflict in README.md
+Automatic merge failed; fix conflicts and then commit the result.
+</code></pre>
+<p><code>add/add</code> - файл <code>README.md</code> додали з двох боків (ти у своєму коміті і сайт у своєму), і текст різний. Розвʼязуєш
+як в Уроці 08: відкрий файл, лиши потрібний текст і прибери три рядки-маркери:</p>
+<pre><code class="language-bash">nano README.md
+</code></pre>
+<pre><code class="language-text">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+# Лабораторні з програмування
+
+ЛР1-ЛР7, 1 курс. Кожна лаба - тека lrN і тег lrN-zdano.
+=======
+# univer-labs
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; acb504200d89530b7a396bf8da830c49922532b6
+</code></pre>
+<p>Згори (<code>HEAD</code>) - твій README, знизу - README з сайту (там може бути ще рядок з описом репо), після <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> - хеш
+коміту з сайту. Лиши свої три рядки, видали <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>, <code>=======</code>, <code># univer-labs</code> і <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; ...</code>, збережи
+(Ctrl+O, Enter, Ctrl+X). Далі:</p>
+<pre><code class="language-bash">git add README.md
+git commit
+git push -u origin main
+</code></pre>
+<p><code>git commit</code> без <code>-m</code> відкриє nano з готовим повідомленням <code>Merge branch 'main' of github.com:Evge14n/univer-labs</code> -
+лиши як є, Ctrl+X. Тепер push проходить і заодно ставить стеження:</p>
+<pre><code class="language-text">To github.com:Evge14n/univer-labs.git
+   c292ff6..a91a74b  main -&gt; main
+branch 'main' set up to track 'origin/main'.
+</code></pre>
+<p>Відтепер працює і простий <code>git pull</code>. У <strong>варіанті Б</strong> README зазвичай лише на сайті - тоді конфлікту нема:
+<code>git pull --allow-unrelated-histories origin main</code> одразу зливає (<code>Merge made by the 'ort' strategy.</code>), nano
+пропонує повідомлення злиття - Ctrl+X, потім <code>git push -u origin main</code>.</p>
+<p><strong>Для лаб</strong> - цей файл і є «для лаб»: ЛР1-ЛР7 за одним рецептом, викладачу - посилання або архів з тегу.</p>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чому один приватний репо <code>univer-labs</code>, а не публічний, і чому не сім окремих?</li>
+<li>Коли робити коміт під час лаби і навіщо перший коміт - із заготовкою?</li>
+<li>Ти закінчив ЛР3 на гілці <code>lr3</code>. Які команди - злити в <code>main</code>, поставити тег здачі і відправити все на GitHub?</li>
+<li>Чому в архіві <code>git archive ... lr1-zdano lr1</code> нема <code>.venv</code> і <code>__pycache__</code>, хоч вони лежать у теці?</li>
+<li>Ти дав викладачу доступ Collaborator до приватного репо. Що він може робити і що зробити після семестру?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Приватний - бо розвʼязки до здачі не мають бачити одногрупники. Один - бо простіше: один <code>.gitignore</code>, один push,
+   уся історія лаб разом; лаби розділяють теки <code>lr1</code>...<code>lr7</code>, гілки і теги.</li>
+<li>Після кожного завдання, що пройшло doctest (і перед великою правкою). Перший коміт із заготовкою - щоб <code>git diff</code>
+   показував, що саме ти змінив у файлі викладача.</li>
+<li><code>git switch main</code>, <code>git merge lr3</code>, <code>git push</code>, <code>git tag -a lr3-zdano -m "ЛР3 здано"</code>, <code>git push origin lr3-zdano</code>
+   (або PR на GitHub, потім <code>git pull</code> і тег).</li>
+<li><code>git archive</code> бере файли з коміту під тегом, а в коміти вони не потрапляють - їх ховає <code>.gitignore</code>.</li>
+<li>Читати і пушити: у приватному репо особистого акаунта доступ співавтора лише «на запис». Після семестру -
+   Settings → Collaborators → Remove.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Pro Git, 3.2 «Basic Branching and Merging»: https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging
+  (відкрито 18.11.2026)</li>
+<li>git-scm.com/docs/git-archive: https://git-scm.com/docs/git-archive (відкрито 18.11.2026)</li>
+<li>docs.github.com, «Inviting collaborators to a personal repository»:
+  https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/inviting-collaborators-to-a-personal-repository
+  (відкрито 18.11.2026)</li>
+<li>docs.github.com, «Permission levels for a personal account repository»:
+  https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/permission-levels-for-a-personal-account-repository
+  (відкрито 18.11.2026)</li>
+<li>docs.github.com, «Downloading source code archives»:
+  https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives (відкрито 18.11.2026)</li>
+<li>cli.github.com, <code>gh repo create</code>: https://cli.github.com/manual/gh_repo_create (відкрито 18.11.2026)</li>
+<li>Файл вимог викладача в теці <code>05_Програмування</code> (тека з назвою «прізвище, ім'я, група, рік»);
+  курс Linux Mint, Урок 04 (теки <code>lr1</code>, заготовки, «Перевір перед здачею»)</li>
+<li>docs.github.com, «Creating a pull request» (жовта смуга «Compare &amp; pull request»):
+  https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request
+  (відкрито 18.11.2026)</li>
+<li>docs.github.com, «Merging a pull request»:
+  https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/merging-a-pull-request
+  (відкрито 18.11.2026)</li>
+</ul>

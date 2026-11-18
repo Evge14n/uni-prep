@@ -1,0 +1,326 @@
+<h1 id="тема-4-перший-репозиторій-init-clone-status-add-commit">Тема 4. Перший репозиторій - init, clone, status, add, commit</h1>
+<p><strong>Навіщо:</strong> це цикл, який ти робитимеш у кожній лабі десятки разів: змінив код → подивився <code>status</code> → <code>add</code> → <code>commit</code> з нормальним повідомленням. Через тиждень по повідомленнях буде видно, де яке завдання ЛР.</p>
+<h3 id="коротко">Коротко</h3>
+<p>Репо можна отримати двома способами:</p>
+<pre><code class="language-text">git init                    нова тека → нове порожнє репо, лише на ноутбуці
+git clone git@github.com:Evge14n/pisochnytsia.git ~/pisochnytsia
+                            копія репо з GitHub, уже з історією і звʼязком origin
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git init</code></td>
+<td>зробити поточну теку репозиторієм (один раз)</td>
+</tr>
+<tr>
+<td><code>git clone АДРЕСА ТЕКА</code></td>
+<td>скопіювати репо з GitHub</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>що змінено, що в індексі, на якій гілці</td>
+</tr>
+<tr>
+<td><code>git add lr1.py</code></td>
+<td>покласти файл в індекс (<code>git add .</code> - усе в поточній теці)</td>
+</tr>
+<tr>
+<td><code>git commit -m "Текст"</code></td>
+<td>коміт з коротким повідомленням</td>
+</tr>
+<tr>
+<td><code>git commit</code></td>
+<td>коміт з довгим повідомленням: відкриється nano</td>
+</tr>
+<tr>
+<td><code>git commit -am "Текст"</code></td>
+<td><code>add</code> для <strong>вже відстежуваних</strong> файлів + коміт одним рядком</td>
+</tr>
+<tr>
+<td><code>git log</code> / <code>git log --oneline</code></td>
+<td>історія повністю / по рядку на коміт (детально - урок 05)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Гарне повідомлення коміту</strong> (Pro Git, 5.2):
+- перший рядок - до ~50 знаків, коротко <strong>що змінено</strong>;
+- якщо треба пояснити <strong>чому</strong> - порожній рядок, далі текст з переносом рядків приблизно на 72 знаки;
+- наказовий спосіб: «Fix bug», а не «Fixed bug». Українською: «Додай перевірку вводу в завд. 2» або безособово «Завдання 2: перевірка вводу».</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Погано</th>
+<th>Добре</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>зміни</code></td>
+<td><code>Додай ввід x у ЛР1</code></td>
+</tr>
+<tr>
+<td><code>asdf</code></td>
+<td><code>ЛР2 завд. 1: сума двох чисел</code></td>
+</tr>
+<tr>
+<td><code>виправив</code></td>
+<td><code>Виправ ділення на нуль у завд. 3</code></td>
+</tr>
+<tr>
+<td><code>ЛР3 повністю</code> (усе одним комітом за тиждень)</td>
+<td>кілька комітів, по одному на завдання</td>
+</tr>
+</tbody>
+</table></div>
+<p>Аналогія: повідомлення коміту - як підпис під фото в альбомі. «Фото» нічого не скаже через місяць, «Захист ЛР2, 25.11» - скаже.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li>Щойно зробив коміт, нічого не змінював і знову пишеш <code>git commit -m "ще"</code>. Що буде?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">On branch main
+nothing to commit, working tree clean
+</code></pre>
+<p>Коміту не буде (код виходу 1): немає що знімати.</p>
+</details>
+<ol start="2">
+<li>Дописав рядок у <code>lr1.py</code>, але забув <code>git add</code> і пишеш <code>git commit -m "Зміни"</code>. Що буде?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">On branch main
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+    modified:   lr1.py
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+</code></pre>
+<p>Індекс порожній, тож коміту нема. git підказує: <code>git add</code> або <code>git commit -a</code>.</p>
+</details>
+<ol start="3">
+<li>Змінив <code>lr1.py</code> і створив <strong>новий</strong> <code>lr2.py</code>. Робиш <code>git commit -am "..."</code>. Що покаже потім <code>git status --short</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">?? lr2.py
+</code></pre>
+<p><code>-a</code> бере лише файли, за якими git уже стежить. Новий файл треба один раз додати руками: <code>git add lr2.py</code>.</p>
+</details>
+<ol start="4">
+<li>У клоні <code>~/pisochnytsia</code> зробив коміт. Що напише <code>git status</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use &quot;git push&quot; to publish your local commits)
+
+nothing to commit, working tree clean
+</code></pre>
+<p>Твій <code>main</code> на 1 коміт попереду копії з GitHub. На сайті цього коміту ще нема - його треба відправити <code>git push</code> (урок 09).</p>
+</details>
+<h3 id="руками">Руками</h3>
+<p><strong>Крок 1. Нове репо і перший коміт</strong> (локальна пісочниця, GitHub не потрібен):</p>
+<pre><code class="language-bash">mkdir ~/git-pisochnytsia
+cd ~/git-pisochnytsia
+git init
+printf 'print(&quot;Привіт, ЛР1&quot;)\n' &gt; lr1.py
+git status
+</code></pre>
+<pre><code class="language-text">Initialized empty Git repository in /home/.../git-pisochnytsia/.git/
+</code></pre>
+<pre><code class="language-text">On branch main
+
+No commits yet
+
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+    lr1.py
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+</code></pre>
+<p>«Untracked» - git бачить файл, але не стежить за ним.</p>
+<pre><code class="language-bash">git add lr1.py
+git status
+git commit -m &quot;Додай заготовку ЛР1&quot;
+git status
+git log
+</code></pre>
+<pre><code class="language-text">On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
+    new file:   lr1.py
+
+</code></pre>
+<pre><code class="language-text">[main (root-commit) 3347fd3] Додай заготовку ЛР1
+ 1 file changed, 1 insertion(+)
+ create mode 100644 lr1.py
+</code></pre>
+<pre><code class="language-text">On branch main
+nothing to commit, working tree clean
+</code></pre>
+<pre><code class="language-text">commit 3347fd379f6d43f5d82154561a80118b691cfeed (HEAD -&gt; main)
+Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
+Date:   Wed Nov 18 10:29:45 2026 +0000
+
+    Додай заготовку ЛР1
+</code></pre>
+<p>«working tree clean» - усе, що є в теці, вже в коміті. <code>(HEAD -&gt; main)</code> - ярлик «ти на гілці <code>main</code>, і вона на цьому коміті» (урок 07). Хеші і час у тебе будуть інші.</p>
+<p><strong>Крок 2. Забув add і <code>commit -am</code></strong> («Передбач» 1-3):</p>
+<pre><code class="language-bash">git commit -m &quot;ще&quot;
+printf 'x = int(input())\n' &gt;&gt; lr1.py
+git commit -m &quot;Зміни&quot;
+printf 'print(&quot;ЛР2&quot;)\n' &gt; lr2.py
+git commit -am &quot;Додай ввід x у ЛР1&quot;
+git status --short
+</code></pre>
+<pre><code class="language-text">[main f30faf1] Додай ввід x у ЛР1
+ 1 file changed, 1 insertion(+)
+</code></pre>
+<pre><code class="language-text">?? lr2.py
+</code></pre>
+<p>У коміт пішов лише <code>lr1.py</code>, новий <code>lr2.py</code> лишився поза git.</p>
+<p><strong>Крок 3. Довге повідомлення через nano.</strong></p>
+<pre><code class="language-bash">git add lr2.py
+git commit
+</code></pre>
+<p>Відкриється nano з таким текстом:</p>
+<pre><code class="language-text">
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Changes to be committed:
+#   new file:   lr2.py
+#
+</code></pre>
+<p>Рядки з <code>#</code> git викине. У перший (порожній) рядок напиши:</p>
+<pre><code class="language-text">Почни ЛР2: заготовка програми
+
+Поки що лише друк назви. Далі завдання 1 з методички:
+ввід двох чисел і їхня сума.
+</code></pre>
+<p>Збережи <strong>Ctrl+O</strong>, Enter, вийди <strong>Ctrl+X</strong>.</p>
+<pre><code class="language-text">[main 3b15e01] Почни ЛР2: заготовка програми
+ 1 file changed, 1 insertion(+)
+ create mode 100644 lr2.py
+</code></pre>
+<pre><code class="language-bash">git log -n 1
+git log --oneline
+</code></pre>
+<pre><code class="language-text">commit 3b15e019a929b8b85c66f342bd15b811160bc90b (HEAD -&gt; main)
+Author: Твоє Імʼя &lt;128326252+Evge14n@users.noreply.github.com&gt;
+Date:   Wed Nov 18 10:29:45 2026 +0000
+
+    Почни ЛР2: заготовка програми
+
+    Поки що лише друк назви. Далі завдання 1 з методички:
+    ввід двох чисел і їхня сума.
+</code></pre>
+<pre><code class="language-text">3b15e01 (HEAD -&gt; main) Почни ЛР2: заготовка програми
+f30faf1 Додай ввід x у ЛР1
+3347fd3 Додай заготовку ЛР1
+</code></pre>
+<p><code>--oneline</code> показує лише перший рядок - тому він і має бути коротким і зрозумілим сам по собі.</p>
+<p><strong>Крок 4. Коміт у клоні з GitHub.</strong> Клон <code>~/pisochnytsia</code> ти зробив в уроці 03. Якщо ще ні:</p>
+<pre><code class="language-bash">git clone git@github.com:Evge14n/pisochnytsia.git ~/pisochnytsia
+</code></pre>
+<pre><code class="language-bash">cd ~/pisochnytsia
+git status
+printf 'print(&quot;Привіт з ноутбука&quot;)\n' &gt; pryvit.py
+git add pryvit.py
+git commit -m &quot;Додай pryvit.py&quot;
+git status
+</code></pre>
+<pre><code class="language-text">On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+</code></pre>
+<pre><code class="language-text">[main 7351312] Додай pryvit.py
+ 1 file changed, 1 insertion(+)
+ create mode 100644 pryvit.py
+</code></pre>
+<pre><code class="language-text">On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use &quot;git push&quot; to publish your local commits)
+
+nothing to commit, working tree clean
+</code></pre>
+<p>Різниця з <code>git init</code>: клон знає про <code>origin/main</code> (копію з GitHub) і показує, чи ти попереду. Відправиш коміт в уроці 09.</p>
+<p><strong>Для лаб:</strong> у теці лаби цикл той самий: розвʼязав завдання і doctest проходить → <code>git status</code> → <code>git add lr3.py</code> → <code>git commit -m "ЛР3 завд. 2: таблиця значень"</code>. Не роби <code>git add .</code> наосліп: спершу <code>git status</code>, щоб у коміт не потрапили <code>.venv/</code>, картинки чи чернетки (від цього захищає <code>.gitignore</code>, урок 06).</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<p><strong>1. Помилка в назві файлу або не та тека:</strong></p>
+<pre><code class="language-text">fatal: pathspec 'lr3.py' did not match any files
+</code></pre>
+<p>Такого файлу тут нема. Перевір <code>ls</code> і <code>pwd</code>, назву (регістр важливий: <code>LR3.py</code> ≠ <code>lr3.py</code>).</p>
+<p><strong>2. Закрив nano, нічого не написавши</strong> (або лише рядки з <code>#</code>):</p>
+<pre><code class="language-text">Aborting commit due to empty commit message.
+</code></pre>
+<p>Коміту нема, але файли лишились в індексі. Просто зроби <code>git commit</code> ще раз і напиши повідомлення.</p>
+<p><strong>3. Клонуєш удруге в ту саму теку:</strong></p>
+<pre><code class="language-text">fatal: destination path '/home/.../pisochnytsia' already exists and is not an empty directory.
+</code></pre>
+<p>Клон уже є - просто <code>cd ~/pisochnytsia</code>. Друга копія потрібна? Дай іншу назву теки в кінці команди.</p>
+<p><strong>4. Повідомлення «зміни», «фікс», «aaa».</strong> git їх приймає, але через тиждень не зрозуміло, який коміт повертати. Пиши, що саме змінено (таблиця в «Коротко»).</p>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li><strong>50/72 і наказовий спосіб</strong> - стандарт з Pro Git 5.2, його ж чекають у більшості відкритих проєктів.</li>
+<li><strong>Один коміт - одна логічна зміна</strong> («make each commit a logically separate changeset», Pro Git 5.2). Не «ЛР3 повністю», а коміт на завдання.</li>
+<li><strong>Conventional Commits</strong> - у багатьох командах перший рядок має тип: <code>feat: ...</code> (нова можливість), <code>fix: ...</code> (виправлення помилки), бо з таких повідомлень програми автоматично складають список змін (conventionalcommits.org, v1.0.0). Для лаб не обовʼязково, але впізнаватимеш у чужих репо.</li>
+<li><strong><code>git add -p</code></strong> - додати в індекс не весь файл, а вибрані шматки (hunk). git показує кожен шматок і питає <code>y</code> (додати) чи <code>n</code> (ні):</li>
+</ul>
+<pre><code class="language-bash">printf 'print(x * 2)\n' &gt;&gt; ~/git-pisochnytsia/lr1.py
+cd ~/git-pisochnytsia
+git add -p lr1.py
+</code></pre>
+<pre><code class="language-text">diff --git a/lr1.py b/lr1.py
+index b72a1f6..419e6aa 100644
+--- a/lr1.py
++++ b/lr1.py
+@@ -1,2 +1,3 @@
+ print(&quot;Привіт, ЛР1&quot;)
+ x = int(input())
++print(x * 2)
+(1/1) Stage this hunk [y,n,q,a,d,e,?]? 
+</code></pre>
+<p>Набери <code>y</code> і Enter. Так з одного файлу можна зробити два акуратні коміти: виправлення окремо, налагоджувальний <code>print</code> - не комітити взагалі.
+- <strong><code>commit.verbose true</code></strong> (урок 02) - у nano під час коміту видно саму зміну, легше написати точне повідомлення.</p>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чим <code>git init</code> відрізняється від <code>git clone</code>?</li>
+<li>Ти змінив <code>lr1.py</code> і пишеш <code>git commit -m "..."</code> без <code>add</code>. Що буде і чому?</li>
+<li>Що робить <code>git commit -am</code> і чого він НЕ робить?</li>
+<li>Які правила гарного повідомлення коміту з Pro Git?</li>
+<li>Що означає «Your branch is ahead of 'origin/main' by 1 commit.»?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>git init</code> робить нове порожнє репо на ноутбуці. <code>git clone</code> копіює вже наявне репо з GitHub разом з історією і звʼязком <code>origin</code>.</li>
+<li>«no changes added to commit»: коміт бере лише індекс, а він порожній. Треба <code>git add lr1.py</code> або <code>git commit -am</code>.</li>
+<li>Додає в індекс зміни вже відстежуваних файлів і робить коміт. Нові (untracked) файли не додає.</li>
+<li>Перший рядок до ~50 знаків, порожній рядок, пояснення з переносом ~72; наказовий спосіб («Додай ...», «Виправ ...»).</li>
+<li>На ноутбуці є 1 коміт, якого ще нема на GitHub. Його треба відправити <code>git push</code>.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Pro Git, 2.2 «Recording Changes to the Repository» - https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository (відкрито 18.11.2026)</li>
+<li>Pro Git, 5.2 «Contributing to a Project» (Commit Guidelines) - https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project (відкрито 18.11.2026)</li>
+<li>git commit - https://git-scm.com/docs/git-commit (відкрито 18.11.2026)</li>
+<li>git add (<code>-p</code>) - https://git-scm.com/docs/git-add (відкрито 18.11.2026)</li>
+<li>Conventional Commits 1.0.0 - https://www.conventionalcommits.org/en/v1.0.0/ (відкрито 18.11.2026)</li>
+<li>Вивід команд - запуск у перевірці <code>_перевірка/u04.sh</code> (git 2.43.0, Ubuntu 24.04, 18.11.2026)</li>
+</ul>

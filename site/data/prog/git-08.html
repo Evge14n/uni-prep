@@ -1,0 +1,349 @@
+<h1 id="тема-8-конфлікт-і-як-розвʼязати-руками">Тема 8. Конфлікт і як розвʼязати руками</h1>
+<p><strong>Навіщо:</strong> ти в гілці поставив <code>g = 9.81</code>, а в <code>main</code> хтось (або ти сам учора) - <code>g = 9.80665</code>. git не знає, що з цього правильно для ЛР1, і питає тебе. Це і є конфлікт. Він не страшний: 4 кроки, і все.</p>
+<h3 id="коротко">Коротко</h3>
+<p><strong>Конфлікт</strong> - коли дві гілки по-різному змінили <strong>ті самі рядки</strong> одного файлу. Різні файли або різні місця файлу git зливає сам. Тут - зупиняється і просить вибрати.</p>
+<p>git вписує у файл обидва варіанти між <strong>маркерами</strong>:</p>
+<pre><code class="language-text">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD          ← початок: нижче твій варіант (поточна гілка)
+g = 9.80665
+=======               ← роздільник
+g = 9.81
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; tochnist      ← кінець: вище варіант з гілки tochnist
+</code></pre>
+<p>Що робити:</p>
+<pre><code class="language-text">1) git status            - які файли в конфлікті (both modified)
+2) nano файл             - лишити правильний рядок, ВИДАЛИТИ всі три маркери
+3) git add файл          - «я розвʼязав»
+4) git commit            - завершити злиття
+   (передумав? git merge --abort - усе як до merge)
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git status</code> / <code>git status --short</code></td>
+<td>файли в конфлікті: <code>both modified</code> / <code>UU</code></td>
+</tr>
+<tr>
+<td><code>git diff</code></td>
+<td>під час конфлікту - обидва варіанти поруч</td>
+</tr>
+<tr>
+<td><code>git add файл</code></td>
+<td>позначити конфлікт у файлі розвʼязаним</td>
+</tr>
+<tr>
+<td><code>git commit</code></td>
+<td>завершити злиття (повідомлення вже готове)</td>
+</tr>
+<tr>
+<td><code>git merge --abort</code></td>
+<td>скасувати злиття, повернути все як було</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td>забрати чужі коміти з GitHub і злити (детально - урок 09)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Аналогія: двоє редагують один абзац реферату. Хтось має прочитати обидва варіанти і лишити один (або змішати). git цього за тебе не робить - і правильно.</p>
+<h3 id="пісочниця">Пісочниця</h3>
+<p>Дві гілки міняють один і той самий рядок:</p>
+<pre><code class="language-bash">mkdir ~/git-pisochnytsia-08
+cd ~/git-pisochnytsia-08
+git init
+printf '# ЛР1: маятник\ng = 9.8\nL = 1.0\n' &gt; lr1.py
+git add lr1.py
+git commit -m &quot;ЛР1: константи&quot;
+git switch -c tochnist
+sed -i 's/g = 9.8/g = 9.81/' lr1.py
+git commit -am &quot;g точніше: 9.81&quot;
+git switch main
+sed -i 's/g = 9.8/g = 9.80665/' lr1.py
+git commit -am &quot;g стандартне: 9.80665&quot;
+git log --oneline --graph --all
+</code></pre>
+<pre><code class="language-text">* d2c6a3c (HEAD -&gt; main) g стандартне: 9.80665
+| * 679fd6f (tochnist) g точніше: 9.81
+|/
+* 9004942 ЛР1: константи
+</code></pre>
+<p>Хеші в тебе будуть інші - дивись на будову.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<ol>
+<li><code>git merge tochnist</code> - злиття пройде?</li>
+</ol>
+<pre><code class="language-bash">git merge tochnist
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<p>Ні, конфлікт. Код виходу 1 (<code>echo $?</code>).</p>
+<pre><code class="language-text">Auto-merging lr1.py
+CONFLICT (content): Merge conflict in lr1.py
+Automatic merge failed; fix conflicts and then commit the result.
+</code></pre>
+</details>
+<ol start="2">
+<li><code>cat lr1.py</code> - що тепер у файлі?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Обидва варіанти з маркерами. Рядки, де згоди нема, - лише рядок з <code>g</code>; заголовок і <code>L</code> git злив сам.</p>
+<pre><code class="language-text"># ЛР1: маятник
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+g = 9.80665
+=======
+g = 9.81
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; tochnist
+L = 1.0
+</code></pre>
+</details>
+<ol start="3">
+<li>Зробити коміт просто зараз: <code>git commit -m "Злиття"</code> - вийде?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Ні, git не дасть закомітити нерозвʼязаний файл (код 128):</p>
+<pre><code class="language-text">error: Committing is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm &lt;file&gt;'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.
+U   lr1.py
+</code></pre>
+</details>
+<h3 id="руками">Руками</h3>
+<p><strong>Крок 1. Подивись, що зламалось.</strong></p>
+<pre><code class="language-bash">git status
+git status --short
+git diff
+</code></pre>
+<pre><code class="language-text">On branch main
+You have unmerged paths.
+  (fix conflicts and run &quot;git commit&quot;)
+  (use &quot;git merge --abort&quot; to abort the merge)
+
+Unmerged paths:
+  (use &quot;git add &lt;file&gt;...&quot; to mark resolution)
+    both modified:   lr1.py
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+</code></pre>
+<pre><code class="language-text">UU lr1.py
+</code></pre>
+<pre><code class="language-text">diff --cc lr1.py
+index 7435f88,75aaf89..0000000
+--- a/lr1.py
++++ b/lr1.py
+@@@ -1,3 -1,3 +1,7 @@@
+  # ЛР1: маятник
+++&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+ +g = 9.80665
+++=======
++ g = 9.81
+++&gt;&gt;&gt;&gt;&gt;&gt;&gt; tochnist
+  L = 1.0
+</code></pre>
+<p><code>UU</code> - «unmerged» в обох. Під час конфлікту <code>git diff</code> особливий (<code>diff --cc</code>): дві колонки плюсів, бо порівнює з обома батьками.</p>
+<p><strong>Крок 2. Розвʼяжи в nano.</strong> У методичці <code>g = 9.81</code> - лишаємо його.</p>
+<pre><code class="language-bash">nano lr1.py
+</code></pre>
+<p>У nano: стань на рядок <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> і видали його (Ctrl+K вирізає цілий рядок), так само рядок <code>g = 9.80665</code>, <code>=======</code> і <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; tochnist</code>. Має лишитись рівно:</p>
+<pre><code class="language-text"># ЛР1: маятник
+g = 9.81
+L = 1.0
+</code></pre>
+<p>Збережи: Ctrl+O, Enter, Ctrl+X. (Без nano те саме одним рядком:)</p>
+<pre><code class="language-bash">printf '# ЛР1: маятник\ng = 9.81\nL = 1.0\n' &gt; lr1.py
+</code></pre>
+<p><strong>Крок 3. add і commit.</strong></p>
+<pre><code class="language-bash">git add lr1.py
+git status
+</code></pre>
+<pre><code class="language-text">On branch main
+All conflicts fixed but you are still merging.
+  (use &quot;git commit&quot; to conclude merge)
+
+Changes to be committed:
+    modified:   lr1.py
+</code></pre>
+<pre><code class="language-bash">git commit
+</code></pre>
+<p>Відкриється nano з готовим повідомленням <code>Merge branch 'tochnist'</code> - просто Ctrl+O, Enter, Ctrl+X.</p>
+<pre><code class="language-text">[main 8d45cb3] Merge branch 'tochnist'
+</code></pre>
+<pre><code class="language-bash">git log --oneline --graph --all
+</code></pre>
+<pre><code class="language-text">*   8d45cb3 (HEAD -&gt; main) Merge branch 'tochnist'
+|\
+| * 679fd6f (tochnist) g точніше: 9.81
+* | d2c6a3c g стандартне: 9.80665
+|/
+* 9004942 ЛР1: константи
+</code></pre>
+<p><strong>Крок 4. Передумав - <code>git merge --abort</code>.</strong> Новий конфлікт, тепер у рядку <code>L</code>:</p>
+<pre><code class="language-bash">git switch -c dovzhyna
+sed -i 's/L = 1.0/L = 0.5/' lr1.py
+git commit -am &quot;L = 0.5&quot;
+git switch main
+sed -i 's/L = 1.0/L = 2.0/' lr1.py
+git commit -am &quot;L = 2.0&quot;
+git merge dovzhyna
+git merge --abort
+git status
+cat lr1.py
+</code></pre>
+<pre><code class="language-text">On branch main
+nothing to commit, working tree clean
+</code></pre>
+<pre><code class="language-text"># ЛР1: маятник
+g = 9.81
+L = 2.0
+</code></pre>
+<p>Маркерів нема, файл як до <code>merge</code>. Це кнопка «назад», коли конфлікт заплутаний і хочеться спершу подумати.</p>
+<p><strong>Крок 5. Конфлікт з чужим комітом (через GitHub).</strong> Другий клон <code>~/druhyi-klon</code> грає роль одногрупника на іншому ноутбуці. Працюємо в приватній пісочниці <code>pisochnytsia</code> з уроку 03. <code>git push</code> - відправити свої коміти на GitHub, <code>git pull</code> - забрати чужі (детально - урок 09).</p>
+<p>Ти пишеш план здачі і відправляєш:</p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+git pull
+printf 'Здача ЛР1: 25.11\n' &gt; plan.txt
+git add plan.txt
+git commit -m &quot;План здачі&quot;
+git push
+</code></pre>
+<p>«Одногрупник» клонує, міняє дату і теж відправляє (якщо <code>~/druhyi-klon</code> уже є - пропусти <code>git clone</code>, натомість <code>cd ~/druhyi-klon</code> і <code>git pull</code>):</p>
+<pre><code class="language-bash">git clone git@github.com:Evge14n/pisochnytsia.git ~/druhyi-klon
+cd ~/druhyi-klon
+git config user.name &quot;Друг&quot;
+sed -i 's/25.11/27.11/' plan.txt
+git commit -am &quot;Здача ЛР1 переноситься на 27.11&quot;
+git push
+</code></pre>
+<p><code>git config</code> без <code>--global</code> діє лише в цьому репо - тут ти «Друг». А ти, не знаючи про це, ставиш свою дату і забираєш зміни:</p>
+<pre><code class="language-bash">cd ~/pisochnytsia
+sed -i 's/25.11/26.11/' plan.txt
+git commit -am &quot;Здача ЛР1 26.11&quot;
+git pull
+cat plan.txt
+</code></pre>
+<pre><code class="language-text">From github.com:Evge14n/pisochnytsia
+   9a7bcdc..89c4ae1  main       -&gt; origin/main
+Auto-merging plan.txt
+CONFLICT (content): Merge conflict in plan.txt
+Automatic merge failed; fix conflicts and then commit the result.
+</code></pre>
+<pre><code class="language-text">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+Здача ЛР1: 26.11
+=======
+Здача ЛР1: 27.11
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 89c4ae13c81d30f023c41b734b83cd842bcec7bf
+</code></pre>
+<p>Те саме, що й між гілками: <code>git pull</code> = забрати + <code>git merge</code>. Замість назви гілки після <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> - хеш чужого коміту. Спитав одногрупника - правильно 27.11:</p>
+<pre><code class="language-bash">nano plan.txt
+printf 'Здача ЛР1: 27.11\n' &gt; plan.txt
+git add plan.txt
+git commit
+git push
+git log --format=&quot;%h %an: %s&quot; -n 3
+</code></pre>
+<p>(<code>nano</code> або <code>printf</code> - щось одне.) nano для коміту запропонує <code>Merge branch 'main' of github.com:Evge14n/pisochnytsia</code> - лиши як є. Останній рядок показує, хто що зробив (<code>%h</code> - хеш, <code>%an</code> - автор, <code>%s</code> - повідомлення):</p>
+<pre><code class="language-text">5402946 Твоє Імʼя: Merge branch 'main' of github.com:Evge14n/pisochnytsia
+6728730 Твоє Імʼя: Здача ЛР1 26.11
+89c4ae1 Друг: Здача ЛР1 переноситься на 27.11
+</code></pre>
+<p><strong>Для лаб:</strong> у <code>~/univer/labs</code> конфлікт найчастіше буває, коли ти правиш ЛР3 у двох гілках або на двох компʼютерах (ноутбук і ПК в аудиторії). Правило те саме: <code>git status</code> → <code>nano lr3/lr3.py</code> → прибрати маркери → <code>python3 -m doctest lr3/lr3.py</code> (перевір, що код живий!) → <code>git add</code> → <code>git commit</code>.</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li>Закомітив файл з маркерами (git дозволяє: <code>git add</code> не перевіряє вміст). Python падає:
+  <code>text
+    File "/home/.../lr1.py", line 2
+      &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+      ^^
+  SyntaxError: invalid syntax</code>
+  <code>line 2</code> - номер рядка з першим маркером (рядок 1 - коментар <code># ЛР1: маятник</code>). Відкрий файл у nano, прибери маркери, новий коміт. Перед <code>git add</code> став собі звичку: <code>git diff --check</code> (див. «Як роблять профі»).</li>
+<li>Перемикаєшся на іншу гілку посеред злиття (<code>git switch tochnist</code>):
+  <code>text
+  fatal: cannot switch branch while merging
+  Consider "git merge --quit" or "git worktree add".</code>
+  Спершу закінчи злиття (<code>git add</code> + <code>git commit</code>) або скасуй (<code>git merge --abort</code>).</li>
+<li><code>git merge --abort</code>, коли злиття вже завершене або його не було:
+  <code>text
+  fatal: There is no merge to abort (MERGE_HEAD missing).</code>
+  Скасувати вже зроблений merge-коміт - це інше (урок 12, <code>git revert</code>).</li>
+<li>Видалив маркери, але лишив обидва рядки <code>g = ...</code> - git не сперечатиметься, а код стане неправильним. Після розвʼязання завжди запускай doctest.</li>
+<li><code>git clone ... ~/druhyi-klon</code> вдруге: <code>fatal: destination path '...' already exists and is not an empty directory.</code> Клон уже є - <code>cd ~/druhyi-klon</code> і <code>git pull</code>.</li>
+</ul>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li>Перевірка на забуті маркери перед <code>git add</code>: <code>git diff --check</code>. Під час конфлікту в кроці 1 вона пише (код 2), а після розвʼязання мовчить (код 0):
+  <code>text
+  lr1.py:2: leftover conflict marker
+  lr1.py:4: leftover conflict marker
+  lr1.py:6: leftover conflict marker</code></li>
+<li>Стиль <code>zdiff3</code> (у git 2.43 на Mint працює, перевірено запуском): між маркерами видно ще й <strong>як було до обох змін</strong> - легше зрозуміти, хто що міняв (git-scm.com/docs/git-config, <code>merge.conflictStyle</code>). Спробуй <strong>один раз</strong>, без зміни налаштувань (<code>-c</code> діє лише на цю команду), на гілці <code>dovzhyna</code> з кроку 4:
+  <code>bash
+  cd ~/git-pisochnytsia-08
+  git -c merge.conflictStyle=zdiff3 merge dovzhyna
+  cat lr1.py
+  git merge --abort</code>
+  <code>cat</code> покаже (<code>|||||||</code> - спільний предок, коміт <code>8d45cb3</code>):
+  ```text
+  # ЛР1: маятник
+  g = 9.81
+  &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+  L = 2.0
+  ||||||| 8d45cb3
+  L = 1.0
+  =======
+  L = 0.5<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>dovzhyna
+  <code>Сподобалось і хочеш так завжди - **необовʼязково**, налаштування для всіх репо (ввімкнеш - конфлікти в наступних уроках виглядатимуть з рядком `|||||||`, не так, як у прикладах курсу; тому краще після курсу):</code>text
+  git config --global merge.conflictStyle zdiff3
+  ```</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</li>
+<li>Узяти цілий файл з одного боку, не редагуючи: <code>git checkout --ours lr1.py</code> (наша версія) або <code>git checkout --theirs lr1.py</code> (їхня), потім <code>git add</code>. Зручно для файлів, які не правлять руками (згенеровані дані).</li>
+<li>Конфліктів менше, якщо: <code>git pull</code> перед початком роботи, маленькі коміти, короткі гілки, і не правити один файл удвох одночасно (Pro Git, розд. 5.2).</li>
+<li>На GitHub прості конфлікти в Pull Request можна розвʼязати прямо в браузері, кнопка <strong>Resolve conflicts</strong> (docs.github.com, «Resolving a merge conflict on GitHub»; урок 11).</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Коли виникає конфлікт, а коли git зливає сам?</li>
+<li>Що означають <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>, <code>=======</code> і <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; tochnist</code>?</li>
+<li>Назви 4 кроки розвʼязання конфлікту.</li>
+<li>Як скасувати злиття, якщо конфлікт заплутаний?</li>
+<li>Чому після <code>git pull</code> теж буває конфлікт?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Конфлікт - коли дві гілки змінили ті самі рядки файлу по-різному. Різні файли чи різні місця файлу git зливає сам.</li>
+<li>Від <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> до <code>=======</code> - твій варіант (поточна гілка), від <code>=======</code> до <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; tochnist</code> - варіант з гілки <code>tochnist</code>.</li>
+<li><code>git status</code> → виправити файл у nano і прибрати маркери → <code>git add файл</code> → <code>git commit</code>.</li>
+<li><code>git merge --abort</code>.</li>
+<li><code>git pull</code> = забрати коміти з GitHub + <code>git merge</code>. Якщо хтось змінив ті самі рядки і вже відправив - це звичайний конфлікт злиття.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>Pro Git, розд. 3.2 «Basic Merge Conflicts»: https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging - відкрито 18.11.2026</li>
+<li>Pro Git, розд. 7.8 «Advanced Merging»: https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging - відкрито 18.11.2026</li>
+<li>git merge (розділи «HOW CONFLICTS ARE PRESENTED», <code>--abort</code>): https://git-scm.com/docs/git-merge - відкрито 18.11.2026</li>
+<li>git config, <code>merge.conflictStyle</code>: https://git-scm.com/docs/git-config - відкрито 18.11.2026</li>
+<li>GitHub, «Resolving a merge conflict using the command line»: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line - відкрито 18.11.2026</li>
+<li>GitHub, «Resolving a merge conflict on GitHub»: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-on-github - відкрито 18.11.2026</li>
+</ul>

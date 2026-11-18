@@ -1,0 +1,277 @@
+<h1 id="урок-01-timeshift-знімок-до-будь-яких-змін">Урок 01. Timeshift - знімок до будь-яких змін</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> знімок системи - це «збереження в грі» для Linux. Зламав систему оновленням, драйвером чи командою з
+інтернету - повернувся до знімка за 10 хвилин, а не перевстановлюєш усе. Тому цей урок перший: спершу знімок, потім усе інше.</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>Timeshift</strong> - програма, що робить знімки системи. Вона вже стоїть на Mint 22.3 (версія 25.12.4).</p>
+<p><strong>Знімок</strong> (snapshot) - копія системних файлів на певний момент: програми, налаштування в <code>/etc</code>, ядро.
+Перший знімок - повна копія системи (кілька ГБ), наступні зберігають лише змінені файли, тому вони малі.</p>
+<pre><code class="language-text">Що Є у знімку                       Чого НЕМА у знімку
+-----------------------------       ------------------------------------
+/ (система), /etc, /usr, ядро       /home/evgen - твоя домашня тека:
+програми, встановлені через apt     лаби, документи, фото, ~/univer
+</code></pre>
+<p>Головне правило уроку: <strong>Timeshift - НЕ резервна копія твоїх лаб.</strong> Офіційний посібник Mint: знімки системи
+«покривають лише саму операційну систему і не включають і не змінюють твої особисті дані». Це і плюс (відновлення
+не зітре твої файли), і мінус (зламався диск або сам стер лабу - Timeshift не допоможе). Для лаб - окрема копія (нижче).</p>
+<p><strong>Як налаштувати (мишкою, один раз):</strong></p>
+<pre><code class="language-text">Спосіб 1: Екран привітання → Перші кроки → Системні знятки → Запуск
+Спосіб 2: Меню → Адміністрування → Timeshift
+(попросить пароль - це нормально, Timeshift працює від root)
+
+Майстер налаштування (українська Mint / англійська):
+1. «Оберіть тип знімка» (Select Snapshot Type):            RSYNC                 → «Далі» (Next)
+2. «Обрати розташування знімків» (Select Snapshot Location): диск для знімків   → «Далі» (Next)
+3. «Оберіть рівні створення знімків» (Select Snapshot Levels):
+   «Щоденно» (Daily) і «Завантаження» (Boot), по 2-3 знімки кожного         → «Далі» (Next)
+4. «Домашні каталоги користувача» (User Home Directories): нічого не вмикай  → «Далі» (Next)
+5. «Встановлення закінчено» (Setup Complete)                               → «Кінець» (Finish)
+</code></pre>
+<p>Українські назви - з файлу перекладу Timeshift 25.12.4 (<code>timeshift.mo</code> з пакета Mint 22.3); вікно на ноутбуці
+в тестовій системі не відкривали, тож кнопки можуть бути трохи іншими.</p>
+<ul>
+<li><strong>RSYNC</strong> - режим для звичайної установки Mint (ext4). BTRFS - лише якщо ти сам розмічав диск під BTRFS.</li>
+<li><strong>Диск:</strong> Timeshift показує лише диски з файловою системою Linux (ext4 тощо). Флешка з FAT32/NTFS у списку не
+  зʼявиться. Якщо диск один - бери його: знімок рятує від поганого оновлення, але не від смерті диска.</li>
+<li>Знімки лягають у теку <code>timeshift/snapshots</code> у корені вибраного диска. Диск не форматується, дані на ньому лишаються.</li>
+<li>Розклад за замовчуванням увесь вимкнено. Mint радить щоденні + при завантаженні (Welcome: щонайменше 2 і 2).</li>
+<li>Домашня тека за замовчуванням виключена. <strong>Не вмикай її</strong> (вкладка «Користувачі» (Users) у «Параметри» (Settings)).</li>
+<li>Нагадування «налаштуй знімки» показує в треї програма «Інформація про систему».</li>
+</ul>
+<p><strong>Команди в терміналі</strong> (усі лише з <code>sudo</code>):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sudo timeshift --create --comments "текст"</code></td>
+<td>зробити знімок зараз, з підписом</td>
+</tr>
+<tr>
+<td><code>sudo timeshift --list</code></td>
+<td>список знімків</td>
+</tr>
+<tr>
+<td><code>sudo timeshift --list-devices</code></td>
+<td>на які диски можна класти знімки</td>
+</tr>
+<tr>
+<td><code>sudo timeshift --delete --snapshot 'імʼя'</code></td>
+<td>видалити один знімок</td>
+</tr>
+<tr>
+<td><code>sudo timeshift --restore</code></td>
+<td>відновити (спитає, який знімок)</td>
+</tr>
+<tr>
+<td><code>sudo timeshift --check</code></td>
+<td>зробити знімок, лише якщо за розкладом уже час</td>
+</tr>
+<tr>
+<td><code>timeshift --help</code></td>
+<td>довідка (тут sudo не треба)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Імʼя знімка - це дата і час, як у прикладі з довідки: <code>2014-10-12_16-29-08</code>. Позначки (Tags) у списку: O - зроблений
+вручну, B - при завантаженні, H, D, W, M - щогодини, щодня, щотижня, щомісяця.</p>
+<p><strong>Лаби бережи за правилом 3-2-1:</strong> 3 копії, на 2 різних носіях, 1 з них - поза домом.</p>
+<pre><code class="language-text">копія 1: ноутбук            ~/univer
+копія 2: флешка             rsync -rtv --modify-window=1 ~/univer/ ШЛЯХ_ДО_ФЛЕШКИ/univer/
+копія 3: інтернет           GitHub (урок 24) або хмара через браузер
+</code></pre>
+<p><code>rsync</code> - програма для копіювання тек. Вдруге копіює лише те, що змінилось, тому швидка. <code>-a</code> - зберегти все
+(підтеки, права, дати), <code>-v</code> - писати, що копіює. Між теками на ноутбуці - <code>rsync -av</code>.</p>
+<p><strong>На флешку - інакше.</strong> Флешки зазвичай відформатовані у FAT32 або exFAT, а ці файлові системи не вміють зберігати
+права файлів Linux. <code>rsync -av</code> на таку флешку скопіює файли, але напише <code>failed to set permissions</code> і завершиться
+з кодом 23 (помилка). Тому для флешки: <code>-r</code> - з підтеками, <code>-t</code> - зберегти дати (за ними rsync бачить, що
+змінилось), <code>-v</code> - писати, що копіює, без прав. <code>--modify-window=1</code> - вважати дати однаковими, якщо різниця до
+1 секунди: FAT зберігає час з точністю 2 секунди, і без цього rsync щоразу копіював би все заново (так радить
+<code>man rsync</code>).</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<ol>
+<li>Ти забув <code>sudo</code>:</li>
+</ol>
+<pre><code class="language-bash">timeshift --list
+</code></pre>
+<p>Що буде?</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">Application needs admin access.
+Please run the application as admin (using 'sudo' or 'su')
+</code></pre>
+<p>Timeshift без прав root не працює взагалі, навіть щоб показати список. Код виходу 1 (помилка).</p>
+</details>
+<ol start="2">
+<li>Скісна риска в кінці шляху. Дві команди відрізняються лише одним символом <code>/</code> після <code>dzherelo</code>:</li>
+</ol>
+<pre><code class="language-bash">mkdir dzherelo
+touch dzherelo/a.py dzherelo/b.py
+rsync -a dzherelo/ kopiya1/
+rsync -a dzherelo kopiya2/
+ls kopiya1
+ls kopiya2
+</code></pre>
+<p>Що покаже кожен <code>ls</code>?</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">$ ls kopiya1
+a.py
+b.py
+$ ls kopiya2
+dzherelo
+</code></pre>
+<p><code>dzherelo/</code> (з рискою) = «вміст теки», файли лягли прямо в <code>kopiya1</code>. <code>dzherelo</code> (без риски) = «саму теку»,
+тому в <code>kopiya2</code> зʼявилась тека <code>dzherelo</code>, а файли всередині неї. Це найчастіша плутанина з rsync.</p>
+</details>
+<ol start="3">
+<li>Продовжуємо. Видаляємо файл у джерелі і копіюємо ще раз:</li>
+</ol>
+<pre><code class="language-bash">rm dzherelo/b.py
+rsync -a dzherelo/ kopiya1/
+ls kopiya1
+</code></pre>
+<p>Чи зникне <code>b.py</code> з копії?</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">a.py
+b.py
+</code></pre>
+<p>Ні. Без прапорця <code>--delete</code> rsync лише додає і оновлює, але нічого не видаляє в копії. Це безпечно: якщо ти випадково
+стер лабу на ноутбуці, на флешці вона лишиться. Прапорець <code>--delete</code> робить копію точним дзеркалом (видаляє зайве) -
+ним легко стерти потрібне, на старті курсу його не бери.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p><strong>Крок 1. Подивись, куди Timeshift може класти знімки.</strong></p>
+<pre><code class="language-bash">sudo timeshift --list-devices
+</code></pre>
+<p>Побачиш таблицю <code>Devices with Linux file systems</code> - диски з файловою системою Linux. На ноутбуці з одним диском
+там буде один розділ (типу <code>/dev/nvme0n1p2</code> або <code>/dev/sda2</code>).</p>
+<p><strong>Крок 2. Налаштуй розклад мишкою</strong> (як у «Коротко»): RSYNC → диск → Daily і Boot → Finish.</p>
+<p><strong>Крок 3. Зроби перший знімок вручну.</strong> Перший робиться довго (кілька хвилин, кілька ГБ). У 22.3 його можна
+поставити на паузу і продовжити.</p>
+<pre><code class="language-bash">sudo timeshift --create --comments &quot;перший знімок, чиста система&quot;
+sudo timeshift --list
+</code></pre>
+<p>Поки знімків нема, <code>--list</code> пише так (справжній вивід зі свіжої Mint 22.3, де диск ще не вибрано):</p>
+<pre><code class="language-text">First run mode (config file not found)
+Selected default snapshot type: RSYNC
+Device : Not Selected
+
+
+** (process:274): CRITICAL **: 08:44:06.610: gee_abstract_collection_get_size: assertion 'self != NULL' failed
+No snapshots found
+</code></pre>
+<p>Рядок <code>CRITICAL</code> тут означає лише, що диск ще не вибрано. Після налаштування буде таблиця зі стовпцями
+Num, Name, Tags, Description - у Description твій підпис з <code>--comments</code>.</p>
+<p><strong>Крок 4. Видали зайвий знімок.</strong> Мишкою: вибери знімок → Delete. У терміналі - з імʼям зі стовпця Name:</p>
+<pre><code class="language-text">sudo timeshift --delete --snapshot '2026-11-18_10-30-00'
+</code></pre>
+<p>(Це шаблон: дату заміни на імʼя свого знімка.)</p>
+<p><strong>Крок 5. Відновлення - знай заздалегідь, як.</strong>
+- Система працює: Timeshift → вибери знімок → Restore → далі за майстром, потім перезавантаження.
+  У терміналі: <code>sudo timeshift --restore</code> (спитає, який знімок і куди).
+- Система не завантажується: завантажся з live USB Mint (та сама флешка, з якої ставив систему), відкрий там
+  Timeshift (він є на образі), вибери свій диск і знімок → Restore. Можна й з текстового входу (TTY, урок 26)
+  командою <code>sudo timeshift --restore</code>. (Повний прохід з live USB у цьому уроці не перевірено - див. урок 26.)</p>
+<p><strong>Крок 6. Копія лаб за 1 хвилину.</strong> Спершу потренуйся на пробній теці:</p>
+<pre><code class="language-bash">mkdir -p ~/proba/labs
+echo 'print(&quot;лаба 1&quot;)' &gt; ~/proba/labs/lr1.py
+rsync -av ~/proba/ ~/proba-kopiya/
+ls ~/proba-kopiya/labs
+diff -r ~/proba ~/proba-kopiya &amp;&amp; echo &quot;однакові&quot;
+</code></pre>
+<p>Вивід <code>rsync -av</code> (тека у тебе буде <code>/home/evgen/proba-kopiya</code>):</p>
+<pre><code class="language-text">sending incremental file list
+created directory /home/evgen/proba-kopiya
+./
+labs/
+labs/lr1.py
+
+sent 180 bytes  received 109 bytes  578.00 bytes/sec
+total size is 20  speedup is 0.07
+</code></pre>
+<p>Запусти <code>rsync -av ~/proba/ ~/proba-kopiya/</code> ще раз - список файлів буде порожній: нічого не змінилось, нічого не
+копіюється. Прибери пробні теки: <code>rm -r ~/proba ~/proba-kopiya</code>.</p>
+<p>Тепер справжня копія на флешку. Встав флешку і знайди, куди вона підключилась:</p>
+<pre><code class="language-bash">lsblk -o NAME,SIZE,MOUNTPOINT
+</code></pre>
+<p>У стовпці <code>MOUNTPOINT</code> біля флешки (дивись за розміром) буде її шлях. Підстав його замість шаблону:</p>
+<pre><code class="language-text">rsync -rtv --modify-window=1 ~/univer/ ШЛЯХ_ДО_ФЛЕШКИ/univer/
+</code></pre>
+<p>(Чому не <code>-av</code> - див. «Коротко», «На флешку - інакше».)</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<ul>
+<li><strong>Увімкнув домашню теку в знімках → диск забився за тиждень.</strong> На r/linuxmint це найчастіша скарга про Timeshift:
+  у знімки потрапили <code>/home</code>, <code>/opt</code> або <code>/var/lib/flatpak</code> (у одного автора - 35 ГБ). Виправлення: у «Параметри»
+  (Settings) на вкладці «Користувачі» (Users) виключити домашні теки, видалити старі знімки, тримати 2-3 знімки
+  кожного типу.</li>
+<li><strong>«Лаби ж у знімку».</strong> Ні. Відновив знімок, а лаби пропали з іншої причини (стер, диск помер) - знімок не допоможе.
+  Лаби - на флешку (rsync) і в GitHub.</li>
+<li><strong><code>Application needs admin access.</code></strong> (українською: <code>Для доступу програма вимагає права адміністратора</code>) - забув
+  <code>sudo</code> перед <code>timeshift</code>.</li>
+<li><strong>Флешки нема в списку дисків Timeshift.</strong> Список показує лише <code>Devices with Linux file systems</code>
+  («Пристрої з файловими системами Linux»). Флешка з FAT32/NTFS для знімків не годиться (для копії лаб через
+  rsync - годиться).</li>
+<li><strong><code>rsync -av</code> на флешку → <code>failed to set permissions</code>, код 23.</strong> FAT32/exFAT не зберігають права Linux. Файли
+  скопійовано, але для флешки пиши <code>rsync -rtv --modify-window=1</code> (див. «Коротко»). Ці повідомлення rsync завжди
+  англійською (перекладу в rsync нема).</li>
+<li><strong>Місця нема, знімок не створюється.</strong> Перевір <code>df -h /</code> (стовпець Avail - вільно). Видали старі знімки
+  (крок 4) і зменш кількість у розкладі.</li>
+<li><strong>Скопіював <code>rsync -a ~/univer ...</code> без риски</strong> - на флешці вийшло <code>univer/univer/...</code>. Пиши <code>~/univer/</code> з рискою.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Знімок перед кожною великою зміною</strong> (точкове оновлення 22.x → 22.3, драйвер NVIDIA, нове ядро, PPA). Пост
+  «PSA - If you're upgrading to 22.3 make a Timeshift backup first» (r/linuxmint, 11.01.2026, 108 балів), і
+  «Had to use Timeshift for the first time» (06.01.2026, 96 балів) - людина відкотилась після невдалого оновлення.</li>
+<li><strong>Знімки окремо, особисті файли окремо.</strong> Timeshift - для системи, rsync/git/хмара - для <code>~</code>. Знімки краще класти на
+  інший диск, якщо він є.</li>
+<li><strong>Правило 3-2-1</strong> згадують досвідчені користувачі в r/linuxmint (12.09.2026), коли хтось записав образ не на ту флешку
+  і втратив дані.</li>
+<li>Код програмісти зберігають у <strong>git</strong> і пушать у GitHub щодня - це і копія, і історія змін (урок 24).</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Чи збереже Timeshift твою ЛР1 з теки <code>~/univer/labs/lr1</code>, якщо ти її випадково видалиш?</li>
+<li>Якою командою зробити знімок з підписом «перед драйвером»?</li>
+<li>Який режим Timeshift вибрати на звичайному Mint з ext4 і чому?</li>
+<li>Чим відрізняється <code>rsync -a ~/univer/ X/</code> від <code>rsync -a ~/univer X/</code>?</li>
+<li>Система після оновлення не завантажується. Як дістатись до Timeshift?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Ні. Домашня тека не входить у знімок. Для лаб потрібна окрема копія: rsync на флешку, GitHub, хмара.</li>
+<li><code>sudo timeshift --create --comments "перед драйвером"</code>.</li>
+<li>RSYNC. BTRFS працює лише на диску з BTRFS і спеціальною розміткою, а Mint за замовчуванням ставиться на ext4.</li>
+<li>З рискою копіюється вміст теки (<code>X/labs/...</code>), без риски - сама тека (<code>X/univer/labs/...</code>).</li>
+<li>Завантажитись з live USB Mint, запустити там Timeshift і відновити знімок. Або з текстового входу
+   <code>sudo timeshift --restore</code> (урок 26).</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Посібник установки Mint, «System snapshots» (Timeshift: RSYNC, диск, розклад) -
+  https://linuxmint-installation-guide.readthedocs.io/en/latest/timeshift.html - відкрито 18.11.2026</li>
+<li>Посібник користувача Mint, «Update Manager» (про знімки і особисті дані) -
+  https://linuxmint-user-guide.readthedocs.io/en/latest/mintupdate.html - відкрито 18.11.2026</li>
+<li>Timeshift на GitHub (проєкт Mint) - https://github.com/linuxmint/timeshift - відкрито 18.11.2026</li>
+<li>r/linuxmint, «PSA - If you're upgrading to 22.3 make a Timeshift backup first» -
+  https://www.reddit.com/r/linuxmint/comments/1qa50ii/ - відкрито 18.11.2026</li>
+<li>r/linuxmint, «Had to use Timeshift for the first time» - https://www.reddit.com/r/linuxmint/comments/1q5uoti/ -
+  відкрито 18.11.2026</li>
+<li>r/linuxmint, Timeshift зʼїв диск (home, /var/lib/flatpak): https://www.reddit.com/r/linuxmint/comments/1p61223/ ,
+  https://www.reddit.com/r/linuxmint/comments/1rbd5h9/ , https://www.reddit.com/r/linuxmint/comments/1to63jy/ -
+  відкрито 18.11.2026</li>
+<li>r/linuxmint, образ не на ту флешку і правило 3-2-1 - https://www.reddit.com/r/linuxmint/comments/1weg0jg/ -
+  відкрито 18.11.2026</li>
+<li><code>timeshift --help</code> (версія 25.12.4) і <code>man rsync</code> (<code>--modify-window</code>, FAT) - перевірено запуском у Mint 22.3,
+  18.11.2026</li>
+<li>Українські назви вікон Timeshift - файл <code>usr/share/locale/uk/LC_MESSAGES/timeshift.mo</code> з пакета <code>timeshift</code>
+  25.12.4 репозиторію Mint 22.3 (розпаковано <code>apt-get download</code> + <code>dpkg-deb -x</code>), 18.11.2026</li>
+</ul>

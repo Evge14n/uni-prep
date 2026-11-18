@@ -1,2 +1,4 @@
 # UPLAN1: календар за RFC 5545 - лише CRLF, git не має переписувати рядки
 *.ics -text
+# UPROGONE: bash-скрипти для wget на ноутбук - лише LF (autocrlf=true робив CRLF у робочій теці, локальна перевірка падала)
+*.sh text eol=lf

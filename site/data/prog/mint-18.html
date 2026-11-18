@@ -1,0 +1,373 @@
+<h1 id="урок-18-диски-і-місце">Урок 18. Диски і місце</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> місце на диску закінчується тихо: журнали, кеш, знімки Timeshift, Flatpak. А на повному диску Mint може
+навіть не пустити на робочий стіл. Тут - як знайти, що з'їло місце, як безпечно почистити, як працювати з флешками і
+як не стерти не той диск.</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>Розділ</strong> (partition) - шматок диска. <strong>Файлова система</strong> - спосіб записувати файли на розділ: у Mint це <code>ext4</code>,
+на флешках <code>FAT32</code>, <code>exFAT</code> або <code>NTFS</code>. <strong>Монтування</strong> - підключення розділу до якоїсь теки (<strong>точки монтування</strong>).
+Системний розділ змонтовано в <code>/</code>, флешки Mint монтує в <code>/media/evgen/НАЗВА_ФЛЕШКИ</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що показує</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>df -h</code></td>
+<td>місце на кожному розділі: Size, Used, <strong>Avail</strong> (вільно), Use%</td>
+</tr>
+<tr>
+<td><code>df -h /</code></td>
+<td>лише системний розділ</td>
+</tr>
+<tr>
+<td><code>du -sh ТЕКА</code></td>
+<td>скільки займає тека (s - лише підсумок, h - у К/М/Г)</td>
+</tr>
+<tr>
+<td><code>du -h --max-depth=1 \| sort -h</code></td>
+<td>що найбільше в поточній теці (найбільше - внизу)</td>
+</tr>
+<tr>
+<td><code>ncdu</code></td>
+<td>те саме, але можна ходити стрілками (<code>sudo apt install ncdu</code>)</td>
+</tr>
+<tr>
+<td><code>lsblk -o NAME,SIZE,MODEL,MOUNTPOINT,FSTYPE</code></td>
+<td>які є диски і флешки - <strong>перед будь-яким записом</strong></td>
+</tr>
+<tr>
+<td><code>findmnt</code></td>
+<td>що куди змонтовано</td>
+</tr>
+<tr>
+<td><code>swapon --show</code>, <code>free -h</code></td>
+<td>swap і оперативна пам'ять</td>
+</tr>
+<tr>
+<td><code>sudo journalctl --disk-usage</code></td>
+<td>скільки займають системні журнали</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Програми мишкою</strong> (усі є на Mint одразу):
+- «Аналізатор використання диска» (baobab) - кольорова діаграма, хто скільки займає.
+- «Диски» (gnome-disks) - список дисків, «Дані SMART і самостійні тести» (здоров'я диска), «Форматувати диск»,
+  «Параметри монтування».
+- «Форматування USB-нагромаджувача» (mintstick) - швидко відформатувати флешку.
+- <strong>GParted</strong> - зміна розмірів розділів. Він є на live USB, але після встановлення Mint його видаляє (стоїть у списку
+  «видалити після встановлення» на ISO 22.3). Розділи системного диска змінюють <strong>лише з live USB</strong>, коли диск не
+  змонтований. На встановленій системі, якщо треба: <code>sudo apt install gparted</code>.</p>
+<p><strong>Безпечне прибирання</strong> (від найбезпечнішого):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що</th>
+<th>Як</th>
+<th>Що звільняє</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Кошик</td>
+<td>Nemo → «Смітник» → «Спорожнити смітник» або <code>gio trash --empty</code></td>
+<td>видалені мишкою файли</td>
+</tr>
+<tr>
+<td>Кеш .deb-пакетів</td>
+<td><code>sudo apt clean</code></td>
+<td><code>/var/cache/apt/archives</code></td>
+</tr>
+<tr>
+<td>Непотрібні пакети</td>
+<td><code>sudo apt autoremove --purge</code></td>
+<td>залежності, які вже ніхто не використовує</td>
+</tr>
+<tr>
+<td>Журнали</td>
+<td><code>sudo journalctl --vacuum-time=2weeks</code></td>
+<td>записи старші за 2 тижні в <code>/var/log/journal</code></td>
+</tr>
+<tr>
+<td>Flatpak</td>
+<td><code>flatpak uninstall --unused</code></td>
+<td>бібліотеки (runtimes), які вже не треба жодній програмі</td>
+</tr>
+<tr>
+<td>Старі ядра</td>
+<td>Диспетчер оновлень → Вигляд → Ядра Linux</td>
+<td>по кількасот МБ на ядро</td>
+</tr>
+<tr>
+<td>Знімки Timeshift</td>
+<td>Timeshift → вибрати старий знімок → Delete (урок 01)</td>
+<td>часто найбільше</td>
+</tr>
+<tr>
+<td>Кеш програм</td>
+<td><code>~/.cache</code> - теки окремих програм, коли програма закрита</td>
+<td>мініатюри, кеш браузера, pip</td>
+</tr>
+</tbody>
+</table></div>
+<p>Не став «чистильники» на кшталт BleachBit: вони видаляють те, що потрібне системі (список «фатальних помилок»
+Easy Linux Tips).</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p>Спершу зроби пробну теку з файлами відомого розміру (<code>head -c 40M /dev/zero</code> - 40 МБ нулів):</p>
+<pre><code class="language-bash">mkdir -p ~/proba/misce/video ~/proba/misce/laby ~/proba/misce/kesh
+head -c 40M /dev/zero &gt; ~/proba/misce/video/film.mp4
+head -c 12M /dev/zero &gt; ~/proba/misce/kesh/kesh.bin
+for i in 1 2 3; do head -c 20K /dev/zero &gt; ~/proba/misce/laby/lr$i.py; done
+cd ~/proba/misce
+</code></pre>
+<ol>
+<li>Який рядок буде <strong>останнім</strong>?</li>
+</ol>
+<pre><code class="language-bash">du -h --max-depth=1 | sort -h
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">64K ./laby
+13M ./kesh
+41M ./video
+53M .
+</code></pre>
+<p>Останнім іде <code>.</code> - це вся поточна тека разом, вона завжди найбільша. Найбільша <strong>підтека</strong> - передостання
+(<code>./video</code>). <code>sort -h</code> розуміє суфікси K, M, G (без <code>-h</code> він поставив би <code>64K</code> після <code>53M</code>, бо порівнював би цифри).</p>
+</details>
+<ol start="2">
+<li>У теці <code>video</code> лежить файл рівно 40 МБ. Чому <code>du</code> показує <code>41M</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p><code>du</code> рахує місце, яке файл реально займає на диску, разом із самою текою (4 КБ), а з <code>-h</code> <strong>округлює вгору</strong>:
+40 МБ + 4 КБ → <code>41M</code>. Так само три файли по 20 КБ дали <code>64K</code>, а не <code>60K</code>: ще 4 КБ на теку. Для порівняння
+«що більше» це неважливо, для точних чисел є <code>du -sb</code> (у байтах).</p>
+</details>
+<ol start="3">
+<li>Ти хочеш, щоб другий диск монтувався при старті, і дописав у <code>/etc/fstab</code> рядок, але помилився в UUID (номері
+диска). Перевіримо такий рядок на пробному файлі, не чіпаючи справжній fstab:</li>
+</ol>
+<pre><code class="language-bash">printf 'UUID=1234-ABCD  /mnt/arhiv  ext4  defaults,nofail  0  2\n' &gt; ~/proba/fstab-proba
+findmnt --verify --tab-file ~/proba/fstab-proba
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">/mnt/arhiv
+   [E] unreachable on boot required target: No such file or directory
+   [E] unreachable on boot required source: UUID=1234-ABCD
+
+0 parse errors, 2 errors, 0 warnings
+</code></pre>
+<p>Дві помилки: нема теки <code>/mnt/arhiv</code> і нема диска з таким UUID. Код виходу 1. Саме так перевіряють справжній fstab
+після правки: <code>sudo findmnt --verify</code>. Якщо все добре, буде <code>Success, no errors or warnings detected</code>
+(справжній вивід з тестової системи, де fstab порожній).</p>
+<p>Увага: такі самі <code>[E]</code> буде і для <strong>правильного</strong> рядка з <code>nofail</code>, якщо зовнішній диск зараз просто не
+підключений - findmnt перевіряє, чи диск є зараз. Для диска з <code>nofail</code> це очікувано: при старті Mint його пропустить.
+Тривожно, коли <code>[E]</code> у рядку <strong>без</strong> <code>nofail</code> або є <code>parse errors</code> (помилка в самому записі).</p>
+</details>
+<ol start="4">
+<li>Що саме видаляє <code>apt clean</code>? Подивись без sudo, у режимі симуляції (<code>-s</code>):</li>
+</ol>
+<pre><code class="language-bash">apt-get -s clean
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">NOTE: This is only a simulation!
+      apt-get needs root privileges for real execution.
+      Keep also in mind that locking is deactivated,
+      so don't depend on the relevance to the real current situation!
+Del /var/cache/apt/archives/* /var/cache/apt/archives/partial/*
+Del /var/lib/apt/lists/partial/*
+Del  
+</code></pre>
+<p>Лише завантажені <code>.deb</code>-файли (кеш). Встановлені програми не чіпає. Якщо колись знадобиться той самий пакет, apt
+просто завантажить його знову.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p><strong>Крок 1. Скільки вільно.</strong></p>
+<pre><code class="language-bash">df -h /
+</code></pre>
+<p>Справжній вивід з тестової системи (диск віртуальний, тому 1007G):</p>
+<pre><code class="language-text">Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdd       1007G  3.6G  953G   1% /
+</code></pre>
+<p>На ноутбуці буде інакше: щось на кшталт <code>/dev/nvme0n1p2</code> (NVMe-диск, розділ 2) і реальний розмір. Звичайний
+<code>df -h</code> покаже ще <code>/boot/efi</code> (маленький розділ <code>vfat</code> для UEFI) і кілька рядків <code>tmpfs</code> - це пам'ять, не диск,
+на них не зважай. Тривожно, коли <code>Use%</code> для <code>/</code> за 90 %.</p>
+<p><strong>Крок 2. Що з'їло місце в домашній теці.</strong></p>
+<pre><code class="language-bash">du -sh ~
+du -h --max-depth=1 ~ 2&gt;/dev/null | sort -h | tail -5
+</code></pre>
+<p><code>2&gt;/dev/null</code> ховає повідомлення про теки без доступу, <code>tail -5</code> лишає 5 найбільших. Часто нагорі <code>.cache</code>
+(кеш програм), <code>.local</code> (там і Flatpak-дані користувача), <code>.var</code> (дані Flatpak-програм). Теки з крапкою приховані:
+у Nemo їх показує Ctrl+H.</p>
+<p><strong>Крок 3. Що з'їло місце в системі.</strong> <code>-x</code> - не заходити на інші диски (флешки, другий диск):</p>
+<pre><code class="language-bash">sudo du -xh --max-depth=1 / 2&gt;/dev/null | sort -h | tail -6
+</code></pre>
+<p>Справжній вивід з тестової системи:</p>
+<pre><code class="language-text">3.9M    /etc
+78M /opt
+849M    /var
+918M    /home
+2.2G    /usr
+4.0G    /
+</code></pre>
+<p><code>/usr</code> - програми, <code>/var</code> - журнали (<code>/var/log</code>), кеш apt, Flatpak (<code>/var/lib/flatpak</code>), <code>/home</code> - твої файли.
+Знімки Timeshift на тому самому диску лежать у <code>/timeshift</code> і можуть бути найбільшими.</p>
+<p><strong>Крок 4. Те саме інтерактивно - ncdu.</strong></p>
+<pre><code class="language-bash">sudo apt install ncdu
+ncdu ~
+sudo ncdu -rx /
+</code></pre>
+<p>Стрілки - ходити, Enter - зайти в теку, стрілка вліво - вгору, <code>?</code> - довідка, <code>q</code> - вийти. Системний диск
+дивимось з <code>-r</code> (read-only - лише перегляд): від root клавіша <code>d</code> стерла б що завгодно. У своїй теці (<code>ncdu ~</code>, без
+sudo) <code>d</code> видаляє вибране (спершу спитає) - лише те, що точно знаєш. Мишкою те саме робить «Аналізатор використання диска»: «Просканувати теку...» або клік по диску.</p>
+<p><strong>Крок 5. Прибирання.</strong> Спершу подивись, скільки займають журнали:</p>
+<pre><code class="language-bash">sudo journalctl --disk-usage
+</code></pre>
+<p>Справжній вивід (у тебе буде своє число):</p>
+<pre><code class="language-text">Archived and active journals take up 464.0M in the file system.
+</code></pre>
+<p>Потім по черзі, читаючи, що кожна команда збирається видаляти:</p>
+<pre><code class="language-bash">sudo apt autoremove --purge
+sudo apt clean
+sudo journalctl --vacuum-time=2weeks
+flatpak uninstall --unused
+gio trash --empty
+</code></pre>
+<p><code>--vacuum-time=2weeks</code> лишає записи за останні 2 тижні, <code>--vacuum-size=500M</code> - лишає не більше 500 МБ.
+На <code>autoremove</code> apt покаже список і спитає <code>[Y/n]</code>: якщо там щось на <code>mint...</code> чи <code>cinnamon</code> - відповідай <code>n</code>.
+Знімки Timeshift: лиши 2-3 кожного типу і перевір, що домашня тека не входить у знімки (урок 01).</p>
+<p><strong>Крок 6. Флешка: подивись, потім пиши.</strong> Встав флешку і <strong>до</strong> будь-якого форматування чи запису образу:</p>
+<pre><code class="language-bash">lsblk -o NAME,SIZE,MODEL,MOUNTPOINT,FSTYPE
+</code></pre>
+<p>У тестовій системі курсу всі диски віртуальні (у стовпці MODEL - <code>Virtual Disk</code>), тому її вивід тут не
+показую. На ноутбуці приблизно так (приклад, назви і розміри будуть інші):</p>
+<pre><code class="language-text">NAME          SIZE MODEL            MOUNTPOINT            FSTYPE
+sda          28.9G USB DISK
+└─sda1       28.9G                  /media/evgen/FLESHKA  exfat
+nvme0n1     476.9G Назва твого SSD
+├─nvme0n1p1   512M                  /boot/efi             vfat
+└─nvme0n1p2 476.4G                  /                     ext4
+</code></pre>
+<p><code>nvme0n1</code> - внутрішній диск, <code>sda</code> - флешка (розмір флешки, модель на кшталт <code>USB DISK</code>, точка <code>/media/evgen/...</code>).
+<strong>Впізнавай флешку за розміром і моделлю</strong>, не за буквою: буква може змінитись після перезавантаження.</p>
+<ul>
+<li>Відмонтувати і витягти: у Nemo біля флешки значок «⏏» («Витягнути»). Не висмикуй флешку, поки копіювання не
+  закінчилось.</li>
+<li>Відформатувати: Меню → «Форматування USB-нагромаджувача» (вибрати флешку зі списку, «Форматувати»), або «Диски» →
+  флешка → «Форматувати диск». Для флешки між Linux і Windows - exFAT або FAT32.</li>
+<li>Здоров'я внутрішнього диска: «Диски» → диск → меню «⋮» → «Дані SMART і самостійні тести». «З диском усе гаразд» -
+  добре. (Розташування кнопок «⋮» і «⚙» тут і в кроці 9 описано з пам'яті, на ноутбуці може трохи відрізнятись;
+  назви пунктів - з українського перекладу програми.)</li>
+</ul>
+<h2 id="далі-за-бажанням">Далі - за бажанням</h2>
+<p>Кроки 7-9 - про swap, TRIM і другий диск. Для лаб не обовʼязкові; повернись до них, коли знадобиться. Якщо
+зупиняєшся тут - прибери пробу: <code>cd ~</code> і <code>rm -r ~/proba</code>.</p>
+<p><strong>Крок 7. Swap і пам'ять.</strong> Swap - місце на диску, куди система відкладає вміст пам'яті, коли оперативної не вистачає.</p>
+<pre><code class="language-bash">swapon --show
+free -h
+</code></pre>
+<p>Справжній вивід з тестової системи:</p>
+<pre><code class="language-text">NAME     TYPE      SIZE USED PRIO
+/dev/sdc partition  12G   0B   -2
+</code></pre>
+<p>На ноутбуці замість розділу може бути файл (TYPE <code>file</code>). <strong>zram</strong> (стиснений swap у пам'яті) у Mint 22.3 з коробки
+нема: пакетів <code>zram-config</code> і <code>systemd-zram-generator</code> на ISO нема (перевірено за списком пакетів ISO). У <code>free -h</code>
+дивись на стовпець <code>available</code> - скільки пам'яті реально можна взяти.</p>
+<p><strong>Крок 8. TRIM для SSD.</strong> TRIM - команда, якою система каже SSD, які блоки вже вільні; так диск довше живе і не
+гальмує. У Mint це робить таймер раз на тиждень:</p>
+<pre><code class="language-bash">systemctl status fstrim.timer
+</code></pre>
+<p>На ноутбуці має бути <code>Active: active (waiting)</code> і <code>Trigger:</code> з датою наступного запуску. У тестовій системі
+справжній вивід інший, бо вона віртуальна: <code>Active: inactive (dead)</code> і
+<code>ConditionVirtualization=!container was not met</code> - на ноутбуці цього рядка не буде. Розклад - <code>OnCalendar=weekly</code>
+(з <code>systemctl cat fstrim.timer</code>).</p>
+<p><strong>Крок 9. Другий диск при старті - <code>/etc/fstab</code> і <code>nofail</code>.</strong> <code>/etc/fstab</code> - файл, де записано, що монтувати при
+старті. Один рядок = один розділ, 6 полів:</p>
+<pre><code class="language-text">UUID=1234-ABCD    /mnt/arhiv   ext4   defaults,nofail   0   2
+що (номер диска)  куди         ФС     опції             -   порядок перевірки
+</code></pre>
+<ul>
+<li>Найпростіше - мишкою: «Диски» → розділ → «⚙» → «Параметри монтування» → «Монтувати під час запуску системи».
+  Програма сама пише рядок у fstab, і серед її типових опцій уже є <code>nofail</code> (<code>nosuid,nodev,nofail,x-gvfs-show</code> -
+  з коду gnome-disk-utility 46).</li>
+<li>Якщо правиш руками: <strong>спершу знімок Timeshift</strong>, потім <code>sudo nano /etc/fstab</code>, потім обов'язково
+  <code>sudo findmnt --verify</code>. UUID свого розділу бери з <code>lsblk -f</code>.</li>
+<li><strong><code>nofail</code></strong> означає: «якщо цього диска нема - завантажуйся далі без нього». Без <code>nofail</code> від'єднаний диск
+  (зовнішній, флешка) кидає систему в аварійний режим (emergency mode) при старті (урок 26).</li>
+</ul>
+<p>Прибери пробу: <code>cd ~</code> і <code>rm -r ~/proba</code>.</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<ul>
+<li><strong>Диск 100 %, Mint не пускає на робочий стіл.</strong> Ctrl+Alt+F2 - текстовий вхід (TTY), логін і пароль. Там:
+  <code>df -h /</code>, <code>sudo journalctl --vacuum-time=2d</code>, <code>sudo apt autoremove --purge</code>, <code>sudo apt clean</code>, і пошук великого
+  <code>du -h --max-depth=1 | sort -h</code>. Назад до графіки - Ctrl+Alt+F7 (r/linuxmint, 24.12.2025, 112 балів: журнали
+  виросли до 900 ГБ). Детальніше - урок 26.</li>
+<li><strong><code>du</code> сиплеться <code>Permission denied</code></strong> (<code>du: cannot read directory '/root': Permission denied</code>, українською
+  <code>du: не вдалося прочитати каталог '/root': Відмовлено у доступі</code>; англійський текст для пошуку -
+  <code>LC_ALL=C du ...</code>) - без sudo ти не маєш доступу до чужих тек. Для системних тек <code>sudo du</code>, для своїх -
+  <code>2&gt;/dev/null</code>.</li>
+<li><strong><code>sudo du /</code> рахує вічно</strong> - він пішов на флешки і другі диски. Додай <code>-x</code>.</li>
+<li><strong>Записав образ не на ту флешку</strong> або відформатував не той диск. Перед записом - <code>lsblk -o NAME,SIZE,MODEL,MOUNTPOINT</code>,
+  впізнавай за розміром і моделлю (r/linuxmint, 12.09.2026).</li>
+<li><strong>Відʼєднав зовнішній диск - система стартує в «emergency mode»</strong>. У fstab рядок без <code>nofail</code>. З аварійного режиму
+  або TTY: <code>sudo nano /etc/fstab</code>, додати <code>nofail</code> чи закоментувати рядок знаком <code>#</code> на початку,
+  <code>sudo findmnt --verify</code>, перезавантаження. Помилки старту - <code>journalctl -xb</code> (r/linuxmint, 04.10.2026; урок 20).</li>
+<li><strong>Знімки Timeshift з'їли диск</strong> - у знімок потрапила <code>/home</code> або <code>/var/lib/flatpak</code> (урок 01).</li>
+<li><strong>Видалив файл, а місця не побільшало</strong> - він у кошику. <code>gio trash --empty</code>.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Спершу дивляться, потім видаляють:</strong> <code>df -h</code> → <code>du ... | sort -h</code> або <code>ncdu</code> → видаляють найбільше і зрозуміле.
+  Нічого не видаляють «про всяк випадок» у <code>/usr</code> чи <code>/var/lib</code>.</li>
+<li><strong>Журнал під контролем:</strong> раз на кілька місяців <code>sudo journalctl --disk-usage</code>; великі журнали лікують <code>--vacuum-*</code>
+  і шукають причину (якась служба пише помилку щосекунди - урок 20).</li>
+<li><strong><code>lsblk</code> перед кожним <code>dd</code>, записом образу чи форматуванням</strong> і правило 3-2-1 для своїх файлів
+  (r/linuxmint, 12.09.2026).</li>
+<li><strong>Диски з даними монтують при старті</strong> через «Диски» (r/linuxmint, 21.04.2026), а fstab правлять лише зі знімком і
+  <code>findmnt --verify</code>.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Як дізнатись, скільки вільного місця на системному розділі?</li>
+<li>Як знайти 5 найбільших тек у домашній теці?</li>
+<li>Навіщо <code>-x</code> у <code>sudo du -xh --max-depth=1 /</code>?</li>
+<li>Що робить опція <code>nofail</code> у <code>/etc/fstab</code>?</li>
+<li>Диск заповнено на 100 %, після входу чорний екран. Що робиш?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li><code>df -h /</code>, стовпець <code>Avail</code>.</li>
+<li><code>du -h --max-depth=1 ~ 2&gt;/dev/null | sort -h | tail -5</code> (або <code>ncdu ~</code>).</li>
+<li>Щоб <code>du</code> не заходив на інші диски і флешки, змонтовані всередині <code>/</code>, а рахував лише системний розділ.</li>
+<li>Якщо диска нема при старті, система завантажується далі без нього, а не падає в аварійний режим.</li>
+<li>Ctrl+Alt+F2, увійти, звільнити місце (<code>sudo journalctl --vacuum-time=2d</code>, <code>sudo apt autoremove --purge</code>,
+   <code>sudo apt clean</code>, знайти великі файли через <code>du ... | sort -h</code>), потім Ctrl+Alt+F7 або <code>sudo reboot</code>.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Факти курсу про Mint 22.3 (Disks, Disk Usage Analyzer на ISO, ncdu окремо, журнали, Flatpak) - список пакетів ISO
+  <code>linuxmint-22.3-cinnamon-64bit.iso</code> (filesystem.manifest і filesystem.manifest-remove) - відкрито 18.11.2026</li>
+<li>systemd, <code>journalctl</code> (--disk-usage, --vacuum-time, --vacuum-size) - https://www.freedesktop.org/software/systemd/man/latest/journalctl.html -
+  відкрито 18.11.2026</li>
+<li><code>findmnt --verify</code>, fstab - https://man7.org/linux/man-pages/man8/findmnt.8.html ,
+  https://man7.org/linux/man-pages/man5/fstab.5.html - відкрито 18.11.2026</li>
+<li>ncdu, клавіші і <code>-r</code> (read-only) - https://dev.yorhel.nl/ncdu/man - відкрито 18.11.2026; <code>ncdu --help</code> у тестовій
+  Mint 22.3, 18.11.2026</li>
+<li>Easy Linux Tips, «fatal mistakes» (не BleachBit) - https://easylinuxtipsproject.blogspot.com/p/fatal-mistakes.html -
+  відкрито 18.11.2026</li>
+<li>r/linuxmint: диск 100 % і TTY https://www.reddit.com/r/linuxmint/comments/1pu9p8v/ ; nofail і emergency mode
+  https://www.reddit.com/r/linuxmint/comments/1wx45gx/ ; образ не на ту флешку https://www.reddit.com/r/linuxmint/comments/1weg0jg/ ;
+  диски з даними при старті https://www.reddit.com/r/linuxmint/comments/1srlqak/ - відкрито 18.11.2026</li>
+<li>Переклади «Диски», «Аналізатор використання диска», mintstick - з пакетів <code>language-pack-gnome-uk-base</code> і
+  <code>mint-translations</code> (Mint 22.3), 18.11.2026</li>
+<li><code>df</code>, <code>du</code>, <code>lsblk</code>, <code>findmnt</code>, <code>swapon</code>, <code>free</code>, <code>journalctl</code>, <code>apt-get -s clean</code>, <code>systemctl cat fstrim.timer</code>,
+  типові опції gnome-disks - перевірено запуском у тестовій Mint 22.3, 18.11.2026</li>
+</ul>

@@ -1,0 +1,78 @@
+<h1 id="тема-4-день-4-права-і-sudo">Тема 4. День 4: Права і sudo</h1>
+<p><strong>Навіщо:</strong> розуміти «Permission denied», запускати свої скрипти і не ламати систему через <code>sudo</code>.</p>
+<h3 id="коротко-5-хв">Коротко (5 хв)</h3>
+<p><strong>Хто ти:</strong> <code>whoami</code> → <code>evgen</code>. <code>id</code> → твої групи (є <code>sudo</code> - значить, можеш бути адміністратором).</p>
+<p><strong>Права файлу</strong> - у <code>ls -l</code>:</p>
+<pre><code>-rwxr-xr--  1 evgen evgen  512 Nov 17 10:00 run.sh
+│└┬┘└┬┘└┬┘    │     │
+│ │  │  │     │     └ група
+│ │  │  │     └────── власник
+│ │  │  └ інші (others):   r--  лише читати
+│ │  └─── група (group):   r-x  читати і запускати
+│ └────── власник (user):  rwx  читати, писати, запускати
+└──────── тип: - файл, d тека, l посилання
+</code></pre>
+<p>r = read (читати), w = write (змінювати), x = execute (запускати; для теки - заходити в неї).</p>
+<p><strong>Числа замість букв:</strong> r = 4, w = 2, x = 1, додаєш для кожної трійки.
+<code>rwx</code> = 4+2+1 = 7, <code>r-x</code> = 4+1 = 5, <code>r--</code> = 4. Тому:
+- <code>chmod 755 run.sh</code> → rwxr-xr-x (скрипт: усі можуть запускати, змінює лише власник);
+- <code>chmod 644 lab.py</code> → rw-r--r-- (звичайний файл).</p>
+<p><strong>Простіше буквами:</strong> <code>chmod +x run.sh</code> - дозволити запуск, <code>chmod -w file</code> - заборонити зміну.</p>
+<p><strong>Запуск свого скрипта:</strong> <code>./run.sh</code> (<code>./</code> = «з цієї теки»). Без <code>chmod +x</code> буде «Permission denied».
+Можна і без прав: <code>bash run.sh</code>, <code>python3 lab.py</code>.</p>
+<p><strong>sudo - «зробити від імені адміністратора (root)».</strong> <code>sudo apt install ...</code> спитає <strong>твій</strong> пароль
+Ubuntu (символи не видно). Пароль памʼятається ~15 хв.</p>
+<p>Правила:
+- <code>sudo</code> - лише для системного: <code>apt</code>, файли поза домашньою текою.
+- Свої файли (<code>~/...</code>) <strong>ніколи</strong> не чіпай через <code>sudo</code>: файли стануть власністю root, і потім
+  без <code>sudo</code> їх не зміниш. Ознака: у <code>ls -l</code> власник <code>root</code>.
+- <code>sudo pip install</code> - не роби. Python-пакети для лаб - у venv (день 8).</p>
+<p><strong>Особливість WSL:</strong> файли на <code>/mnt/c</code> і <code>/mnt/d</code> показують права як <code>rwxrwxrwx</code> - це диск Windows,
+справжні права там вирішує Windows. <code>chmod</code> на них зазвичай нічого не змінює.</p>
+<h3 id="руками-10-хв">Руками (10 хв)</h3>
+<pre><code>whoami
+id
+cd ~/univer/praktyka
+printf 'echo &quot;Привіт з скрипта&quot;\n' &gt; run.sh
+ls -l run.sh             # -rw-r--r-- : x нема
+./run.sh                 # Permission denied
+bash run.sh              # працює: bash сам читає файл
+chmod +x run.sh
+ls -l run.sh             # -rwxr-xr-x
+./run.sh                 # тепер працює
+chmod 600 run.sh
+ls -l run.sh             # -rw------- : лише ти читаєш і пишеш
+chmod 755 run.sh
+sudo whoami              # спитає пароль, відповідь root
+ls -l /etc/hostname      # власник root
+echo test &gt; /etc/test.txt          # Permission denied - система не твоя
+ls -ld /mnt/c            # drwxrwxrwx - диск Windows
+</code></pre>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li><code>sudo</code> перед усім підряд «щоб не було помилок». Потім <code>Permission denied</code> уже на власних файлах.
+  Виправити: <code>sudo chown -R evgen:evgen ~/univer</code> (повернути собі власність).</li>
+<li><code>chmod 777</code> «щоб працювало». Це дозволяє всім усе. Для скрипта досить <code>chmod +x</code> (або 755).</li>
+<li>Забув пароль Ubuntu. У PowerShell Windows: <code>wsl -u root passwd evgen</code> (замість <code>evgen</code> - твоє імʼя в Ubuntu,
+  воно в рядку перед @) - задаси новий.</li>
+<li>Запускаєш <code>run.sh</code> без <code>./</code> → «command not found». Поточна тека не шукається автоматично.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Що означають права <code>-rw-r--r--</code>?</li>
+<li>Яким числом записати <code>rwxr-xr-x</code>?</li>
+<li>Чому <code>./script.sh</code> пише «Permission denied», а <code>bash script.sh</code> працює?</li>
+<li>Чий пароль питає <code>sudo</code> у WSL?</li>
+<li>Чому не можна <code>sudo nano ~/univer/labs/lab.py</code>?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Звичайний файл; власник читає і пише, група і всі інші лише читають.</li>
+<li>755 (7 = 4+2+1, 5 = 4+1).</li>
+<li>У файлу нема права x. <code>bash script.sh</code> запускає bash, а він просто читає файл, тому x не потрібне.</li>
+<li>Твій пароль користувача Ubuntu (того, що задав при встановленні), не пароль Windows.</li>
+<li>Файл може стати власністю root (якщо nano створить його заново), і потім ти без sudo його не збережеш.
+   Свої файли редагують без sudo.</li>
+</ol>
+</details>

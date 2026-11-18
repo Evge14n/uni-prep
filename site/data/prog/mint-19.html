@@ -1,0 +1,388 @@
+<h1 id="урок-19-процеси-і-системний-монітор">Урок 19. Процеси і «Системний монітор»</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> програма з нескінченним циклом у лабі, браузер, що з'їв усю пам'ять, вікно, яке не закривається, - усе це
+процеси, і їх можна знайти і зупинити, не перезавантажуючи ноутбук. Тут - як дивитись, що працює, як зупиняти
+правильно (спершу м'яко, потім жорстко) і як читати навантаження системи.</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>Процес</strong> - запущена програма. У кожного є номер <strong>PID</strong>. <strong>Сигнал</strong> - коротке повідомлення процесу від системи
+чи від тебе.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Сигнал (номер)</th>
+<th>Хто надсилає</th>
+<th>Що означає</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIGINT (2)</td>
+<td>Ctrl+C у терміналі</td>
+<td>«перерви» - Python кидає <code>KeyboardInterrupt</code></td>
+</tr>
+<tr>
+<td>SIGTERM (15)</td>
+<td><code>kill PID</code>, «Припинити процес»</td>
+<td>«завершись, будь ласка» - програма встигає закрити файли</td>
+</tr>
+<tr>
+<td>SIGKILL (9)</td>
+<td><code>kill -9 PID</code>, «Знищити процес»</td>
+<td>ядро вбиває одразу, без питань (дані можуть втратитись)</td>
+</tr>
+<tr>
+<td>SIGTSTP (20)</td>
+<td>Ctrl+Z</td>
+<td>призупинити (не вбити!)</td>
+</tr>
+<tr>
+<td>SIGCONT (18)</td>
+<td><code>fg</code>, <code>bg</code></td>
+<td>продовжити призупинене</td>
+</tr>
+<tr>
+<td>SIGHUP (1)</td>
+<td>закрили вікно терміналу</td>
+<td>«твій термінал зник» - більшість програм завершується</td>
+</tr>
+</tbody>
+</table></div>
+<p>Код виходу процесу, вбитого сигналом, = 128 + номер сигналу: SIGTERM → <code>143</code>, SIGKILL → <code>137</code>, Ctrl+C → <code>130</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда / клавіші</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ps aux</code></td>
+<td>усі процеси всіх користувачів (PID - другий стовпець)</td>
+</tr>
+<tr>
+<td><code>pgrep -af python</code></td>
+<td>PID і повна команда всіх процесів, де є «python»</td>
+</tr>
+<tr>
+<td><code>top</code></td>
+<td>живий список (вийти <code>q</code>)</td>
+</tr>
+<tr>
+<td><code>htop</code></td>
+<td>зручніший живий список: F6 сортувати, F9 вбити, F10 вийти (<code>sudo apt install htop</code>)</td>
+</tr>
+<tr>
+<td><code>kill PID</code> / <code>kill %1</code></td>
+<td>SIGTERM процесу за PID / за номером у <code>jobs</code></td>
+</tr>
+<tr>
+<td><code>kill -9 PID</code></td>
+<td>SIGKILL - лише якщо <code>kill</code> не допоміг</td>
+</tr>
+<tr>
+<td><code>killall назва</code></td>
+<td>SIGTERM усім процесам з такою назвою</td>
+</tr>
+<tr>
+<td><code>команда &amp;</code></td>
+<td>запустити у фоні, термінал одразу вільний</td>
+</tr>
+<tr>
+<td><code>jobs</code>, <code>fg</code>, <code>bg</code></td>
+<td>задачі цього терміналу / на передній план / продовжити у фоні</td>
+</tr>
+<tr>
+<td><code>nohup команда &amp;</code></td>
+<td>щоб програма жила і після закриття терміналу</td>
+</tr>
+<tr>
+<td><code>nice -n 10 команда</code>, <code>renice -n 15 -p PID</code></td>
+<td>менший пріоритет (лагідніший до інших програм)</td>
+</tr>
+<tr>
+<td><code>uptime</code>, <code>free -h</code>, <code>sensors</code></td>
+<td>навантаження, пам'ять, температури</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>«Системний монітор»</strong> (gnome-system-monitor, є на Mint одразу): Super → набери «монітор» → Enter.
+Вкладки «Процеси», «Ресурси» (графіки процесора, пам'яті, мережі), «Файлові системи». Права кнопка на процесі:
+«Припинити процес» (SIGTERM), «Знищити процес» (SIGKILL), «Змінити пріоритет», «Зупинити...» / «Продовжити».
+(Назви - з українського перекладу програми. За довідкою GNOME «Припинити» дає програмі закритись правильно і
+зберегти файли, а примусове завершення закриває одразу - як SIGTERM і SIGKILL; запуском не перевірено.)</p>
+<p><strong>Навантаження (load average)</strong> - три числа в <code>uptime</code> і <code>top</code>: скільки процесів у середньому хотіли процесор за
+останні 1, 5 і 15 хвилин. Порівнюй з кількістю ядер (<code>nproc</code>): навантаження 2 на 8 ядрах - спокій, 8 на 8 - усі зайняті,
+16 на 8 - черга, усе гальмує.</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p>Для всіх вправ - пробна програма, що рахує щосекунди (створи її один раз):</p>
+<pre><code class="language-bash">mkdir -p ~/proba/proc
+cd ~/proba/proc
+printf 'import time\n\nn = 0\nwhile True:\n    n += 1\n    print(n, flush=True)\n    time.sleep(1)\n' &gt; forever.py
+cat forever.py
+</code></pre>
+<pre><code class="language-python">import time
+
+n = 0
+while True:
+    n += 1
+    print(n, flush=True)
+    time.sleep(1)
+</code></pre>
+<ol>
+<li>Запусти <code>python3 forever.py</code>, через пару секунд натисни <strong>Ctrl+Z</strong> (не Ctrl+C!), потім набери <code>jobs</code>. Що побачиш?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Справжній сеанс (запрошення <code>$</code>, числа у тебе можуть бути інші):</p>
+<pre><code class="language-text">$ python3 forever.py
+1
+2
+^Z
+[1]+  Stopped                 python3 forever.py
+$ jobs
+[1]+  Stopped                 python3 forever.py
+</code></pre>
+<p>(Якщо Mint українською, bash пише <code>Зупинено</code> замість <code>Stopped</code>, а в передбаченні 3 - <code>Припинено</code> замість
+<code>Terminated</code>.) Програма не вбита, а <strong>призупинена</strong> і висить у пам'яті. <code>[1]</code> - номер задачі, <code>+</code> - «поточна». Повернути - <code>fg</code>,
+вбити - <code>kill %1</code>. Якщо Ctrl+Z натиснув випадково, а потім закрив термінал, програма зникне разом з ним (SIGHUP).</p>
+</details>
+<ol start="2">
+<li>Які назви в сигналів 9 і 15?</li>
+</ol>
+<pre><code class="language-bash">kill -l 9
+kill -l 15
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">KILL
+TERM
+</code></pre>
+<p><code>kill</code> без номера надсилає 15 (TERM) - «завершись». <code>kill -9</code> - KILL, процес навіть не дізнається, що його вбили.
+<code>kill -l</code> без числа покаже всі 62 сигнали (номери від 1 до 64, крім 32 і 33).</p>
+</details>
+<ol start="3">
+<li>Пастка <code>pkill -f</code>. <code>pkill -f слово</code> вбиває всі процеси, в <strong>повній команді</strong> яких є це слово. Що надрукує друга
+команда?</li>
+</ol>
+<pre><code class="language-bash">python3 forever.py &gt; /dev/null &amp;
+bash -c &quot;pkill -f forever.py; echo я живий&quot;
+echo $?
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<p>Справжній сеанс (PID у тебе інший):</p>
+<pre><code class="language-text">$ python3 forever.py &gt; /dev/null &amp;
+[1] 263
+$ bash -c &quot;pkill -f forever.py; echo я живий&quot;
+Terminated
+[1]+  Terminated              python3 forever.py &gt; /dev/null
+$ echo $?
+143
+</code></pre>
+<p>(Рядок <code>[1]+  Terminated</code> іноді з'являється трохи пізніше, після <code>143</code>, - bash друкує його перед найближчим
+запрошенням.) <code>я живий</code> не надрукувалось: у командному рядку самого <code>bash -c "pkill -f forever.py; ..."</code> теж є слово <code>forever.py</code>,
+тому <code>pkill</code> вбив і свою ж оболонку (код 143 = 128 + 15). Так само <code>pkill -f python</code> вбʼє <strong>усі</strong> Python, разом із
+чужими. Спершу дивись, кого зачепить: <code>pgrep -af forever.py</code>, потім вбивай за PID.</p>
+</details>
+<ol start="4">
+<li>Ти знизив пріоритет програми до 15 (<code>renice -n 15</code>). Чи можна без sudo повернути його до 5?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Ні. Справжній вивід (PID у тебе інший):</p>
+<pre><code class="language-text">renice: failed to set priority for 5066 (process ID): Permission denied
+</code></pre>
+<p>Число nice від -20 до 19: більше = лагідніший до інших. Звичайний користувач може лише <strong>збільшувати</strong> nice своїм
+процесам. Зменшувати (робити «важливішим») - лише <code>sudo renice</code>.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p>Усе в теці <code>~/proba/proc</code> з <code>forever.py</code> (вище).</p>
+<p><strong>Крок 1. Ctrl+C - зупинити.</strong></p>
+<pre><code class="language-bash">python3 forever.py
+</code></pre>
+<p>Через 3 секунди Ctrl+C. Справжній вивід:</p>
+<pre><code class="language-text">$ python3 forever.py
+1
+2
+3
+^CTraceback (most recent call last):
+  File &quot;/home/evgen/proba/proc/forever.py&quot;, line 7, in &lt;module&gt;
+    time.sleep(1)
+KeyboardInterrupt
+</code></pre>
+<p><code>KeyboardInterrupt</code> - не помилка в коді, а знак, що програму перервав ти.</p>
+<p><strong>Крок 2. Ctrl+Z, <code>jobs</code>, <code>fg</code>.</strong> Знову <code>python3 forever.py</code>, Ctrl+Z, потім:</p>
+<pre><code class="language-bash">jobs
+fg
+</code></pre>
+<pre><code class="language-text">$ fg
+python3 forever.py
+3
+4
+^CTraceback (most recent call last):
+</code></pre>
+<p><code>fg</code> повертає програму, і вона рахує далі з того самого місця. Зупини Ctrl+C.</p>
+<p><strong>Крок 3. Фон: <code>&amp;</code>, <code>pgrep</code>, <code>kill</code>.</strong> <code>&gt; /dev/null</code> викидає вивід, щоб числа не сипались у термінал:</p>
+<pre><code class="language-bash">python3 forever.py &gt; /dev/null &amp;
+jobs
+pgrep -af forever
+kill %1
+jobs
+</code></pre>
+<p>Справжній сеанс (PID у тебе інший):</p>
+<pre><code class="language-text">$ python3 forever.py &gt; /dev/null &amp;
+[1] 287
+$ jobs
+[1]+  Running                 python3 forever.py &gt; /dev/null &amp;
+$ pgrep -af forever
+287 python3 forever.py
+$ kill %1
+$ jobs
+[1]+  Terminated              python3 forever.py &gt; /dev/null
+</code></pre>
+<p><code>%1</code> - номер задачі з <code>jobs</code>; з іншого вікна терміналу вбивай за PID: <code>kill 287</code>. Якщо вже запустив без <code>&amp;</code> -
+Ctrl+Z, потім <code>bg</code>: програма продовжить у фоні (<code>[1]+ python3 forever.py &gt; /dev/null &amp;</code>).</p>
+<p><strong>Крок 4. <code>kill -9</code> і <code>killall</code>.</strong> <code>kill -9</code> - коли програма не реагує на звичайний <code>kill</code>:</p>
+<pre><code class="language-text">$ python3 forever.py &gt; /dev/null &amp;
+[1] 508
+$ kill -9 %1
+$ 
+[1]+  Killed                  python3 forever.py &gt; /dev/null
+</code></pre>
+<p><code>Killed</code> (SIGKILL) замість <code>Terminated</code> (SIGTERM). <code>killall</code> - за назвою програми, <code>-v</code> пише, кого вбив:</p>
+<pre><code class="language-bash">sleep 300 &amp;
+sleep 300 &amp;
+killall -v sleep
+</code></pre>
+<pre><code class="language-text">Killed sleep(3692) with signal 15
+Killed sleep(3693) with signal 15
+</code></pre>
+<p>(«Killed ... with signal 15» - тут це SIGTERM, просто так пише killall.)</p>
+<p><strong>Крок 5. <code>nohup</code> - щоб жило після закриття терміналу.</strong></p>
+<pre><code class="language-bash">nohup python3 forever.py &amp;
+</code></pre>
+<pre><code class="language-text">nohup: ignoring input and appending output to 'nohup.out'
+</code></pre>
+<p>Вивід програми тепер іде у файл <code>nohup.out</code> (подивись <code>cat nohup.out</code>). Закрий термінал, відкрий новий:
+<code>pgrep -af forever</code> її ще бачить. Зупини: <code>pkill -f forever.py</code> (тут це безпечно - ти запускаєш <code>pkill</code> прямо з
+терміналу, а не з <code>bash -c</code>) або <code>kill PID</code>.</p>
+<p><strong>Крок 6. Пріоритет: <code>nice</code> і <code>renice</code>.</strong> Довгий розрахунок, щоб не гальмував усе інше:</p>
+<pre><code class="language-bash">nice -n 10 python3 forever.py &gt; /dev/null &amp;
+ps -o pid,ni,comm -p $!
+renice -n 15 -p $!
+kill %1
+</code></pre>
+<p><code>$!</code> - PID останньої фонової програми. Справжній сеанс (PID у тебе інший):</p>
+<pre><code class="language-text">$ nice -n 10 python3 forever.py &gt; /dev/null &amp;
+[1] 5066
+$ ps -o pid,ni,comm -p $!
+    PID  NI COMMAND
+   5066  10 python3
+$ renice -n 15 -p $!
+5066 (process ID) old priority 10, new priority 15
+</code></pre>
+<p>Стовпець <code>NI</code> - число nice: було 10 (від <code>nice -n 10</code>), стало 15.</p>
+<h2 id="далі-за-бажанням">Далі - за бажанням</h2>
+<p>Кроки 7-9 - другим заходом: хто їсть памʼять, навантаження і що робити з завислим вікном. Якщо зупиняєшся тут -
+прибери пробу: <code>cd ~</code> і <code>rm -r ~/proba</code>.</p>
+<p><strong>Крок 7. Хто їсть пам'ять і процесор.</strong></p>
+<pre><code class="language-bash">ps aux --sort=-%mem | head -4
+top
+</code></pre>
+<p><code>ps aux</code> - стовпці USER, PID, %CPU, %MEM (частка пам'яті), RSS (пам'ять у КБ), COMMAND. <code>--sort=-%mem</code> - за пам'яттю,
+найбільші зверху. У <code>top</code>: <code>q</code> - вийти, <code>k</code> - вбити (спитає PID), <code>r</code> - змінити nice (з вбудованої довідки <code>top</code>,
+клавіша <code>h</code>). У <code>htop</code> (<code>sudo apt install htop</code>) - внизу підказки: F6 SortBy (сортувати), F9 Kill, F10 Quit; стрілками
+вибрати процес, F9, Enter (SIGTERM).</p>
+<p><strong>Крок 8. Навантаження, пам'ять, температура.</strong></p>
+<pre><code class="language-bash">uptime
+nproc
+free -h
+sensors
+</code></pre>
+<p>Справжній <code>uptime</code> з тестової системи:</p>
+<pre><code class="language-text"> 09:50:31 up 11 min,  1 user,  load average: 0.42, 0.68, 0.41
+</code></pre>
+<p><code>up 11 min</code> - скільки працює з увімкнення, далі навантаження за 1, 5 і 15 хв. <code>sensors</code> (пакет <code>lm-sensors</code> є на Mint
+одразу) на ноутбуці покаже температури процесора, дисків, відеокарти в °C. У тестовій віртуальній системі датчиків
+нема, справжній вивід там такий:</p>
+<pre><code class="language-text">No sensors found!
+Make sure you loaded all the kernel drivers you need.
+Try sensors-detect to find out which these are.
+</code></pre>
+<p>На ноутбуці так буде рідко. Якщо буде - <code>sudo sensors-detect</code> (питає про кожен тип датчиків, Enter = відповідь
+за замовчуванням).</p>
+<p><strong>Крок 9. Завис графічний застосунок.</strong>
+1. Вікно не закривається хрестиком - Cinnamon сам покаже «... не відповідає» з кнопками «Зачекати» і
+   «Примусово закрити» (назви з українського перекладу Cinnamon 6.6).
+2. <code>xkill</code> (пакет <code>x11-utils</code>, є на Mint одразу): набери в терміналі або Alt+F2 → <code>xkill</code> → курсор стане хрестиком →
+   клацни по завислому вікну. Це вбиває саме ту програму, якій належить вікно.
+3. «Системний монітор» → «Процеси» → знайди програму → права кнопка → «Припинити процес»; не допомогло -
+   «Знищити процес».
+4. Зависла панель або весь робочий стіл Cinnamon, а мишка рухається - Ctrl+Alt+Esc перезапускає Cinnamon, вікна
+   лишаються.
+5. Не реагує взагалі нічого - Ctrl+Alt+F2 (текстовий вхід), там <code>top</code> → знайти, <code>kill PID</code>; назад Ctrl+Alt+F7
+   (урок 26).</p>
+<p>Прибери пробу: <code>cd ~</code> і <code>rm -r ~/proba</code>.</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<p>Якщо Mint українською - у дужках той самий текст українською (справжній запуск з перекладом <code>language-pack-uk-base</code>).
+Англійський текст для пошуку: <code>LC_ALL=C команда</code>.</p>
+<ul>
+<li><strong>Ctrl+Z замість Ctrl+C</strong> - програма «зникла», а насправді висить призупинена. <code>jobs</code> покаже <code>Stopped</code>
+  (<code>Зупинено</code>); <code>fg</code> і Ctrl+C, або <code>kill %1</code>.</li>
+<li><strong><code>kill: (999999) - No such process</code></strong> (<code>kill: (999999) - Немає такого процесу</code>) - такого PID нема (процес уже
+  завершився або ти помилився в числі). Перевір <code>pgrep -af назва</code>.</li>
+<li><strong><code>kill: (1) - Operation not permitted</code></strong> (<code>kill: (1) - Дію заборонено</code>) - чужий процес (тут PID 1 - systemd, процес root). Свої процеси вбиваєш
+  без sudo, чужі - лише <code>sudo kill</code>. Подумай, чи справді треба.</li>
+<li><strong><code>kill -9</code> одразу.</strong> Програма не встигає зберегти файли. Спершу <code>kill</code> (SIGTERM), чекай кілька секунд.</li>
+<li><strong><code>pkill -f python</code> або <code>killall python3</code></strong> - вбивають усі Python, разом із системними програмами Mint на Python
+  (Диспетчер оновлень теж на Python - урок 02). Спершу <code>pgrep -af python</code>, потім <code>kill PID</code>.</li>
+<li><strong>Програма «зависла», а насправді чекає <code>input()</code>.</strong> Курсор блимає на порожньому рядку - введи значення або Ctrl+D.</li>
+<li><strong><code>renice: failed to set priority ... Permission denied</code></strong> (<code>renice: не вдалося встановити значення
+  пріоритетності для ... (process ID): Відмовлено у доступі</code>) - зменшувати nice без sudo не можна (передбач 4).</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Від м'якого до жорсткого:</strong> Ctrl+C → <code>kill PID</code> (SIGTERM) → кілька секунд → <code>kill -9 PID</code>. Так само в «Системному
+  моніторі»: «Припинити» → «Знищити».</li>
+<li><strong>Спершу <code>pgrep -af</code>, потім <code>kill PID</code></strong>, а не <code>pkill</code>/<code>killall</code> наосліп.</li>
+<li><strong><code>htop</code> замість <code>top</code></strong> - кольори, мишка, F-клавіші, підказки внизу екрана. Для довгих розрахунків - <code>nice</code>,
+  щоб ноутбук не гальмував.</li>
+<li><strong>Довга програма, яку не можна втратити при закритті терміналу</strong> - <code>nohup</code> (сьогодні частіше <code>tmux</code> або служба
+  systemd, урок 20).</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Чим Ctrl+C відрізняється від Ctrl+Z?</li>
+<li>Як знайти PID усіх процесів, у команді яких є <code>forever</code>, і зупинити один з них правильно?</li>
+<li>Чому після <code>kill PID</code> код виходу програми 143, а після <code>kill -9 PID</code> - 137?</li>
+<li>Що означають три числа <code>load average: 0.42, 0.68, 0.41</code> і з чим їх порівнювати?</li>
+<li>Вікно програми зависло і не закривається. Назви два способи його прибрати.</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Ctrl+C надсилає SIGINT і зупиняє програму (у Python - <code>KeyboardInterrupt</code>). Ctrl+Z лише призупиняє: програма
+   жива, <code>jobs</code> її покаже, <code>fg</code> поверне.</li>
+<li><code>pgrep -af forever</code> (перше число в рядку - PID), потім <code>kill PID</code>. Якщо за кілька секунд не завершилась -
+   <code>kill -9 PID</code>.</li>
+<li>Код = 128 + номер сигналу. SIGTERM = 15 → 143, SIGKILL = 9 → 137.</li>
+<li>Середня кількість процесів, які хотіли процесор, за 1, 5 і 15 хвилин. Порівнюють з кількістю ядер (<code>nproc</code>).</li>
+<li><code>xkill</code> і клік по вікну; «Системний монітор» → права кнопка → «Припинити процес» / «Знищити процес»;
+   або <code>pgrep -af назва</code> і <code>kill PID</code> у терміналі.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Попередній курс Linux цього розділу, день 06 «процеси» - переписано для Mint, 18.11.2026</li>
+<li>bash, керування задачами (jobs, fg, bg, коди 128+n) - https://www.gnu.org/software/bash/manual/html_node/Job-Control-Basics.html ,
+  https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html - відкрито 18.11.2026</li>
+<li>signal(7), список сигналів - https://man7.org/linux/man-pages/man7/signal.7.html - відкрито 18.11.2026</li>
+<li>Довідка GNOME System Monitor, «Force Stop ("kill") a program immediately» -
+  https://help.gnome.org/users/gnome-system-monitor/process-kill.html - відкрито 18.11.2026</li>
+<li>htop - https://htop.dev/ - відкрито 18.11.2026</li>
+<li>Переклади «Системний монітор» і вікна «не відповідає» - пакети <code>language-pack-gnome-uk-base</code> і <code>cinnamon-l10n</code>
+  (Mint 22.3), 18.11.2026</li>
+<li><code>ps</code>, <code>pgrep</code>, <code>kill</code>, <code>killall</code>, <code>nohup</code>, <code>nice</code>, <code>renice</code>, <code>uptime</code>, <code>sensors</code>, <code>top</code>, <code>htop</code> - справжні сеанси
+  в тестовій Mint 22.3 (псевдотермінал), 18.11.2026</li>
+</ul>

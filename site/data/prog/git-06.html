@@ -1,0 +1,254 @@
+<h1 id="тема-6-gitignore-для-python">Тема 6. gitignore для Python</h1>
+<p><strong>Навіщо:</strong> у теці лаби, крім твого коду, Python сам наробить сміття: <code>__pycache__/</code>, <code>.venv/</code> з тисячею файлів, картинки-графіки. Їм не місце в git: вони великі, у кожного свої і відтворюються запуском. <code>.gitignore</code> каже git їх не помічати.</p>
+<h3 id="коротко">Коротко</h3>
+<p><code>.gitignore</code> - звичайний текстовий файл у корені репо (назва з крапкою на початку, тому <code>ls</code> без <code>-a</code> його не показує). Один рядок - один шаблон.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Рядок у <code>.gitignore</code></th>
+<th>Що ігнорує</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.venv/</code></td>
+<td>теку віртуального середовища (сотні пакетних файлів)</td>
+</tr>
+<tr>
+<td><code>__pycache__/</code></td>
+<td>теку, куди Python кладе скомпільований код при <code>import</code></td>
+</tr>
+<tr>
+<td><code>*.pyc</code></td>
+<td>окремі такі файли (<code>*</code> - будь-які символи)</td>
+</tr>
+<tr>
+<td><code>.pytest_cache/</code></td>
+<td>кеш pytest</td>
+</tr>
+<tr>
+<td><code>.mypy_cache/</code></td>
+<td>кеш перевірки типів mypy</td>
+</tr>
+<tr>
+<td><code>*.png</code></td>
+<td>усі картинки-результати (графіки з matplotlib)</td>
+</tr>
+<tr>
+<td><code>!lr3/skhema.png</code></td>
+<td><code>!</code> - виняток: цей файл НЕ ігнорувати</td>
+</tr>
+<tr>
+<td><code># коментар</code></td>
+<td>коментар, лише з <code>#</code> на початку рядка</td>
+</tr>
+</tbody>
+</table></div>
+<p>Де стоїть <code>/</code> - вирішує, що і де ловить шаблон (git-scm.com/docs/gitignore):</p>
+<ul>
+<li><code>/</code> <strong>у кінці</strong> - лише тека (і все в ній): <code>__pycache__/</code>, <code>.venv/</code>.</li>
+<li><code>/</code> <strong>нема ніде, крім кінця</strong> - шаблон діє на будь-якій глибині: <code>__pycache__/</code> спрацює і в <code>lr1/</code>, і в <code>lr7/</code>, <code>*.pyc</code> - теж.</li>
+<li><code>/</code> <strong>на початку або в середині</strong> - шлях рахується від теки, де лежить <code>.gitignore</code>: <code>/dani/</code> - лише тека <code>dani/</code> у корені (а <code>lr1/dani/</code> - ні), <code>lr3/skhema.png</code> - лише цей файл (а <code>lr5/lr3/skhema.png</code> - ні).</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git check-ignore -v файл</code></td>
+<td>який рядок якого <code>.gitignore</code> ігнорує файл</td>
+</tr>
+<tr>
+<td><code>git rm --cached файл</code></td>
+<td>прибрати файл з git, але <strong>лишити на диску</strong></td>
+</tr>
+<tr>
+<td><code>git status --ignored</code></td>
+<td>показати і ігноровані файли теж</td>
+</tr>
+</tbody>
+</table></div>
+<p>Головне правило: <strong><code>.gitignore</code> діє лише на файли, яких ще нема в git.</strong> Що вже закомічене - git і далі стежить, поки не скажеш <code>git rm --cached</code>.</p>
+<p>Аналогія: <code>.gitignore</code> - список «не пакувати у валізу». Якщо светр уже у валізі, список його не викине - треба вийняти руками.</p>
+<h3 id="пісочниця">Пісочниця</h3>
+<p>На свіжій Mint 22.3 нема пакета <code>python3-venv</code>, і <code>python3 -m venv</code> падає з <code>The virtual environment was not created successfully because ensurepip is not available.</code> Якщо ти робив крок 0 уроку 03 курсу Linux Mint (<a href="../Linux-Mint/Урок 03 - Термінал для лаб - теки, файли, nano, запуск, venv.md">Урок 03 - Термінал для лаб</a>), пакет уже є. Якщо ні - один раз (попросить пароль):</p>
+<pre><code class="language-bash">sudo apt install python3-venv
+</code></pre>
+<p>Тепер пісочниця:</p>
+<pre><code class="language-bash">mkdir ~/git-pisochnytsia-06
+cd ~/git-pisochnytsia-06
+git init
+python3 -m venv .venv
+printf 'def double(x):\n    return x * 2\n' &gt; lr1.py
+printf 'import lr1\nprint(lr1.double(4))\n' &gt; main.py
+python3 main.py
+touch grafik.png
+git status
+</code></pre>
+<p><code>python3 main.py</code> надрукує <code>8</code>, а заодно створить <code>__pycache__/lr1.cpython-312.pyc</code> (бо <code>main.py</code> імпортує <code>lr1</code>). <code>touch grafik.png</code> - уяви, що це графік, який зберіг matplotlib.</p>
+<pre><code class="language-text">On branch main
+
+No commits yet
+
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+    .venv/
+    __pycache__/
+    grafik.png
+    lr1.py
+    main.py
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+</code></pre>
+<p>У <code>.venv/</code> понад тисячу файлів (у перевірці git нарахував 1014). <code>git add .</code> зараз потягнув би їх усі.</p>
+<h3 id="передбач-потім-запусти">Передбач, потім запусти</h3>
+<p>Створи <code>.gitignore</code> (у nano впиши 5 рядків, Ctrl+O, Enter, Ctrl+X) або одним рядком через <code>printf</code>:</p>
+<pre><code class="language-bash">nano .gitignore
+# або те саме без nano, одним рядком:
+printf '.venv/\n__pycache__/\n*.pyc\n.pytest_cache/\n.mypy_cache/\n' &gt; .gitignore
+</code></pre>
+<ol>
+<li><code>git status --short</code> - які файли лишаться в списку?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p><code>.venv/</code> і <code>__pycache__/</code> зникли, а сам <code>.gitignore</code> зʼявився - його теж треба комітити. <code>grafik.png</code> ще видно: правила для <code>*.png</code> поки нема.</p>
+<pre><code class="language-text">?? .gitignore
+?? grafik.png
+?? lr1.py
+?? main.py
+</code></pre>
+</details>
+<ol start="2">
+<li><code>git check-ignore -v __pycache__/lr1.cpython-312.pyc</code> - який рядок спрацює: <code>__pycache__/</code> чи <code>*.pyc</code>?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Рядок 2, <code>__pycache__/</code>: git ігнорує всю теку і всередину вже не дивиться. Формат: файл<code>:</code>номер рядка<code>:</code>шаблон, потім Tab і шлях.</p>
+<pre><code class="language-text">.gitignore:2:__pycache__/   __pycache__/lr1.cpython-312.pyc
+</code></pre>
+</details>
+<ol start="3">
+<li><code>git check-ignore -v main.py</code> - що виведе?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Нічого, і код виходу 1 (<code>echo $?</code> покаже <code>1</code>): <code>main.py</code> не ігнорується. Тиша тут - добра новина.</p>
+</details>
+<h3 id="руками">Руками</h3>
+<p><strong>Крок 1. Комітимо разом з графіком</strong> (наче ти ще не знав про <code>*.png</code>):</p>
+<pre><code class="language-bash">git add .
+git commit -m &quot;ЛР1 і gitignore&quot;
+</code></pre>
+<pre><code class="language-text">[main (root-commit) bf8917a] ЛР1 і gitignore
+ 4 files changed, 9 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 grafik.png
+ create mode 100644 lr1.py
+ create mode 100644 main.py
+</code></pre>
+<p>4 файли: <code>.venv/</code> і <code>__pycache__/</code> у коміт не пішли. (Хеш у тебе буде інший.)</p>
+<p><strong>Крок 2. Пізно додали правило.</strong> Дописуємо <code>*.png</code> і «перемальовуємо» графік:</p>
+<pre><code class="language-bash">printf '*.png\n' &gt;&gt; .gitignore
+printf 'новий графік\n' &gt; grafik.png
+git status --short
+git check-ignore -v grafik.png
+</code></pre>
+<pre><code class="language-text"> M .gitignore
+ M grafik.png
+</code></pre>
+<p><code>grafik.png</code> досі в списку змінених, а <code>check-ignore</code> мовчить: файл уже в git, і правило на нього не діє.</p>
+<p><strong>Крок 3. Прибрати з git, лишити на диску.</strong></p>
+<pre><code class="language-bash">git rm --cached grafik.png
+git status --short
+</code></pre>
+<pre><code class="language-text">rm 'grafik.png'
+</code></pre>
+<pre><code class="language-text"> M .gitignore
+D  grafik.png
+</code></pre>
+<p><code>D</code> у першій колонці - «видалення з репо підготовлене до коміту». Файл на диску не чіпали.</p>
+<pre><code class="language-bash">git add .gitignore
+git commit -m &quot;Не зберігай картинки-результати&quot;
+ls grafik.png
+git status --short
+</code></pre>
+<pre><code class="language-text">[main d84d1e0] Не зберігай картинки-результати
+ 2 files changed, 1 insertion(+)
+ delete mode 100644 grafik.png
+</code></pre>
+<pre><code class="language-text">grafik.png
+</code></pre>
+<p><code>ls grafik.png</code> показав файл - він на диску (якби його не було, <code>ls</code> написав би <code>No such file or directory</code>). <code>git status --short</code> порожній - тепер git його справді ігнорує. Перевір: <code>git check-ignore -v grafik.png</code> → <code>.gitignore:6:*.png   grafik.png</code>.</p>
+<p><strong>Для лаб:</strong> один <code>.gitignore</code> у корені <code>~/univer/labs</code> діє на всі теки <code>lr1</code> ... <code>lr7</code>. Візьми ті самі 6 рядків (<code>.venv/</code>, <code>__pycache__/</code>, <code>*.pyc</code>, <code>.pytest_cache/</code>, <code>.mypy_cache/</code>, <code>*.png</code>). Якщо до звіту ЛР3 треба саме цю схему - допиши виняток <code>!lr3/skhema.png</code>. Зроби <code>.gitignore</code> <strong>до</strong> першого <code>git add .</code>, тоді <code>git rm --cached</code> не знадобиться.</p>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li>Додаєш ігнорований файл руками:
+  <code>text
+  The following paths are ignored by one of your .gitignore files:
+  grafik.png
+  hint: Use -f if you really want to add them.
+  hint: Turn this message off by running
+  hint: "git config advice.addIgnoredFile false"</code>
+  git питає «ти впевнений?». Якщо файл справді треба - <code>git add -f grafik.png</code>, але краще виняток <code>!</code> у <code>.gitignore</code>.</li>
+<li>Правило написане, а файл досі в <code>git status</code> як змінений (<code>M</code>) - він закомічений раніше. Лікування - <code>git rm --cached файл</code> і коміт (крок 3).</li>
+<li>Закомітив цілу <code>.venv/</code> (у перевірці це 1014 файлів в одному коміті). Прибрати з git, не чіпаючи середовище (<code>-r</code> - рекурсивно, <code>-q</code> - тихо, без тисячі рядків <code>rm '...'</code>):
+  <code>bash
+  git rm -r -q --cached .venv
+  git commit -m "Прибери .venv з репо"</code>
+  Не забудь <code>.venv/</code> у <code>.gitignore</code>, інакше наступний <code>git add .</code> поверне її.</li>
+<li>Коментар у тому ж рядку: <code>*.png # картинки</code> <strong>не працює</strong> - git шукає файл, що закінчується на <code>.png # картинки</code>. <code>git status --short</code> і далі показує <code>?? a.png</code>. Коментар - лише окремим рядком з <code>#</code> на початку.</li>
+<li>Файл назвали <code>gitignore</code> (без крапки) або <code>.gitignore.txt</code> - git його не читає. Перевір <code>ls -a</code>: має бути рівно <code>.gitignore</code>.</li>
+</ul>
+<h3 id="як-роблять-профі">Як роблять профі</h3>
+<ul>
+<li>Не пишуть з нуля, а беруть шаблон GitHub <code>Python.gitignore</code> (репо github/gitignore; 18.11.2026 у ньому 223 рядки, є <code>__pycache__/</code>, <code>*.py[codz]</code>, <code>.pytest_cache/</code>, <code>.venv</code>, <code>.mypy_cache/</code>). Його ж підставляє сайт при створенні репо (поле «Add .gitignore» → Python) і <code>gh</code>. Це для <strong>нового</strong> проєкту, не для пісочниці: <code>wget -O .gitignore</code> <strong>перезапише</strong> твій <code>.gitignore</code>, а <code>gh repo create</code> створить на GitHub ще один репо (і потребує входу в gh, урок 16). Тому тут лише зразок, <code>НАЗВА</code> - твоя назва нового репо:
+  <code>text
+  wget -O .gitignore https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore
+  gh repo create НАЗВА --private --gitignore Python</code>
+  Прочитай шаблон перед комітом: там є, наприклад, <code>lib/</code> і <code>build/</code> - тека <code>lib/</code> з твоїм кодом теж стане ігнорованою.</li>
+<li>Особисте сміття твого редактора (<code>*.swp</code>, <code>*~</code>) пишуть не в <code>.gitignore</code> проєкту, а в <strong>глобальний</strong> файл <code>~/.config/git/ignore</code> - він діє в усіх репо на твоєму компʼютері (git-scm.com/docs/gitignore: якщо <code>core.excludesFile</code> не задано, береться <code>$HOME/.config/git/ignore</code>):
+  <code>bash
+  mkdir -p ~/.config/git
+  printf '*.swp\n' &gt; ~/.config/git/ignore
+  touch .lr1.py.swp
+  git check-ignore -v .lr1.py.swp</code>
+  <code>text
+  /home/.../.config/git/ignore:1:*.swp  .lr1.py.swp</code>
+  (замість <code>...</code> - твоя домашня тека.)</li>
+<li><code>git check-ignore -v --no-index файл</code> - показує правило навіть для вже закоміченого файлу (без <code>--no-index</code> git про такі мовчить, як у кроці 2).</li>
+<li><code>git status --ignored</code> - глянути, що саме зараз ігнорується (чи не сховав ти щось потрібне).</li>
+<li>Python 3.13+ сам кладе в нову <code>.venv/</code> файл <code>.gitignore</code> з <code>*</code> (docs.python.org, venv: «Changed in version 3.13: venv now creates a .gitignore file for Git by default»). На Mint 22 Python 3.12 - тому <code>.venv/</code> у свій <code>.gitignore</code> пишемо самі.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Що буде з <code>grafik.png</code>, якщо він уже закомічений, а ти дописав <code>*.png</code> у <code>.gitignore</code>?</li>
+<li>Чим <code>git rm --cached lr1.png</code> відрізняється від <code>rm lr1.png</code>?</li>
+<li>Яка команда скаже, через який рядок <code>.gitignore</code> ігнорується файл?</li>
+<li>Чому <code>*.png # графіки</code> в <code>.gitignore</code> не ігнорує <code>grafik.png</code>?</li>
+<li>Що з цього писати в <code>.gitignore</code> проєкту, а що в <code>~/.config/git/ignore</code>: <code>__pycache__/</code>, <code>*.swp</code> від твого редактора?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Нічого: git і далі стежить за ним (<code>M grafik.png</code> у статусі). Треба <code>git rm --cached grafik.png</code> і коміт.</li>
+<li><code>git rm --cached</code> прибирає файл лише з git, на диску він лишається; <code>rm</code> видаляє з диска.</li>
+<li><code>git check-ignore -v файл</code> (для вже закоміченого - з <code>--no-index</code>).</li>
+<li>Коментар можна лише окремим рядком; тут <code># графіки</code> стало частиною шаблону.</li>
+<li><code>__pycache__/</code> - у <code>.gitignore</code> проєкту (стосується всіх, хто працює з кодом); <code>*.swp</code> - у глобальний, це звичка лише твого редактора.</li>
+</ol>
+</details>
+<h3 id="джерела">Джерела</h3>
+<ul>
+<li>gitignore (шаблони, <code>!</code>, <code>#</code>, глобальний файл): https://git-scm.com/docs/gitignore - відкрито 18.11.2026</li>
+<li>git check-ignore: https://git-scm.com/docs/git-check-ignore - відкрито 18.11.2026</li>
+<li>git rm (<code>--cached</code>): https://git-scm.com/docs/git-rm - відкрито 18.11.2026</li>
+<li>Pro Git, розд. 2.2 «Ignoring Files»: https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository - відкрито 18.11.2026</li>
+<li>Шаблон Python.gitignore: https://github.com/github/gitignore/blob/main/Python.gitignore - відкрито 18.11.2026</li>
+<li>GitHub, «Ignoring files»: https://docs.github.com/en/get-started/git-basics/ignoring-files - відкрито 18.11.2026</li>
+<li>Python venv (3.13 створює .gitignore): https://docs.python.org/3/library/venv.html - відкрито 18.11.2026</li>
+</ul>

@@ -1,0 +1,59 @@
+<h1 id="тема-5-файли-й-секрети">Тема 5. Файли й секрети</h1>
+<div class="pybox" id="pybox"></div>
+
+<p><strong>Що треба з Python:</strong> <code>open(шлях)</code>, модуль <code>pathlib</code>: <code>Path("a") / "b"</code>, <code>.resolve()</code> (зводить <code>..</code> і
+дає повний шлях), <code>.is_relative_to(тека)</code> (Python 3.9+).</p>
+<p><strong>Де діра: path traversal.</strong> Сайт віддає файли з теки за іменем від користувача: <code>open("files/" + name)</code>.
+Користувач передає <code>../</code> і виходить з теки, наприклад <code>../../etc/passwd</code> на Linux.</p>
+<p><strong>Як правильно:</strong> звести шлях і перевірити, що він досі всередині дозволеної теки.</p>
+<pre><code class="language-python">from pathlib import Path
+
+BASE = Path(&quot;/srv/files&quot;).resolve()
+
+
+def is_safe(name):
+    p = (BASE / name).resolve()
+    return p.is_relative_to(BASE)
+
+
+for name in [&quot;notes.txt&quot;, &quot;sub/../notes.txt&quot;, &quot;../secret.txt&quot;,
+             &quot;../../etc/passwd&quot;, &quot;/etc/passwd&quot;]:
+    print(name, &quot;-&gt;&quot;, is_safe(name))
+</code></pre>
+<pre><code class="language-text">notes.txt -&gt; True
+sub/../notes.txt -&gt; True
+../secret.txt -&gt; False
+../../etc/passwd -&gt; False
+/etc/passwd -&gt; False
+</code></pre>
+<p>Зверни увагу на останній: <code>Path("/srv/files") / "/etc/passwd"</code> дає просто <code>/etc/passwd</code> - абсолютний
+шлях «перебиває» теку. Тому перевіряти треба результат, а не шукати <code>..</code> у рядку.
+Ще надійніше - не брати імʼя файлу від користувача взагалі, а зберігати файли під своїми номерами.</p>
+<p><strong>Секрети (паролі, ключі API, токени):</strong>
+- ніколи не писати в код: код потрапляє в git, на GitHub, до всіх, хто його бачить;
+- тримати в змінних оточення або у файлі <code>.env</code>, а <code>.env</code> дописати в <code>.gitignore</code>;
+- <code>.env</code> Python сам НЕ читає: потрібен пакет <code>python-dotenv</code> (<code>from dotenv import load_dotenv</code>, потім
+  <code>load_dotenv()</code>), тоді значення зʼявляться в <code>os.environ</code>;
+- читати так:</p>
+<pre><code class="language-python">import os
+
+key = os.environ.get(&quot;UNIPREP_DEMO_KEY&quot;)
+if key is None:
+    print(&quot;ключ не задано - працюю без нього&quot;)
+</code></pre>
+<pre><code class="language-text">ключ не задано - працюю без нього
+</code></pre>
+<ul>
+<li>випадкові паролі й токени - лише модуль <code>secrets</code>, не <code>random</code> (<code>random</code> передбачуваний, він для ігор і симуляцій):</li>
+</ul>
+<pre><code class="language-python">import secrets
+
+token = secrets.token_urlsafe(32)    # 32 випадкові байти
+print(len(token))
+</code></pre>
+<pre><code class="language-text">43
+</code></pre>
+<p>Якщо секрет уже потрапив у git - видалити файл замало (він лишається в історії). Ключ треба
+<strong>замінити на новий</strong> (відкликати старий).</p>
+<p>OWASP: A01 Broken Access Control (path traversal - CWE-22), A07 Authentication Failures (пароль у коді - CWE-798),
+A04 Cryptographic Failures (слабкий випадковий генератор - CWE-338).</p>

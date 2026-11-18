@@ -86,13 +86,108 @@ def slug_uk(value, separator="-"):
     return re.sub(r"[\s_-]+", separator, v)[:60]
 
 
+# ---------- UPROGONE: частини одного розділу (mint, git, linux, prog-sec живуть у prog) ----------
+def split_themes(text, prefix):
+    """Великий teoriya.md частини -> покажчик (вступ, Тема 0, інші ##) + сторінка на кожну «## Тема N.»."""
+    chunks = {prefix: []}
+    cur = prefix
+    fence = False
+    for ln in text.split("\n"):
+        if re.match(r"^\s*(```|~~~)", ln):
+            fence = not fence
+        elif not fence and ln.startswith("## "):
+            m = re.match(r"^## Тема (\d+)\. ", ln)
+            cur = prefix if (not m or int(m.group(1)) == 0) else f"{prefix}-{int(m.group(1)):02d}"
+            chunks.setdefault(cur, [])
+            if cur != prefix:
+                ln = "# " + ln[3:]
+        chunks[cur].append(ln)
+    return {k: "\n".join(v).strip() + "\n" for k, v in chunks.items()}
+
+
+def part_pages(pid, cfg, udir):
+    """Сторінки частини (ключ у prog -> Markdown) і куди веде кожна стара адреса #/u/<pid>/<ключ>."""
+    pre = cfg["prefix"]
+    pages, moved = {}, {"": pre, "test": "test", "video": "shlyakh"}
+    for fname, key in cfg.get("files", {}).items():
+        src = udir / f"{fname}.md"
+        if src.exists():
+            pages[key] = src.read_text(encoding="utf-8")
+            moved[fname] = key
+    if cfg.get("split"):
+        for key, md in split_themes((udir / f"{cfg['split']}.md").read_text(encoding="utf-8"), pre).items():
+            if cfg.get("pybox") and key != pre:
+                first, _, rest = md.partition("\n")
+                md = first + '\n\n<div class="pybox" id="pybox"></div>\n' + rest
+            pages[key] = md
+        moved[cfg["split"]] = pre
+    if (udir / "pages").exists():
+        for src in sorted((udir / "pages").glob("urok-*.md")):
+            key = f"{pre}-{src.stem.split('-')[1]}"
+            pages[key] = src.read_text(encoding="utf-8")
+            moved[src.stem] = key
+    return pages, moved
+
+
+MOVED = {}  # стара частина -> {старий ключ: новий ключ у prog}
+OLD_LINK = re.compile(r'href="#/u/([a-z-]+)(?:/([^"/]*))?"')
+
+
+def rewrite_links(html):
+    """Посилання на старі розділи -> сторінки всередині prog (щоб не ходити через перенаправлення)."""
+    def sub(m):
+        pid, key = m.group(1), m.group(2) or ""
+        if pid not in MOVED:
+            return m.group(0)
+        new = MOVED[pid].get(key, MOVED[pid][""])
+        return f'href="#/u/prog/{new}"'
+    return OLD_LINK.sub(sub, html)
+
+
 def main():
     errors = []
     units = json.loads((CONTENT / "units.json").read_text(encoding="utf-8"))
     index = []
     files = []
+    # UPROGONE: шлях по лабах (модулі, «Шлях», «Усе», «Шпаргалки») складається з частин перед збиранням
+    try:
+        sys.path.insert(0, str(ROOT / "tools"))
+        import gen_prog_path
+        gen_prog_path.main(quiet=True)
+    except Exception as e:  # noqa: BLE001 - будь-яка помилка шляху = помилка збирання
+        errors.append(f"gen_prog_path: {e}")
+    parts_cfg = json.loads((CONTENT / "prog" / "meta.json").read_text(encoding="utf-8")).get("parts", {})
+    part_out = {}
+    for pid, cfg in parts_cfg.items():
+        part_out[pid] = part_pages(pid, cfg, CONTENT / pid)
+        MOVED[pid] = part_out[pid][1]
     for uid in units:
         udir = CONTENT / uid
+        if uid in parts_cfg:
+            # частина: тести лишаються в data/<частина>/quiz.json (id не міняються - статистика і бот),
+            # сторінки - у data/prog/<префікс>-..., старі адреси сайт перенаправляє (meta.moved)
+            meta = json.loads((udir / "meta.json").read_text(encoding="utf-8"))
+            out = DATA / uid
+            out.mkdir(parents=True, exist_ok=True)
+            for old in out.glob("*.html"):
+                old.unlink()
+            qtext = (udir / "quiz.json").read_text(encoding="utf-8")
+            check_text(qtext, f"{uid}/quiz.json", errors)
+            qd = json.loads(qtext)
+            (out / "quiz.json").write_text(json.dumps(qd, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+            files.append(f"data/{uid}/quiz.json")
+            for f in sorted((out / "zadachi").glob("*.py")) if (out / "zadachi").exists() else []:
+                files.append(f"data/{uid}/zadachi/{f.name}")
+            pdir = DATA / "prog"
+            pdir.mkdir(parents=True, exist_ok=True)
+            for key, text in part_out[uid][0].items():
+                check_text(text, f"{uid}->prog/{key}.md", errors)
+                (pdir / f"{key}.html").write_text(rewrite_links(md_to_html(text)), encoding="utf-8")
+                files.append(f"data/prog/{key}.html")
+            meta.update({"parent": "prog", "moved": MOVED[uid], "ptitle": parts_cfg[uid].get("title", meta["title"]), "pages": [{"key": "test", "title": "Тести"}],
+                         "nq": len(qd["questions"]), "nv": 0, "ng": 0})
+            index.append(meta)
+            continue
         if not (udir / "meta.json").exists():
             if "--strict" in sys.argv:
                 errors.append(f"нема {uid}/meta.json")
@@ -105,22 +200,35 @@ def main():
         out = DATA / uid
         out.mkdir(parents=True, exist_ok=True)
         pages = []
-        for key, title in PAGES:
+        # UPROGONE: розділ може задати свої вкладки (meta.tabs = [[ключ, назва], ...]); решта сторінок - поза вкладками
+        tabs = meta.get("tabs")
+        keys = [k for k, _ in PAGES] + [k for k, _ in (tabs or []) if k not in dict(PAGES)]
+        for key in keys:
             src = udir / f"{key}.md"
             if not src.exists():
                 continue
             text = src.read_text(encoding="utf-8")
             check_text(text, f"{uid}/{key}.md", errors)
-            html = md_to_html(text)
+            html = rewrite_links(md_to_html(text))
             (out / f"{key}.html").write_text(html, encoding="utf-8")
             files.append(f"data/{uid}/{key}.html")
-            pages.append({"key": key, "title": title})
+            if not tabs:
+                pages.append({"key": key, "title": dict(PAGES)[key]})
+        if tabs:
+            for key, title in tabs:
+                if not (udir / f"{key}.md").exists():
+                    errors.append(f"{uid}: вкладка {key} без файлу")
+                pages.append({"key": key, "title": title})
         # сторінки поза вкладками (UNIPROG1: уроки prog) - content/<id>/pages/*.md -> data/<id>/<імʼя>.html
         for src in sorted((udir / "pages").glob("*.md")) if (udir / "pages").exists() else []:
             text = src.read_text(encoding="utf-8")
             check_text(text, f"{uid}/pages/{src.name}", errors)
-            (out / f"{src.stem}.html").write_text(md_to_html(text), encoding="utf-8")
+            (out / f"{src.stem}.html").write_text(rewrite_links(md_to_html(text)), encoding="utf-8")
             files.append(f"data/{uid}/{src.stem}.html")
+        # UPROGONE: модулі шляху (питання модуля, модуль кожної сторінки) - tools/gen_prog_path.py
+        if (udir / "moduli-data.json").exists():
+            (out / "moduli.json").write_text((udir / "moduli-data.json").read_text(encoding="utf-8"), encoding="utf-8")
+            files.append(f"data/{uid}/moduli.json")
         # файли для скачування (заготовки задач prog) - теж у офлайн-кеш
         for f in sorted((out / "zadachi").glob("*.py")) if (out / "zadachi").exists() else []:
             files.append(f"data/{uid}/zadachi/{f.name}")
@@ -167,7 +275,7 @@ def main():
         if src.exists():
             text = src.read_text(encoding="utf-8")
             check_text(text, f"{key}.md", errors)
-            (DATA / f"{key}.html").write_text(md_to_html(text), encoding="utf-8")
+            (DATA / f"{key}.html").write_text(rewrite_links(md_to_html(text)), encoding="utf-8")
             files.append(f"data/{key}.html")
 
     # UPLAN1: графік навчання (генерує uni-nagad/plan_gen.py у content/grafik) - дані і календар.
@@ -199,6 +307,12 @@ def main():
         (SITE / "kalendar.ics").write_bytes(("\r\n".join(ics) + "\r\n").encode("utf-8"))
         files.append("kalendar.ics")
 
+    # UPROGONE: скільки питань у розділі разом з частинами (include) - для кільця прогресу і картки розділу
+    by_id = {u["id"]: u for u in index}
+    for u in index:
+        if u.get("include") and not u.get("parent"):
+            u["nqAll"] = u["nq"] + sum(by_id[i]["nq"] for i in u["include"] if i in by_id)
+            u["parts"] = [i for i in u["include"] if by_id.get(i, {}).get("parent") == u["id"]]
     (DATA / "units.json").write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
     files.append("data/units.json")
 

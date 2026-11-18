@@ -1,0 +1,639 @@
+<h1 id="урок-04-лр1-у-терміналі-з-нуля">Урок 04. ЛР1 у терміналі з нуля</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> зробити першу лабораторну повністю в терміналі Mint: тека, файли викладача, <code>nano</code>, запуск,
+doctest, перевірка стилю - без VS Code. Код пишеш ти сам; тут лише дорога, підказки і пастки.</p>
+<p>Перед цим уроком: Урок 03 (термінал, <code>nano</code>, venv). Якщо запускав <code>ustanovka-mint.sh</code> - venv
+<code>~/univer/.venv</code> з pytest, flake8, black, ruff, mypy, pycodestyle уже є.</p>
+<h2 id="коротко">Коротко</h2>
+<p>Уся лаба - це повторення одного кола:</p>
+<pre><code class="language-text">nano lr1_1.py  →  зберегти (Ctrl+O, Enter)  →  вийти (Ctrl+X)  →  запустити  →  читати Expected / Got  →  знову nano
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що робиш</th>
+<th>Команда</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>тека для лаби</td>
+<td><code>mkdir -p ~/univer/labs/lr1</code> і <code>cd ~/univer/labs/lr1</code></td>
+</tr>
+<tr>
+<td>увімкнути venv</td>
+<td><code>source ~/univer/.venv/bin/activate</code> (зліва зʼявиться <code>(.venv)</code>)</td>
+</tr>
+<tr>
+<td>файли викладача з Telegram</td>
+<td>зазвичай <code>~/Завантаження/Telegram Desktop/</code>: <code>ls ~/Завантаження/"Telegram Desktop"</code></td>
+</tr>
+<tr>
+<td>дістати заготовку з <code>.ipynb</code></td>
+<td><code>klitynka файл.ipynb 4 &gt; lr1_1.py</code> (функцію <code>klitynka</code> зробимо нижче)</td>
+</tr>
+<tr>
+<td>редагувати</td>
+<td><code>nano lr1_1.py</code></td>
+</tr>
+<tr>
+<td>запустити з введенням</td>
+<td><code>printf "127\n" \| python3 lr1_1.py</code></td>
+</tr>
+<tr>
+<td>усі doctest докладно</td>
+<td><code>printf "127\n" \| python3 lr1_1.py -v \| tail -n 3</code></td>
+</tr>
+<tr>
+<td>doctest з чесним кодом виходу</td>
+<td><code>printf "127\n" \| python3 -m pytest --doctest-modules -q -s lr1_1.py</code></td>
+</tr>
+<tr>
+<td>стиль і типи</td>
+<td><code>python3 -m black -l 78</code>, <code>flake8</code>, <code>pycodestyle</code>, <code>ruff check</code>, <code>mypy</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Три правила лаби, які викладач перевіряє насамперед (ЛР1, с. 12 методички; файл «Вимоги викладача»):</p>
+<ul>
+<li><strong>без <code>if</code>, <code>elif</code>, <code>else</code> і без циклів <code>for</code>, <code>while</code> у всіх трьох завданнях (с. 12: «Заборонено оператори
+  галуження ... та цикли»); у завданні 3 ще й без списків і словників;</strong></li>
+<li>назву, параметри функції і doctest <strong>не міняти</strong> - свій код вкладаєш у готову функцію;</li>
+<li>функція <strong>повертає</strong> рядок через <code>return</code>, а не друкує його через <code>print</code>; doctest мають пройти всі.</li>
+</ul>
+<h2 id="умова-коротко">Умова коротко</h2>
+<p>Оригінал: <code>Лабораторна_робота_1_Пайтон,_2026_2027.pdf</code> (далі «с.» - сторінка цього PDF) або той самий
+<code>.ipynb</code> (далі «клітинка» - номер клітинки, рахуємо з 0). Теорія - с. 1-12, у ній є майже всі потрібні прийоми.</p>
+<p><strong>Завдання 1. Цифри тризначного числа</strong> (с. 13-15, умова - клітинка 3, заготовка - клітинка 4).
+Користувач вводить число. Функція <code>number_operations(number)</code> рахує суму цифр, модуль різниці між числом і
+числом, записаним навпаки, і частку «число / сума цифр» з трьома знаками після крапки (<code>44.000</code>, а не <code>44.0</code>).
+Для недодатного числа повертає <code>Number must be positive</code>, для не тризначного - <code>Number of digits must be 3</code>.
+Повертає один рядок з <code>\n</code> усередині.</p>
+<p><strong>Завдання 2. Тривалість космічної місії</strong> (с. 15-17, клітинки 5 і 6). Користувач вводить кількість секунд.
+Функція <code>time_operations(seconds)</code> розкладає їх на дні, години, хвилини, секунди (лише <code>//</code> і <code>%</code>, доба =
+86400 с) і дає ще запис <code>D days, HH:MM:SS</code> з двома цифрами в годинах, хвилинах, секундах. Для відʼємного числа -
+<code>Number of seconds must be non-negative</code>.</p>
+<p><strong>Завдання 3. Оплата банкнотами</strong> (с. 17-22, клітинки 7 і 8). Вводять ціну і скільки є банкнот 500, 100, 50,
+20, 10, 5, 1. Функція <code>calculate_payment(...)</code> бере від найбільшого номіналу стільки банкнот, скільки влазить у
+залишок, але не більше, ніж є. Виводить, скільки взято кожних, і <code>Remaining amount: ... UAH.</code> Окремо
+перевіряти «чи можна оплатити» не треба. Заборонено <code>if</code>, <code>for</code>, <code>while</code>, списки; дозволено <code>min()</code>, <code>//</code>, <code>%</code>.</p>
+<h2 id="крок-за-кроком-у-терміналі">Крок за кроком у терміналі</h2>
+<h3 id="крок-0-venv-і-nano-під-python">Крок 0. venv і nano під Python</h3>
+<p>Відкрий термінал (Ctrl+Alt+T) і увімкни venv (так - на початку кожної роботи над лабою):</p>
+<pre><code class="language-bash">source ~/univer/.venv/bin/activate
+</code></pre>
+<p><code>nano</code> ти вже налаштував в Уроці 03 (крок 2). Перевір:</p>
+<pre><code class="language-bash">cat ~/.nanorc
+</code></pre>
+<p>Мають бути 4 рядки <code>set ...</code>. Якщо файлу нема (<code>cat: /home/evgen/.nanorc: No such file or directory</code>, укр.
+<code>... Немає такого файла або каталогу</code>) - урок 03 пропущено, зроби це зараз один раз. Без цього клавіша Tab у <code>nano</code>
+ставить символ табуляції, і Python падає з <code>TabError</code> (див. «Типові помилки»):</p>
+<pre><code class="language-bash">printf 'set tabstospaces\nset tabsize 4\nset linenumbers\nset autoindent\n' &gt;&gt; ~/.nanorc
+</code></pre>
+<p>Тепер Tab = 4 пробіли, зліва видно номери рядків, а Enter зберігає відступ попереднього рядка.</p>
+<h3 id="крок-1-тека-лаби">Крок 1. Тека лаби</h3>
+<pre><code class="language-bash">mkdir -p ~/univer/labs/lr1
+cd ~/univer/labs/lr1
+pwd
+</code></pre>
+<p><code>mkdir -p</code> створює і всі проміжні теки, і не лається, якщо тека вже є. <code>pwd</code> має показати
+<code>/home/твій_логін/univer/labs/lr1</code>.</p>
+<h3 id="крок-2-файли-викладача-з-telegram">Крок 2. Файли викладача з Telegram</h3>
+<p>Telegram Desktop зазвичай зберігає файли з чату в підтеку <code>~/Завантаження/Telegram Desktop/</code> (на твоєму ноутбуці
+не перевірено; якщо зберігав через «Зберегти як» - туди, куди вибрав). У назві теки <strong>пробіл</strong>, тому її беруть у
+лапки - інакше bash вважатиме <code>Telegram</code> і <code>Desktop</code> двома різними словами. Подивись, що там:</p>
+<pre><code class="language-bash">ls ~/Завантаження/&quot;Telegram Desktop&quot;
+</code></pre>
+<p>(Якщо Mint англійською, тека називається <code>~/Downloads</code> - тоді в усіх командах уроку пиши її.)</p>
+<p>Не набирай довгу назву руками: набери <code>cp ~/Завантаження/"Telegram Desktop"/Лаб</code> і натисни <strong>Tab</strong> - bash допише
+назву сам (якщо варіантів кілька, натисни Tab двічі - покаже список). Скопіюй ноутбук викладача в теку лаби
+(крапка в кінці = «сюди, у поточну теку»):</p>
+<pre><code class="language-bash">cp ~/Завантаження/&quot;Telegram Desktop&quot;/Лабораторна_робота_1_Пайтон,_2026_2027.ipynb .
+ls
+</code></pre>
+<p>Якщо <code>cp</code> пише <code>cannot stat</code> (файлу там нема - Telegram міг покласти його деінде), знайди його по всій домашній
+теці і скопіюй з того шляху, який покаже <code>find</code>:</p>
+<pre><code class="language-bash">find ~ -name &quot;Лабораторна_робота_1*&quot;
+</code></pre>
+<h3 id="крок-3-дістати-заготовки-з-ipynb">Крок 3. Дістати заготовки з <code>.ipynb</code></h3>
+<p><code>.ipynb</code> - це JSON (текстовий формат запису даних: списки <code>[...]</code> і пари «назва: значення» у <code>{...}</code>; Python читає
+його модулем <code>json</code>): текст і код лежать у «клітинках». Дві короткі функції bash: <code>klityny</code> показує список
+клітинок, <code>klitynka</code> друкує одну клітинку. Скопіюй обидва рядки в термінал (вставка - Ctrl+Shift+V):</p>
+<pre><code class="language-bash">klityny() { python3 -c 'import json, sys; [print(i, c[&quot;cell_type&quot;], &quot;&quot;.join(c[&quot;source&quot;])[:45].split(&quot;\n&quot;)[0]) for i, c in enumerate(json.load(open(sys.argv[1]))[&quot;cells&quot;])]' &quot;$1&quot;; }
+klitynka() { python3 -c 'import json, sys; print(&quot;&quot;.join(json.load(open(sys.argv[1]))[&quot;cells&quot;][int(sys.argv[2])][&quot;source&quot;]))' &quot;$1&quot; &quot;$2&quot;; }
+</code></pre>
+<p>Подивись, які клітинки є:</p>
+<pre><code class="language-bash">klityny Лабораторна_робота_1_Пайтон,_2026_2027.ipynb
+</code></pre>
+<pre><code class="language-text">0 markdown # Лабораторна робота 1
+1 markdown ## Теоретична частина
+2 markdown ## Практична частина
+3 markdown ### **Завдання 1. Операції з цифрами тризначн
+4 code import doctest
+5 markdown ### **Завдання 2. Визначення тривалості космі
+6 code import doctest
+7 markdown ### **Завдання 3. Формування суми покупки дос
+8 code import doctest
+</code></pre>
+<p>Клітинки <code>code</code> 4, 6, 8 - це заготовки трьох завдань. Знак <code>&gt;</code> пише вивід команди у файл:</p>
+<pre><code class="language-bash">klitynka Лабораторна_робота_1_Пайтон,_2026_2027.ipynb 4 &gt; lr1_1.py
+klitynka Лабораторна_робота_1_Пайтон,_2026_2027.ipynb 6 &gt; lr1_2.py
+klitynka Лабораторна_робота_1_Пайтон,_2026_2027.ipynb 8 &gt; lr1_3.py
+ls
+</code></pre>
+<p>Функції живуть, поки відкрите вікно термінала. Щоб були завжди (знадобляться в ЛР2), допиши їх у <code>~/.bashrc</code>:</p>
+<pre><code class="language-bash">declare -f klityny klitynka &gt;&gt; ~/.bashrc
+</code></pre>
+<p>Чому не файл <code>lab1_doctests.py</code> з чату? У ньому завдання 1 зламане: рядок з <code>return</code> не компілюється, а два
+doctest розірвані на два рядки (розбір - у розділі «Коли помиляється doctest викладача»). Завдання 2 і 3 там
+такі самі, як у <code>.ipynb</code>, але простіше брати все з одного місця.</p>
+<h3 id="крок-4-відкрий-файл-у-nano-і-подивись-на-будову">Крок 4. Відкрий файл у nano і подивись на будову</h3>
+<pre><code class="language-bash">nano lr1_1.py
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Клавіші nano</th>
+<th>Що роблять</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl+O, потім Enter</td>
+<td>зберегти</td>
+</tr>
+<tr>
+<td>Ctrl+X</td>
+<td>вийти (якщо не зберіг - спитає: Y зберегти, N ні)</td>
+</tr>
+<tr>
+<td>Ctrl+K / Ctrl+U</td>
+<td>вирізати рядок / вставити</td>
+</tr>
+<tr>
+<td>Ctrl+W</td>
+<td>пошук</td>
+</tr>
+<tr>
+<td>Ctrl+/</td>
+<td>перейти до рядка за номером (зручно, коли Python каже «line 39»)</td>
+</tr>
+<tr>
+<td>Alt+U</td>
+<td>скасувати останню дію</td>
+</tr>
+</tbody>
+</table></div>
+<p>Будова файлу, яку чекає викладач (заготовка вже так зроблена, ти дописуєш лише позначене):</p>
+<pre><code class="language-text">import doctest                                   ← як у заготовці
+
+
+def number_operations(number: int) -&gt; str:      ← назву і параметри НЕ міняти
+    &quot;&quot;&quot;
+    опис і doctest викладача                     ← НЕ міняти жодного символу
+    &quot;&quot;&quot;
+    твій код: обчислення                         ← пишеш ти
+    return результат                             ← один рядок-результат
+
+
+number = int(input(&quot;Enter number: &quot;))           ← введення: пишеш ти (int, бо input дає str)
+
+print(number_operations(number))                ← виклик із заготовки, обгорнутий у print
+
+doctest.testmod()                                ← як у заготовці
+</code></pre>
+<p>Дві речі в заготовці треба знати:</p>
+<ul>
+<li>у завданнях 1 і 2 викладач викликає функцію без <code>print</code> - результат тоді нікуди не виводиться. Умова каже
+  «вивести», тому обгорни виклик у <code>print(...)</code>, як у заготовці завдання 3;</li>
+<li><code>doctest.testmod()</code> стоїть унизу файлу, без <code>if __name__ == "__main__":</code>. У ЛР1 так і залиш: <code>if</code>
+  заборонений, а викладач дав саме таку заготовку.</li>
+</ul>
+<p>Відступ усередині функції - 4 пробіли (з Кроку 0 Tab сам ставить 4 пробіли).</p>
+<h3 id="крок-5-перший-запуск-побач-що-все-червоне-і-це-нормально">Крок 5. Перший запуск - побач, що все червоне, і це нормально</h3>
+<p>Збережи і вийди (Ctrl+O, Enter, Ctrl+X). Запусти заготовку, поки ти ще нічого не дописав:</p>
+<pre><code class="language-bash">python3 lr1_1.py
+</code></pre>
+<pre><code class="language-text">NameError: name 'number' is not defined
+</code></pre>
+<p>Python дійшов до рядка <code>number_operations(number)</code>, а змінної <code>number</code> ще нема - бо ще нема введення.
+Допиши рядок з <code>input</code> і <code>print(...)</code> навколо виклику (як у схемі вище). Функцію поки не чіпай. Запусти знову.
+Програма чекає числа - набери <code>127</code> і Enter. Або подай число одразу, без набору, через <code>printf</code>:</p>
+<pre><code class="language-bash">printf &quot;127\n&quot; | python3 lr1_1.py
+</code></pre>
+<pre><code class="language-text">Enter number: None
+**********************************************************************
+File &quot;/home/evgen/univer/labs/lr1/lr1_1.py&quot;, line 13, in __main__.number_operations
+Failed example:
+    number_operations(124)
+Expected:
+    'The sum of digits of the number 124 is 7;\nthe absolute value of the difference of the number and reversed number is 297;\nthe fraction of the number 124 and the sum of its digits is 17.714.'
+Got nothing
+</code></pre>
+<p>і в кінці:</p>
+<pre><code class="language-text">1 items had failures:
+   5 of   5 in __main__.number_operations
+***Test Failed*** 5 failures.
+</code></pre>
+<p>Як це читати:</p>
+<ul>
+<li><code>Enter number:</code> - підказка з твого <code>input</code>. Число прийшло з <code>printf</code>, тому на екрані його нема, і текст
+  програми йде в тому самому рядку - так і має бути;</li>
+<li><code>None</code> - функція ще нічого не повертає (<code>return</code> нема), а <code>print</code> надрукував це «нічого»;</li>
+<li><code>File "/home/evgen/..."</code> - повний шлях до файлу; у тебе замість <code>evgen</code> буде твій логін;</li>
+<li><code>Failed example</code> - який виклик з doctest не пройшов, <code>line 13</code> - де він у файлі;</li>
+<li><code>Expected</code> - що мало бути, <code>Got</code> - що вийшло насправді (<code>Got nothing</code> = функція повернула <code>None</code>);</li>
+<li><code>5 of 5</code> - не пройшли всі 5 прикладів. Твоя мета - щоб цей звіт зник.</li>
+</ul>
+<p>Це і є «спершу тест, потім код» (про це говорив викладач): doctest уже написані, ти дописуєш функцію, доки
+вони не позеленіють.</p>
+<h3 id="крок-6-пиши-малими-кроками">Крок 6. Пиши малими кроками</h3>
+<p>Не пиши всю функцію відразу. Один-два рядки → Ctrl+O, Ctrl+X → запуск → дивишся <code>Got</code>. Наприклад, спершу лише
+сума цифр і <code>return f"... {сума} ..."</code>, потім різниця, потім частка. Щоб швидко глянути проміжне значення,
+можна тимчасово вставити <code>print(...)</code> у функцію і потім прибрати (докладно - Урок 05).</p>
+<p>Коли doctest пройшли всі, програма після свого виводу <strong>нічого більше не пише</strong> - це і є «усе добре».
+Для 127 (приклад з с. 14) має бути рівно так:</p>
+<pre><code class="language-text">Enter number: The sum of digits of the number 127 is 10;
+the absolute value of the difference of the number and reversed number is 594;
+the fraction of the number 127 and the sum of its digits is 12.700.
+</code></pre>
+<p>Переконайся докладно:</p>
+<pre><code class="language-bash">printf &quot;127\n&quot; | python3 lr1_1.py -v | tail -n 3
+</code></pre>
+<pre><code class="language-text">5 tests in 2 items.
+5 passed and 0 failed.
+Test passed.
+</code></pre>
+<p><code>-v</code> показує кожен приклад (<code>Trying ... Expecting ... ok</code>), <code>tail -n 3</code> залишає три останні рядки.</p>
+<h3 id="крок-7-завдання-2-і-3-так-само">Крок 7. Завдання 2 і 3 - так само</h3>
+<pre><code class="language-bash">nano lr1_2.py
+printf &quot;93784\n&quot; | python3 lr1_2.py
+nano lr1_3.py
+printf &quot;534\n1\n3\n2\n3\n5\n2\n10\n&quot; | python3 lr1_3.py
+</code></pre>
+<p>У завданні 3 вісім <code>input()</code>, тому <code>printf</code> подає вісім чисел, кожне з <code>\n</code> (ціна, потім кількість 500, 100,
+50, 20, 10, 5, 1 - як у прикладі 1 на с. 19).</p>
+<h3 id="крок-8-за-бажанням-git-зберігай-кожне-готове-завдання">Крок 8 (за бажанням). git: зберігай кожне готове завдання</h3>
+<p>git - це «знімки» твоїх файлів: якщо завтра зіпсуєш код, повернешся до вчорашнього. Докладно - Урок 24.
+git на свіжій Mint ще нема - його ставить урок 03 (крок 0) або <code>ustanovka-mint.sh</code>. Спершу один раз скажи git, хто
+ти - дві команди, у лапках <strong>своє</strong> імʼя і пошту (це шаблон, тому не в блоці <code>bash</code>). Без цього <code>git commit</code>
+зупиниться з <code>Author identity unknown</code>:</p>
+<pre><code class="language-text">git config --global user.name &quot;Твоє Імʼя Прізвище&quot;
+git config --global user.email &quot;твоя@пошта&quot;
+</code></pre>
+<p>Перевір: <code>git config --global user.name</code> друкує твоє імʼя.</p>
+<p>Потім один раз на всі лаби:</p>
+<pre><code class="language-bash">cd ~/univer/labs
+git init
+printf '.mypy_cache/\n.ruff_cache/\n.pytest_cache/\n__pycache__/\n' &gt; .gitignore
+</code></pre>
+<p>Після кожного готового завдання:</p>
+<pre><code class="language-bash">cd ~/univer/labs
+git add .gitignore lr1/lr1_1.py
+git commit -m &quot;ЛР1: завдання 1&quot;
+git log --oneline
+</code></pre>
+<h2 id="підказки-до-завдань-без-розвʼязку">Підказки до завдань (без розвʼязку)</h2>
+<p>Список функцій і операторів з поясненнями - <code>Курс/ДОВІДНИК-ФУНКЦІЙ.md</code> (тека курсу Python на ПК): розділи
+<code>// (ціле ділення)</code>, <code>% (остача від ділення)</code>, <code>abs()</code>, <code>min()</code>, <code>max()</code>, <code>round()</code>, <code>f-рядок</code>,
+<code>рядок * число (множення на умову)</code>. Пояснення до лекцій 1-4 - курс Python (тека <code>Курс/</code>), уроки 01-03 (урок 02 -
+форматування і функції, урок 03 - логіка).</p>
+<p><strong>Завдання 1.</strong></p>
+<ul>
+<li>Ідея: цифри дістають арифметикою, без перетворення на рядок. Остання цифра - <code>% 10</code>, число без останньої
+  цифри - <code>// 10</code> (с. 3). Подумай, як з цих двох дій дістати середню цифру.</li>
+<li>«Навпаки» - це нове число з тих самих цифр: кожна цифра множиться на свій розряд (100, 10, 1).</li>
+<li>Частка з трьома знаками: формат <code>:.3f</code> у f-рядку (с. 4), а не <code>round</code> (див. «Передбач», пункт 2).</li>
+<li>Повідомлення без <code>if</code>: на с. 7-8 є прийом «рядок помножити на 0 або 1». Перевір <strong>обидва</strong> повідомлення і
+  звичайний результат - кожен має зʼявлятися рівно тоді, коли треба.</li>
+<li>Без <code>if</code> Python рахує всі частини виразу, навіть для «поганого» числа. Перевір руками <code>printf "0\n"</code>: якщо
+  падає <code>ZeroDivisionError</code>, згадай, як <code>max()</code> (с. 5) не дає величині опуститися нижче межі.</li>
+</ul>
+<p>Схожа задача (інша!): сума першої і останньої цифри чотиризначного року.</p>
+<pre><code class="language-python">year = 2026
+first_digit = year // 1000
+last_digit = year % 10
+print(first_digit + last_digit)  # 8
+</code></pre>
+<p><strong>Завдання 2.</strong></p>
+<ul>
+<li>Ідея: «послідовне вилучення частин» (с. 3): спершу скільки цілих діб, потім те, що лишилось, на години, і т. д.
+  Порядок двох рядків важливий: спочатку <code>//</code>, потім <code>%</code>.</li>
+<li>Дві цифри з нулем попереду - формат <code>:02d</code> (с. 4: <code>f"{7:02d}"</code> дає <code>07</code>).</li>
+</ul>
+<p>Схожа задача (інша!): грами → кілограми і грами.</p>
+<pre><code class="language-python">grams = 2345
+kilograms = grams // 1000
+rest_grams = grams % 1000
+print(f&quot;{kilograms} kg {rest_grams:03d} g&quot;)  # 2 kg 345 g
+</code></pre>
+<p><strong>Завдання 3.</strong></p>
+<ul>
+<li>Ідея - прийом <code>min()</code> з с. 5 методички (<code>quantity = min(available, required)</code>): з двох чисел береш менше.
+  Подумай, що тут «є» і що «потрібно», і що відбувається із залишком після кожного номіналу.</li>
+<li>Цикл і список тут заборонені - як тоді обійти всі номінали, вирішуєш сам.</li>
+<li>Імена змінних - як у викладача: зрозумілі англійські слова (<code>used_500</code>, <code>remaining_amount</code>), не <code>a</code>, <code>b</code>, <code>x1</code>.</li>
+</ul>
+<p>Схожа задача (інша!): розкласти яйця в коробки по 12, коробок лише 2.</p>
+<pre><code class="language-python">eggs = 40
+boxes_12 = 2
+used_12 = min(eggs // 12, boxes_12)
+eggs = eggs - used_12 * 12
+print(used_12, eggs)  # 2 16
+</code></pre>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p>Спершу скажи (або запиши) відповідь, потім запусти рядок у терміналі.</p>
+<ol>
+<li>Скільки буде остача і ціла частка для відʼємного числа?</li>
+</ol>
+<pre><code class="language-bash">python3 -c 'print(-124 % 10, -124 // 100)'
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">6 -2
+</code></pre>
+<p>Не <code>4</code> і не <code>-1</code>: у Python <code>//</code> округлює вниз (до мінус нескінченності), а <code>%</code> має знак дільника.
+Тому з відʼємним числом «цифри» виходять дивні - ось чому завдання 1 спершу перевіряє, чи число додатне.</p>
+</details>
+<ol start="2">
+<li><code>round</code> чи формат?</li>
+</ol>
+<pre><code class="language-bash">python3 -c 'print(round(44.0, 3), f&quot;{44.0:.3f}&quot;)'
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">44.0 44.000
+</code></pre>
+<p><code>round</code> змінює число, а нулі в кінці число не зберігає. Формат <code>:.3f</code> керує тим, як число <strong>показати</strong> -
+три знаки завжди. Doctest для 792 чекає <code>44.000</code>.</p>
+</details>
+<ol start="3">
+<li>Що дасть рядок, помножений на умову?</li>
+</ol>
+<pre><code class="language-bash">python3 -c 'print(repr(&quot;Correct&quot; * (7 &gt; 3)), repr(&quot;Correct&quot; * (7 &lt; 3)))'
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">'Correct' ''
+</code></pre>
+<p><code>True</code> поводиться як 1, <code>False</code> як 0. Рядок × 1 = той самий рядок, рядок × 0 = порожній рядок. Це прийом
+з с. 7-8 замість <code>if</code>.</p>
+</details>
+<ol start="4">
+<li>Що виведе програма, якщо ввести 5?</li>
+</ol>
+<pre><code class="language-bash">printf &quot;5\n&quot; | python3 -c 'x = input(&quot;x = &quot;); print(x * 3)'
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">x = 555
+</code></pre>
+<p><code>input</code> завжди повертає рядок. <code>"5" * 3</code> - це рядок, повторений тричі, а не 15. Тому <code>int(input(...))</code>.</p>
+</details>
+<ol start="5">
+<li>Чому в doctest <code>\n</code>, а на екрані перенос рядка?</li>
+</ol>
+<pre><code class="language-bash">python3 -c 'print(repr(&quot;a\nb&quot;)); print(&quot;a\nb&quot;)'
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">'a\nb'
+a
+b
+</code></pre>
+<p>Doctest показує результат функції так, як його показує інтерактивний Python - через <code>repr</code>: у лапках і з <code>\n</code>.
+<code>print</code> друкує той самий рядок «по-людськи». Тому твоя функція повертає рядок з <code>\n</code>, а doctest порівнює
+його <code>repr</code>.</p>
+</details>
+<h2 id="типові-помилки">Типові помилки</h2>
+<p>Кожен текст нижче - справжній вивід Python 3.12 у Mint 22.3.</p>
+<p><strong>1. Запустив заготовку до того, як написав введення.</strong></p>
+<pre><code class="language-text">NameError: name 'number' is not defined
+</code></pre>
+<p>Допиши рядок з <code>input</code> перед викликом функції.</p>
+<p><strong>2. Функція ще нічого не повертає.</strong> <code>Got nothing</code>, на екрані <code>None</code>, <code>***Test Failed*** 5 failures.</code>
+mypy каже те саме ще до запуску:</p>
+<pre><code class="language-text">lr1_1.py:4: error: Missing return statement  [empty-body]
+</code></pre>
+<p>Це не помилка, а старт: допиши код і <code>return</code>.</p>
+<p><strong>3. Tab у nano.</strong> Рядок з табуляцією серед рядків з пробілами:</p>
+<pre><code class="language-text">TabError: inconsistent use of tabs and spaces in indentation
+</code></pre>
+<p>Виправ: налаштуй <code>nano</code> (Крок 0), у зламаному рядку видали відступ і набери його заново.</p>
+<p><strong>4. Забув <code>int(...)</code> навколо <code>input</code>.</strong> Помилки може й не бути - лише неправильна відповідь (див. «Передбач» 4).
+Приклад на іншій функції: <code>double(n)</code> повертає <code>n * 2</code>, а в неї передали рядок з <code>input</code>.
+Ввів 5 - програма надрукує <code>55</code> замість <code>10</code>. mypy ловить це до запуску:</p>
+<pre><code class="language-text">s.py:6: error: Argument 1 to &quot;double&quot; has incompatible type &quot;str&quot;; expected &quot;int&quot;  [arg-type]
+</code></pre>
+<p><strong>5. <code>print</code> замість <code>return</code> у функції.</strong> Приклад на іншій функції <code>mass_text(2345)</code>:</p>
+<pre><code class="language-text">Failed example:
+    mass_text(2345)
+Expected:
+    '2 kg 345 g'
+Got:
+    2 kg 345 g
+</code></pre>
+<p>Різниця лише в лапках: <code>Expected</code> у лапках = функція має <strong>повернути</strong> рядок; <code>Got</code> без лапок = вона його
+надрукувала. Заміни <code>print(...)</code> на <code>return ...</code>.</p>
+<p><strong>6. Натиснув Enter без числа або ввів дріб.</strong></p>
+<pre><code class="language-text">ValueError: invalid literal for int() with base 10: ''
+ValueError: invalid literal for int() with base 10: '12.5'
+</code></pre>
+<p><strong>7. <code>printf</code> дав менше чисел, ніж просить програма</strong> (у завданні 3 треба вісім):</p>
+<pre><code class="language-text">EOFError: EOF when reading a line
+</code></pre>
+<p><strong>8. Відʼємне число в <code>printf</code>.</strong> Хочеш перевірити <code>-124</code> і пишеш <code>printf "-124\n"</code> - bash думає, що <code>-124</code> -
+це опції самого <code>printf</code> (bash показує першу «опцію» <code>-1</code>). Справжній вивід у терміналі:</p>
+<pre><code class="language-text">bash: printf: -1: invalid option
+printf: usage: printf [-v var] format [arguments]
+</code></pre>
+<p>На українській Mint (це повідомлення bash, не Python):</p>
+<pre><code class="language-text">bash: printf: -1: неправильний параметр
+printf: використовуйте: printf [-v змінна] шаблон-форматування [аргументи]
+</code></pre>
+<p>Дві риски <code>--</code> кажуть «опції скінчились, далі текст»:</p>
+<pre><code class="language-bash">printf -- &quot;-124\n&quot; | python3 lr1_1.py
+</code></pre>
+<p><strong>8а. Файлу нема там, куди копіюєш з</strong> (Крок 2):</p>
+<pre><code class="language-text">cp: cannot stat '/home/evgen/Завантаження/Telegram Desktop/Лабораторна_робота_1_Пайтон,_2026_2027.ipynb': No such file or directory
+</code></pre>
+<p>укр.: <code>cp: не вдалося виконати stat для '...': Немає такого файла або каталогу</code>. Файл в іншій теці (наприклад,
+просто в <code>~/Завантаження</code>) - знайди <code>find ~ -name "Лабораторна_робота_1*"</code>. А без лапок навколо <code>Telegram Desktop</code>
+буде дві помилки: <code>cp: cannot stat '/home/evgen/Завантаження/Telegram': No such file or directory</code> і ще одна для
+<code>Desktop/...</code> - лапки обовʼязкові.</p>
+<p><strong>9. Ділення на нуль для «поганого» числа</strong> (без <code>if</code> рахується все, див. підказки до завдання 1):</p>
+<pre><code class="language-text">ZeroDivisionError: division by zero
+</code></pre>
+<p><strong>10. Перевірив командою з методички <code>python -m doctest файл.py</code> - і бачиш чужу помилку.</strong> Методичка
+(с. 6, 9-10) радить <code>python -m doctest program.py -v</code>. З заготовкою, де <code>doctest.testmod()</code> стоїть просто внизу
+файлу, це завжди дає зайвий провал - навіть для правильного коду:</p>
+<pre><code class="language-text">File &quot;/usr/lib/python3.12/doctest.py&quot;, line 1862, in __main__.DebugRunner
+...
+1 items had failures:
+   1 of  21 in __main__.DebugRunner
+***Test Failed*** 1 failures.
+</code></pre>
+<p><code>DebugRunner</code> - це частина самого модуля <code>doctest</code>, не твій код. Під час <code>python -m doctest</code> «головним»
+модулем стає сам <code>doctest</code>, і рядок <code>doctest.testmod()</code> у твоєму файлі тестує його, а не тебе. Не лякайся і
+не правь код через це: перевіряй командами з Кроку 6 і розділу «Перевір перед здачею».</p>
+<p><strong>11. pytest і <code>input()</code>.</strong></p>
+<pre><code class="language-text">E   OSError: pytest: reading from stdin while output is captured!  Consider using `-s`.
+</code></pre>
+<p>pytest під час імпорту файлу дійшов до <code>input()</code>, а введення закрите. Додай <code>-s</code> і подай число через <code>printf</code>
+(команда - у «Перевір перед здачею»). І памʼятай: <code>python3 lr1_1.py</code> повертає код виходу 0 навіть тоді, коли
+doctest провалились. Чесний код виходу (0 - добре, 1 - є провали) дає лише pytest.</p>
+<p><strong>12. flake8 лається на довгі рядки doctest.</strong> Рядки з очікуваним результатом у doctest викладача довші за 78
+символів (<code>E501 line too long (198 &gt; 78 characters)</code>), а міняти їх не можна. Це не твоя помилка - покажи
+викладачу, якщо спитає. Усі <strong>інші</strong> зауваження flake8 мають зникнути.</p>
+<p><strong>13. black без <code>-l 78</code>.</strong> black за замовчуванням робить рядки до 88 символів, а викладач хоче до 78 - тоді
+flake8 знайде <code>E501</code> уже в <strong>твоєму</strong> коді. Запускай <code>python3 -m black -l 78 файл.py</code>.</p>
+<h2 id="коли-помиляється-doctest-викладача">Коли помиляється doctest викладача</h2>
+<p>Викладачі просили: знайдеш помилку в doctest - надішли їм список. Як відрізнити «у мене баг» від «у doctest
+помилка»: <strong>перерахуй <code>Expected</code> руками</strong>. Якщо очікуваний результат суперечить самій умові - це doctest.</p>
+<p><strong>Завдання 3, приклади 2 і 3.</strong> Код, що чесно робить «від найбільшого номіналу, <code>min()</code> на кожному кроці»,
+проходить приклади 1 і 4 і падає на 2 і 3:</p>
+<pre><code class="language-text">4 tests in 2 items.
+2 passed and 2 failed.
+***Test Failed*** 2 failures.
+</code></pre>
+<p>Перевір арифметикою сам <code>Expected</code> з doctest:</p>
+<pre><code class="language-text">Приклад 2: ціна 1245, Expected: 500×2 + 100×2 + 50×1 + 20×2 + 10×0 + 5×1 + 1×0
+         = 1000 + 200 + 50 + 40 + 0 + 5 + 0 = 1295 грн  &gt; 1245, а залишок 0?
+         Узяли на 50 грн більше, ніж треба. Умова: «не перевищує суму, яку ще треба сплатити».
+
+Приклад 3: ціна 137, Expected: 50×2 + 20×1 + 10×1 + 5×0 + 1×2 = 132 грн,
+         137 - 132 = 5, а Expected каже «Remaining amount: 0 UAH.»
+</code></pre>
+<p>Якщо у твоєму <code>Got</code> для прикладу 2 стоїть <code>50: 0 banknotes</code>, а для прикладу 3 - <code>Remaining amount: 5 UAH.</code>,
+а всі інші приклади проходять - код правильний, помилка в doctest. Не підганяй код під помилковий doctest і
+не міняй doctest сам: напиши викладачу ці два розрахунки.</p>
+<p><strong>Файл <code>lab1_doctests.py</code> з чату, завдання 1</strong> (його краще не брати, Крок 3):</p>
+<ul>
+<li>рядок з <code>return</code> - недописана чернетка, файл не запускається:</li>
+</ul>
+<pre><code class="language-text">SyntaxError: f-string: valid expression required before '}'
+</code></pre>
+<ul>
+<li>doctest для 124 і 792 розірвані через <code>\</code> на два рядки. Навіть з правильним кодом doctest падає:</li>
+</ul>
+<pre><code class="language-text">ValueError: line 11 of the docstring for __main__.number_operations has inconsistent leading whitespace: &quot;the fraction of the number 124 and the sum of its digits is 17.714.'&quot;
+</code></pre>
+<p>У <code>.ipynb</code> і PDF ці doctest цілі, в один рядок - тому заготовки беремо звідти.</p>
+<p><strong>Дрібниці в заготовках:</strong> у завданнях 1 і 2 виклик функції без <code>print</code> (нічого не виводиться); рядки doctest
+довші за 78 символів (п. 12 вище); у docstring завдання 1 «порожні» рядки з пробілами (flake8 <code>W293</code>) - їх
+прибирає black, doctest від цього не змінюються.</p>
+<h2 id="перевір-перед-здачею">Перевір перед здачею</h2>
+<p>Для кожного файлу - той самий набір. Приклад для <code>lr1_1.py</code>:</p>
+<pre><code class="language-bash">cd ~/univer/labs/lr1
+source ~/univer/.venv/bin/activate
+printf &quot;127\n&quot; | python3 lr1_1.py -v | tail -n 3
+printf &quot;127\n&quot; | python3 -m pytest --doctest-modules -q -s lr1_1.py
+python3 -m black -l 78 lr1_1.py
+python3 -m flake8 --max-line-length=78 lr1_1.py
+python3 -m pycodestyle --max-line-length=78 lr1_1.py
+python3 -m ruff check lr1_1.py
+python3 -m mypy lr1_1.py
+</code></pre>
+<p>Що має бути (вивід з тестової Mint 22.3, на правильному коді):</p>
+<pre><code class="language-text">5 passed and 0 failed.
+Test passed.
+...
+1 passed in 0.02s
+...
+reformatted lr1_1.py
+...
+lr1_1.py:14:79: E501 line too long (198 &gt; 78 characters)
+lr1_1.py:17:79: E501 line too long (199 &gt; 78 characters)
+lr1_1.py:26:79: E501 line too long (198 &gt; 78 characters)
+...
+All checks passed!
+Success: no issues found in 1 source file
+</code></pre>
+<ul>
+<li><code>1 passed</code> у pytest - весь docstring з усіма прикладами пройшов (pytest рахує docstring як один тест).
+  Час (<code>0.02s</code>) у тебе буде інший;</li>
+<li>black пише <code>reformatted</code>, якщо щось поправив, або <code>1 file left unchanged</code>, якщо нічого;</li>
+<li><code>E501</code> лише в рядках 14, 17, 26 - це doctest викладача (п. 12 «Типових помилок»). У <code>lr1_2.py</code> таких рядків
+  пʼять (12, 15, 18, 21, 24), у <code>lr1_3.py</code> - пʼять (15 - опис функції, 18, 21, 24, 27). Будь-який інший номер
+  рядка - вже твій, виправ;</li>
+<li>pycodestyle показує ті самі <code>E501</code>, ruff - <code>All checks passed!</code>, mypy - <code>Success</code>.</li>
+</ul>
+<p>Для інших файлів зміни лише <code>printf</code>: <code>printf "93784\n"</code> для <code>lr1_2.py</code>, <code>printf "534\n1\n3\n2\n3\n5\n2\n10\n"</code>
+для <code>lr1_3.py</code>. У <code>lr1_3.py</code> pytest покаже <code>1 failed</code> - через два doctest викладача (див. розділ вище); переконайся,
+що падають рівно приклади 2 і 3 з тим самим <code>Got</code>.</p>
+<p>Заборонені конструкції - груба перевірка (команда шукає рядки, які <strong>починаються</strong> з цих слів; коментарі з <code>#</code> не
+рахуються, а <code>if</code> усередині рядка, наприклад <code>x if y else z</code>, вона пропустить - тож це підказка, а не доказ).
+Порожній вивід = добре:</p>
+<pre><code class="language-bash">grep -nE '^\s*(if|elif|else|for|while)\b' lr1_1.py lr1_2.py lr1_3.py
+</code></pre>
+<p>Або все одразу: <code>perevir lr1_1.py 127</code> (скорочення з <code>ustanovka-mint.sh</code>, урок 03): відповіді на <code>input()</code> пишеш
+після назви через пробіл, кожна - окремий рядок вводу (для <code>lr1_3.py</code> - <code>perevir lr1_3.py 534 1 3 2 3 5 2 10</code>).
+Він проганяє doctest (через pytest), black, flake8, pycodestyle, ruff і mypy. black він лише перевіряє
+(<code>black: оформлення ок</code>), а виправляє <code>python3 -m black -l 78 файл.py</code>. Без відповідей perevir скаже
+<code>doctest: файл питає input() при запуску. Дай відповіді після назви: perevir lr1_1.py 5</code>. Ті самі три <code>E501</code> він
+покаже двічі - від flake8 і від pycodestyle.</p>
+<p>Останнє - людське: кожен рядок свого коду ти маєш уміти пояснити (викладач питає). Імена змінних - англійські
+і зрозумілі. Функція повертає рядок через <code>return</code>.</p>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Захист <code>if __name__ == "__main__":</code>.</strong> У звичайних проєктах введення і <code>doctest.testmod()</code> ховають під
+  цю перевірку - тоді файл можна імпортувати (pytest, інші модулі) без запитання <code>input()</code>. Викладач сам показує
+  це на с. 10 (приклад з <code>%%writefile</code>). Але в ЛР1 <code>if</code> заборонений, тому лишай заготовку як є; у наступних лабах
+  можна спитати викладача. https://docs.python.org/3/library/<strong>main</strong>.html</li>
+<li><strong>pytest як «суддя».</strong> <code>pytest --doctest-modules</code> збирає doctest з усіх файлів і дає код виходу, який
+  розуміють скрипти й GitHub Actions. https://docs.pytest.org/en/stable/how-to/doctest.html</li>
+<li><strong>ruff замість купи інструментів.</strong> <code>ruff check</code> замінює flake8 і частину pylint, а <code>ruff format</code> задуманий
+  як «drop-in replacement for Black» (так пише документація ruff). Викладач поки хоче всі пʼять інструментів -
+  жени всі. https://docs.astral.sh/ruff/formatter/</li>
+<li><strong>Типи + mypy.</strong> Анотації (<code>number: int</code>, <code>-&gt; str</code>) і mypy ловлять половину дурних помилок до запуску
+  (п. 4 «Типових помилок»). https://mypy.readthedocs.io/en/stable/</li>
+<li><strong>Маленькі коміти.</strong> Одне завдання = один коміт з людським повідомленням. Урок 24 - як вивантажити на GitHub.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Чому <code>python3 lr1_1.py</code> не годиться як єдина перевірка перед здачею, і яка команда дає чесний код виходу?</li>
+<li>Що означають <code>Expected</code>, <code>Got</code> і <code>Got nothing</code> у звіті doctest?</li>
+<li>Чому <code>python -m doctest lr1_1.py</code> показує провал у <code>__main__.DebugRunner</code>, хоча код правильний?</li>
+<li>Як без <code>if</code> повернути <code>Number must be positive</code> лише для недодатного числа?</li>
+<li>Як переконатися, що doctest у завданні 3 помилковий, а не твій код?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Він мовчить, коли все добре, але й код виходу 0 повертає навіть при провалених doctest - провал легко
+   пропустити. Чесний код виходу дає <code>printf "127\n" | python3 -m pytest --doctest-modules -q -s lr1_1.py</code>
+   (0 - пройшли, 1 - є провали); докладний звіт - <code>python3 lr1_1.py -v</code>.</li>
+<li><code>Expected</code> - що написав викладач у doctest, <code>Got</code> - що реально повернула твоя функція. <code>Got nothing</code> - функція
+   повернула <code>None</code> (нема <code>return</code>). Якщо <code>Expected</code> у лапках, а <code>Got</code> без лапок - ти друкуєш замість повертати.</li>
+<li>При <code>python -m doctest</code> головним модулем стає сам <code>doctest</code>, і рядок <code>doctest.testmod()</code> у твоєму файлі тестує
+   його власні приклади, один з яких падає в <code>DebugRunner</code>. Це не твій код.</li>
+<li>Помножити рядок на умову: <code>True</code> = 1, <code>False</code> = 0, тож рядок зʼявляється лише тоді, коли умова істинна
+   (с. 7-8 методички). Решту частин результату так само множать на свої умови і додають.</li>
+<li>Перерахувати <code>Expected</code> руками: скласти номінали × кількість. У прикладі 2 виходить 1295 грн при ціні 1245, у
+   прикладі 3 - 132 грн при «залишку 0» замість 5. Очікуване суперечить умові - отже, помилка в doctest; написати
+   викладачу.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Методичка ЛР1 викладача: <code>Лабораторна_робота_1_Пайтон,_2026_2027.pdf</code> (с. 3 - <code>//</code>, <code>%</code>, вилучення частин;
+  с. 4 - <code>:.3f</code>, <code>:02d</code>; с. 5 - <code>min()</code>, <code>max()</code>; с. 6 і 9-10 - doctest і <code>python -m doctest</code>; с. 7-8 - вибір без
+  <code>if</code>; с. 12 - обмеження; с. 13-22 - завдання і заготовки) і той самий <code>.ipynb</code>, клітинки 3-8. Файли
+  <code>lab1_doctests.py</code> / <code>lab1_doctests.txt</code> з чату 17.11.2026 (однакові).</li>
+<li>Вимоги викладача: <code>05_Програмування/Вимоги викладача (...).md</code> - заборони, імена змінних, 78 символів, інструменти.</li>
+<li>doctest: https://docs.python.org/3/library/doctest.html (відкрито 18.11.2026)</li>
+<li>Вбудовані функції <code>min</code>, <code>max</code>, <code>abs</code>, <code>round</code>, <code>int</code>, <code>input</code>: https://docs.python.org/3/library/functions.html
+  (відкрито 18.11.2026)</li>
+<li><code>__main__</code> і <code>if __name__ == "__main__"</code>: https://docs.python.org/3/library/<strong>main</strong>.html (відкрито 18.11.2026)</li>
+<li>pytest і doctest: https://docs.pytest.org/en/stable/how-to/doctest.html ; захоплення виводу і <code>-s</code>:
+  https://docs.pytest.org/en/stable/how-to/capture-stdout-stderr.html (відкрито 18.11.2026)</li>
+<li>PEP 8: https://peps.python.org/pep-0008/ (відкрито 18.11.2026)</li>
+<li>black: https://black.readthedocs.io/en/stable/ ; ruff: https://docs.astral.sh/ruff/ ; flake8:
+  https://flake8.pycqa.org/en/latest/ ; pycodestyle: https://pycodestyle.pycqa.org/en/latest/ ; mypy:
+  https://mypy.readthedocs.io/en/stable/ (усі відкрито 18.11.2026)</li>
+<li>nano: https://www.nano-editor.org/dist/latest/nano.html (відкрито 18.11.2026); у Mint 22.3 стоїть nano 7.2, опції
+  <code>tabstospaces</code>, <code>tabsize</code>, <code>linenumbers</code>, <code>autoindent</code> описані в <code>/etc/nanorc</code> (перевірено запуском).</li>
+<li>git commit: https://git-scm.com/docs/git-commit (відкрито 18.11.2026)</li>
+<li>Усі виводи в уроці - з тестової Mint 22.3 (python3 3.12.3, pytest 9.2, flake8 7.5, black 26.10, ruff 0.17,
+  mypy 2.4), перевірка <code>_перевірка/u04.sh</code>.</li>
+</ul>

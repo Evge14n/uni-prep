@@ -1,0 +1,66 @@
+<h1 id="тема-1-ввід-користувача">Тема 1. Ввід користувача</h1>
+<div class="pybox" id="pybox"></div>
+
+<p><strong>Що треба з Python:</strong> <code>input()</code> завжди повертає рядок. <code>int("17")</code> дає 17, а <code>int("abc")</code> кидає <code>ValueError</code>.
+<code>try/except</code> ловить помилку. <code>eval(рядок)</code> виконує рядок як код Python.</p>
+<p><strong>Де діра 1: програма падає на будь-якому «неправильному» вводі.</strong> Для сервера це означає, що один
+запит зупиняє обробку.</p>
+<pre><code class="language-python">text = &quot;abc&quot;          # уяви, що це прийшло з input()
+age = int(text)
+print(&quot;Через рік тобі&quot;, age + 1)
+</code></pre>
+<pre><code class="language-text">Traceback (most recent call last):
+  File &quot;&lt;код&gt;&quot;, line 2
+    age = int(text)
+ValueError: invalid literal for int() with base 10: 'abc'
+</code></pre>
+<p><strong>Як правильно:</strong> перевірити і тип, і межі. Не впевнений - повертаєш «нема значення», а не падаєш.</p>
+<pre><code class="language-python">def read_age(text):
+    try:
+        age = int(text)
+    except ValueError:
+        return None          # не число
+    if not 0 &lt;= age &lt;= 130:
+        return None          # число, але неможливе
+    return age
+
+
+for t in [&quot;17&quot;, &quot;abc&quot;, &quot;&quot;, &quot;-5&quot;, &quot;999&quot;, &quot; 18 &quot;]:
+    print(repr(t), &quot;-&gt;&quot;, read_age(t))
+</code></pre>
+<pre><code class="language-text">'17' -&gt; 17
+'abc' -&gt; None
+'' -&gt; None
+'-5' -&gt; None
+'999' -&gt; None
+' 18 ' -&gt; 18
+</code></pre>
+<p>Зверни увагу: <code>int(" 18 ")</code> пробіли по краях прощає, а от <code>int("1 8")</code> - ні. Ще <code>int()</code> приймає
+<code>"+18"</code> і <code>"1_8"</code> (це 18) - тому межі після перетворення перевіряти обовʼязково.</p>
+<p><strong>Де діра 2: <code>eval</code> виконує ввід як код.</strong> Хотів калькулятор, а користувач ввів не число, а імʼя змінної:</p>
+<pre><code class="language-python">secret = &quot;пароль-123&quot;
+user_text = &quot;secret&quot;     # користувач ввів не число
+print(eval(user_text))
+</code></pre>
+<pre><code class="language-text">пароль-123
+</code></pre>
+<p>Програма віддала те, що мала тримати в собі. Так само через <code>eval</code> можна викликати будь-яку функцію,
+навіть видалення файлів. <strong>Правило: ніколи <code>eval(ввід)</code> і <code>exec(ввід)</code>.</strong></p>
+<p><strong>Як правильно:</strong> якщо треба число - <code>int()</code> / <code>float()</code>. Якщо треба список чи словник з тексту -
+спершу <code>json.loads</code>. Якщо саме синтаксис Python - <code>ast.literal_eval</code> (приймає лише літерали: числа, рядки,
+списки, словники), але з лімітом довжини і ловити кілька помилок: на <code>"1+"</code> він кидає <code>SyntaxError</code>, а не
+<code>ValueError</code>, а на дуже глибоких дужках може закінчитись памʼять.</p>
+<pre><code class="language-python">import ast
+
+print(ast.literal_eval(&quot;[1, 2, 3]&quot;))
+try:
+    ast.literal_eval(&quot;secret&quot;)
+except (ValueError, SyntaxError) as e:
+    print(&quot;відмова:&quot;, type(e).__name__)
+</code></pre>
+<pre><code class="language-text">[1, 2, 3]
+відмова: ValueError
+</code></pre>
+<p><strong>Типова помилка:</strong> перевіряти ввід лише в браузері (JavaScript-форма). Запит можна надіслати й без форми,
+тому перевірка завжди на сервері, у Python.</p>
+<p>OWASP: A05 Injection (eval - це інʼєкція коду, CWE-95).</p>

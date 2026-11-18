@@ -1,0 +1,38 @@
+<h1 id="тема-4-списки-цикли-ліміти">Тема 4. Списки, цикли, ліміти</h1>
+<div class="pybox" id="pybox"></div>
+
+<p><strong>Що треба з Python:</strong> <code>len()</code>, <code>split()</code>, цикл <code>for</code>. Памʼять і час компʼютера скінченні.</p>
+<p><strong>Де діра:</strong> цикл чи список по вводу без обмеження. Хтось надішле рядок на 100 МБ або мільйон чисел -
+програма зʼїсть памʼять і процесор, і сервіс перестане відповідати всім. Це відмова в обслуговуванні (DoS).</p>
+<p><strong>Як правильно:</strong> межа на вході, ДО будь-якої роботи.</p>
+<pre><code class="language-python">MAX_TEXT = 1000
+MAX_ITEMS = 100
+
+
+def parse_numbers(text):
+    if len(text) &gt; MAX_TEXT:
+        raise ValueError(&quot;задовгий ввід&quot;)
+    parts = text.split(&quot;,&quot;)
+    if len(parts) &gt; MAX_ITEMS:
+        raise ValueError(&quot;забагато чисел&quot;)
+    return [int(p) for p in parts]
+
+
+print(parse_numbers(&quot;1,2,3&quot;))
+for t in [&quot;1,&quot; * 199 + &quot;1&quot;, &quot;9&quot; * 5000]:
+    try:
+        parse_numbers(t)
+    except ValueError as e:
+        print(len(t), &quot;символів -&gt;&quot;, e)
+</code></pre>
+<pre><code class="language-text">[1, 2, 3]
+399 символів -&gt; забагато чисел
+5000 символів -&gt; задовгий ввід
+</code></pre>
+<p>Інші місця, де потрібна межа: розмір файлу, який завантажують; кількість спроб входу (інакше перебір
+паролів); глибина рекурсії; регулярні вирази з вкладеними <code>(a+)+</code> на довгому вводі (можуть працювати
+дуже довго, це називають ReDoS).</p>
+<p><strong>Типова помилка:</strong> перевірити довжину ПІСЛЯ того, як усе вже прочитав і розібрав. Межа має стояти
+до роботи.</p>
+<p>OWASP: окремої категорії в Top 10:2025 для цього нема (CWE-400 «неконтрольоване споживання ресурсів» і CWE-770
+«ресурси без ліміту» не значаться в жодній з 10). Але це класична відмова в обслуговуванні - ліміт ставлять завжди.</p>

@@ -1,0 +1,128 @@
+<h1 id="тема-3-день-3-переглянути-і-редагувати-nano-і-vs-code">Тема 3. День 3: Переглянути і редагувати: nano і VS Code</h1>
+<p><strong>Навіщо:</strong> швидко глянути файл, поправити рядок у терміналі, а лаби писати в нормальному редакторі.</p>
+<h3 id="коротко-5-хв">Коротко (5 хв)</h3>
+<p><strong>Подивитись файл:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cat файл</code></td>
+<td>вивести весь файл (для коротких)</td>
+</tr>
+<tr>
+<td><code>less файл</code></td>
+<td>гортати довгий: стрілки, пробіл, <code>/слово</code> - пошук, <code>q</code> - вийти</td>
+</tr>
+<tr>
+<td><code>head -n 20 файл</code></td>
+<td>перші 20 рядків</td>
+</tr>
+<tr>
+<td><code>tail -n 20 файл</code></td>
+<td>останні 20 рядків</td>
+</tr>
+<tr>
+<td><code>wc -l файл</code></td>
+<td>скільки рядків</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>nano - простий редактор у терміналі.</strong> <code>nano файл.py</code> відкриває (або створює) файл.
+Підказки внизу: <code>^</code> - це Ctrl.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Клавіші</th>
+<th>Що</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl+O, Enter</td>
+<td>зберегти (Write Out); Ctrl+S теж зберігає</td>
+</tr>
+<tr>
+<td>Ctrl+X</td>
+<td>вийти (якщо не зберіг - спитає: Y/N)</td>
+</tr>
+<tr>
+<td>Ctrl+W</td>
+<td>пошук</td>
+</tr>
+<tr>
+<td>Ctrl+K / Ctrl+U</td>
+<td>вирізати рядок / вставити</td>
+</tr>
+<tr>
+<td>Alt+U</td>
+<td>скасувати</td>
+</tr>
+<tr>
+<td>Ctrl+_</td>
+<td>перейти до рядка за номером (зручно, коли flake8 каже «рядок 19»)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>VS Code - для лаб.</strong> У теці лаби:</p>
+<pre><code>cd ~/univer/labs/ЛР4
+code .
+</code></pre>
+<p>Відкриється VS Code у режимі WSL (унизу ліворуч зелене «WSL: Ubuntu»). Терміналом усередині VS Code
+(Ctrl+<code>- клавіша ліворуч від 1, або меню Terminal → New Terminal) є Ubuntu. Python-розширення бачить venv: Ctrl+Shift+P →
+«Python: Select Interpreter» →</code>~/univer/.venv/bin/python`.</p>
+<p><strong>Кінці рядків.</strong> Windows закінчує рядок двома символами (CRLF, <code>\r\n</code>), Linux - одним (LF, <code>\n</code>).
+Python усе одно, а bash-скрипт з CRLF ламається: <code>bash: $'\r': command not found</code>.
+Перевірити: <code>file скрипт.sh</code> (буде «with CRLF line terminators»). У VS Code внизу праворуч
+напис <code>CRLF</code> - клікни і вибери <code>LF</code>.</p>
+<h3 id="руками-10-хв">Руками (10 хв)</h3>
+<pre><code>cd ~/univer/praktyka
+nano hello.py
+</code></pre>
+<p>Надрукуй:</p>
+<pre><code class="language-python">name = input(&quot;Як тебе звати? &quot;)
+print(f&quot;Привіт, {name}!&quot;)
+</code></pre>
+<p>Ctrl+O, Enter, Ctrl+X. Далі:</p>
+<pre><code>cat hello.py
+python3 hello.py
+wc -l hello.py          # 2 hello.py
+head -n 1 hello.py
+less ~/.bashrc          # погортай, знайди /univer, вийди q
+tail -n 25 ~/.bashrc    # тут команди univer і perevir
+code .                  # відкрий hello.py у VS Code, допиши рядок, Ctrl+S
+cat hello.py            # бачиш зміну з VS Code
+file hello.py
+</code></pre>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li>Натиснув Ctrl+Z у nano (як «скасувати» у Windows) - нічого не скасувалось, а внизу напис
+  <code>[ To suspend, type ^T^Z ]</code>. Скасувати в nano - Alt+U. (У звичайному терміналі Ctrl+Z призупиняє програму - день 6.)</li>
+<li>Ctrl+S поза nano (просто в терміналі) може «заморозити» вікно - нічого не друкується. Розморозити - Ctrl+Q.</li>
+<li><code>cat</code> на величезний файл засипає екран - для довгих бери <code>less</code>.</li>
+<li>Відкрив <code>code .</code> у <code>/mnt/c/...</code> - VS Code працює, але повільніше. Лаби - у <code>~/univer/labs</code>.</li>
+<li>Редагував файл у Блокноті Windows через <code>\\wsl.localhost\...</code> і він став CRLF. Краще VS Code.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Як зберегти файл і вийти з nano?</li>
+<li>Як подивитись останні 5 рядків файлу <code>log.txt</code>?</li>
+<li>Що означає помилка <code>$'\r': command not found</code> і як виправити?</li>
+<li>Як відкрити поточну теку у VS Code з Ubuntu?</li>
+<li>Чим <code>less</code> кращий за <code>cat</code> для довгого файлу?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Ctrl+O, Enter (зберегти), Ctrl+X (вийти).</li>
+<li><code>tail -n 5 log.txt</code>.</li>
+<li>Файл має кінці рядків Windows (CRLF), bash бачить зайвий символ <code>\r</code>. Виправити: у VS Code
+   переключити <code>CRLF</code> на <code>LF</code> і зберегти, або <code>sed -i 's/\r$//' файл</code>.</li>
+<li><code>code .</code> (крапка - поточна тека).</li>
+<li><code>less</code> показує по екрану, можна гортати назад і шукати <code>/слово</code>; <code>cat</code> вивалює все одразу.</li>
+</ol>
+</details>

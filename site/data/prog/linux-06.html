@@ -1,0 +1,122 @@
+<h1 id="тема-6-день-6-процеси">Тема 6. День 6: Процеси</h1>
+<p><strong>Навіщо:</strong> програма з нескінченним циклом (у лабах буває) - її треба вміти зупинити, а не закривати вікно.</p>
+<h3 id="коротко-5-хв">Коротко (5 хв)</h3>
+<p>Процес = запущена програма. У кожного є номер <strong>PID</strong>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда / клавіші</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl+C</td>
+<td>зупинити програму, що працює зараз у терміналі</td>
+</tr>
+<tr>
+<td>Ctrl+D</td>
+<td>«кінець вводу»: вийти з <code>python3</code> без аргументів, закрити <code>input()</code></td>
+</tr>
+<tr>
+<td>Ctrl+Z</td>
+<td><strong>призупинити</strong> (не зупинити!) і повернути термінал</td>
+</tr>
+<tr>
+<td><code>jobs</code></td>
+<td>що призупинено або працює у фоні в цьому терміналі</td>
+</tr>
+<tr>
+<td><code>fg</code></td>
+<td>повернути призупинене на передній план</td>
+</tr>
+<tr>
+<td><code>bg</code></td>
+<td>продовжити призупинене у фоні</td>
+</tr>
+<tr>
+<td><code>команда &amp;</code></td>
+<td>одразу запустити у фоні</td>
+</tr>
+<tr>
+<td><code>ps</code></td>
+<td>процеси цього терміналу</td>
+</tr>
+<tr>
+<td><code>pgrep -af python</code></td>
+<td>усі процеси python: PID і команда</td>
+</tr>
+<tr>
+<td><code>ps aux \| grep python</code></td>
+<td>те саме по-старому (останній рядок - сам grep, його не чіпай)</td>
+</tr>
+<tr>
+<td><code>top</code> (вийти <code>q</code>) або <code>htop</code></td>
+<td>живий список: хто їсть процесор і память</td>
+</tr>
+<tr>
+<td><code>kill PID</code></td>
+<td>попросити процес завершитись</td>
+</tr>
+<tr>
+<td><code>kill -9 PID</code></td>
+<td>вбити без питань (якщо <code>kill</code> не допоміг)</td>
+</tr>
+<tr>
+<td><code>pkill назва</code></td>
+<td>вбити за назвою програми. Обережно: <code>pkill python</code> вбʼє ВСІ python, і ті, що працюють для VS Code</td>
+</tr>
+<tr>
+<td><code>free -h</code>, <code>df -h</code></td>
+<td>скільки памʼяті, скільки місця на диску</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Повністю вимкнути Ubuntu</strong> (все зависло): у PowerShell Windows <code>wsl --shutdown</code>.
+Ubuntu також сама вимикається за кілька секунд, коли закриті всі її вікна - тоді все, що в ній працювало, теж зупиняється.</p>
+<h3 id="руками-10-хв">Руками (10 хв)</h3>
+<pre><code>cd ~/univer/praktyka
+printf 'import time\nn = 0\nwhile True:\n    n += 1\n    time.sleep(1)\n    print(n)\n' &gt; forever.py
+cat forever.py
+python3 forever.py       # рахує 1, 2, 3... Натисни Ctrl+C
+                         # KeyboardInterrupt - це нормально, програму зупинено
+python3 forever.py       # знову, а тепер Ctrl+Z
+jobs                     # [1]+ Stopped
+fg                       # знову рахує; Ctrl+C
+python3 forever.py &gt; /dev/null &amp;     # у фоні, вивід викидаємо
+jobs
+pgrep -af forever        # PID і команда
+kill %1                  # %1 - номер у jobs (або kill PID з pgrep)
+jobs                     # Terminated
+top                      # подивись, q - вийти
+free -h
+df -h ~
+</code></pre>
+<h3 id="типові-помилки">Типові помилки</h3>
+<ul>
+<li>Ctrl+Z замість Ctrl+C - програма «зникла», але висить у памʼяті. <code>jobs</code> покаже. Потім <code>fg</code> і Ctrl+C.</li>
+<li>Закривати вікно хрестиком, щоб зупинити програму. Працює, але втрачаєш усе в терміналі.</li>
+<li><code>kill -9</code> одразу. Спершу звичайний <code>kill</code>: програма встигне закрити файли.</li>
+<li>Програма чекає <code>input()</code>, а тобі здається, що вона зависла. Курсор блимає на порожньому рядку -
+  вона чекає вводу. Введи значення або Ctrl+D.</li>
+<li>Ctrl+C у вікні терміналу без виділеного тексту - не «копіювати», а «зупинити». Як копіювати - день 1.</li>
+</ul>
+<h3 id="самоперевірка">Самоперевірка</h3>
+<ol>
+<li>Чим Ctrl+C відрізняється від Ctrl+Z?</li>
+<li>Програма в нескінченному циклі. Як зупинити, не закриваючи вікно?</li>
+<li>Як знайти PID усіх запущених python?</li>
+<li>Що робить <code>&amp;</code> у кінці команди?</li>
+<li>Коли потрібен <code>wsl --shutdown</code>?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Ctrl+C зупиняє програму (Python кидає KeyboardInterrupt). Ctrl+Z лише призупиняє: програма жива,
+   її можна повернути <code>fg</code>.</li>
+<li>Ctrl+C. Якщо не реагує - в іншому вікні <code>pgrep -af python</code> і <code>kill PID</code> (у крайньому разі <code>kill -9 PID</code>).</li>
+<li><code>pgrep -af python</code> (перше число в рядку - PID). Або <code>ps aux | grep python</code> (друга колонка; рядок з самим grep пропусти).</li>
+<li>Запускає команду у фоні, термінал одразу вільний.</li>
+<li>Коли зависла вся Ubuntu (не відповідає жодне вікно) або після зміни налаштувань WSL. Виконується в PowerShell Windows.</li>
+</ol>
+</details>

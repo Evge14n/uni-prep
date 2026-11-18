@@ -1,0 +1,439 @@
+<h1 id="урок-12-лр7-у-терміналі">Урок 12. ЛР7 у терміналі</h1>
+<p><a href="#/u/prog/mint">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> у ЛР7 готового файлу з тестами нема - викладач вимагає, щоб ти сам розбив задачу на функції, написав
+заготовки з <code>raise NotImplementedError</code> і щонайменше 5 doctest-ів до кожної, а вже потім код. Тут - як робити це в
+терміналі по кроках і де в ЛР7 найчастіше ламається.</p>
+<h2 id="коротко">Коротко</h2>
+<p>Правила ЛР7 (с. 3-4) - це <strong>розробка через тести</strong> (test-driven): спершу опис і тести, потім код.</p>
+<pre><code class="language-text">1. Коментар на початку файлу: список функцій і що кожна робить
+2. Заготовка кожної функції: сигнатура з типами + докстрінг + raise NotImplementedError
+3. Щонайменше 5 doctest у кожній: типові і граничні випадки (порожній вхід, мінімум, вироджене)
+4. python3 -m doctest файл.py  → усі тести падають з NotImplementedError  (це нормально!)
+5. Пишеш тіло однієї функції → її тести зеленіють → наступна
+</code></pre>
+<p><strong><code>NotImplementedError</code></strong> - вбудований виняток «ще не написано». <code>raise</code> - інструкція «кинути виняток». Заготовка з ним
+одразу запускається, але кожен виклик чесно каже, що функції ще нема.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що</th>
+<th>Команда</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>запустити тести, побачити лише провали</td>
+<td><code>python3 -m doctest lr7_1.py</code></td>
+</tr>
+<tr>
+<td>підсумок</td>
+<td><code>python3 -m doctest -v lr7_1.py \| tail -n 3</code></td>
+</tr>
+<tr>
+<td>скільки рядків <code>&gt;&gt;&gt;</code> у файлі</td>
+<td><code>grep -c "&gt;&gt;&gt;" lr7_1.py</code></td>
+</tr>
+<tr>
+<td>чи не лишилось заготовок</td>
+<td><code>grep -n NotImplementedError lr7_*.py</code></td>
+</tr>
+<tr>
+<td>подати ввід без набору</td>
+<td><code>printf '130\n' \| python3 lr7_1.py</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Один файл - одне завдання: <code>lr7_1.py</code>, <code>lr7_2.py</code>, <code>lr7_3.py</code>.</p>
+<h2 id="умова-коротко">Умова коротко</h2>
+<p>Файл: <code>Лабораторна робота 7 (Пайтон).pdf</code>, 8 с. Теорія - с. 1-3: решето і зрізи <code>del lst[s-1::s]</code> (с. 1), вектори,
+скалярний, векторний і мішаний добутки (с. 1-2), прямокутний трикутник, паралелограм і прямокутник (с. 2),
+<code>itertools.combinations</code> (с. 3), вирівнювання f-рядками (с. 3), сідлові точки і добуток матриць (с. 3).
+Правила для кожного завдання - с. 3-4 (з прикладом заготовки <code>digit_sum</code>).</p>
+<ul>
+<li><strong>Завдання 1 (с. 4-5). Щасливі числа.</strong> Решето: з непарних чисел викреслюється кожне 3-тє, потім кожне 7-ме і т.д.
+  Ввести N, повернути всі щасливі числа, менші за N. Вивід: по 5 у рядку, між рядками порожній рядок, вирівнювання
+  праворуч, ширина стовпчика = кількість цифр N, між стовпчиками два пробіли. Приклад для N = 130 - с. 5.</li>
+<li><strong>Завдання 2 (с. 5-7). Точки в просторі.</strong> Найдальша пара і відстань; кількість вироджених трійок (на одній прямій);
+  прямокутні трикутники з вершиною прямого кута; плоскі прямокутники (площа, периметр, найбільший). Перебір -
+  лише <code>itertools.combinations</code>. Три режими: а) точки вводяться рядками до порожнього рядка; б) точки за формулами
+  (k, -k², k³) і (-p³, p², -p), відсортовані за відстанню до початку координат; в) дослідження для N = 1 ... 4 з
+  таблицею, прогнозом і графіками. Приклади - с. 6-7.</li>
+<li><strong>Завдання 3 (с. 7-8). Матриці.</strong> Ввести дві матриці, вивести добуток (або повідомлення, що не можна); індекси
+  сідлових точок і «особливих» елементів - для добутку, а якщо його нема, для A. Індекси з нуля. Приклад - с. 8.</li>
+</ul>
+<p>Теорія до ЛР7: списки, зрізи і <code>del</code> - курс Python (тека <code>Курс/</code> на ПК), урок 08; кортежі, генератори і
+<code>itertools</code> - там же, урок 09.</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<p><strong>1.</strong> Зріз з кроком вилучає <strong>позиції</strong>, а не значення. Що надрукує?</p>
+<pre><code class="language-python">letters = list(&quot;abcdefghij&quot;)
+del letters[2::3]
+print(letters)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">['a', 'b', 'd', 'e', 'g', 'h', 'j']
+</code></pre>
+<p><code>[2::3]</code> - позиції 2, 5, 8 (рахуємо з нуля), тобто кожен 3-й елемент, починаючи з третього: <code>c</code>, <code>f</code>, <code>i</code>. Саме так
+на с. 1 описано <code>del lst[s-1::s]</code> - «кожен s-й з позиції s-1».</p>
+</details>
+<p><strong>2.</strong> Вирівнювання праворуч. Що надрукує?</p>
+<pre><code class="language-python">print(&quot;|&quot;.join(f&quot;{number:&gt;4}&quot; for number in [5, 50, 500]))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">   5|  50| 500
+</code></pre>
+<p><code>:&gt;4</code> - ширина 4, притиснути праворуч, зліва пробіли. Ширину можна взяти зі змінної: <code>f"{number:&gt;{width}}"</code> (с. 3).</p>
+</details>
+<p><strong>3.</strong> Що надрукує?</p>
+<pre><code class="language-python">import math
+
+print(0.1 + 0.2 == 0.3, math.isclose(0.1 + 0.2, 0.3))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">False True
+</code></pre>
+<p>float зберігає 0,1 і 0,2 з крихітною похибкою, і сума не точно 0,3. У режимі а) завдання 2 точки можуть бути
+дробовими - тоді «скалярний добуток = 0» перевіряй з допуском (<code>math.isclose(..., 0, abs_tol=1e-9)</code>), а не <code>==</code>.
+У режимі б) координати цілі, і <code>== 0</code> точне.</p>
+</details>
+<p><strong>4.</strong> Скільки трійок з 6 точок і скільки четвірок зі 100?</p>
+<pre><code class="language-python">import itertools
+import math
+
+print(len(list(itertools.combinations(range(6), 3))), math.comb(100, 4))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">20 3921225
+</code></pre>
+<p>C(6, 3) = 20, C(100, 4) = 3 921 225 - майже 4 мільйони (у PDF, с. 3, «близько 3 мільйонів»). Для режиму в) з N = 4
+точок 18, четвірок C(18, 4) = 3060 - це швидко.</p>
+</details>
+<h2 id="крок-за-кроком-у-терміналі">Крок за кроком у терміналі</h2>
+<p><strong>Крок 1. Тека.</strong></p>
+<pre><code class="language-bash">mkdir -p ~/univer/labs/lr7
+cd ~/univer/labs/lr7
+source ~/univer/.venv/bin/activate
+cp ~/Завантаження/&quot;Лабораторна робота 7 (Пайтон).pdf&quot; .
+</code></pre>
+<p>Тека завантажень на англійській Mint - <code>~/Downloads</code>, назву друкує <code>xdg-user-dir DOWNLOAD</code>. Telegram Desktop
+зазвичай кладе файли в підтеку <code>~/Завантаження/Telegram Desktop</code> (на твоєму ноутбуці не перевірено). У її назві
+пробіл, тож теж лапки; не знаєш, де файл, - шукай по всій домашній теці:</p>
+<pre><code class="language-bash">cp ~/Завантаження/&quot;Telegram Desktop&quot;/&quot;Лабораторна робота 7 (Пайтон).pdf&quot; .
+find ~ -name &quot;Лабораторна робота 7*&quot;
+</code></pre>
+<p>Без лапок навколо <code>Telegram Desktop</code> bash розріже шлях на два і <code>cp</code> скаже двічі <code>cannot stat</code> - спершу про
+<code>.../Завантаження/Telegram</code>, потім про <code>Desktop/...</code> (див. «Типові помилки»).</p>
+<p><strong>Крок 2. Спершу - як працює заготовка.</strong> Приклад викладача з с. 4 (сума цифр - не завдання лаби, а зразок форми;
+тут додано порожні рядки для читабельності). Збережи як <code>pryklad_zagotovky.py</code> (<code>nano pryklad_zagotovky.py</code>):</p>
+<pre><code class="language-python">def digit_sum(n: int) -&gt; int:
+    &quot;&quot;&quot;Сума цифр невід'ємного цілого числа n.
+
+    Параметри:
+        n: невід'ємне ціле число.
+    Повертає:
+        сума цифр числа n.
+
+    &gt;&gt;&gt; digit_sum(0)
+    0
+    &gt;&gt;&gt; digit_sum(7)
+    7
+    &gt;&gt;&gt; digit_sum(130)
+    4
+    &gt;&gt;&gt; digit_sum(999)
+    27
+    &gt;&gt;&gt; digit_sum(10**6)
+    1
+    &quot;&quot;&quot;
+    raise NotImplementedError
+</code></pre>
+<pre><code class="language-bash">python3 -m doctest pryklad_zagotovky.py | tail -n 3
+</code></pre>
+<pre><code class="language-text">1 items had failures:
+   5 of   5 in pryklad_zagotovky.digit_sum
+***Test Failed*** 5 failures.
+</code></pre>
+<p>Кожен провал усередині закінчується так - це <strong>очікувано</strong>, функції ще нема:</p>
+<pre><code class="language-text">Exception raised:
+    Traceback (most recent call last):
+    ...
+    NotImplementedError
+</code></pre>
+<p>Коли тіло написане правильно, <code>python3 -m doctest -v pryklad_zagotovky.py | tail -n 4</code> покаже, скільки тестів у функції:</p>
+<pre><code class="language-text">   5 tests in pryklad_zagotovky.digit_sum
+5 tests in 2 items.
+5 passed and 0 failed.
+Test passed.
+</code></pre>
+<p><strong>Крок 3. Твій файл завдання.</strong> <code>nano lr7_1.py</code>. Структура (заглушки <code>...</code> - твоє):</p>
+<pre><code class="language-text"># ЛР7, завдання 1. Щасливі числа.
+# Функції:
+#   parse_limit(text)     - з введеного рядка робить N, перевіряє, що це натуральне число
+#   lucky_numbers(limit)  - список щасливих чисел, менших за limit
+#   format_rows(...)      - рядок для друку: по 5, вирівнювання, порожні рядки
+#   main()                - input(), виклики функцій, print - без doctest
+import doctest
+
+
+def lucky_numbers(limit: int) -&gt; list[int]:
+    &quot;&quot;&quot;Щасливі числа, менші за limit.
+
+    Параметри:
+        limit: натуральне число N.
+    Повертає:
+        список щасливих чисел, менших за limit, за зростанням.
+
+    &gt;&gt;&gt; ...         ← щонайменше 5: N = 1, мале N, приклад з PDF, ...
+    &quot;&quot;&quot;
+    raise NotImplementedError
+
+... інші функції так само ...
+
+
+def main() -&gt; None:
+    ... введення, виклики, друк ...
+
+
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod()
+    main()
+</code></pre>
+<p>Назви функцій тут - лише приклад; декомпозицію вигадуєш сам, але кожна функція - одна задача. Функція, що <strong>друкує</strong>,
+погано тестується doctest-ом; краще хай повертає рядок, а друкує <code>main</code>.</p>
+<p><strong>Як тестувати введення.</strong> Функцію, що сама викликає <code>input()</code>, doctest перевірити не може: під час тесту вона
+чекатиме клавіатуру (pytest без <code>-s</code> падає з <code>reading from stdin while output is captured</code>). Тому ділимо на дві:
+<strong>чиста</strong> функція бере вже введений <strong>рядок</strong> і повертає число або кидає <code>ValueError</code> - її легко покрити 5 doctest-ами;
+а тонка <code>main()</code> лише робить <code>input()</code> і <code>print</code> - у ній нема чого тестувати. Приклад на <strong>іншій</strong> задачі (скільки
+квадратів надрукувати), файл <code>kvadraty.py</code>:</p>
+<pre><code class="language-python">def parse_count(text: str) -&gt; int:
+    &quot;&quot;&quot;Кількість з введеного рядка: ціле число, не менше 1.
+
+    &gt;&gt;&gt; parse_count(&quot;5&quot;)
+    5
+    &gt;&gt;&gt; parse_count(&quot; 12 &quot;)
+    12
+    &gt;&gt;&gt; parse_count(&quot;1&quot;)
+    1
+    &gt;&gt;&gt; parse_count(&quot;0&quot;)
+    Traceback (most recent call last):
+    ...
+    ValueError: потрібно ціле число від 1, а не 0
+    &gt;&gt;&gt; parse_count(&quot;п'ять&quot;)
+    Traceback (most recent call last):
+    ...
+    ValueError: invalid literal for int() with base 10: &quot;п'ять&quot;
+    &quot;&quot;&quot;
+    count = int(text)
+    if count &lt; 1:
+        raise ValueError(f&quot;потрібно ціле число від 1, а не {count}&quot;)
+    return count
+
+
+def main() -&gt; None:
+    count = parse_count(input(&quot;Скільки квадратів? &quot;))
+    for number in range(1, count + 1):
+        print(number, number * number)
+
+
+if __name__ == &quot;__main__&quot;:
+    import doctest
+
+    doctest.testmod()
+    main()
+</code></pre>
+<pre><code class="language-bash">python3 -m doctest -v kvadraty.py | tail -n 3
+printf '3\n' | python3 kvadraty.py
+</code></pre>
+<pre><code class="language-text">5 tests in 3 items.
+5 passed and 0 failed.
+Test passed.
+Скільки квадратів? 1 1
+2 4
+3 9
+</code></pre>
+<p><code>int(" 12 ")</code> сам прибирає пробіли по краях. Виняток у doctest записують так: рядок <code>Traceback (most recent call
+last):</code>, потім <code>...</code> (усе середнє doctest пропускає) і останній рядок помилки дослівно.</p>
+<p><strong>Крок 4. Підказки по завданнях</strong> (розвʼязок твій; функції - «Курс/ДОВІДНИК-ФУНКЦІЙ.md»: <code>range()</code>, <code>sorted()</code>,
+<code>enumerate()</code>, <code>zip()</code>, <code>itertools.combinations()</code>, <code>math.sqrt()</code>, f-рядок, <code>str.join</code>).</p>
+<ul>
+<li><strong>1, решето.</strong> Рекомендації с. 5: список непарних до N, починай з позиції 1 (число 3), крок = число на поточній
+  позиції, вилучай зрізом (Передбач №1), зупинись, коли крок більший за довжину списку. Граничні тести: що має
+  вийти для N = 1 (менших чисел нема), N = 2, N = 4 (1 і 3)? Приклад з PDF для N = 130 перевірено незалежною
+  програмою - він правильний, тож якщо в тебе інакше, шукай у себе.</li>
+<li><strong>1, вивід.</strong> Ширина = <code>len(str(N))</code> (с. 3), «два пробіли між стовпчиками» - це роздільник у <code>join</code>, порожній
+  рядок між рядками чисел - теж роздільник, тільки між рядками.</li>
+<li><strong>2, вектори.</strong> Кортеж не віднімається (<code>(1, 2, 3) - (1, 1, 1)</code> дає <code>TypeError</code>), тож напиши маленькі функції:
+  різниця точок, скалярний добуток, векторний добуток - формули с. 1-2. Далі все складається з них: на одній прямій -
+  векторний добуток нульовий; прямий кут у вершині V - скалярний добуток нуль; чотири точки в одній площині - мішаний
+  добуток нуль; прямокутник - теорія с. 2 (діагоналі навпіл і рівні). Порівнюй <strong>квадрати</strong> відстаней - без кореня.</li>
+<li><strong>2, приклади (с. 6-7) перевірено</strong>: режим б) для n1 = m1 = -1, n2 = m2 = 1 дає 8 вироджених трійок, 4 прямокутні
+  трикутники, 1 прямокутник (S = 5.657, P = 9.657); таблиця для N = 1 ... 4 (точок 6, 10, 14, 18; трикутників 4, 4,
+  8, 8; прямокутників 1, 1, 1, 1) і приклад режиму а) - теж правильні. Порядок точок з однаковою відстанню в
+  прикладі - як у списку до сортування: <code>sorted</code> у Python <strong>стійке</strong>. Стійке сортування - таке, що елементи з
+однаковим ключем (тут - однаковою відстанню) лишаються в тому порядку, в якому були до сортування.</li>
+<li><strong>2, введення до порожнього рядка.</strong> Цикл <code>while True:</code> з <code>line = input()</code> і виходом, коли <code>line</code> порожній. Точка:
+  <code>x, y, z = map(float, line.split())</code> - якщо чисел не три, буде <code>ValueError</code> (нижче).</li>
+<li><strong>3, матриці.</strong> Рядок матриці: <code>[float(value) for value in input().split()]</code>, перевір довжину. Множити можна, коли
+  стовпців A стільки, скільки рядків B (с. 3). Для «зліва всі менші, справа всі більші» зручні зрізи <code>row[:j]</code>,
+  <code>row[j + 1:]</code> і функція <code>all()</code>: для <strong>порожнього</strong> зрізу <code>all()</code> дає <code>True</code> - тому крайні елементи теж можуть бути
+  особливими, як <code>(1, 0)</code> і <code>(1, 2)</code> у прикладі с. 8. Приклад с. 8 перевірено: A·B = [[19, 14], [43, 34]], сідлова
+  точка <code>[(1, 1)]</code>, особливих нема; для матриці [[1, 2, 3], [4, 5, 6]] особливі <code>(1, 0), (1, 1), (1, 2)</code>, сідлова <code>(1, 0)</code>.</li>
+</ul>
+<p><strong>Крок 5. Запуск з вводом без набору.</strong> Вигадай свій інтерфейс (питання програми), а перевіряй через <code>printf</code>:</p>
+<pre><code class="language-bash">printf '130\n' | python3 lr7_1.py
+printf '0 0 0\n3 0 0\n0 4 0\n1 1 1\n\n' | python3 lr7_2.py
+</code></pre>
+<p><code>\n</code> - Enter. У другому рядку в кінці <code>\n\n</code> - останній Enter дає порожній рядок, який зупиняє введення точок
+(якщо в тебе спершу питається режим - додай його першим рядком). Графіки режиму в) - як в уроці 11:
+<code>plt.savefig("grafik.png")</code> і <code>xdg-open grafik.png</code>.</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що бачиш</th>
+<th>Чому</th>
+<th>Що робити</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NotImplementedError</code> у кожному тесті</td>
+<td>функцію ще не написано</td>
+<td>так і має бути до кроку 5</td>
+</tr>
+<tr>
+<td><code>TypeError: unsupported operand type(s) for -: 'tuple' and 'tuple'</code></td>
+<td>віднімаєш точки-кортежі напряму</td>
+<td>своя функція різниці векторів</td>
+</tr>
+<tr>
+<td><code>ValueError: not enough values to unpack (expected 3, got 2)</code></td>
+<td>у рядку точки 2 числа замість 3</td>
+<td>перевір кількість і попроси ввести знову</td>
+</tr>
+<tr>
+<td><code>ValueError: invalid literal for int() with base 10: 'abc'</code></td>
+<td>ввели не число</td>
+<td><code>try</code> / <code>except ValueError</code></td>
+</tr>
+<tr>
+<td><code>EOFError: EOF when reading a line</code></td>
+<td>ввід закінчився без порожнього рядка (<code>printf</code> без <code>\n\n</code>)</td>
+<td>додай порожній рядок у кінці</td>
+</tr>
+<tr>
+<td><code>IndexError: list index out of range</code></td>
+<td>позиція за межами списку (у решеті плутаєш позицію і значення)</td>
+<td>позиції з нуля, значення - число в списку</td>
+</tr>
+<tr>
+<td><code>ValueError: max() iterable argument is empty</code></td>
+<td><code>max</code> по парах, а точок менше двох</td>
+<td>перевір кількість точок перед пошуком</td>
+</tr>
+<tr>
+<td><code>0.1 + 0.2 == 0.3</code> → <code>False</code></td>
+<td>похибка float</td>
+<td><code>math.isclose</code> з <code>abs_tol</code></td>
+</tr>
+<tr>
+<td><code>OSError: pytest: reading from stdin while output is captured!</code></td>
+<td>doctest викликає функцію, що сама робить <code>input()</code></td>
+<td><code>input()</code> - лише в <code>main()</code>, тестуй чисту функцію з рядком (крок 3)</td>
+</tr>
+<tr>
+<td><code>cp: cannot stat '/home/evgen/Завантаження/Лабораторна робота 7 (Пайтон).pdf': No such file or directory</code> (укр. <code>cp: не вдалося виконати stat для '...': Немає такого файла або каталогу</code>)</td>
+<td>файл не в <code>~/Завантаження</code> (часто в <code>Telegram Desktop</code>)</td>
+<td><code>find ~ -name "Лабораторна робота 7*"</code></td>
+</tr>
+<tr>
+<td><code>cp: cannot stat '/home/evgen/Завантаження/Telegram': No such file or directory</code> і <code>cp: cannot stat 'Desktop/...': No such file or directory</code></td>
+<td><code>Telegram Desktop</code> без лапок - bash розрізав шлях на два</td>
+<td><code>~/Завантаження/"Telegram Desktop"/...</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Усі тексти - справжні, з тестової Mint 22.3 (python3 3.12.3). Якщо на іншій версії Python текст трохи інший - суть та
+сама. Python пише англійською завжди; повідомлення самого термінала (<code>cp</code>) на українській Mint - українською, як у
+дужках (<code>/home/evgen</code> у тебе - твій логін).</p>
+<h2 id="перевір-перед-здачею">Перевір перед здачею</h2>
+<p>Ті самі команди, що в уроках 04, 07-11. <code>input()</code> і <code>testmod()</code> у тебе під <code>if __name__</code>, тож <code>printf</code> не потрібен
+(для <code>lr7_2.py</code>, <code>lr7_3.py</code> - так само):</p>
+<pre><code class="language-bash">cd ~/univer/labs/lr7
+source ~/univer/.venv/bin/activate
+python3 -m doctest -v lr7_1.py | tail -n 3
+python3 -m pytest --doctest-modules -q lr7_1.py
+python3 -m black -l 78 lr7_1.py
+python3 -m flake8 --max-line-length=78 lr7_1.py
+python3 -m pycodestyle --max-line-length=78 lr7_1.py
+python3 -m ruff check lr7_1.py
+python3 -m mypy lr7_1.py
+grep -c &quot;&gt;&gt;&gt;&quot; lr7_1.py lr7_2.py lr7_3.py
+grep -n NotImplementedError lr7_1.py lr7_2.py lr7_3.py
+</code></pre>
+<p>Або все одразу: <code>perevir lr7_1.py</code> (скорочення з <code>ustanovka-mint.sh</code>, урок 03; якщо файл питає <code>input()</code> поза
+<code>if __name__</code>, відповіді пишеш після назви через пробіл, кожна - окремий рядок вводу). black він лише перевіряє
+(<code>black: оформлення ок</code>), а виправляє <code>python3 -m black -l 78 файл.py</code>.</p>
+<ul>
+<li>[ ] на початку кожного файлу - коментар зі списком функцій і призначенням;</li>
+<li>[ ] у кожної функції (крім тонкої <code>main</code>) анотації типів, докстрінг з параметрами і результатом, <strong>5+ doctest</strong>, серед них граничні
+  (порожній вхід, N = 1, вироджена трійка, матриці, які не можна перемножити);</li>
+<li>[ ] <code>grep -n NotImplementedError</code> нічого не знайшов - усі заготовки замінені кодом;</li>
+<li>[ ] вивід завдання 1 для N = 130 символ у символ як на с. 5;</li>
+<li>[ ] у завданні 2 перебір лише через <code>itertools.combinations</code>, приклади с. 6-7 збігаються; для режиму в) записаний
+  прогноз <strong>до</strong> запуску, таблиця і графіки з підписами;</li>
+<li>[ ] у завданні 3 програма каже, до якої матриці застосовано пункти б) і в);</li>
+<li>[ ] flake8 мовчить, mypy без помилок, змінні з назвами англійською.</li>
+</ul>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>TDD</strong> (test-driven development) - «червоний → зелений → рефакторинг»: тест падає, мінімальний код, тест
+  проходить, потім чистиш код. Заготовка з <code>NotImplementedError</code> - перший, «червоний» крок.</li>
+<li><strong>Граничні випадки - у тести першими</strong>: порожній вхід, одна точка, однакові точки, нуль. Більшість помилок живе там.</li>
+<li><strong>Перевірка властивостей</strong> (property-based testing, бібліотека Hypothesis): замість 5 прикладів - сотні випадкових,
+  і перевіряється правило, напр. «S прямокутника = добуток сусідніх сторін».</li>
+<li><strong>Обчислення з матрицями і векторами</strong> в науці роблять у NumPy (<code>numpy.cross</code>, <code>numpy.dot</code>, <code>A @ B</code>), але свої
+  функції в ЛР7 - щоб розуміти формули.</li>
+</ul>
+<p>Документація: <code>itertools.combinations</code> - https://docs.python.org/3/library/itertools.html#itertools.combinations ;
+<code>NotImplementedError</code> - https://docs.python.org/3/library/exceptions.html#NotImplementedError</p>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Навіщо писати заготовку з <code>raise NotImplementedError</code> і тести до того, як пишеш код?</li>
+<li>Що робить <code>del lst[2::3]</code> - вилучає числа 2, 5, 8 чи елементи на позиціях 2, 5, 8?</li>
+<li>Як перевірити, що три точки простору лежать на одній прямій, без кутів і коренів?</li>
+<li>Чому в режимі а) завдання 2 не можна перевіряти прямий кут через <code>== 0</code>, а в режимі б) можна?</li>
+<li>Чому крайній елемент рядка може бути «особливим», хоча зліва (чи справа) від нього нічого нема?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>Тести фіксують, що функція має робити, ще до коду; заготовка вже запускається, і видно, що саме не готове.
+   Викладач прямо вимагає так (с. 3-4).</li>
+<li>Елементи на позиціях 2, 5, 8 (з нуля) - зрізи працюють за позиціями, а не за значеннями.</li>
+<li>Векторний добуток векторів AB і AC має бути нульовим вектором (с. 2) - лише множення і віднімання.</li>
+<li>У режимі а) координати можуть бути дробовими, і float дає крихітну похибку; у режимі б) координати цілі, обчислення
+   точні.</li>
+<li>Умова «усі елементи зліва менші» для порожнього набору виконується (у Python <code>all()</code> порожнього - <code>True</code>); приклад
+   с. 8 саме так і рахує <code>(1, 0)</code> і <code>(1, 2)</code>.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Умова: <code>Лабораторна робота 7 (Пайтон).pdf</code> викладача - с. 1-3 теорія (зрізи с. 1, добутки с. 1-2, прямокутник с. 2,
+  <code>combinations</code> і f-рядки с. 3), с. 3-4 правила (заготовки, 5 doctest, приклад <code>digit_sum</code>), с. 4-5 завдання 1
+  (приклад N = 130), с. 5-7 завдання 2 (приклади), с. 7-8 завдання 3 (приклад).</li>
+<li>Python, <code>itertools.combinations</code>: https://docs.python.org/3/library/itertools.html#itertools.combinations (відкрито 18.11.2026)</li>
+<li>Python, вбудовані винятки (<code>NotImplementedError</code>, <code>EOFError</code>): https://docs.python.org/3/library/exceptions.html (відкрито 18.11.2026)</li>
+<li>Python, стійкість <code>sorted</code>: https://docs.python.org/3/howto/sorting.html (відкрито 18.11.2026)</li>
+<li>Python, <code>math.isclose</code>, <code>math.comb</code>: https://docs.python.org/3/library/math.html (відкрито 18.11.2026)</li>
+<li>Python, doctest: https://docs.python.org/3/library/doctest.html (відкрито 18.11.2026)</li>
+<li>Hypothesis: https://hypothesis.readthedocs.io/ (відкрито 18.11.2026)</li>
+<li>Курс Python (тека <code>Курс/</code> на ПК): урок 08 (списки, зрізи), урок 09 (кортежі, генератори);
+  «Курс/ДОВІДНИК-ФУНКЦІЙ.md».</li>
+<li><code>cp: cannot stat</code> - справжній вивід у тестовій Mint 22.3; український текст - з перекладу coreutils (пакет
+  <code>language-pack-uk-base</code>), 18.11.2026.</li>
+<li>Усі виводи - з тестової Linux Mint 22.3 (python3 3.12.3), 18.11.2026.</li>
+</ul>

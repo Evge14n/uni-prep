@@ -50,11 +50,19 @@ function record(unit, q, ok, mode) {
   while (keys.length > 70) delete STORE.d[keys.shift()];
   save(STORE);
 }
+// UPROGONE: розділ з частинами (prog = Python + Mint + Git + безпека + Linux) рахує відповіді всіх частин;
+// ключі відповідей лишились «частина/id» - прогрес не скинуто
+function unitIds(unit) {
+  const u = UNITS.find((x) => x.id === unit);
+  return [unit, ...((u && u.parts) || [])];
+}
+function inUnit(id, ids) { return ids.some((x) => id.startsWith(x + "/")); }
 function unitStats(unit) {
   let r = 0, w = 0, seen = 0, wrongNow = 0, rightNow = 0;
   const topics = {};
+  const ids = unitIds(unit);
   for (const [id, v] of Object.entries(STORE.q)) {
-    if (!id.startsWith(unit + "/") || v.g) continue;
+    if (!inUnit(id, ids) || v.g) continue;
     seen++; r += v.r; w += v.w; if (v.last === 0) wrongNow++; if (v.last === 1) rightNow++;
     const t = topics[v.t] || (topics[v.t] = { r: 0, w: 0 });
     t.r += v.r; t.w += v.w;
@@ -64,8 +72,9 @@ function unitStats(unit) {
 // «знаю сьогодні» / «памʼятаю надовго» по розділу (тестові питання + картки «поясни/виведи»)
 function memStats(unit) {
   let today = 0, long = 0, seen = 0;
+  const ids = unitIds(unit);
   for (const [id, v] of Object.entries(STORE.q)) {
-    if (!id.startsWith(unit + "/")) continue;
+    if (!inUnit(id, ids)) continue;
     seen++;
     if (v.last === 1 && v.lt) long++;
     else if (v.last === 1) today++;
@@ -154,7 +163,7 @@ const IC = {
 const icon = (n, cls = "") => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ""}</svg>`;
 
 // колір предмета
-const SUBJ = { "an-k1": "an", an: "an", "ma-k2": "ma", ma: "ma", mech: "mech", mol: "mol", prog: "prog", zfp: "zfp", hist: "hist", eng: "eng", linux: "prog", git: "prog", "prog-sec": "prog" };
+const SUBJ = { "an-k1": "an", an: "an", "ma-k2": "ma", ma: "ma", mech: "mech", mol: "mol", prog: "prog", zfp: "zfp", hist: "hist", eng: "eng", linux: "prog", git: "prog", "prog-sec": "prog", mint: "prog" };
 const sk = (id) => SUBJ[id] || "an";
 function kindBadge(u) {
   if (u.kind === "colloquium") return '<span class="badge k">Колоквіум</span>';
@@ -165,7 +174,8 @@ function kindBadge(u) {
 // частка питань розділу, на які остання відповідь правильна
 function mastery(u) {
   const s = unitStats(u.id);
-  return u.nq ? Math.min(1, s.rightNow / u.nq) : 0;
+  const nq = u.nqAll || u.nq;
+  return nq ? Math.min(1, s.rightNow / nq) : 0;
 }
 
 // кільце прогресу: SVG; заповнення анімується в animateRings()
@@ -356,7 +366,7 @@ function unitCard(u) {
         ${kindBadge(u)}
         <h3>${esc(u.title)}</h3>
         <div class="row"><span>Дата: ${esc(u.date)}</span><span>${esc(u.points)}</span></div>
-        <div class="row"><span>${u.nq} питань у тестах</span>${u.nv ? `<span>${u.nv} відео</span>` : ""}</div>
+        <div class="row"><span>${u.nqAll || u.nq} питань у тестах</span>${u.nv ? `<span>${u.nv} відео</span>` : ""}</div>
         ${memLine(u.id) ? `<div class="row">${memLine(u.id)}</div>` : ""}
       </div>
       ${ring(p, 56, 6, `<b>${Math.round(p * 100)}%</b>`)}
@@ -431,6 +441,7 @@ async function home() {
         <h2>Колоквіуми</h2>
         <div class="colls stagger">${coll.map(unitCard).join("")}</div>
         <p><a class="chiplink" href="#/subjects">${icon("book")}Усі предмети: іспити й заліки</a></p>
+        ${UNITS.some((u) => u.id === "prog") ? `<p><a class="chiplink" href="#/u/prog/shlyakh">${icon("pen")}Програмування: шлях по лабах ЛР1-ЛР7</a></p>` : ""}
       </section>
     </div>`;
   bindInstall();
@@ -447,8 +458,9 @@ async function subjects() {
   delete app.dataset.s;
   const kol = UNITS.filter((u) => u.kind === "colloquium").map(unitCard).join("");
   const ex = UNITS.filter((u) => u.kind === "exam").map(unitCard).join("");
-  const zl = UNITS.filter((u) => u.kind === "zalik").map(unitCard).join("");
-  const skl = UNITS.filter((u) => u.kind === "skill").map(unitCard).join(""); // ULINUX1: навички без дати (Linux)
+  const prog = UNITS.filter((u) => u.id === "prog" && !u.parent).map(unitCard).join(""); // UPROGONE: один розділ
+  const zl = UNITS.filter((u) => u.kind === "zalik" && u.id !== "prog").map(unitCard).join("");
+  const skl = UNITS.filter((u) => u.kind === "skill" && !u.parent).map(unitCard).join(""); // ULINUX1: навички без дати
   app.innerHTML = `
     <h1>Підготовка до колоквіумів і сесії</h1>
     <p class="muted">Перший семестр, 1 курс фізфаку. Зараз - лише два колоквіуми, 30-40 хв на день. Іспити і заліки - після них. Після першого відкриття все працює без інтернету (крім відео).</p>
@@ -460,9 +472,10 @@ async function subjects() {
     </div>
     <h2>Зараз: колоквіуми</h2>
     <div class="units stagger">${kol}</div>
+    ${prog ? `<h2>Програмування: один шлях по лабах</h2><p class="muted">Python, Linux Mint, Git і безпечний код - разом, модуль на кожну лабу.</p><div class="units">${prog}</div>` : ""}
     <details class="later"><summary>Після колоквіумів: 4 іспити</summary><div class="units">${ex}</div></details>
     <details class="later"><summary>Заліки</summary><div class="units">${zl}</div></details>
-    ${skl ? `<details class="later"><summary>Навички: Linux, Python + безпека</summary><div class="units">${skl}</div></details>` : ""}
+    ${skl ? `<details class="later"><summary>Навички</summary><div class="units">${skl}</div></details>` : ""}
     <p><a class="chiplink" href="#/grafik">${icon("cal")}Графік навчання і календар для телефона</a></p>
     <p class="footer">Власні конспекти, задачі й тести. Числові відповіді тестів перевірені скриптом. Дати, яких нема в джерелах, позначені «спитати в групі».</p>`;
   stagger(); animateRings();
@@ -481,15 +494,35 @@ async function staticPage(key, title) {
 }
 
 const TAB_IC = { teoriya: "book", oznachennya: "sheet", zadachi: "pen", shpargalka: "sheet", slovnyk: "dict", video: "video", test: "target" };
+function tabOf(u, cur) {
+  if (!cur || u.pages.some((p) => p.key === cur)) return cur;
+  if (cur.startsWith("urok-")) return "uroky"; // уроки prog - сторінки всередині вкладки «Уроки»
+  if (u.id !== "prog") return cur;
+  if (/^m\d$/.test(cur) || cur.startsWith("lab-") || /^(mint|git|sec|linux)-\d\d$/.test(cur)) return "shlyakh"; // UPROGONE: модулі, їхні уроки, розбори лаб
+  if (/shpargalka$/.test(cur)) return "shpargalky";
+  return "vse"; // уроки Mint, Git, безпеки, Linux, теорія, задачі
+}
 function unitTabs(u, cur) {
-  if (cur && cur.startsWith("urok-")) cur = "uroky"; // уроки prog - сторінки всередині вкладки «Уроки»
+  cur = tabOf(u, cur);
   return `<nav class="tabs" aria-label="Розділи">${u.pages.map((p) =>
     `<a href="#/u/${u.id}/${p.key}"${p.key === cur ? ' aria-current="page"' : ""}>${esc(p.title)}</a>`).join("")}</nav>`;
 }
 
-async function unitPage(id, page) {
+// UPROGONE: модулі шляху (питання модуля, модуль кожної сторінки) - data/prog/moduli.json
+async function moduli() { try { return await getJSON("data/prog/moduli.json"); } catch (e) { return null; } }
+function modMastery(m) {
+  const right = m.keys.filter((k) => (STORE.q[k] || {}).last === 1).length;
+  return m.keys.length ? right / m.keys.length : 0;
+}
+const PART_NAME = { mint: "Linux Mint", git: "Git і GitHub", sec: "Безпечний код", linux: "Linux у WSL", urok: "Python", lab: "Розбір лаби" };
+async function unitPage(id, page, anchor) {
   const u = UNITS.find((x) => x.id === id);
   if (!u) return notFound();
+  if (u.parent) { // старий окремий розділ (mint, git, linux, prog-sec) - тепер частина «Програмування»
+    const to = (u.moved && (u.moved[page || ""] || u.moved[""])) || "";
+    location.replace(`#/u/${u.parent}/${to}`);
+    return "redirect";
+  }
   if (!page) page = u.pages[0] ? u.pages[0].key : "test";
   setTitle(u.title);
   app.dataset.s = sk(u.id);
@@ -503,10 +536,32 @@ async function unitPage(id, page) {
   if (page === "video") { await videoPage(u, head); return animateRings(); }
   try {
     const html = await getText(`data/${u.id}/${page}.html`);
-    app.innerHTML = head + `<article class="doc">${html}</article>`;
-    if ((u.id === "prog" || u.id === "prog-sec") && window.PyRun) { // UNIPROG1: «Запустити» під кодом, Python офлайн
+    let crumb = "";
+    const md = u.id === "prog" ? await moduli() : null;
+    if (md && md.pageModule[page] && !/^m\d$/.test(page)) { // сторінка частини: з якого вона модуля
+      const m = md.modules.find((x) => x.n === md.pageModule[page]);
+      const part = PART_NAME[page.split("-")[0]] || "";
+      if (m) crumb = `<p class="crumb"><a class="chiplink" href="#/u/prog/m${m.n}">${icon("left")}Модуль ${m.n}: ${esc(m.lab)}</a>${part ? ` <span class="muted">${esc(part)}</span>` : ""}</p>`;
+    }
+    app.innerHTML = head + crumb + `<article class="doc">${html}</article>`;
+    // UNIPROG1: «Запустити» під кодом Python (офлайн); у Mint/Git/Linux код - для термінала, без кнопок
+    if ((u.id === "prog" || u.id === "prog-sec") && window.PyRun && !/^(mint|git|linux)(-|$)/.test(page)) {
       PyRun.enhance(app.querySelector("article.doc"));
       PyRun.box(app.querySelector("#pybox"));
+    }
+    if (md && page === "shlyakh") { // кільце «скільки питань модуля знаю зараз» на кожному модулі
+      app.querySelectorAll("[data-mod]").forEach((a) => {
+        const m = md.modules.find((x) => x.n === +a.dataset.mod);
+        if (m && m.keys.length) a.insertAdjacentHTML("beforeend", ring(modMastery(m), 56, 6, `<b>${Math.round(modMastery(m) * 100)}%</b>`));
+      });
+    }
+    if (anchor) { // #/u/<розділ>/<сторінка>/<якір>: розділ сторінки (зламана програма, задача, іспит)
+      const el = document.getElementById(anchor);
+      if (el) {
+        for (let d = el.closest("details"); d; d = d.parentElement.closest("details")) d.open = true;
+        requestAnimationFrame(() => el.scrollIntoView({ block: "start" }));
+        return "anchor";
+      }
     }
   } catch (e) {
     app.innerHTML = head + `<p>Не вдалося відкрити (${esc(e.message)}).</p>`;
@@ -560,6 +615,7 @@ async function testStart(u, head) {
       ${mt(`#/q/${u.id}/recall`, "cards", "Пригадай сам (картки)", u.ng ? `${RECALL_N} карток: спершу ті, що пора перевірити через добу; є «поясни» і «виведи»` : `${RECALL_N} карток: спершу ті, що пора перевірити через добу`)}
       ${mt(`#/q/${u.id}/wrong`, "redo", `Лише помилки (${wrongIds.length})`, wrongIds.length ? "перерозвʼязати те, що не вийшло" : "поки помилок нема", wrongIds.length ? "" : ' aria-disabled="true"')}
     </div>
+    ${await modTests(u)}
     <details class="card picker"><summary>${icon("target")}Тренувати лише вибрані теми</summary>
       <div class="filter">${topics.map((tp, i) => `<label><input type="checkbox" value="${i}"> ${esc(tp)}</label>`).join("")}</div>
       <button class="btn subject" type="button" id="byTopic">Почати по вибраних темах</button>
@@ -573,6 +629,18 @@ async function testStart(u, head) {
     clearRun();
     location.hash = `#/q/${u.id}/topics`;
   });
+}
+
+// UPROGONE: у тестах «Програмування» - тест кожного модуля і кожної частини окремо
+async function modTests(u) {
+  if (u.id !== "prog") return "";
+  const md = await moduli();
+  if (!md) return "";
+  const rows = md.modules.filter((m) => m.keys.length).map((m) => `<li><a href="#/q/prog/m${m.n}"><span>Модуль ${m.n}: ${esc(m.lab)}</span><span class="chip">${m.keys.length} пит. · ${Math.round(modMastery(m) * 100)} %</span></a></li>`).join("");
+  const parts = (u.parts || []).map((id) => UNITS.find((x) => x.id === id)).filter(Boolean)
+    .map((p) => `<a class="chiplink" href="#/q/${p.id}/train">${esc(p.ptitle || p.title)} · ${p.nq}</a>`).join(" ");
+  return `<div class="card"><h3 style="margin-top:2px">Тест модуля (по лабах)</h3><ul class="topics mods">${rows}</ul></div>
+    <div class="card"><h3 style="margin-top:2px">Тест однієї частини</h3><p class="muted">Python - кнопки вище «Як на справжньому» (25 питань, лише Python, як залік).</p><p class="links">${parts}</p></div>`;
 }
 
 async function loadPool(u, withGen = false) {
@@ -701,7 +769,19 @@ async function quiz(id, mode, fresh) {
   if (!u) return notFound();
   setTitle("Тест: " + u.title);
   app.dataset.s = sk(u.id);
-  let pool = await loadPool(u, mode === "recall");
+  const mm = /^([mk])(\d+)$/.exec(mode || ""); // UPROGONE: m3 - тест модуля 3, k3 - картки модуля 3
+  const recallMode = mode === "recall" || (mm && mm[1] === "k");
+  let pool = await loadPool(u, recallMode);
+  let back = "";
+  if (mm) {
+    const md = await moduli();
+    const m = md && md.modules.find((x) => x.n === +mm[2]);
+    if (!m) return notFound();
+    const keys = new Set(m.keys);
+    pool = pool.filter((q) => keys.has(q._unit + "/" + q.id));
+    back = `#/u/${u.id}/m${m.n}`;
+    setTitle(`${recallMode ? "Картки" : "Тест"}: модуль ${m.n}`);
+  }
   const t = u.test || {};
   clearInterval(timerId);
   S_CUR = null;
@@ -711,7 +791,7 @@ async function quiz(id, mode, fresh) {
     const by = new Map(pool.map((q) => [q._unit + "/" + q.id, q]));
     const qs = saved.keys.map((k, i) => { const q = by.get(k); return q ? Object.assign({}, q, saved.orders[i] ? { _order: saved.orders[i] } : {}) : null; });
     if (qs.every(Boolean)) {
-      S = { u, mode, real: mode === "real", qs, i: Math.min(saved.i, qs.length), ans: saved.ans, done: false, end: saved.end, known: saved.known, enter: true };
+      S = { u, mode, real: mode === "real", qs, i: Math.min(saved.i, qs.length), ans: saved.ans, done: false, end: saved.end, known: saved.known, enter: true, back };
     }
   }
   if (!S) {
@@ -722,12 +802,13 @@ async function quiz(id, mode, fresh) {
       pool = pool.filter((q) => sel.includes(q.topic));
     }
     if (!pool.length) {
-      app.innerHTML = `<a class="back" href="#/u/${id}/test">${icon("left")}Назад</a><div class="card"><p>Тут поки нема питань${mode === "wrong" ? ". Помилок немає - так тримати." : "."}</p></div>`;
+      app.innerHTML = `<a class="back" href="${back || `#/u/${id}/test`}">${icon("left")}Назад</a><div class="card"><p>Тут поки нема питань${mode === "wrong" ? ". Помилок немає - так тримати." : "."}</p></div>`;
       return;
     }
-    if (mode === "recall") pool = recallOrder(pool); // UNIFIX1: довга памʼять + перемежування, 20 карток
+    if (recallMode) pool = recallOrder(pool); // UNIFIX1: довга памʼять + перемежування, 20 карток
     else shuffle(pool);
     const real = mode === "real";
+    if (real && t.units) pool = pool.filter((q) => t.units.includes(q._unit)); // UPROGONE: залік - лише Python
     if (real && t.count) pool = pool.slice(0, t.count);
     const qs = pool.map((q) => {
       const c = Object.assign({}, q);
@@ -738,14 +819,14 @@ async function quiz(id, mode, fresh) {
       }
       return c;
     });
-    S = { u, mode, real, qs, i: 0, ans: new Array(qs.length).fill(null), done: false, end: real && t.timer ? Date.now() + t.timer * 60000 : 0, enter: true };
-    if (mode === "recall") S.known = 0;
+    S = { u, mode, real, qs, i: 0, ans: new Array(qs.length).fill(null), done: false, end: real && t.timer ? Date.now() + t.timer * 60000 : 0, enter: true, back };
+    if (recallMode) S.known = 0;
     saveRun(S);
   }
   S.vids = await loadVideos([u.id, ...(u.include || [])]);
   S_CUR = S;
   if (S.end) timerId = setInterval(() => tick(S), 1000);
-  if (mode === "recall") return renderRecall(S);
+  if (recallMode) return renderRecall(S);
   renderQ(S);
 }
 let S_CUR = null;
@@ -933,12 +1014,12 @@ function recallResult(S) {
     focusMain();
     return;
   }
-  app.innerHTML = `<a class="back" href="#/u/${S.u.id}/test">${icon("left")}До тестів</a><h1>Картки: результат</h1>
+  app.innerHTML = `<a class="back" href="${S.back || `#/u/${S.u.id}/test`}">${icon("left")}${S.back ? "До модуля" : "До тестів"}</a><h1>Картки: результат</h1>
     <div class="card result">${ring(p, 150, 12, `<b class="score"><span id="cnt">${S.known}</span><small>знав з ${n}</small></b>`, "big")}
     <div class="pts">${Math.round(p * 100)} % згадав сам</div>${streakLine()}
     ${memLine(S.u.id) ? `<p>${memLine(S.u.id)}</p>` : ""}
-    <div class="btn-row" style="width:100%"><a class="btn primary" href="#/q/${S.u.id}/recall" id="again">${icon("redo")}Ще ${RECALL_N}</a><a class="btn" href="#/q/${S.u.id}/wrong">Лише помилки</a></div></div>`;
-  $("#again").addEventListener("click", (e) => { e.preventDefault(); quiz(S.u.id, "recall", true); });
+    <div class="btn-row" style="width:100%"><a class="btn primary" href="#/q/${S.u.id}/${S.mode}" id="again">${icon("redo")}Ще ${RECALL_N}</a><a class="btn" href="#/q/${S.u.id}/wrong">Лише помилки</a></div></div>`;
+  $("#again").addEventListener("click", (e) => { e.preventDefault(); quiz(S.u.id, S.mode, true); });
   countUp($("#cnt"), S.known);
   animateRings();
   if (n) setTimeout(celebrate, 200);
@@ -1010,7 +1091,7 @@ function renderQ(S) {
   const show = answered && !S.real;
   const fx = S.fx && motion();
   S.fx = false;
-  const head = `${progressBar(S, show)}<div class="qhead"><a href="#/u/${S.u.id}/test" id="exit">${icon("x")}Вийти</a>
+  const head = `${progressBar(S, show)}<div class="qhead"><a href="${S.back || `#/u/${S.u.id}/test`}" id="exit">${icon("x")}Вийти</a>
     <span class="num">${S.i + 1} / ${S.qs.length}</span>
     ${S.end ? `<span class="timer" id="timer" role="timer" aria-label="Залишилось часу"></span>` : `<span>${{ wrong: "помилки", recall: "пригадування", topics: "теми" }[S.mode] || "тренування"}</span>`}</div>`;
   let body = `<div class="card q${S.enter && motion() ? " qin" : ""}${fx ? " fx" : ""}"><div class="topic">${esc(q.topic)}</div><p>${rich(q.q)}</p>${q.pre ? `<pre>${esc(q.pre)}</pre>` : ""}`;
@@ -1122,7 +1203,7 @@ function finish(S, timeUp) {
   const n = S.qs.length;
   const pct = Math.round((100 * right) / n);
   const pts = S.u.test && S.u.test.points ? `≈ ${(S.u.test.points * right / n).toFixed(1).replace(".", ",")} з ${S.u.test.points} балів` : "";
-  app.innerHTML = `<a class="back" href="#/u/${S.u.id}/test">${icon("left")}До тестів</a>
+  app.innerHTML = `<a class="back" href="${S.back || `#/u/${S.u.id}/test`}">${icon("left")}${S.back ? "До модуля" : "До тестів"}</a>
     <h1>${timeUp ? "Час вийшов. " : ""}Результат</h1>
     <div class="card result">${ring(right / n, 150, 12, `<b class="score"><span id="cnt">${right}</span> / ${n}<small>${pct} %</small></b>`, "big")}
     ${pts ? `<div class="pts">${pts}</div>` : ""}${streakLine()}
@@ -1138,7 +1219,7 @@ function finish(S, timeUp) {
 async function statsPage() {
   setTitle("Слабкі теми");
   delete app.dataset.s;
-  const rows = UNITS.map((u) => {
+  const rows = UNITS.filter((u) => !u.parent).map((u) => {
     const s = unitStats(u.id);
     const list = Object.entries(s.topics).map(([t, v]) => ({ t, p: v.r / (v.r + v.w), n: v.r + v.w }))
       .sort((a, b) => a.p - b.p);
@@ -1321,10 +1402,11 @@ async function route() {
   const h = decodeURIComponent(location.hash.replace(/^#\/?/, "")).split("/");
   markNav(h[0]);
   const skT = setTimeout(() => { app.innerHTML = SKEL; }, 160);
+  let keep = false; // UPROGONE: перейшли до якоря - не прокручувати вгору
   try {
     if (!UNITS.length) UNITS = await getJSON("data/units.json");
     if (!h[0]) await home();
-    else if (h[0] === "u") await unitPage(h[1], h[2]);
+    else if (h[0] === "u") { const r = await unitPage(h[1], h[2], h[3]); if (r === "redirect") { clearTimeout(skT); return; } if (r === "anchor") keep = true; }
     else if (h[0] === "q") await quiz(h[1], h[2] || "train");
     else if (h[0] === "subjects") await subjects();
     else if (h[0] === "plan") await staticPage("plan", "План підготовки");
@@ -1340,7 +1422,8 @@ async function route() {
   }
   clearTimeout(skT);
   app.dataset.route = location.hash; // маркер «екран готовий» (для тестів)
-  if (h[0] !== "q") focusMain();
+  if (h[0] !== "q" && !keep) focusMain();
+  else if (keep) app.focus({ preventScroll: true });
 }
 // переходи між екранами: View Transitions (плавна зміна), без них - просто рендер
 function navigate() {

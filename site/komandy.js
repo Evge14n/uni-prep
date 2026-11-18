@@ -94,6 +94,7 @@ const Cmd = (() => {
       if (v.length > 1 && v[0] === "-" && !/^-\d+(\.\d+)?$/.test(v)) {
         const f = v.split("=")[0];
         if (fl[f] || (/^-[A-Za-z]{2,}$/.test(f) && [...f.slice(1)].every((c) => fl["-" + c]))) out.push({ s: ws[j].s, e: ws[j].s + f.length, k: key, f });
+        else if (ar[v]) out.push({ s: ws[j].s, e: ws[j].e, k: key, a: v }); // ssh -T, chmod -w - описані як аргументи
       } else if (ar[v]) out.push({ s: ws[j].s, e: ws[j].e, k: key, a: v });
     }
   }
@@ -146,8 +147,19 @@ const Cmd = (() => {
         return;
       }
     }
+    if (!key) { // ip -br a, apt -y install: прапорці перед підкомандою
+      let j = i + 1;
+      while (j < ws.length && ws[j].v[0] === "-") j++;
+      if (j > i + 1 && j < ws.length && d[w0 + " " + ws[j].v]) {
+        const k2 = w0 + " " + ws[j].v;
+        out.push({ s: ws[i].s, e: ws[i].e, k: k2 }, { s: ws[j].s, e: ws[j].e, k: k2 });
+        flagMarks(k2, ws.slice(0, j), i + 1, d, out);
+        flagMarks(k2, ws, j + 1, d, out);
+        return;
+      }
+    }
     if (!key) {
-      if (/^\.{0,2}\/[\w.-]/.test(w0) && d["./скрипт"]) out.push({ s: ws[i].s, e: ws[i].e, k: "./скрипт" });
+      if (/^(\.{0,2}|~)\/[\w.-]/.test(w0) && d["./скрипт"]) out.push({ s: ws[i].s, e: ws[i].e, k: "./скрипт" });
       return;
     }
     out.push({ s: ws[i].s, e: ws[end].e, k: key });
@@ -179,7 +191,8 @@ const Cmd = (() => {
     blocks.forEach((b) => { try { wrap(b, d); } catch (e) { /* підказки - не головне, код лишається як був */ } });
   }
 
-  function cap(s) { return s ? s[0].toUpperCase() + s.slice(1) : s; }
+  // текст довідника: `код` -> <code>
+  const rt = (s) => escH(s).replace(/`([^`]+)`/g, "<code>$1</code>");
   function close(back = true) {
     if (!tip) return;
     tip.remove();
@@ -194,14 +207,14 @@ const Cmd = (() => {
     close(false);
     opener = btn;
     const [id, short, name, fl, ar] = e;
-    let body = `<p class="cks"><code>${escH(btn.dataset.k)}</code> - ${escH(short)}.</p><p class="muted ckn">Назва: ${escH(name)}</p>`;
+    let body = `<p class="cks"><code>${escH(btn.dataset.k)}</code> - ${rt(short)}.</p><p class="muted ckn">Назва: ${rt(name)}</p>`;
     const f = btn.dataset.f;
     if (f) {
       const parts = fl[f] ? [[f, fl[f]]] : [...f.slice(1)].map((c) => ["-" + c, fl["-" + c] || "дивись у довіднику"]);
       if (!fl[f] && parts.length > 1) body += `<p class="muted">${escH(f)} = ${parts.map((p) => escH(p[0])).join(" ")} (короткі прапорці можна склеювати)</p>`;
-      body += parts.map(([k, w]) => `<p><code>${escH(k)}</code> - ${escH(w)}</p>`).join("");
+      body += parts.map(([k, w]) => `<p><code>${escH(k)}</code> - ${rt(w)}</p>`).join("");
     }
-    if (btn.dataset.a && ar[btn.dataset.a]) body += `<p><code>${escH(btn.dataset.a)}</code> - ${escH(ar[btn.dataset.a])}</p>`;
+    if (btn.dataset.a && ar[btn.dataset.a]) body += `<p><code>${escH(btn.dataset.a)}</code> - ${rt(ar[btn.dataset.a])}</p>`;
     const onPage = /#\/u\/prog\/komandy(\/|$)/.test(location.hash);
     const link = onPage ? `<a href="#/u/prog/komandy/${id}" data-cklink>До запису в довіднику</a>`
       : `<a href="#/u/prog/komandy/${id}">Усе про ${escH(btn.dataset.k)}: приклади, як скасувати</a>`;

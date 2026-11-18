@@ -69,26 +69,41 @@
 </tbody>
 </table></div>
 <p><strong>VS Code - для лаб.</strong> У теці лаби:</p>
-<pre><code>cd ~/univer/labs/ЛР4
+<pre><code class="language-bash">cd ~/univer/labs/ЛР4
 code .
 </code></pre>
-<p>Відкриється VS Code у режимі WSL (унизу ліворуч зелене «WSL: Ubuntu»). Терміналом усередині VS Code
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>code</code> - відкриває файл або теку у VS Code. Назва: code - від Visual Studio Code («код»). <code>.</code> - крапка = поточна тека: відкрити її всю як проєкт.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
+Відкриється VS Code у режимі WSL (унизу ліворуч зелене «WSL: Ubuntu»). Терміналом усередині VS Code
 (Ctrl+<code>- клавіша ліворуч від 1, або меню Terminal → New Terminal) є Ubuntu. Python-розширення бачить venv: Ctrl+Shift+P →
 «Python: Select Interpreter» →</code>~/univer/.venv/bin/python`.</p>
+</blockquote>
 <p><strong>Кінці рядків.</strong> Windows закінчує рядок двома символами (CRLF, <code>\r\n</code>), Linux - одним (LF, <code>\n</code>).
 Python усе одно, а bash-скрипт з CRLF ламається: <code>bash: $'\r': command not found</code>.
 Перевірити: <code>file скрипт.sh</code> (буде «with CRLF line terminators»). У VS Code внизу праворуч
 напис <code>CRLF</code> - клікни і вибери <code>LF</code>.</p>
 <h3 id="руками-10-хв">Руками (10 хв)</h3>
-<pre><code>cd ~/univer/praktyka
+<pre><code class="language-bash">cd ~/univer/praktyka
 nano hello.py
 </code></pre>
-<p>Надрукуй:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).
+Надрукуй:</li>
+</ul>
+</blockquote>
 <pre><code class="language-python">name = input(&quot;Як тебе звати? &quot;)
 print(f&quot;Привіт, {name}!&quot;)
 </code></pre>
 <p>Ctrl+O, Enter, Ctrl+X. Далі:</p>
-<pre><code>cat hello.py
+<pre><code class="language-bash">cat hello.py
 python3 hello.py
 wc -l hello.py          # 2 hello.py
 head -n 1 hello.py
@@ -98,6 +113,19 @@ code .                  # відкрий hello.py у VS Code, допиши ря�
 cat hello.py            # бачиш зміну з VS Code
 file hello.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+<li><code>wc</code> - рахує рядки, слова, символи. Назва: word count - «підрахунок слів»; рахує ще рядки й байти. <code>-l</code> - лише кількість рядків (lines).</li>
+<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу. <code>-n</code> - скільки перших рядків показати: -n 3 (lines).</li>
+<li><code>less</code> - гортає довгий файл по сторінках, вихід q. Назва: less - «менше»: жарт, бо less is more - кращий за старий переглядач more.</li>
+<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу. <code>-n</code> - скільки останніх рядків показати: -n 3 (lines).</li>
+<li><code>file</code> - каже, що за файл за його вмістом. Назва: file - «файл»: каже, що це за файл.</li>
+<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.</li>
+</ul>
+</blockquote>
 <h3 id="типові-помилки">Типові помилки</h3>
 <ul>
 <li>Натиснув Ctrl+Z у nano (як «скасувати» у Windows) - нічого не скасувалось, а внизу напис

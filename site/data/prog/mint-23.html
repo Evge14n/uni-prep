@@ -140,6 +140,20 @@ chmod +x ~/arg.sh
 cd ~
 ./arg.sh &quot;ЛР 1&quot; lr2
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>chmod</code> - змінює права файлу: читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>+x</code> - дозволити запуск (x); у Mint - усім трьом: власнику, групі й іншим.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку». <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
+<li><code>./скрипт</code> - запускає свій файл-скрипт з поточної теки. Назва: ./ - «звідси»: крапка = поточна тека, / відділяє теку від файлу.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">Скрипт: ./arg.sh
@@ -157,6 +171,14 @@ printf '#!/bin/bash\nset -euo pipefail\ncp nema.txt kopiya.txt\necho &quot;да�
 bash bez_e.sh; echo &quot;код $?&quot;
 bash z_e.sh; echo &quot;код $?&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>bash</code> - оболонка, що виконує команди; bash файл.sh запускає скрипт. Назва: Bourne-Again SHell - «знову оболонка Борна» (гра слів: born again - «народжений знову»).</li>
+<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>;</code> - розділяє команди в рядку, виконує всі по черзі. Назва: крапка з комою - роздільник команд.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">cp: cannot stat 'nema.txt': No such file or directory
@@ -174,6 +196,15 @@ cp: cannot stat 'nema.txt': No such file or directory
 <pre><code class="language-bash">mkdir -p ~/porozhnya &amp;&amp; cd ~/porozhnya
 for f in *.py; do echo &quot;файл: $f&quot;; done
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>&amp;&amp;</code> - друга команда - лише якщо перша вдалась. Назва: «і»: друга команда - лише якщо перша вдалась.</li>
+<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
+<li><code>*</code> - шаблон: будь-які символи в назві файлу. Назва: asterisk («зірочка») - шаблон «будь-які символи».</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">файл: *.py
@@ -198,6 +229,12 @@ printf 'def kvadrat(x: float) -&gt; float:\n    &quot;&quot;&quot;Квадрат
 <pre><code class="language-bash">mkdir -p ~/.local/bin
 nano ~/.local/bin/zdaty
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+</ul>
+</blockquote>
 <p>Встав у nano (Ctrl+Shift+V) або набери текст нижче і зміни <code>PIB</code> на своє прізвище, імʼя і групу. Це вміст
 файлу, а не команди для термінала - тому блок позначено як текст:</p>
 <pre><code class="language-text">#!/bin/bash
@@ -285,6 +322,13 @@ unzip -l &quot;$ZDACHA/$nazva.zip&quot;
 bash -n ~/.local/bin/zdaty
 shellcheck ~/.local/bin/zdaty
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>bash</code>: <code>-n</code> - лише перевірити скрипт на синтаксичні помилки, нічого не виконуючи (no execute).</li>
+<li><code>shellcheck</code> - шукає типові помилки в bash-скриптах. Назва: shell check - «перевірка (скрипта) оболонки».</li>
+</ul>
+</blockquote>
 <p><code>bash -n</code> перевіряє синтаксис, нічого не запускаючи. Обидві команди мають мовчати. (Якщо <code>shellcheck</code> нема -
 <code>sudo apt install shellcheck</code>.)</p>
 <p><strong>Крок 3. Перший запуск - є зауваження.</strong> Набери по черзі три команди: <code>zdaty</code>, <code>zdaty 7</code>, <code>zdaty 0</code>. Якщо
@@ -325,6 +369,12 @@ Archive:  /home/evgen/univer/zdacha/Прізвище_Імʼя_Група_ЛР0.z
 <pre><code class="language-bash">crontab -l
 crontab -e
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>crontab</code> - редагує розклад автоматичних запусків (cron). Назва: cron table - «таблиця cron»; cron - від грецького chronos, «час». <code>-l</code> - показати свою таблицю (list); <code>-e</code> - редагувати таблицю в редакторі (edit); перший раз спитає, у якому.</li>
+</ul>
+</blockquote>
 <p><code>crontab -l</code> скаже <code>no crontab for evgen</code> (таблиці ще нема). <code>crontab -e</code> перший раз спитає редактор. Справжній
 вивід з тестової Mint (там встановлено ще micro і vim, тому список довший; у тебе пунктів може бути менше):</p>
 <pre><code class="language-text">no crontab for evgen - using an empty one
@@ -360,6 +410,16 @@ atq
 job 2 at Wed Nov 18 10:14:00 2026
 2   Wed Nov 18 10:14:00 2026 a evgen
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
+<li><code>at</code> - запускає команду один раз у заданий час. Назва: at - «о» (такій-то годині): виконати один раз у заданий час.</li>
+<li><code>atq</code> - показує заплановані завдання at. Назва: at queue - «черга at»: що заплановано.</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <p>Через хвилину зʼявиться файл <code>~/at_spratsyuvav</code>. Скасувати завдання до запуску - <code>atrm 2</code> (номер з <code>atq</code>).</p>
 <h2 id="типові-помилки">Типові помилки</h2>
 <p>Якщо Mint українською, bash пише українською - у дужках (справжній запуск з перекладом <code>language-pack-uk-base</code>).

@@ -118,12 +118,30 @@ cd ~/univer/labs/lr7
 source ~/univer/.venv/bin/activate
 cp ~/Завантаження/&quot;Лабораторна робота 7 (Пайтон).pdf&quot; .
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
+<li><code>cp</code> - копіює файл або теку. Назва: copy - «копіювати». <code>.</code> - «сюди», у поточну теку: cp ~/Завантаження/lab1.py .</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Тека завантажень на англійській Mint - <code>~/Downloads</code>, назву друкує <code>xdg-user-dir DOWNLOAD</code>. Telegram Desktop
 зазвичай кладе файли в підтеку <code>~/Завантаження/Telegram Desktop</code> (на твоєму ноутбуці не перевірено). У її назві
 пробіл, тож теж лапки; не знаєш, де файл, - шукай по всій домашній теці:</p>
 <pre><code class="language-bash">cp ~/Завантаження/&quot;Telegram Desktop&quot;/&quot;Лабораторна робота 7 (Пайтон).pdf&quot; .
 find ~ -name &quot;Лабораторна робота 7*&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>find</code> - шукає файли за назвою, часом чи власником. Назва: find - «знайти». <code>-name</code> - за назвою, шаблон у лапках: -name "*.py"; великі й малі літери різні; <code>~</code> - шукати по всій домашній теці (знайти, куди Telegram зберіг лабу).</li>
+</ul>
+</blockquote>
 <p>Без лапок навколо <code>Telegram Desktop</code> bash розріже шлях на два і <code>cp</code> скаже двічі <code>cannot stat</code> - спершу про
 <code>.../Завантаження/Telegram</code>, потім про <code>Desktop/...</code> (див. «Типові помилки»).</p>
 <p><strong>Крок 2. Спершу - як працює заготовка.</strong> Приклад викладача з с. 4 (сума цифр - не завдання лаби, а зразок форми;
@@ -155,6 +173,15 @@ find ~ -name &quot;Лабораторна робота 7*&quot;
    5 of   5 in pryklad_zagotovky.digit_sum
 ***Test Failed*** 5 failures.
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції.</li>
+<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу. <code>-n</code> - скільки останніх рядків показати: -n 3 (lines).</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <p>Кожен провал усередині закінчується так - це <strong>очікувано</strong>, функції ще нема:</p>
 <pre><code class="language-text">Exception raised:
     Traceback (most recent call last):
@@ -253,6 +280,14 @@ Test passed.
 2 4
 3 9
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m doctest</code>: <code>-v</code> - докладно: кожен приклад (Trying, Expecting, ok) і підсумок «N passed and M failed».</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+</ul>
+</blockquote>
 <p><code>int(" 12 ")</code> сам прибирає пробіли по краях. Виняток у doctest записують так: рядок <code>Traceback (most recent call
 last):</code>, потім <code>...</code> (усе середнє doctest пропускає) і останній рядок помилки дослівно.</p>
 <p><strong>Крок 4. Підказки по завданнях</strong> (розвʼязок твій; функції - <a href="#/u/prog/dovidnyk">Довідник функцій</a>: <code>range()</code>, <code>sorted()</code>,
@@ -373,6 +408,18 @@ python3 -m mypy lr7_1.py
 grep -c &quot;&gt;&gt;&gt;&quot; lr7_1.py lr7_2.py lr7_3.py
 grep -n NotImplementedError lr7_1.py lr7_2.py lr7_3.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s».</li>
+<li><code>python3 -m black</code> - сам гарно оформлює код Python (пробіли, переноси). Назва: black - «чорний»: як у Форда, «будь-який колір, якщо він чорний». <code>-l</code> - найбільша довжина рядка; викладач хоче 78 (black сам ставить 88).</li>
+<li><code>python3 -m flake8</code> - шукає помилки стилю і зайвий код, нічого не змінює. Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша дозволена довжина рядка; викладач хоче 78 (типово 79).</li>
+<li><code>python3 -m pycodestyle</code> - перевіряє лише оформлення коду за PEP 8. Назва: Python code style - «стиль коду Python» (раніше програма звалась pep8). <code>--max-line-length</code> - найбільша довжина рядка; викладач хоче 78 (типово 79).</li>
+<li><code>python3 -m ruff check</code> - швидко шукає помилки в коді, з --fix сам виправляє. Назва: ruff - назва не розшифровується; check - «перевірити».</li>
+<li><code>python3 -m mypy</code> - перевіряє типи (int, str ...) без запуску програми. Назва: назва не розшифровується (py - від Python).</li>
+<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати». <code>-c</code> - лише порахувати рядки зі збігом у кожному файлі (count); <code>-n</code> - показати номер рядка перед кожним збігом (line number).</li>
+</ul>
+</blockquote>
 <p>Або все одразу: <code>perevir lr7_1.py</code> (скорочення з <code>ustanovka-mint.sh</code>, урок 03; якщо файл питає <code>input()</code> поза
 <code>if __name__</code>, відповіді пишеш після назви через пробіл, кожна - окремий рядок вводу). black він лише перевіряє
 (<code>black: оформлення ок</code>), а виправляє <code>python3 -m black -l 78 файл.py</code>.</p>

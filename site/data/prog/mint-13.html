@@ -243,6 +243,13 @@ BIOS (там видно режим завантаження і «Безпечн�
 </ol>
 <pre><code class="language-bash">gsettings get org.cinnamon.desktop.keybindings.media-keys screensaver
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gsettings get</code> - друкує значення одного налаштування робочого столу. Назва: get - «отримати, взяти». <code>org.cinnamon.desktop.keybindings.media-keys</code> - схема гарячих клавіш Cinnamon для програм і «мультимедіа» (термінал, блокування); <code>screensaver</code> - ключ: комбінація, що блокує екран.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">['&lt;Control&gt;&lt;Alt&gt;l', 'XF86ScreenSaver']
@@ -254,6 +261,12 @@ BIOS (там видно режим завантаження і «Безпечн�
 </ol>
 <pre><code class="language-bash">gsettings get org.cinnamon.desktop.keybindings looking-glass-keybinding
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gsettings get</code>: <code>looking-glass-keybinding</code> - ключ схеми org.cinnamon.desktop.keybindings: налагоджувач Looking Glass.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">['&lt;Super&gt;l']
@@ -266,6 +279,12 @@ BIOS (там видно режим завантаження і «Безпечн�
 </ol>
 <pre><code class="language-bash">gsettings get org.cinnamon.desktop.keybindings.wm switch-to-workspace-up
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gsettings get</code>: <code>switch-to-workspace-up</code> - ключ схеми ...keybindings.wm: перехід на інший робочий простір.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">['&lt;Control&gt;&lt;Alt&gt;Up', '&lt;Alt&gt;F1']
@@ -277,6 +296,12 @@ BIOS (там видно режим завантаження і «Безпечн�
 </ol>
 <pre><code class="language-bash">gsettings get org.x.apps.portal color-scheme
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gsettings get</code>: <code>org.x.apps.portal</code> - схема Mint для програм; ключ color-scheme - світла чи темна тема; <code>color-scheme</code> - ключ: 'default', 'prefer-dark' або 'prefer-light'.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">'default'
@@ -301,23 +326,51 @@ org.cinnamon.desktop.keybindings.wm switch-to-workspace-left ['&lt;Control&gt;&l
 org.cinnamon.desktop.keybindings.wm switch-to-workspace-right ['&lt;Control&gt;&lt;Alt&gt;Right']
 org.cinnamon.desktop.keybindings.wm switch-to-workspace-up ['&lt;Control&gt;&lt;Alt&gt;Up', '&lt;Alt&gt;F1']
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gsettings list-recursively</code> - друкує всі налаштування схеми зі значеннями. Назва: list recursively - «перелічити все, з усіма вкладеними».</li>
+<li><code>grep</code> - знаходить рядки з текстом у файлах. Назва: g/re/p з редактора ed: «знайти регулярний вираз у всьому файлі і надрукувати».</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <p>Збережи всі свої комбінації у файл - знадобиться, якщо колись перевстановиш систему:</p>
 <pre><code class="language-bash">gsettings list-recursively org.cinnamon.desktop.keybindings.media-keys &gt; ~/moi-klavishi.txt
 grep terminal ~/moi-klavishi.txt
 </code></pre>
 <pre><code class="language-text">org.cinnamon.desktop.keybindings.media-keys terminal ['&lt;Primary&gt;&lt;Alt&gt;t']
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+</blockquote>
 <p><code>&lt;Primary&gt;</code> - те саме, що Ctrl.</p>
 <p><strong>Крок 5. Змінити комбінацію і повернути як було.</strong> «Системні налаштування» → «Клавіатура» → «Сполучення
 клавішів». Зліва категорія «Панелі запуску» (Launchers), справа «Запустити термінал» (Launch terminal). Клацни на рядок з <code>Ctrl+Alt+T</code> унизу, натисни нову комбінацію, наприклад Super+T. Перевір у терміналі:</p>
 <pre><code class="language-bash">gsettings get org.cinnamon.desktop.keybindings.media-keys terminal
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gsettings get</code>: <code>terminal</code> - ключ: комбінація, що відкриває термінал.</li>
+</ul>
+</blockquote>
 <p>Тепер там твоя нова комбінація. Повернути типову однією командою:</p>
 <pre><code class="language-bash">gsettings reset org.cinnamon.desktop.keybindings.media-keys terminal
 gsettings get org.cinnamon.desktop.keybindings.media-keys terminal
 </code></pre>
 <pre><code class="language-text">['&lt;Primary&gt;&lt;Alt&gt;t']
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gsettings reset</code> - повертає налаштування до типового значення. Назва: reset - «скинути» (до типового). <code>terminal</code> - ключ схеми ...media-keys: комбінація для терміналу (типово Ctrl+Alt+T).</li>
+</ul>
+</blockquote>
 <p>Своя програма на клавішу: та сама вкладка, кнопка «Додати власне скорочення» (Add custom shortcut) - назва,
 команда (наприклад <code>xed</code>) і комбінація.</p>
 <p><strong>Крок 6. Українська розкладка.</strong> «Системні налаштування» → «Клавіатура» → «Розкладки» → кнопка «+» → знайди
@@ -337,6 +390,12 @@ EN ↔ UA, а аплет «Клавіатура» на панелі показу
 (українською вона може зватись інакше, ніж Pictures):</p>
 <pre><code class="language-bash">xdg-user-dir PICTURES
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>xdg-user-dir</code> - друкує шлях до теки завантажень, зображень тощо. Назва: XDG user directory - «тека користувача» за правилами freedesktop.org. <code>PICTURES</code> - тека зображень (туди йдуть знімки екрана).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 9. Перезапуск Cinnamon.</strong> Натисни <strong>Ctrl+Alt+Esc</strong>: панель зникне і зʼявиться за секунду, а вікна і
 програми лишаться. Той самий пункт мишкою: права кнопка на панелі → «Вирішення проблем» → «Перезавантажити Cinnamon».
 Запамʼятай - це перша допомога, коли панель чи меню «застигли».</p>

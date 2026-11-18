@@ -136,20 +136,43 @@ gh auth status
 <pre><code class="language-text">gh version 2.105.0 (2026-11-17)
 https://github.com/cli/cli/releases/tag/v2.105.0
 </code></pre>
-<p><code>gh version</code> - те саме, що <code>gh --version</code>. Версія має бути новіша за 2.46 (у тебе може бути ще новіша). <code>gh auth status</code> після входу виводить блок <code>github.com</code>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh version</code> - показує версію gh (те саме, що gh --version). Назва: version - «версія».</li>
+<li><code>gh auth status</code> - показує, чи gh увійшов у GitHub і яким акаунтом. Назва: auth - від authentication, «вхід»; status - «стан».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
+<code>gh version</code> - те саме, що <code>gh --version</code>. Версія має бути новіша за 2.46 (у тебе може бути ще новіша). <code>gh auth status</code> після входу виводить блок <code>github.com</code>
 з рядком <code>✓ Logged in to github.com account Evge14n (...)</code> і далі <code>- Active account: true</code>,
 <code>- Git operations protocol: ssh</code> - це формат з коду gh (<code>pkg/cmd/auth/status/status.go</code>), сам вивід на твоєму
 ноутбуці не перевірено.</p>
+</blockquote>
 <p><strong>Крок 1. Репо.</strong></p>
 <pre><code class="language-bash">cd ~/pisochnytsia
 gh repo view
 gh repo view --web
 gh browse
 </code></pre>
-<p><code>gh repo view</code> друкує назву, опис і README. <code>--web</code> і <code>gh browse</code> відкривають сторінку репо в браузері.
-Ще корисне: <code>gh repo list --limit 5</code> - пʼять твоїх останніх репо.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>gh repo view</code> - показує опис і README репо (або відкриває в браузері). Назва: repository view - «переглянути репозиторій». <code>--web</code> - відкрити сторінку репо в браузері замість друку в терміналі.</li>
+<li><code>gh browse</code> - відкриває репо (чи файл) на GitHub у браузері. Назва: browse - «переглядати»: відкрити в браузері.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.
+<code>gh repo view</code> друкує назву, опис і README. <code>--web</code> і <code>gh browse</code> відкривають сторінку репо в браузері.
+Ще корисне: <code>gh repo list --limit 5</code> - пʼять твоїх останніх репо.</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">gh repo list --limit 5
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh repo list</code> - показує твої репозиторії на GitHub. Назва: repository list - «список репозиторіїв». <code>--limit</code> - скільки репо показати (типово 30), напр. --limit 5.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 2. Issue - «завдання собі».</strong></p>
 <pre><code class="language-bash">gh issue create --title &quot;ЛР2: перевірити завдання 3&quot; --body &quot;doctest падає на відʼємних числах&quot;
 gh issue list
@@ -157,7 +180,17 @@ gh issue view 1
 gh issue close 1 --comment &quot;Виправлено&quot;
 gh issue list --state closed
 </code></pre>
-<p><code>issue create</code> друкує посилання на нову Issue. <code>--state closed</code> - показати закриті (без нього - лише відкриті).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh issue create</code> - створює Issue на GitHub. Назва: issue - «питання, справа»: завдання чи зауваження в репо; create - «створити». <code>--title</code> - назва Issue; без неї gh спитає сам; <code>--body</code> - опис Issue.</li>
+<li><code>gh issue list</code> - показує список Issues репо. Назва: issue - «справа, завдання»; list - «список». <code>--state</code> - які показати: open (за замовчуванням), closed - закриті, all - усі.</li>
+<li><code>gh issue view</code> - показує одне Issue за номером. Назва: issue - «справа, завдання»; view - «переглянути». <code>1</code> - номер Issue (видно в gh issue list і в адресі .../issues/1).</li>
+<li><code>gh issue close</code> - закриває Issue за номером. Назва: issue - «справа, завдання»; close - «закрити». <code>--comment</code> - залишити коментар при закритті: --comment "Виправлено"; <code>1</code> - номер Issue.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».
+<code>issue create</code> друкує посилання на нову Issue. <code>--state closed</code> - показати закриті (без нього - лише відкриті).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 3. Pull Request з терміналу.</strong> Гілка і коміт - звичайним git (Уроки 07, 09):</p>
 <pre><code class="language-bash">git switch -c lr2-zavd1
 printf 'def square(number: int) -&gt; int:\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; square(3)\n    9\n    &quot;&quot;&quot;\n    return number * number\n' &gt; lr2_1.py
@@ -166,7 +199,21 @@ git add lr2_1.py
 git commit -m &quot;ЛР2: завдання 1&quot;
 git push -u origin lr2-zavd1
 </code></pre>
-<p><code>python3 -m doctest</code> нічого не друкує - отже всі тести пройшли. Кінець виводу <code>git push -u</code>:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути». <code>-c</code> - створити нову гілку від поточного місця і перейти на неї.</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції.</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub. <code>-u</code> - запамʼятати звʼязок гілки з GitHub; далі просто git push і git pull.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.
+<code>python3 -m doctest</code> нічого не друкує - отже всі тести пройшли. Кінець виводу <code>git push -u</code>:</li>
+</ul>
+</blockquote>
 <pre><code class="language-text"> * [new branch]      lr2-zavd1 -&gt; lr2-zavd1
 branch 'lr2-zavd1' set up to track 'origin/lr2-zavd1'.
 </code></pre>
@@ -176,8 +223,17 @@ gh pr list
 gh pr view 1
 gh pr diff 1
 </code></pre>
-<p><code>--fill</code> бере назву й опис з комітів (тут - «ЛР2: завдання 1»), <code>--base main</code> - куди зливати. Без <code>--fill</code> gh спитає
-назву й опис сам. Якщо в описі написати <code>Closes #1</code>, Issue №1 закриється, коли PR зіллють (так пише <code>gh pr create --help</code>).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh pr create</code> - створює Pull Request з поточної гілки. Назва: pr - pull request, «запит на злиття» гілки в main; create - «створити». <code>--fill</code> - назву й опис узяти з комітів гілки; <code>--base</code> - куди зливати: --base main.</li>
+<li><code>gh pr list</code> - показує список Pull Requests репо. Назва: pr - pull request, «запит на злиття»; list - «список».</li>
+<li><code>gh pr view</code> - показує один Pull Request за номером. Назва: pr - pull request, «запит на злиття»; view - «переглянути». <code>1</code> - номер PR; без номера - PR поточної гілки.</li>
+<li><code>gh pr diff</code> - показує зміни Pull Request (як Files changed). Назва: pr - pull request; diff - від difference, «різниця». <code>1</code> - номер PR.
+<code>--fill</code> бере назву й опис з комітів (тут - «ЛР2: завдання 1»), <code>--base main</code> - куди зливати. Без <code>--fill</code> gh спитає
+назву й опис сам. Якщо в описі написати <code>Closes #1</code>, Issue №1 закриється, коли PR зіллють (так пише <code>gh pr create --help</code>).</li>
+</ul>
+</blockquote>
 <p><strong>Крок 4. «Друг» перевіряє PR</strong> у своєму клоні <code>~/druhyi-klon</code> (Урок 09; якщо його нема -
 <code>gh repo clone Evge14n/pisochnytsia ~/druhyi-klon</code>):</p>
 <pre><code class="language-bash">cd ~/druhyi-klon
@@ -186,8 +242,14 @@ python3 -m doctest lr2_1.py
 git switch main
 cd ~/pisochnytsia
 </code></pre>
-<p>Що <code>gh pr checkout 1</code> робить усередині: якби gh не було, <strong>замість</strong> нього (не після) у <code>~/druhyi-klon</code> можна руками
-(тут не набирай - це лише для розуміння):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh pr checkout</code> - забирає гілку PR до себе і перемикає на неї. Назва: pr - pull request; check out - «взяти» (як книжку в бібліотеці). <code>1</code> - номер PR; можна і назву гілки.
+Що <code>gh pr checkout 1</code> робить усередині: якби gh не було, <strong>замість</strong> нього (не після) у <code>~/druhyi-klon</code> можна руками
+(тут не набирай - це лише для розуміння):</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">git fetch origin
 git switch lr2-zavd1
 </code></pre>
@@ -201,17 +263,31 @@ branch 'lr2-zavd1' set up to track 'origin/lr2-zavd1'.
 <pre><code class="language-bash">gh pr merge 1 --squash --delete-branch
 git log --oneline -n 3
 </code></pre>
-<p><code>--squash</code> - усі коміти PR стають <strong>одним</strong> комітом на <code>main</code> (Урок 11, види merge). <code>--delete-branch</code> - видалити гілку
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh pr merge</code> - зливає Pull Request (як кнопка Merge на сайті). Назва: pr - pull request; merge - «злити». <code>--squash</code> - усі коміти PR одним комітом на main (Squash and merge); <code>--delete-branch</code> - після злиття видалити гілку і на GitHub, і в тебе.</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення; <code>-n</code> - лише N останніх комітів: -n 3 (або коротко -3).
+<code>--squash</code> - усі коміти PR стають <strong>одним</strong> комітом на <code>main</code> (Урок 11, види merge). <code>--delete-branch</code> - видалити гілку
 і на GitHub, і в тебе. Якщо ти стояв на цій гілці, gh перемкне тебе на <code>main</code> і зробить <code>git pull</code>
 (так написано в коді gh 2.105, <code>pkg/cmd/pr/merge/merge.go</code>). У виводі будуть рядки за шаблоном
 <code>✓ Squashed and merged pull request Evge14n/pisochnytsia#1 (...)</code>, <code>✓ Deleted local branch lr2-zavd1 and switched to branch main</code>,
 <code>✓ Deleted remote branch lr2-zavd1</code> (шаблон з коду, на справжньому GitHub у цьому курсі не запускали).
-<code>git log --oneline -n 3</code> покаже на <code>main</code> новий коміт з назвою PR.</p>
+<code>git log --oneline -n 3</code> покаже на <code>main</code> новий коміт з назвою PR.</li>
+</ul>
+</blockquote>
 <p><strong>Довідка, коли забув прапорець:</strong></p>
 <pre><code class="language-bash">gh help
 gh pr merge --help
 </code></pre>
-<p>Повна довідка онлайн: https://cli.github.com/manual</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh help</code> - довідка gh (англійською). Назва: help - «допомога, довідка».</li>
+<li><code>gh pr merge</code>: <code>--help</code> - довідка з усіма прапорцями.
+Повна довідка онлайн: https://cli.github.com/manual</li>
+</ul>
+</blockquote>
 <p><strong>Для лаб:</strong> у <code>univer-labs</code> кожна лаба - гілка <code>lr2</code>, і коли завдання пройшли doctest:
 <code>git push -u origin lr2</code> → <code>gh pr create --fill --base main</code> → <code>gh pr merge --squash --delete-branch</code> (або звичайний
 merge, якщо хочеш бачити кожен коміт-завдання в історії <code>main</code>). Покроково - «Лаби в git - univer-labs покроково».</p>
@@ -231,6 +307,14 @@ merge, якщо хочеш бачити кожен коміт-завдання �
    <code>bash
    gh issue list -R Evge14n/pisochnytsia</code></p>
 </li>
+</ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh issue list</code>: <code>-R</code> - інший репо: -R Evge14n/pisochnytsia (не з поточної теки).</li>
+</ul>
+</blockquote>
+<ol start="3">
 <li>
 <p><strong>Старий gh з репо Mint.</strong> <code>gh pr view</code> падає з <code>GraphQL: Projects (classic) is being deprecated ...</code>, а
    <code>gh --version</code> показує 2.45.0. Видали його і постав з офіційного репо (Урок 02).</p>
@@ -243,16 +327,22 @@ merge, якщо хочеш бачити кожен коміт-завдання �
    If you are sure you want to delete it, run 'git branch -D lr2-zavd1'</code>
    Переконайся, що PR справді злито (на сторінці PR фіолетова позначка Merged, або <code>gh pr view 1</code>), і видали з <code>-D</code>:
    <code>bash
-   git branch -D lr2-zavd1</code>
+   git branch -D lr2-zavd1</code></p>
+</li>
+</ol>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git branch</code> - показує, створює і видаляє гілки. Назва: branch - «гілка». <code>-D</code> - видалити гілку навіть незлиту (= --delete --force); її коміти зникнуть з видимості.
    Незвичне (git 2.43): якщо гілка <code>origin/lr2-zavd1</code> у тебе ще є - на сайті <strong>не</strong> натискав Delete branch, або
    натискав, але <code>git fetch --prune</code> ще не робив, - то <code>git branch -d</code> гілку <strong>видаляє</strong> (код 0), лише з попередженням:
    <code>text
    warning: deleting branch 'lr2-zavd1' that has been merged to
             'refs/remotes/origin/lr2-zavd1', but not yet merged to HEAD
    Deleted branch lr2-zavd1 (was 3c4bd53).</code>
-   Бо <code>-d</code> порівнює з гілкою, за якою твоя стежить (<code>origin/lr2-zavd1</code>), а не лише з <code>main</code>.</p>
-</li>
-</ol>
+   Бо <code>-d</code> порівнює з гілкою, за якою твоя стежить (<code>origin/lr2-zavd1</code>), а не лише з <code>main</code>.</li>
+</ul>
+</blockquote>
 <h3 id="як-роблять-профі">Як роблять профі</h3>
 <ul>
 <li><strong>PR з Issue одним рухом:</strong> <code>gh pr create --fill</code> + у тексті <code>Closes #12</code> - після злиття Issue закриється сама.</li>
@@ -261,10 +351,16 @@ merge, якщо хочеш бачити кожен коміт-завдання �
 <li><strong>Стежити за Actions</strong> (той самий «pages build and deployment» з Уроку 15) без браузера:
   <code>bash
   gh run list --limit 3</code></li>
+</ul>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh run list</code> - показує останні запуски GitHub Actions. Назва: run list - «список запусків» (GitHub Actions). <code>--limit</code> - скільки запусків показати (типово 20), напр. --limit 3.</li>
 <li><strong>Опублікувати локальний репо одним рядком:</strong> <code>gh repo create univer-labs --private --source=. --remote=origin --push</code>
   (створює репо на GitHub, додає <code>origin</code> і пушить; файл «Лаби в git»).</li>
 <li><strong><code>gh api</code></strong> - будь-який запит до GitHub API для скриптів, напр. <code>gh api repos/Evge14n/uni-prep</code> (cli.github.com/manual/gh_api).</li>
 </ul>
+</blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>
 <ol>
 <li>Чим відрізняється робота <code>git</code> і <code>gh</code>?</li>

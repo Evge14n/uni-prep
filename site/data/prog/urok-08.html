@@ -969,8 +969,16 @@ print(min_index, temperatures[min_index])
 <h2 id="6-задачі-з-doctest-сам-у-терміналі">6. Задачі з doctest (сам у терміналі)</h2>
 <p>Заготовка - <code>zadachi/urok08.py</code>, розвʼязок - <code>_rozvyazky/urok08.py</code> (відкривай лише після
 2 спроб). У терміналі, з теки <code>Курс</code>:</p>
-<pre><code>python3 -m doctest zadachi/urok08.py -v
+<pre><code class="language-bash">python3 -m doctest zadachi/urok08.py -v
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції. <code>-v</code> - докладно: кожен приклад (Trying, Expecting, ok) і підсумок «N passed and M failed».</li>
+</ul>
+<p>Усе про кожну команду - у довіднику «05_Програмування/КОМАНДИ - довідник.md» (на сайті - вкладка «Команди»).</p>
+</blockquote>
 <p>Спершу всі тести червоні. Ти дописуєш тіло функції замість <code>pass</code> - тести стають зеленими.</p>
 <p><strong>Задача 1. <code>remove_spikes(readings, limit)</code> - прибрати викиди датчика.</strong> Повернути <strong>новий</strong>
 список без значень, у яких модуль більший за <code>limit</code>. Вихідний список не змінювати (є

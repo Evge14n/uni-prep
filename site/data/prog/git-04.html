@@ -137,6 +137,21 @@ git status
 </code></pre>
 <pre><code class="language-text">Initialized empty Git repository in /home/.../git-pisochnytsia/.git/
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан».</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <pre><code class="language-text">On branch main
 
 No commits yet
@@ -163,6 +178,14 @@ Changes to be committed:
     new file:   lr1.py
 
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів.</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">[main (root-commit) 3347fd3] Додай заготовку ЛР1
  1 file changed, 1 insertion(+)
  create mode 100644 lr1.py
@@ -188,6 +211,14 @@ git status --short
 <pre><code class="language-text">[main f30faf1] Додай ввід x у ЛР1
  1 file changed, 1 insertion(+)
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git commit</code>: <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.</li>
+<li><code>git status</code>: <code>--short</code> - коротко: по рядку на файл з двома буквами стану (M, A, ??).</li>
+<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">?? lr2.py
 </code></pre>
 <p>У коміт пішов лише <code>lr1.py</code>, новий <code>lr2.py</code> лишився поза git.</p>
@@ -228,6 +259,12 @@ Date:   Wed Nov 18 10:29:45 2026 +0000
     Поки що лише друк назви. Далі завдання 1 з методички:
     ввід двох чисел і їхня сума.
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git log</code>: <code>-n</code> - лише N останніх комітів: -n 3 (або коротко -3); <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">3b15e01 (HEAD -&gt; main) Почни ЛР2: заготовка програми
 f30faf1 Додай ввід x у ЛР1
 3347fd3 Додай заготовку ЛР1
@@ -236,6 +273,12 @@ f30faf1 Додай ввід x у ЛР1
 <p><strong>Крок 4. Коміт у клоні з GitHub.</strong> Клон <code>~/pisochnytsia</code> ти зробив в уроці 03. Якщо ще ні:</p>
 <pre><code class="language-bash">git clone git@github.com:Evge14n/pisochnytsia.git ~/pisochnytsia
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git clone</code> - копіює весь репо з GitHub до тебе. Назва: clone - «клон, точна копія». <code>~/pisochnytsia</code> - куди скопіювати; без неї - тека з назвою репо в поточній теці.</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">cd ~/pisochnytsia
 git status
 printf 'print(&quot;Привіт з ноутбука&quot;)\n' &gt; pryvit.py
@@ -295,8 +338,14 @@ index b72a1f6..419e6aa 100644
 +print(x * 2)
 (1/1) Stage this hunk [y,n,q,a,d,e,?]? 
 </code></pre>
-<p>Набери <code>y</code> і Enter. Так з одного файлу можна зробити два акуратні коміти: виправлення окремо, налагоджувальний <code>print</code> - не комітити взагалі.
-- <strong><code>commit.verbose true</code></strong> (урок 02) - у nano під час коміту видно саму зміну, легше написати точне повідомлення.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git add</code>: <code>-p</code> - питає про кожен шматок змін окремо: y - додати, n - ні, q - вийти.
+  Набери <code>y</code> і Enter. Так з одного файлу можна зробити два акуратні коміти: виправлення окремо, налагоджувальний <code>print</code> - не комітити взагалі.</li>
+<li><strong><code>commit.verbose true</code></strong> (урок 02) - у nano під час коміту видно саму зміну, легше написати точне повідомлення.</li>
+</ul>
+</blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>
 <ol>
 <li>Чим <code>git init</code> відрізняється від <code>git clone</code>?</li>

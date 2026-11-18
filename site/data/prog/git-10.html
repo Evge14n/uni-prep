@@ -90,13 +90,31 @@ Submit new issue
 gh issue create --title &quot;Описати пісочницю в README&quot; --body &quot;Зараз у README лише назва&quot; --label documentation
 gh issue list
 </code></pre>
-<p>Мітки <code>bug</code>, <code>documentation</code>, <code>enhancement</code>, <code>question</code> та інші GitHub створює в кожному новому репо сам.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>gh issue create</code> - створює Issue на GitHub. Назва: issue - «питання, справа»: завдання чи зауваження в репо; create - «створити». <code>--title</code> - назва Issue; без неї gh спитає сам; <code>--body</code> - опис Issue; <code>--label</code> - мітка: bug, documentation, enhancement (є в кожному новому репо).</li>
+<li><code>gh issue list</code> - показує список Issues репо. Назва: issue - «справа, завдання»; list - «список».</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
+Мітки <code>bug</code>, <code>documentation</code>, <code>enhancement</code>, <code>question</code> та інші GitHub створює в кожному новому репо сам.</p>
+</blockquote>
 <p><strong>Крок 2. README.md.</strong></p>
 <pre><code class="language-bash">cd ~/pisochnytsia
 git pull
 nano README.md
 </code></pre>
-<p>Зітри все і набери (Ctrl+O, Enter - зберегти, Ctrl+X - вийти):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git pull</code> - забирає нові коміти з GitHub і зливає у твою гілку. Назва: pull - «потягнути»: забрати нові коміти з GitHub до себе.</li>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).
+Зітри все і набери (Ctrl+O, Enter - зберегти, Ctrl+X - вийти):</li>
+</ul>
+</blockquote>
 <pre><code class="language-markdown"># pisochnytsia
 
 Пісочниця для вправ з **git**. Тут можна ламати.
@@ -162,7 +180,16 @@ git commit -m &quot;Опиши пісочницю в README&quot; -m &quot;Close
 git log -1 --format=%B
 git push
 </code></pre>
-<p>Вивід коміту і пушу:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--format</code> - свій вигляд рядка: %h - хеш, %an - автор, %s - повідомлення.</li>
+<li><code>git push</code> - відправляє твої коміти на GitHub. Назва: push - «штовхнути»: відправити свої коміти на GitHub.
+Вивід коміту і пушу:</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">[main 4f55914] Опиши пісочницю в README
  1 file changed, 18 insertions(+)
 To github.com:Evge14n/pisochnytsia.git
@@ -176,7 +203,15 @@ gh repo create proba-gh --private --add-readme --clone
 cd ~/proba-gh
 git log --oneline
 </code></pre>
-<p><code>--private</code> - приватний, <code>--add-readme</code> - одразу з README, <code>--clone</code> - одразу склонувати в поточну теку. Один з <code>--public</code> / <code>--private</code> обовʼязковий, коли пишеш назву: без нього gh не питає, а одразу падає (перевірено, gh 2.105.0):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code>: <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
+<li><code>gh repo create</code> - створює репозиторій на GitHub з терміналу. Назва: repository create - «створити репозиторій» на GitHub. <code>--private</code> - приватний репо: бачиш лише ти (і кого запросиш); для лаб - саме так; <code>--add-readme</code> - одразу створити файл README.md; <code>--clone</code> - одразу склонувати новий репо в поточну теку.</li>
+<li><code>git log</code>: <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.
+<code>--private</code> - приватний, <code>--add-readme</code> - одразу з README, <code>--clone</code> - одразу склонувати в поточну теку. Один з <code>--public</code> / <code>--private</code> обовʼязковий, коли пишеш назву: без нього gh не питає, а одразу падає (перевірено, gh 2.105.0):</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">`--public`, `--private`, or `--internal` required when not running interactively
 </code></pre>
 <p>Діалог з питаннями буде лише від голого <code>gh repo create</code> без жодних аргументів (так каже <code>gh repo create --help</code>). Потім репо <code>proba-gh</code> можна видалити на сайті: Settings → унизу Danger Zone → Delete this repository (не перевірено).</p>
@@ -199,7 +234,14 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 <pre><code class="language-bash">git pull --allow-unrelated-histories origin main
 git push -u origin main
 </code></pre>
-<p>Як не потрапити: якщо код уже є на ноутбуці, створюй на сайті <strong>порожній</strong> репо (без README, .gitignore і ліцензії). Документація GitHub прямо про це попереджає.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git pull</code>: <code>--allow-unrelated-histories</code> - дозволити злити дві історії без спільного початку (репо на сайті створили з README).</li>
+<li><code>git push</code>: <code>-u</code> - запамʼятати звʼязок гілки з GitHub; далі просто git push і git pull.
+Як не потрапити: якщо код уже є на ноутбуці, створюй на сайті <strong>порожній</strong> репо (без README, .gitignore і ліцензії). Документація GitHub прямо про це попереджає.</li>
+</ul>
+</blockquote>
 <p><strong>2. Написав <code>Closes #1</code>, а issue не закрилось.</strong> Коміт лежить в іншій гілці (наприклад, <code>lr3</code>). Issue закривається, лише коли коміт потрапить у гілку за замовчуванням (<code>main</code>). Злий гілку в <code>main</code> (урок 11) - тоді закриється.</p>
 <p><strong>3. <code>gh</code> з репозиторію Mint.</strong> Пакет gh 2.45 з Mint зламаний (падає на <code>gh issue view</code>). Став gh з офіційного репозиторію GitHub, як в уроці 02.</p>
 <h3 id="як-роблять-профі">Як роблять профі</h3>
@@ -214,7 +256,13 @@ git push -u origin main
 <p><strong>Для лаб:</strong> один <strong>приватний</strong> репо <code>univer-labs</code>. Якщо тека <code>~/univer/labs</code> уже з комітами - створи на сайті порожній репо <code>univer-labs</code> (Private, без README) і запуш, як в уроці 09. Або одним рядком gh з самої теки:</p>
 <pre><code class="language-bash">gh repo create univer-labs --private --source . --remote origin --push
 </code></pre>
-<p>Потім README зі списком: <code>lr1/</code> - ЛР1, ... <code>lr7/</code> - ЛР7, і як запускати (<code>python3 lr1/lr1_1.py</code>). На кожне «доробити» (наприклад, «ЛР3: завдання 2 не проходить doctest») - issue з міткою <code>bug</code>, і коміт з <code>Closes #N</code>, коли виправиш. Викладача можна додати в приватний репо: Settings → Collaborators → Add people (не перевірено).</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh repo create</code>: <code>--source</code> - взяти теку, що вже є на ноутбуці, напр. --source=. - поточну; <code>--remote</code> - як назвати віддалений репо в git, напр. --remote=origin; <code>--push</code> - одразу запушити коміти з --source на GitHub; <code>.</code> - після --source: поточна тека; <code>origin</code> - після --remote: стандартна назва віддаленого репо.
+Потім README зі списком: <code>lr1/</code> - ЛР1, ... <code>lr7/</code> - ЛР7, і як запускати (<code>python3 lr1/lr1_1.py</code>). На кожне «доробити» (наприклад, «ЛР3: завдання 2 не проходить doctest») - issue з міткою <code>bug</code>, і коміт з <code>Closes #N</code>, коли виправиш. Викладача можна додати в приватний репо: Settings → Collaborators → Add people (не перевірено).</li>
+</ul>
+</blockquote>
 <h3 id="самоперевірка">Самоперевірка</h3>
 <ol>
 <li>Чим приватний репо відрізняється від публічного і який обрати для лаб?</li>

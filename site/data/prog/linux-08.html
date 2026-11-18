@@ -86,13 +86,27 @@
 Інакше перевірка doctest (pytest, <code>perevir</code>) відкриє вікно і чекатиме, поки ти його закриєш.
 Якщо вікна нема зовсім (стара Windows) - див. «00 - Почни тут», крок 6.</p>
 <h3 id="руками-10-хв">Руками (10 хв)</h3>
-<pre><code>univer
+<pre><code class="language-bash">univer
 which python
 pip list | head
 cd ~/univer/labs/ЛР4
 nano kvadrat.py
 </code></pre>
-<p>Надрукуй (це тренування, не сама лаба):</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>univer</code> - переходить у ~/univer і вмикає venv. Назва: наша назва: «універ» - тека ~/univer для навчання.</li>
+<li><code>which</code> - показує шлях до програми з PATH. Назва: which - «котрий»: котрий файл запуститься. <code>python</code> - у venv покаже ~/univer/.venv/bin/python; поза venv - тиша.</li>
+<li><code>pip list</code> - показує встановлені бібліотеки і їхні версії. Назва: list - «список» встановлених пакетів.</li>
+<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.
+Надрукуй (це тренування, не сама лаба):</p>
+</blockquote>
 <pre><code class="language-python">import doctest
 
 
@@ -111,15 +125,30 @@ def square_area(side: float) -&gt; float:
 doctest.testmod()
 </code></pre>
 <p>Далі:</p>
-<pre><code>python kvadrat.py                # тиша - усі doctest пройшли
+<pre><code class="language-bash">python kvadrat.py                # тиша - усі doctest пройшли
 python kvadrat.py -v             # подробиці, внизу Test passed.
 perevir kvadrat.py               # doctest: усе пройшло (1 passed ...), flake8, mypy
 </code></pre>
-<p>Тепер зіпсуй: заміни <code>side * side</code> на <code>side * 2</code>, збережи, і ще раз <code>python kvadrat.py</code> - побачиш
-<code>Failed example</code> з <code>Expected: 9</code> і <code>Got: 6</code>. І <code>perevir kvadrat.py</code> - напише «Є ПОМИЛКИ». Поверни як було.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови.</li>
+<li><code>perevir</code> - перевіряє лабу всіма інструментами одразу (doctest, стиль, типи). Назва: наша назва: «перевір» - перевірка лаби перед здачею.</li>
+<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.
+Тепер зіпсуй: заміни <code>side * side</code> на <code>side * 2</code>, збережи, і ще раз <code>python kvadrat.py</code> - побачиш
+<code>Failed example</code> з <code>Expected: 9</code> і <code>Got: 6</code>. І <code>perevir kvadrat.py</code> - напише «Є ПОМИЛКИ». Поверни як було.</li>
+</ul>
+</blockquote>
 <p>Turtle-перевірка (вікно на 2 секунди):</p>
-<pre><code>python -c &quot;import turtle, time; turtle.circle(50); time.sleep(2)&quot;
+<pre><code class="language-bash">python -c &quot;import turtle, time; turtle.circle(50); time.sleep(2)&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>python3</code>: <code>-c</code> - виконати рядок коду з командного рядка, без файлу: python3 -c 'print(2 ** 10)'.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+</blockquote>
 <h3 id="типові-помилки">Типові помилки</h3>
 <ul>
 <li>Забув <code>univer</code> (venv вимкнено) → <code>ModuleNotFoundError: No module named 'matplotlib'</code> або

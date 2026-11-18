@@ -123,11 +123,32 @@ head -c 12M /dev/zero &gt; ~/proba/misce/kesh/kesh.bin
 for i in 1 2 3; do head -c 20K /dev/zero &gt; ~/proba/misce/laby/lr$i.py; done
 cd ~/proba/misce
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки.</li>
+<li><code>head</code> - показує перші рядки файлу. Назва: head - «голова»: початок файлу. <code>-c</code> - скільки перших байтів: -c 20K; з /dev/zero так роблять файл потрібного розміру; <code>/dev/zero</code> - нескінченне джерело нульових байтів; лише з -c.</li>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>;</code> - розділяє команди в рядку, виконує всі по черзі. Назва: крапка з комою - роздільник команд.</li>
+<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <ol>
 <li>Який рядок буде <strong>останнім</strong>?</li>
 </ol>
 <pre><code class="language-bash">du -h --max-depth=1 | sort -h
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>du</code> - рахує, скільки місця займає тека. Назва: disk usage - «використання диска». <code>-h</code> - розміри в K, M, G замість блоків по кілобайту; <code>--max-depth</code> - заходить лише на N рівнів углиб: --max-depth=1 - лише прямі підтеки.</li>
+<li><code>sort</code> - впорядковує рядки. Назва: sort - «сортувати, впорядкувати». <code>-h</code> - як розміри з du -h: 512K &lt; 2M &lt; 1G.</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">64K ./laby
@@ -154,6 +175,14 @@ cd ~/proba/misce
 <pre><code class="language-bash">printf 'UUID=1234-ABCD  /mnt/arhiv  ext4  defaults,nofail  0  2\n' &gt; ~/proba/fstab-proba
 findmnt --verify --tab-file ~/proba/fstab-proba
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>findmnt</code> - показує, що куди змонтовано; --verify перевіряє fstab. Назва: find mount - «знайти монтування». <code>--verify</code> - перевіряє записи fstab: чи є такий диск, тека, файлова система; <code>--tab-file</code> - перевіряє не /etc/fstab, а вказаний файл - для проби; <code>~/proba/fstab-proba</code> - пробний файл з уроку 18, щоб не чіпати справжній /etc/fstab.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">/mnt/arhiv
@@ -174,6 +203,12 @@ findmnt --verify --tab-file ~/proba/fstab-proba
 </ol>
 <pre><code class="language-bash">apt-get -s clean
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt-get clean</code> - стирає кеш завантажених .deb. Назва: apt-get - «apt, дістань»; clean - «почистити». <code>-s</code> - лише показує, що стер би; sudo не треба.</li>
+</ul>
+</blockquote>
 <details>
 <summary>Відповідь</summary>
 <pre><code class="language-text">NOTE: This is only a simulation!
@@ -191,6 +226,12 @@ Del
 <p><strong>Крок 1. Скільки вільно.</strong></p>
 <pre><code class="language-bash">df -h /
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>df</code> - показує вільне місце на дисках. Назва: disk free - «вільне на диску». <code>-h</code> - розміри в K, M, G замість кілобайтних блоків (human-readable); <code>/</code> - корінь - розділ, де стоїть система.</li>
+</ul>
+</blockquote>
 <p>Справжній вивід з тестової системи (диск віртуальний, тому 1007G):</p>
 <pre><code class="language-text">Filesystem      Size  Used Avail Use% Mounted on
 /dev/sdd       1007G  3.6G  953G   1% /
@@ -202,12 +243,27 @@ Del
 <pre><code class="language-bash">du -sh ~
 du -h --max-depth=1 ~ 2&gt;/dev/null | sort -h | tail -5
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>du</code>: <code>-s</code> - лише один підсумок на кожну теку, без підтек; <code>~</code> - домашня тека: du -sh ~ - скільки займає все твоє.</li>
+<li><code>tail</code> - показує останні рядки; -f стежить наживо. Назва: tail - «хвіст»: кінець файлу.</li>
+<li><code>2&gt;</code> - пише лише помилки у файл. Назва: redirect stderr - «перенаправити помилки»: 2 - номер потоку помилок.</li>
+</ul>
+</blockquote>
 <p><code>2&gt;/dev/null</code> ховає повідомлення про теки без доступу, <code>tail -5</code> лишає 5 найбільших. Часто нагорі <code>.cache</code>
 (кеш програм), <code>.local</code> (там і Flatpak-дані користувача), <code>.var</code> (дані Flatpak-програм). Теки з крапкою приховані:
 у Nemo їх показує Ctrl+H.</p>
 <p><strong>Крок 3. Що з'їло місце в системі.</strong> <code>-x</code> - не заходити на інші диски (флешки, другий диск):</p>
 <pre><code class="language-bash">sudo du -xh --max-depth=1 / 2&gt;/dev/null | sort -h | tail -6
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>du</code>: <code>-x</code> - не заходить на інші диски і флешки, змонтовані всередині.</li>
+</ul>
+</blockquote>
 <p>Справжній вивід з тестової системи:</p>
 <pre><code class="language-text">3.9M    /etc
 78M /opt
@@ -223,12 +279,25 @@ du -h --max-depth=1 ~ 2&gt;/dev/null | sort -h | tail -5
 ncdu ~
 sudo ncdu -rx /
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
+<li><code>ncdu</code> - du з навігацією стрілками: що зʼїло місце. Назва: NCurses Disk Usage - du з «вікном» у терміналі (бібліотека ncurses). <code>~</code> - ncdu ~ - твоя домашня тека, без sudo; <code>-r</code> - лише перегляд (read-only): клавіша d нічого не видалить; <code>-x</code> - не заходить на інші диски і флешки; <code>/</code> - sudo ncdu -rx / - уся система, лише перегляд.</li>
+</ul>
+</blockquote>
 <p>Стрілки - ходити, Enter - зайти в теку, стрілка вліво - вгору, <code>?</code> - довідка, <code>q</code> - вийти. Системний диск
 дивимось з <code>-r</code> (read-only - лише перегляд): від root клавіша <code>d</code> стерла б що завгодно. У своїй теці (<code>ncdu ~</code>, без
 sudo) <code>d</code> видаляє вибране (спершу спитає) - лише те, що точно знаєш. Мишкою те саме робить «Аналізатор використання диска»: «Просканувати теку...» або клік по диску.</p>
 <p><strong>Крок 5. Прибирання.</strong> Спершу подивись, скільки займають журнали:</p>
 <pre><code class="language-bash">sudo journalctl --disk-usage
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>journalctl</code> - показує журнал системи і служб. Назва: journal control - «керування журналом» systemd. <code>--disk-usage</code> - скільки місця на диску займає журнал.</li>
+</ul>
+</blockquote>
 <p>Справжній вивід (у тебе буде своє число):</p>
 <pre><code class="language-text">Archived and active journals take up 464.0M in the file system.
 </code></pre>
@@ -239,12 +308,28 @@ sudo journalctl --vacuum-time=2weeks
 flatpak uninstall --unused
 gio trash --empty
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>apt autoremove</code> - прибирає залежності, які вже нікому не потрібні. Назва: auto remove - «автоматично прибрати». <code>--purge</code> - заодно стирає системні налаштування цих пакетів у /etc (як apt purge).</li>
+<li><code>apt clean</code> - стирає кеш завантажених .deb, програми лишаються. Назва: clean - «почистити».</li>
+<li><code>journalctl</code>: <code>--vacuum-time</code> - стерти записи, старші за час, напр. --vacuum-time=2weeks (потрібен sudo).</li>
+<li><code>flatpak uninstall</code> - видаляє Flatpak-програму або непотрібні бібліотеки. Назва: uninstall - «видалити встановлене». <code>--unused</code> - прибрати runtimes (спільні бібліотеки), які вже не потрібні жодній програмі.</li>
+<li><code>gio</code> - робота з файлами як у Nemo; gio trash - у кошик. Назва: GIO - GLib Input/Output, «ввід-вивід бібліотеки GLib». <code>--empty</code> - спорожнює кошик - файли зникають назовсім; <code>trash</code> - команда «кошик»: gio trash ФАЙЛ кладе файл у кошик, як Delete у Nemo.</li>
+</ul>
+</blockquote>
 <p><code>--vacuum-time=2weeks</code> лишає записи за останні 2 тижні, <code>--vacuum-size=500M</code> - лишає не більше 500 МБ.
 На <code>autoremove</code> apt покаже список і спитає <code>[Y/n]</code>: якщо там щось на <code>mint...</code> чи <code>cinnamon</code> - відповідай <code>n</code>.
 Знімки Timeshift: лиши 2-3 кожного типу і перевір, що домашня тека не входить у знімки (урок 01).</p>
 <p><strong>Крок 6. Флешка: подивись, потім пиши.</strong> Встав флешку і <strong>до</strong> будь-якого форматування чи запису образу:</p>
 <pre><code class="language-bash">lsblk -o NAME,SIZE,MODEL,MOUNTPOINT,FSTYPE
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>lsblk</code> - показує диски, флешки і розділи деревом. Назва: list block devices - «список блокових пристроїв» (дисків і розділів). <code>-o</code> - які колонки показати: -o NAME,SIZE,MOUNTPOINT (output).</li>
+</ul>
+</blockquote>
 <p>У тестовій системі курсу всі диски віртуальні (у стовпці MODEL - <code>Virtual Disk</code>), тому її вивід тут не
 показую. На ноутбуці приблизно так (приклад, назви і розміри будуть інші):</p>
 <pre><code class="language-text">NAME          SIZE MODEL            MOUNTPOINT            FSTYPE
@@ -272,6 +357,13 @@ nvme0n1     476.9G Назва твого SSD
 <pre><code class="language-bash">swapon --show
 free -h
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>swapon</code> - показує (і вмикає) swap. Назва: swap on - «увімкнути swap». <code>--show</code> - показує swap: файл чи розділ, розмір, скільки зайнято.</li>
+<li><code>free</code> - показує памʼять: скільки зайнято і доступно. Назва: free - «вільна» (скільки вільної памʼяті). <code>-h</code> - зручні одиниці Ki, Mi, Gi замість кілобайтів.</li>
+</ul>
+</blockquote>
 <p>Справжній вивід з тестової системи:</p>
 <pre><code class="language-text">NAME     TYPE      SIZE USED PRIO
 /dev/sdc partition  12G   0B   -2
@@ -283,6 +375,12 @@ free -h
 гальмує. У Mint це робить таймер раз на тиждень:</p>
 <pre><code class="language-bash">systemctl status fstrim.timer
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>systemctl status</code> - показує стан служби і останні рядки її журналу. Назва: status - «стан».</li>
+</ul>
+</blockquote>
 <p>На ноутбуці має бути <code>Active: active (waiting)</code> і <code>Trigger:</code> з датою наступного запуску. У тестовій системі
 справжній вивід інший, бо вона віртуальна: <code>Active: inactive (dead)</code> і
 <code>ConditionVirtualization=!container was not met</code> - на ноутбуці цього рядка не буде. Розклад - <code>OnCalendar=weekly</code>

@@ -2,7 +2,7 @@
 <p><strong>Навіщо:</strong> «збереження гри» для коду. Зламав лабу - повернувся до робочої версії за секунду.</p>
 <h3 id="коротко-5-хв">Коротко (5 хв)</h3>
 <p>git запамʼятовує <strong>знімки (коміти)</strong> теки. Кожен коміт - стан усіх файлів у момент + підпис, що змінив.</p>
-<pre><code>правиш файли  →  git add  →  git commit  →  історія (git log)
+<pre><code class="language-text">правиш файли  →  git add  →  git commit  →  історія (git log)
 (робоча тека)    (вибрав,      (знімок
                  що зберегти)   з підписом)
 </code></pre>
@@ -49,11 +49,19 @@
 </tbody>
 </table></div>
 <p>Перед першим комітом git має знати, хто ти (один раз на комп'ютер):</p>
-<pre><code>git config --global user.name &quot;Твоє Імʼя Прізвище&quot;
+<pre><code class="language-bash">git config --global user.name &quot;Твоє Імʼя Прізвище&quot;
 git config --global user.email &quot;твоя@пошта&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). Назва: config - від configuration, «налаштування». <code>--global</code> - для тебе на цьому ноутбуці: пише у файл ~/.gitconfig, діє в усіх репо.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>.gitignore</strong> - файл зі списком того, що git не чіпає. Для Python:</p>
-<pre><code>.venv/
+<pre><code class="language-text">.venv/
 __pycache__/
 *.png
 </code></pre>
@@ -62,7 +70,7 @@ __pycache__/
 <p>GitHub - сайт, куди можна вивантажити репозиторій (<code>git push</code>). Для лаб не обовʼязково; почни з
 локального git.</p>
 <h3 id="руками-10-хв">Руками (10 хв)</h3>
-<pre><code>cd ~/univer/praktyka
+<pre><code class="language-bash">cd ~/univer/praktyka
 mkdir den9 &amp;&amp; cd den9
 git init
 printf 'def double(x: int) -&gt; int:\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; double(4)\n    8\n    &quot;&quot;&quot;\n    return x * 2\n' &gt; lab.py
@@ -81,8 +89,31 @@ git restore lab.py                     # повернули
 python3 -m doctest lab.py              # тиша - знову все добре
 git log --oneline
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку».</li>
+<li><code>git init</code> - робить теку репозиторієм git (створює .git). Назва: init - від initialize, «почати, підготувати».</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан».</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>git log</code> - показує історію комітів, новий зверху. Назва: log - «журнал»: історія комітів. <code>--oneline</code> - по рядку на коміт: 7 знаків хешу і перший рядок повідомлення.</li>
+<li><code>sed</code> - друкує потрібні рядки або замінює текст. Назва: stream editor - «потоковий редактор»: править текст, що тече крізь нього. <code>-i</code> - змінити САМ файл (без -i sed лише показує результат); -i.bak - ще й копія.</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m doctest</code> - перевіряє приклади &gt;&gt;&gt; з опису функцій. Назва: doc test - «тест у документації»: приклади &gt;&gt;&gt; в описі функції.</li>
+<li><code>git diff</code> - показує, які рядки змінено (+ додано, - прибрано). Назва: diff - від difference, «різниця».</li>
+<li><code>git restore</code> - викидає зміни у файлі або забирає його з індексу. Назва: restore - «відновити».</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>&amp;&amp;</code> - друга команда - лише якщо перша вдалась. Назва: «і»: друга команда - лише якщо перша вдалась.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>#</code> - коментар: далі до кінця рядка bash не читає. Назва: hash («решітка») - коментар.</li>
+</ul>
+</blockquote>
 <p>Для ЛР4 (один раз):</p>
-<pre><code>cd ~/univer/labs/ЛР4
+<pre><code class="language-bash">cd ~/univer/labs/ЛР4
 git init
 printf '.venv/\n__pycache__/\n*.png\n' &gt; .gitignore
 </code></pre>

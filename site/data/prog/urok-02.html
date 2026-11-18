@@ -306,7 +306,9 @@ print(&quot;{} + {} = {}&quot;.format(2, 3, 5))
 <p>Інструменти (с. 12-14): <strong>лінтери</strong> знаходять проблеми, не запускаючи код (<code>pycodestyle</code> - лише PEP 8;
 <code>flake8</code> - PEP 8 + невикористані імена; <code>pylint</code> - глибше, ставить оцінку з 10; <code>mypy</code> - перевіряє
 типи). <strong>Форматери</strong> самі переписують код (<code>black</code> - «безкомпромісний», ширина 88; <code>autopep8</code>;
-<code>isort</code> - сортує імпорти). Запуск: <code>pip install flake8 black</code>, потім <code>flake8 my_program.py</code>.</p>
+<code>isort</code> - сортує імпорти). Запуск: <code>pip install flake8 black</code>, потім <code>flake8 my_program.py</code>.
+У Linux Mint <code>pip install</code> працює лише всередині venv (<code>source ~/univer/.venv/bin/activate</code>), інакше
+помилка <code>externally-managed-environment</code> - курс Linux-Mint, уроки 02-03.</p>
 <p>Приклад з лекції (с. 14-15), сума цифр двозначного числа. Спершу «до PEP 8» (працює, але читати важко):</p>
 <pre><code class="language-python"># не запускати: приклад поганого стилю, flake8 знайде 7 зауважень
 x=int(input(&quot;Введіть двозначне число &quot;))

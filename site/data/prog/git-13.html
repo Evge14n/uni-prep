@@ -92,6 +92,22 @@ printf 'def f(x):\n    return x\n' &gt; lr4.py
 git add lr4.py
 git commit -m &quot;ЛР4: заготовка&quot;
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>git switch</code> - перемикає на іншу гілку (-c - створює нову). Назва: switch - «перемкнути». <code>-c</code> - створити нову гілку від поточного місця і перейти на неї.</li>
+<li><code>git pull</code> - забирає нові коміти з GitHub і зливає у твою гілку. Назва: pull - «потягнути»: забрати нові коміти з GitHub до себе.</li>
+<li><code>printf</code> - друкує текст за шаблоном; \n - Enter. Назва: print formatted - «надрукувати за шаблоном».</li>
+<li><code>git add</code> - додає зміни файлу в наступний коміт (індекс). Назва: add - «додати» (в індекс, тобто в наступний коміт).</li>
+<li><code>git commit</code> - зберігає знімок змін з індексу в історію. Назва: commit - «зафіксувати»: зберегти знімок змін в історію. <code>-m</code> - повідомлення коміту одразу в команді; без -m відкриється nano.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Крок 2. Недописане - і перемкнутись не виходить.</strong></p>
 <pre><code class="language-bash">printf '# завдання 2 - ще пишу\n' &gt;&gt; lr4.py
 printf 'ідеї до звіту\n' &gt; chernetka.txt
@@ -105,6 +121,13 @@ error: Your local changes to the following files would be overwritten by checkou
 Please commit your changes or stash them before you switch branches.
 Aborting
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git status</code> - показує, що змінено і що піде в наступний коміт. Назва: status - «стан». <code>--short</code> - коротко: по рядку на файл з двома буквами стану (M, A, ??).</li>
+<li><code>&gt;&gt;</code> - дописує вивід у кінець файлу. Назва: append - «дописати» в кінець файлу.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 3. Простий <code>stash</code> і повернення.</strong></p>
 <pre><code class="language-bash">git stash
 git status --short
@@ -121,7 +144,13 @@ Changes not staged for commit:
 ...
 Dropped refs/stash@{0} (d72d50356fc7dbbcf1887bc812215b6dabce8eae)
 </code></pre>
-<p><code>chernetka.txt</code> лишилась на місці - простий <code>stash</code> її не взяв.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git stash</code> - ховає незакомічені зміни на потім і чистить теку. Назва: stash - «заначка, сховати на потім». <code>list</code> - список схованок: stash@{0} - найновіша; <code>pop</code> - повернути найновішу схованку і видалити її зі списку.
+<code>chernetka.txt</code> лишилась на місці - простий <code>stash</code> її не взяв.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 4. <code>stash -u</code>, термінова правка в <code>main</code>, повернення.</strong></p>
 <pre><code class="language-bash">git stash -u
 git status --short
@@ -134,7 +163,13 @@ git stash apply
 git stash list
 git stash drop
 </code></pre>
-<p>Після <code>stash -u</code> <code>git status --short</code> нічого не друкує - тека чиста, і <code>git switch main</code> проходить. Після <code>apply</code> - <code>lr4.py</code> знову змінений, <code>chernetka.txt</code> знову є, а схованка ще на полиці; <code>drop</code> її прибирає:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git stash</code>: <code>-u</code> - сховати й нові файли (?? у git status); без -u вони лишаються в теці; <code>apply</code> - повернути, але лишити в списку (на всяк випадок); <code>drop</code> - видалити схованку без повернення.
+Після <code>stash -u</code> <code>git status --short</code> нічого не друкує - тека чиста, і <code>git switch main</code> проходить. Після <code>apply</code> - <code>lr4.py</code> знову змінений, <code>chernetka.txt</code> знову є, а схованка ще на полиці; <code>drop</code> її прибирає:</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">Dropped refs/stash@{0} (65d8f24b94b7f4ebc41b4ce380162538447b0ad5)
 </code></pre>
 <p><strong>Крок 5. Справжній конфлікт при <code>pop</code>.</strong> Ховаємо зміни, а в той самий рядок <code>lr4.py</code> комітимо інше:</p>
@@ -161,14 +196,27 @@ UU lr4.py
 ?? chernetka.txt
 stash@{0}: WIP on lr4: 5bd6881 ЛР4: заготовка
 </code></pre>
-<p>Маркери як в уроці 08, тільки підписи інші: <code>Updated upstream</code> - те, що зараз у гілці, <code>Stashed changes</code> - те, що було в схованці. Відкрий <code>nano lr4.py</code> і залиш обидві частини, як треба:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git commit</code>: <code>-a</code> - спершу сам додає зміни ВЖЕ відстежуваних файлів; нові файли - ні.</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.
+Маркери як в уроці 08, тільки підписи інші: <code>Updated upstream</code> - те, що зараз у гілці, <code>Stashed changes</code> - те, що було в схованці. Відкрий <code>nano lr4.py</code> і залиш обидві частини, як треба:</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">nano lr4.py
 </code></pre>
 <pre><code class="language-text">def f(x):
     return 2 * x
 # завдання 2 - ще пишу
 </code></pre>
-<p>Потім:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>nano</code> - простий редактор файлів у терміналі. Назва: nano - жарт з одиницями: наступник редактора pico (піко &lt; нано).
+Потім:</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">git add lr4.py
 git stash drop
 git status --short

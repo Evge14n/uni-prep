@@ -94,6 +94,16 @@ git --version
 </code></pre>
 <pre><code class="language-text">git version 2.43.0
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>apt update</code> - оновлює список пакетів, нічого не ставить. Назва: update - «оновити» (тут оновлюється лише список пакетів).</li>
+<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
+<li><code>git</code> - програма, що зберігає історію змін файлів (коміти, гілки). Назва: назва не розшифровується: англ. сленгове git - «бовдур», так жартома назвав автор. <code>--version</code> - надрукувати версію git (у Mint 22.3 - 2.43.0).</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p><strong>Крок 2. gh з офіційного репозиторію GitHub.</strong> Скопіюй блок цілком (це один довгий рядок, розбитий <code>\</code>), встав у термінал (Ctrl+Shift+V) і натисни Enter. Сніпет дослівно з документації gh (<code>docs/install_linux.md</code>, 18.11.2026): він додає ключ і адресу репозиторію GitHub, а потім ставить <code>gh</code>.</p>
 <pre><code class="language-bash">(type -p wget &gt;/dev/null || (sudo apt update &amp;&amp; sudo apt install wget -y)) \
     &amp;&amp; sudo mkdir -p -m 755 /etc/apt/keyrings \
@@ -105,13 +115,43 @@ git --version
     &amp;&amp; sudo apt update \
     &amp;&amp; sudo apt install gh -y
 </code></pre>
-<p>Перевір версію і звідки вона:</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>type</code> - каже, що це за команда і де вона. Назва: type - «тип»: що це за команда. <code>-p</code> - лише шлях до файлу, або нічого, якщо це не файл (path); <code>wget</code> - з -p у скриптах: є програма - нічого не ставити.</li>
+<li><code>apt install</code>: <code>-y</code> - одразу відповідає «так» на «Продовжити?» - список того, що поставиться, не встигнеш прочитати.</li>
+<li><code>mkdir</code> - створює нову теку. Назва: make directory - «зробити теку». <code>-p</code> - створює і всі проміжні теки шляху; якщо тека вже є - мовчить, без помилки; <code>-m</code> - одразу задає права нової теки, напр. -m 700 - лише для тебе.</li>
+<li><code>wget</code> - завантажує файл з інтернету за адресою. Назва: World Wide Web + get - «дістати з вебу».</li>
+<li><code>cat</code> - показує вміст файлу. Назва: concatenate - «зчепити»: склеює кілька файлів в один вивід.</li>
+<li><code>tee</code> - показує вивід і одночасно пише у файл. Назва: tee - трійник у трубах (літера T): потік іде у два боки.</li>
+<li><code>chmod</code> - змінює права файлу: читати, змінювати, запускати. Назва: change mode - «змінити режим», тобто права доступу файлу. <code>go+r</code> - дати читання групі (g = group) та іншим.</li>
+<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали.</li>
+<li><code>mktemp</code> - створює тимчасовий файл чи теку і друкує шлях. Назва: make temporary - «зробити тимчасовий» файл чи теку.</li>
+<li><code>dpkg</code> - ставить один .deb і знає, що встановлено. Назва: Debian package - «пакет Debian». <code>--print-architecture</code> - друкує архітектуру системи, напр. amd64.</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>||</code> - друга команда - лише якщо перша впала. Назва: «або»: друга команда - лише якщо перша впала.</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>&amp;&amp;</code> - друга команда - лише якщо перша вдалась. Назва: «і»: друга команда - лише якщо перша вдалась.</li>
+<li><code>$( )</code> - підставляє вивід команди в рядок. Назва: command substitution - «підстановка команди».</li>
+<li><code>$ЗМІННА</code> - підставляє значення змінної. Назва: dollar («долар») - «значення змінної».</li>
+<li><code>\</code> - екранує символ або переносить команду на новий рядок. Назва: backslash - «зворотна скісна риска».
+Перевір версію і звідки вона:</li>
+</ul>
+</blockquote>
 <pre><code class="language-bash">gh version
 apt-cache policy gh
 </code></pre>
 <pre><code class="language-text">gh version 2.105.0 (2026-11-17)
 https://github.com/cli/cli/releases/tag/v2.105.0
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>gh version</code> - показує версію gh (те саме, що gh --version). Назва: version - «версія».</li>
+<li><code>apt-cache policy</code> - показує версії пакета і звідки він. Назва: apt-cache - «кеш apt» (збережений список пакетів); policy - «політика». <code>gh</code> - з уроку git 02: видно, чи стоїть gh з cli.github.com, чи старий 2.45 з Ubuntu.</li>
+</ul>
+</blockquote>
 <pre><code class="language-text">gh:
   Installed: 2.105.0
   Candidate: 2.105.0
@@ -143,7 +183,13 @@ core.editor=nano
 core.quotepath=false
 pull.rebase=false
 </code></pre>
-<p>Зверни увагу: <code>init.defaultBranch</code> git показує малими літерами (<code>defaultbranch</code>) - назви ключів для git нечутливі до регістру.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git config</code> - читає і змінює налаштування git (імʼя, пошта, редактор). Назва: config - від configuration, «налаштування». <code>--global</code> - для тебе на цьому ноутбуці: пише у файл ~/.gitconfig, діє в усіх репо; <code>--list</code> - показати всі налаштування рядками ключ=значення.
+Зверни увагу: <code>init.defaultBranch</code> git показує малими літерами (<code>defaultbranch</code>) - назви ключів для git нечутливі до регістру.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 4. Звідки взялось кожне налаштування.</strong> Запускай з домашньої теки (<code>cd ~</code>), не з репо:</p>
 <pre><code class="language-bash">cd ~
 git config --list --show-origin
@@ -155,7 +201,15 @@ file:/home/.../.gitconfig   core.editor=nano
 file:/home/.../.gitconfig   core.quotepath=false
 file:/home/.../.gitconfig   pull.rebase=false
 </code></pre>
-<p>Якщо запустити це всередині репо, внизу додадуться рядки <code>file:.git/config</code> - налаштування саме цього репо. <code>--show-origin</code> рятує, коли «я ж налаштував, а git робить інакше»: видно, який файл перебиває.</p>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку». <code>~</code> - домашня тека /home/evgen; ~/univer/labs - шлях від домашньої теки.</li>
+<li><code>git config</code>: <code>--show-origin</code> - біля кожного налаштування - з якого файлу воно взялось.</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.
+Якщо запустити це всередині репо, внизу додадуться рядки <code>file:.git/config</code> - налаштування саме цього репо. <code>--show-origin</code> рятує, коли «я ж налаштував, а git робить інакше»: видно, який файл перебиває.</li>
+</ul>
+</blockquote>
 <p><strong>Крок 5. Сам файл</strong> - звичайний текст, його можна відкрити й у nano:</p>
 <pre><code class="language-bash">cat ~/.gitconfig
 git config user.name
@@ -204,6 +258,12 @@ init.defaultbranch=main
 <p>Прибрати зайвий рядок:</p>
 <pre><code class="language-bash">git config --global --unset user.nmae
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>git config</code>: <code>--unset</code> - прибрати налаштування (напр. з помилкою в назві).</li>
+</ul>
+</blockquote>
 <p><strong>3. Пропустив крапку в ключі</strong> (<code>git config --global user "Імʼя"</code>):</p>
 <pre><code class="language-text">error: key does not contain a section: user
 </code></pre>

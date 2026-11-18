@@ -95,6 +95,19 @@ repository and signing key, which enables auto-update through the system package
 wget -O code_latest_amd64.deb &quot;https://code.visualstudio.com/sha/download?build=stable&amp;os=linux-deb-x64&quot;
 sudo apt install ./code_latest_amd64.deb
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>cd</code> - переходить в іншу теку. Назва: change directory - «змінити теку».</li>
+<li><code>xdg-user-dir</code> - друкує шлях до теки завантажень, зображень тощо. Назва: XDG user directory - «тека користувача» за правилами freedesktop.org. <code>DOWNLOAD</code> - тека завантажень (туди кладуть файли браузер і Telegram).</li>
+<li><code>wget</code> - завантажує файл з інтернету за адресою. Назва: World Wide Web + get - «дістати з вебу». <code>-O</code> - під яким імʼям зберегти; -O - (мінус) означає «на екран», щоб передати далі в трубу |.</li>
+<li><code>sudo</code> - виконує одну команду від імені адміністратора (root). Назва: su do - «виконати як інший користувач», зазвичай root.</li>
+<li><code>apt install</code> - ставить програму (пакет) зі сховища. Назва: install - «встановити».</li>
+<li><code>"..."</code> - текст з пробілами одним словом, $ підставляється. Назва: подвійні лапки - «усе це одне слово, але $ працює».</li>
+<li><code>$( )</code> - підставляє вивід команди в рядок. Назва: command substitution - «підстановка команди».</li>
+</ul>
+<p>Усе про кожну команду - у вкладці <a href="#/u/prog/komandy">«Команди»</a>, а тут торкнись команди в коді - вискочить підказка.</p>
+</blockquote>
 <p>Файл близько 300 МБ. Під час установки зʼявиться питання про репозиторій Microsoft - <strong>Yes</strong> (автооновлення).
 Подвійний клік по .deb у Nemo теж працює - відкриється Captain (урок 16).</p>
 <p><strong>Крок 1 (варіант Б). VSCodium з його apt-репозиторію.</strong> Команди - з vscodium.com, варіант «Ubuntu 24.04 or newer»
@@ -103,6 +116,20 @@ sudo apt install ./code_latest_amd64.deb
 echo -e 'Types: deb\nURIs: https://download.vscodium.com/debs\nSuites: vscodium\nComponents: main\nArchitectures: amd64 arm64\nSigned-by: /usr/share/keyrings/vscodium-archive-keyring.gpg' | sudo tee /etc/apt/sources.list.d/vscodium.sources
 sudo apt update &amp;&amp; sudo apt install codium
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>wget</code>: <code>-q</code> - нічого не писати (тихо).</li>
+<li><code>gpg</code> - працює з ключами; у курсі - перетворює ключ репозиторію. Назва: GNU Privacy Guard - «охоронець приватності GNU». <code>--dearmor</code> - зняти «броню»: текстовий ключ (-----BEGIN PGP ...) перетворити на двійковий, як хоче apt.</li>
+<li><code>tee</code> - показує вивід і одночасно пише у файл. Назва: tee - трійник у трубах (літера T): потік іде у два боки.</li>
+<li><code>echo</code> - друкує текст і значення змінних. Назва: echo - «луна»: повторює те, що йому дали. <code>-e</code> - розуміти \n (новий рядок) і \t (таб) всередині тексту.</li>
+<li><code>apt update</code> - оновлює список пакетів, нічого не ставить. Назва: update - «оновити» (тут оновлюється лише список пакетів).</li>
+<li><code>&gt;</code> - пише вивід у файл, старий вміст стирає. Назва: redirect - «перенаправлення» виводу у файл.</li>
+<li><code>|</code> - передає вивід однієї команди на ввід іншій. Назва: pipe - «труба» (пайп), вертикальна риска.</li>
+<li><code>'...'</code> - текст буквально, нічого не підставляється. Назва: одинарні лапки - «буквально, як написано».</li>
+<li><code>&amp;&amp;</code> - друга команда - лише якщо перша вдалась. Назва: «і»: друга команда - лише якщо перша вдалась.</li>
+</ul>
+</blockquote>
 <p>Що тут відбувається: 1) завантажити ключ, яким підписано репозиторій, перетворити (<code>--dearmor</code>) і покласти в
 <code>/usr/share/keyrings/</code>; 2) записати файл репозиторію <code>vscodium.sources</code>; 3) оновити список пакетів і поставити
 <code>codium</code>. Перший рядок довгий - копіюй цілим. (Альтернатива - перевірений Flatpak <code>com.vscodium.codium</code>, але з тією
@@ -144,6 +171,16 @@ cd ~/univer/labs/lr1
 python3 -m pytest --doctest-modules -q lr1_1.py
 python3 -m flake8 --max-line-length=78 lr1_1.py
 </code></pre>
+<blockquote>
+<p><strong>Нове тут:</strong></p>
+<ul>
+<li><code>source</code> - виконує файл у поточному bash (venv, ~/.bashrc). Назва: source - «джерело»: виконати команди з файлу-джерела. <code>~/univer/.venv/bin/activate</code> - увімкнути venv для лаб; вимкнути - deactivate.</li>
+<li><code>python3</code> - запускає Python: файл, рядок коду або модуль. Назва: Python - на честь комедійного шоу «Monty Python», 3 - третя версія мови. <code>-m</code> - запусти модуль як програму: python3 -m pytest, python3 -m venv, python3 -m pdb.</li>
+<li><code>python3 -m pytest</code> - проганяє doctest і дає чесний код виходу 0/1. Назва: py + test - «тести для Python». <code>--doctest-modules</code> - шукати doctest (приклади &gt;&gt;&gt;) у файлах .py; без нього pytest шукає лише функції test_; <code>-q</code> - коротко: крапка за кожен тест і рядок підсумку «1 passed in 0.01s».</li>
+<li><code>python3 -m flake8</code> - шукає помилки стилю і зайвий код, нічого не змінює. Назва: pyflakes + pep8: обʼєднав дві старі програми перевірки коду. <code>--max-line-length</code> - найбільша дозволена довжина рядка; викладач хоче 78 (типово 79).</li>
+<li><code>~</code> - домашня тека /home/evgen. Назва: tilde («тильда») - домашня тека.</li>
+</ul>
+</blockquote>
 <p>(або <code>perevir lr1_1.py</code>, урок 03). Зелена галочка в редакторі - не перевірка. Перевірка - ці команди.</p>
 <p><strong>Крок 6. Налагоджувач мишкою.</strong> Відкрий будь-який файл з уроку 05 (напр. <code>period.py</code>), клацни ліворуч від номера
 рядка - зʼявиться червона крапка (точка зупинки). F5 → «Python Debugger» → «Python File». Код зупиниться на

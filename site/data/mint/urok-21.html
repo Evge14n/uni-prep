@@ -1,0 +1,459 @@
+<h1 id="урок-21-мережа-і-ssh">Урок 21. Мережа і ssh</h1>
+<p><a href="#/u/mint/uroky">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> коли «інтернет не працює», за дві хвилини зрозуміти, що саме зламалось: Wi-Fi, роутер, DNS чи сайт.
+І зробити ssh-ключ - він знадобиться для GitHub (урок 24) і для входу на інший компʼютер.</p>
+<h2 id="коротко">Коротко</h2>
+<p>Шлях від ноутбука до сайту:</p>
+<pre><code class="language-text">ноутбук ──Wi-Fi──► роутер (шлюз) ──► провайдер ──► інтернет ──► сайт
+   │
+   └── «яка адреса в linuxmint.com?» ──► DNS-сервер ──► «192.124.249.53»
+</code></pre>
+<ul>
+<li><strong>IP-адреса</strong> - номер компʼютера в мережі (напр. <code>192.168.0.105</code>).</li>
+<li><strong>Шлюз</strong> (gateway) - куди йдуть усі пакети «назовні», зазвичай це роутер.</li>
+<li><strong>DNS</strong> - «телефонна книга»: перетворює імʼя <code>linuxmint.com</code> на IP-адресу.</li>
+<li><strong>Порт</strong> - номер «дверей» програми на компʼютері: 22 - ssh, 443 - https.</li>
+</ul>
+<p>У Mint мережею керує служба <strong>NetworkManager</strong> (є на ISO 22.3, версія 1.46). Мишкою - <strong>аплет мережі</strong> на панелі
+біля годинника: список Wi-Fi, вимкнути/увімкнути, «Мережні зʼєднання» (програма <code>nm-connection-editor</code>).
+У терміналі той самий NetworkManager - це команда <code>nmcli</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що показує</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nmcli device status</code></td>
+<td>пристрої (Wi-Fi, кабель) і чи підключені (<code>connected</code>)</td>
+</tr>
+<tr>
+<td><code>nmcli dev wifi list</code></td>
+<td>які Wi-Fi мережі видно, сигнал, захист</td>
+</tr>
+<tr>
+<td><code>ip -br a</code> (або <code>ip a</code>)</td>
+<td>мої IP-адреси (<code>-br</code> - коротко)</td>
+</tr>
+<tr>
+<td><code>ip r</code></td>
+<td>маршрути; рядок <code>default via ...</code> - це шлюз</td>
+</tr>
+<tr>
+<td><code>ping -c 3 1.1.1.1</code></td>
+<td>чи доходять пакети до інтернету (3 спроби)</td>
+</tr>
+<tr>
+<td><code>resolvectl status</code></td>
+<td>які DNS-сервери використовує система</td>
+</tr>
+<tr>
+<td><code>curl -I https://сайт</code></td>
+<td>чи відповідає сайт (лише заголовки, <code>200</code> = добре)</td>
+</tr>
+<tr>
+<td><code>sudo ss -tulpn</code></td>
+<td>які програми слухають порти (чекають підключень)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Сходинки діагностики</strong> - йди зверху вниз, перша сходинка, що не працює, і є поломка:</p>
+<pre><code class="language-text">1. nmcli device status        Wi-Fi &quot;connected&quot;?           ні → Wi-Fi (крок 3)
+2. ip -br a                   є адреса (напр. 192.168.x.x)? ні → роутер не дав адресу
+3. ip r                       є &quot;default via ...&quot;?         ні → нема шлюзу
+4. ping -c 3 1.1.1.1          пакети доходять?             ні → роутер або провайдер
+5. ping -c 3 linuxmint.com    імʼя знаходиться?            ні → DNS
+6. curl -I https://linuxmint.com   відповідь 200?          ні → сам сайт
+</code></pre>
+<p><strong>ssh</strong> (Secure Shell) - зашифрований вхід у термінал іншого компʼютера: <code>ssh користувач@адреса</code>. Замість пароля
+краще <strong>ключ</strong> - пара файлів:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Файл</th>
+<th>Що це</th>
+<th>Кому</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/.ssh/id_ed25519</code></td>
+<td>приватний ключ</td>
+<td><strong>нікому</strong>, ніколи. Права <code>600</code></td>
+</tr>
+<tr>
+<td><code>~/.ssh/id_ed25519.pub</code></td>
+<td>публічний ключ</td>
+<td>можна давати: GitHub, сервер</td>
+</tr>
+<tr>
+<td><code>~/.ssh/known_hosts</code></td>
+<td>«відбитки» серверів, де ти вже був</td>
+<td>ssh веде сам</td>
+</tr>
+<tr>
+<td><code>~/.ssh/config</code></td>
+<td>короткі імена для серверів</td>
+<td>ти пишеш сам. Права <code>600</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Сама тека <code>~/.ssh</code> - права <code>700</code> (лише ти). Що означають цифри - урок 15.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ssh-keygen -t ed25519 -C "підпис"</code></td>
+<td>зробити пару ключів (ed25519 - сучасний тип)</td>
+</tr>
+<tr>
+<td><code>ssh-copy-id користувач@сервер</code></td>
+<td>дописати твій <code>.pub</code> на сервер (раз, з паролем)</td>
+</tr>
+<tr>
+<td><code>ssh користувач@сервер</code></td>
+<td>увійти</td>
+</tr>
+<tr>
+<td><code>scp файл користувач@сервер:тека/</code></td>
+<td>скопіювати файл туди (або назад)</td>
+</tr>
+<tr>
+<td><code>rsync -av тека/ куди/</code></td>
+<td>скопіювати теку, наступного разу - лише зміни</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>ssh-сервера на Mint нема</strong> (пакета <code>openssh-server</code> нема на ISO 22.3), тобто ніхто не може зайти на твій
+ноутбук по ssh. Клієнт <code>ssh</code> є. Сервер не став, поки не треба. Якщо колись знадобиться (зайти на ноутбук з іншого
+компʼютера): <code>sudo apt install openssh-server</code>, потім <code>sudo ufw allow ssh</code> (урок 25), а коли вхід по ключу
+запрацює - вимкнути вхід паролем (<code>PasswordAuthentication no</code> у файлі в <code>/etc/ssh/sshd_config.d/</code>).</p>
+<p><strong>VPN коротко.</strong> На ISO 22.3 є додатки NetworkManager для OpenVPN і PPTP. Якщо університет чи робота дасть файл
+<code>.ovpn</code>: аплет мережі → «Мережні зʼєднання» → <code>+</code> → імпорт збереженої конфігурації VPN (назви пунктів - не
+перевірено в Cinnamon GUI). Далі VPN вмикається в тому ж аплеті. Роби саме за інструкцією того, хто дав VPN.</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<ol>
+<li>Інтернет є (<code>ping -c 3 1.1.1.1</code> працює). Що скаже ping для імені, якого не існує?</li>
+</ol>
+<pre><code class="language-bash">ping -c 1 nema.invalid
+echo $?
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">ping: nema.invalid: Name or service not known
+2
+</code></pre>
+<p>DNS <strong>працює</strong> і чесно відповів: такого імені нема (домен <code>.invalid</code> спеціально ніколи не існує). Пакети навіть
+не пішли. А от якщо DNS-сервер недосяжний, відповідь інша - <code>Temporary failure in name resolution</code>; коли так
+відповідає <strong>кожне</strong> імʼя, а <code>ping 1.1.1.1</code> працює - зламався DNS, а не інтернет (див. «Типові помилки»).
+Українською: <code>Невідома назва чи сервіс</code> і <code>Тимчасова помилка розв'язання назв</code>.</p>
+</details>
+<ol start="2">
+<li>У теці <code>lr1</code> два файли. Куди потраплять файли в кожному випадку?</li>
+</ol>
+<pre><code class="language-bash">rsync -av lr1/ backup-lr1/
+rsync -av lr1 backup2/
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">sending incremental file list
+created directory backup-lr1
+./
+lr1_1.py
+lr1_2.py
+
+sent 205 bytes  received 90 bytes  590.00 bytes/sec
+total size is 18  speedup is 0.06
+sending incremental file list
+created directory backup2
+lr1/
+lr1/lr1_1.py
+lr1/lr1_2.py
+
+sent 218 bytes  received 88 bytes  612.00 bytes/sec
+total size is 18  speedup is 0.06
+</code></pre>
+<p><code>lr1/</code> (зі скісною рискою) = «вміст теки» → файли лежать прямо в <code>backup-lr1/</code>. <code>lr1</code> без риски = «сама тека» →
+вийде <code>backup2/lr1/lr1_1.py</code>. Це найчастіша плутанина з rsync. Швидкість (<code>bytes/sec</code>) і число після <code>sent</code> у тебе будуть інші (воно
+змінюється на кілька байтів навіть від запуску до запуску).</p>
+</details>
+<ol start="3">
+<li>Приватному ключу випадково дали права <code>644</code> (читати можуть усі). Що зробить ssh?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p>Відмовиться його використовувати (справжній вивід у тестовій Mint 22.3, ключ лежав в іншій теці):</p>
+<pre><code class="language-text">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions 0644 for '/home/evgen/.ssh/id_ed25519' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+Load key &quot;/home/evgen/.ssh/id_ed25519&quot;: bad permissions
+evgen@localhost: Permission denied (publickey).
+</code></pre>
+<p>Лікується <code>chmod 600 ~/.ssh/id_ed25519</code>.</p>
+</details>
+<ol start="4">
+<li>Ти вперше підключаєшся до сервера (тут - GitHub). Що спитає ssh і що з цим робити?</li>
+</ol>
+<pre><code class="language-bash">ssh -T git@github.com
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">The authenticity of host 'github.com (140.82.121.4)' can't be established.
+ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
+git@github.com: Permission denied (publickey).
+</code></pre>
+<p>ssh ще не знає цей сервер і показує його «відбиток». Звір його з офіційним списком GitHub (там саме
+<code>SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU</code>) і лише тоді пиши <code>yes</code>. Відбиток запишеться в
+<code>~/.ssh/known_hosts</code>. <code>Permission denied (publickey)</code> - нормально: свій ключ на GitHub ти додаси в уроці 24.
+IP-адреса в дужках у тебе може бути інша.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p><strong>Крок 1. Де я в мережі.</strong></p>
+<pre><code class="language-bash">ip -br a
+ip r
+resolvectl status
+</code></pre>
+<p>Справжній вивід з <strong>тестової</strong> Mint 22.3 - це віртуальна машина, тому там один «кабель» <code>eth0</code>, а не Wi-Fi:</p>
+<pre><code class="language-text">lo               UNKNOWN        127.0.0.1/8 ::1/128
+eth0             UP             172.29.180.211/20 fe80::215:5dff:fed7:9f51/64
+default via 172.29.176.1 dev eth0 proto kernel onlink
+172.29.176.0/20 dev eth0 proto kernel scope link src 172.29.180.211
+</code></pre>
+<p>На ноутбуці буде інакше: Wi-Fi зветься на кшталт <code>wlp2s0</code> (<code>wl</code> = wireless), кабель - <code>enp3s0</code> або схоже, адреса
+від домашнього роутера найчастіше <code>192.168.x.x</code>, а <code>default via 192.168.x.1</code> - це роутер. <code>lo</code> (127.0.0.1) - «сам
+собі», є завжди. <code>resolvectl status</code> покаже DNS-сервер (<code>Current DNS Server:</code>), найчастіше той самий роутер.</p>
+<p><strong>Крок 2. Сходинки 4-6: інтернет, DNS, сайт.</strong></p>
+<pre><code class="language-bash">ping -c 3 1.1.1.1
+ping -c 3 linuxmint.com
+curl -I https://linuxmint.com
+</code></pre>
+<p>Добре, коли в ping <code>3 packets transmitted, 3 received, 0% packet loss</code>, а curl першим рядком пише <code>HTTP/2 200</code>.
+Справжній кінець ping у тестовій Mint:</p>
+<pre><code class="language-text">--- 1.1.1.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2004ms
+rtt min/avg/max/mdev = 8.621/10.028/11.370/1.123 ms
+</code></pre>
+<p><code>time=...ms</code> - скільки йде пакет туди й назад. Без <code>-c 3</code> ping іде вічно - зупини Ctrl+C.</p>
+<p><strong>Крок 3. Wi-Fi на ноутбуці.</strong></p>
+<pre><code class="language-bash">nmcli device status
+nmcli dev wifi list
+nmcli radio wifi
+rfkill list
+</code></pre>
+<p><code>nmcli device status</code> - таблиця <code>DEVICE TYPE STATE CONNECTION</code>. Твій Wi-Fi пристрій має бути <code>connected</code> і мати
+імʼя мережі. У тестовій машині NetworkManager нема (там мережу дає сама віртуалка), тому вивід nmcli тут
+не показую. Ось приклад <code>nmcli device wifi list</code> з документації NetworkManager (не з твого ноутбука):</p>
+<pre><code class="language-text">*  SSID               MODE    CHAN  RATE       SIGNAL  BARS  SECURITY
+   netdatacomm_local  Infra   6     54 Mbit/s  37      ▂▄__  WEP
+*  F1                 Infra   11    54 Mbit/s  98      ▂▄▆█  WPA1
+   LoremCorp          Infra   1     54 Mbit/s  62      ▂▄▆_  WPA2 802.1X
+</code></pre>
+<p><code>*</code> - до якої мережі ти зараз підключений, <code>SIGNAL</code> - сила сигналу (0-100).</p>
+<p>Якщо Wi-Fi не працює - по черзі:</p>
+<ol>
+<li><code>nmcli radio wifi</code> пише <code>disabled</code> → <code>nmcli radio wifi on</code> (або вимкни режим польоту в аплеті).</li>
+<li><code>rfkill list</code> пише <code>Soft blocked: yes</code> → те саме; <code>Hard blocked: yes</code> → фізичний перемикач або Fn-клавіша з
+   антеною на ноутбуці. (rfkill є на ISO 22.3; у тестовій машині Wi-Fi нема, тому вивід не перевірено.)</li>
+<li>Мережа в списку є, але не підключається → в аплеті «Забути» мережу і підключитись знову, уважно з паролем.</li>
+<li>Не допомогло → <code>sudo systemctl restart NetworkManager</code> (служби - урок 20).</li>
+<li>Wi-Fi пристрою взагалі нема в <code>nmcli device status</code> → драйвер, «Керування драйверами» (урок 17).</li>
+</ol>
+<p><strong>Крок 4. Хто слухає порти.</strong></p>
+<pre><code class="language-bash">sudo ss -tulpn
+</code></pre>
+<p><code>-t</code> TCP, <code>-u</code> UDP, <code>-l</code> лише ті, що слухають, <code>-p</code> яка програма (тому <code>sudo</code>), <code>-n</code> номери замість назв.
+Справжній вивід у тестовій Mint (там для перевірок поставлено ssh-сервер, тому є порт 22):</p>
+<pre><code class="language-text">Netid State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+udp   UNCONN 0      0         127.0.0.54:53        0.0.0.0:*    users:((&quot;systemd-resolve&quot;,pid=92,fd=16))
+udp   UNCONN 0      0      127.0.0.53%lo:53        0.0.0.0:*    users:((&quot;systemd-resolve&quot;,pid=92,fd=14))
+udp   UNCONN 0      0          127.0.0.1:323       0.0.0.0:*
+udp   UNCONN 0      0              [::1]:323          [::]:*
+tcp   LISTEN 0      4096      127.0.0.54:53        0.0.0.0:*    users:((&quot;systemd-resolve&quot;,pid=92,fd=17))
+tcp   LISTEN 0      4096         0.0.0.0:22        0.0.0.0:*    users:((&quot;systemd&quot;,pid=1,fd=58))
+tcp   LISTEN 0      4096   127.0.0.53%lo:53        0.0.0.0:*    users:((&quot;systemd-resolve&quot;,pid=92,fd=15))
+tcp   LISTEN 0      4096            [::]:22           [::]:*    users:((&quot;systemd&quot;,pid=1,fd=59))
+</code></pre>
+<p>Як читати: <code>127.0.0.53:53</code> - адреса «лише для себе» (127...), ззовні недосяжна, це DNS-кеш systemd-resolved.
+<code>0.0.0.0:22</code> - слухає на <strong>всіх</strong> адресах, тобто доступно з мережі. На твоєму ноутбуці 22 не буде (сервера нема).
+Можуть бути, напр., служба друку cups (<code>127.0.0.1:631</code>) і avahi (UDP <code>5353</code>) - обидві є на ISO 22.3.</p>
+<h2 id="далі-за-бажанням">Далі - за бажанням</h2>
+<p>Кроки 5-8 - ssh і резервна копія, другим заходом. Крок 5 (ssh-ключ) <strong>потрібен перед уроком 24</strong> (GitHub).</p>
+<p><strong>Крок 5. ssh-ключ.</strong> Підпис після <code>-C</code> - будь-який текст, щоб упізнати ключ (пошта не обовʼязкова).</p>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -C &quot;evgen-laptop&quot;
+</code></pre>
+<p>На перше питання - просто Enter (типове місце), далі двічі пароль ключа (passphrase). З паролем безпечніше:
+якщо ноутбук вкрадуть, ключ без пароля не спрацює. Символи пароля не видно. Справжній сеанс (у тестовій Mint пароль
+ключа порожній, а «малюнок» і відбиток у тебе будуть інші):</p>
+<pre><code class="language-text">Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/evgen/.ssh/id_ed25519):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/evgen/.ssh/id_ed25519
+Your public key has been saved in /home/evgen/.ssh/id_ed25519.pub
+The key fingerprint is:
+SHA256:PGmwaTOKyeoFpxMOetwQ5+c3QMZ7P3nmHIZpbcv+QR8 evgen-laptop
+The key's randomart image is:
++--[ED25519 256]--+
+|                 |
+|     .           |
+|  . . =          |
+|   + o * .       |
+|.o... X S     .E |
+|+o== = * o = . ..|
+|.+*.o . o B B . .|
+| oo    . o X o . |
+|o.         .*..  |
++----[SHA256]-----+
+</code></pre>
+<p>Якщо теки <code>~/.ssh</code> ще не було, після першого питання ssh-keygen сам її зробить і напише
+<code>Created directory '/home/evgen/.ssh'.</code> Перевір права і подивись публічний ключ:</p>
+<pre><code class="language-bash">ls -la ~/.ssh
+ssh-keygen -l -f ~/.ssh/id_ed25519.pub
+cat ~/.ssh/id_ed25519.pub
+</code></pre>
+<pre><code class="language-text">drwx------  2 evgen evgen 4096 Nov 18 09:58 .
+-rw-------  1 evgen evgen  399 Nov 18 09:58 id_ed25519
+-rw-r--r--  1 evgen evgen   94 Nov 18 09:58 id_ed25519.pub
+256 SHA256:PGmwaTOKyeoFpxMOetwQ5+c3QMZ7P3nmHIZpbcv+QR8 evgen-laptop (ED25519)
+</code></pre>
+<p>(тут лише потрібні рядки виводу). <code>cat</code> покаже один рядок <code>ssh-ed25519 AAAAC3...  evgen-laptop</code> - це і є те, що
+дають GitHub чи серверу. Якщо права не такі: <code>chmod 700 ~/.ssh</code> і <code>chmod 600 ~/.ssh/id_ed25519</code>.</p>
+<p><strong>Крок 6. Перше підключення до GitHub</strong> (ключ туди ще не додано - урок 24):</p>
+<pre><code class="language-bash">ssh -T git@github.com
+</code></pre>
+<p>Звір відбиток з передбачення 4, напиши <code>yes</code>. Має закінчитись на <code>Permission denied (publickey)</code> - це добре: звʼязок
+є, просто GitHub ще не знає твій ключ.</p>
+<p><strong>Крок 7. Резервна копія лаб rsync-ом</strong> (на флешку - заміни шлях на свою флешку з <code>/media/evgen/</code>):</p>
+<pre><code class="language-bash">mkdir -p ~/backup
+rsync -av ~/univer/labs/ ~/backup/labs/
+rsync -av ~/univer/labs/ ~/backup/labs/
+</code></pre>
+<p>Вдруге rsync нічого не копіює (<code>sending incremental file list</code> і одразу підсумок) - бо нічого не змінилось. Тому
+rsync і беруть для резервних копій. Автоматично щодня - урок 23 (cron).</p>
+<p><code>~/backup</code> на тому самому диску - <strong>лише тренування</strong>: помре диск чи вкрадуть ноутбук - зникнуть обидві копії.
+Справжня копія - на флешці чи зовнішньому диску (<code>rsync -av ~/univer/labs/ /media/evgen/НАЗВА/labs/</code>) і в git на
+GitHub (урок 24).</p>
+<p><strong>Крок 8 (коли буде сервер).</strong> Якщо тобі дадуть доступ до сервера (кафедра, хмара, другий компʼютер), шаблон:</p>
+<pre><code class="language-text">ssh-copy-id користувач@адреса            раз: попросить пароль і допише твій .pub на сервер
+ssh користувач@адреса                    далі вхід по ключу
+scp lr1_1.py користувач@адреса:labs/     файл туди
+scp користувач@адреса:labs/out.txt .     файл звідти сюди (крапка = поточна тека)
+rsync -av ~/univer/labs/ користувач@адреса:labs/
+exit                                     вийти з сервера (або Ctrl+D)
+</code></pre>
+<p>А щоб не набирати адресу щоразу, у <code>~/.ssh/config</code> (створи в nano, права <code>600</code>):</p>
+<pre><code class="language-text">Host kafedra
+    HostName адреса.сервера
+    User користувач
+    IdentityFile ~/.ssh/id_ed25519
+</code></pre>
+<p>Тепер <code>ssh kafedra</code>, <code>scp lr1_1.py kafedra:labs/</code>, <code>rsync -av ~/univer/labs/ kafedra:labs/</code>. У тестовій Mint це
+перевірено на ssh-сервері самої машини (<code>localhost</code>): вхід по ключу, <code>scp</code> і <code>rsync</code> через коротке імʼя.</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<p>Тексти помилок нижче - справжні, з тестової Mint 22.3 (мережу там відрізано командою <code>sudo unshare -n</code>). Якщо Mint
+українською, ping пише українською (у дужках - з файлу перекладу <code>libc.mo</code> пакета <code>language-pack-uk-base</code>), а
+<code>curl</code> і <code>ssh</code> - англійською (перевірено запуском з українською мовою). Англійський текст для пошуку:
+<code>LC_ALL=C ping ...</code>.</p>
+<ul>
+<li><strong><code>ping: linuxmint.com: Temporary failure in name resolution</code></strong> (<code>ping: linuxmint.com: Тимчасова помилка
+  розв'язання назв</code>) - DNS-сервер недосяжний. Якщо при цьому
+  <code>ping 1.1.1.1</code> працює - проблема саме в DNS: перепідключи Wi-Fi; якщо часто - у «Мережних зʼєднаннях» задай DNS
+  вручну (напр. <code>1.1.1.1</code>). <code>Name or service not known</code> (<code>Невідома назва чи сервіс</code>) - DNS працює, але такого
+  імені нема (одруківка).</li>
+<li><strong><code>ping: connect: Network is unreachable</code></strong> (<code>ping: connect: Не вдалося отримати доступ до мережі</code>) - нема
+  маршруту назовні: Wi-Fi не підключено (сходинки 1-3).</li>
+<li><strong><code>curl: (6) Could not resolve host: linuxmint.com</code></strong> - те саме, що з ping: DNS або помилка в адресі.</li>
+<li><strong><code>ssh: Could not resolve hostname github.com: Temporary failure in name resolution</code></strong> - знову DNS, а не ssh.</li>
+<li><strong><code>WARNING: UNPROTECTED PRIVATE KEY FILE!</code></strong> - права ключа (передбачення 3). <code>chmod 600 ~/.ssh/id_ed25519</code>.</li>
+<li><strong><code>Permission denied (publickey).</code></strong> - сервер не знає твій публічний ключ (не зробив <code>ssh-copy-id</code> або не додав на
+  GitHub), або ssh бере інший ключ. Подивись, що він пробує: <code>ssh -v ...</code> (рядки <code>Offering public key</code>).</li>
+<li><strong><code>WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!</code></strong> - відбиток сервера не той, що в <code>known_hosts</code>. Справжній
+  вивід (у тестовій Mint відбиток GitHub навмисно зіпсовано):</li>
+</ul>
+<pre><code class="language-text">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ED25519 key sent by the remote host is
+SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+Please contact your system administrator.
+Add correct host key in /home/evgen/.ssh/known_hosts to get rid of this message.
+Offending ED25519 key in /home/evgen/.ssh/known_hosts:1
+  remove with:
+  ssh-keygen -f '/home/evgen/.ssh/known_hosts' -R 'github.com'
+Host key for github.com has changed and you have requested strict checking.
+Host key verification failed.
+</code></pre>
+<p>Буває, коли сервер перевстановили, а буває - атака. <strong>Не видаляй рядок навмання</strong>: спершу спитай адміністратора
+  (для GitHub - звір з офіційним списком відбитків). Лише коли впевнений - <code>ssh-keygen -R адреса</code> і підключись знову.
+- <strong><code>ssh: connect to host ... port 22: Connection refused</code></strong> - на тому компʼютері нема ssh-сервера або він вимкнений.
+  Твій ноутбук так відповідає завжди: сервера на Mint нема.
+- <strong><code>Connection timed out</code></strong> - адреса не та, або брандмауер чи мережа (напр. гостьовий Wi-Fi) блокує порт 22
+  (цей текст у тестовій Mint не відтворено).</p>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li><strong>Ключі ed25519 з паролем, паролі для входу вимкнені.</strong> GitHub у документації генерує саме
+  <code>ssh-keygen -t ed25519</code> і радить пароль ключа (passphrase); на серверах вхід паролем вимикають, лишають ключі.</li>
+<li><strong><code>~/.ssh/config</code> замість довгих команд.</strong> Короткі імена (<code>Host kafedra</code>) розуміють ssh, scp, rsync і git.
+  Курс MIT «Missing Semester» вчить цього в лекції про командний рядок.</li>
+<li><strong>Діагностика сходинками, а не «перезавантаж усе».</strong> Спершу IP і шлюз, потім ping за IP, потім за імʼям, потім
+  сайт. Так роблять адміністратори, і так поломку видно за хвилину.</li>
+<li><strong>Відбиток сервера звіряють.</strong> Для GitHub офіційні відбитки опубліковані в документації; сліпе <code>yes</code> на новому
+  сервері - те саме, що не дивитись, кому віддаєш пароль.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li><code>ping -c 3 1.1.1.1</code> працює, а <code>ping -c 3 linuxmint.com</code> пише <code>Temporary failure in name resolution</code>. Що
+   зламалось?</li>
+<li>Який файл ключа можна дати іншим, а який ніколи? Які права мають бути в теки <code>~/.ssh</code> і приватного ключа?</li>
+<li>Чим <code>rsync -av lr1/ backup/</code> відрізняється від <code>rsync -av lr1 backup/</code>?</li>
+<li>Що означає <code>0.0.0.0:22</code> у виводі <code>sudo ss -tulpn</code> і чи має таке бути на твоєму ноутбуці?</li>
+<li>ssh пише <code>REMOTE HOST IDENTIFICATION HAS CHANGED!</code>. Що робити і чого не робити?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>DNS: пакети до інтернету доходять (за IP), а DNS-сервер недосяжний, і імена не перетворюються на адреси.
+   (<code>Name or service not known</code> означало б інше: DNS працює, але такого імені нема - одруківка.)</li>
+<li>Давати - <code>id_ed25519.pub</code> (публічний). Ніколи - <code>id_ed25519</code> (приватний). <code>~/.ssh</code> - <code>700</code>, приватний ключ - <code>600</code>.</li>
+<li><code>lr1/</code> копіює вміст теки прямо в <code>backup/</code>; <code>lr1</code> копіює саму теку, вийде <code>backup/lr1/...</code>.</li>
+<li>Програма (ssh-сервер) слухає порт 22 на всіх адресах, тобто до неї можна підключитись з мережі. На твоєму
+   ноутбуці такого не буде: <code>openssh-server</code> на Mint не встановлено.</li>
+<li>Не писати навмання <code>ssh-keygen -R</code>. Спершу дізнатись у власника сервера (або в офіційному списку), чи змінювався
+   ключ. Лише коли зміна справжня - прибрати старий рядок і підключитись знову, звіривши новий відбиток.</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Список пакетів ISO Mint 22.3 (<code>casper/filesystem.manifest</code>: network-manager 1.46.0, network-manager-openvpn,
+  network-manager-pptp, openssh-client, rsync, cups, avahi-daemon; openssh-server нема) -
+  https://mirrors.kernel.org/linuxmint/stable/22.3/ - відкрито 18.11.2026</li>
+<li>nmcli і приклади - https://networkmanager.dev/docs/api/latest/nmcli.html ,
+  https://networkmanager.dev/docs/api/latest/nmcli-examples.html - відкрито 18.11.2026</li>
+<li>Імена мережевих пристроїв (<code>wl</code> - Wi-Fi, <code>en</code> - кабель) -
+  https://www.freedesktop.org/software/systemd/man/latest/systemd.net-naming-scheme.html - відкрито 18.11.2026</li>
+<li>GitHub: створення ключа, перевірка підключення, офіційні відбитки -
+  https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent ,
+  https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection ,
+  https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints -
+  відкрито 18.11.2026</li>
+<li>OpenSSH (ssh, ssh_config, ssh-keygen) - https://www.openssh.com/manual.html ,
+  https://man.openbsd.org/ssh_config - відкрито 18.11.2026</li>
+<li>MIT Missing Semester - https://missing.csail.mit.edu/ - відкрито 18.11.2026</li>
+<li>Усі показані виводи (крім nmcli) - запуском у тестовій Mint 22.3 (OpenSSH 9.6p1, rsync 3.2.7), 18.11.2026</li>
+</ul>

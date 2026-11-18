@@ -1,0 +1,623 @@
+<h1 id="урок-05-налагодження-1-traceback-print-assert-breakpoint">Урок 05. Налагодження 1 - traceback, print, assert, breakpoint</h1>
+<p><a href="#/u/mint/uroky">← Усі уроки</a></p>
+<p><strong>Навіщо:</strong> програма майже ніколи не працює з першого разу. Цей урок вчить чотирьох простих способів знайти, де саме
+вона помиляється: прочитати traceback, надрукувати змінні, поставити assert і зупинити програму в <code>breakpoint()</code>.
+Усе в терміналі, без VS Code.</p>
+<h2 id="коротко">Коротко</h2>
+<p><strong>Налагодження</strong> (debugging) - пошук місця, де програма робить не те, що ти думаєш. Помилка в програмі - <strong>баг</strong>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Що бачиш</th>
+<th>З чого почати</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Програма впала, у кінці <code>Traceback ...</code> і назва помилки</td>
+<td>прочитай traceback <strong>знизу вгору</strong></td>
+</tr>
+<tr>
+<td>Програма не падає, але число не те</td>
+<td><code>print(f"{x=}")</code> або <code>breakpoint()</code></td>
+</tr>
+<tr>
+<td>Хочеш, щоб програма сама «кричала», коли дані погані</td>
+<td><code>assert умова, "повідомлення"</code></td>
+</tr>
+<tr>
+<td>Програма впала, хочеш покопатись у змінних після падіння</td>
+<td><code>python3 -i файл.py</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Traceback</strong> (слід виклику) - звіт Python про падіння. Читати <strong>знизу вгору</strong>:</p>
+<pre><code class="language-text">Traceback (most recent call last):          ← «останній виклик - внизу»
+  File &quot;.../period.py&quot;, line 16, in &lt;module&gt;     ← звідки все почалось (рівень файлу)
+    main()
+  File &quot;.../period.py&quot;, line 13, in main         ← потім функція main, рядок 13
+    print(...)
+  File &quot;.../period.py&quot;, line 7, in period        ← тут упало: функція period, рядок 7
+    return 2 * math.pi * math.sqrt(length / G)
+                         ^^^^^^^^^^^^^^^^^^^^^   ← ^^^ показують, ЯКА саме частина рядка впала
+ValueError: math domain error                    ← 1) ЧИТАЙ ПЕРШИМ: тип помилки і пояснення
+</code></pre>
+<ol>
+<li>Останній рядок - <strong>що</strong> сталося (тип помилки + пояснення).</li>
+<li>Рядок над ним - <strong>де</strong> (файл, номер рядка, функція) і сам рядок коду з <code>^^^</code>.</li>
+<li>Вище - <strong>як туди дійшли</strong>: хто кого викликав. Помилка не завжди в найнижчому рядку - часто погане значення
+   прийшло згори (наприклад, від'ємна довжина в списку в <code>main</code>).</li>
+</ol>
+<p>Python 3.12 підказує: <code>Did you mean: '...'?</code> (може, ти мав на увазі), <code>Did you forget to import '...'?</code>
+(забув імпорт), <code>Perhaps you forgot a comma?</code> (забув кому). Підказки корисні, але <strong>не завжди правильні</strong>
+(побачиш нижче).</p>
+<h3 id="часті-помилки-в-лабах-першого-курсу-справжній-вивід-python-3">Часті помилки в лабах першого курсу (справжній вивід Python 3.12.3)</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Помилка</th>
+<th>Що означає</th>
+<th>Приклад коду → останній рядок traceback</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NameError</code></td>
+<td>імені нема (одруківка, не створив змінну, забув import)</td>
+<td><code>T = 2 * math.pi</code> без <code>import math</code> → <code>NameError: name 'math' is not defined. Did you forget to import 'math'?</code></td>
+</tr>
+<tr>
+<td><code>TypeError</code></td>
+<td>операція не підходить для цього типу</td>
+<td><code>"5" + 3</code> → <code>TypeError: can only concatenate str (not "int") to str</code>; <code>period()</code> → <code>TypeError: period() missing 1 required positional argument: 'length'</code></td>
+</tr>
+<tr>
+<td><code>ValueError</code></td>
+<td>тип правильний, а значення ні</td>
+<td><code>float("9,81")</code> → <code>ValueError: could not convert string to float: '9,81'</code>; <code>math.sqrt(-1)</code> → <code>ValueError: math domain error</code></td>
+</tr>
+<tr>
+<td><code>ZeroDivisionError</code></td>
+<td>ділення на нуль</td>
+<td><code>sum([]) / len([])</code> → <code>ZeroDivisionError: division by zero</code></td>
+</tr>
+<tr>
+<td><code>IndexError</code></td>
+<td>номер за межами списку</td>
+<td><code>[0.0, 0.5, 1.0][3]</code> → <code>IndexError: list index out of range</code></td>
+</tr>
+<tr>
+<td><code>KeyError</code></td>
+<td>ключа нема в словнику</td>
+<td><code>{"g": 9.81}["G"]</code> → <code>KeyError: 'G'</code></td>
+</tr>
+<tr>
+<td><code>AttributeError</code></td>
+<td>у об'єкта нема такого методу</td>
+<td><code>"9.81 9.79".splitt()</code> → <code>AttributeError: 'str' object has no attribute 'splitt'. Did you mean: 'split'?</code></td>
+</tr>
+<tr>
+<td><code>IndentationError</code></td>
+<td>відступи</td>
+<td>тіло функції без відступу → <code>IndentationError: expected an indented block after function definition on line 1</code>; зайвий відступ → <code>IndentationError: unexpected indent</code></td>
+</tr>
+<tr>
+<td><code>SyntaxError</code></td>
+<td>Python не може навіть прочитати файл</td>
+<td>незакрита дужка <code>print(f"T = {T:.3f} с"</code> → <code>SyntaxError: '(' was never closed</code>; <code>if x = 5:</code> → <code>SyntaxError: invalid syntax. Maybe you meant '==' or ':=' instead of '='?</code>; <code>print("g =" g)</code> → <code>SyntaxError: invalid syntax. Perhaps you forgot a comma?</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>SyntaxError</code> і <code>IndentationError</code> не мають рядка <code>Traceback (most recent call last)</code>: програма не запустилась
+зовсім, жоден рядок не виконався.</p>
+<h3 id="друк-для-налагодження">Друк для налагодження</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Запис</th>
+<th>Що друкує</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>print(f"{x=}")</code></td>
+<td><code>x=</code> і значення (рядки - в лапках!)</td>
+</tr>
+<tr>
+<td><code>print(f"{x=:.3f}")</code></td>
+<td>те саме, 3 знаки після коми</td>
+</tr>
+<tr>
+<td><code>print(f"{a / b = :.4f}")</code></td>
+<td>можна вираз; пробіли навколо <code>=</code> зберігаються</td>
+</tr>
+<tr>
+<td><code>print(repr(s))</code></td>
+<td>рядок «як є»: видно пробіли, <code>\n</code>, лапки</td>
+</tr>
+<tr>
+<td><code>print(type(x))</code></td>
+<td>тип: <code>&lt;class 'str'&gt;</code>, <code>&lt;class 'float'&gt;</code></td>
+</tr>
+<tr>
+<td><code>print(..., file=sys.stderr)</code></td>
+<td>друк у <strong>потік помилок</strong>, а не в звичайний вивід (потрібен <code>import sys</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="перші-команди-pdb">Перші команди pdb</h3>
+<p><code>breakpoint()</code> у коді зупиняє програму і відкриває <strong>pdb</strong> (Python debugger, вбудований налагоджувач).
+Запрошення <code>(Pdb)</code> - він чекає команду.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Від слова</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>p вираз</code></td>
+<td>print</td>
+<td>показати значення</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>next</td>
+<td>виконати рядок і зупинитись на наступному (у функцію не заходить)</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td>step</td>
+<td>зробити крок <strong>всередину</strong> функції</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>continue</td>
+<td>їхати далі до наступного <code>breakpoint()</code> або до кінця</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>list</td>
+<td>показати код навколо; <code>-&gt;</code> - рядок, який виконається наступним</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>quit</td>
+<td>вийти (програма обривається)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Повний pdb - в уроці 06.</p>
+<h2 id="передбач-потім-запусти">Передбач, потім запусти</h2>
+<ol>
+<li>Що надрукує ця програма?</li>
+</ol>
+<pre><code class="language-python">import math
+
+length = 1.0
+T = 2 * math.pi * math.sqrt(length / 9.81)
+print(f&quot;{T=}&quot;)
+print(f&quot;{T=:.3f}&quot;)
+print(f&quot;{length / 9.81 = :.4f}&quot;)
+line = &quot;9.81\n&quot;
+word = &quot;9.81 &quot;
+print(line, word, &quot;|&quot;)
+print(repr(line), repr(word))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">T=2.0060666807106475
+T=2.006
+length / 9.81 = 0.1019
+9.81
+ 9.81  |
+'9.81\n' '9.81 '
+</code></pre>
+<p><code>f"{T=}"</code> пише ім'я, знак <code>=</code> і значення. Після двокрапки - формат, як у звичайному f-рядку. <code>print(line, ...)</code>
+не показує, що в кінці <code>line</code> є <code>\n</code> (він просто переносить рядок), а в <code>word</code> - пробіл. <code>repr</code> показує все.</p>
+</details>
+<ol start="2">
+<li>Файл <code>masa.py</code> питає дві маси. Ти вводиш <code>2</code> і <code>3</code>. Що він надрукує?</li>
+</ol>
+<pre><code class="language-python">mass_1 = input(&quot;Перша маса, кг: &quot;)
+mass_2 = input(&quot;Друга маса, кг: &quot;)
+total = mass_1 + mass_2
+print(&quot;Разом:&quot;, total, &quot;кг&quot;)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">Перша маса, кг: 2
+Друга маса, кг: 3
+Разом: 23 кг
+</code></pre>
+<p><code>input()</code> завжди повертає <strong>рядок</strong>. <code>"2" + "3"</code> - це склеювання рядків, <code>"23"</code>. Помилки нема, тому traceback не
+допоможе - допоможе <code>print(f"{mass_1=}")</code> (крок 5 у «Руками»).</p>
+</details>
+<ol start="3">
+<li>У <code>main()</code> є змінні <code>lengths</code> (список) і <code>length</code> (одне число), а в коді одруківка <code>period(lenght)</code>. Python
+   підкаже <code>Did you mean: '...'?</code>. Яке ім'я він запропонує?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p><code>'lengths'</code>, а не <code>'length'</code> (справжній вивід - у кроці 1 «Руками»). Підказка рахує, яке ім'я «найближче» за
+буквами, і тут вгадала неправильно. Підказка - не наказ: дивись сам, що мав на увазі.</p>
+</details>
+<ol start="4">
+<li>У функції стоїть <code>assert length &gt; 0, "..."</code>. Що буде, якщо запустити <code>python3 -O period.py</code> з від'ємною
+   довжиною?</li>
+</ol>
+<details>
+<summary>Відповідь</summary>
+<p><code>-O</code> (optimize) <strong>вимикає всі assert</strong>. Перевірки нема, і програма падає далі, на <code>math.sqrt</code> з
+<code>ValueError: math domain error</code> (крок 3 «Руками»). Тому assert - для налагодження і самоперевірки, а не для
+перевірки того, що вводить користувач.</p>
+</details>
+<h2 id="руками">Руками</h2>
+<p>Тека для вправ (у тебе замість <code>evgen</code> у шляхах буде твоє ім'я користувача):</p>
+<pre><code class="language-bash">mkdir -p ~/univer/praktyka/nalag1
+cd ~/univer/praktyka/nalag1
+nano period.py
+</code></pre>
+<h3 id="крок-1-прочитай-traceback-знизу-вгору">Крок 1. Прочитай traceback знизу вгору</h3>
+<p>Набери в <code>period.py</code> (період маятника <code>T = 2π·√(l/g)</code>), збережи Ctrl+O, Enter, вийди Ctrl+X:</p>
+<pre><code class="language-python">import math
+
+G = 9.81
+
+
+def period(length):
+    return 2 * math.pi * math.sqrt(length / G)
+
+
+def main():
+    lengths = [0.5, 1.0, 1.5]
+    for length in lengths:
+        print(f&quot;l = {length} м, T = {period(lenght):.3f} с&quot;)
+
+
+main()
+</code></pre>
+<pre><code class="language-bash">python3 period.py
+</code></pre>
+<pre><code class="language-text">Traceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 16, in &lt;module&gt;
+    main()
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 13, in main
+    print(f&quot;l = {length} м, T = {period(lenght):.3f} с&quot;)
+                                        ^^^^^^
+NameError: name 'lenght' is not defined. Did you mean: 'lengths'?
+</code></pre>
+<p>Знизу вгору: <code>NameError</code> - імені <code>lenght</code> нема. Де: рядок 13, функція <code>main</code>, <code>^^^^^^</code> під <code>lenght</code>. Підказка
+каже <code>lengths</code>, але ми мали на увазі <code>length</code> (одне число з циклу). Рядок 16 - лише «звідки викликали».</p>
+<h3 id="крок-2-помилка-глибше-ніж-здається">Крок 2. Помилка глибше, ніж здається</h3>
+<p>Виправ <code>lenght</code> на <code>length</code>. А в списку «помились при записі даних»: заміни <code>1.5</code> на <code>-1.5</code>. Запусти знову:</p>
+<pre><code class="language-bash">python3 period.py
+</code></pre>
+<pre><code class="language-text">l = 0.5 м, T = 1.419 с
+l = 1.0 м, T = 2.006 с
+Traceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 16, in &lt;module&gt;
+    main()
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 13, in main
+    print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+                                 ^^^^^^^^^^^^^^
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 7, in period
+    return 2 * math.pi * math.sqrt(length / G)
+                         ^^^^^^^^^^^^^^^^^^^^^
+ValueError: math domain error
+</code></pre>
+<p>Падає в рядку 7 (<code>sqrt</code> від від'ємного), але <strong>винен</strong> рядок 11 зі списком. Traceback показує, де програма
+впала, а не де ти помилився. Тому читаємо всі рівні, а не лише нижній.</p>
+<h3 id="крок-3-assert-програма-сама-каже-що-не-так">Крок 3. assert - програма сама каже, що не так</h3>
+<p>Додай у функцію перший рядок-перевірку (тепер функція така):</p>
+<pre><code class="language-python">def period(length):
+    assert length &gt; 0, f&quot;довжина має бути додатна, а не {length}&quot;
+    return 2 * math.pi * math.sqrt(length / G)
+</code></pre>
+<p><code>assert умова, повідомлення</code> - «я впевнений, що умова істинна; якщо ні - зупинись з цим повідомленням».</p>
+<pre><code class="language-bash">python3 period.py
+</code></pre>
+<pre><code class="language-text">l = 0.5 м, T = 1.419 с
+l = 1.0 м, T = 2.006 с
+Traceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 17, in &lt;module&gt;
+    main()
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 14, in main
+    print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+                                 ^^^^^^^^^^^^^^
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 7, in period
+    assert length &gt; 0, f&quot;довжина має бути додатна, а не {length}&quot;
+           ^^^^^^^^^^
+AssertionError: довжина має бути додатна, а не -1.5
+</code></pre>
+<p>Тепер одразу видно причину: <code>-1.5</code>. А з <code>-O</code> перевірки зникають:</p>
+<pre><code class="language-bash">python3 -O period.py
+</code></pre>
+<pre><code class="language-text">l = 0.5 м, T = 1.419 с
+l = 1.0 м, T = 2.006 с
+Traceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 17, in &lt;module&gt;
+    main()
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 14, in main
+    print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+                                 ^^^^^^^^^^^^^^
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 8, in period
+    return 2 * math.pi * math.sqrt(length / G)
+                         ^^^^^^^^^^^^^^^^^^^^^
+ValueError: math domain error
+</code></pre>
+<h3 id="крок-4-python3-i-зазирнути-всередину-після-падіння">Крок 4. <code>python3 -i</code> - зазирнути всередину після падіння</h3>
+<p><code>-i</code> (interactive) після кінця програми (і після падіння теж) відкриває Python <code>&gt;&gt;&gt;</code>, де вже є все з файлу:</p>
+<pre><code class="language-bash">python3 -i period.py
+</code></pre>
+<pre><code class="language-text">l = 0.5 м, T = 1.419 с
+l = 1.0 м, T = 2.006 с
+Traceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 17, in &lt;module&gt;
+    main()
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 14, in main
+    print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+                                 ^^^^^^^^^^^^^^
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 7, in period
+    assert length &gt; 0, f&quot;довжина має бути додатна, а не {length}&quot;
+           ^^^^^^^^^^
+AssertionError: довжина має бути додатна, а не -1.5
+&gt;&gt;&gt; G
+9.81
+&gt;&gt;&gt; period(1.0)
+2.0060666807106475
+&gt;&gt;&gt; period(-1.5)
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 7, in period
+    assert length &gt; 0, f&quot;довжина має бути додатна, а не {length}&quot;
+           ^^^^^^^^^^
+AssertionError: довжина має бути додатна, а не -1.5
+&gt;&gt;&gt; lengths
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+NameError: name 'lengths' is not defined
+&gt;&gt;&gt;
+</code></pre>
+<p>Тут видно глобальні імена (<code>G</code>, <code>period</code>) і можна викликати функції руками. А <code>lengths</code> нема: це <strong>локальна</strong>
+змінна <code>main</code>, вона зникла разом з функцією. Щоб побачити локальні змінні місця падіння, є <code>pdb.pm()</code> (урок 06).
+Вихід з <code>&gt;&gt;&gt;</code> - Ctrl+D.</p>
+<h3 id="крок-5-breakpoint-і-перші-кроки-в-pdb">Крок 5. <code>breakpoint()</code> і перші кроки в pdb</h3>
+<p>Онови <code>period.py</code> до такого вигляду (assert лишається, у циклі додався <code>breakpoint()</code>):</p>
+<pre><code class="language-python">import math
+
+G = 9.81
+
+
+def period(length):
+    assert length &gt; 0, f&quot;довжина має бути додатна, а не {length}&quot;
+    return 2 * math.pi * math.sqrt(length / G)
+
+
+def main():
+    lengths = [0.5, 1.0, -1.5]
+    for length in lengths:
+        breakpoint()
+        print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+
+
+main()
+</code></pre>
+<pre><code class="language-bash">python3 period.py
+</code></pre>
+<p>Нижче - справжній сеанс. Після <code>(Pdb)</code> - те, що набрано руками, далі Enter:</p>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag1/period.py(15)main()
+-&gt; print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+(Pdb) p length
+0.5
+(Pdb) s
+--Call--
+&gt; /home/evgen/univer/praktyka/nalag1/period.py(6)period()
+-&gt; def period(length):
+(Pdb) s
+&gt; /home/evgen/univer/praktyka/nalag1/period.py(7)period()
+-&gt; assert length &gt; 0, f&quot;довжина має бути додатна, а не {length}&quot;
+(Pdb) p length / G
+0.0509683995922528
+(Pdb) n
+&gt; /home/evgen/univer/praktyka/nalag1/period.py(8)period()
+-&gt; return 2 * math.pi * math.sqrt(length / G)
+(Pdb) n
+--Return--
+&gt; /home/evgen/univer/praktyka/nalag1/period.py(8)period()-&gt;1.4185033534428875
+-&gt; return 2 * math.pi * math.sqrt(length / G)
+(Pdb) c
+l = 0.5 м, T = 1.419 с
+&gt; /home/evgen/univer/praktyka/nalag1/period.py(15)main()
+-&gt; print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+(Pdb) l
+ 10
+ 11     def main():
+ 12         lengths = [0.5, 1.0, -1.5]
+ 13         for length in lengths:
+ 14             breakpoint()
+ 15  -&gt;         print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+ 16
+ 17
+ 18     main()
+[EOF]
+(Pdb) c
+l = 1.0 м, T = 2.006 с
+&gt; /home/evgen/univer/praktyka/nalag1/period.py(15)main()
+-&gt; print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+(Pdb) p length
+-1.5
+(Pdb) q
+Traceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 18, in &lt;module&gt;
+    main()
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 15, in main
+    print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+    ^^^^^
+  File &quot;/usr/lib/python3.12/bdb.py&quot;, line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/usr/lib/python3.12/bdb.py&quot;, line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+                      ^^^^^^^^^^^^^
+bdb.BdbQuit
+</code></pre>
+<p>Що тут сталося:
+- <code>&gt; ...period.py(15)main()</code> - де стоїмо: файл, рядок 15, функція <code>main</code>. <code>-&gt;</code> - рядок, який <strong>ще не виконався</strong>.
+- <code>s</code> на рядку з викликом <code>period(...)</code> зайшов усередину функції (<code>--Call--</code>), <code>n</code> ішов по рядках,
+  <code>--Return--</code> і <code>-&gt;1.418...</code> - функція повертає це значення.
+- <code>c</code> поїхав до наступного <code>breakpoint()</code> (наступний оберт циклу).
+- <code>q</code> обриває програму, і Python 3.12 друкує traceback з <code>bdb.BdbQuit</code>. <strong>Це не твоя помилка</strong> - так pdb
+  повідомляє «користувач вийшов». Хочеш без нього - доїдь до кінця командою <code>c</code>.</p>
+<p>Вимкнути всі <code>breakpoint()</code> без правки файлу - змінна середовища <code>PYTHONBREAKPOINT=0</code>:</p>
+<pre><code class="language-bash">PYTHONBREAKPOINT=0 python3 period.py
+</code></pre>
+<p>Програма пройде без зупинок і впаде на <code>AssertionError</code> з <code>-1.5</code>, як у кроці 3.</p>
+<p>Підказка для самоперевірки без набору: команди pdb можна подати одразу через <code>printf</code> (у виводі тоді не видно
+самих команд, лише <code>(Pdb)</code> підряд):</p>
+<pre><code class="language-bash">printf 'p length\nc\np length\nc\nq\n' | python3 period.py
+</code></pre>
+<pre><code class="language-text">&gt; /home/evgen/univer/praktyka/nalag1/period.py(15)main()
+-&gt; print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+(Pdb) 0.5
+(Pdb) l = 0.5 м, T = 1.419 с
+&gt; /home/evgen/univer/praktyka/nalag1/period.py(15)main()
+-&gt; print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+(Pdb) 1.0
+(Pdb) l = 1.0 м, T = 2.006 с
+&gt; /home/evgen/univer/praktyka/nalag1/period.py(15)main()
+-&gt; print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+(Pdb) Traceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 18, in &lt;module&gt;
+    main()
+  File &quot;/home/evgen/univer/praktyka/nalag1/period.py&quot;, line 15, in main
+    print(f&quot;l = {length} м, T = {period(length):.3f} с&quot;)
+    ^^^^^
+  File &quot;/usr/lib/python3.12/bdb.py&quot;, line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/usr/lib/python3.12/bdb.py&quot;, line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+                      ^^^^^^^^^^^^^
+bdb.BdbQuit
+</code></pre>
+<h3 id="крок-6-print-налагодження-fx-type-stderr">Крок 6. print-налагодження: <code>f"{x=}"</code>, <code>type</code>, stderr</h3>
+<p>Створи <code>masa.py</code> з «Передбач» (пункт 2) і запусти. Число <code>23</code> - підозріле. Додай друк змінних <strong>у потік помилок</strong>
+(stderr), щоб він не змішувався зі справжнім виводом:</p>
+<pre><code class="language-python">import sys
+
+mass_1 = input(&quot;Перша маса, кг: &quot;)
+mass_2 = input(&quot;Друга маса, кг: &quot;)
+total = mass_1 + mass_2
+print(f&quot;{mass_1=} {mass_2=} {total=}&quot;, file=sys.stderr)
+print(f&quot;{type(total)=}&quot;, file=sys.stderr)
+print(&quot;Разом:&quot;, total, &quot;кг&quot;)
+</code></pre>
+<pre><code class="language-bash">python3 masa.py
+</code></pre>
+<pre><code class="language-text">Перша маса, кг: 2
+Друга маса, кг: 3
+mass_1='2' mass_2='3' total='23'
+type(total)=&lt;class 'str'&gt;
+Разом: 23 кг
+</code></pre>
+<p>Лапки в <code>mass_1='2'</code> і <code>&lt;class 'str'&gt;</code> кажуть: це рядки, треба <code>float(input(...))</code>. На екрані stderr і звичайний
+вивід видно разом, але їх можна розділити. <code>2&gt;</code> перенаправляє лише stderr:</p>
+<pre><code class="language-bash">printf '2\n3\n' | python3 masa.py 2&gt;/dev/null
+printf '2\n3\n' | python3 masa.py 2&gt; debug.txt
+cat debug.txt
+</code></pre>
+<pre><code class="language-text">Перша маса, кг: Друга маса, кг: Разом: 23 кг
+Перша маса, кг: Друга маса, кг: Разом: 23 кг
+mass_1='2' mass_2='3' total='23'
+type(total)=&lt;class 'str'&gt;
+</code></pre>
+<p>(Відповіді <code>2</code> і <code>3</code> прийшли з <code>printf</code>, тому їх не видно після запрошень.) <code>/dev/null</code> - «чорна діра»,
+усе, що туди пишеш, зникає. Виправ сам: <code>float(input(...))</code>, і прибери налагоджувальні <code>print</code>.</p>
+<h2 id="типові-помилки">Типові помилки</h2>
+<ul>
+<li><strong>Забутий налагоджувальний <code>print</code> у функції ламає doctest.</strong> doctest порівнює все, що функція надрукувала у
+  звичайний вивід:</li>
+</ul>
+<p><code>text
+  Failed example:
+      period(1.0)
+  Expected:
+      'T = 2.006 с'
+  Got:
+      t=2.0060666807106475
+      'T = 2.006 с'</code></p>
+<p>Друк з <code>file=sys.stderr</code> doctest не ловить (перевірено: той самий файл з <code>print(f"{length=}", file=sys.stderr)</code>
+  показав <code>length=1.0</code> на екрані, а в <code>Got</code> його нема). Але перед здачею прибери обидва.
+- <strong>Забутий <code>breakpoint()</code>.</strong> Програма «зависає» на <code>(Pdb)</code>. А <code>perevir</code> (урок 03) замість цього пише
+  <code>doctest: файл питає input() при запуску. Дай відповіді після назви: perevir lab_bp.py 5</code>, бо pdb теж читає з
+  клавіатури. Нема <code>input()</code>, а таке повідомлення є - шукай <code>breakpoint()</code>: <code>grep -n breakpoint *.py</code>.
+- <strong><code>q</code> у pdb дає traceback з <code>bdb.BdbQuit</code>.</strong> Це нормально, див. крок 5.
+- <strong>assert з дужками завжди «проходить».</strong> <code>assert (length &gt; 0, "текст")</code> - це перевірка кортежу, а непорожній
+  кортеж завжди істина. Python 3.12 попереджає:
+  <code>SyntaxWarning: assertion is always true, perhaps remove parentheses?</code> і програма йде далі. Пиши без дужок:
+  <code>assert length &gt; 0, "текст"</code>.
+- <strong>assert для перевірки вводу користувача.</strong> З <code>python3 -O</code> він зникає. Для вводу - звичайна умова й
+  повідомлення (або виняток <code>ValueError</code>), assert - для «цього не може бути».
+- <strong>Читати лише перший рядок traceback.</strong> Головне - <strong>останній</strong> рядок і найнижчий рядок <strong>твого</strong> файлу.
+  Рядки з <code>/usr/lib/python3.12/...</code> - це бібліотеки Python, їх зазвичай пропускаєш.
+- <strong><code>SyntaxError</code> показує не той рядок.</strong> Для незакритої дужки Python 3.12 показує рядок, де дужку <strong>відкрито</strong>
+  (<code>'(' was never closed</code>). Якщо повідомлення дивне - подивись і на рядок <strong>вище</strong>.</p>
+<h2 id="як-роблять-профі">Як роблять профі</h2>
+<ul>
+<li>Python з кожною версією пояснює помилки краще: <code>^^^</code> під точним місцем з'явились у 3.11 (PEP 657), підказки
+  <code>Did you forget to import</code> - у 3.12. Тому перше правило налагодження - <strong>уважно прочитати повідомлення</strong>.</li>
+<li><code>print(f"{x=}")</code> - нормальний інструмент і в 2026, але для програм довших за одну лабу професіонали переходять на
+  <code>logging</code> (рівні DEBUG/INFO/WARNING, можна вимкнути одним рядком) - урок 06.</li>
+<li><code>breakpoint()</code> (PEP 553, Python 3.7+) замість старого <code>import pdb; pdb.set_trace()</code>: коротше і вимикається
+  через <code>PYTHONBREAKPOINT=0</code>, а через <code>PYTHONBREAKPOINT=ipdb.set_trace</code> вмикає інший налагоджувач (урок 06).
+  У Python 3.12 (Mint 22) pdb зупиняється на рядку <strong>після</strong> <code>breakpoint()</code> (у кроці 5 - рядок 15); з Python 3.13</li>
+<li>одразу на рядку з <code>breakpoint()</code>. Також з 3.13 traceback кольоровий, а 3.14 вміє підключити pdb до вже
+  запущеної програми: <code>python -m pdb -p PID</code>.</li>
+<li>Лінтер ловить забуте: <code>ruff</code> (є у venv з уроку 03) має правила <code>T100</code> (забутий <code>breakpoint()</code>) і <code>T201</code>
+  (забутий <code>print</code>): <code>ruff check --select T100,T201 period.py</code> (не в лабах - там <code>print</code> бувають потрібні).</li>
+<li>У VS Code ті самі речі робить графічний налагоджувач (debugpy) - це урок 27, пізніше. pdb працює скрізь, де є
+  термінал: на сервері, по ssh, на комп'ютері в аудиторії.</li>
+</ul>
+<h2 id="самоперевірка">Самоперевірка</h2>
+<ol>
+<li>Traceback має 3 рівні: <code>&lt;module&gt;</code> → <code>main</code> → <code>period</code>, останній рядок <code>ValueError: math domain error</code>. У якому
+   рядку і якій функції програма впала? Чи обов'язково там помилка?</li>
+<li>Чим <code>print(f"{x=}")</code> кращий за <code>print(x)</code>, коли <code>x = "2"</code>?</li>
+<li>Що зробить <code>python3 -O файл.py</code> з рядком <code>assert g &gt; 0, "g має бути додатне"</code>?</li>
+<li>Ти в <code>(Pdb)</code> на рядку <code>y = f(x)</code>. Чим відрізняються <code>n</code> і <code>s</code>? Що зробить <code>c</code>?</li>
+<li>Що надрукує <code>python3 -i файл.py</code> після падіння і чому там не видно локальних змінних функції?</li>
+</ol>
+<details>
+<summary>Відповіді</summary>
+<ol>
+<li>У функції <code>period</code> (найнижчий рівень, рядок з <code>^^^</code>). Не обов'язково: там програма <strong>впала</strong>, а погане
+   значення могло прийти згори, з <code>main</code> (як <code>-1.5</code> у кроці 2).</li>
+<li><code>f"{x=}"</code> друкує ім'я і <code>repr</code> значення: <code>x='2'</code>. Лапки показують, що це рядок, а <code>print(x)</code> надрукує просто <code>2</code>.</li>
+<li>Нічого: <code>-O</code> вимикає всі <code>assert</code>, рядок не виконається.</li>
+<li><code>n</code> виконає рядок повністю (разом з викликом <code>f</code>) і зупиниться на наступному; <code>s</code> зайде всередину <code>f</code>
+   (<code>--Call--</code>). <code>c</code> поїде далі до наступного <code>breakpoint()</code> або до кінця програми.</li>
+<li>Traceback, а потім запрошення <code>&gt;&gt;&gt;</code>, де доступні глобальні імена файлу (функції, константи). Локальні змінні
+   функції живуть лише поки функція працює; після падіння їх уже нема. Їх показує <code>import pdb; pdb.pm()</code> (урок 06).</li>
+</ol>
+</details>
+<h2 id="джерела">Джерела</h2>
+<ul>
+<li>Python 3.12, <code>pdb</code> - https://docs.python.org/3.12/library/pdb.html (відкрито 18.11.2026)</li>
+<li><code>breakpoint()</code> і <code>PYTHONBREAKPOINT</code> - https://docs.python.org/3.12/library/functions.html#breakpoint ,
+  PEP 553 https://peps.python.org/pep-0553/ (відкрито 18.11.2026)</li>
+<li>Інструкція <code>assert</code> і <code>-O</code> - https://docs.python.org/3.12/reference/simple_stmts.html#the-assert-statement ,
+  https://docs.python.org/3.12/using/cmdline.html#cmdoption-O (відкрито 18.11.2026)</li>
+<li>Покращені повідомлення про помилки в 3.12 - https://docs.python.org/3.12/whatsnew/3.12.html#improved-error-messages
+  (відкрито 18.11.2026)</li>
+<li>Що нового в 3.13 (кольоровий traceback, <code>breakpoint()</code> зупиняється одразу) -
+  https://docs.python.org/3/whatsnew/3.13.html ; у 3.14 (<code>pdb -p PID</code>, PEP 768) -
+  https://docs.python.org/3/whatsnew/3.14.html (відкрито 18.11.2026)</li>
+<li>Точні місця помилок <code>^^^</code> - PEP 657 https://peps.python.org/pep-0657/ (відкрито 18.11.2026)</li>
+<li>f-рядки з <code>=</code> - https://docs.python.org/3.12/reference/lexical_analysis.html#f-strings (відкрито 18.11.2026)</li>
+<li>Правила ruff T100/T201 - https://docs.astral.sh/ruff/rules/debugger/ , https://docs.astral.sh/ruff/rules/print/
+  (відкрито 18.11.2026)</li>
+<li>Увесь вивід у цьому уроці - справжній, з тестової Linux Mint 22.3, Python 3.12.3 (18.11.2026).</li>
+</ul>

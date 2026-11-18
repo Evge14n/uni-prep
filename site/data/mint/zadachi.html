@@ -1,0 +1,2292 @@
+<h1 id="задачі-практика-й-іспит">Задачі, практика й іспит</h1>
+<h2 id="тренування-7-зламаних-програм">Тренування: 7 зламаних програм</h2>
+<p>Збережи кожну програму у файл з такою ж назвою (наприклад <code>nano bug_1.py</code>, встав, Ctrl+O, Enter, Ctrl+X) і шукай
+помилку способом, який підказує завдання (уроки 05-06).</p>
+<details>
+<summary>bug_1.py</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Середнє прискорення вільного падіння з 5 вимірювань.&quot;&quot;&quot;
+measurements = [9.79, 9.83, 9.81, 9.78, 9.84]
+
+
+def mean(values):
+    total = 0
+    for k in range(1, len(values)):
+        total += values[k]
+    return total / len(values)
+
+
+g_mean = mean(measurements)
+print(f&quot;g = {g_mean:.3f} м/с²&quot;)
+</code></pre>
+</details>
+<details>
+<summary>bug_2.py</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Переведення швидкості з км/год у м/с.&quot;&quot;&quot;
+
+
+def kmh_to_ms(speed_kmh: float) -&gt; float:
+    &quot;&quot;&quot;Швидкість у м/с, округлена до 3 знаків після коми.
+
+    &gt;&gt;&gt; kmh_to_ms(36)
+    10.0
+    &gt;&gt;&gt; kmh_to_ms(90)
+    25.0
+    &gt;&gt;&gt; kmh_to_ms(100)
+    27.778
+    &quot;&quot;&quot;
+    return round(speed_kmh * 1000 // 3600, 3)
+
+
+if __name__ == &quot;__main__&quot;:
+    import doctest
+
+    doctest.testmod()
+</code></pre>
+</details>
+<details>
+<summary>bug_3.py</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Корені квадратного рівняння a·x² + b·x + c = 0 (дискримінант &gt; 0).&quot;&quot;&quot;
+import math
+
+
+def roots(coef_a, coef_b, coef_c):
+    disc = coef_b ** 2 - 4 * coef_a * coef_c
+    root_1 = (-coef_b + math.sqrt(disc)) / 2 * coef_a
+    root_2 = (-coef_b - math.sqrt(disc)) / 2 * coef_a
+    return root_1, root_2
+
+
+equations = [(1, -3, 2), (2, -6, 4), (1, -5, 6)]
+for coef_a, coef_b, coef_c in equations:
+    root_1, root_2 = roots(coef_a, coef_b, coef_c)
+    residual = coef_a * root_1 ** 2 + coef_b * root_1 + coef_c
+    assert abs(residual) &lt; 1e-9, f&quot;x1 = {root_1} не корінь&quot;
+    print(f&quot;{coef_a, coef_b, coef_c}: x1 = {root_1}, x2 = {root_2}&quot;)
+</code></pre>
+</details>
+<details>
+<summary>bug_4.py</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Рахуємо кроки часу по 0.1 с, поки не дійдемо до 1 с.&quot;&quot;&quot;
+time_s = 0.0
+steps = 0
+while time_s != 1.0:
+    time_s += 0.1
+    steps += 1
+print(f&quot;кроків: {steps}&quot;)
+</code></pre>
+</details>
+<details>
+<summary>bug_5.py</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Кінетична енергія тіла: E = m·v²/2.&quot;&quot;&quot;
+
+
+def kinetic_energy(mass: float, speed: float) -&gt; str:
+    &quot;&quot;&quot;Рядок з енергією в джоулях.
+
+    &gt;&gt;&gt; kinetic_energy(2, 3)
+    'E = 9.0 Дж'
+    &gt;&gt;&gt; kinetic_energy(3, 0.7)
+    'E = 0.735 Дж'
+    &quot;&quot;&quot;
+    energy = mass * speed ** 2 / 2
+    print(f&quot;E = {energy} Дж&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    import doctest
+
+    doctest.testmod()
+</code></pre>
+</details>
+<details>
+<summary>bug_6.py</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Дві окремі серії вимірювань періоду маятника.&quot;&quot;&quot;
+
+
+def add_measurement(value, series=[]):
+    series.append(value)
+    return series
+
+
+series_1 = add_measurement(2.01)
+series_1 = add_measurement(1.99, series_1)
+series_2 = add_measurement(1.42)
+print(&quot;серія 1:&quot;, series_1)
+print(&quot;серія 2:&quot;, series_2)
+</code></pre>
+</details>
+<details>
+<summary>bug_7.py</summary>
+<pre><code class="language-python">&quot;&quot;&quot;Швидкість на кожній ділянці і середня швидкість на всьому шляху.&quot;&quot;&quot;
+distances = [120.0, 80.0, 100.0]  # м
+times = [12.0, 10.0, 8.0]  # с
+
+for k in range(len(distances)):
+    speed = distances[k] / times[k]
+    print(f&quot;ділянка {k + 1}: {speed:.2f} м/с&quot;)
+
+sum = 0
+for distance in distances:
+    sum += distance
+total_time = sum(times)
+print(f&quot;середня швидкість: {sum / total_time:.2f} м/с&quot;)
+</code></pre>
+</details>
+<p>Сім маленьких програм, у кожній <strong>один</strong> баг (у <code>bug_5.py</code> - два, один за одним). Кожна справді поводиться так, як
+написано в «Симптомі» (перевірено в Linux Mint 22.3, Python 3.12.3). Порядок роботи:</p>
+<ol>
+<li>Скопіюй теку в <code>~/univer/praktyka/zlamani</code> (як перенести її з ПК і яка команда <code>cp</code> - урок 06, крок 9) і перейди
+   туди: <code>cd ~/univer/praktyka/zlamani</code>.</li>
+<li>Запусти програму, порівняй з симптомом.</li>
+<li>Знайди баг <strong>методом, який указано</strong> (саме ним - це тренування методу, а не вгадування).</li>
+<li>Лише якщо застряг - відкривай «Підказки». «Виправлення» - коли вже виправив сам, для перевірки.</li>
+</ol>
+<p>Шляхи у виводі нижче - з <code>/home/evgen/...</code>; у тебе буде твоє ім'я користувача.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Файл</th>
+<th>Що рахує</th>
+<th>Метод</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bug_1.py</code></td>
+<td>середнє g з 5 вимірювань</td>
+<td>print <code>f"{x=}"</code> або <code>logging.debug</code></td>
+</tr>
+<tr>
+<td><code>bug_2.py</code></td>
+<td>км/год → м/с, doctest</td>
+<td><code>python3 bug_2.py -v</code>, <code>Expected</code> / <code>Got</code></td>
+</tr>
+<tr>
+<td><code>bug_3.py</code></td>
+<td>корені квадратного рівняння</td>
+<td><code>assert</code> уже є + точка зупинки pdb з умовою</td>
+</tr>
+<tr>
+<td><code>bug_4.py</code></td>
+<td>кроки часу по 0.1 с</td>
+<td>Ctrl+C (traceback) + print / <code>faulthandler</code></td>
+</tr>
+<tr>
+<td><code>bug_5.py</code></td>
+<td>кінетична енергія, doctest</td>
+<td><code>python3 bug_5.py -v</code>, двічі</td>
+</tr>
+<tr>
+<td><code>bug_6.py</code></td>
+<td>дві серії вимірювань</td>
+<td>pdb: <code>b</code>, <code>p id(...)</code> при кожному виклику</td>
+</tr>
+<tr>
+<td><code>bug_7.py</code></td>
+<td>середня швидкість</td>
+<td>traceback + post-mortem <code>-c continue</code>, <code>p type(...)</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h3 id="bug-1py-середнє-g">bug_1.py - середнє g</h3>
+<p><strong>Симптом.</strong> П'ять вимірювань близько 9.8, а середнє чомусь менше за кожне з них:</p>
+<pre><code class="language-bash">python3 bug_1.py
+</code></pre>
+<pre><code class="language-text">g = 7.852 м/с²
+</code></pre>
+<p><strong>Метод:</strong> print-налагодження <code>f"{x=}"</code> (урок 05) або <code>logging.debug</code> (урок 06, крок 10): надрукуй, <strong>які</strong> значення
+потрапляють у суму.</p>
+<details>
+<summary>Підказки</summary>
+<ul>
+<li>Середнє менше за найменше вимірювання - значить, у суму потрапило не все. Додай у цикл
+  <code>print(f"{k=} {values[k]=}")</code> і порахуй рядки: їх має бути 5.</li>
+<li>Або з logging: на початку <code>import logging</code> і <code>logging.basicConfig(level=logging.DEBUG)</code>, у циклі
+  <code>logging.debug(f"{k=} {total=}")</code>.</li>
+<li>Або pdb: <code>python3 -m pdb bug_1.py</code>, <code>b 8</code>, <code>c</code>, <code>p k, values[k]</code> - з якого <code>k</code> починається?</li>
+</ul>
+</details>
+<details>
+<summary>Виправлення</summary>
+<p><code>range(1, len(values))</code> починається з 1, тому <code>values[0] = 9.79</code> не потрапляє в суму (а ділимо все одно на 5).
+Типова помилка «на одиницю» (off-by-one). Правильно <code>range(len(values))</code>:</p>
+<pre><code class="language-text">    for k in range(len(values)):
+</code></pre>
+<p>Після виправлення:</p>
+<pre><code class="language-text">g = 9.810 м/с²
+</code></pre>
+<p>Ще простіше без циклу: <code>sum(values) / len(values)</code>.</p>
+</details>
+<hr>
+<h3 id="bug-2py-переведення-кмгод-у-мс">bug_2.py - переведення км/год у м/с</h3>
+<p><strong>Симптом.</strong> Усі три doctest-и падають:</p>
+<pre><code class="language-bash">python3 bug_2.py
+</code></pre>
+<pre><code class="language-text">**********************************************************************
+File &quot;/home/evgen/univer/praktyka/zlamani/bug_2.py&quot;, line 7, in __main__.kmh_to_ms
+Failed example:
+    kmh_to_ms(36)
+Expected:
+    10.0
+Got:
+    10
+**********************************************************************
+File &quot;/home/evgen/univer/praktyka/zlamani/bug_2.py&quot;, line 9, in __main__.kmh_to_ms
+Failed example:
+    kmh_to_ms(90)
+Expected:
+    25.0
+Got:
+    25
+**********************************************************************
+File &quot;/home/evgen/univer/praktyka/zlamani/bug_2.py&quot;, line 11, in __main__.kmh_to_ms
+Failed example:
+    kmh_to_ms(100)
+Expected:
+    27.778
+Got:
+    27
+**********************************************************************
+1 items had failures:
+   3 of   3 in __main__.kmh_to_ms
+***Test Failed*** 3 failures.
+</code></pre>
+<p><strong>Метод:</strong> doctest <code>-v</code> (урок 06, крок 8): уважно порівняй <code>Expected</code> і <code>Got</code>. doctest не міняй - він правильний.</p>
+<details>
+<summary>Підказки</summary>
+<ul>
+<li><code>python3 bug_2.py -v</code> покаже кожен приклад окремо.</li>
+<li><code>10</code> замість <code>10.0</code> - це вже підказка про <strong>тип</strong>: ціле число, а не дробове. Перевір у <code>python3</code>:
+  <code>type(36 * 1000 // 3600)</code> і <code>type(36 * 1000 / 3600)</code>.</li>
+<li>Який оператор ділення дає ціле і відкидає дробову частину?</li>
+</ul>
+</details>
+<details>
+<summary>Виправлення</summary>
+<p><code>//</code> - ділення націло (з відкиданням дробової частини): <code>100000 // 3600 = 27</code>. Потрібне звичайне ділення <code>/</code>:</p>
+<pre><code class="language-text">    return round(speed_kmh * 1000 / 3600, 3)
+</code></pre>
+<p>Після виправлення <code>python3 bug_2.py</code> нічого не друкує (усі doctest пройшли), а <code>python3 bug_2.py -v</code> закінчується
+рядком <code>Test passed.</code></p>
+</details>
+<hr>
+<h3 id="bug-3py-корені-квадратного-рівняння">bug_3.py - корені квадратного рівняння</h3>
+<p><strong>Симптом.</strong> Перше рівняння пораховано, на другому спрацьовує <code>assert</code> (перевірка, що <code>x1</code> справді корінь):</p>
+<pre><code class="language-bash">python3 bug_3.py
+</code></pre>
+<pre><code class="language-text">(1, -3, 2): x1 = 2.0, x2 = 1.0
+Traceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/zlamani/bug_3.py&quot;, line 16, in &lt;module&gt;
+    assert abs(residual) &lt; 1e-9, f&quot;x1 = {root_1} не корінь&quot;
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: x1 = 8.0 не корінь
+</code></pre>
+<p><strong>Метод:</strong> <code>assert</code> уже знайшов, <strong>що</strong> не так (<code>x1 = 8.0</code> для <code>2x² - 6x + 4 = 0</code>, а корені 2 і 1). Знайти, <strong>де</strong> -
+точка зупинки pdb з умовою всередині <code>roots</code>.</p>
+<details>
+<summary>Підказки</summary>
+<ul>
+<li>Post-mortem (<code>python3 -m pdb -c continue bug_3.py</code>) тут зупиниться на рівні модуля, рядок 16: змінної <code>disc</code> там
+  нема (<code>*** NameError: name 'disc' is not defined</code>), вона жила лише всередині <code>roots</code>.</li>
+<li>Тому так: <code>python3 -m pdb bug_3.py</code>, далі <code>b 9, coef_a == 2</code> (рядок <code>return</code> у <code>roots</code>, лише для другого
+  рівняння), <code>c</code>, <code>p disc, root_1</code>.</li>
+<li>Порахуй руками: <code>x = (6 + √4) / (2·2)</code>. Тепер у pdb: <code>p (-coef_b + math.sqrt(disc)) / 2 * coef_a</code> і
+  <code>p (-coef_b + math.sqrt(disc)) / (2 * coef_a)</code>. Яке дає 2.0?</li>
+<li>Чому перше рівняння проходило? Подивись, чому дорівнює <code>coef_a</code> там.</li>
+</ul>
+</details>
+<details>
+<summary>Виправлення</summary>
+<p><code>/ 2 * coef_a</code> означає <code>(... / 2) * coef_a</code>: ділення і множення виконуються зліва направо, тому <code>coef_a</code>
+<strong>множить</strong>, а не ділить. Для <code>coef_a = 1</code> різниці нема, тому перше рівняння проходило. Потрібні дужки:</p>
+<pre><code class="language-text">    root_1 = (-coef_b + math.sqrt(disc)) / (2 * coef_a)
+    root_2 = (-coef_b - math.sqrt(disc)) / (2 * coef_a)
+</code></pre>
+<p>Після виправлення:</p>
+<pre><code class="language-text">(1, -3, 2): x1 = 2.0, x2 = 1.0
+(2, -6, 4): x1 = 2.0, x2 = 1.0
+(1, -5, 6): x1 = 3.0, x2 = 2.0
+</code></pre>
+</details>
+<hr>
+<h3 id="bug-4py-кроки-часу-по-01-с">bug_4.py - кроки часу по 0.1 с</h3>
+<p><strong>Симптом.</strong> Програма має надрукувати <code>кроків: 10</code>, а вона нічого не друкує і не закінчується. Зупини Ctrl+C:</p>
+<pre><code class="language-bash">python3 bug_4.py
+</code></pre>
+<pre><code class="language-text">^CTraceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/zlamani/bug_4.py&quot;, line 4, in &lt;module&gt;
+    while time_s != 1.0:
+          ^^^^^^^^^^^^^
+KeyboardInterrupt
+</code></pre>
+<p><strong>Метод:</strong> Ctrl+C показує, <strong>де</strong> програма крутиться (рядок 4, умова циклу). Далі - подивитись, які значення
+набуває <code>time_s</code>: print або <code>faulthandler</code> (урок 06, крок 11 - за бажанням).</p>
+<details>
+<summary>Підказки</summary>
+<ul>
+<li>Додай у цикл <code>print(f"{steps=} {time_s=}")</code> і <strong>запобіжник</strong>, щоб не друкувати вічно: другим рядком у циклі
+  <code>assert steps &lt; 20, "забагато кроків"</code>. Подивись на значення біля 10-го кроку.</li>
+<li>Перевір у <code>python3</code>: <code>0.1 + 0.1 + 0.1</code> і <code>0.1 + 0.1 + 0.1 == 0.3</code>.</li>
+<li>Інший спосіб знайти місце зависання: на початку файлу <code>import faulthandler</code> і
+  <code>faulthandler.dump_traceback_later(3, exit=True)</code>.</li>
+</ul>
+</details>
+<details>
+<summary>Виправлення</summary>
+<p>0.1 у двійковому вигляді не записується точно, тому після 10 додавань <code>time_s = 0.9999999999999999</code>, а після 11 -
+<code>1.0999999999999999</code>. Рівно <code>1.0</code> не буває ніколи, умова <code>!=</code> завжди істинна. <strong>Дробові числа не порівнюють на
+рівність.</strong> Порівнювати з запасом:</p>
+<pre><code class="language-text">while time_s &lt; 1.0 - 1e-9:
+</code></pre>
+<p>Після виправлення:</p>
+<pre><code class="language-text">кроків: 10
+</code></pre>
+<p>Увага: просто <code>while time_s &lt; 1.0:</code> дасть <code>кроків: 11</code> (бо <code>0.9999999999999999 &lt; 1.0</code>). Найнадійніше -
+рахувати цілими кроками: <code>for steps in range(1, 11):</code> і <code>time_s = steps * 0.1</code>.</p>
+</details>
+<hr>
+<h3 id="bug-5py-кінетична-енергія">bug_5.py - кінетична енергія</h3>
+<p><strong>Симптом.</strong> Обидва doctest-и падають, хоча числа «майже ті»:</p>
+<pre><code class="language-bash">python3 bug_5.py
+</code></pre>
+<pre><code class="language-text">**********************************************************************
+File &quot;/home/evgen/univer/praktyka/zlamani/bug_5.py&quot;, line 7, in __main__.kinetic_energy
+Failed example:
+    kinetic_energy(2, 3)
+Expected:
+    'E = 9.0 Дж'
+Got:
+    E = 9.0 Дж
+**********************************************************************
+File &quot;/home/evgen/univer/praktyka/zlamani/bug_5.py&quot;, line 9, in __main__.kinetic_energy
+Failed example:
+    kinetic_energy(3, 0.7)
+Expected:
+    'E = 0.735 Дж'
+Got:
+    E = 0.7349999999999999 Дж
+**********************************************************************
+1 items had failures:
+   2 of   2 in __main__.kinetic_energy
+***Test Failed*** 2 failures.
+</code></pre>
+<p><strong>Метод:</strong> doctest <code>-v</code> і посимвольне порівняння <code>Expected</code> / <code>Got</code>. Тут два баги - виправляй по одному і запускай
+знову.</p>
+<details>
+<summary>Підказки</summary>
+<ul>
+<li>Порівняй перший приклад: чим <code>'E = 9.0 Дж'</code> відрізняється від <code>E = 9.0 Дж</code>? Лапки показують <code>repr</code> <strong>рядка</strong>,
+  який функція <strong>повернула</strong>. Без лапок - текст, який вона <strong>надрукувала</strong>. Що функція повертає, якщо в ній нема
+  <code>return</code>?</li>
+<li>Після першого виправлення другий приклад покаже <code>Got: 'E = 0.7349999999999999 Дж'</code>. Це похибка float
+  (<code>3 * 0.7 ** 2 / 2</code>). Як округлити до 3 знаків?</li>
+</ul>
+</details>
+<details>
+<summary>Виправлення</summary>
+<ol>
+<li>Функція друкує (<code>print</code>), а не повертає: повертає <code>None</code>, а doctest бачить лише надрукований текст без лапок.
+   Заміни <code>print(...)</code> на <code>return ...</code>. Після цього лишається одна помилка:</li>
+</ol>
+<pre><code class="language-text">**********************************************************************
+File &quot;/home/evgen/univer/praktyka/zlamani/bug_5.py&quot;, line 9, in __main__.kinetic_energy
+Failed example:
+    kinetic_energy(3, 0.7)
+Expected:
+    'E = 0.735 Дж'
+Got:
+    'E = 0.7349999999999999 Дж'
+**********************************************************************
+1 items had failures:
+   1 of   2 in __main__.kinetic_energy
+***Test Failed*** 1 failures.
+</code></pre>
+<ol start="2">
+<li>Округлити: <code>round(energy, 3)</code> дає <code>0.735</code>, а <code>9.0</code> лишається <code>9.0</code> (формат <code>:.3f</code> дав би <code>9.000</code> і зламав
+   перший приклад):</li>
+</ol>
+<pre><code class="language-text">    return f&quot;E = {round(energy, 3)} Дж&quot;
+</code></pre>
+<p>Після виправлення <code>python3 bug_5.py</code> нічого не друкує - усі doctest пройшли.</p>
+</details>
+<hr>
+<h3 id="bug-6py-дві-серії-вимірювань">bug_6.py - дві серії вимірювань</h3>
+<p><strong>Симптом.</strong> Друга серія мала б бути <code>[1.42]</code>, а в ній значення першої:</p>
+<pre><code class="language-bash">python3 bug_6.py
+</code></pre>
+<pre><code class="language-text">серія 1: [2.01, 1.99, 1.42]
+серія 2: [2.01, 1.99, 1.42]
+</code></pre>
+<p><strong>Метод:</strong> pdb з точкою зупинки у функції; при кожній зупинці дивись <strong>сам список</strong> і його <code>id</code> (номер об'єкта в
+пам'яті - однаковий <code>id</code> означає «той самий список»).</p>
+<details>
+<summary>Підказки</summary>
+<ul>
+<li><code>python3 -m pdb bug_6.py</code>, <code>b 5</code>, <code>c</code>, <code>p series, id(series)</code>, знову <code>c</code> і <code>p series, id(series)</code> - тричі.</li>
+<li>На третьому виклику (<code>add_measurement(1.42)</code>, без другого аргументу) <code>series</code> має бути <strong>новим порожнім</strong>
+  списком. Чи він порожній? Чи <code>id</code> новий?</li>
+<li><code>p add_measurement.__defaults__</code> - де Python зберігає значення за замовчуванням.</li>
+</ul>
+</details>
+<details>
+<summary>Виправлення</summary>
+<p>Значення за замовчуванням <code>series=[]</code> створюється <strong>один раз</strong>, коли Python читає <code>def</code>, і потім той самий список
+використовується в кожному виклику без другого аргументу. Тому <code>series_1</code> і <code>series_2</code> - один і той самий список.
+Правильний прийом - <code>None</code> і новий список усередині:</p>
+<pre><code class="language-text">def add_measurement(value, series=None):
+    if series is None:
+        series = []
+</code></pre>
+<p>Після виправлення:</p>
+<pre><code class="language-text">серія 1: [2.01, 1.99]
+серія 2: [1.42]
+</code></pre>
+</details>
+<hr>
+<h3 id="bug-7py-середня-швидкість">bug_7.py - середня швидкість</h3>
+<p><strong>Симптом.</strong> Швидкості на ділянках правильні, а на середній - падіння:</p>
+<pre><code class="language-bash">python3 bug_7.py
+</code></pre>
+<pre><code class="language-text">ділянка 1: 10.00 м/с
+ділянка 2: 8.00 м/с
+ділянка 3: 12.50 м/с
+Traceback (most recent call last):
+  File &quot;/home/evgen/univer/praktyka/zlamani/bug_7.py&quot;, line 12, in &lt;module&gt;
+    total_time = sum(times)
+                 ^^^^^^^^^^
+TypeError: 'float' object is not callable
+</code></pre>
+<p><strong>Метод:</strong> прочитати traceback (урок 05), потім post-mortem: <code>python3 -m pdb -c continue bug_7.py</code> і подивитись,
+<strong>що</strong> таке <code>sum</code> у момент падіння.</p>
+<details>
+<summary>Підказки</summary>
+<ul>
+<li><code>'float' object is not callable</code> - «дробове число не можна викликати як функцію». Хто в рядку 12 викликається
+  дужками?</li>
+<li>У post-mortem: <code>p type(sum)</code> і <code>p sum</code>. Потім <code>q</code> двічі (урок 06, крок 7).</li>
+<li>Знайди в файлі, де <code>sum</code> отримує значення: <code>grep -n "sum" bug_7.py</code>.</li>
+</ul>
+</details>
+<details>
+<summary>Виправлення</summary>
+<p>Рядок <code>sum = 0</code> <strong>затінив</strong> вбудовану функцію <code>sum</code> (shadowing): після нього ім'я <code>sum</code> означає число <code>300.0</code>, і
+<code>sum(times)</code> пробує викликати число. Змінна має мати власне ім'я:</p>
+<pre><code class="language-text">total_distance = 0
+for distance in distances:
+    total_distance += distance
+</code></pre>
+<p>і в останньому рядку <code>total_distance / total_time</code>. Після виправлення:</p>
+<pre><code class="language-text">ділянка 1: 10.00 м/с
+ділянка 2: 8.00 м/с
+ділянка 3: 12.50 м/с
+середня швидкість: 10.00 м/с
+</code></pre>
+<p>Імена, які не можна брати для змінних, бо вони вже зайняті: <code>sum</code>, <code>max</code>, <code>min</code>, <code>list</code>, <code>input</code>, <code>len</code>, <code>round</code>,
+<code>type</code>, <code>id</code>. Лінтер <code>ruff check --select A bug_7.py</code> (у venv) таке ловить.</p>
+</details>
+<h2 id="практика-4-завдання-як-у-справжній-роботі">Практика: 4 завдання як у справжній роботі</h2>
+<p>Чотири реальні задачі, які збирають разом кілька уроків. Це <strong>не лаби викладача</strong>, тому повні розвʼязки тут є.</p>
+<p>Як працювати: прочитай умову, зроби сам (20-40 хвилин на завдання), і лише тоді відкривай «Розвʼязок» і порівнюй.
+Застряг надовго - відкрий розвʼязок до першого кроку, якого не знаєш, і далі знову сам.</p>
+<p>Файли до завдань 2 і 3 лежать поруч у теці <code>Практика - файли</code> (<code>lab_zlamana.py</code>, <code>zibraty.sh</code>), а ще вони повністю
+надруковані нижче - можна набрати або вставити в nano. Увесь вивід у розвʼязках - справжній, з тестової Linux Mint
+22.3 (перевіряє <code>_перевірка/u_ispyt.sh</code>); шлях <code>/home/evgen/...</code> у тебе буде зі своїм логіном.</p>
+<hr>
+<h3 id="завдання-1-робоче-місце-з-нуля-на-свіжій-mint">Завдання 1. Робоче місце з нуля на свіжій Mint</h3>
+<p><strong>Умова.</strong> Свіжовстановлена Mint 22.3, нічого не налаштовано. Треба отримати:</p>
+<ol>
+<li>знімок системи «як після встановлення»;</li>
+<li>оновлену систему;</li>
+<li>пакети для лаб (git, venv, pip, tkinter);</li>
+<li>venv <code>~/univer/.venv</code> з pytest, flake8, black, mypy, ruff;</li>
+<li>git з твоїм імʼям і гілкою <code>main</code> за замовчуванням;</li>
+<li>команду <code>perevir</code>, яка на тестовому <code>hello.py</code> не має жодного зауваження.</li>
+</ol>
+<p>Склади чекліст <strong>у правильному порядку</strong> з командами і поясни, чому порядок саме такий. Наприкінці - таблиця
+«як перевірити, що кожен пункт готовий».</p>
+<details>
+<summary>Розвʼязок</summary>
+<p><strong>Чому такий порядок.</strong> Знімок - першим: ним відкочуєш, якщо щось далі зламається (і він найменший, поки система
+чиста). Оновлення - до пакетів: <code>apt install</code> ставить найновіші версії зі свіжого списку. venv - лише після пакета
+<code>python3-venv</code>, інакше <code>ensurepip is not available</code>. git і <code>perevir</code> - наприкінці, бо їм потрібні venv і пакети.</p>
+<p><strong>Крок 1. Знімок (урок 01).</strong> Спершу один раз мишкою: Меню → Адміністрування → Timeshift → RSYNC → диск → розклад
+Daily і Boot по 2-3 знімки → Finish. Домашню теку <strong>не</strong> вмикай. Потім:</p>
+<pre><code class="language-bash">sudo timeshift --create --comments &quot;свіжа система&quot;
+sudo timeshift --list
+</code></pre>
+<p><strong>Крок 2. Оновлення (урок 02).</strong> Мишкою - Диспетчер оновлень, або в терміналі (список перед <code>Y</code> - читати):</p>
+<pre><code class="language-bash">sudo apt update
+sudo apt upgrade
+flatpak update
+</code></pre>
+<p>Значок у треї попросить перезавантаження (якщо було нове ядро) - перезавантаж зараз, до лаб.</p>
+<p><strong>Крок 3. Пакети для лаб.</strong> На свіжій Mint 22.3 їх нема (git, python3-venv, python3-pip, python3-tk):</p>
+<pre><code class="language-bash">sudo apt install git python3-venv python3-pip python3-tk
+</code></pre>
+<p><strong>Крок 4. Тека і venv (урок 03).</strong></p>
+<pre><code class="language-bash">mkdir -p ~/univer/labs/lr1 ~/univer/praktyka
+python3 -m venv ~/univer/.venv
+source ~/univer/.venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install pytest flake8 black mypy ruff
+</code></pre>
+<p><code>python</code> (без 3) працює саме тому, що ввімкнено venv - у системі є лише <code>python3</code>.</p>
+<p><strong>Крок 5. git (урок 24).</strong> Імʼя і пошту - свої:</p>
+<pre><code class="language-bash">git config --global user.name &quot;Твоє Імʼя Прізвище&quot;
+git config --global user.email &quot;tvoya.poshta@example.com&quot;
+git config --global init.defaultBranch main
+git config --global core.quotepath false
+</code></pre>
+<p><code>core.quotepath false</code> - щоб git показував кириличні назви файлів як є, а не <code>\320\233...</code>.</p>
+<p><strong>Крок 6. perevir.</strong> Найпростіше - скрипт курсу <code>ustanovka-mint.sh</code> (він робить кроки 3-6 сам і додає в <code>~/.bashrc</code>
+команди <code>univer</code> і <code>perevir</code>), див. «00 - Почни тут». Після нього - нове вікно термінала. Тестовий файл
+<code>~/univer/praktyka/hello.py</code>:</p>
+<pre><code class="language-python">def pryvit(imya: str) -&gt; str:
+    &quot;&quot;&quot;Привітання.
+
+    &gt;&gt;&gt; pryvit(&quot;Прізвище&quot;)
+    'Привіт, Прізвище!'
+    &quot;&quot;&quot;
+    return f&quot;Привіт, {imya}!&quot;
+</code></pre>
+<pre><code class="language-bash">cd ~/univer/praktyka
+perevir hello.py
+</code></pre>
+<pre><code class="language-text">--- doctest (через pytest; зупиню, якщо довше 120 с)
+doctest: усе пройшло (1 passed in 0.01s)
+--- black (лише перевірка, файл не змінює; виправити: black -l 78 hello.py)
+black: оформлення ок
+--- flake8 і pycodestyle (рядок до 78 символів, як каже викладач)
+flake8: зауважень нема
+pycodestyle: зауважень нема
+--- ruff
+ruff: зауважень нема
+--- mypy
+Success: no issues found in 1 source file
+</code></pre>
+<p>(Час <code>0.01s</code> у тебе інший.)</p>
+<p><strong>Таблиця готовності:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Пункт</th>
+<th>Перевірка</th>
+<th>Має бути</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>знімок</td>
+<td><code>sudo timeshift --list</code></td>
+<td>рядок з коментарем «свіжа система»</td>
+</tr>
+<tr>
+<td>оновлення</td>
+<td><code>apt list --upgradable</code></td>
+<td><code>Listing...</code> і жодного пакета під ним</td>
+</tr>
+<tr>
+<td>версія</td>
+<td><code>cat /etc/os-release</code></td>
+<td><code>PRETTY_NAME="Linux Mint 22.3"</code></td>
+</tr>
+<tr>
+<td>tkinter</td>
+<td><code>python3 -c "import tkinter; print(tkinter.TkVersion)"</code></td>
+<td><code>8.6</code></td>
+</tr>
+<tr>
+<td>venv</td>
+<td><code>source ~/univer/.venv/bin/activate</code>, потім <code>which python</code></td>
+<td><code>/home/evgen/univer/.venv/bin/python</code></td>
+</tr>
+<tr>
+<td>бібліотеки</td>
+<td><code>python -m pytest --version</code></td>
+<td><code>pytest</code> і номер версії</td>
+</tr>
+<tr>
+<td>git</td>
+<td><code>git config --global init.defaultBranch</code></td>
+<td><code>main</code></td>
+</tr>
+<tr>
+<td>perevir</td>
+<td><code>perevir hello.py</code></td>
+<td>кожен інструмент без зауважень, як вище</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Типові пастки цього завдання:</strong> venv створено до <code>python3-venv</code> → видалити недороблену <code>~/univer/.venv</code> і створити
+знову; <code>pip install</code> поза venv → <code>externally-managed-environment</code> (увімкни venv, не <code>sudo pip</code>); домашня тека в
+знімках Timeshift → диск забивається за тиждень.</p>
+<p>Джерела: уроки 01, 02, 03, 24; <code>00 - Почни тут.md</code> (швидке налаштування).</p>
+</details>
+<hr>
+<h3 id="завдання-2-лабу-зламано">Завдання 2. «Лабу зламано»</h3>
+<p><strong>Умова.</strong> Файл <code>lab_zlamana.py</code> рахує середню швидкість на ділянках шляху. Doctest-и в ньому <strong>правильні</strong> (це
+умова задачі, їх не міняють), а код має кілька помилок - і логічних, і стилю. Треба:</p>
+<ol>
+<li>знайти всі логічні помилки, користуючись <strong>лише</strong> <code>python3 -m doctest -v</code>, повним звітом doctest і pdb
+   post-mortem (<code>python3 -m pdb -c continue</code>) - не вгадуючи;</li>
+<li>виправити код, не чіпаючи doctest;</li>
+<li>довести до чистоти: doctest <code>0 failed</code>, black не має що міняти, flake8 мовчить, mypy - <code>Success</code>.</li>
+</ol>
+<p>Підготовка (venv увімкнено):</p>
+<pre><code class="language-bash">mkdir -p ~/univer/praktyka/p2
+cd ~/univer/praktyka/p2
+nano lab_zlamana.py
+</code></pre>
+<p>Встав код (Ctrl+Shift+V) або скопіюй файл з теки <code>Практика - файли</code>:</p>
+<pre><code class="language-python">&quot;&quot;&quot;Практика 2: середня швидкість на ділянках (навмисно зламано).&quot;&quot;&quot;
+import math
+
+
+def to_ms(speed_kmh: float) -&gt; float:
+    &quot;&quot;&quot;Перевести км/год у м/с, округлити до 2 знаків.
+
+    &gt;&gt;&gt; to_ms(36)
+    10.0
+    &gt;&gt;&gt; to_ms(90)
+    25.0
+    &quot;&quot;&quot;
+    return round(speed_kmh * 3.6, 2)
+
+
+def mean_speed(distances: list[float], times: list[float]) -&gt; float:
+    &quot;&quot;&quot;Середня швидкість на всьому шляху, м/с: увесь шлях / увесь час.
+
+    Порожній список ділянок - швидкість 0.0.
+
+    &gt;&gt;&gt; mean_speed([100, 200], [10, 30])
+    7.5
+    &gt;&gt;&gt; mean_speed([], [])
+    0.0
+    &quot;&quot;&quot;
+    total=0
+    for k in range(len(distances)):
+        total += distances[k] / times[k]
+    return total / len(distances)
+
+
+if __name__ == &quot;__main__&quot;:
+    dani = {
+        &quot;ділянка A&quot;: ([100.0, 200.0], [10.0, 30.0]),
+        &quot;ділянка B&quot;: ([], []),
+    }
+    for nazva, (d, t) in dani.items():
+        print(nazva, mean_speed(d, t), &quot;м/с&quot;)
+</code></pre>
+<details>
+<summary>Розвʼязок</summary>
+<p><strong>Крок 1. Скільки всього впало.</strong></p>
+<pre><code class="language-bash">python3 -m doctest -v lab_zlamana.py | tail -n 3
+</code></pre>
+<pre><code class="language-text">4 tests in 3 items.
+0 passed and 4 failed.
+***Test Failed*** 4 failures.
+</code></pre>
+<p>Упали всі чотири приклади. <code>-m doctest</code> тут безпечний: <code>if __name__ == "__main__":</code> захищає від чужого провалу.</p>
+<p><strong>Крок 2. Повний звіт - читаємо Expected / Got.</strong></p>
+<pre><code class="language-bash">python3 -m doctest lab_zlamana.py
+</code></pre>
+<pre><code class="language-text">**********************************************************************
+File &quot;/home/evgen/univer/praktyka/p2/lab_zlamana.py&quot;, line 21, in lab_zlamana.mean_speed
+Failed example:
+    mean_speed([100, 200], [10, 30])
+Expected:
+    7.5
+Got:
+    8.333333333333334
+**********************************************************************
+File &quot;/home/evgen/univer/praktyka/p2/lab_zlamana.py&quot;, line 23, in lab_zlamana.mean_speed
+Failed example:
+    mean_speed([], [])
+Exception raised:
+    Traceback (most recent call last):
+      File &quot;/usr/lib/python3.12/doctest.py&quot;, line 1361, in __run
+        exec(compile(example.source, filename, &quot;single&quot;,
+      File &quot;&lt;doctest lab_zlamana.mean_speed[1]&gt;&quot;, line 1, in &lt;module&gt;
+        mean_speed([], [])
+      File &quot;/home/evgen/univer/praktyka/p2/lab_zlamana.py&quot;, line 29, in mean_speed
+        return total / len(distances)
+               ~~~~~~^~~~~~~~~~~~~~~~
+    ZeroDivisionError: division by zero
+**********************************************************************
+File &quot;/home/evgen/univer/praktyka/p2/lab_zlamana.py&quot;, line 8, in lab_zlamana.to_ms
+Failed example:
+    to_ms(36)
+Expected:
+    10.0
+Got:
+    129.6
+**********************************************************************
+File &quot;/home/evgen/univer/praktyka/p2/lab_zlamana.py&quot;, line 10, in lab_zlamana.to_ms
+Failed example:
+    to_ms(90)
+Expected:
+    25.0
+Got:
+    324.0
+**********************************************************************
+2 items had failures:
+   2 of   2 in lab_zlamana.mean_speed
+   2 of   2 in lab_zlamana.to_ms
+***Test Failed*** 4 failures.
+</code></pre>
+<p>Читаємо як фізики:</p>
+<ul>
+<li><strong>Баг 1, <code>to_ms</code>.</strong> <code>Got 129.6</code> = 36 × 3,6. Множимо замість ділити: 1 м/с = 3,6 км/год, тож 36 км/год = 10 м/с.</li>
+<li><strong>Баг 2, <code>mean_speed</code>.</strong> <code>Got 8.333...</code> = (100/10 + 200/30) / 2 - це <strong>середнє швидкостей</strong>. А середня швидкість
+  = <strong>увесь шлях / увесь час</strong> = 300 / 40 = 7,5 (так і в doctest). Класична помилка з фізики, а не з Python.</li>
+<li><strong>Баг 3, <code>mean_speed([], [])</code>.</strong> Ділення на <code>len([])</code> = 0. Doctest каже: має бути <code>0.0</code>.</li>
+</ul>
+<p><strong>Крок 3. Post-mortem: на яких даних падає справжня програма.</strong></p>
+<pre><code class="language-bash">python3 -m pdb -c continue lab_zlamana.py
+</code></pre>
+<p>Кінець виводу (вище - traceback з рядками самого pdb, їх пропускай) і сеанс:</p>
+<pre><code class="language-text">ZeroDivisionError: division by zero
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+&gt; /home/evgen/univer/praktyka/p2/lab_zlamana.py(29)mean_speed()
+-&gt; return total / len(distances)
+(Pdb) p distances, times
+([], [])
+(Pdb) u
+&gt; /home/evgen/univer/praktyka/p2/lab_zlamana.py(38)&lt;module&gt;()
+-&gt; print(nazva, mean_speed(d, t), &quot;м/с&quot;)
+(Pdb) p nazva, d, t
+('ділянка B', [], [])
+(Pdb) q
+Post mortem debugger finished. The /home/evgen/univer/praktyka/p2/lab_zlamana.py will be restarted
+&gt; /home/evgen/univer/praktyka/p2/lab_zlamana.py(1)&lt;module&gt;()
+-&gt; &quot;&quot;&quot;Практика 2: середня швидкість на ділянках (навмисно зламано).&quot;&quot;&quot;
+(Pdb) q
+</code></pre>
+<p><code>p distances, times</code> - у момент падіння обидва списки порожні; <code>u</code> - на рівень вище, у головну частину; <code>p nazva</code>
+каже, яка ділянка винна. Після першого <code>q</code> програма перезапускається - тому <code>q</code> двічі.</p>
+<p><strong>Крок 4. Що кажуть інструменти стилю і типів.</strong></p>
+<pre><code class="language-bash">python3 -m flake8 --max-line-length=78 lab_zlamana.py
+python3 -m mypy lab_zlamana.py
+</code></pre>
+<pre><code class="language-text">lab_zlamana.py:2:1: F401 'math' imported but unused
+lab_zlamana.py:26:10: E225 missing whitespace around operator
+lab_zlamana.py:28: error: Incompatible types in assignment (expression has type &quot;float&quot;, variable has type &quot;int&quot;)  [assignment]
+Found 1 error in 1 file (checked 1 source file)
+</code></pre>
+<ul>
+<li><code>F401</code> - зайвий <code>import math</code> (<strong>помилка стилю 1</strong>), <code>E225</code> - <code>total=0</code> без пробілів (<strong>помилка стилю 2</strong>).</li>
+<li>mypy підказує ще й про логіку: <code>total = 0</code> - ціле, а додаємо дроби. У виправленому коді <code>total</code> взагалі не
+  потрібен.</li>
+</ul>
+<p>Що вміє black, а що ні - перевір на копії:</p>
+<pre><code class="language-bash">cp lab_zlamana.py kopiya.py
+python3 -m black -l 78 kopiya.py
+python3 -m flake8 --max-line-length=78 kopiya.py
+</code></pre>
+<pre><code class="language-text">reformatted kopiya.py
+
+All done! ✨ 🍰 ✨
+1 file reformatted.
+kopiya.py:3:1: F401 'math' imported but unused
+</code></pre>
+<p>black виправив пробіли (<code>total = 0</code>) і додав порожній рядок після docstring (тому <code>math</code> тепер у рядку 3), а зайвий
+імпорт лишився: black - форматер, він не прибирає код. Такі речі - руками (або <code>ruff check --fix</code>).</p>
+<p><strong>Крок 5. Виправлений файл</strong> (doctest не змінено ні на символ):</p>
+<pre><code class="language-python">&quot;&quot;&quot;Практика 2: середня швидкість на ділянках (виправлено).&quot;&quot;&quot;
+
+
+def to_ms(speed_kmh: float) -&gt; float:
+    &quot;&quot;&quot;Перевести км/год у м/с, округлити до 2 знаків.
+
+    &gt;&gt;&gt; to_ms(36)
+    10.0
+    &gt;&gt;&gt; to_ms(90)
+    25.0
+    &quot;&quot;&quot;
+    return round(speed_kmh / 3.6, 2)
+
+
+def mean_speed(distances: list[float], times: list[float]) -&gt; float:
+    &quot;&quot;&quot;Середня швидкість на всьому шляху, м/с: увесь шлях / увесь час.
+
+    Порожній список ділянок - швидкість 0.0.
+
+    &gt;&gt;&gt; mean_speed([100, 200], [10, 30])
+    7.5
+    &gt;&gt;&gt; mean_speed([], [])
+    0.0
+    &quot;&quot;&quot;
+    if not times:
+        return 0.0
+    return sum(distances) / sum(times)
+
+
+if __name__ == &quot;__main__&quot;:
+    dani = {
+        &quot;ділянка A&quot;: ([100.0, 200.0], [10.0, 30.0]),
+        &quot;ділянка B&quot;: ([], []),
+    }
+    for nazva, (d, t) in dani.items():
+        print(nazva, mean_speed(d, t), &quot;м/с&quot;)
+</code></pre>
+<p><strong>Крок 6. Фінальна перевірка.</strong></p>
+<pre><code class="language-bash">python3 -m doctest -v lab_zlamana.py | tail -n 3
+python3 lab_zlamana.py
+python3 -m black -l 78 --check lab_zlamana.py
+python3 -m flake8 --max-line-length=78 lab_zlamana.py
+python3 -m mypy lab_zlamana.py
+</code></pre>
+<pre><code class="language-text">4 tests in 3 items.
+4 passed and 0 failed.
+Test passed.
+ділянка A 7.5 м/с
+ділянка B 0.0 м/с
+All done! ✨ 🍰 ✨
+1 file would be left unchanged.
+Success: no issues found in 1 source file
+</code></pre>
+<p>flake8 мовчить - зауважень нема. Підсумок: <strong>3 логічні помилки</strong> (множення замість ділення, середнє швидкостей
+замість шлях/час, ділення на нуль для порожніх даних) і <strong>2 стилю</strong> (зайвий імпорт, пробіли).</p>
+<p>Чесне питання на співбесіді: а якщо <code>times = [0.0]</code>? Тоді <code>sum(times)</code> = 0 і знову <code>ZeroDivisionError</code>. Doctest про
+це не питає - але варто сказати викладачу про такий граничний випадок (як у ЛР7: граничні випадки - теж тести).</p>
+<p>Джерела: урок 04 (Expected / Got, print і return); урок 05 (traceback знизу вгору); урок 06, кроки 7-8
+(post-mortem, налагодження doctest); урок 12 (граничні випадки в тестах).</p>
+</details>
+<hr>
+<h3 id="завдання-3-скрипт-zibratysh-і-щоденна-копія">Завдання 3. Скрипт <code>zibraty.sh</code> і щоденна копія</h3>
+<p><strong>Умова.</strong></p>
+<ol>
+<li>Напиши скрипт <code>~/univer/zibraty.sh</code>, який перевіряє <strong>всі</strong> лаби в <code>~/univer/labs/lr*/</code>: для кожного <code>.py</code> -
+   doctest через pytest і flake8 до 78 символів, і друкує одну таблицю «лаба | файл | doctest | flake8». Код
+   виходу: 0 - усе чисто, 1 - є провали чи зауваження, 2 - помилка запуску (нема venv чи теки). З номером лаби
+   (<code>bash zibraty.sh 1</code>) він ще й збирає <code>~/univer/zdacha/Прізвище_Імʼя_Група_ЛР1.zip</code>, у якому рівно одна тека
+   <code>Прізвище_Імʼя_Група_ЛР1/</code> і лише <code>.py</code>.</li>
+<li>Налаштуй щоденну копію <code>~/univer</code> в іншу теку через rsync (без <code>.venv</code> і <code>__pycache__</code>): варіант cron і варіант
+   таймера systemd. Поясни, що вибрав би на ноутбуці.</li>
+</ol>
+<p>Пастки, які скрипт мусить обійти: <code>python3 файл.py</code> дає код 0 навіть при проваленому doctest; файл з <code>input()</code> при
+імпорті «вішає» pytest; файл без жодного doctest pytest вважає «нема тестів» (код 5); <code>zip -r</code> з повним шляхом
+кладе в архів увесь <code>home/evgen/...</code>; <code>python3 -m zipfile -c</code> лишає лише останню теку.</p>
+<details>
+<summary>Розвʼязок</summary>
+<p><strong>Скрипт</strong> (файл <code>zibraty.sh</code> є і в теці <code>Практика - файли</code>):</p>
+<pre><code class="language-bash">#!/bin/bash
+# zibraty.sh - перевірити всі лаби в ~/univer/labs і (за бажанням) зібрати zip однієї.
+#   bash zibraty.sh      - лише таблиця перевірок
+#   bash zibraty.sh 2    - таблиця + архів лаби ~/univer/labs/lr2
+#   LABS=~/proba/labs bash zibraty.sh   - інша тека з лабами (для тренування)
+# Код виходу: 0 - усе чисто, 1 - є провали чи зауваження, 2 - помилка запуску.
+set -uo pipefail
+
+PIB=&quot;Прізвище_Імʼя_Група&quot;        # заміни на своє, як у zdaty (урок 23)
+LABS=&quot;${LABS:-$HOME/univer/labs}&quot;
+PY=&quot;$HOME/univer/.venv/bin/python&quot;
+ZDACHA=&quot;$HOME/univer/zdacha&quot;
+
+pomylka() {
+    echo &quot;ПОМИЛКА: $1&quot; &gt;&amp;2
+    exit 2
+}
+
+[ -x &quot;$PY&quot; ] || pomylka &quot;нема venv $PY (урок 03)&quot;
+[ -d &quot;$LABS&quot; ] || pomylka &quot;нема теки $LABS&quot;
+shopt -s nullglob
+
+rezultat=0
+ryadky=()
+for lab in &quot;$LABS&quot;/lr*/; do
+    for f in &quot;$lab&quot;*.py; do
+        &quot;$PY&quot; -m pytest --doctest-modules -q -p no:cacheprovider &quot;$f&quot; &lt; /dev/null &gt; /dev/null 2&gt;&amp;1
+        kod=$?
+        if [ &quot;$kod&quot; -eq 0 ]; then
+            d=&quot;ok&quot;
+        elif [ &quot;$kod&quot; -eq 5 ]; then
+            d=&quot;нема тестів&quot;
+        else
+            d=&quot;ВПАВ&quot;
+            rezultat=1
+        fi
+        n=$(&quot;$PY&quot; -m flake8 --max-line-length=78 &quot;$f&quot; | wc -l)
+        if [ &quot;$n&quot; -eq 0 ]; then
+            s=&quot;ok&quot;
+        else
+            s=&quot;$n зауваж.&quot;
+            rezultat=1
+        fi
+        ryadky+=(&quot;$(basename &quot;$lab&quot;)|$(basename &quot;$f&quot;)|$d|$s&quot;)
+    done
+done
+printf '%s\n' &quot;лаба|файл|doctest|flake8&quot; &quot;${ryadky[@]}&quot; | column -t -s '|'
+
+[ &quot;$#&quot; -eq 0 ] &amp;&amp; exit &quot;$rezultat&quot;
+
+n=&quot;$1&quot;
+lab=&quot;$LABS/lr$n&quot;
+[ -d &quot;$lab&quot; ] || pomylka &quot;нема теки $lab&quot;
+files=(&quot;$lab&quot;/*.py)
+[ &quot;${#files[@]}&quot; -gt 0 ] || pomylka &quot;у $lab нема .py файлів&quot;
+nazva=&quot;${PIB}_ЛР${n}&quot;
+tmp=$(mktemp -d)
+mkdir &quot;$tmp/$nazva&quot;
+cp &quot;${files[@]}&quot; &quot;$tmp/$nazva/&quot;
+mkdir -p &quot;$ZDACHA&quot;
+rm -f &quot;$ZDACHA/$nazva.zip&quot;
+(cd &quot;$tmp&quot; &amp;&amp; zip -qr &quot;$ZDACHA/$nazva.zip&quot; &quot;$nazva&quot;)
+rm -r &quot;$tmp&quot;
+echo
+echo &quot;Архів: $ZDACHA/$nazva.zip&quot;
+unzip -Z1 &quot;$ZDACHA/$nazva.zip&quot;
+exit &quot;$rezultat&quot;
+</code></pre>
+<p><strong>Чому саме так:</strong></p>
+<ul>
+<li><strong>pytest, а не <code>python3 файл.py</code></strong> - лише pytest дає чесний код виходу (іспит, питання А4). Код 5 = «тестів
+  нема» - окремий стан, не провал.</li>
+<li><strong><code>&lt; /dev/null</code></strong> - файл з <code>input()</code> на імпорті одразу отримує «кінець вводу» і падає, а не чекає вічно.
+  Такий файл у таблиці буде <code>ВПАВ</code> - перевір його руками з <code>printf</code>, як в уроці 04.</li>
+<li><strong><code>set -uo pipefail</code> без <code>-e</code>.</strong> <code>-e</code> зупинив би скрипт на першому ж проваленому pytest, а нам треба перевірити
+  всі файли і зібрати таблицю. Помилки запуску ловимо явно (<code>pomylka</code>, код 2).</li>
+<li><strong><code>shopt -s nullglob</code></strong> - тека без <code>.py</code> дає нуль ітерацій, а не «файл» <code>*.py</code> (урок 23, «Передбач» 3).</li>
+<li><strong><code>column -t -s '|'</code></strong> - вирівнює стовпці навіть з кириличними назвами.</li>
+<li><strong>Коди 0 / 1 / 2</strong> - скрипт можна ставити в cron чи в <code>&amp;&amp;</code>: «лаби брудні» і «скрипт не зміг запуститись» -
+  різні речі.</li>
+<li><strong>zip:</strong> тимчасова тека з <strong>потрібною</strong> назвою, туди лише <code>.py</code>, і <code>zip</code> <strong>з неї</strong> (<code>cd "$tmp"</code>). Без <code>cd</code> в архів
+  потрапив би повний шлях <code>home/evgen/univer/labs/lr1/...</code> і <code>__pycache__</code>; <code>python3 -m zipfile -c</code> дав би
+  <code>lr1/...</code> без потрібної назви (іспит, В16).</li>
+</ul>
+<p>Збережи скрипт як <code>~/univer/zibraty.sh</code> (nano, Ctrl+Shift+V, Ctrl+S, Ctrl+X).</p>
+<p><strong>Перевірка на двох тренувальних лабах.</strong> Справжні лаби не чіпаємо: тренувальні лежать у <code>~/proba/labs</code>, а скрипт
+бере їх, бо перед ним стоїть <code>LABS=~/proba/labs</code> (змінна лише для цієї однієї команди, урок 22).</p>
+<pre><code class="language-bash">mkdir -p ~/proba/labs/lr1 ~/proba/labs/lr2
+printf 'def kub(x: float) -&gt; float:\n    &quot;&quot;&quot;Куб числа.\n\n    &gt;&gt;&gt; kub(2)\n    8\n    &quot;&quot;&quot;\n    return x ** 3\n' &gt; ~/proba/labs/lr1/kub.py
+printf 'def kvadrat(x: float) -&gt; float:\n    &quot;&quot;&quot;Квадрат числа.\n\n    &gt;&gt;&gt; kvadrat(3)\n    9\n    &quot;&quot;&quot;\n    return x * 2 \n' &gt; ~/proba/labs/lr2/kvadrat.py
+printf 'print(&quot;Привіт&quot;)\n' &gt; ~/proba/labs/lr2/pryklad.py
+cd ~/univer
+LABS=~/proba/labs bash zibraty.sh; echo &quot;код $?&quot;
+</code></pre>
+<pre><code class="language-text">лаба  файл        doctest      flake8
+lr1   kub.py      ok           ok
+lr2   kvadrat.py  ВПАВ         1 зауваж.
+lr2   pryklad.py  нема тестів  ok
+код 1
+</code></pre>
+<p>У <code>kvadrat.py</code> два дефекти: <code>x * 2</code> замість <code>x ** 2</code> (doctest) і пробіл у кінці рядка (<code>W291</code>, flake8).
+<code>pryklad.py</code> без doctest - не провал. Тепер архів ЛР1:</p>
+<pre><code class="language-bash">LABS=~/proba/labs bash zibraty.sh 1; echo &quot;код $?&quot;
+</code></pre>
+<pre><code class="language-text">лаба  файл        doctest      flake8
+lr1   kub.py      ok           ok
+lr2   kvadrat.py  ВПАВ         1 зауваж.
+lr2   pryklad.py  нема тестів  ok
+
+Архів: /home/evgen/univer/zdacha/Прізвище_Імʼя_Група_ЛР1.zip
+Прізвище_Імʼя_Група_ЛР1/
+Прізвище_Імʼя_Група_ЛР1/kub.py
+код 1
+</code></pre>
+<p>Код 1 - бо ЛР2 ще брудна (таблиця завжди про всі лаби). Неіснуюча лаба:</p>
+<pre><code class="language-bash">LABS=~/proba/labs bash zibraty.sh 7 &gt; /dev/null; echo &quot;код $?&quot;
+</code></pre>
+<pre><code class="language-text">ПОМИЛКА: нема теки /home/evgen/proba/labs/lr7
+код 2
+</code></pre>
+<p>(Повідомлення йде в stderr, тому <code>&gt; /dev/null</code> його не сховав.) І перевірка самого скрипта:</p>
+<pre><code class="language-bash">bash -n zibraty.sh
+shellcheck zibraty.sh
+</code></pre>
+<p>Обидві команди мовчать - зауважень нема.</p>
+<p><strong>Щоденна копія. Варіант 1: cron</strong> (урок 23). <code>crontab -e</code> і рядок (щодня о 21:30):</p>
+<pre><code class="language-text">30 21 * * * mkdir -p /home/evgen/backup &amp;&amp; /usr/bin/rsync -a --exclude=.venv --exclude=__pycache__ /home/evgen/univer/ /home/evgen/backup/univer/ &gt;&gt; /home/evgen/backup.log 2&gt;&amp;1
+</code></pre>
+<p>Повні шляхи, <code>&gt;&gt; лог 2&gt;&amp;1</code>, без <code>%</code> у рядку. <code>--exclude=.venv</code> без риски в кінці: venv завжди можна перестворити.</p>
+<p><strong>Варіант 2: таймер systemd</strong> (урок 20, крок 7). Два файли в <code>~/.config/systemd/user/</code>.
+<code>kopiya-univer.service</code>:</p>
+<pre><code class="language-text">[Unit]
+Description=Копія ~/univer у ~/backup (rsync)
+
+[Service]
+Type=oneshot
+ExecStartPre=/usr/bin/mkdir -p %h/backup
+ExecStart=/usr/bin/rsync -a --exclude=.venv --exclude=__pycache__ %h/univer/ %h/backup/univer/
+</code></pre>
+<p><code>kopiya-univer.timer</code>:</p>
+<pre><code class="language-text">[Unit]
+Description=Щодня копіювати ~/univer
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+</code></pre>
+<pre><code class="language-bash">mkdir -p ~/.config/systemd/user
+nano ~/.config/systemd/user/kopiya-univer.service
+nano ~/.config/systemd/user/kopiya-univer.timer
+systemctl --user daemon-reload
+systemctl --user enable --now kopiya-univer.timer
+systemctl --user start kopiya-univer.service
+ls ~/backup/univer
+systemctl --user list-timers
+journalctl --user -u kopiya-univer.service -n 5
+</code></pre>
+<p><code>OnCalendar=daily</code> = щодня о 00:00 (<code>systemd-analyze calendar daily</code> покаже <code>Normalized form: *-*-* 00:00:00</code>).
+<code>start</code> служби - щоб не чекати півночі й одразу побачити копію.</p>
+<p><strong>Що вибрати на ноутбуці - таймер</strong>: о 00:00 чи 21:30 ноутбук часто закритий, а <code>Persistent=true</code> виконає пропущену
+копію при наступній нагоді; cron пропущене не доганяє. Плюс журнал (<code>journalctl --user -u ...</code>) замість ручного
+лог-файлу.</p>
+<p><strong>Чесно про межі такої копії:</strong> вона на <strong>тому самому диску</strong> - від «сам стер лабу» рятує, від смерті SSD - ні.
+Правило 3-2-1: ще флешка (<code>rsync -rtv --modify-window=1 --exclude=.venv --exclude=__pycache__ ~/univer/ /media/evgen/НАЗВА/univer/</code> -
+на FAT/exFAT <code>-a</code> не працює, урок 01) і приватний GitHub. І це <strong>дзеркало</strong>,
+а не історія: зіпсований файл завтра перезапише хорошу копію - історію версій дає git (урок 24).</p>
+<p>Джерела: урок 23 (скрипти, <code>zdaty</code>, cron, zip); урок 22 (лапки, <code>"$@"</code>, коди виходу); урок 20 (таймери, журнал);
+урок 01 і 25 (3-2-1).</p>
+</details>
+<hr>
+<h3 id="завдання-4-ноутбук-не-стартує-після-оновлення-ядра">Завдання 4. Ноутбук не стартує після оновлення ядра</h3>
+<p><strong>Умова.</strong> Учора Диспетчер оновлень поставив нове ядро. Сьогодні після логотипа Mint - чорний екран, нічого не
+відбувається. На ноутбуці лише Mint. Склади покроковий план діагностики і відновлення: що робиш, як зрозумієш,
+що крок спрацював, і що робиш, якщо ні. Окремо: як написати на форум питання, на яке захочуть відповісти.</p>
+<details>
+<summary>Розвʼязок</summary>
+<p><strong>Крок 0. Не панікувати і не перевстановлювати.</strong> Сфотографуй екран телефоном. Згадай, що стоїть з «особливого»:
+драйвер NVIDIA (DKMS), PPA, <code>.deb</code> з сайтів. Чи є знімок Timeshift і live USB.</p>
+<p><strong>Крок 1. Чи живе система «під» чорним екраном?</strong> Ctrl+Alt+F2.
+- Є <code>login:</code> → ядро стартувало, зламалась графіка. Увійди, <code>df -h /</code> (диск не повний?),
+  <code>sudo journalctl -b -p err</code> (що впало), <code>dkms status</code> (чи зібрано модуль NVIDIA під <strong>нове</strong> ядро - DKMS збирає
+  модуль під кожне ядро окремо). Далі - відновлення знімка з TTY: <code>sudo timeshift --list</code>,
+  <code>sudo timeshift --restore</code>.
+- Нема реакції → крок 2.</p>
+<p><strong>Крок 2. Старе ядро через GRUB.</strong> Перезавантаж (довге натискання кнопки - лише якщо нічого іншого не реагує). При
+старті тримай Esc (UEFI) або Shift (старий BIOS) → «Advanced options for Linux Mint» → рядок з <strong>попереднім</strong>
+ядром (без <code>(recovery mode)</code>).
+- Стартувало → винне нове ядро (або модуль під нього). Крок 3.
+- Не стартує й старе → крок 4.</p>
+<p><strong>Крок 3. Робоча система на старому ядрі - діагностика і прибирання.</strong></p>
+<pre><code class="language-bash">uname -r
+sudo journalctl --list-boots
+sudo journalctl -b -1 -p err
+sudo journalctl -b -1 -e
+</code></pre>
+<p><code>uname -r</code> - переконатись, що працює <strong>старе</strong> ядро. <code>-b -1</code> - попереднє (невдале) завантаження: помилки і останні
+рядки перед зависанням. (Якщо зависло раніше, ніж система встигла записати журнал на диск, такого завантаження в
+списку не буде - тоді лишається фото екрана; на ноутбуці не перевірено.)</p>
+<p>Потім Диспетчер оновлень → Вигляд → Ядра Linux → вибрати <strong>нове</strong> ядро → Видалити (поточне видалити не можна - і
+добре). Щоб наступного разу меню GRUB було видно без ловлі клавіші: «Керування системою» → «Меню завантаження» →
+«Показати меню», затримка 3 с.</p>
+<p><strong>Крок 4. Не стартує жодне ядро.</strong> Чорний екран саме після логотипа на будь-якому ядрі - схоже на відео: на рядку
+Mint у GRUB <code>e</code> → <code>quiet splash</code> замінити на <code>nomodeset</code> → F10 (діє лише на один запуск), увійти, «Керування
+драйверами», перезавантаження без <code>nomodeset</code>. Ще варіант - GRUB → <code>(recovery mode)</code> → пункт <code>dpkg</code> («Полагодити
+пошкоджені пакунки»), якщо оновлення обірвалось на півдорозі.</p>
+<p><strong>Крок 5. Останній рубіж - live USB.</strong> Завантажся з флешки Mint → Timeshift (є на образі) → вибрати диск і знімок
+→ Restore. Нема знімка - скопіюй <code>~/univer</code> з внутрішнього диска на іншу флешку через Nemo і лише тоді
+перевстановлюй.</p>
+<p><strong>Профілактика:</strong> знімок перед кожним оновленням, live USB поруч (урок 26, крок 3), видиме меню GRUB, лаби в git.</p>
+<p><strong>Питання на форум</strong> (forums.linuxmint.com або r/linuxmint, англійською). Спершу зібрати дані зі старого ядра:</p>
+<pre><code class="language-bash">inxi -c0 -Fxxxz &gt; ~/inxi.txt
+sudo journalctl -b -1 -p err &gt; ~/pomylky-b1.txt
+uname -r
+</code></pre>
+<p><code>-Fxxxz</code>: усе (F), максимум деталей (xxx), без MAC-адрес і серійних номерів (z). <code>-c0</code> - без кодів кольору: у
+тестовій Mint без нього у файл потрапляли службові символи кольору (<code>^C12System:</code>), а з ним файл чистий і його
+зручно вставити на форум. Шаблон допису:</p>
+<pre><code class="language-text">Тема: Mint 22.3 Cinnamon: чорний екран після оновлення ядра 6.14.0-37 → 6.14.0-NN, старе ядро працює
+
+Що сталось: учора Update Manager поставив ядро 6.14.0-NN. Після перезавантаження - чорний екран
+після логотипа, Ctrl+Alt+F2 не реагує.
+Що вже пробував:
+1. Advanced options → 6.14.0-37 - стартує нормально (зараз пишу з нього).
+2. nomodeset на новому ядрі - те саме, чорний екран.
+Що є з «нестандартного»: драйвер nvidia-driver-580-open з Driver Manager, Secure Boot увімкнено.
+Вивід inxi -Fxxxz: (вставити вміст ~/inxi.txt у блок коду)
+Помилки попереднього завантаження: (вставити ~/pomylky-b1.txt)
+Фото екрана: (посилання)
+</code></pre>
+<p>Добре питання = що робив, точний текст і фото, що вже пробував і з яким результатом, <code>inxi</code>. Погане - «нічого не
+працює, допоможіть». І не виконуй порад, яких не розумієш (explainshell.com), особливо з <code>rm</code>, <code>dd</code> чи <code>sudo</code> перед
+скриптом з інтернету.</p>
+<p>Джерела: урок 26 (драбина, сценарії Б, В, Г, Є, «Як просити допомоги», крок 4); урок 20 (<code>journalctl -b -1</code>);
+урок 17 (DKMS, NVIDIA); урок 02 (Ядра Linux у Диспетчері оновлень); урок 01 (Timeshift з live USB).</p>
+</details>
+<h2 id="іспит-самоперевірка-60-питань">Іспит-самоперевірка: 60 питань</h2>
+<p>Три блоки по 20 питань - рівень випускного іспиту або співбесіди на сильного джуна. Половина питань не «згадай
+команду», а «поясни, чому» і «що зробиш по черзі»: так перевіряють, чи ти розумієш систему, а не памʼятаєш рядки.</p>
+<p><strong>Як складати:</strong></p>
+<ol>
+<li>Один блок за раз, 60-90 хвилин, без уроків і без пошуку.</li>
+<li>Відповідай на папері або вголос, <strong>потім</strong> відкривай «Відповідь». Питання «що виведе» - спершу передбач, потім
+   запусти і порівняй.</li>
+<li>Рахуй бали: 1 - відповідь повна, 0,5 - суть правильна, але бракує важливого, 0 - ні.</li>
+<li>Кожна відповідь має «Джерело» - урок і розділ, де про це написано. Помилився - читай саме там.</li>
+</ol>
+<p><strong>Код у питаннях справжній.</strong> Вивід у відповідях скопійовано з тестової Linux Mint 22.3 (Python 3.12.3), його
+перевіряє скрипт <code>_перевірка/u_ispyt.sh</code>. Шлях у виводі - <code>/home/evgen/...</code>, у тебе буде твій логін. Для
+питань з кодом спершу зроби теку:</p>
+<pre><code class="language-bash">mkdir -p ~/ispyt
+cd ~/ispyt
+</code></pre>
+<p>Коли в питанні є блок Python і написано «файл <code>~/ispyt/назва.py</code>» - відкрий <code>nano ~/ispyt/назва.py</code>, встав код
+(Ctrl+Shift+V), збережи (Ctrl+S, Ctrl+X) і тоді виконуй команди. Після іспиту теку можна прибрати в смітник:
+<code>gio trash ~/ispyt</code>.</p>
+<hr>
+<h3 id="блок-а-лаби-оновлення-налагодження-уроки-01-12">Блок А. Лаби, оновлення, налагодження (уроки 01-12)</h3>
+<h4 id="а1-timeshift-відновив-систему-а-лаба">А1. Timeshift відновив систему. А лаба?</h4>
+<p>Учора ввечері ти змінив <code>~/univer/labs/lr3/lr3_1.py</code>, а вночі поставив оновлення, після якого система поводиться
+дивно. Вранці відновлюєш знімок Timeshift, зроблений позавчора (налаштування типові).</p>
+<p>а) Що станеться з учорашніми змінами в <code>lr3_1.py</code>?
+б) Через місяць SSD ноутбука помер. Що з твоїх даних урятує Timeshift?
+в) Чому Timeshift - не резервна копія, і що тоді нею є?</p>
+<details>
+<summary>Відповідь</summary>
+<p>а) Нічого: домашня тека типово <strong>не входить</strong> у знімок, і відновлення її не чіпає. Офіційний посібник Mint:
+знімки «не включають і не змінюють твої особисті дані». Учорашня версія <code>lr3_1.py</code> лишиться.</p>
+<p>б) Нічого. Знімки лежать у теці <code>timeshift/snapshots</code> на диску, і в них нема домашньої теки. Помер диск - пропали і
+система, і знімки на ньому, і лаби.</p>
+<p>в) Timeshift - «збереження гри» для <strong>системи</strong>: відкотити невдале оновлення чи драйвер. Резервна копія - це копії
+<strong>твоїх файлів</strong> на інших носіях за правилом 3-2-1: 3 копії, на 2 різних носіях, 1 - поза домом. Для лаб: git +
+приватний GitHub, <code>rsync</code> на флешку (можна за розкладом через cron), хмара. І навпаки: якби ти ввімкнув домашню теку
+в знімках, відкат знімка відкотив би і лаби до позавчорашніх.</p>
+<p>Джерело: урок 01, розділи «Коротко» і «Типові помилки»; урок 25, «Решта звичок» (3-2-1).</p>
+</details>
+<h4 id="а2-що-виведе-rsync-і-риска-в-кінці">А2. Що виведе? (rsync і риска в кінці)</h4>
+<pre><code class="language-bash">mkdir -p ~/ispyt/a2/univer/labs &amp;&amp; touch ~/ispyt/a2/univer/labs/lab.py
+cd ~/ispyt/a2
+rsync -a univer backup1/
+rsync -a univer/ backup2/
+find backup1 backup2 -name lab.py | sort
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">backup1/univer/labs/lab.py
+backup2/labs/lab.py
+</code></pre>
+<p>Без риски (<code>univer</code>) rsync копіює <strong>саму теку</strong>, з рискою (<code>univer/</code>) - лише її <strong>вміст</strong>. Типова помилка: двічі
+скопіював без риски в теку, що вже зветься <code>univer</code>, - вийшло <code>univer/univer/...</code>. Для копії лаб на флешку пиши
+<code>rsync -rtv --modify-window=1 ~/univer/ /media/evgen/НАЗВА/univer/</code> - риска в джерелі, тоді структура однакова
+(на флешці FAT/exFAT <code>-a</code> дає <code>failed to set permissions</code>, тому <code>-rt</code> і <code>--modify-window=1</code>, урок 01).</p>
+<p>Джерело: урок 01, «Коротко» (правило 3-2-1, rsync) і «Типові помилки»; урок 21, «Самоперевірка» 3.</p>
+</details>
+<h4 id="а3-що-виведе-pip-поза-venv-і-чому-так-задумано">А3. Що виведе pip поза venv? І чому так задумано</h4>
+<p>Новий термінал, venv <strong>не</strong> ввімкнено, пакет <code>python3-pip</code> уже стоїть (урок 03 або <code>ustanovka-mint.sh</code>):</p>
+<pre><code class="language-bash">cd ~
+python3 -m pip install requests &gt; pip.txt 2&gt;&amp;1; echo &quot;код $?&quot;
+head -n 1 pip.txt
+</code></pre>
+<p>Поясни, чому Mint так робить і чому правильна відповідь - venv, а не <code>sudo pip</code> чи <code>--break-system-packages</code>.</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">код 1
+error: externally-managed-environment
+</code></pre>
+<p>Це PEP 668: у Mint 22 (база Ubuntu 24.04) лежить файл <code>/usr/lib/python3.12/EXTERNALLY-MANAGED</code>, і pip відмовляється
+ставити пакети в <strong>системний</strong> Python. Причина: на <code>/usr/bin/python3</code> працюють програми самої Mint (Диспетчер
+оновлень, Джерела програм та інші). Симуляція видалення <code>python3</code> тягне за собою понад сотню пакетів, серед них
+mintupdate. Пакет з pip, що підмінив бібліотеку apt, може зламати їх тихо, через тижні.</p>
+<ul>
+<li><code>sudo pip</code> - пише в системні теки від root, саме те, від чого захищає PEP 668.</li>
+<li><code>--break-system-packages</code> - ти сам вимикаєш захист.</li>
+<li>venv (<code>~/univer/.venv</code>) - окрема тека зі своїм Python і своїми бібліотеками: ламай скільки хочеш, видалив теку -
+  створив знову. Для програм-утиліт (uv, ruff як команда) - <code>pipx</code>.</li>
+</ul>
+<p>Джерело: урок 02, «Типові помилки» і «Самоперевірка» 2; урок 03, «Коротко» (venv); урок 25, «Що НЕ запускати з
+sudo».</p>
+</details>
+<h4 id="а4-код-виходу-0-отже-все-добре">А4. Код виходу 0 - отже, все добре?</h4>
+<p>Файл <code>~/ispyt/kv.py</code>:</p>
+<pre><code class="language-python">def kvadrat(x):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; kvadrat(3)
+    9
+    &quot;&quot;&quot;
+    return x * 2
+
+
+if __name__ == &quot;__main__&quot;:
+    import doctest
+
+    doctest.testmod()
+</code></pre>
+<pre><code class="language-bash">cd ~/ispyt
+source ~/univer/.venv/bin/activate
+python3 kv.py &gt; /dev/null; echo &quot;код $?&quot;
+python3 -m pytest --doctest-modules -q -p no:cacheprovider kv.py &gt; /dev/null; echo &quot;код $?&quot;
+</code></pre>
+<p>Що виведуть дві останні команди? Чому це важливо для скриптів на кшталт <code>zdaty</code> і для cron?</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">код 0
+код 1
+</code></pre>
+<p>doctest справді впав (<code>kvadrat(3)</code> дає 6), але <code>doctest.testmod()</code> лише <strong>друкує</strong> звіт, а код виходу програми
+лишається 0. pytest повертає 1, коли є провали. Тому:</p>
+<ul>
+<li><code>python3 kv.py &amp;&amp; echo готово</code> надрукує «готово» навіть зі зламаним кодом;</li>
+<li>скрипт перевірки (урок 23, <code>zdaty</code>) чи завдання cron, які дивляться на код виходу, мають запускати doctest через
+  pytest, а не через <code>python3 файл.py</code>;</li>
+<li>людині для читання зручніший <code>python3 kv.py -v</code> (видно кожен приклад), а <strong>машині</strong> - pytest.</li>
+</ul>
+<p>Джерело: урок 03, «Типові помилки» (останній пункт); урок 04, «Типові помилки» п. 11 і «Самоперевірка» 1; урок 22,
+«Код виходу»; урок 23, крок 2 (<code>perevir_odyn</code>).</p>
+</details>
+<h4 id="а5-чужий-провал-що-виведе-і-чому">А5. Чужий провал: що виведе і чому</h4>
+<p>Файл <code>~/ispyt/lab5.py</code> (так виглядають заготовки ЛР5: <code>testmod()</code> просто внизу файлу):</p>
+<pre><code class="language-python">import doctest
+
+
+def dvichi(x):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; dvichi(2)
+    4
+    &quot;&quot;&quot;
+    return x * 2
+
+
+doctest.testmod()
+</code></pre>
+<pre><code class="language-bash">cd ~/ispyt
+python3 -m doctest lab5.py | tail -n 3
+python3 -m doctest lab5.py &gt; /dev/null; echo &quot;код $?&quot;
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">1 items had failures:
+   1 of  21 in __main__.DebugRunner
+***Test Failed*** 1 failures.
+код 0
+</code></pre>
+<p>Код правильний (<code>dvichi(2)</code> = 4), а провал - <strong>чужий</strong>. При <code>python3 -m doctest</code> головним модулем (<code>__main__</code>) стає
+сам doctest. Він імпортує <code>lab5.py</code>, на імпорті виконується рядок <code>doctest.testmod()</code>, а <code>testmod()</code> без аргументів
+тестує модуль <code>__main__</code> - тобто власні приклади doctest, один з яких у клас <code>DebugRunner</code> падає. Навіть код виходу
+0: звіт надрукувала твоя ж <code>testmod()</code> під час імпорту, а сам <code>-m doctest</code> твій файл перевірив успішно.</p>
+<p>Ліки: обгорнути виклик у <code>if __name__ == "__main__":</code> або перевіряти <code>python3 lab5.py -v</code> чи pytest.</p>
+<p>Джерело: урок 04, «Типові помилки» п. 10 і «Самоперевірка» 3; урок 10, «Коротко», «Типові помилки» і
+«Самоперевірка» 1.</p>
+</details>
+<h4 id="а6-venv-увімкнено-а-pip-знову-externally-managed">А6. venv увімкнено, а pip знову «externally-managed»</h4>
+<p>Ти поставив Python 3.13 через uv і зробив:</p>
+<pre><code class="language-text">~/.local/bin/uv venv --python 3.13 .venv313
+source .venv313/bin/activate
+pip install numpy
+error: externally-managed-environment
+</code></pre>
+<p>Venv же ввімкнено (<code>(.venv313)</code> на початку рядка). Чому так, як це перевірити однією командою і як виправити
+(два способи)?</p>
+<details>
+<summary>Відповідь</summary>
+<p><code>uv venv</code> без <code>--seed</code> робить venv <strong>без pip</strong>. Набираєш <code>pip</code> - bash шукає його по теках PATH зліва направо:
+<code>.venv313/bin</code> стоїть першою, але pip там нема, тож знаходиться наступний - системний <code>/usr/bin/pip</code>, а він ставить
+у системний Python і впирається в PEP 668.</p>
+<p>Перевірка: <code>which pip</code> (або <code>type pip</code>) покаже <code>/usr/bin/pip</code> замість <code>.../.venv313/bin/pip</code>.</p>
+<p>Виправлення: <code>uv venv --seed --python 3.13 .venv313</code> (pip покладеться у venv) або ставити через
+<code>~/.local/bin/uv pip install numpy</code> (uv сам знає, що venv активний).</p>
+<p>Загальний урок: «команда не та» - майже завжди PATH. <code>type</code> / <code>which</code> перед тим, як щось лагодити.</p>
+<p>Джерело: урок 02, «Типові помилки» (venv від uv) і «Самоперевірка» 4; урок 22, «PATH» і «Де команда?».</p>
+</details>
+<h4 id="а7-що-виведе-fx-і-типи">А7. Що виведе? (<code>f"{x=}"</code> і типи)</h4>
+<p>Файл <code>~/ispyt/typy.py</code>, запуск <code>python3 typy.py</code>:</p>
+<pre><code class="language-python">x = &quot;2&quot;
+y = 2
+print(x * 3, y * 3)
+print(f&quot;{x=} {y=}&quot;)
+print(type(x), type(y))
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">222 6
+x='2' y=2
+&lt;class 'str'&gt; &lt;class 'int'&gt;
+</code></pre>
+<p><code>print(x)</code> надрукував би просто <code>2</code> - і рядок, і число виглядають однаково. <code>f"{x=}"</code> друкує <code>repr</code>: лапки одразу
+кажуть «це рядок». Так ловиться найчастіший баг першого курсу - забутий <code>int(...)</code> навколо <code>input()</code>: ввів 5, а
+програма видала <code>55</code> замість <code>10</code>, і жодного traceback.</p>
+<p>Джерело: урок 05, «Друк для налагодження» і «Самоперевірка» 2; урок 04, «Типові помилки» п. 4.</p>
+</details>
+<h4 id="а8-знайди-помилку-assert">А8. Знайди помилку (assert)</h4>
+<p>Файл <code>~/ispyt/a8.py</code>, запуск <code>python3 a8.py</code>:</p>
+<pre><code class="language-python"># БАГ: знайди помилку
+g = -9.81
+assert (g &gt; 0, &quot;g має бути додатне&quot;)
+print(&quot;далі&quot;)
+</code></pre>
+<p>Що надрукує програма? Де помилка, як правильно, і чи годиться <code>assert</code> для перевірки числа, яке ввів користувач?</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">/home/evgen/ispyt/a8.py:3: SyntaxWarning: assertion is always true, perhaps remove parentheses?
+  assert (g &gt; 0, &quot;g має бути додатне&quot;)
+далі
+</code></pre>
+<p>Дужки зробили з умови і тексту <strong>кортеж</strong> з двох елементів, а непорожній кортеж завжди істинний. Python 3.12
+попереджає, але програма йде далі з <code>g = -9.81</code>. Правильно без дужок: <code>assert g &gt; 0, "g має бути додатне"</code>.</p>
+<p>Для вводу користувача assert не годиться: <code>python3 -O</code> вимикає всі assert. Там - звичайна умова і повідомлення
+(або <code>raise ValueError(...)</code>). assert - для «цього не може бути, якщо мій код правильний».</p>
+<p>Джерело: урок 05, «Типові помилки» (assert з дужками, assert для вводу) і «Самоперевірка» 3.</p>
+</details>
+<h4 id="а9-post-mortem-чи-breakpoint">А9. post-mortem чи <code>breakpoint()</code>?</h4>
+<p>Програма за 10 хвилин обробляє 1000 файлів вимірювань і десь посередині падає з <code>ZeroDivisionError</code> у функції
+<code>mean</code>. Одногрупник радить: «Постав <code>breakpoint()</code> у <code>mean</code> і дивись». Чому це погана порада тут? Що зробиш ти,
+нічого не змінюючи в коді, і які команди pdb набереш першими? Коли <code>breakpoint()</code> усе ж правильний вибір?</p>
+<details>
+<summary>Відповідь</summary>
+<p><code>breakpoint()</code> у <code>mean</code> зупинить програму на <strong>кожному</strong> виклику - до падіння доведеться 500 разів тиснути <code>c</code>.
+І забутий <code>breakpoint()</code> потім «вішає» pytest (<code>reading from stdin while output is captured</code>) і <code>perevir</code>.</p>
+<p>Краще <strong>post-mortem</strong> - налагодження вже впалої програми, змінні в момент падіння ще живі:</p>
+<ul>
+<li><code>python3 -m pdb -c continue vymiry.py</code> - працює повним ходом і зупиняється рівно в місці падіння;</li>
+<li>або, якщо вже впало в <code>python3 -i vymiry.py</code>, - <code>import pdb; pdb.pm()</code>.</li>
+</ul>
+<p>Далі: <code>p values</code> (що прийшло в <code>mean</code>), <code>u</code> (на рівень вище, у функцію, що викликала) і <code>p name</code> (яка серія
+винна), <code>w</code> (увесь стек). Після <code>q</code> у варіанті <code>-c continue</code> програма перезапускається - <code>q</code> двічі. Сам
+<code>python3 -i</code> без <code>pdb.pm()</code> показує лише глобальні імена: локальних змінних функції після падіння вже нема.</p>
+<p><code>breakpoint()</code> (або <code>b рядок, умова</code> у pdb) - коли програма <strong>не падає</strong>, а дає не те число, і ти знаєш, де
+дивитись; для циклу - точка з умовою <code>b 14, k == 500</code>, а не 500 разів <code>c</code>.</p>
+<p>Джерело: урок 05, «Типові помилки» (забутий <code>breakpoint()</code>) і «Самоперевірка» 5; урок 06, «Чотири способи
+запустити pdb», «Крок 7. Post-mortem», «Типові помилки», «Самоперевірка» 1-2.</p>
+</details>
+<h4 id="а10-знайди-помилку-в-сеансі-pdb">А10. Знайди помилку в сеансі pdb</h4>
+<p>У функції є змінна <code>c = 3e8</code> (швидкість світла). Ти зупинився в pdb і набрав <code>c</code>, щоб побачити її значення, а
+програма поїхала до кінця. Потім в іншому запуску хочеш перевірити, що буде на Місяці, набираєш <code>!G = 1.62</code>, але
+функція далі рахує з <code>G = 9.81</code>. Що пішло не так у кожному випадку і як правильно?</p>
+<details>
+<summary>Відповідь</summary>
+<ol>
+<li><code>c</code> - це команда pdb continue, вона сильніша за імʼя змінної. Подивитись змінну: <code>p c</code>; змінити: <code>!c = ...</code>.
+   Те саме з <code>n</code>, <code>s</code>, <code>l</code>, <code>a</code>, <code>b</code>, <code>h</code>.</li>
+<li><code>!G = 1.62</code> усередині функції створює <strong>локальну</strong> змінну <code>G</code>, глобальна лишається 9.81. Треба
+   <code>!global G; G = 1.62</code>.</li>
+</ol>
+<p>Джерело: урок 06, «Усі команди pdb» (група «Змінити»), «Типові помилки» і «Самоперевірка» 3.</p>
+</details>
+<h4 id="а11-що-виведе-logging">А11. Що виведе? (logging)</h4>
+<p>Файл <code>~/ispyt/log.py</code>, запуск <code>python3 log.py</code>:</p>
+<pre><code class="language-python">import logging
+
+logging.warning(&quot;перше&quot;)
+logging.basicConfig(level=logging.DEBUG)
+logging.debug(&quot;друге&quot;)
+logging.warning(&quot;третє&quot;)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">WARNING:root:перше
+WARNING:root:третє
+</code></pre>
+<p>Перший виклик <code>logging.warning(...)</code> сам налаштовує logging з рівнем WARNING. Пізніший <code>basicConfig(level=DEBUG)</code>
+уже нічого не змінює, тому <code>debug("друге")</code> не друкується. <code>basicConfig</code> - найпершим рядком програми.</p>
+<p>Бонус-питання «навіщо logging, якщо є print»: рівнем (DEBUG → WARNING) вимикаєш усі налагоджувальні рядки, не
+видаляючи їх; logging пише в stderr і тому не ламає doctest, а забутий <code>print</code> у функції - ламає (<code>Got</code> з зайвим
+рядком).</p>
+<p>Джерело: урок 06, «Типові помилки» (останній пункт) і «Самоперевірка» 5; урок 05, «Типові помилки» (забутий
+print).</p>
+</details>
+<h4 id="а12-що-виведе-float">А12. Що виведе? (float)</h4>
+<p>Файл <code>~/ispyt/fl.py</code>, запуск <code>python3 fl.py</code>:</p>
+<pre><code class="language-python">import math
+
+s = 0.1 + 0.2
+print(s == 0.3, math.isclose(s, 0.3))
+print(s, f&quot;{s:.3f}&quot;, round(s, 3))
+</code></pre>
+<p>Як це повʼязано з doctest, де очікують <code>'v = 0.3 м/с'</code>, а отримують <code>'v = 0.30000000000000004 м/с'</code>?</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">False True
+0.30000000000000004 0.300 0.3
+</code></pre>
+<p>0,1 і 0,2 не записуються у двійковому вигляді точно, сума має крихітну похибку. Порівнювати float через <code>==</code> -
+помилка; для «чи рівні» - <code>math.isclose</code> (для чисел біля нуля - з <code>abs_tol</code>). Для <strong>виводу</strong> - формат <code>:.3f</code> або
+<code>round</code>: саме так лікується doctest з <code>0.30000000000000004</code> (яке саме - залежить від умови: <code>:.3f</code> дає рядок рівно з
+трьома знаками). У ЛР7 з тієї ж причини прямий кут при дробових координатах не перевіряють через <code>== 0</code>.</p>
+<p>Джерело: урок 12, «Типові помилки» (рядок <code>0.1 + 0.2 == 0.3</code>) і «Самоперевірка» 4.</p>
+</details>
+<h4 id="а13-що-виведе-відʼємне-число-в-printf">А13. Що виведе? (відʼємне число в printf)</h4>
+<p>Набери в терміналі по черзі:</p>
+<pre><code class="language-bash">printf &quot;-5\n&quot; | python3 -c &quot;print(int(input()) * 2)&quot;
+printf -- &quot;-5\n&quot; | python3 -c &quot;print(int(input()) * 2)&quot;
+printf '%s\n' -5 | python3 -c &quot;print(int(input()) * 2)&quot;
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">bash: printf: -5: invalid option
+printf: usage: printf [-v var] format [arguments]
+Traceback (most recent call last):
+  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;
+EOFError: EOF when reading a line
+-10
+-10
+</code></pre>
+<p>У першому рядку bash вважає <code>-5</code> опціями самого <code>printf</code>, нічого не друкує, і Python отримує порожній ввід -
+<code>EOFError</code>. Дві риски <code>--</code> кажуть «опції скінчились»; <code>'%s\n'</code> робить <code>-5</code> аргументом, а не форматом. Обидва
+способи - для перевірки лаб з відʼємними числами (ЛР2).</p>
+<p>Джерело: урок 04, «Типові помилки» п. 7-8; урок 07, «Типові помилки» п. 1 і «Самоперевірка» 2.</p>
+</details>
+<h4 id="а14-що-виведе-і-що-виправити-print-чи-return">А14. Що виведе і що виправити? (print чи return)</h4>
+<p>Файл <code>~/ispyt/pr.py</code>:</p>
+<pre><code class="language-python">def speed_text(v_kmh: float) -&gt; str:
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; speed_text(36)
+    '10.0 м/с'
+    &quot;&quot;&quot;
+    print(f&quot;{v_kmh / 3.6:.1f} м/с&quot;)
+
+
+def age_chat(age: int) -&gt; None:
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; age_chat(18)
+    Тобі 18 років
+    &quot;&quot;&quot;
+    return f&quot;Тобі {age} років&quot;
+</code></pre>
+<pre><code class="language-bash">cd ~/ispyt
+python3 -m doctest pr.py
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">**********************************************************************
+File &quot;/home/evgen/ispyt/pr.py&quot;, line 11, in pr.age_chat
+Failed example:
+    age_chat(18)
+Expected:
+    Тобі 18 років
+Got:
+    'Тобі 18 років'
+**********************************************************************
+File &quot;/home/evgen/ispyt/pr.py&quot;, line 3, in pr.speed_text
+Failed example:
+    speed_text(36)
+Expected:
+    '10.0 м/с'
+Got:
+    10.0 м/с
+**********************************************************************
+2 items had failures:
+   1 of   1 in pr.age_chat
+   1 of   1 in pr.speed_text
+***Test Failed*** 2 failures.
+</code></pre>
+<p>Читай лапки: <code>Expected</code> <strong>у лапках</strong> = функція має <strong>повернути</strong> рядок (<code>speed_text</code>: замінити <code>print(...)</code> на
+<code>return ...</code>). <code>Expected</code> <strong>без лапок</strong> = функція має <strong>надрукувати</strong> (<code>age_chat</code>: <code>print(...)</code> замість <code>return</code>, як
+<code>age_chat</code> у ЛР2). Анотації (<code>-&gt; str</code>, <code>-&gt; None</code>) кажуть те саме, і mypy це спіймав би до запуску.</p>
+<p>Джерело: урок 04, «Типові помилки» п. 5 і «Самоперевірка» 2; урок 07, «Типові помилки» п. 3 і «Самоперевірка» 3.</p>
+</details>
+<h4 id="а15-чому-лаба-зависає-і-як-перевіряти-без-вікон">А15. Чому лаба «зависає» і як перевіряти без вікон</h4>
+<p>Поясни для ЛР3 (графіки matplotlib) і ЛР4 (turtle): чому після запуску термінал «завис», як перевірити doctest, не
+відкриваючи вікон, і що зробити, щоб <code>python3 -m doctest lab4.py</code> не відкривав вікно черепашки. Що буде, якщо
+запустити малюнок через ssh?</p>
+<details>
+<summary>Відповідь</summary>
+<ul>
+<li>ЛР3: <code>plt.show()</code> чекає, доки закриєш вікно графіка, і лише тоді йде <code>doctest.testmod()</code>. Без вікон:
+  <code>MPLBACKEND=Agg</code> перед командою (<code>printf "12\n" | MPLBACKEND=Agg python3 lr3_1.py</code>); попередження
+  <code>FigureCanvasAgg is non-interactive</code> тоді нормальне.</li>
+<li>ЛР4: <code>turtle.done()</code> тримає вікно і програма на ньому чекає; закрий вікно або Ctrl+C. Математику (кути, позиції)
+  перевіряють doctest-ом з <code>turtle.TNavigator()</code> - він рахує позицію без вікна.</li>
+<li>Щоб <code>python3 -m doctest</code> не малював: код малювання - під <code>if __name__ == "__main__":</code>, бо doctest імпортує файл,
+  а все, що на верхньому рівні, на імпорті виконується.</li>
+<li>Через ssh чи в TTY нема екрана: <code>_tkinter.TclError: no display name and no $DISPLAY environment variable</code>.</li>
+</ul>
+<p>Джерело: урок 08, «Коротко», «Типові помилки» п. 5 і 8, «Самоперевірка» 2; урок 09, «Коротко» і «Типові помилки».</p>
+</details>
+<h4 id="а16-що-виведе-файл-з-назвою-модуля">А16. Що виведе? (файл з назвою модуля)</h4>
+<pre><code class="language-bash">mkdir -p ~/ispyt/a16 &amp;&amp; cd ~/ispyt/a16
+printf 'import turtle\n\nturtle.forward(100)\nturtle.done()\n' &gt; turtle.py
+python3 turtle.py 2&gt;&amp;1 | tail -n 1
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">AttributeError: partially initialized module 'turtle' has no attribute 'forward' (most likely due to a circular import)
+</code></pre>
+<p><code>import turtle</code> спершу шукає модуль у теці скрипта, знаходить <strong>твій</strong> <code>turtle.py</code> і імпортує його замість
+справжнього. Вікно навіть не відкривається. Не називай файли як модулі (<code>turtle.py</code>, <code>math.py</code>, <code>random.py</code>) -
+перейменуй, наприклад, <code>lr4_1.py</code>.</p>
+<p>Джерело: урок 09, «Типові помилки» і «Самоперевірка» 3.</p>
+</details>
+<h4 id="а17-що-виведе-timeout">А17. Що виведе? (timeout)</h4>
+<pre><code class="language-bash">timeout 1 python3 -c &quot;while True: pass&quot;; echo &quot;код $?&quot;
+</code></pre>
+<p>Навіщо це в ЛР5 і чим відрізняється від Ctrl+C?</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">код 124
+</code></pre>
+<p><code>timeout 1</code> зупиняє команду через 1 секунду, а код <strong>124</strong> каже «зупинено за часом» - не плутаєш з помилкою програми
+(1). У ЛР5 деякі doctest (<code>pi_gregory(10)</code>) рахують хвилинами - <code>timeout 60 python3 ...</code> не дасть терміналу
+«зависнути» навічно, а малі n краще перевірити окремим викликом. Ctrl+C - те саме вручну: Python покаже
+<code>KeyboardInterrupt</code> і рядок, де крутився цикл.</p>
+<p>Джерело: урок 10, «Коротко», «Типові помилки» і «Самоперевірка» 5; урок 08, «Типові помилки» п. 2.</p>
+</details>
+<h4 id="а18-що-виведе-зріз-і-del">А18. Що виведе? (зріз і <code>del</code>)</h4>
+<p>Файл <code>~/ispyt/zriz.py</code>, запуск <code>python3 zriz.py</code>:</p>
+<pre><code class="language-python">lst = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+del lst[2::3]
+print(lst)
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">[10, 11, 13, 14, 16, 17, 19]
+</code></pre>
+<p><code>[2::3]</code> - <strong>позиції</strong> 2, 5, 8 (з нуля), тобто значення 12, 15, 18. Зрізи працюють за позиціями, а не за значеннями
+- пастка решета в ЛР7, де значення і позиції легко сплутати.</p>
+<p>Джерело: урок 12, «Типові помилки» (IndexError у решеті) і «Самоперевірка» 2.</p>
+</details>
+<h4 id="а19-мовчить-значить-пройшло">А19. «Мовчить - значить, пройшло»?</h4>
+<p>Студент запускає <code>python3 lr6_1.py</code> (файл ЛР6 від викладача) - порожньо. Каже: «Тести пройшли». Чи правий він?
+Чому для ЛР6 <code>python3 -m doctest lr6_1.py</code> безпечний, а для ЛР5 той самий запуск показує чужий провал? Яка одна
+команда дає чесну відповідь для будь-якої лаби?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Не правий. У файлі ЛР6 <strong>нема</strong> <code>doctest.testmod()</code>, тож <code>python3 lr6_1.py</code> лише визначає функції - тести ніхто
+не запускав. Тиша нічого не означає.</p>
+<p><code>python3 -m doctest lr6_1.py</code> для ЛР6 правильний: він сам запускає приклади і друкує лише провали (тиша тут = усе
+пройшло, а <code>-v | tail -n 3</code> дає підсумок). У ЛР5 той самий запуск дає чужий провал, бо у файлі ЛР5 <code>testmod()</code>
+стоїть на верхньому рівні (питання А5).</p>
+<p>Чесно для будь-якої лаби: <code>python3 -m pytest --doctest-modules -q файл.py</code> - пише <code>N passed</code> / <code>failed</code> і дає код
+виходу 0 або 1 (для файлів з <code>input()</code> - ще <code>-s</code> і <code>printf</code>).</p>
+<p>Джерело: урок 11, «Коротко» і «Самоперевірка» 2; урок 10, «Коротко»; урок 04, «Перевір перед здачею».</p>
+</details>
+<h4 id="а20-сценарій-завтра-дедлайн-а-диспетчер-оновлень-пропонує-40">А20. Сценарій: завтра дедлайн, а Диспетчер оновлень пропонує 40 оновлень, серед них нове ядро</h4>
+<p>Що робиш і в якому порядку? Поясни, чому порядок саме такий.</p>
+<details>
+<summary>Відповідь</summary>
+<ol>
+<li><strong>Спершу лаби в безпеку</strong>, незалежно від системи: <code>git add</code>, <code>git commit</code>, <code>git push</code> у приватний репозиторій
+   (або <code>rsync</code> на флешку). Timeshift лаби не зберігає.</li>
+<li><strong>Знімок системи:</strong> <code>sudo timeshift --create --comments "перед оновленням"</code>.</li>
+<li><strong>Оновлення</strong> через Диспетчер оновлень (або <code>sudo apt update</code>, <code>sudo apt upgrade</code>), <strong>читаючи список</strong>, без
+   <code>-y</code> наосліп. Якщо <code>Could not get lock</code> - зачекай, lock-файли не видаляй.</li>
+<li>Перезавантаження, коли просить значок у треї (нове ядро вмикається лише після нього).</li>
+<li>Перевірка: <code>uname -r</code>, <code>source ~/univer/.venv/bin/activate</code>, <code>perevir</code> на поточній лабі. Venv переживе
+   оновлення, бо системний Python 3.12 лишається тим самим.</li>
+<li>Якщо нове ядро не стартує - GRUB → Advanced options → попереднє ядро; не допомогло - відновити знімок.</li>
+</ol>
+<p>Чесний варіант для дедлайну: відкласти <strong>оновлення ядра</strong> на день після здачі (Mint 22.x підтримується до 2029, день
+нічого не змінить), але безпекові оновлення програм поставити.</p>
+<p>Джерело: урок 01, «Коротко»; урок 02, «Коротко» і «Типові помилки»; урок 24, «Коротко»; урок 26, «Сценарії
+порятунку» (Б).</p>
+</details>
+<hr>
+<h3 id="блок-б-mint-як-система-уроки-13-18-25-26">Блок Б. Mint як система (уроки 13-18, 25, 26)</h3>
+<h4 id="б1-чотири-комбінації-клавіш">Б1. Чотири комбінації клавіш</h4>
+<p>а) Як заблокувати екран, коли відходиш від ноутбука? б) Що насправді робить Super+L? в) Чим небезпечна
+Ctrl+Alt+Backspace і чим вона відрізняється від Ctrl+Alt+Delete? г) Що робить Ctrl+Alt+Esc?</p>
+<details>
+<summary>Відповідь</summary>
+<p>а) Ctrl+Alt+L. б) Відкриває «Збільшувальне скло» (Looking Glass) - налагоджувач Cinnamon, екран лишається
+<strong>незаблокованим</strong>. в) Миттєво вбиває весь графічний сеанс без питань (у Mint увімкнено навмисно), незбережене
+пропадає; Ctrl+Alt+Delete - вихід із сеансу, спершу питає. г) Перезапускає Cinnamon (панель, робочий стіл), вікна і
+програми лишаються.</p>
+<p>Джерело: урок 13, «Коротко» (гарячі клавіші), «Типові помилки» і «Самоперевірка» 1, 3; урок 25, «Решта звичок».</p>
+</details>
+<h4 id="б2-сценарій-панель-і-меню-застигли-мишка-рухається">Б2. Сценарій: панель і меню застигли, мишка рухається</h4>
+<p>Твої кроки по черзі, від найлагіднішого. Що робити, якщо застигло все і навіть Ctrl+Alt+Esc не допоміг? А якщо
+проблема почалась після того, як ти поставив новий аплет?</p>
+<details>
+<summary>Відповідь</summary>
+<ol>
+<li>Ctrl+Alt+Esc - перезапуск Cinnamon, вікна і програми лишаються.</li>
+<li>Не допомогло - Ctrl+Alt+F2, текстовий вхід (TTY): логін і пароль. Там <code>top</code> (або <code>pgrep -af назва</code>) - знайти, що
+   «їсть» процесор чи памʼять, <code>kill PID</code> (спершу без <code>-9</code>). Назад до графіки - Ctrl+Alt+F7. Крайній випадок -
+   <code>sudo reboot</code> з TTY, а не кнопка живлення.</li>
+<li>Почалось після аплету - «Аплети» → «Налаштування» → вибрати його → «-». Якщо через нього не стартує панель -
+   права кнопка на панелі → «Вирішення проблем» → «Повернути типові значення налаштувань» (скине налаштування панелі).</li>
+</ol>
+<p>Джерело: урок 13, «Типові помилки» і «Самоперевірка» 3; урок 19, «Коротко»; урок 26, «Драбина порятунку» і
+«Руками», крок 1.</p>
+</details>
+<h4 id="б3-що-виведе-посилання-і-rm-r">Б3. Що виведе? (посилання і <code>rm -r</code>)</h4>
+<pre><code class="language-bash">mkdir -p ~/ispyt/b3/lr1 &amp;&amp; touch ~/ispyt/b3/lr1/lab.py
+cd ~/ispyt/b3 &amp;&amp; ln -s lr1 posylannya
+rm -r posylannya/
+ls -A lr1; echo &quot;--&quot;; ls -l posylannya | cut -c1
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">rm: cannot remove 'posylannya/': Not a directory
+--
+l
+</code></pre>
+<p>Риска в кінці «проводить» шлях крізь посилання в справжню теку: <code>rm -r</code> стирає <strong>вміст</strong> <code>lr1</code> (там тепер
+порожньо), а саме посилання лишається (<code>l</code> - тип «посилання»), і <code>rm</code> ще й пише помилку - легко подумати, що нічого
+не сталось. Посилання видаляють без <code>-r</code> і без риски: <code>rm posylannya</code>. А свої файли безпечніше класти в смітник:
+<code>gio trash</code>.</p>
+<p>Джерело: урок 14, «Типові помилки» (перший пункт) і «Коротко» (кошик і термінал).</p>
+</details>
+<h4 id="б4-сценарій-посеред-оновлення-зникло-світло">Б4. Сценарій: посеред оновлення зникло світло</h4>
+<p>Після старту <code>sudo apt upgrade</code> пише <code>E: dpkg was interrupted, you must manually run 'sudo dpkg --configure -a' to
+correct the problem.</code>, а в іншому вікні відкритий Диспетчер оновлень. Що робиш по черзі і чого <strong>не</strong> робиш? Що,
+якщо система після обриву навіть не завантажує робочий стіл?</p>
+<details>
+<summary>Відповідь</summary>
+<ol>
+<li>Закрити Диспетчер оновлень (і Менеджер програм) - інакше <code>Could not get lock /var/lib/dpkg/lock-frontend</code>.</li>
+<li><code>sudo dpkg --configure -a</code> - доналаштувати перервані пакети.</li>
+<li><code>sudo apt-get install -f</code> - докачати залежності, яких бракує.</li>
+<li><code>sudo apt update</code>, потім <code>sudo apt upgrade</code> - доробити оновлення.</li>
+</ol>
+<p>Не робити: не видаляти lock-файли (dpkg прямо пише, що це завжди неправильно), не вбивати процес посеред
+встановлення.</p>
+<p>Графіка не стартує - Ctrl+Alt+F2 і ті самі команди з TTY, або GRUB → recovery mode → пункт <code>dpkg</code> («Полагодити
+пошкоджені пакунки»).</p>
+<p>Джерело: урок 16, «Типові помилки»; урок 26, «Передбач» 2, «Сценарії порятунку» (Д), «Самоперевірка» 4.</p>
+</details>
+<h4 id="б5-що-виведе-umask-і-chmod">Б5. Що виведе? (umask і chmod)</h4>
+<pre><code class="language-bash">mkdir -p ~/ispyt/b5 &amp;&amp; cd ~/ispyt/b5
+umask 0002
+touch nove.txt &amp;&amp; mkdir -p nova
+stat -c '%A %a %n' nove.txt nova
+chmod 640 nove.txt &amp;&amp; stat -c '%A %a' nove.txt
+chmod g-r,o+r nove.txt &amp;&amp; stat -c '%A %a' nove.txt
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">-rw-rw-r-- 664 nove.txt
+drwxrwxr-x 775 nova
+-rw-r----- 640
+-rw----r-- 604
+</code></pre>
+<p>umask 0002 (так у Mint після входу) «забирає» право w в інших: файл 666 → 664, тека 777 → 775. 640 = rw- (6) r-- (4)
+--- (0). Останній рядок дивний, але законний: група не читає, а «інші» - читають. Таке поєднання майже завжди -
+помилка; звичайні права для файлу - 644 або 600.</p>
+<p>Джерело: урок 15, «Коротко» (числа, <code>chmod o-r</code>, umask у Mint) і «Самоперевірка» 1.</p>
+</details>
+<h4 id="б6-знайди-помилку-групи">Б6. Знайди помилку (групи)</h4>
+<p>Для плати Arduino треба група <code>dialout</code>. Ти виконав <code>sudo usermod -G dialout evgen</code>, перезайшов - і тепер будь-яка
+команда з <code>sudo</code> пише <code>evgen is not in the sudoers file.</code> Що сталось, як треба було, і як тепер повернути права?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Без <code>-a</code> (append) <code>usermod -G</code> <strong>замінює</strong> всі додаткові групи однією <code>dialout</code> - ти випав з групи <code>sudo</code>.
+Правильно: <code>sudo usermod -aG dialout "$USER"</code>, вийти з сеансу і зайти, перевірити <code>groups</code>.</p>
+<p>Повернути: sudo вже не працює, тож потрібен root іншим шляхом - GRUB → Advanced options → <code>(recovery mode)</code> →
+<code>root</code> → <code>mount -o remount,rw /</code> → <code>usermod -aG sudo evgen</code> → <code>reboot</code>. (Або інший адміністратор ноутбука:
+«Користувачі та групи» → «Тип обліківки» → «Адміністратор».)</p>
+<p>Джерело: урок 15, «Коротко» (групи), «Типові помилки» і «Самоперевірка» 5; урок 26, «Сценарії порятунку» (Г).</p>
+</details>
+<h4 id="б7-чому-permission-denied-на-власному-файлі">Б7. Чому «Permission denied» на власному файлі?</h4>
+<p>Ти створив новий файл лаби <code>sudo nano ~/univer/labs/lr1/lab2.py</code>, а ще раніше запускав <code>sudo xed</code>. Тепер без sudo
+файл не зберігається, а xed поводиться дивно. Поясни механізм, як це діагностувати однією командою, як виправити і як
+правильно редагувати <strong>системні</strong> файли.</p>
+<details>
+<summary>Відповідь</summary>
+<p>Новий файл, створений від root, стає власністю root - тобі вже не можна в нього писати (наявний файл <code>sudo nano</code>
+зберігає зі старим власником). Віконна програма з sudo так само лишає у твоїй домашній теці свої налаштування вже
+від root.</p>
+<p>Діагностика: <code>stat -c '%U' ~/univer/labs/lr1/lab2.py</code> → <code>root</code>.</p>
+<p>Виправлення: <code>sudo chown "$USER:$USER" ~/univer/labs/lr1/lab2.py</code> (теку - з <code>-R</code>; після віконних програм практики
+радять <code>sudo chown -R "$USER:$USER" "$HOME"</code>).</p>
+<p>Системні файли - <code>sudoedit /etc/файл</code> (= <code>sudo -e</code>): відкриває твій звичайний редактор, а зберігає від root. Свої
+файли - ніколи через sudo.</p>
+<p>Джерело: урок 15, «Типові помилки» і «Самоперевірка» 4; урок 25, «Що НЕ запускати з sudo».</p>
+</details>
+<h4 id="б8-що-виведе-apt-у-mint">Б8. Що виведе? (apt у Mint)</h4>
+<pre><code class="language-bash">type apt
+type apt-get
+apt-get install ncdu
+</code></pre>
+<p>Чому <code>apt install ncdu</code> без sudo питає пароль, а <code>apt-get</code> - ні?</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">apt is /usr/local/bin/apt
+apt-get is /usr/bin/apt-get
+E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+</code></pre>
+<p><code>apt</code> у Mint - не справжній apt, а обгортка Mint <code>/usr/local/bin/apt</code>: вона стоїть у PATH раніше за <code>/usr/bin</code> і
+сама додає <code>sudo</code> до install, remove, update, upgrade. <code>apt-get</code> - справжня програма без обгортки, без <code>sudo</code> вона не
+може взяти lock бази пакетів. Що насправді виконає обгортка - <code>apt help install</code>.</p>
+<p>Джерело: урок 16, «Коротко» (apt у Mint - обгортка), «Типові помилки» і «Самоперевірка» 1; урок 22, «PATH».</p>
+</details>
+<h4 id="б9-знайди-помилку-три-спроби-поставити-deb">Б9. Знайди помилку: три спроби поставити <code>.deb</code></h4>
+<p>Файл <code>prog.deb</code> лежить у «Завантаженнях». Ти в домашній теці.</p>
+<pre><code class="language-text">1) sudo apt install prog.deb      → E: Unable to locate package prog.deb
+2) sudo apt install ./prog.deb    → E: Unsupported file ./prog.deb given on commandline
+3) apt deb ~/Завантаження/prog.deb  → поставилось, але програма не запускається: бракує бібліотек
+</code></pre>
+<p>Що не так у кожній і як правильно? Чи оновлюватиметься така програма сама?</p>
+<details>
+<summary>Відповідь</summary>
+<ol>
+<li>Без <code>./</code> apt шукає <strong>пакет</strong> з такою назвою в сховищах, а не файл.</li>
+<li><code>./prog.deb</code> - файл у <strong>поточній</strong> теці, а ти не в «Завантаженнях».</li>
+<li><code>apt deb</code> = <code>sudo dpkg -i</code>: ставить сам файл, але <strong>не докачує залежності</strong>. Лікування: <code>sudo apt-get install -f</code>.</li>
+</ol>
+<p>Правильно: перейти в теку з файлом (<code>cd ~/Завантаження</code>, <code>ls *.deb</code>) і <code>sudo apt install ./prog.deb</code> - apt сам
+докачає залежності. Оновлюватиметься лише тоді, коли пакет додав своє сховище (так роблять VS Code, Chrome); інакше
+нова версія - знову вручну з сайту.</p>
+<p>Джерело: урок 16, «Коротко» (.deb з сайту), «Типові помилки» і «Самоперевірка» 3; урок 27, «Типові помилки».</p>
+</details>
+<h4 id="б10-сценарій-для-python-313-додай-ppa">Б10. Сценарій: «для Python 3.13 додай PPA»</h4>
+<p>Порада з форуму: додати PPA і поставити <code>python3.13</code> через apt. Чому це погана ідея саме на Mint і саме перед
+наступною великою версією Mint? Як отримати Python 3.13 правильно? Якщо PPA уже додано - як прибрати його чисто?</p>
+<details>
+<summary>Відповідь</summary>
+<ul>
+<li><code>sudo apt install python3.13</code> → <code>E: Unable to locate package python3.13</code>: у сховищах Ubuntu 24.04 його нема,
+  тому і радять PPA - <strong>стороннє</strong> сховище однієї людини чи команди.</li>
+<li>Документація Ubuntu: сторонні сховища - найчастіша причина зламаного оновлення версії системи. Ключ PPA доводить
+  лише «звідки пакет», а не «що він безпечний». Наступна Mint (на базі Ubuntu 26.04) ще попереду - зайвий PPA може
+  зламати саме цей перехід.</li>
+<li>Правильно: Python 3.13 <strong>поруч</strong> із системним, без apt: <code>pipx install uv</code>, <code>~/.local/bin/uv python install 3.13</code>.
+  Системний <code>python3</code> (3.12) не чіпати ніколи.</li>
+<li>Прибрати PPA: <code>sudo add-apt-repository --remove ppa:власник/назва</code>, а пакети з нього повернути до офіційних -
+  <code>ppa-purge</code>. Мишкою: «Джерела програмного забезпечення» → «Пакунки PPA».</li>
+</ul>
+<p>Джерело: урок 02, «Коротко», «Типові помилки» і «Самоперевірка» 3; урок 16, «Коротко» (PPA) і «Типові помилки».</p>
+</details>
+<h4 id="б11-apt-flatpak-чи-керування-програмами">Б11. apt, Flatpak чи «Керування програмами»?</h4>
+<p>Програма є і в apt, і на Flathub. Що вибереш і чому? Чому VS Code у «Керуванні програмами» схований, і чим погана
+Flatpak-версія VS Code саме для лаб у <code>~/univer/.venv</code>?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Правило практиків: «Deb if available, flatpak if not» - системний пакет, якщо є (менше місця, оновлюється разом із
+системою), Flatpak - коли в apt нема або версія дуже стара.</p>
+<p>VS Code там - <strong>неперевірений</strong> Flatpak (<code>com.visualstudio.code</code>, «Not verified»: виклав не Microsoft), а Mint ховає
+неперевірені, бо це ризик безпеки. До того ж Flatpak працює в пісочниці: вбудований термінал не бачить системних
+програм і venv без <code>flatpak-spawn --host</code>. Для лаб - .deb з code.visualstudio.com (додає своє сховище, оновлення
+через Диспетчер оновлень) або VSCodium з його apt-сховища.</p>
+<p>Джерело: урок 16, «Коротко» (таблиця шляхів, «Керування програмами», Flatpak); урок 27, «Коротко» (чому не з
+Менеджера програм) і «Самоперевірка» 1.</p>
+</details>
+<h4 id="б12-сценарій-nvidia-і-синій-екран">Б12. Сценарій: NVIDIA і синій екран</h4>
+<p>Ти поставив рекомендований драйвер NVIDIA в «Керуванні драйверами», перезавантажився, побачив синій екран з
+англійським меню і, не читаючи, вибрав продовжити завантаження. Тепер низька роздільність або чорний екран. Secure
+Boot увімкнено. Що сталось і що робиш? Чого не робиш?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Синій екран - MOK Manager: треба було вибрати «Enroll MOK» і ввести пароль, придуманий під час встановлення
+драйвера. З Secure Boot ядро вантажить лише підписані модулі, а модуль NVIDIA, зібраний DKMS, підписаний твоїм
+ключем MOK, якого UEFI ще не знає. Без нього драйвер не завантажився.</p>
+<p>Що робити: Ctrl+Alt+F2 (TTY) → <code>mokutil --sb-state</code> (переконатись, що Secure Boot увімкнено) →
+<code>sudo update-secureboot-policy --enroll-key</code> → <code>sudo reboot</code> → на синьому екрані «Enroll MOK», підтвердити, той
+самий пароль. Перевірка: <code>nvidia-smi</code> показує <code>Driver Version</code>, <code>inxi -G</code> - <code>driver: nvidia</code>, <code>dkms status</code>.</p>
+<p>Не робити: не вимикати Secure Boot «щоб не морочитись» (з BitLocker Windows почне питати ключ відновлення); не
+ставити <code>.run</code> з nvidia.com (ламається з кожним ядром).</p>
+<p>Джерело: урок 17, «Коротко» (Secure Boot, MOK), «Типові помилки» і «Самоперевірка» 3-4; урок 26, «Подвійне
+завантаження».</p>
+</details>
+<h4 id="б13-сценарій-після-встановлення-mint-не-видно-wi-fi">Б13. Сценарій: після встановлення Mint не видно Wi-Fi</h4>
+<p>Опиши діагностику по сходинках: які команди, що в їхньому виводі шукаєш і що робиш на кожен результат. Інтернету
+немає зовсім (кабелю теж).</p>
+<details>
+<summary>Відповідь</summary>
+<ol>
+<li><code>rfkill list</code> - <code>Soft blocked: yes</code> → вимкнено програмно (режим «у літаку»): <code>rfkill unblock wifi</code> або аплет.
+   <code>Hard blocked: yes</code> → фізична кнопка чи Fn-клавіша з антеною.</li>
+<li><code>nmcli device status</code> - чи є пристрій <code>wifi</code> взагалі. Нема - драйвера нема.</li>
+<li><code>lspci -k</code> (або <code>lsusb</code> для USB-адаптера) - знайти мережевий контролер і рядок <code>Kernel driver in use</code>. Нема
+   рядка - модуль не завантажився.</li>
+<li>Intel / AMD - драйвер уже в ядрі, прошивка в <code>linux-firmware</code>; найчастіше винен rfkill. Broadcom - «Керування
+   драйверами»: без інтернету воно попросить live USB → «Змонтувати інсталяційний носій» (флешка стане джерелом
+   пакетів).</li>
+<li>Не вийшло - на форум з виводом <code>inxi -Fxz</code> (<code>z</code> ховає MAC-адреси).</li>
+</ol>
+<p>Джерело: урок 17, «Коротко» (таблиця команд, Broadcom, без інтернету) і «Самоперевірка» 5; урок 21, «Коротко»
+(сходинки діагностики).</p>
+</details>
+<h4 id="б14-що-виведе-sort-n-чи-sort-h">Б14. Що виведе? (<code>sort -n</code> чи <code>sort -h</code>)</h4>
+<pre><code class="language-bash">mkdir -p ~/ispyt/b14/foto ~/ispyt/b14/kurs ~/ispyt/b14/labs &amp;&amp; cd ~/ispyt/b14
+head -c 900K /dev/zero &gt; foto/a.bin; head -c 5M /dev/zero &gt; kurs/b.bin; head -c 40K /dev/zero &gt; labs/c.py
+du -sh */ | sort -n
+echo &quot;-&quot;
+du -sh */ | sort -h
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">5.1M    kurs/
+44K labs/
+904K    foto/
+-
+44K labs/
+904K    foto/
+5.1M    kurs/
+</code></pre>
+<p><code>sort -n</code> дивиться лише на число (5.1 &lt; 44 &lt; 904) і не знає, що M більше за K, - найбільша тека опинилась
+<strong>першою</strong>. <code>sort -h</code> розуміє K, M, G. Звідси правило: <code>du -h ... | sort -h</code>, найбільше - внизу. Розміри трохи
+більші за файли (904K, 5.1M), бо <code>du</code> рахує зайняті блоки диска разом із самою текою.</p>
+<p>Джерело: урок 18, «Коротко» (<code>du -h --max-depth=1 | sort -h</code>) і «Самоперевірка» 2; урок 22, «Фільтри» (<code>sort -n</code>).</p>
+</details>
+<h4 id="б15-сценарій-диск-заповнено-на-100-хто-зʼїв-місце">Б15. Сценарій: диск заповнено на 100 %. Хто зʼїв місце?</h4>
+<p>Графіка ще працює. Опиши, як <strong>знайти</strong>, що саме заповнило диск, і в якому порядку безпечно звільняти місце. Які
+«підозрювані» перевіриш першими і чому? Чого не робиш?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Знайти:</p>
+<ol>
+<li><code>df -h /</code> - скільки вільно (стовпець <code>Avail</code>).</li>
+<li><code>sudo du -xh --max-depth=1 / 2&gt;/dev/null | sort -h | tail</code> - найбільші теки системного розділу; <code>-x</code> - не
+   заходити на флешки й інші диски, <code>2&gt;/dev/null</code> - сховати <code>Permission denied</code>. Далі спускатись у найбільшу
+   (або <code>sudo ncdu -x /</code> і стрілками).</li>
+<li>Типові підозрювані:
+   - журнали: <code>sudo journalctl --disk-usage</code> (бували випадки на сотні ГБ);
+   - знімки Timeshift (тека <code>timeshift</code> у корені диска), особливо якщо в них потрапили <code>/home</code> чи <code>/var/lib/flatpak</code>;
+   - <code>/var/lib/flatpak</code> - старі бібліотеки, <code>/var/cache/apt/archives</code> - кеш .deb, старі ядра;
+   - <code>~/.cache</code> і смітник (<code>~/.local/share/Trash</code>).</li>
+</ol>
+<p>Звільняти від найбезпечнішого: <code>gio trash --empty</code>, <code>sudo apt clean</code>, <code>sudo apt autoremove --purge</code>,
+<code>sudo journalctl --vacuum-time=2weeks</code>, <code>flatpak uninstall --unused</code>, старі ядра в Диспетчері оновлень, зайві знімки
+в Timeshift.</p>
+<p>Не робити: «чистильники» на кшталт BleachBit, видалення програм Mint «для місця», ручне видалення з <code>/var</code> чи
+<code>/usr</code>. Якщо графіка вже не пускає - те саме з TTY (Ctrl+Alt+F2).</p>
+<p>Джерело: урок 18, «Коротко» (безпечне прибирання), «Типові помилки» і «Самоперевірка» 3, 5; урок 01, «Типові
+помилки»; урок 20, «Коротко» (<code>journalctl --disk-usage</code>).</p>
+</details>
+<h4 id="б16-знайди-помилку-fstab">Б16. Знайди помилку (fstab)</h4>
+<p>У <code>/etc/fstab</code> ти додав зовнішній диск для копій:</p>
+<pre><code class="language-text">UUID=3f6c2a1e-8b1d-4c55-9a0e-2f7d4b6c9e10  /media/evgen/arhiv  ext4  defaults  0  2
+</code></pre>
+<p>Тиждень усе добре, потім диск лишився вдома, а ноутбук у гуртожитку стартує з <code>You are in emergency mode</code>. Чому, як
+виправити рядок і як дістатись до файлу з цього режиму?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Без <code>nofail</code> диск із fstab вважається обовʼязковим: нема диска - систему не довантажено. Рядок має бути з
+<code>defaults,nofail</code> (тоді без диска старт іде далі).</p>
+<p>З аварійного режиму: Enter (або пароль) → <code>journalctl -xb</code> - знайти червоний рядок про <code>mount</code> → <code>nano /etc/fstab</code>
+- дописати <code>nofail</code> або закоментувати рядок <code>#</code> → <code>findmnt --verify</code> → <code>systemctl reboot</code>.</p>
+<p>Джерело: урок 18, «Типові помилки» і «Самоперевірка» 4; урок 26, «Сценарії порятунку» (Ґ).</p>
+</details>
+<h4 id="б17-сценарій-ноутбук-після-оновлення-показує-чорний-екран-тв">Б17. Сценарій: ноутбук після оновлення показує чорний екран. Твої 3 кроки по порядку</h4>
+<p>Що робиш спершу, що потім, і як зрозуміти, яка з причин (ядро, відеодрайвер, щось інше)? Що робити, якщо жоден
+крок не допоміг?</p>
+<details>
+<summary>Відповідь</summary>
+<p><strong>Крок 1. Чи живе система під графікою?</strong> Ctrl+Alt+F2. Є <code>login:</code> - ядро працює, зламалась графіка або місце: увійти,
+<code>df -h /</code> (диск 100 %?), <code>sudo journalctl -b -p err</code> (що впало). Щойно ставив драйвер чи оновлення - відкотити:
+<code>sudo timeshift --list</code>, <code>sudo timeshift --restore</code>.</p>
+<p><strong>Крок 2. TTY нема, зависає одразу після логотипа - GRUB.</strong> Перезавантаження, меню GRUB (Esc на UEFI, Shift на
+BIOS) → «Advanced options for Linux Mint» → <strong>попереднє</strong> ядро (не recovery).
+- Стартувало - винне нове ядро: <code>uname -r</code> (старе), Диспетчер оновлень → Вигляд → Ядра Linux → видалити нове.
+  Помилки невдалого старту - <code>sudo journalctl -b -1 -p err</code>.
+- І старе не стартує, чорний екран після логотипа - відео: на рядку Mint <code>e</code>, <code>quiet splash</code> → <code>nomodeset</code>, F10;
+  потім «Керування драйверами» і перезавантаження без <code>nomodeset</code> (діє лише на один запуск).</p>
+<p><strong>Крок 3. Нічого не допомогло</strong> - live USB → Timeshift (є на образі) → вибрати диск і знімок → Restore. Або
+скопіювати <code>~/univer</code> на іншу флешку через Nemo і перевстановити - лаби вціліють.</p>
+<p>Чого не робити: перевстановлювати Mint при першій проблемі.</p>
+<p>Джерело: урок 26, «Драбина порятунку», «Сценарії порятунку» (А, Б, В, Є), «Передбач» 3, «Типові помилки»; урок 02,
+«Типові помилки» (останній пункт); урок 20, «Коротко» (<code>journalctl -b -1</code>).</p>
+</details>
+<h4 id="б18-поясни-як-скинути-забутий-пароль-і-що-це-каже-про-безпек">Б18. Поясни: як скинути забутий пароль і що це каже про безпеку</h4>
+<p>Перелічи кроки. Чому recovery mode пускає без пароля? Від чого захищає шифрування диска і коли його вмикають? Що
+означає <code>passwd: Authentication token manipulation error</code> у цьому режимі?</p>
+<details>
+<summary>Відповідь</summary>
+<p>GRUB → «Advanced options» → <code>(recovery mode)</code> → <code>root</code> → Enter → <code>mount -o remount,rw /</code> → <code>passwd evgen</code> →
+<code>reboot</code>.</p>
+<p>Пароль root у Mint заблоковано, і <code>sulogin</code> у такому разі пускає по Enter: хто фізично має ноутбук, той може стати
+root. Від цього захищає лише шифрування диска (LUKS): без пароля диска recovery mode нічого не прочитає. Вмикають
+його <strong>тільки під час встановлення</strong> Mint; потім - лише перевстановленням.</p>
+<p><code>Authentication token manipulation error</code> - забув <code>mount -o remount,rw /</code>, диск ще лише для читання.</p>
+<p>Джерело: урок 26, «Сценарії порятунку» (Г) і «Типові помилки»; урок 25, «Решта звичок» (шифрування диска).</p>
+</details>
+<h4 id="б19-поясни-брандмауер-працює-дивись-active">Б19. Поясни: «брандмауер працює, дивись - active»</h4>
+<p>Одногрупник показує <code>systemctl status ufw</code> → <code>Active: active (exited)</code> і каже: «брандмауер увімкнено». Чи правий він?
+Що реально змінює <code>sudo ufw enable</code> для тебе і для інших компʼютерів у мережі гуртожитку? Як перевірити, чи
+взагалі щось на ноутбуці чекає вхідних підключень?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Не обовʼязково. <code>active (exited)</code> - служба при старті один раз виконала свою дію і успішно завершилась; стан самого
+брандмауера показує лише <code>sudo ufw status</code> (на свіжій Mint - <code>Status: inactive</code>).</p>
+<p>Після <code>sudo ufw enable</code>: вхідні підключення заборонені, вихідні дозволені. Ти нічого не помітиш (інтернет,
+оновлення, GitHub працюють), а інші компʼютери більше не зможуть підключитись до ноутбука, поки ти явно щось не
+дозволиш (<code>sudo ufw allow ...</code>).</p>
+<p>Хто слухає порти: <code>sudo ss -tulpn</code>. Рядок <code>0.0.0.0:22</code> означав би ssh-сервер для всієї мережі - на Mint його нема,
+<code>openssh-server</code> не встановлено.</p>
+<p>Джерело: урок 25, «Коротко» (брандмауер) і «Самоперевірка» 1; урок 20, «Коротко» (стани) і «Самоперевірка» 2;
+урок 21, «Коротко» і «Самоперевірка» 4.</p>
+</details>
+<h4 id="б20-знайди-помилку-порада-з-чату">Б20. Знайди помилку: «порада» з чату</h4>
+<p>У чаті групи скинули «рецепт, щоб усе запрацювало», три рядки. Перший завантажує скрипт з невідомого сайту
+curl-ом і одразу передає його в <code>sudo bash</code>. Другий - <code>sudo pip install numpy</code> з ключем <code>--break-system-packages</code>.
+Третій рекурсивно ставить права 777 на <code>~/univer</code>. Що не так з кожним, і що робиш замість цього?</p>
+<details>
+<summary>Відповідь</summary>
+<ol>
+<li>Скрипт у <code>sudo bash</code> наосліп: ти навіть не бачиш, що виконується, а виконується від root - що завгодно. Замість:
+   завантажити у файл, прочитати (<code>less</code>), перевірити <code>shellcheck</code>, розібрати незнайомі команди на explainshell.com,
+   і лише тоді вирішувати.</li>
+<li><code>sudo pip</code> + <code>--break-system-packages</code> - ламає системний Python, на якому працює сама Mint. Замість: venv
+   (<code>~/univer/.venv</code>), для програм - pipx.</li>
+<li>777 - будь-хто і будь-яка програма може змінити файл. Скрипту досить <code>chmod +x</code>, файлу - 644, теці - 755.</li>
+</ol>
+<p>Головне правило: пароль sudo - це твоя згода на все, що написано далі. Нічого не вставляєш, поки не розумієш кожне
+слово.</p>
+<p>Джерело: урок 25, «Коротко» (що не запускати з sudo), «Типові помилки» і «Самоперевірка» 2, 5; урок 15, «Типові
+помилки» (777); урок 23, «Типові помилки» (чужий скрипт).</p>
+</details>
+<hr>
+<h3 id="блок-в-термінал-і-адміністрування-уроки-19-24-27">Блок В. Термінал і адміністрування (уроки 19-24, 27)</h3>
+<h4 id="в1-що-виведе-код-виходу-після-сигналу">В1. Що виведе? (код виходу після сигналу)</h4>
+<pre><code class="language-bash">cd ~/ispyt
+printf 'sleep 30 &amp;\nkill $!\nwait $!; echo &quot;код $?&quot;\nsleep 30 &amp;\nkill -9 $!\nwait $!; echo &quot;код $?&quot;\n' &gt; kody.sh
+bash kody.sh 2&gt; /dev/null
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">код 143
+код 137
+</code></pre>
+<p>Процес, убитий сигналом, має код 128 + номер сигналу: SIGTERM (15, звичайний <code>kill</code>) → 143, SIGKILL (9, <code>kill -9</code>)
+→ 137, Ctrl+C (SIGINT, 2) → 130. <code>$!</code> - PID останньої фонової команди. (Якщо набирати ці рядки в терміналі, bash
+ще повідомить про задачу, наприклад <code>[1]+  Terminated  sleep 30</code>.) За кодом у журналі чи в cron видно, «сам упав»
+чи «його вбили».</p>
+<p>Джерело: урок 19, «Коротко» (сигнали, код 128 + номер) і «Самоперевірка» 3.</p>
+</details>
+<h4 id="в2-поясни-ctrlz-і-killall-python3">В2. Поясни: Ctrl+Z і <code>killall python3</code></h4>
+<p>Лаба з нескінченним циклом. Ти натиснув Ctrl+Z, запрошення повернулось. Що з програмою зараз? Як її правильно
+завершити? Одногрупник радить «просто <code>killall python3</code>» - чим це небезпечно в Mint і як вбивати точково?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Ctrl+Z лише <strong>призупиняє</strong> (SIGTSTP): програма жива, <code>jobs</code> покаже <code>Stopped</code>. Завершити: <code>fg</code> і Ctrl+C, або
+<code>kill %1</code>.</p>
+<p><code>killall python3</code> (чи <code>pkill -f python</code>) вбиває <strong>всі</strong> Python-процеси, разом із програмами Mint на Python
+(Диспетчер оновлень теж на Python). Точково: <code>pgrep -af python</code> (PID і повна команда) → <code>kill PID</code> (SIGTERM, дає
+програмі закрити файли) → лише якщо за кілька секунд не завершилась - <code>kill -9 PID</code>.</p>
+<p>Джерело: урок 19, «Коротко», «Типові помилки» і «Самоперевірка» 1-2; урок 02, «Самоперевірка» 2 (Mint на системному
+Python).</p>
+</details>
+<h4 id="в3-поясни-одна-команда-три-результати">В3. Поясни: одна команда, три результати</h4>
+<p><code>zdaty 3</code> у терміналі працює. <code>sudo zdaty 3</code> каже, що такої команди нема. Той самий рядок у crontab пише в лог
+<code>/bin/sh: 1: zdaty: not found</code>. Поясни всі три випадки і як зробити правильно.</p>
+<details>
+<summary>Відповідь</summary>
+<p>Усе - PATH, список тек, де шукаються команди:</p>
+<ul>
+<li>у твоєму терміналі в PATH є <code>~/.local/bin</code> (її додає <code>~/.profile</code> при вході, якщо тека тоді вже була) - <code>zdaty</code>
+  знаходиться;</li>
+<li><code>sudo</code> використовує свій короткий безпечний PATH без твоїх тек і аліасів. Та й запускати свої скрипти від root не
+  треба;</li>
+<li>cron запускає <code>/bin/sh</code> з коротким PATH
+  (<code>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:...</code>), без <code>~/.local/bin</code>, venv, аліасів і функцій
+  з <code>~/.bashrc</code>.</li>
+</ul>
+<p>Правильно в cron - повні шляхи: <code>/home/evgen/.local/bin/zdaty</code>, <code>/home/evgen/univer/.venv/bin/python</code>. Перевірити,
+що саме знаходить твій bash: <code>type zdaty</code>.</p>
+<p>Джерело: урок 22, «PATH» і «Типові помилки» (останні два пункти); урок 23, «Три правила cron» і «Типові помилки».</p>
+</details>
+<h4 id="в4-поясни-cron-чи-таймер-systemd-для-щоденної-копії-на-ноутб">В4. Поясни: cron чи таймер systemd для щоденної копії на ноутбуці?</h4>
+<p>Копія <code>~/univer</code> має робитися раз на день. Ноутбук часто закритий о тій годині, коли стоїть завдання. Що вибереш і
+чому? Що спільного в пастках обох способів?</p>
+<details>
+<summary>Відповідь</summary>
+<p><strong>Таймер systemd</strong> (<code>systemctl --user</code>) з <code>Persistent=true</code>: якщо час пропущено (ноутбук спав чи був вимкнений),
+запуск відбудеться при наступній нагоді. cron пропущене <strong>не доганяє</strong>: о 13:00 ноутбук закритий - копії сьогодні
+не буде. Ще плюс таймера: вивід іде в журнал (<code>journalctl --user -u назва</code>), а статус видно в
+<code>systemctl --user list-timers</code>.</p>
+<p>Спільні пастки: команда запускається не з твого термінала - нема твого PATH, venv, аліасів; потрібні <strong>повні
+шляхи</strong> (<code>ExecStart=/usr/bin/rsync ...</code>, у cron - <code>/usr/bin/...</code> чи <code>/home/evgen/...</code>). У cron ще <code>%</code> треба писати
+<code>\%</code> і самому дописувати <code>&gt;&gt; лог 2&gt;&amp;1</code>; у systemd - після правки файлу <code>systemctl --user daemon-reload</code>.</p>
+<p>Джерело: урок 23, «Коротко» (три правила cron, пропущений запуск); урок 20, «Коротко», «Руками» крок 7, «Типові
+помилки».</p>
+</details>
+<h4 id="в5-сценарій-ноутбук-уночі-сам-перезавантажився">В5. Сценарій: ноутбук уночі сам перезавантажився</h4>
+<p>Вранці ти бачиш, що ноутбук перезавантажувався. Якими командами дізнаєшся, коли це було і які помилки були перед
+цим? Які рівні важливості покаже <code>-p err</code>?</p>
+<details>
+<summary>Відповідь</summary>
+<ul>
+<li><code>last reboot | head -3</code> або <code>uptime -s</code> - коли вмикався;</li>
+<li><code>sudo journalctl --list-boots</code> - список завантажень (<code>0</code> - поточне, <code>-1</code> - попереднє);</li>
+<li><code>sudo journalctl -b -1 -p err</code> - лише помилки попереднього завантаження;</li>
+<li><code>sudo journalctl -b -1 -e</code> - одразу кінець попереднього завантаження: що було останнім перед падінням;</li>
+<li>ядро окремо: <code>sudo journalctl -k -b -1</code> (і <code>sudo dmesg</code> для поточного - без sudo ядро Mint свій журнал не
+  показує).</li>
+</ul>
+<p><code>-p err</code> = рівні 0-3: <code>emerg</code>, <code>alert</code>, <code>crit</code>, <code>err</code>.</p>
+<p>Джерело: урок 20, «Коротко» (журнал, рівні), «Руками» кроки 5-6, «Самоперевірка» 3.</p>
+</details>
+<h4 id="в6-знайди-помилки-служба-systemd">В6. Знайди помилки (служба systemd)</h4>
+<p>Ти зробив <code>~/.config/systemd/user/kopiya.service</code> і запустив <code>systemctl --user start kopiya.service</code>:</p>
+<pre><code class="language-text">[Unit]
+Description=Копія лаб
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pyton3 %h/univer/kopiya.py
+</code></pre>
+<pre><code class="language-text">Job for kopiya.service failed because the control process exited with error code.
+</code></pre>
+<p><code>systemctl --user status kopiya.service</code> показує <code>status=203/EXEC</code>. Ти виправив файл і знову <code>start</code> - а status пише
+<code>... changed on disk. Run 'systemctl --user daemon-reload' to reload units.</code> Що не так і в якому порядку
+лагодити?</p>
+<details>
+<summary>Відповідь</summary>
+<ol>
+<li><code>203/EXEC</code> - systemd не зміг запустити програму: одруківка <code>pyton3</code>. Шлях - повний і справжній:
+   <code>/usr/bin/python3</code> (перевір <code>which python3</code>). <code>%h</code> - правильно, systemd сам підставить домашню теку.</li>
+<li>Після правки файлу systemd досі працює зі старою версією - спершу <code>systemctl --user daemon-reload</code>, потім
+   <code>systemctl --user start kopiya.service</code>, <code>systemctl --user status kopiya.service</code>.</li>
+</ol>
+<p>Загальний порядок діагностики: <code>status</code> (код), <code>journalctl --user -xeu kopiya.service</code> (подробиці).</p>
+<p>Джерело: урок 20, «Типові помилки» (daemon-reload, <code>ExecStart</code>) і «Самоперевірка» 5.</p>
+</details>
+<h4 id="в7-сценарій-wi-fi-підключено-а-сайти-не-відкриваються">В7. Сценарій: Wi-Fi підключено, а сайти не відкриваються</h4>
+<pre><code class="language-text">$ ping -c 3 1.1.1.1
+3 packets transmitted, 3 received, 0% packet loss
+$ ping -c 3 linuxmint.com
+ping: linuxmint.com: Temporary failure in name resolution
+</code></pre>
+<p>Що зламалось, що робиш? Чим відрізняються <code>Name or service not known</code> і <code>Network is unreachable</code>?</p>
+<details>
+<summary>Відповідь</summary>
+<p>Пакети в інтернет ходять (за IP), а імена не перетворюються на адреси - <strong>DNS</strong>. <code>resolvectl status</code> - які
+DNS-сервери; перепідключити Wi-Fi; якщо повторюється - у «Мережних зʼєднаннях» задати DNS вручну (напр.
+<code>1.1.1.1</code>).</p>
+<ul>
+<li><code>Name or service not known</code> - DNS працює, але такого імені нема (одруківка в адресі).</li>
+<li><code>Network is unreachable</code> - нема маршруту назовні: Wi-Fi не підключено (сходинки <code>nmcli device status</code>, <code>ip -br a</code>,
+  <code>ip r</code>).</li>
+</ul>
+<p>Джерело: урок 21, «Коротко» (сходинки діагностики), «Типові помилки» і «Самоперевірка» 1.</p>
+</details>
+<h4 id="в8-що-виведе-права-ключа-ssh">В8. Що виведе? (права ключа ssh)</h4>
+<pre><code class="language-bash">mkdir -p ~/ispyt/v8 &amp;&amp; cd ~/ispyt/v8
+ssh-keygen -q -t ed25519 -N &quot;&quot; -C &quot;proba&quot; -f kluch
+stat -c '%a %n' kluch kluch.pub
+</code></pre>
+<p>Який з файлів можна дати GitHub, а який нікому? Що скаже ssh, якщо в приватного ключа права 644?</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">600 kluch
+644 kluch.pub
+</code></pre>
+<p><code>kluch</code> (у житті <code>~/.ssh/id_ed25519</code>) - <strong>приватний</strong>, лише ти, права 600; <code>kluch.pub</code> - публічний, його дають
+GitHub і серверам. Тека <code>~/.ssh</code> - 700. З правами 644 на приватному ключі ssh відмовиться його брати:
+<code>WARNING: UNPROTECTED PRIVATE KEY FILE!</code> - лікується <code>chmod 600</code>. (<code>-N ""</code> тут - ключ без пароля лише для вправи.)</p>
+<p>Джерело: урок 21, «Коротко» (файли ключа), «Типові помилки» і «Самоперевірка» 2; урок 15, «Коротко» (600, 700).</p>
+</details>
+<h4 id="в9-що-виведе-лапки">В9. Що виведе? (лапки)</h4>
+<pre><code class="language-bash">name=&quot;ЛР 1&quot;
+echo &quot;$name&quot; '$name'
+printf '[%s]\n' $name
+printf '[%s]\n' &quot;$name&quot;
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">ЛР 1 $name
+[ЛР]
+[1]
+[ЛР 1]
+</code></pre>
+<p>У подвійних лапках змінна підставляється, в одинарних - друкується буквально. Без лапок значення з пробілом
+розпадається на <strong>два</strong> аргументи - звідси правило «змінну завжди в <code>"$x"</code>» (інакше <code>cp $f ...</code> з назвою
+«Лаба 1» шукатиме два файли).</p>
+<p>Джерело: урок 22, «Коротко» (змінні) і «Самоперевірка» 1.</p>
+</details>
+<h4 id="в10-що-виведе-stdout-stderr">В10. Що виведе? (stdout, stderr)</h4>
+<pre><code class="language-bash">mkdir -p ~/ispyt/v10 &amp;&amp; cd ~/ispyt/v10
+printf 'print(&quot;ok&quot;)\nprint(1 / 0)\n' &gt; p.py
+python3 p.py &gt; out.txt 2&gt; /dev/null
+cat out.txt
+python3 p.py &gt; all.txt 2&gt;&amp;1
+tail -n 1 all.txt
+</code></pre>
+<p>А що зробить <code>python3 p.py &gt; p.py</code>?</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">ok
+ZeroDivisionError: division by zero
+</code></pre>
+<p><code>&gt;</code> перенаправляє лише stdout (1), traceback іде в stderr (2) - його в <code>out.txt</code> нема. <code>&gt; all.txt 2&gt;&amp;1</code> - обидва
+потоки в один файл (коротко <code>&amp;&gt; all.txt</code>).</p>
+<p><code>python3 p.py &gt; p.py</code> <strong>стирає код</strong>: bash спершу обнуляє файл для <code>&gt;</code>, а вже потім запускає Python - той бачить
+порожній файл. Вивід - завжди в інший файл.</p>
+<p>Джерело: урок 22, «Потоки і перенаправлення», «Типові помилки» і «Самоперевірка» 5.</p>
+</details>
+<h4 id="в11-що-виведе-uniq-без-sort">В11. Що виведе? (<code>uniq</code> без <code>sort</code>)</h4>
+<pre><code class="language-bash">printf 'b\na\nb\nb\na\n' | uniq -c
+printf 'b\na\nb\nb\na\n' | sort | uniq -c | sort -rn
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">      1 b
+      1 a
+      2 b
+      1 a
+      3 b
+      2 a
+</code></pre>
+<p><code>uniq -c</code> склеює лише <strong>сусідні</strong> однакові рядки - без <code>sort</code> числа «дивні». <code>sort | uniq -c | sort -rn</code> - класичний
+«частотний словник»: найчастіше - згори (наприклад, які помилки найчастіше в журналі чи які коди flake8 у лабі).</p>
+<p>Джерело: урок 22, «Фільтри» і «Типові помилки».</p>
+</details>
+<h4 id="в12-що-виведе-find-без-лапок">В12. Що виведе? (<code>find</code> без лапок)</h4>
+<pre><code class="language-bash">mkdir -p ~/ispyt/v12/sub &amp;&amp; cd ~/ispyt/v12 &amp;&amp; touch a.py b.py sub/c.py
+find . -name *.py; echo &quot;код $?&quot;
+find . -name &quot;*.py&quot; | sort
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">find: paths must precede expression: `b.py'
+find: possible unquoted pattern after predicate `-name'?
+код 1
+./a.py
+./b.py
+./sub/c.py
+</code></pre>
+<p>Без лапок bash <strong>сам</strong> розгортає <code>*.py</code> у назви файлів поточної теки: find отримує <code>-name a.py b.py</code> і не розуміє
+зайвого <code>b.py</code>. А якби в теці був лише один <code>.py</code> - find мовчки шукав би тільки його (ще гірше: помилки нема, а
+результат неповний). Шаблон - завжди в лапках.</p>
+<p>Джерело: урок 22, «Фільтри» (<code>find</code>) і «Типові помилки».</p>
+</details>
+<h4 id="в13-знайди-помилки-рядок-crontab">В13. Знайди помилки (рядок crontab)</h4>
+<pre><code class="language-text">0 18 * * 5 zdaty 3 &gt; ~/zvit-$(date +%F).txt
+</code></pre>
+<p>Мета: щопʼятниці о 18:00 зібрати ЛР3 і зберегти звіт. Знайди всі проблеми і запиши правильний рядок.</p>
+<details>
+<summary>Відповідь</summary>
+<ol>
+<li><code>zdaty</code> у cron не знайдеться: PATH короткий, без <code>~/.local/bin</code> (буде <code>/bin/sh: 1: zdaty: not found</code>).</li>
+<li><code>%</code> у рядку cron означає новий рядок - <code>date +%F</code> ламає команду, вона тихо не виконується. Треба <code>\%</code>.</li>
+<li>Нема <code>2&gt;&amp;1</code> - помилки підуть «поштою», якої на ноутбуці нема, і загубляться.</li>
+<li><code>zdaty</code> при зауваженнях питає <code>(y/n)</code> - у cron відповісти нікому, питання закінчиться помилкою. Для cron -
+   команди без питань.</li>
+</ol>
+<p>Виправлено:</p>
+<pre><code class="language-text">0 18 * * 5 /home/evgen/.local/bin/zdaty 3 &gt;&gt; /home/evgen/cron.log 2&gt;&amp;1
+</code></pre>
+<p>(Якщо потрібна дата в назві - <code>$(date +\%F)</code>.)</p>
+<p>Джерело: урок 23, «Три правила cron», «Типові помилки» і «Самоперевірка» 4-5.</p>
+</details>
+<h4 id="в14-що-виведе-set-e-і-пайпи">В14. Що виведе? (<code>set -e</code> і пайпи)</h4>
+<pre><code class="language-bash">bash -c 'set -e; false | true; echo &quot;далі 1&quot;'; echo &quot;код $?&quot;
+bash -c 'set -eo pipefail; false | true; echo &quot;далі 2&quot;'; echo &quot;код $?&quot;
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">далі 1
+код 0
+код 1
+</code></pre>
+<p>Код пайпу - це код <strong>останньої</strong> команди (<code>true</code> → 0), тож <code>set -e</code> не помічає, що <code>false</code> упав. З <code>pipefail</code> пайп
+вважається невдалим, якщо впала будь-яка його частина, і <code>set -e</code> зупиняє скрипт. Тому в скриптах -
+<code>set -euo pipefail</code>: інакше, наприклад, <code>python3 -m pytest ... | tail -n 1</code> «успішний» навіть при провалених тестах.</p>
+<p>Джерело: урок 23, «Коротко» (<code>set -euo pipefail</code>) і «Самоперевірка» 2; урок 22, «Код виходу».</p>
+</details>
+<h4 id="в15-що-виведе-і">В15. Що виведе? (<code>"$@"</code> і <code>$@</code>)</h4>
+<pre><code class="language-bash">cd ~/ispyt
+printf '#!/bin/bash\nfor a in &quot;$@&quot;; do echo &quot;[$a]&quot;; done\nfor a in $@; do echo &quot;&lt;$a&gt;&quot;; done\n' &gt; args.sh
+bash args.sh &quot;ЛР 1&quot; lr2
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">[ЛР 1]
+[lr2]
+&lt;ЛР&gt;
+&lt;1&gt;
+&lt;lr2&gt;
+</code></pre>
+<p><code>"$@"</code> у лапках - кожен аргумент окремо, як його передали (2 аргументи). <code>$@</code> без лапок - знову розбиття за
+пробілами (3 «аргументи»). У скрипті, що приймає назви файлів чи тек, - тільки <code>"$@"</code>.</p>
+<p>Джерело: урок 23, «Коротко» (таблиця <code>$0</code>, <code>$#</code>, <code>"$@"</code>) і «Передбач» 1; урок 22, «Коротко» (лапки).</p>
+</details>
+<h4 id="в16-що-виведе-що-потрапляє-в-zip">В16. Що виведе? (що потрапляє в zip)</h4>
+<pre><code class="language-bash">mkdir -p ~/ispyt/v16/labs/lr1 &amp;&amp; cd ~/ispyt/v16 &amp;&amp; printf 'x = 1\n' &gt; labs/lr1/a.py
+zip -qr z1.zip ~/ispyt/v16/labs/lr1
+python3 -m zipfile -c z2.zip ~/ispyt/v16/labs/lr1
+unzip -Z1 z1.zip; echo &quot;-&quot;; unzip -Z1 z2.zip
+</code></pre>
+<p>Як отримати архів, усередині якого рівно <code>Прізвище_Імʼя_Група_ЛР1/a.py</code>?</p>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">home/evgen/ispyt/v16/labs/lr1/
+home/evgen/ispyt/v16/labs/lr1/a.py
+-
+lr1/
+lr1/a.py
+</code></pre>
+<p><code>zip -r</code> кладе шлях так, як його передали (увесь <code>home/evgen/...</code>, разом із <code>__pycache__</code>, якщо є), а
+<code>python3 -m zipfile -c</code> лишає лише <strong>останню</strong> теку (<code>lr1/</code>), і потрібної назви в архіві нема. Правильно, як у
+<code>zdaty</code>: зробити тимчасову теку з потрібною назвою, скопіювати туди лише <code>.py</code> і пакувати <strong>з батьківської</strong> теки:
+<code>(cd "$tmp" &amp;&amp; zip -qr "$ZDACHA/$nazva.zip" "$nazva")</code>.</p>
+<p>Джерело: урок 23, «Руками» крок 2, «Типові помилки» (zip з повним шляхом) і «Самоперевірка» 3; урок 14, «Коротко»
+(архіви).</p>
+</details>
+<h4 id="в17-поясни-git-restore-і-пароль-у-коміті">В17. Поясни: <code>git restore</code> і пароль у коміті</h4>
+<p>а) Ти набрав <code>git restore lab3.py</code> і втратив дві години незакоміченої роботи. Чому git не питав і чому нема «назад»?
+Що робити наступного разу? б) Ти закомітив і запушив файл з токеном, потім зробив <code>git rm --cached token.txt</code> і
+новий коміт. Проблему розвʼязано?</p>
+<details>
+<summary>Відповідь</summary>
+<p>а) <code>git restore файл</code> викидає <strong>незакомічені</strong> зміни: їх ніде не було збережено (ні в коміті, ні в staging), тому
+повертати нема звідки, і git не питає. Наступного разу: спершу <code>git diff</code> (що саме зникне) або коміт; часті малі
+коміти - це і є «збереження гри» для коду.</p>
+<p>б) Ні. <code>git rm --cached</code> прибирає файл лише з <strong>наступних</strong> комітів, у старих (і на GitHub) він лишається. Токен
+вважати витеклим: <strong>відкликати / змінити</strong>. Надалі - секрети поза репозиторієм, їхні файли в <code>.gitignore</code>.</p>
+<p>Джерело: урок 24, «Коротко» (<code>git restore</code>), «Типові помилки» і «Самоперевірка» 2.</p>
+</details>
+<h4 id="в18-що-виведе-gitignore">В18. Що виведе? (<code>.gitignore</code>)</h4>
+<pre><code class="language-bash">mkdir -p ~/ispyt/v18 &amp;&amp; cd ~/ispyt/v18 &amp;&amp; git init -q -b main
+printf '.venv/\n__pycache__/\n' &gt; .gitignore
+mkdir -p .venv __pycache__ &amp;&amp; touch .venv/x a.py __pycache__/a.pyc
+git status --short
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<pre><code class="language-text">?? .gitignore
+?? a.py
+</code></pre>
+<p><code>??</code> - файл ще не відстежується. <code>.venv/</code> і <code>__pycache__/</code> git не бачить зовсім - їх можна перестворити, а у
+репозиторії вони були б тисячами зайвих файлів. Сам <code>.gitignore</code> комітять. Якщо <code>.venv</code> уже закомічено -
+<code>git rm -r --cached .venv</code> і коміт.</p>
+<p>Джерело: урок 24, «Коротко» (<code>.gitignore</code>), «Типові помилки» і «Самоперевірка» 3.</p>
+</details>
+<h4 id="в19-сценарій-git-push-не-проходить">В19. Сценарій: <code>git push</code> не проходить</h4>
+<p>Три різні повідомлення в різні дні. Що означає кожне і що робиш?</p>
+<pre><code class="language-text">1) git@github.com: Permission denied (publickey).
+2) ! [rejected]        main -&gt; main (fetch first)
+3) remote: Support for password authentication was removed
+</code></pre>
+<details>
+<summary>Відповідь</summary>
+<ol>
+<li>GitHub не знає твій ключ або ssh бере інший. По черзі: <code>ls -l ~/.ssh</code> (ключ є, права 600), <code>ssh -T git@github.com</code>
+   (має привітати), <code>.pub</code> доданий на GitHub (Settings → SSH and GPG keys), <code>ssh -v git@github.com</code> (рядки
+   <code>Offering public key</code>).</li>
+<li>На GitHub є коміти, яких нема в тебе (пушив з іншого компʼютера): <code>git pull</code>, потім <code>git push</code>.</li>
+<li>Адреса <code>origin</code> - <code>https://...</code>, а пароль GitHub не приймає: <code>git remote -v</code>, потім
+   <code>git remote set-url origin git@github.com:Evge14n/labs.git</code>.</li>
+</ol>
+<p>Джерело: урок 24, «Коротко», «Типові помилки» і «Самоперевірка» 4; урок 21, «Типові помилки»
+(<code>Permission denied (publickey)</code>).</p>
+</details>
+<h4 id="в20-поясни-у-vs-code-усе-зелене">В20. Поясни: «у VS Code усе зелене»</h4>
+<p>Ти поставив VS Code, і редактор не підсвічує помилок. Чому перед здачею все одно треба перевірити лабу в терміналі
+(якими командами)? Навіщо знати pdb, якщо у VS Code є налагоджувач debugpy? Яке налаштування VS Code обовʼязково
+вимкнути для лаб і чому?</p>
+<details>
+<summary>Відповідь</summary>
+<ul>
+<li>«Зелене» в редакторі - це підсвітка, не doctest. Викладач перевіряє doctest, flake8 до 78, mypy - саме ними:
+  <code>python3 -m pytest --doctest-modules</code>, <code>python3 -m flake8 --max-line-length=78</code>, mypy (або <code>perevir файл.py</code>), з
+  venv <code>~/univer/.venv</code>. До того ж VS Code міг узяти <strong>не той</strong> інтерпретатор (<code>ModuleNotFoundError</code> у ньому, а в
+  терміналі працює).</li>
+<li>debugpy - той самий принцип, що pdb (F10 = <code>n</code>, F11 = <code>s</code>, F5 = <code>c</code>), але pdb працює в будь-якому терміналі: по
+  ssh, у TTY, на парі чи іспиті без VS Code.</li>
+<li>ШІ-функції (<code>chat.disableAIFeatures</code>): код, який дописав ШІ, ти не поясниш викладачу, а пояснення кожного рядка -
+  частина здачі.</li>
+</ul>
+<p>Джерело: урок 27, «Коротко», «Типові помилки» і «Самоперевірка» 2-5; урок 04, «Перевір перед здачею»; урок 06,
+«Коротко».</p>
+</details>
+<hr>
+<h3 id="як-оцінити-себе">Як оцінити себе</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Бали в блоці</th>
+<th>Що робити</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>≥ 18 з 20</strong></td>
+<td>блок зараховано - далі</td>
+</tr>
+<tr>
+<td>менше 18</td>
+<td>перечитай уроки з тих питань, де помилився (рядок «Джерело»), і <strong>перескладай блок через 2 дні</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Перескладай без підглядання в цей файл: за 2 дні памʼять «відпускає» дослівні відповіді, і лишається те, що ти
+справді зрозумів. Питання «що виведе» запускай знову: якщо вивід у тебе інший - це теж знахідка (інша версія Mint
+чи Python), запиши її.</p>

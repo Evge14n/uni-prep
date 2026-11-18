@@ -1,0 +1,49 @@
+<h1 id="linux-mint-шпаргалка-1-сторінка">Linux Mint - шпаргалка (1 сторінка)</h1>
+<p>Курс: <code>05_Програмування\Linux-Mint\</code>. Термінал Ctrl+Alt+T; копіювати/вставити - Ctrl+Shift+C / V.
+Помилка українською, а шукати треба англійською: <code>LC_ALL=C команда</code> (урок 00).</p>
+<p><strong>Перед зміною системи - знімок:</strong> <code>sudo timeshift --create --comments "перед ..."</code></p>
+<pre><code class="language-text">sudo apt update      apt list --upgradable      sudo apt upgrade (прочитай список, без -y)
+flatpak update       fwupdmgr get-updates (прошивки)      sudo timeshift --list
+</code></pre>
+<p><strong>Python</strong> - системний python3 (3.12) не чіпати і не видаляти; бібліотеки - лише у venv:</p>
+<pre><code class="language-text">sudo apt install python3-venv python3-pip python3-tk git
+python3 -m venv ~/univer/.venv    source ~/univer/.venv/bin/activate    (deactivate - вимкнути)
+pip install pytest flake8 black mypy ruff     pip list --outdated     pip install -U пакет
+</code></pre>
+<p><code>externally-managed-environment</code> = ти поза venv. Не <code>sudo pip</code>, не <code>--break-system-packages</code>.</p>
+<p><strong>Лаба</strong> (<code>univer</code> = cd + venv; <code>univer</code>, <code>perevir</code> і htop ставить <code>ustanovka-mint.sh</code>):</p>
+<pre><code class="language-text">mkdir -p ~/univer/labs/lr1 &amp;&amp; cd ~/univer/labs/lr1    nano lr1_1.py (Ctrl+S, Ctrl+X)
+python3 lr1_1.py -v                              doctest з подробицями
+python3 -m pytest --doctest-modules -q lr1_1.py  doctest з чесним кодом виходу
+printf &quot;127\n&quot; | python3 -m pytest --doctest-modules -q -s lr1_1.py   якщо є input()
+perevir lr1_1.py [відповіді на input()]   doctest, black, flake8, pycodestyle, ruff (78), mypy
+</code></pre>
+<p><code>python3 -m doctest файл.py</code> на файлі з <code>doctest.testmod()</code> у кінці тестує ще й сам doctest і пише
+чужий провал <code>... in __main__.DebugRunner</code> - твій код ні до чого. Бери <code>-v</code>, pytest або <code>perevir</code>.</p>
+<p><strong>Налагодження:</strong></p>
+<pre><code class="language-text">print(f&quot;{x=}&quot;)    breakpoint()    python3 -i lab.py (змінні після падіння)
+python3 -m pdb lab.py: n s c l ll p pp w u d  b 12  b 12, x &gt; 5  tbreak  cl 1  r  until  j  q
+python3 -m pdb -c continue lab.py (post-mortem)   python3 -X dev lab.py   python3 -W error lab.py
+</code></pre>
+<p><strong>Файли, пошук, місце:</strong></p>
+<pre><code class="language-text">pwd  ls -la  cd ~  cd ..  cd -    Tab - дописати    Ctrl+R - пошук в історії    man команда (q)
+cp -i a b   mv -i a b   rm -i файл   gio trash файл (у смітник)   mkdir -p a/b   ln -s ціль імʼя
+grep -rn &quot;print(&quot; ~/univer/labs    find ~/univer -name &quot;*.py&quot; -mtime -1
+df -h /    du -h --max-depth=1 | sort -h    lsblk -o NAME,SIZE,MODEL,MOUNTPOINT
+</code></pre>
+<p><strong>Права, програми, процеси, журнали:</strong></p>
+<pre><code class="language-text">chmod +x run.sh   ls -l   id   groups   sudo -k      sudo apt install ./файл.deb (з ./)
+apt search назва   sudo apt install назва   sudo apt remove назва   sudo apt autoremove
+htop (F9 вбити, F10 вийти)   pgrep -af назва   kill PID   Ctrl+C   flatpak list
+systemctl status NetworkManager    systemctl --failed    sudo journalctl -b -p err
+</code></pre>
+<p><strong>Мережа, git, безпека:</strong></p>
+<pre><code class="language-text">ip -br a   ping -c 3 1.1.1.1   ping -c 3 linuxmint.com   nmcli device status   sudo ss -tulpn
+ssh-keygen -t ed25519   ssh -T git@github.com   sudo ufw enable   sudo ufw status verbose
+git status   git add .   git commit -m &quot;ЛР1 завд. 1&quot;   git log --oneline   git push
+</code></pre>
+<p><strong>Cinnamon:</strong> Super - меню, Ctrl+Alt+L - заблокувати (Super+L - НЕ блокування), Super+D - стіл,
+Super+E - домашня тека, Super+стрілки - половина екрана, Ctrl+Alt+←/→ - робочий простір,
+Ctrl+Alt+Esc - перезапустити Cinnamon, Print - знімок екрана.
+<strong>Не завантажується:</strong> Shift/Esc при старті → GRUB → Advanced options → старе ядро. Чорний екран →
+Ctrl+Alt+F2 (TTY), назад Ctrl+Alt+F7. Зовсім погано → live USB → Timeshift → відновити.</p>

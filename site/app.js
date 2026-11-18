@@ -154,7 +154,7 @@ const IC = {
 const icon = (n, cls = "") => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ""}</svg>`;
 
 // колір предмета
-const SUBJ = { "an-k1": "an", an: "an", "ma-k2": "ma", ma: "ma", mech: "mech", mol: "mol", prog: "prog", zfp: "zfp", hist: "hist", eng: "eng", linux: "prog", "prog-sec": "prog" };
+const SUBJ = { "an-k1": "an", an: "an", "ma-k2": "ma", ma: "ma", mech: "mech", mol: "mol", prog: "prog", zfp: "zfp", hist: "hist", eng: "eng", linux: "prog", git: "prog", "prog-sec": "prog" };
 const sk = (id) => SUBJ[id] || "an";
 function kindBadge(u) {
   if (u.kind === "colloquium") return '<span class="badge k">Колоквіум</span>';

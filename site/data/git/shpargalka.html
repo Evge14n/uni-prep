@@ -1,0 +1,170 @@
+<h1 id="git-і-github-шпаргалка-1-сторінка">Git і GitHub - шпаргалка (1 сторінка)</h1>
+<h2 id="один-раз-на-ноутбуці-уроки-02-03">Один раз на ноутбуці (уроки 02-03)</h2>
+<pre><code>sudo apt install git
+git config --global user.name &quot;Твоє Імʼя&quot;
+git config --global user.email &quot;128326252+Evge14n@users.noreply.github.com&quot;
+git config --global init.defaultBranch main
+git config --global core.editor nano
+git config --global pull.rebase false
+ssh-keygen -t ed25519 -C &quot;128326252+Evge14n@users.noreply.github.com&quot;
+ssh -T git@github.com            → «Hi Evge14n! You've successfully authenticated...»
+</code></pre>
+<h2 id="три-зони">Три зони</h2>
+<pre><code>робоча тека  --git add--&gt;  індекс (staging)  --git commit--&gt;  репозиторій  --git push--&gt;  GitHub
+             &lt;-git restore-                   &lt;-restore --staged-                  &lt;-git pull--
+</code></pre>
+<h2 id="щодня-уроки-04-06">Щодня (уроки 04-06)</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git status</code></td>
+<td>що змінено і що піде в коміт</td>
+</tr>
+<tr>
+<td><code>git add файл</code> / <code>git add .</code></td>
+<td>вибрати в коміт</td>
+</tr>
+<tr>
+<td><code>git commit -m "Завд. 2: перевірка вводу"</code></td>
+<td>знімок; перший рядок ≤ 50 знаків, що змінено</td>
+</tr>
+<tr>
+<td><code>git log --oneline --graph --all</code></td>
+<td>історія з гілками</td>
+</tr>
+<tr>
+<td><code>git diff</code> / <code>git diff --staged</code></td>
+<td>що змінено / що вже в індексі</td>
+</tr>
+<tr>
+<td><code>git show HEAD</code></td>
+<td>останній коміт повністю</td>
+</tr>
+<tr>
+<td><code>.gitignore</code></td>
+<td><code>.venv/</code> <code>__pycache__/</code> <code>*.pyc</code> <code>.pytest_cache/</code></td>
+</tr>
+<tr>
+<td><code>git rm --cached -r .venv</code></td>
+<td>прибрати з git, лишити на диску</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="гілки-і-конфлікт-уроки-07-08">Гілки і конфлікт (уроки 07-08)</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git switch -c lr3</code></td>
+<td>нова гілка і перейти</td>
+</tr>
+<tr>
+<td><code>git switch main</code></td>
+<td>назад на main</td>
+</tr>
+<tr>
+<td><code>git merge lr3</code></td>
+<td>злити lr3 у поточну</td>
+</tr>
+<tr>
+<td><code>git branch -d lr3</code></td>
+<td>видалити злиту гілку</td>
+</tr>
+<tr>
+<td><code>git merge --abort</code></td>
+<td>скасувати злиття з конфліктом</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD          ← твоя версія
+=======
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; lr3           ← версія з гілки
+</code></pre>
+<h2 id="github-уроки-09-11-16">GitHub (уроки 09-11, 16)</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Що робить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git clone git@github.com:Evge14n/univer-labs.git</code></td>
+<td>скачати репо</td>
+</tr>
+<tr>
+<td><code>git push -u origin lr3</code></td>
+<td>перший пуш гілки</td>
+</tr>
+<tr>
+<td><code>git push</code> / <code>git pull</code></td>
+<td>відправити / забрати і злити</td>
+</tr>
+<tr>
+<td><code>git fetch</code></td>
+<td>лише забрати, не зливати</td>
+</tr>
+<tr>
+<td><code>gh pr create --fill</code></td>
+<td>Pull Request з гілки</td>
+</tr>
+<tr>
+<td><code>gh pr merge --squash --delete-branch</code></td>
+<td>злити PR</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="скасувати-уроки-12-13">Скасувати (уроки 12-13)</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Сталося</th>
+<th>Лікування</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>зіпсував файл, не комітив</td>
+<td><code>git restore файл</code></td>
+</tr>
+<tr>
+<td>додав у індекс зайве</td>
+<td><code>git restore --staged файл</code></td>
+</tr>
+<tr>
+<td>помилка в останньому коміті, ще не push</td>
+<td><code>git commit --amend</code> або <code>git reset --soft HEAD~1</code></td>
+</tr>
+<tr>
+<td>поганий коміт уже на GitHub</td>
+<td><code>git revert хеш</code> (новий коміт)</td>
+</tr>
+<tr>
+<td>«загубив» коміт після reset --hard</td>
+<td><code>git reflog</code>, потім <code>git reset --hard HEAD@{1}</code></td>
+</tr>
+<tr>
+<td>треба терміново на іншу гілку</td>
+<td><code>git stash</code> → ... → <code>git stash pop</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="здача-лр-урок-14-лаби-в-git">Здача ЛР (урок 14, «Лаби в git»)</h2>
+<pre><code>git switch -c lr3            (на початку лаби)
+git add . &amp;&amp; git commit -m &quot;Завд. 1: ...&quot;   (після кожного завдання з зеленим doctest)
+git switch main &amp;&amp; git merge lr3
+git tag -a lr3-zdano -m &quot;ЛР3 здано&quot;
+git push origin main lr3-zdano
+</code></pre>
